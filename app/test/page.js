@@ -114,7 +114,7 @@ function TestContent() {
           )}
 
           <p className="text-[18px] font-bold text-[#1E293B] leading-relaxed mb-6">
-            {q.question}
+            {(q.question || '').replace(/^\d+\.\s*/, '')}
           </p>
 
           <div className="flex flex-col gap-3">
@@ -129,7 +129,7 @@ function TestContent() {
                 <button key={i} onClick={() => handleSelect(i)}
                   className={`w-full text-left px-4 py-3 rounded-xl text-sm transition-all ${style} ${!showAnswer ? 'hover:border-[#2563EB] hover:text-[#2563EB]' : ''}`}>
                   <span className="font-bold mr-3">{['A', 'B', 'C', 'D'][i]}.</span>
-                  {opt}
+                  {opt.replace(/^[A-D]\.\s*/, '')}
                 </button>
               );
             })}
@@ -144,20 +144,7 @@ function TestContent() {
           </div>
         )}
 
-        {showUpgradeBanner && !user && current === 19 ? (
-          <div className="bg-[#0B1C3D] rounded-2xl p-6 border border-[#132248]">
-            <p className="text-white font-semibold text-lg mb-1">You&apos;ve reached the free limit</p>
-            <p className="text-[#94A3B8] text-sm mb-4">Sign in or upgrade to Pro to continue</p>
-            <button onClick={handleGoogleSignIn}
-              className="w-full bg-white text-[#0B1C3D] py-3 rounded-xl font-semibold text-sm mb-3 hover:bg-[#E2E8F0] transition-all">
-              🔵 Continue with Google
-            </button>
-            <button onClick={() => router.push('/upgrade')}
-              className="w-full bg-[#F59E0B] text-[#0B1C3D] py-3 rounded-xl font-semibold text-sm hover:bg-[#FBBF24] transition-all">
-              Upgrade to Pro $39/mo
-            </button>
-          </div>
-        ) : showAnswer && (
+        {showAnswer && !(showUpgradeBanner && !user && current === 19) && (
           <button onClick={handleNext}
             className="w-full bg-[#2563EB] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#1D4ED8] hover:-translate-y-0.5 hover:shadow-lg transition-all">
             {current + 1 < total ? 'Next Question →' : 'See Results →'}
@@ -165,6 +152,31 @@ function TestContent() {
         )}
 
       </div>
+
+      {/* Upgrade modal overlay */}
+      {showUpgradeBanner && !user && current === 19 && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
+          <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-xl border border-[#E2E8F0] text-center">
+            <h2 className="text-2xl font-bold text-[#0B1C3D] mb-2">🔓 Unlock Full Access</h2>
+            <p className="text-[#475569] text-sm leading-relaxed mb-4">
+              Join thousands of immigrants who passed their DMV test with DMVSOS
+            </p>
+            <p className="text-[#2563EB] font-semibold text-sm mb-5">99% pass rate after full preparation</p>
+            <ul className="text-left text-sm text-[#475569] space-y-2 mb-6">
+              <li>✅ All 40 questions per test</li>
+              <li>✅ All 50 states, 3 categories, 4 languages</li>
+            </ul>
+            <button onClick={() => router.push('/upgrade')}
+              className="w-full bg-[#F59E0B] text-[#0B1C3D] py-4 rounded-xl font-bold text-base hover:bg-[#FBBF24] hover:-translate-y-0.5 hover:shadow-lg transition-all mb-3">
+              Upgrade to Pro — $39/mo
+            </button>
+            <button onClick={handleGoogleSignIn}
+              className="text-sm text-[#2563EB] hover:underline">
+              Continue with Google to sign in
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
