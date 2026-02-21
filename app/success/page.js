@@ -1,0 +1,42 @@
+'use client';
+import { useRouter } from 'next/navigation';
+
+export default function Success() {
+  const router = useRouter();
+
+  return (
+    <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
+      <div className="w-full max-w-md text-center">
+        {/* Logo */}
+        <div className="inline-flex items-center gap-3 mb-8">
+          <div className="w-11 h-11 bg-[#0B1C3D] rounded-xl flex items-center justify-center">
+            <span className="text-[#F59E0B] text-lg font-bold">✦</span>
+          </div>
+          <span className="text-[26px] font-bold text-[#0B1C3D] tracking-tight">
+            DMV<span className="text-[#2563EB]">SOS</span>
+          </span>
+        </div>
+
+        {/* Success card */}
+        <div className="bg-white rounded-2xl p-8 shadow-lg border border-[#E2E8F0] mb-6">
+          <div className="w-16 h-16 bg-[#F0FDF4] rounded-full flex items-center justify-center mx-auto mb-5">
+            <span className="text-4xl text-[#16A34A]">✓</span>
+          </div>
+          <h1 className="text-xl font-bold text-[#0B1C3D] mb-3">Payment successful!</h1>
+          <p className="text-[#475569] text-sm leading-relaxed mb-6">
+            Welcome to DMVSOS Pro! You now have access to all tests.
+          </p>
+
+          <button onClick={() => router.push('/category')}
+            className="w-full bg-[#2563EB] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#1D4ED8] hover:-translate-y-0.5 hover:shadow-lg transition-all mb-3">
+            Start practicing
+          </button>
+          <button onClick={() => router.push('/')}
+            className="w-full bg-white border-2 border-[#E2E8F0] text-[#1E293B] py-3 rounded-xl font-semibold text-base hover:border-[#2563EB] hover:text-[#2563EB] transition-all">
+            Go to home
+          </button>
+        </div>
+      </div>
+    </main>
+  );
+}
