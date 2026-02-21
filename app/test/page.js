@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
+import { supabase } from '@/lib/supabase';
 
 function TestContent() {
   const router = useRouter();
@@ -9,24 +10,34 @@ function TestContent() {
   const state = params.get('state') || 'washington';
   const category = params.get('category') || 'car';
 
+  const [user, setUser] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
   const [score, setScore] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [showUpgradeBanner, setShowUpgradeBanner] = useState(false);
 
   useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user: u } }) => setUser(u));
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
     fetch(`/data/${state}.json`)
       .then(r => r.json())
       .then(d => {
         const categoryMap = { dmv: 'car', cdl: 'cdl', moto: 'motorcycle' };
         const mappedCategory = categoryMap[category] || category;
         const test = d[mappedCategory]?.[0];
-        if (test) setQuestions(test.questions.slice(0, 20));
+        if (test) {
+          const all = test.questions;
+          setQuestions(user ? all : all.slice(0, 20));
+        }
         setLoading(false);
       });
-  }, [state, category]);
+  }, [state, category, user]);
 
   if (loading) return (
     <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
@@ -55,6 +66,10 @@ function TestContent() {
   }
 
   function handleNext() {
+    if (!user && current === 19) {
+      setShowUpgradeBanner(true);
+      return;
+    }
     if (current + 1 < total) {
       setCurrent(c => c + 1);
       setSelected(null);
@@ -63,6 +78,15 @@ function TestContent() {
       const finalScore = score + (selected === q.correctAnswerIndex ? 1 : 0);
       router.push(`/result?score=${finalScore}&total=${total}`);
     }
+  }
+
+  async function handleGoogleSignIn() {
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}${window.location.pathname}?${window.location.search}`
+      }
+    });
   }
 
   return (
@@ -120,7 +144,20 @@ function TestContent() {
           </div>
         )}
 
-        {showAnswer && (
+        {showUpgradeBanner && !user && current === 19 ? (
+          <div className="bg-[#0B1C3D] rounded-2xl p-6 border border-[#132248]">
+            <p className="text-white font-semibold text-lg mb-1">You&apos;ve reached the free limit</p>
+            <p className="text-[#94A3B8] text-sm mb-4">Sign in or upgrade to Pro to continue</p>
+            <button onClick={handleGoogleSignIn}
+              className="w-full bg-white text-[#0B1C3D] py-3 rounded-xl font-semibold text-sm mb-3 hover:bg-[#E2E8F0] transition-all">
+              🔵 Continue with Google
+            </button>
+            <button onClick={() => router.push('/upgrade')}
+              className="w-full bg-[#F59E0B] text-[#0B1C3D] py-3 rounded-xl font-semibold text-sm hover:bg-[#FBBF24] transition-all">
+              Upgrade to Pro $39/mo
+            </button>
+          </div>
+        ) : showAnswer && (
           <button onClick={handleNext}
             className="w-full bg-[#2563EB] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#1D4ED8] hover:-translate-y-0.5 hover:shadow-lg transition-all">
             {current + 1 < total ? 'Next Question →' : 'See Results →'}
