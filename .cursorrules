@@ -1,0 +1,36 @@
+# DMVSOS — DMV Test Prep Platform
+
+## Project Overview
+Web platform helping immigrants pass DMV/DOL knowledge exams in the US.
+Site: dmvsos.com
+
+## Tech Stack
+- Next.js 14 (App Router)
+- Tailwind CSS
+- Supabase (database + auth)
+- Vercel (hosting)
+
+## Core Principles
+- Immigrant-first UX: simple language, short sentences, clear explanations
+- Government-source accuracy: questions based strictly on official state manuals
+- Multi-state: WA, CA, NY, TX, FL and more
+- Multi-language: EN, RU, ES, ZH, UK
+- Two auth modes: Guest (no signup) + OAuth (Google, Apple)
+
+## Pages We Are Building
+1. Home page — state selector, category picker
+2. Test screen — question, 4 options, progress bar, timer
+3. Result screen — score, error review
+4. Dashboard — user history, weak topics
+
+## Database (Supabase)
+- questions: id, state, category, language, question_text, option_a/b/c/d, correct_answer, explanation, manual_version
+- test_sessions: id, user_id, state, score, answers[], created_at
+
+## Current Status
+- Login screen done (Guest + Google + Apple + state selector + language switcher)
+- Setting up project structure now
+
+## Design Style
+- Clean, professional, mobile-first
+- Colors: navy #0B1C3D, blue #
