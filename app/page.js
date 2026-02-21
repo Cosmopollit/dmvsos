@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
 
 export default function Home() {
   const [lang, setLang] = useState('English');
@@ -20,6 +21,27 @@ export default function Home() {
     'Texas (TX)', 'Florida (FL)', 'Illinois (IL)',
     'New Jersey (NJ)', 'Arizona (AZ)', 'Oregon (OR)', 'Nevada (NV)',
   ];
+
+  function stateToSlug(displayState) {
+    if (!displayState) return '';
+    const name = displayState.replace(/\s*\([A-Z]{2}\)\s*$/, '').trim();
+    return name.toLowerCase().replace(/\s+/g, '-');
+  }
+
+  const handleStartAsGuest = () => {
+    const stateCode = stateToSlug(state);
+    if (!stateCode) return;
+    router.push(`/category?state=${stateCode}`);
+  };
+
+  async function handleGoogleSignIn() {
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin + '/category'
+      }
+    });
+  }
 
   return (
     <main style={{ fontFamily: 'DM Sans, sans-serif' }} className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6 relative overflow-hidden">
@@ -80,7 +102,7 @@ export default function Home() {
         </select>
 
         {/* Guest button */}
-<button onClick={() => router.push('/category')}
+<button onClick={handleStartAsGuest}
   className="w-full bg-[#0B1C3D] text-white py-4 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#132248] hover:-translate-y-px hover:shadow-lg transition-all">
   🚗 Start as Guest
   <span className="bg-[#FEF3C7] text-[#B45309] text-[11px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">No signup</span>
@@ -94,7 +116,7 @@ export default function Home() {
         </div>
 
         {/* Google */}
-        <button className="w-full bg-white text-[#1E293B] border-[1.5px] border-[#E2E8F0] py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#F8FAFC] hover:-translate-y-px hover:shadow transition-all">
+        <button onClick={handleGoogleSignIn} className="w-full bg-white text-[#1E293B] border-[1.5px] border-[#E2E8F0] py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#F8FAFC] hover:-translate-y-px hover:shadow transition-all">
           🔵 Continue with Google
         </button>
 

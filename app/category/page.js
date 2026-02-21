@@ -1,5 +1,6 @@
 'use client';
-import { useRouter } from 'next/navigation';
+import { Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const categories = [
   {
@@ -34,8 +35,10 @@ const categories = [
   },
 ];
 
-export default function Category() {
+function CategoryContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const state = searchParams.get('state') ?? '';
 
   return (
     <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
@@ -52,7 +55,7 @@ export default function Category() {
         {categories.map((cat) => (
           <button
             key={cat.id}
-            onClick={() => router.push('/test')}
+            onClick={() => router.push(`/test?state=${state}&category=${cat.id}`)}
             className="bg-white border-2 border-[#E2E8F0] rounded-2xl p-5 flex items-center gap-5 hover:border-[#2563EB] hover:-translate-y-0.5 hover:shadow-lg transition-all text-left"
           >
             <div className="w-14 h-14 rounded-xl flex items-center justify-center text-3xl flex-shrink-0"
@@ -86,5 +89,13 @@ export default function Category() {
       </button>
 
     </main>
+  );
+}
+
+export default function Category() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">Loading…</div>}>
+      <CategoryContent />
+    </Suspense>
   );
 }

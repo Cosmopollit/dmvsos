@@ -89,7 +89,7 @@ function ResultContent() {
 
 export default function Result() {
   return (
-    <Suspense>
+    <Suspense fallback={<div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">Loading…</div>}>
       <ResultContent />
     </Suspense>
   );

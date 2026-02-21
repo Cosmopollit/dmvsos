@@ -20,7 +20,9 @@ function TestContent() {
     fetch(`/data/${state}.json`)
       .then(r => r.json())
       .then(d => {
-        const test = d[category]?.[0];
+        const categoryMap = { dmv: 'car', cdl: 'cdl', moto: 'motorcycle' };
+        const mappedCategory = categoryMap[category] || category;
+        const test = d[mappedCategory]?.[0];
         if (test) setQuestions(test.questions.slice(0, 20));
         setLoading(false);
       });
