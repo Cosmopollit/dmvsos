@@ -102,11 +102,23 @@ export default function Home() {
         </select>
 
         {/* Guest button */}
-<button onClick={handleStartAsGuest}
-  className="w-full bg-[#0B1C3D] text-white py-4 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#132248] hover:-translate-y-px hover:shadow-lg transition-all">
-  🚗 Start as Guest
-  <span className="bg-[#FEF3C7] text-[#B45309] text-[11px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">No signup</span>
-</button>
+        <div className="mb-3">
+          <button
+            onClick={handleStartAsGuest}
+            disabled={!state}
+            className={`w-full py-4 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 transition-all ${
+              state
+                ? 'bg-[#0B1C3D] text-white hover:bg-[#132248] hover:-translate-y-px hover:shadow-lg cursor-pointer'
+                : 'bg-[#E2E8F0] text-[#94A3B8] cursor-not-allowed'
+            }`}
+          >
+            🚗 Start as Guest
+            <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide ${state ? 'bg-[#FEF3C7] text-[#B45309]' : 'bg-[#CBD5E1] text-[#64748B]'}`}>No signup</span>
+          </button>
+          {!state && (
+            <p className="text-xs text-[#94A3B8] text-center mt-2">Please select your state first</p>
+          )}
+        </div>
 
         {/* Divider */}
         <div className="flex items-center gap-3 my-6">
