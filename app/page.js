@@ -135,6 +135,37 @@ export default function Home() {
 
       </div>
 
+      {/* Pricing */}
+      <div className="w-full max-w-[560px] mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Free plan */}
+        <div className="bg-white rounded-2xl p-6 border-2 border-[#E2E8F0]">
+          <h3 className="text-lg font-bold text-[#1E293B] mb-1">FREE</h3>
+          <p className="text-2xl font-bold text-[#0B1C3D] mb-4">$0</p>
+          <ul className="space-y-2 text-sm text-[#475569]">
+            <li>3 practice tests per state</li>
+            <li>Car (DMV) only</li>
+            <li>English only</li>
+            <li>Basic results</li>
+          </ul>
+        </div>
+        {/* Pro plan */}
+        <div className="bg-[#0B1C3D] rounded-2xl p-6 border-2 border-[#F59E0B] relative">
+          <span className="absolute top-3 right-3 text-[10px] font-bold text-[#F59E0B] uppercase tracking-wide">Popular</span>
+          <h3 className="text-lg font-bold text-white mb-1">PRO</h3>
+          <p className="text-2xl font-bold text-white mb-4">$39<span className="text-sm font-normal text-[#94A3B8]">/mo</span></p>
+          <ul className="space-y-2 text-sm text-[#CBD5E1] mb-5">
+            <li>All tests for all 50 states</li>
+            <li>Car, CDL, Motorcycle</li>
+            <li>4 languages (EN, RU, ES, ZH)</li>
+            <li>Detailed results + explanations</li>
+          </ul>
+          <button onClick={() => router.push('/upgrade')}
+            className="w-full bg-[#F59E0B] text-[#0B1C3D] py-3 rounded-xl font-semibold text-sm hover:bg-[#FBBF24] hover:-translate-y-0.5 hover:shadow-lg transition-all">
+            Upgrade $39/mo
+          </button>
+        </div>
+      </div>
+
       {/* Footer */}
       <p className="text-xs text-[#94A3B8] mt-5 text-center leading-relaxed">
         By continuing, you agree to our{' '}
