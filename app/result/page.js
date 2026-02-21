@@ -66,6 +66,16 @@ function ResultContent() {
 
         </div>
 
+        {/* Upgrade banner */}
+        <div className="bg-[#0B1C3D] rounded-2xl p-6 mb-5 border border-[#132248]">
+          <p className="text-white font-semibold text-lg mb-1">Want more questions? Upgrade to Pro</p>
+          <p className="text-[#94A3B8] text-sm mb-4">Get access to all 50 states, all categories, 4 languages</p>
+          <button onClick={() => router.push('/upgrade')}
+            className="w-full bg-[#F59E0B] text-[#0B1C3D] py-3 rounded-xl font-semibold text-sm hover:bg-[#FBBF24] hover:-translate-y-0.5 hover:shadow-lg transition-all">
+            Upgrade $39/mo
+          </button>
+        </div>
+
         {/* Buttons */}
         <button onClick={() => router.push('/test')}
           className="w-full bg-[#2563EB] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#1D4ED8] hover:-translate-y-0.5 hover:shadow-lg transition-all mb-3">
