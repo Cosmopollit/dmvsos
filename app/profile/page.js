@@ -38,15 +38,16 @@ export default function Profile() {
   }, []);
 
   useEffect(() => {
-    if (!user?.id) return;
-    supabase
-      .from('test_sessions')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
-      .limit(10)
-      .then(({ data }) => setSessions(data ?? []));
-  }, [user?.id]);
+    if (user) {
+      supabase
+        .from('test_sessions')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(10)
+        .then(({ data }) => setSessions(data || []));
+    }
+  }, [user]);
 
   if (loading) return (
     <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
@@ -81,26 +82,57 @@ export default function Profile() {
         {sessions.length > 0 && (
           <div className="bg-white rounded-2xl p-6 w-full mt-5 shadow-sm border border-[#E2E8F0]">
             <h3 className="text-base font-bold text-[#0B1C3D] mb-4">Test history</h3>
-            <ul className="space-y-2">
-              {sessions.map((s) => {
-                const passed = s.total > 0 && s.score / s.total >= 0.7;
-                return (
-                  <li
-                    key={s.id}
-                    className={`rounded-xl px-4 py-3 border text-left text-sm ${
-                      passed ? 'bg-[#F0FDF4] border-[#16A34A]' : 'bg-[#FEF2F2] border-[#DC2626]'
-                    }`}
-                  >
-                    <span className="font-medium text-[#1E293B]">{formatState(s.state)}</span>
-                    <span className="text-[#94A3B8] mx-2">·</span>
-                    <span className="text-[#1E293B]">{formatCategory(s.category)}</span>
-                    <span className="text-[#94A3B8] mx-2">·</span>
-                    <span className="font-semibold">{s.score}/{s.total}</span>
-                    <span className="text-[#94A3B8] ml-2">{formatDate(s.created_at)}</span>
-                  </li>
-                );
-              })}
-            </ul>
+            {(() => {
+              const totalTests = sessions.length;
+              const pcts = sessions.map((s) => (s.total > 0 ? (s.score / s.total) * 100 : 0));
+              const avgPct = totalTests > 0 ? Math.round(pcts.reduce((a, b) => a + b, 0) / totalTests) : 0;
+              const bestPct = pcts.length > 0 ? Math.round(Math.max(...pcts)) : 0;
+              return (
+                <>
+                  <div className="grid grid-cols-3 gap-3 mb-4">
+                    <div className="bg-[#F8FAFC] rounded-xl px-3 py-2.5 text-center">
+                      <p className="text-xs text-[#94A3B8]">Total tests</p>
+                      <p className="text-lg font-bold text-[#0B1C3D]">{totalTests}</p>
+                    </div>
+                    <div className="bg-[#F8FAFC] rounded-xl px-3 py-2.5 text-center">
+                      <p className="text-xs text-[#94A3B8]">Average score</p>
+                      <p className="text-lg font-bold text-[#0B1C3D]">{avgPct}%</p>
+                    </div>
+                    <div className="bg-[#F8FAFC] rounded-xl px-3 py-2.5 text-center">
+                      <p className="text-xs text-[#94A3B8]">Best score</p>
+                      <p className="text-lg font-bold text-[#0B1C3D]">{bestPct}%</p>
+                    </div>
+                  </div>
+                  <ul className="space-y-2">
+                    {sessions.map((s) => {
+                      const passed = s.total > 0 && s.score / s.total >= 0.7;
+                      return (
+                        <li
+                          key={s.id}
+                          className="rounded-xl px-4 py-3 border border-[#E2E8F0] text-left text-sm bg-white"
+                        >
+                          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                            <span className="font-medium text-[#1E293B]">{formatState(s.state)}</span>
+                            <span className="text-[#94A3B8]">·</span>
+                            <span className="text-[#1E293B]">{formatCategory(s.category)}</span>
+                            <span className="text-[#94A3B8]">·</span>
+                            <span className="font-semibold">{s.score}/{s.total}</span>
+                            <span className="text-[#94A3B8]">{formatDate(s.created_at)}</span>
+                            <span
+                              className={`ml-auto inline-block text-xs font-semibold px-2 py-0.5 rounded-full ${
+                                passed ? 'bg-[#F0FDF4] text-[#16A34A]' : 'bg-[#FEF2F2] text-[#DC2626]'
+                              }`}
+                            >
+                              {passed ? 'Passed' : 'Not passed'}
+                            </span>
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </>
+              );
+            })()}
           </div>
         )}
 

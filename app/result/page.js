@@ -1,6 +1,7 @@
 'use client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useState, useEffect } from 'react';
+import { t } from '@/lib/translations';
 
 function ResultContent() {
   const router = useRouter();
@@ -27,6 +28,7 @@ function ResultContent() {
   const category = testResults?.category ?? 'car';
   const lang = testResults?.lang ?? 'en';
   const wrongQuestions = questions.filter((q, i) => userAnswers[i] !== q.correctAnswerIndex);
+  const tex = t[lang] || t.en;
   const formatTime = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
 
   function stripQuestion(s) {
@@ -132,7 +134,7 @@ function ResultContent() {
             }}
             className="w-full bg-white border border-[#E2E8F0] text-[#1E293B] py-3.5 rounded-xl font-semibold text-base hover:border-[#2563EB] hover:text-[#2563EB] hover:bg-[#F8FAFC] transition-all"
           >
-            🔄 Retry Wrong Answers ({wrongQuestions.length})
+            {tex.retryWrong} ({wrongQuestions.length})
           </button>
         )}
         <button
