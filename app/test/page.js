@@ -58,8 +58,8 @@ function TestContent() {
         const mappedCategory = categoryMap[category] || category;
         const test = d[mappedCategory]?.[0];
         if (test) {
-          const all = test.questions;
-          setQuestions(user ? all : all.slice(0, 20));
+          const shuffled = [...test.questions].sort(() => Math.random() - 0.5);
+          setQuestions(user ? shuffled : shuffled.slice(0, 20));
         }
         setLoading(false);
       });
