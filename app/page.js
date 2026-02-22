@@ -4,6 +4,39 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { t } from '@/lib/translations';
 
+const greetings = {
+  en: [
+    "Your license won't get itself 😏",
+    "Let's go. Today's the day 🔥",
+    "Your license is literally waiting 🪪",
+    "No excuses. Let's do this 🚗",
+  ],
+  ru: [
+    "Права сами себя не сдадут 😏",
+    "Ну что, погнали? 🔥",
+    "Твои права уже ждут тебя 🪪",
+    "Хватит откладывать. Погнали 🚗",
+  ],
+  es: [
+    "Tu licencia no se va a sacar sola 😏",
+    "Vamos. Hoy es el día 🔥",
+    "Tu licencia te está esperando 🪪",
+    "Sin excusas. Vamos a por ello 🚗",
+  ],
+  zh: [
+    "驾照不会自己来找你 😏",
+    "走吧，今天就是今天 🔥",
+    "你的驾照在等你 🪪",
+    "没有借口，干就完了 🚗",
+  ],
+  ua: [
+    "Права самі себе не здадуть 😏",
+    "Ну що, погнали? 🔥",
+    "Твої права вже чекають 🪪",
+    "Досить відкладати. Погнали 🚗",
+  ],
+};
+
 export default function Home() {
   const [lang, setLang] = useState('English');
   const [state, setState] = useState('');
@@ -11,6 +44,7 @@ export default function Home() {
   const [isPro, setIsPro] = useState(false);
   const [liveCount] = useState(() => Math.floor(Math.random() * 40) + 15);
   const [activeStep, setActiveStep] = useState(0);
+  const [greetingIndex] = useState(() => Math.floor(Math.random() * 4));
   const router = useRouter();
 
   useEffect(() => {
@@ -23,6 +57,7 @@ export default function Home() {
   const langToCode = { English: 'en', 'Русский': 'ru', 'Español': 'es', '中文': 'zh', 'Українська': 'ua' };
   const langCode = langToCode[lang] || 'en';
   const tex = t[langCode] || t.en;
+  const greeting = (greetings[langCode] ?? greetings.en)[greetingIndex];
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
@@ -165,8 +200,7 @@ export default function Home() {
       <div id="state-selector" className="w-full max-w-lg mx-auto px-4 mb-8">
         <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 border border-[#E2E8F0]/40">
 
-        <h2 className="text-[22px] font-bold text-[#1E293B] mb-1">{tex.startTitle}</h2>
-        <p className="text-sm text-[#94A3B8] mb-7 leading-relaxed">{tex.startSubtitle}</p>
+        <h2 className="text-[22px] font-bold text-[#1E293B] mb-7 leading-tight">{greeting}</h2>
 
         {/* State */}
         <label className="text-xs font-semibold text-[#1E293B] uppercase tracking-widest mb-2 block">{tex.yourState}</label>
