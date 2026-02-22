@@ -96,9 +96,7 @@ export default function Home() {
       {/* Brand */}
       <div className="text-center mb-6">
         <div className="inline-flex items-center gap-3 mb-2">
-          <div className="w-11 h-11 bg-[#0B1C3D] rounded-xl flex items-center justify-center">
-            <span className="text-[#F59E0B] text-lg font-bold">✦</span>
-          </div>
+          <img src="/logo.png" alt="DMVSOS" className="w-12 h-12 rounded-xl" />
           <span className="text-[26px] font-bold text-[#0B1C3D] tracking-tight">
             DMV<span className="text-[#2563EB]">SOS</span>
           </span>
@@ -121,7 +119,7 @@ export default function Home() {
       </div>
 
       {/* Card */}
-      <div className="bg-white rounded-2xl p-9 w-full max-w-[440px] border border-[#E2E8F0]"
+      <div id="state-selector" className="bg-white rounded-2xl p-9 w-full max-w-[440px] border border-[#E2E8F0]"
         style={{ boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05), 0 20px 60px -10px rgba(11,28,61,0.1)' }}>
 
         {/* Step dots */}
@@ -220,10 +218,23 @@ export default function Home() {
         <p className="text-sm text-[#64748B] text-center mb-6 leading-relaxed max-w-md mx-auto">{tex.pricingSubtext}</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {/* Free plan */}
-          <div className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-sm">
+          <div className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-sm flex flex-col">
             <h3 className="text-base font-bold text-[#1E293B] mb-1">{tex.freeTitle}</h3>
-            <p className="text-sm text-[#94A3B8] mb-4">{tex.freeDesc}</p>
-            <p className="text-2xl font-bold text-[#0B1C3D]">$0</p>
+            <p className="text-sm text-[#94A3B8] mb-3">{tex.freeDesc}</p>
+            <p className="text-2xl font-bold text-[#0B1C3D] mb-4">$0</p>
+            <ul className="space-y-2 text-sm text-[#94A3B8] mb-4">
+              <li>{tex.freeFeature1}</li>
+              <li>{tex.freeFeature2}</li>
+              <li>{tex.freeFeature3}</li>
+              <li>{tex.freeFeature4}</li>
+            </ul>
+            <button
+              type="button"
+              onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
+              className="mt-auto w-full py-3 rounded-xl font-semibold text-sm border border-[#E2E8F0] text-[#1E293B] hover:bg-[#F8FAFC] hover:border-[#2563EB] hover:text-[#2563EB] transition-all"
+            >
+              {tex.startFree}
+            </button>
           </div>
           {/* Pro plan */}
           <div className="bg-[#0B1C3D] rounded-2xl p-6 border border-[#1e3a5f] shadow-sm">

@@ -16,6 +16,7 @@ export const metadata = {
   title: 'DMVSOS — Free DMV Practice Tests for All 50 States',
   description: 'Free DMV practice tests for all 50 US states. Car, CDL, and Motorcycle tests in English, Russian, Spanish, and Chinese. Pass your DMV test on the first try.',
   keywords: 'DMV practice test, driving test, DMV test 2026, free DMV test',
+  icons: { icon: '/logo.png' },
   openGraph: {
     title: 'DMVSOS — Free DMV Practice Tests',
     description: 'Pass your DMV test on the first try. Free practice tests for all 50 states.',
