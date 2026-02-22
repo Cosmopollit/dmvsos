@@ -3,10 +3,27 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 
+function formatState(s) {
+  if (!s) return '—';
+  return s.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+}
+
+function formatCategory(c) {
+  const map = { car: 'Car', cdl: 'CDL', motorcycle: 'Motorcycle' };
+  return map[c] || c;
+}
+
+function formatDate(createdAt) {
+  if (!createdAt) return '—';
+  const d = new Date(createdAt);
+  return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
 export default function Profile() {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [sessions, setSessions] = useState([]);
 
   useEffect(() => {
     setTimeout(async () => {
@@ -19,6 +36,17 @@ export default function Profile() {
       setLoading(false);
     }, 500);
   }, []);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    supabase
+      .from('test_sessions')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(10)
+      .then(({ data }) => setSessions(data ?? []));
+  }, [user?.id]);
 
   if (loading) return (
     <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
@@ -49,6 +77,33 @@ export default function Profile() {
             </button>
           </div>
         </div>
+
+        {sessions.length > 0 && (
+          <div className="bg-white rounded-2xl p-6 w-full mt-5 shadow-sm border border-[#E2E8F0]">
+            <h3 className="text-base font-bold text-[#0B1C3D] mb-4">Test history</h3>
+            <ul className="space-y-2">
+              {sessions.map((s) => {
+                const passed = s.total > 0 && s.score / s.total >= 0.7;
+                return (
+                  <li
+                    key={s.id}
+                    className={`rounded-xl px-4 py-3 border text-left text-sm ${
+                      passed ? 'bg-[#F0FDF4] border-[#16A34A]' : 'bg-[#FEF2F2] border-[#DC2626]'
+                    }`}
+                  >
+                    <span className="font-medium text-[#1E293B]">{formatState(s.state)}</span>
+                    <span className="text-[#94A3B8] mx-2">·</span>
+                    <span className="text-[#1E293B]">{formatCategory(s.category)}</span>
+                    <span className="text-[#94A3B8] mx-2">·</span>
+                    <span className="font-semibold">{s.score}/{s.total}</span>
+                    <span className="text-[#94A3B8] ml-2">{formatDate(s.created_at)}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+
         <button type="button" onClick={() => router.push('/')} className="mt-6 text-sm text-[#94A3B8] hover:text-[#2563EB] transition">← Back to Home</button>
       </div>
     </main>

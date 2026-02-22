@@ -23,6 +23,22 @@ function TestContent() {
   const [score, setScore] = useState(0);
   const [loading, setLoading] = useState(true);
   const [showUpgradeBanner, setShowUpgradeBanner] = useState(false);
+  const [motivationalMessage, setMotivationalMessage] = useState(null); // { text, phase: 'show'|'fade' }
+
+  const correctMessages = ['🔥 Great job!', '💪 Keep it up!', '⭐ Excellent!', '🎯 Perfect!'];
+  const wrongMessages = ['📚 Keep learning!', '💡 Now you know!', '🔄 You\'ll get it!', '👍 Good try!'];
+
+  useEffect(() => {
+    if (!motivationalMessage) return;
+    if (motivationalMessage.phase === 'show') {
+      const t = setTimeout(() => setMotivationalMessage(m => m ? { ...m, phase: 'fade' } : null), 1000);
+      return () => clearTimeout(t);
+    }
+    if (motivationalMessage.phase === 'fade') {
+      const t = setTimeout(() => setMotivationalMessage(null), 300);
+      return () => clearTimeout(t);
+    }
+  }, [motivationalMessage]);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user: u } }) => setUser(u));
@@ -62,15 +78,23 @@ function TestContent() {
   const q = questions[current];
   const total = questions.length;
   const progress = (current / total) * 100;
+  const answered = showAnswer ? current + 1 : current;
+  const correctCount = score;
+  const wrongCount = answered - correctCount;
 
   function handleSelect(index) {
     if (showAnswer) return;
     setSelected(index);
     setShowAnswer(true);
-    if (index === q.correctAnswerIndex) setScore(s => s + 1);
+    const correct = index === q.correctAnswerIndex;
+    if (correct) setScore(s => s + 1);
+    const msg = correct
+      ? correctMessages[Math.floor(Math.random() * correctMessages.length)]
+      : wrongMessages[Math.floor(Math.random() * wrongMessages.length)];
+    setMotivationalMessage({ text: msg, phase: 'show' });
   }
 
-  function handleNext() {
+  async function handleNext() {
     if (!user && current === 19) {
       setShowUpgradeBanner(true);
       return;
@@ -87,6 +111,16 @@ function TestContent() {
         'testResults',
         JSON.stringify({ questions, userAnswers: finalUserAnswers })
       );
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        await supabase.from('test_sessions').insert({
+          user_id: session.user.id,
+          state,
+          category,
+          score: finalScore,
+          total,
+        });
+      }
       router.push(`/result?score=${finalScore}&total=${total}`);
     }
   }
@@ -105,11 +139,23 @@ function TestContent() {
       <div className="w-full max-w-md">
 
         <div className="flex items-center justify-between mb-5">
-          <button type="button" onClick={() => router.push('/category')}
-            className="text-sm text-[#94A3B8] hover:text-[#2563EB] transition">
-            {tex.back}
-          </button>
-          <span className="text-sm font-medium text-[#94A3B8]">{current + 1} / {total}</span>
+          <div className="flex items-center gap-2">
+            <button type="button" onClick={() => router.push('/category')}
+              className="text-sm text-[#94A3B8] hover:text-[#2563EB] transition">
+              {tex.back}
+            </button>
+            <button type="button" onClick={() => { if (window.confirm('Leave test? Your progress will be lost.')) router.push('/'); }}
+              className="text-[#94A3B8] hover:text-[#2563EB] transition p-0.5"
+              title="Home"
+              aria-label="Home">
+              🏠
+            </button>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-[#16A34A]">✅ {correctCount}</span>
+            <span className="text-sm text-[#DC2626]">❌ {wrongCount}</span>
+            <span className="text-sm font-medium text-[#94A3B8]">{current + 1} / {total}</span>
+          </div>
         </div>
 
         <div className="w-full h-1.5 bg-[#E2E8F0] rounded-full mb-6">
@@ -150,9 +196,15 @@ function TestContent() {
         {showAnswer && (
           <div className="bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl p-4 mb-5">
             <p className="text-sm text-[#1E40AF] leading-relaxed">
-              ✅ {tex.correct}: <strong>{q.answers[q.correctAnswerIndex]}</strong>
+              ✅ {tex.correct}: <strong>{q.answers[q.correctAnswerIndex].replace(/^[A-D]\.\s*/i, '')}</strong>
             </p>
           </div>
+        )}
+
+        {motivationalMessage && (
+          <p className={`text-center text-base font-semibold mb-4 transition-opacity duration-300 ${motivationalMessage.phase === 'fade' ? 'opacity-0' : 'opacity-100'}`}>
+            {motivationalMessage.text}
+          </p>
         )}
 
         {showAnswer && !(showUpgradeBanner && !user && current === 19) && (
