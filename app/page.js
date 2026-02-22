@@ -98,7 +98,7 @@ export default function Home() {
 
       {/* Header: brand + user (no overlap, in flow) */}
       <header className="w-full max-w-lg mx-auto flex items-center justify-between gap-4 mb-6 px-1">
-        <div className="flex items-center gap-3 min-w-0">
+        <a href="/" className="flex items-center gap-3 min-w-0 cursor-pointer hover:opacity-90 transition">
           <img src="/logo.png" alt="DMVSOS" className="w-12 h-12 rounded-xl shrink-0" />
           <div className="min-w-0">
             <div className="text-[22px] sm:text-[26px] font-bold text-[#0B1C3D] tracking-tight">
@@ -106,7 +106,7 @@ export default function Home() {
             </div>
             <p className="text-sm text-[#94A3B8]">{tex.slogan}</p>
           </div>
-        </div>
+        </a>
         {user && (() => {
           const raw = user.user_metadata?.full_name || user.email || '';
           const firstName = raw.split(/\s+/)[0] || raw.split('@')[0] || '?';

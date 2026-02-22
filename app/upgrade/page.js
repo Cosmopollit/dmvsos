@@ -6,7 +6,8 @@ import { t } from '@/lib/translations';
 function UpgradeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const lang = searchParams.get('lang') || 'en';
+  const storedLang = typeof window !== 'undefined' ? (() => { try { return JSON.parse(sessionStorage.getItem('testResults') || '{}').lang; } catch { return null; } })() : null;
+  const lang = searchParams.get('lang') || storedLang || 'en';
   const tex = t[lang] || t.en;
 
   const [loading, setLoading] = useState(false);
@@ -28,10 +29,12 @@ function UpgradeContent() {
     <main className="min-h-screen bg-[#0B1C3D] flex flex-col items-center justify-center p-6">
 
       {/* Logo */}
-      <div className="flex items-center gap-3 mb-8">
-        <img src="/logo.png" alt="DMVSOS" className="w-10 h-10 rounded-xl" />
-        <span className="text-2xl font-bold text-white">DMV<span className="text-[#F59E0B]">SOS</span></span>
-      </div>
+      <a href="/" className="inline-block">
+        <div className="flex items-center gap-3 mb-8 cursor-pointer hover:opacity-80">
+          <img src="/logo.png" alt="DMVSOS" className="w-10 h-10 rounded-xl" />
+          <span className="text-2xl font-bold text-white">DMV<span className="text-[#F59E0B]">SOS</span></span>
+        </div>
+      </a>
 
       {/* Hero */}
       <div className="text-center mb-8 max-w-lg">
@@ -107,7 +110,7 @@ function UpgradeContent() {
       </div>
 
       <button onClick={() => router.back()} className="text-[#94A3B8] text-sm hover:text-white">
-        ← Back
+        {tex.back}
       </button>
     </main>
   );
