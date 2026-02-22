@@ -18,6 +18,7 @@ function TestContent() {
   const [questions, setQuestions] = useState([]);
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
+  const [userAnswers, setUserAnswers] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
   const [score, setScore] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -75,11 +76,17 @@ function TestContent() {
       return;
     }
     if (current + 1 < total) {
-      setCurrent(c => c + 1);
+      setUserAnswers((prev) => [...prev, selected]);
+      setCurrent((c) => c + 1);
       setSelected(null);
       setShowAnswer(false);
     } else {
       const finalScore = score + (selected === q.correctAnswerIndex ? 1 : 0);
+      const finalUserAnswers = [...userAnswers, selected];
+      sessionStorage.setItem(
+        'testResults',
+        JSON.stringify({ questions, userAnswers: finalUserAnswers })
+      );
       router.push(`/result?score=${finalScore}&total=${total}`);
     }
   }
