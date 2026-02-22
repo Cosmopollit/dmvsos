@@ -22,6 +22,8 @@ function ResultContent() {
 
   const questions = testResults?.questions ?? [];
   const userAnswers = testResults?.userAnswers ?? [];
+  const elapsed = testResults?.elapsed ?? 0;
+  const formatTime = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
 
   function stripQuestion(s) {
     return (s || '').replace(/^\d+\.\s*/, '');
@@ -44,9 +46,13 @@ function ResultContent() {
             {passed ? 'PASSED' : 'NOT PASSED'}
           </div>
           <div className="text-5xl font-bold text-[#0B1C3D] mb-1">{percent}%</div>
-          <p className="text-[#94A3B8] text-sm mb-6">
+          <p className="text-[#94A3B8] text-sm mb-2">
             You answered {score} out of {total} questions correctly
           </p>
+          {elapsed > 0 && (
+            <p className="text-[#94A3B8] text-sm mb-6">Completed in {formatTime(elapsed)}</p>
+          )}
+          {elapsed === 0 && <div className="mb-6" />}
           <div className="w-full h-1.5 bg-[#E2E8F0] rounded-full mb-6">
             <div
               className={`h-1.5 rounded-full transition-all duration-700 ${

@@ -24,9 +24,14 @@ function TestContent() {
   const [loading, setLoading] = useState(true);
   const [showUpgradeBanner, setShowUpgradeBanner] = useState(false);
   const [motivationalMessage, setMotivationalMessage] = useState(null); // { text, phase: 'show'|'fade' }
+  const [elapsed, setElapsed] = useState(0);
 
-  const correctMessages = ['🔥 Great job!', '💪 Keep it up!', '⭐ Excellent!', '🎯 Perfect!'];
-  const wrongMessages = ['📚 Keep learning!', '💡 Now you know!', '🔄 You\'ll get it!', '👍 Good try!'];
+  const formatTime = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+
+  useEffect(() => {
+    const interval = setInterval(() => setElapsed(e => e + 1), 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (!motivationalMessage) return;
@@ -88,9 +93,8 @@ function TestContent() {
     setShowAnswer(true);
     const correct = index === q.correctAnswerIndex;
     if (correct) setScore(s => s + 1);
-    const msg = correct
-      ? correctMessages[Math.floor(Math.random() * correctMessages.length)]
-      : wrongMessages[Math.floor(Math.random() * wrongMessages.length)];
+    const arr = correct ? tex.motivationalCorrect : tex.motivationalWrong;
+    const msg = arr[Math.floor(Math.random() * arr.length)];
     setMotivationalMessage({ text: msg, phase: 'show' });
   }
 
@@ -109,7 +113,7 @@ function TestContent() {
       const finalUserAnswers = [...userAnswers, selected];
       sessionStorage.setItem(
         'testResults',
-        JSON.stringify({ questions, userAnswers: finalUserAnswers })
+        JSON.stringify({ questions, userAnswers: finalUserAnswers, elapsed })
       );
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
@@ -154,6 +158,7 @@ function TestContent() {
           <div className="flex items-center gap-3">
             <span className="text-sm text-[#16A34A]">✅ {correctCount}</span>
             <span className="text-sm text-[#DC2626]">❌ {wrongCount}</span>
+            <span className="text-sm text-[#94A3B8]">⏱ {formatTime(elapsed)}</span>
             <span className="text-sm font-medium text-[#94A3B8]">{current + 1} / {total}</span>
           </div>
         </div>
