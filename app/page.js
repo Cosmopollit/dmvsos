@@ -103,6 +103,7 @@ export default function Home() {
     { emoji: '🚗', label: tex.step3, color: '#10B981' },
     { emoji: '🌴', label: tex.step4, color: '#F59E0B' },
   ];
+  const carPosition = (activeStep / 3) * 100;
 
   return (
     <main style={{ fontFamily: 'DM Sans, sans-serif', background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }} className="min-h-screen flex flex-col items-center py-8 px-4">
@@ -122,6 +123,14 @@ export default function Home() {
               DMV<span className="text-[#2563EB]">SOS</span>
             </div>
             <p className="text-sm text-[#94A3B8]">{tex.slogan}</p>
+            <div className="flex flex-wrap gap-3 justify-center mt-2 mb-4">
+              {tex.trustBar?.map((item, i) => (
+                <span key={i}>
+                  {i > 0 && <span className="text-gray-200"> · </span>}
+                  <span className="text-xs text-gray-400">{item}</span>
+                </span>
+              ))}
+            </div>
           </a>
         </div>
         {user && (() => {
@@ -271,13 +280,33 @@ export default function Home() {
             {steps.map((step, i) => (
               <div key={i} className="flex items-center gap-3">
                 <div
-                  className="flex flex-col items-center transition-all duration-500"
+                  className="flex flex-col items-center relative"
                   style={{
-                    transform: activeStep === i ? 'scale(1.3)' : 'scale(1)',
+                    transform: activeStep === i ? 'scale(1.5) translateY(-4px)' : 'scale(1)',
+                    filter: activeStep === i ? 'drop-shadow(0 4px 6px rgba(0,0,0,0.2))' : 'none',
+                    transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
                     opacity: activeStep === i ? 1 : 0.4
                   }}
                 >
-                  <span className="text-3xl">{step.emoji}</span>
+                  <div className="relative flex flex-col items-center" style={{ minWidth: 50, minHeight: 50 }}>
+                    {activeStep === i && (
+                      <div
+                        style={{
+                          position: 'absolute',
+                          width: '50px',
+                          height: '50px',
+                          borderRadius: '50%',
+                          background: steps[activeStep].color,
+                          opacity: 0.15,
+                          filter: 'blur(10px)',
+                          transform: 'translate(-50%, -50%)',
+                          top: '50%',
+                          left: '50%'
+                        }}
+                      />
+                    )}
+                    <span className="text-3xl relative z-10">{step.emoji}</span>
+                  </div>
                   <span
                     className="text-xs mt-1 font-medium transition-all duration-500"
                     style={{ color: activeStep === i ? step.color : '#9CA3AF' }}
@@ -296,14 +325,19 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <div className="mt-4 h-1 bg-gray-100 rounded-full overflow-hidden">
+          {/* Road animation */}
+          <div className="relative mt-4 h-8 bg-gray-100 rounded-full overflow-hidden border border-gray-200">
+            <div className="absolute inset-0 flex items-center px-4 gap-3">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="h-0.5 w-6 bg-gray-300 rounded" />
+              ))}
+            </div>
             <div
-              className="h-full rounded-full transition-all duration-1500"
-              style={{
-                width: `${((activeStep + 1) / 4) * 100}%`,
-                background: steps[activeStep].color
-              }}
-            />
+              className="absolute top-1 text-xl transition-all duration-700 ease-in-out"
+              style={{ left: `calc(${carPosition}% - 12px)` }}
+            >
+              🚗
+            </div>
           </div>
         </div>
       </div>
