@@ -245,6 +245,26 @@ export default function Home() {
 
       </div>
 
+      <div className="w-full max-w-lg mx-auto mt-8 mb-8">
+        <h2 className="text-center text-xl font-bold text-[#0B1C3D] mb-6">
+          {tex.howItWorks}
+        </h2>
+        <div className="grid grid-cols-3 gap-4">
+          <div className="text-center">
+            <div className="text-3xl mb-2">🗺️</div>
+            <div className="font-semibold text-[#0B1C3D] text-sm">{tex.step1}</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl mb-2">🌍</div>
+            <div className="font-semibold text-[#0B1C3D] text-sm">{tex.step2}</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl mb-2">🚗</div>
+            <div className="font-semibold text-[#0B1C3D] text-sm">{tex.step3}</div>
+          </div>
+        </div>
+      </div>
+
       {/* Pricing - PRO first (left on desktop, top on mobile), all text centered */}
       <div className="w-full max-w-[560px] mt-10 px-4">
         <h2 className="text-xl font-bold text-[#0B1C3D] text-center mb-2">{tex.pricingHeading}</h2>
