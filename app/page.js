@@ -10,7 +10,15 @@ export default function Home() {
   const [user, setUser] = useState(null);
   const [isPro, setIsPro] = useState(false);
   const [liveCount] = useState(() => Math.floor(Math.random() * 40) + 15);
+  const [activeStep, setActiveStep] = useState(0);
   const router = useRouter();
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveStep(prev => prev < 3 ? prev + 1 : 0);
+    }, 1500);
+    return () => clearInterval(timer);
+  }, []);
 
   const langToCode = { English: 'en', 'Русский': 'ru', 'Español': 'es', '中文': 'zh', 'Українська': 'ua' };
   const langCode = langToCode[lang] || 'en';
@@ -89,6 +97,12 @@ export default function Home() {
   }
 
   const stateEmoji = { 'Washington (WA)': '🏔️', 'California (CA)': '🌴', 'New York (NY)': '🗽', 'Texas (TX)': '🤠', 'Florida (FL)': '🌊' };
+  const steps = [
+    { emoji: '📱', label: tex.step1, color: '#3B82F6' },
+    { emoji: '🏛️', label: tex.step2, color: '#8B5CF6' },
+    { emoji: '🚗', label: tex.step3, color: '#10B981' },
+    { emoji: '🌴', label: tex.step4, color: '#F59E0B' },
+  ];
 
   return (
     <main style={{ fontFamily: 'DM Sans, sans-serif', background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }} className="min-h-screen flex flex-col items-center py-8 px-4">
@@ -247,23 +261,49 @@ export default function Home() {
         </div>
       </div>
 
-      {/* How it works */}
+      {/* How it works - animated steps */}
       <div className="w-full max-w-lg mx-auto text-center mb-8 px-4">
         <h2 className="text-xl font-bold text-[#0B1C3D] mb-6">
           {tex.howItWorks}
         </h2>
-        <div className="grid grid-cols-3 gap-4">
-          <div className="text-center">
-            <div className="text-3xl mb-2">🗺️</div>
-            <div className="font-semibold text-[#0B1C3D] text-sm">{tex.step1}</div>
+        <div className="w-full max-w-lg mx-auto mb-8">
+          <div className="flex items-center justify-center gap-3 flex-wrap">
+            {steps.map((step, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <div
+                  className="flex flex-col items-center transition-all duration-500"
+                  style={{
+                    transform: activeStep === i ? 'scale(1.3)' : 'scale(1)',
+                    opacity: activeStep === i ? 1 : 0.4
+                  }}
+                >
+                  <span className="text-3xl">{step.emoji}</span>
+                  <span
+                    className="text-xs mt-1 font-medium transition-all duration-500"
+                    style={{ color: activeStep === i ? step.color : '#9CA3AF' }}
+                  >
+                    {step.label}
+                  </span>
+                </div>
+                {i < 3 && (
+                  <span
+                    className="text-gray-300 text-xl transition-all duration-500"
+                    style={{ opacity: activeStep > i ? 1 : 0.3 }}
+                  >
+                    →
+                  </span>
+                )}
+              </div>
+            ))}
           </div>
-          <div className="text-center">
-            <div className="text-3xl mb-2">🌍</div>
-            <div className="font-semibold text-[#0B1C3D] text-sm">{tex.step2}</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl mb-2">🚗</div>
-            <div className="font-semibold text-[#0B1C3D] text-sm">{tex.step3}</div>
+          <div className="mt-4 h-1 bg-gray-100 rounded-full overflow-hidden">
+            <div
+              className="h-full rounded-full transition-all duration-1500"
+              style={{
+                width: `${((activeStep + 1) / 4) * 100}%`,
+                background: steps[activeStep].color
+              }}
+            />
           </div>
         </div>
       </div>
