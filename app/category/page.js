@@ -4,9 +4,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { t } from '@/lib/translations';
 
 const categories = [
-  { id: 'dmv', icon: '🚗', titleKey: 'car', descKey: 'carDesc', questions: 40, time: '25 min', color: '#2563EB', bg: '#EFF6FF' },
-  { id: 'cdl', icon: '🚛', titleKey: 'truck', descKey: 'truckDesc', questions: 50, time: '35 min', color: '#16A34A', bg: '#F0FDF4' },
-  { id: 'moto', icon: '🏍️', titleKey: 'motorcycle', descKey: 'motoDesc', questions: 30, time: '20 min', color: '#D97706', bg: '#FFFBEB' },
+  { id: 'dmv', icon: '🚗', titleKey: 'car', descKey: 'carDesc', questions: 40, time: '25 min', color: '#2563EB', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', badge: null, emojiSize: 'text-6xl' },
+  { id: 'cdl', icon: '🚛', titleKey: 'truck', descKey: 'truckDesc', questions: 50, time: '35 min', color: '#0EA5E9', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)', badge: '💼 Professional', emojiSize: 'text-4xl' },
+  { id: 'moto', icon: '🏍️', titleKey: 'motorcycle', descKey: 'motoDesc', questions: 30, time: '20 min', color: '#D97706', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)', badge: '⚡ Quick', emojiSize: 'text-4xl' },
 ];
 
 function CategoryContent() {
@@ -17,7 +17,10 @@ function CategoryContent() {
   const tex = t[lang] || t.en;
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
+    <main className="min-h-screen flex flex-col items-center justify-center p-6 relative" style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}>
+      <button type="button" onClick={() => router.back()} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">
+        ✕
+      </button>
       <div className="text-center mb-8">
         <span className="text-2xl font-bold text-[#0B1C3D]">
           DMV<span className="text-[#2563EB]">SOS</span>
@@ -32,22 +35,27 @@ function CategoryContent() {
             key={cat.id}
             type="button"
             onClick={() => router.push(`/test?state=${state}&category=${cat.id}&lang=${lang}`)}
-            className="bg-white border border-[#E2E8F0] rounded-2xl p-5 flex items-center gap-5 hover:border-[#2563EB] hover:shadow-md transition-all text-left shadow-sm"
+            className="rounded-2xl p-5 flex items-center gap-5 hover:shadow-lg transition-all text-left border-2 border-white/60 shadow-md"
+            style={{ background: cat.gradient }}
           >
-            <div className="w-14 h-14 rounded-xl flex items-center justify-center text-3xl flex-shrink-0"
-              style={{ background: cat.bg }}>
+            <div className={`flex-shrink-0 ${cat.emojiSize}`}>
               {cat.icon}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="font-bold text-[#1E293B] text-lg">{tex[cat.titleKey]}</div>
-              <div className="text-sm text-[#94A3B8] mt-0.5 mb-2">{tex[cat.descKey]}</div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="font-bold text-[#1E293B] text-lg">{tex[cat.titleKey]}</span>
+                {cat.badge && (
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-white/70 text-[#475569]">
+                    {cat.badge}
+                  </span>
+                )}
+              </div>
+              <div className="text-sm text-[#64748B] mt-0.5 mb-2">{tex[cat.descKey]}</div>
               <div className="flex gap-2 flex-wrap">
-                <span className="text-xs font-medium px-2.5 py-1 rounded-full"
-                  style={{ background: cat.bg, color: cat.color }}>
+                <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-white/70" style={{ color: cat.color }}>
                   {cat.questions} questions
                 </span>
-                <span className="text-xs font-medium px-2.5 py-1 rounded-full"
-                  style={{ background: cat.bg, color: cat.color }}>
+                <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-white/70" style={{ color: cat.color }}>
                   ⏱ {cat.time}
                 </span>
               </div>
@@ -56,18 +64,13 @@ function CategoryContent() {
           </button>
         ))}
       </div>
-
-      <button type="button" onClick={() => router.push('/')}
-        className="mt-8 text-sm text-[#94A3B8] hover:text-[#2563EB] transition">
-        {tex.back}
-      </button>
     </main>
   );
 }
 
 export default function Category() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">Loading…</div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}>Loading…</div>}>
       <CategoryContent />
     </Suspense>
   );
