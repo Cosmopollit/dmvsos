@@ -112,8 +112,8 @@ export default function Home() {
         })()}
       </header>
 
-      {/* Language bar - horizontal scroll on mobile, smaller text */}
-      <div className="flex gap-2 overflow-x-auto pb-1 w-full justify-start px-4 scrollbar-hide mb-6">
+      {/* Language bar - centered, wraps on small screens */}
+      <div className="flex flex-wrap gap-2 justify-center mb-6">
         {langs.map((l) => (
           <button key={l.name} onClick={() => setLang(l.name)} type="button"
             className={`shrink-0 px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-medium border border-[#E2E8F0] transition-all ${
@@ -165,10 +165,6 @@ export default function Home() {
             {!state && (
               <p className="text-xs text-[#94A3B8] text-center mt-2">{tex.selectStateFirst}</p>
             )}
-            <button type="button" onClick={() => router.push('/profile')}
-              className="mt-4 text-sm text-[#2563EB] hover:underline">
-              {tex.myProfile}
-            </button>
           </>
         ) : (
           <>
