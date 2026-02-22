@@ -148,7 +148,7 @@ function TestContent() {
               className="text-sm text-[#94A3B8] hover:text-[#2563EB] transition">
               {tex.back}
             </button>
-            <button type="button" onClick={() => { if (window.confirm('Leave test? Your progress will be lost.')) router.push('/'); }}
+            <button type="button" onClick={() => { if (window.confirm(tex.leaveConfirm)) router.push('/'); }}
               className="text-[#94A3B8] hover:text-[#2563EB] transition p-0.5"
               title="Home"
               aria-label="Home">
