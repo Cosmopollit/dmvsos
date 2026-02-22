@@ -2,6 +2,7 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useState, useEffect } from 'react';
 import { t } from '@/lib/translations';
+import { supabase } from '@/lib/supabase';
 
 function ResultContent() {
   const router = useRouter();
@@ -10,6 +11,11 @@ function ResultContent() {
   const total = Math.max(1, parseInt(params.get('total') || 3, 10));
   const percent = Math.round((score / total) * 100);
   const passed = total > 0 && score / total >= 0.7;
+
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setUser(data.session?.user));
+  }, []);
 
   const [testResults, setTestResults] = useState(null);
   useEffect(() => {
@@ -30,6 +36,18 @@ function ResultContent() {
   const wrongQuestions = questions.filter((q, i) => userAnswers[i] !== q.correctAnswerIndex);
   const tex = t[lang] || t.en;
   const formatTime = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+
+  const [email, setEmail] = useState('');
+  const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const [emailLoading, setEmailLoading] = useState(false);
+  async function handleSaveResults(e) {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setEmailLoading(true);
+    await supabase.auth.signInWithOtp({ email: email.trim() });
+    setEmailLoading(false);
+    setEmailSubmitted(true);
+  }
 
   function stripQuestion(s) {
     return (s || '').replace(/^\d+\.\s*/, '');
@@ -68,6 +86,36 @@ function ResultContent() {
             />
           </div>
         </div>
+
+        {/* Email capture for guests */}
+        {!user && (
+          <div className="bg-white rounded-2xl p-6 w-full shadow-sm border border-[#E2E8F0]">
+            <h3 className="text-lg font-bold text-[#0B1C3D] mb-1">💾 {tex.saveResults}</h3>
+            <p className="text-sm text-[#94A3B8] mb-4">{tex.saveSubtext}</p>
+            {emailSubmitted ? (
+              <p className="text-[#16A34A] font-medium text-sm">{tex.checkEmail}</p>
+            ) : (
+              <form onSubmit={handleSaveResults} className="flex flex-col gap-3">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="w-full px-4 py-3 rounded-xl border border-[#E2E8F0] text-[#1E293B] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent"
+                  required
+                  disabled={emailLoading}
+                />
+                <button
+                  type="submit"
+                  disabled={emailLoading}
+                  className="w-full bg-[#2563EB] text-white py-3 rounded-xl font-semibold text-sm hover:bg-[#1D4ED8] transition disabled:opacity-60"
+                >
+                  {emailLoading ? '…' : tex.saveBtn}
+                </button>
+              </form>
+            )}
+          </div>
+        )}
 
         {/* Question-by-question review */}
         {questions.length > 0 && (

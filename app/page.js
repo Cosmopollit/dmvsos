@@ -215,33 +215,34 @@ export default function Home() {
       </div>
 
       {/* Pricing */}
-      <div className="w-full max-w-[560px] mt-10 grid grid-cols-1 sm:grid-cols-2 gap-5">
-        {/* Free plan */}
-        <div className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-sm">
-          <h3 className="text-base font-bold text-[#1E293B] mb-0.5">FREE</h3>
-          <p className="text-2xl font-bold text-[#0B1C3D] mb-4">$0</p>
-          <ul className="space-y-2.5 text-sm text-[#64748B]">
-            <li>3 practice tests per state</li>
-            <li>Car (DMV) only</li>
-            <li>English only</li>
-            <li>Basic results</li>
-          </ul>
-        </div>
-        {/* Pro plan */}
-        <div className="bg-[#0B1C3D] rounded-2xl p-6 border border-[#1e3a5f] relative shadow-sm">
-          <span className="absolute top-3 right-3 text-[10px] font-bold text-[#F59E0B] uppercase tracking-wide">Popular</span>
-          <h3 className="text-base font-bold text-white mb-0.5">PRO</h3>
-          <p className="text-2xl font-bold text-white mb-4">$39<span className="text-sm font-normal text-[#94A3B8]">/mo</span></p>
-          <ul className="space-y-2.5 text-sm text-[#CBD5E1] mb-6">
-            <li>All tests for all 50 states</li>
-            <li>Car, CDL, Motorcycle</li>
-            <li>4 languages (EN, RU, ES, ZH)</li>
-            <li>Detailed results + explanations</li>
-          </ul>
-          <button type="button" onClick={() => router.push('/upgrade')}
-            className="w-full bg-[#F59E0B] text-[#0B1C3D] py-3 rounded-xl font-semibold text-sm hover:bg-[#FBBF24] transition-all">
-            Upgrade $39/mo
-          </button>
+      <div className="w-full max-w-[560px] mt-10">
+        <h2 className="text-xl font-bold text-[#0B1C3D] text-center mb-2">{tex.pricingHeading}</h2>
+        <p className="text-sm text-[#64748B] text-center mb-6 leading-relaxed max-w-md mx-auto">{tex.pricingSubtext}</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {/* Free plan */}
+          <div className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-sm">
+            <h3 className="text-base font-bold text-[#1E293B] mb-1">{tex.freeTitle}</h3>
+            <p className="text-sm text-[#94A3B8] mb-4">{tex.freeDesc}</p>
+            <p className="text-2xl font-bold text-[#0B1C3D]">$0</p>
+          </div>
+          {/* Pro plan */}
+          <div className="bg-[#0B1C3D] rounded-2xl p-6 border border-[#1e3a5f] shadow-sm">
+            <h3 className="text-base font-bold text-white mb-1">{tex.proTitle}</h3>
+            <p className="text-sm text-[#94A3B8] mb-4">{tex.proDesc}</p>
+            <ul className="space-y-2 text-sm text-[#CBD5E1] mb-4">
+              <li>{tex.feature1}</li>
+              <li>{tex.feature2}</li>
+              <li>{tex.feature3}</li>
+              <li>{tex.feature4}</li>
+              <li>{tex.feature5}</li>
+            </ul>
+            <p className="text-sm font-semibold text-[#F59E0B] mb-4">{tex.proNote}</p>
+            <button type="button" onClick={() => router.push('/upgrade')}
+              className="w-full bg-[#F59E0B] text-[#0B1C3D] py-4 rounded-xl font-bold text-base hover:bg-[#FBBF24] transition-all">
+              {tex.upgradBtn}
+            </button>
+            <p className="text-xs text-[#94A3B8] text-center mt-3">{tex.cancelAnytime}</p>
+          </div>
         </div>
       </div>
 
