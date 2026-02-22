@@ -90,7 +90,7 @@ export default function Home() {
             <div className="text-[22px] sm:text-[26px] font-bold text-[#0B1C3D] tracking-tight">
               DMV<span className="text-[#2563EB]">SOS</span>
             </div>
-            <p className="text-sm text-[#94A3B8]">{tex.freeDmv}</p>
+            <p className="text-sm text-[#94A3B8]">{tex.slogan}</p>
           </div>
         </div>
         {user && (() => {

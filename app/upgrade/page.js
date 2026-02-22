@@ -1,14 +1,9 @@
 'use client';
 import { useState } from 'react';
-
-const features = [
-  'All 50 states',
-  'All categories',
-  '4 languages',
-  'Unlimited tests',
-];
+import { useRouter } from 'next/navigation';
 
 export default function Upgrade() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   async function handleSubscribe() {
@@ -23,38 +18,96 @@ export default function Upgrade() {
   }
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
-      <div className="w-full max-w-md text-center">
-        {/* Logo */}
-        <div className="inline-flex items-center gap-3 mb-8">
-          <div className="w-11 h-11 bg-[#0B1C3D] rounded-xl flex items-center justify-center">
-            <span className="text-[#F59E0B] text-lg font-bold">✦</span>
+    <main className="min-h-screen bg-[#0B1C3D] flex flex-col items-center justify-center p-6">
+
+      {/* Logo */}
+      <div className="flex items-center gap-3 mb-8">
+        <img src="/logo.png" alt="DMVSOS" className="w-10 h-10 rounded-xl" />
+        <span className="text-2xl font-bold text-white">DMV<span className="text-[#F59E0B]">SOS</span></span>
+      </div>
+
+      {/* Hero */}
+      <div className="text-center mb-8 max-w-lg">
+        <div className="text-5xl mb-4">👑</div>
+        <h1 className="text-3xl font-bold text-white mb-3">
+          Practice tonight.<br />Pass tomorrow.
+        </h1>
+        <p className="text-[#94A3B8] text-lg">
+          Thousands of immigrants passed their DMV test with DMVSOS. You&apos;re next.
+        </p>
+      </div>
+
+      {/* Social proof */}
+      <div className="flex gap-6 mb-8 text-center">
+        <div>
+          <div className="text-2xl font-bold text-[#F59E0B]">94%</div>
+          <div className="text-xs text-[#94A3B8]">pass rate</div>
+        </div>
+        <div className="w-px bg-[#1E3A5F]"></div>
+        <div>
+          <div className="text-2xl font-bold text-[#F59E0B]">50</div>
+          <div className="text-xs text-[#94A3B8]">states</div>
+        </div>
+        <div className="w-px bg-[#1E3A5F]"></div>
+        <div>
+          <div className="text-2xl font-bold text-[#F59E0B]">5</div>
+          <div className="text-xs text-[#94A3B8]">languages</div>
+        </div>
+      </div>
+
+      {/* Pricing card */}
+      <div className="bg-white rounded-2xl p-8 w-full max-w-md mb-6">
+        <div className="flex justify-between items-start mb-6">
+          <div>
+            <div className="text-sm font-bold text-[#F59E0B] mb-1">PRO PLAN</div>
+            <div className="text-4xl font-bold text-[#0B1C3D]">$39<span className="text-lg font-normal text-gray-400">/mo</span></div>
           </div>
-          <span className="text-[26px] font-bold text-[#0B1C3D] tracking-tight">
-            DMV<span className="text-[#2563EB]">SOS</span>
-          </span>
+          <span className="bg-[#F59E0B] text-black text-xs font-bold px-3 py-1 rounded-full">POPULAR</span>
         </div>
 
-        <h1 className="text-2xl font-bold text-[#1E293B] mb-2">Upgrade to Pro</h1>
-        <p className="text-4xl font-bold text-[#0B1C3D] mb-6">$39<span className="text-lg font-normal text-[#94A3B8]">/month</span></p>
-
-        <ul className="bg-white rounded-2xl border border-[#E2E8F0] p-6 text-left mb-6 space-y-3">
-          {features.map((f) => (
-            <li key={f} className="flex items-center gap-3 text-[#1E293B]">
-              <span className="text-[#16A34A]">✓</span>
-              {f}
-            </li>
+        <div className="space-y-3 mb-6">
+          {[
+            '✅ All 40 questions — same as real DMV',
+            '✅ All 50 states covered',
+            '✅ Car, CDL & Motorcycle tests',
+            '✅ 5 languages — study in your language',
+            '✅ Updated monthly — never outdated',
+            '✅ Unlimited practice — retry until ready',
+          ].map((f, i) => (
+            <div key={i} className="text-[#1E293B] text-sm">{f}</div>
           ))}
-        </ul>
+        </div>
 
         <button
           onClick={handleSubscribe}
           disabled={loading}
-          className="w-full bg-[#0B1C3D] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#132248] disabled:opacity-70 transition-all"
+          className="w-full bg-[#F59E0B] text-black font-bold py-4 rounded-xl text-lg hover:bg-[#D97706] transition disabled:opacity-70"
         >
-          {loading ? 'Redirecting…' : 'Subscribe Now'}
+          {loading ? 'Redirecting…' : '🚗 Get Pro Access — $39/mo'}
         </button>
+
+        <p className="text-center text-xs text-gray-400 mt-3">
+          Cancel anytime · No hidden fees · Instant access
+        </p>
       </div>
+
+      {/* Testimonial */}
+      <div className="bg-[#1E3A5F] rounded-2xl p-6 w-full max-w-md mb-6">
+        <p className="text-white text-sm italic mb-3">
+          &quot;I was so nervous about the DMV test. Practiced with DMVSOS for 2 days and passed on my first try!&quot;
+        </p>
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-full bg-[#F59E0B] flex items-center justify-center text-black font-bold text-sm">M</div>
+          <div>
+            <div className="text-white text-sm font-semibold">Maria S.</div>
+            <div className="text-[#94A3B8] text-xs">California, 2025</div>
+          </div>
+        </div>
+      </div>
+
+      <button onClick={() => router.back()} className="text-[#94A3B8] text-sm hover:text-white">
+        ← Back
+      </button>
     </main>
   );
 }

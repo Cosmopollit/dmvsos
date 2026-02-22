@@ -15,6 +15,7 @@ function TestContent() {
   const tex = t[lang] || t.en;
 
   const [user, setUser] = useState(null);
+  const [isPro, setIsPro] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
@@ -46,7 +47,20 @@ function TestContent() {
   }, [motivationalMessage]);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user: u } }) => setUser(u));
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      const u = session?.user ?? null;
+      setUser(u);
+      if (!u?.email) {
+        setIsPro(false);
+        return;
+      }
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('is_pro')
+        .eq('email', u.email)
+        .single();
+      setIsPro(profile?.is_pro ?? false);
+    });
   }, []);
 
   useEffect(() => {
@@ -71,11 +85,11 @@ function TestContent() {
         const test = d[mappedCategory]?.[0];
         if (test) {
           const shuffled = [...test.questions].sort(() => Math.random() - 0.5);
-          setQuestions(user ? shuffled : shuffled.slice(0, 20));
+          setQuestions(isPro ? shuffled : shuffled.slice(0, 20));
         }
         setLoading(false);
       });
-  }, [state, category, user, lang, params]);
+  }, [state, category, user, isPro, lang, params]);
 
   if (loading) return (
     <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
@@ -111,7 +125,7 @@ function TestContent() {
   }
 
   async function handleNext() {
-    if (!user && current === 19) {
+    if (!isPro && total === 20 && current === 19) {
       setShowUpgradeBanner(true);
       return;
     }
@@ -224,7 +238,7 @@ function TestContent() {
           </p>
         )}
 
-        {showAnswer && !(showUpgradeBanner && !user && current === 19) && (
+        {showAnswer && !showUpgradeBanner && (
           <button type="button" onClick={handleNext}
             className="w-full bg-[#2563EB] text-white py-3.5 rounded-xl font-semibold text-base hover:bg-[#1D4ED8] transition-all">
             {current + 1 < total ? tex.next : tex.seeResults}
@@ -234,7 +248,7 @@ function TestContent() {
       </div>
 
       {/* Upgrade modal overlay */}
-      {showUpgradeBanner && !user && current === 19 && (
+      {showUpgradeBanner && !isPro && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
           <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-xl border border-[#E2E8F0] text-center">
             <h2 className="text-2xl font-bold text-[#0B1C3D] mb-2">{tex.upgradeTitle}</h2>

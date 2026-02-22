@@ -45,3 +45,9 @@ export async function POST(request) {
 
   return new Response('OK', { status: 200 });
 }
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
