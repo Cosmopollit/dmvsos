@@ -9,6 +9,7 @@ export default function Home() {
   const [state, setState] = useState('');
   const [user, setUser] = useState(null);
   const [isPro, setIsPro] = useState(false);
+  const [liveCount] = useState(() => Math.floor(Math.random() * 40) + 15);
   const router = useRouter();
 
   const langToCode = { English: 'en', 'Русский': 'ru', 'Español': 'es', '中文': 'zh', 'Українська': 'ua' };
@@ -87,8 +88,10 @@ export default function Home() {
     setUser(null);
   }
 
+  const stateEmoji = { 'Washington (WA)': '🏔️', 'California (CA)': '🌴', 'New York (NY)': '🗽', 'Texas (TX)': '🤠', 'Florida (FL)': '🌊' };
+
   return (
-    <main style={{ fontFamily: 'DM Sans, sans-serif' }} className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center py-10 px-4 sm:px-6 relative overflow-hidden">
+    <main style={{ fontFamily: 'DM Sans, sans-serif', background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }} className="min-h-screen flex flex-col items-center justify-center py-10 px-4 sm:px-6 relative overflow-hidden">
 
       {/* Background blobs */}
       <div className="fixed top-[-200px] right-[-200px] w-[600px] h-[600px] rounded-full pointer-events-none"
@@ -153,15 +156,7 @@ export default function Home() {
       </div>
 
       {/* Card */}
-      <div id="state-selector" className="bg-white rounded-2xl p-9 w-full max-w-lg mx-auto px-4 border border-[#E2E8F0]"
-        style={{ boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05), 0 20px 60px -10px rgba(11,28,61,0.1)' }}>
-
-        {/* Step dots */}
-        <div className="flex justify-center gap-2 mb-7">
-          <div className="w-5 h-[6px] rounded bg-[#2563EB]" />
-          <div className="w-[6px] h-[6px] rounded-full bg-[#E2E8F0]" />
-          <div className="w-[6px] h-[6px] rounded-full bg-[#E2E8F0]" />
-        </div>
+      <div id="state-selector" className="bg-white rounded-3xl p-9 w-full max-w-lg mx-auto px-4 shadow-2xl border border-[#E2E8F0]/40">
 
         <h2 className="text-[22px] font-bold text-[#1E293B] mb-1">{tex.startTitle}</h2>
         <p className="text-sm text-[#94A3B8] mb-7 leading-relaxed">{tex.startSubtitle}</p>
@@ -171,7 +166,9 @@ export default function Home() {
         <select value={state} onChange={e => setState(e.target.value)}
           className="w-full px-4 py-3 border-[1.5px] border-[#E2E8F0] rounded-[10px] text-[15px] text-[#1E293B] bg-[#F8FAFC] mb-6 focus:outline-none focus:border-[#2563EB] transition cursor-pointer">
           <option value="">{tex.selectState}</option>
-          {states.map(s => <option key={s}>{s}</option>)}
+          {states.map(s => (
+            <option key={s} value={s}>{stateEmoji[s] ? `${s} ${stateEmoji[s]}` : s}</option>
+          ))}
         </select>
 
         {user ? (
@@ -180,7 +177,7 @@ export default function Home() {
               type="button"
               onClick={() => { const slug = stateToSlug(state); if (slug) router.push(`/category?state=${slug}&lang=${langCode}`); }}
               disabled={!state}
-              className={`w-full py-4 rounded-xl font-semibold text-[15px] flex items-center justify-center gap-2 transition-all ${
+              className={`w-full py-4 rounded-xl font-semibold text-[15px] flex items-center justify-center gap-2 transition-all ${state ? 'btn-pulse' : ''} ${
                 state
                   ? 'bg-[#2563EB] text-white hover:bg-[#1D4ED8] cursor-pointer'
                   : 'bg-[#E2E8F0] text-[#94A3B8] cursor-not-allowed'
@@ -188,6 +185,9 @@ export default function Home() {
             >
               {tex.startPracticing}
             </button>
+            {state && (
+              <p className="text-xs text-gray-400 mt-2 text-center">🟢 {liveCount} {tex.practicingNow}</p>
+            )}
             {!state && (
               <p className="text-xs text-[#94A3B8] text-center mt-2">{tex.selectStateFirst}</p>
             )}
@@ -208,6 +208,9 @@ export default function Home() {
                 {tex.startAsGuest}
                 <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide ${state ? 'bg-[#FEF3C7] text-[#B45309]' : 'bg-[#CBD5E1] text-[#64748B]'}`}>No signup</span>
               </button>
+              {state && (
+                <p className="text-xs text-gray-400 mt-2 text-center">🟢 {liveCount} {tex.practicingNow}</p>
+              )}
               {!state && (
                 <p className="text-xs text-[#94A3B8] text-center mt-2">{tex.selectStateFirst}</p>
               )}
