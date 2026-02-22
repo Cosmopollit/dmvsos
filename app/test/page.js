@@ -50,6 +50,18 @@ function TestContent() {
   }, []);
 
   useEffect(() => {
+    const isRetry = params.get('retry') === 'true';
+    if (isRetry) {
+      try {
+        const raw = sessionStorage.getItem('retryQuestions');
+        const data = raw ? JSON.parse(raw) : [];
+        setQuestions(Array.isArray(data) ? data : []);
+      } catch {
+        setQuestions([]);
+      }
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     fetch(`/data/${langFolder}/${state}.json`)
       .then(r => r.json())
@@ -63,7 +75,7 @@ function TestContent() {
         }
         setLoading(false);
       });
-  }, [state, category, user, lang]);
+  }, [state, category, user, lang, params]);
 
   if (loading) return (
     <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
@@ -113,7 +125,7 @@ function TestContent() {
       const finalUserAnswers = [...userAnswers, selected];
       sessionStorage.setItem(
         'testResults',
-        JSON.stringify({ questions, userAnswers: finalUserAnswers, elapsed })
+        JSON.stringify({ questions, userAnswers: finalUserAnswers, elapsed, state, category, lang })
       );
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {

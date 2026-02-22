@@ -23,6 +23,10 @@ function ResultContent() {
   const questions = testResults?.questions ?? [];
   const userAnswers = testResults?.userAnswers ?? [];
   const elapsed = testResults?.elapsed ?? 0;
+  const state = testResults?.state ?? 'washington';
+  const category = testResults?.category ?? 'car';
+  const lang = testResults?.lang ?? 'en';
+  const wrongQuestions = questions.filter((q, i) => userAnswers[i] !== q.correctAnswerIndex);
   const formatTime = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
 
   function stripQuestion(s) {
@@ -119,6 +123,18 @@ function ResultContent() {
         >
           🔄 Try Again
         </button>
+        {wrongQuestions.length > 0 && (
+          <button
+            type="button"
+            onClick={() => {
+              sessionStorage.setItem('retryQuestions', JSON.stringify(wrongQuestions));
+              router.push(`/test?state=${state}&category=${category}&lang=${lang}&retry=true`);
+            }}
+            className="w-full bg-white border border-[#E2E8F0] text-[#1E293B] py-3.5 rounded-xl font-semibold text-base hover:border-[#2563EB] hover:text-[#2563EB] hover:bg-[#F8FAFC] transition-all"
+          >
+            🔄 Retry Wrong Answers ({wrongQuestions.length})
+          </button>
+        )}
         <button
           type="button"
           onClick={() => router.push('/')}
