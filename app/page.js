@@ -265,6 +265,49 @@ export default function Home() {
         </div>
       </div>
 
+      <div className="w-full max-w-lg mx-auto mt-8 mb-8">
+        <h2 className="text-center text-xl font-bold text-[#0B1C3D] mb-6">
+          {tex.testimonialsTitle}
+        </h2>
+        <div className="flex flex-col gap-4">
+          <div className="bg-white rounded-2xl p-5 shadow-sm">
+            <div className="flex gap-1 mb-2">⭐⭐⭐⭐⭐</div>
+            <p className="text-sm text-[#475569] mb-3">"Готовился на русском языке, всё понятно и чётко. Сдал с первого раза в Bellevue. Очень помогло что вопросы именно по Вашингтону."</p>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-600 text-sm">М</div>
+              <div>
+                <div className="text-sm font-semibold text-[#0B1C3D]">Михаил Д.</div>
+                <div className="text-xs text-gray-400">Bellevue, WA</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl p-5 shadow-sm">
+            <div className="flex gap-1 mb-2">⭐⭐⭐⭐⭐</div>
+            <p className="text-sm text-[#475569] mb-3">"Practiqué dos días en español y pasé el examen a la primera en Santa Monica. Los mejores $9.99 que gasté."</p>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center font-bold text-orange-600 text-sm">C</div>
+              <div>
+                <div className="text-sm font-semibold text-[#0B1C3D]">Carlos R.</div>
+                <div className="text-xs text-gray-400">Santa Monica, CA</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl p-5 shadow-sm">
+            <div className="flex gap-1 mb-2">⭐⭐⭐⭐⭐</div>
+            <p className="text-sm text-[#475569] mb-3">"用中文练习很方便，两天后在Fort Lauderdale一次通过考试！"</p>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center font-bold text-red-600 text-sm">W</div>
+              <div>
+                <div className="text-sm font-semibold text-[#0B1C3D]">Wei L.</div>
+                <div className="text-xs text-gray-400">Fort Lauderdale, FL</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Pricing - PRO first (left on desktop, top on mobile), all text centered */}
       <div className="w-full max-w-[560px] mt-10 px-4">
         <h2 className="text-xl font-bold text-[#0B1C3D] text-center mb-2">{tex.pricingHeading}</h2>
