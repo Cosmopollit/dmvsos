@@ -89,7 +89,7 @@ function ProfileContent() {
             {!isPro && (
               <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}`)}
                 className="w-full bg-[#F59E0B] text-[#0B1C3D] py-3.5 rounded-xl font-semibold text-sm hover:bg-[#FBBF24] transition border-0">
-                Upgrade to Pro — $39/mo
+                Upgrade to Pro — $9.99/mo
               </button>
             )}
             <button type="button" onClick={async () => { await supabase.auth.signOut(); router.push('/'); }}

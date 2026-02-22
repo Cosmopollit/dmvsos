@@ -72,7 +72,7 @@ function UpgradeContent() {
         <div className="flex justify-between items-start mb-6">
           <div>
             <div className="text-sm font-bold text-[#F59E0B] mb-1">PRO PLAN</div>
-            <div className="text-4xl font-bold text-[#0B1C3D]">$39<span className="text-lg font-normal text-gray-400">/mo</span></div>
+            <div className="text-4xl font-bold text-[#0B1C3D]">$9.99<span className="text-lg font-normal text-gray-400">/mo</span></div>
           </div>
           <span className="bg-[#F59E0B] text-black text-xs font-bold px-3 py-1 rounded-full">POPULAR</span>
         </div>
@@ -88,7 +88,7 @@ function UpgradeContent() {
           disabled={loading}
           className="w-full bg-[#F59E0B] text-black font-bold py-4 rounded-xl text-lg hover:bg-[#D97706] transition disabled:opacity-70"
         >
-          {loading ? '…' : (tex.upgradeCta || '🚗 Get Pro Access — $39/mo')}
+          {loading ? '…' : (tex.upgradeCta || '🚗 Get Pro Access — $9.99/mo')}
         </button>
 
         <p className="text-center text-xs text-gray-400 mt-3">
