@@ -137,9 +137,10 @@ function TestContent() {
     } else {
       const finalScore = score + (selected === q.correctAnswerIndex ? 1 : 0);
       const finalUserAnswers = [...userAnswers, selected];
+      const langParam = new URLSearchParams(window.location.search).get('lang') || 'en';
       sessionStorage.setItem(
         'testResults',
-        JSON.stringify({ questions, userAnswers: finalUserAnswers, elapsed, state, category, lang })
+        JSON.stringify({ questions, userAnswers: finalUserAnswers, elapsed, state, category, lang: langParam })
       );
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
