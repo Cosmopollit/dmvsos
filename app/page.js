@@ -2,12 +2,17 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { t } from '@/lib/translations';
 
 export default function Home() {
   const [lang, setLang] = useState('English');
   const [state, setState] = useState('');
   const [user, setUser] = useState(null);
   const router = useRouter();
+
+  const langToCode = { English: 'en', 'Русский': 'ru', 'Español': 'es', '中文': 'zh', 'Українська': 'ua' };
+  const langCode = langToCode[lang] || 'en';
+  const tex = t[langCode] || t.en;
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
@@ -40,9 +45,6 @@ export default function Home() {
     'Vermont (VT)', 'Virginia (VA)', 'Washington (WA)', 'West Virginia (WV)',
     'Wisconsin (WI)', 'Wyoming (WY)'
   ];
-
-  const langToCode = { English: 'en', 'Русский': 'ru', 'Español': 'es', '中文': 'zh', 'Українська': 'ua' };
-  const langCode = langToCode[lang] || 'en';
 
   function stateToSlug(displayState) {
     if (!displayState) return '';
@@ -101,7 +103,7 @@ export default function Home() {
             DMV<span className="text-[#2563EB]">SOS</span>
           </span>
         </div>
-        <p className="text-sm text-[#94A3B8]">Free DMV practice tests for all 50 states</p>
+        <p className="text-sm text-[#94A3B8]">{tex.freeDmv}</p>
       </div>
 
       {/* Language bar - single row */}
@@ -133,10 +135,10 @@ export default function Home() {
         <p className="text-sm text-[#94A3B8] mb-7 leading-relaxed">Choose your state, then pick how to start. No experience needed.</p>
 
         {/* State */}
-        <label className="text-xs font-semibold text-[#1E293B] uppercase tracking-widest mb-2 block">Your state</label>
+        <label className="text-xs font-semibold text-[#1E293B] uppercase tracking-widest mb-2 block">{tex.yourState}</label>
         <select value={state} onChange={e => setState(e.target.value)}
           className="w-full px-4 py-3 border-[1.5px] border-[#E2E8F0] rounded-[10px] text-[15px] text-[#1E293B] bg-[#F8FAFC] mb-6 focus:outline-none focus:border-[#2563EB] transition cursor-pointer">
-          <option value="">— Select your state —</option>
+          <option value="">{tex.selectState}</option>
           {states.map(s => <option key={s}>{s}</option>)}
         </select>
 
@@ -152,14 +154,14 @@ export default function Home() {
                   : 'bg-[#E2E8F0] text-[#94A3B8] cursor-not-allowed'
               }`}
             >
-              Start Practicing →
+              {tex.startPracticing}
             </button>
             {!state && (
-              <p className="text-xs text-[#94A3B8] text-center mt-2">Please select your state first</p>
+              <p className="text-xs text-[#94A3B8] text-center mt-2">{tex.selectStateFirst}</p>
             )}
             <button type="button" onClick={() => router.push('/profile')}
               className="mt-4 text-sm text-[#2563EB] hover:underline">
-              My Profile
+              {tex.myProfile}
             </button>
           </>
         ) : (
@@ -175,29 +177,29 @@ export default function Home() {
                     : 'bg-[#E2E8F0] text-[#94A3B8] cursor-not-allowed'
                 }`}
               >
-                🚗 Start as Guest
+                {tex.startAsGuest}
                 <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide ${state ? 'bg-[#FEF3C7] text-[#B45309]' : 'bg-[#CBD5E1] text-[#64748B]'}`}>No signup</span>
               </button>
               {!state && (
-                <p className="text-xs text-[#94A3B8] text-center mt-2">Please select your state first</p>
+                <p className="text-xs text-[#94A3B8] text-center mt-2">{tex.selectStateFirst}</p>
               )}
             </div>
 
             {/* Divider */}
             <div className="flex items-center gap-3 my-6">
               <div className="flex-1 h-px bg-[#E2E8F0]" />
-              <span className="text-xs text-[#94A3B8] font-medium whitespace-nowrap">or save your progress</span>
+              <span className="text-xs text-[#94A3B8] font-medium whitespace-nowrap">{tex.orSaveProgress}</span>
               <div className="flex-1 h-px bg-[#E2E8F0]" />
             </div>
 
             {/* Google */}
             <button onClick={handleGoogleSignIn} type="button" className="w-full bg-white text-[#1E293B] border-[1.5px] border-[#E2E8F0] py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#F8FAFC] hover:-translate-y-px hover:shadow transition-all">
-              🔵 Continue with Google
+              {tex.continueGoogle}
             </button>
 
             {/* Apple */}
             <button type="button" className="w-full bg-black text-white py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 hover:bg-[#1a1a1a] hover:-translate-y-px hover:shadow-lg transition-all">
-              🍎 Continue with Apple
+              {tex.continueApple}
             </button>
 
             {/* Info */}
