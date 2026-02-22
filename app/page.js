@@ -74,18 +74,7 @@ export default function Home() {
   }
 
   return (
-    <main style={{ fontFamily: 'DM Sans, sans-serif' }} className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center py-10 px-6 relative overflow-hidden">
-
-      {/* User pill (top right) */}
-      {user && (
-        <div className="fixed top-4 right-4 z-10 flex items-center gap-2 bg-white border border-[#E2E8F0] rounded-full pl-3 pr-1 py-1.5 shadow-sm">
-          <span className="text-xs font-medium text-[#1E293B] max-w-[120px] truncate">{user.user_metadata?.full_name || user.email}</span>
-          <button onClick={handleSignOut} type="button"
-            className="text-xs font-medium text-[#94A3B8] hover:text-[#DC2626] transition px-2.5 py-1 rounded-full hover:bg-[#FEF2F2]">
-            Sign out
-          </button>
-        </div>
-      )}
+    <main style={{ fontFamily: 'DM Sans, sans-serif' }} className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center py-10 px-4 sm:px-6 relative overflow-hidden">
 
       {/* Background blobs */}
       <div className="fixed top-[-200px] right-[-200px] w-[600px] h-[600px] rounded-full pointer-events-none"
@@ -93,22 +82,41 @@ export default function Home() {
       <div className="fixed bottom-[-150px] left-[-150px] w-[500px] h-[500px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 70%)' }} />
 
-      {/* Brand */}
-      <div className="text-center mb-6">
-        <div className="inline-flex items-center gap-3 mb-2">
-          <img src="/logo.png" alt="DMVSOS" className="w-12 h-12 rounded-xl" />
-          <span className="text-[26px] font-bold text-[#0B1C3D] tracking-tight">
-            DMV<span className="text-[#2563EB]">SOS</span>
-          </span>
+      {/* Header: brand + user (no overlap, in flow) */}
+      <header className="w-full max-w-lg mx-auto flex items-center justify-between gap-4 mb-6 px-1">
+        <div className="flex items-center gap-3 min-w-0">
+          <img src="/logo.png" alt="DMVSOS" className="w-12 h-12 rounded-xl shrink-0" />
+          <div className="min-w-0">
+            <div className="text-[22px] sm:text-[26px] font-bold text-[#0B1C3D] tracking-tight">
+              DMV<span className="text-[#2563EB]">SOS</span>
+            </div>
+            <p className="text-sm text-[#94A3B8]">{tex.freeDmv}</p>
+          </div>
         </div>
-        <p className="text-sm text-[#94A3B8]">{tex.freeDmv}</p>
-      </div>
+        {user && (() => {
+          const raw = user.user_metadata?.full_name || user.email || '';
+          const firstName = raw.split(/\s+/)[0] || raw.split('@')[0] || '?';
+          const initial = (raw || '?')[0].toUpperCase();
+          return (
+            <div className="flex items-center gap-2 bg-white border border-[#E2E8F0] rounded-full pl-1.5 pr-2.5 py-1 shadow-sm shrink-0">
+              <div className="w-7 h-7 rounded-full bg-[#0B1C3D] flex items-center justify-center text-white text-[11px] font-bold shrink-0">
+                {initial}
+              </div>
+              <span className="hidden sm:block text-xs font-medium text-[#1E293B] max-w-[100px] truncate">{firstName}</span>
+              <button onClick={handleSignOut} type="button"
+                className="text-[11px] text-[#94A3B8] hover:text-[#64748B] hover:underline transition">
+                Sign out
+              </button>
+            </div>
+          );
+        })()}
+      </header>
 
-      {/* Language bar - single row */}
-      <div className="flex gap-2 mb-6 justify-center flex-nowrap">
+      {/* Language bar - horizontal scroll on mobile, smaller text */}
+      <div className="flex gap-2 overflow-x-auto pb-1 w-full justify-start px-4 scrollbar-hide mb-6">
         {langs.map((l) => (
           <button key={l.name} onClick={() => setLang(l.name)} type="button"
-            className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border border-[#E2E8F0] transition-all ${
+            className={`shrink-0 px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-medium border border-[#E2E8F0] transition-all ${
               lang === l.name
                 ? 'bg-[#0B1C3D] text-white border-[#0B1C3D]'
                 : 'bg-white text-[#94A3B8] hover:border-[#2563EB] hover:text-[#2563EB]'
@@ -119,7 +127,7 @@ export default function Home() {
       </div>
 
       {/* Card */}
-      <div id="state-selector" className="bg-white rounded-2xl p-9 w-full max-w-[440px] border border-[#E2E8F0]"
+      <div id="state-selector" className="bg-white rounded-2xl p-9 w-full max-w-lg mx-auto px-4 border border-[#E2E8F0]"
         style={{ boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05), 0 20px 60px -10px rgba(11,28,61,0.1)' }}>
 
         {/* Step dots */}
@@ -212,17 +220,35 @@ export default function Home() {
 
       </div>
 
-      {/* Pricing */}
-      <div className="w-full max-w-[560px] mt-10">
+      {/* Pricing - PRO first (left on desktop, top on mobile), all text centered */}
+      <div className="w-full max-w-[560px] mt-10 px-4">
         <h2 className="text-xl font-bold text-[#0B1C3D] text-center mb-2">{tex.pricingHeading}</h2>
         <p className="text-sm text-[#64748B] text-center mb-6 leading-relaxed max-w-md mx-auto">{tex.pricingSubtext}</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {/* Free plan */}
-          <div className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-sm flex flex-col">
+          {/* Pro plan - first so left on desktop, top on mobile */}
+          <div className="bg-[#0B1C3D] rounded-2xl p-6 border border-[#1e3a5f] shadow-sm text-center">
+            <h3 className="text-base font-bold text-white mb-1">{tex.proTitle}</h3>
+            <p className="text-sm text-[#94A3B8] mb-4">{tex.proDesc}</p>
+            <ul className="space-y-2 text-sm text-[#CBD5E1] mb-4 text-center list-none">
+              <li>{tex.feature1}</li>
+              <li>{tex.feature2}</li>
+              <li>{tex.feature3}</li>
+              <li>{tex.feature4}</li>
+              <li>{tex.feature5}</li>
+            </ul>
+            <p className="text-sm font-semibold text-[#F59E0B] mb-4">{tex.proNote}</p>
+            <button type="button" onClick={() => router.push('/upgrade')}
+              className="w-full bg-[#F59E0B] text-[#0B1C3D] py-4 rounded-xl font-bold text-base hover:bg-[#FBBF24] transition-all">
+              {tex.upgradBtn}
+            </button>
+            <p className="text-xs text-[#94A3B8] mt-3">{tex.cancelAnytime}</p>
+          </div>
+          {/* Free plan - second */}
+          <div className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-sm flex flex-col text-center">
             <h3 className="text-base font-bold text-[#1E293B] mb-1">{tex.freeTitle}</h3>
             <p className="text-sm text-[#94A3B8] mb-3">{tex.freeDesc}</p>
             <p className="text-2xl font-bold text-[#0B1C3D] mb-4">$0</p>
-            <ul className="space-y-2 text-sm text-[#94A3B8] mb-4">
+            <ul className="space-y-2 text-sm text-[#94A3B8] mb-4 text-center list-none">
               <li>{tex.freeFeature1}</li>
               <li>{tex.freeFeature2}</li>
               <li>{tex.freeFeature3}</li>
@@ -235,24 +261,6 @@ export default function Home() {
             >
               {tex.startFree}
             </button>
-          </div>
-          {/* Pro plan */}
-          <div className="bg-[#0B1C3D] rounded-2xl p-6 border border-[#1e3a5f] shadow-sm">
-            <h3 className="text-base font-bold text-white mb-1">{tex.proTitle}</h3>
-            <p className="text-sm text-[#94A3B8] mb-4">{tex.proDesc}</p>
-            <ul className="space-y-2 text-sm text-[#CBD5E1] mb-4">
-              <li>{tex.feature1}</li>
-              <li>{tex.feature2}</li>
-              <li>{tex.feature3}</li>
-              <li>{tex.feature4}</li>
-              <li>{tex.feature5}</li>
-            </ul>
-            <p className="text-sm font-semibold text-[#F59E0B] mb-4">{tex.proNote}</p>
-            <button type="button" onClick={() => router.push('/upgrade')}
-              className="w-full bg-[#F59E0B] text-[#0B1C3D] py-4 rounded-xl font-bold text-base hover:bg-[#FBBF24] transition-all">
-              {tex.upgradBtn}
-            </button>
-            <p className="text-xs text-[#94A3B8] text-center mt-3">{tex.cancelAnytime}</p>
           </div>
         </div>
       </div>
