@@ -131,8 +131,8 @@ export default function Home() {
           <div className="w-[6px] h-[6px] rounded-full bg-[#E2E8F0]" />
         </div>
 
-        <h2 className="text-[22px] font-bold text-[#1E293B] mb-1">Start practicing</h2>
-        <p className="text-sm text-[#94A3B8] mb-7 leading-relaxed">Choose your state, then pick how to start. No experience needed.</p>
+        <h2 className="text-[22px] font-bold text-[#1E293B] mb-1">{tex.startTitle}</h2>
+        <p className="text-sm text-[#94A3B8] mb-7 leading-relaxed">{tex.startSubtitle}</p>
 
         {/* State */}
         <label className="text-xs font-semibold text-[#1E293B] uppercase tracking-widest mb-2 block">{tex.yourState}</label>
