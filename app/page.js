@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { t } from '@/lib/translations';
@@ -11,6 +11,7 @@ export default function Home() {
   const [isPro, setIsPro] = useState(false);
   const [liveCount] = useState(() => Math.floor(Math.random() * 40) + 15);
   const [activeStep, setActiveStep] = useState(0);
+  const stateSelectRef = useRef(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -106,14 +107,6 @@ export default function Home() {
               DMV<span className="text-[#2563EB]">SOS</span>
             </div>
             <p className="text-sm text-[#94A3B8]">{tex.slogan}</p>
-            <div className="flex flex-wrap gap-3 justify-center mt-2 mb-4">
-              {tex.trustBar?.map((item, i) => (
-                <span key={i}>
-                  {i > 0 && <span className="text-gray-200"> · </span>}
-                  <span className="text-xs text-gray-400">{item}</span>
-                </span>
-              ))}
-            </div>
           </a>
         </div>
         {user && (() => {
@@ -151,7 +144,7 @@ export default function Home() {
       <div className="flex flex-wrap gap-2 justify-center mb-6 w-full max-w-lg mx-auto px-4">
         {langs.map((l) => (
           <button key={l.name} onClick={() => setLang(l.name)} type="button"
-            className={`shrink-0 px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-medium border border-[#E2E8F0] transition-all ${
+            className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium border border-[#E2E8F0] transition-all ${
               lang === l.name
                 ? 'bg-[#0B1C3D] text-white border-[#0B1C3D]'
                 : 'bg-white text-[#94A3B8] hover:border-[#2563EB] hover:text-[#2563EB]'
@@ -163,37 +156,48 @@ export default function Home() {
 
       {/* Main card */}
       <div id="state-selector" className="w-full max-w-lg mx-auto px-4 mb-8">
-        <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 border border-[#E2E8F0]/40">
+        <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 border border-[#E2E8F0]/40" style={{ borderTop: '4px solid #2563EB' }}>
 
         <h2 className="text-[22px] font-bold text-[#1E293B] mb-1">{tex.heroTitle}</h2>
         <p className="text-sm text-[#94A3B8] mb-7 leading-relaxed">{tex.heroSub}</p>
 
         {/* State */}
         <label className="text-xs font-semibold text-[#1E293B] uppercase tracking-widest mb-2 block">{tex.yourState}</label>
-        <select value={state} onChange={e => setState(e.target.value)}
-          className="w-full px-4 py-3 border-[1.5px] border-[#E2E8F0] rounded-[10px] text-[15px] text-[#1E293B] bg-[#F8FAFC] mb-6 focus:outline-none focus:border-[#2563EB] transition cursor-pointer">
+        <select
+          ref={stateSelectRef}
+          value={state}
+          onChange={e => setState(e.target.value)}
+          className="w-full px-4 py-4 border-2 border-[#E2E8F0] rounded-[10px] text-base text-[#1E293B] bg-[#F8FAFC] mb-6 focus:outline-none focus:border-[#2563EB] transition cursor-pointer"
+        >
           <option value="">{tex.selectState}</option>
           {states.map(s => (
             <option key={s} value={s}>{stateEmoji[s] ? `${s} ${stateEmoji[s]}` : s}</option>
           ))}
         </select>
 
-        {/* Single primary CTA */}
+        {/* Single primary CTA - always blue */}
         <button
           type="button"
-          onClick={() => { const slug = stateToSlug(state); if (slug) router.push(`/category?state=${slug}&lang=${langCode}`); }}
-          disabled={!state}
-          className={`w-full py-4 rounded-xl font-semibold text-[15px] flex items-center justify-center gap-2 transition-all ${state ? 'btn-pulse' : ''} ${
-            state
-              ? 'bg-[#2563EB] text-white hover:bg-[#1D4ED8] cursor-pointer'
-              : 'bg-[#E2E8F0] text-[#94A3B8] cursor-not-allowed'
-          }`}
+          onClick={() => {
+            if (state) {
+              const slug = stateToSlug(state);
+              if (slug) router.push(`/category?state=${slug}&lang=${langCode}`);
+            } else {
+              document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' });
+              stateSelectRef.current?.focus();
+            }
+          }}
+          className={`w-full py-4 rounded-xl font-semibold text-[15px] flex items-center justify-center gap-2 transition-all bg-[#2563EB] text-white hover:bg-[#1D4ED8] cursor-pointer ${state ? 'btn-pulse' : ''}`}
         >
-          {state ? tex.oneCtaBtn : tex.selectStateFirst}
+          {state ? tex.oneCtaBtn : tex.chooseStateBtn}
         </button>
-        <p className="text-xs text-gray-400 mt-2 text-center">{tex.noSignupRequired}</p>
+        <div className="flex flex-wrap gap-2 justify-center mt-3">
+          <span className="text-xs text-gray-400">{tex.trust1}</span>
+          <span className="text-xs text-gray-400">{tex.trust2}</span>
+          <span className="text-xs text-gray-400">{tex.trust3}</span>
+        </div>
         {state && (
-          <p className="text-xs text-gray-400 mt-0.5 text-center">🟢 {liveCount} {tex.practicingNow}</p>
+          <p className="text-xs text-gray-400 mt-2 text-center">🟢 {liveCount} {tex.practicingNow}</p>
         )}
         <button
           type="button"
