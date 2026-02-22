@@ -8,6 +8,7 @@ export default function Home() {
   const [lang, setLang] = useState('English');
   const [state, setState] = useState('');
   const [user, setUser] = useState(null);
+  const [isPro, setIsPro] = useState(false);
   const router = useRouter();
 
   const langToCode = { English: 'en', 'Русский': 'ru', 'Español': 'es', '中文': 'zh', 'Українська': 'ua' };
@@ -18,9 +19,22 @@ export default function Home() {
     supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
         setUser(session.user);
+      } else {
+        setUser(null);
+        setIsPro(false);
       }
     });
   }, []);
+
+  useEffect(() => {
+    if (!user?.email) return;
+    supabase
+      .from('profiles')
+      .select('is_pro')
+      .eq('email', user.email)
+      .single()
+      .then(({ data: profile }) => setIsPro(profile?.is_pro ?? false));
+  }, [user?.email]);
 
   const langs = [
     { flag: '🇺🇸', name: 'English' },
@@ -99,10 +113,22 @@ export default function Home() {
           const initial = (raw || '?')[0].toUpperCase();
           return (
             <div className="flex items-center gap-2 bg-white border border-[#E2E8F0] rounded-full pl-1.5 pr-2.5 py-1 shadow-sm shrink-0">
-              <div className="w-7 h-7 rounded-full bg-[#0B1C3D] flex items-center justify-center text-white text-[11px] font-bold shrink-0">
-                {initial}
-              </div>
-              <span className="hidden sm:block text-xs font-medium text-[#1E293B] max-w-[100px] truncate">{firstName}</span>
+              <button
+                type="button"
+                onClick={() => router.push('/profile')}
+                className="flex items-center gap-2 min-w-0 hover:opacity-90 transition"
+              >
+                {isPro ? (
+                  <span className="text-[#F59E0B] font-medium text-xs max-w-[100px] truncate">👑 <span className="hidden sm:inline">{firstName}</span></span>
+                ) : (
+                  <>
+                    <div className="w-7 h-7 rounded-full bg-[#0B1C3D] flex items-center justify-center text-white text-[11px] font-bold shrink-0">
+                      {initial}
+                    </div>
+                    <span className="hidden sm:block text-xs font-medium text-[#1E293B] max-w-[100px] truncate">{firstName}</span>
+                  </>
+                )}
+              </button>
               <button onClick={handleSignOut} type="button"
                 className="text-[11px] text-[#94A3B8] hover:text-[#64748B] hover:underline transition">
                 Sign out
