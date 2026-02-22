@@ -1,0 +1,5038 @@
+{
+  "car": [
+    {
+      "name": "Utah Car Practice Test #1",
+      "questions": [
+        {
+          "question": "4. What does a double solid white line indicate?",
+          "answers": [
+            "A. Lane changes are allowed",
+            "B. Lane changes are not allowed",
+            "C. You are approaching a stop sign",
+            "D. You are in a carpool lane"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What should you do when approaching a railroad crossing?",
+          "answers": [
+            "A. Speed up to cross before the train arrives.",
+            "B. Ignore the signals and proceed.",
+            "C. Stop, look, and listen for an approaching train before proceeding.",
+            "D. Cross the tracks without checking for trains."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "2. Who are the only occupants allowed in the vehicle during the driving skills test?",
+          "answers": [
+            "A. The applicant and the examiner.",
+            "B. The applicant, examiner and a parent or guardian.",
+            "C. The applicant, examiner and driving instructor.",
+            "D. The applicant only."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What is the requirement for the driver's side window for the driving skills test?",
+          "answers": [
+            "A. The window must be tinted.",
+            "B. The window must be able to roll down.",
+            "C. The window must be able to roll up.",
+            "D. There are no specific requirements for the driver's side window."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What should you do when approaching a slow-moving vehicle?",
+          "answers": [
+            "A. Honk your horn to make them speed up.",
+            "B. Pass them without any caution.",
+            "C. Tailgate them to make them speed up.",
+            "D. Slow down, maintain a safe distance and pass when it's safe to do so."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What is one of the things you will be scored on during the driving skills test?",
+          "answers": [
+            "A. The use of proper driving techniques.",
+            "B. Your knowledge of the vehicle's make and model.",
+            "C. Your ability to drive at high speeds.",
+            "D. Your ability to multitask while driving."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What does a solid yellow line on your side of the center line mean?",
+          "answers": [
+            "A. You may pass if the way is clear",
+            "B. No passing zone",
+            "C. You are in a two-way left turn lane",
+            "D. You are in a shared center lane"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What should you do when you are stopped by the police while driving?",
+          "answers": [
+            "A. Keep driving and ignore the police.",
+            "B. Speed up and try to escape.",
+            "C. Pull over to the side of the road safely and follow the officer's instructions.",
+            "D. Stop your car in the middle of the road."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What should you do when approaching a train crossing?",
+          "answers": [
+            "A. Speed up to beat the train.",
+            "B. Ignore the signals and proceed.",
+            "C. Stop, look, and listen for the train before proceeding.",
+            "D. Drive around the lowered gates."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What does a circular sign with a red border and a white background indicate?",
+          "answers": [
+            "Stop",
+            "Do not enter",
+            "Yield",
+            "Railroad crossing ahead"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What should you do when you approach a roundabout?",
+          "answers": [
+            "A. Yield to pedestrians and bicyclists crossing the roadway.",
+            "B. Yield to vehicles already in the roundabout.",
+            "C. Enter the roundabout to the right (counterclockwise).",
+            "D. Both A and B."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What is the requirement for tires for the driving skills test?",
+          "answers": [
+            "A. Tires with no bald spots.",
+            "B. Tires with at least 50% tread.",
+            "C. Tires that are less than 5 years old.",
+            "D. Tires that have been rotated in the last 6 months."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "4. How long will the driving skills test last?",
+          "answers": [
+            "A. About 10 minutes.",
+            "B. About 20 minutes.",
+            "C. About 30 minutes.",
+            "D. About 40 minutes."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What should you do when stopping the vehicle?",
+          "answers": [
+            "A. Stop abruptly without any warning.",
+            "B. Signal and gradually slow down before coming to a stop.",
+            "C. Stop in the middle of the road regardless of traffic.",
+            "D. Stop without checking the rear-view mirror."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What should your vehicle have for the driving skills test?",
+          "answers": [
+            "A. The rear plate must show current registration.",
+            "B. Both front and back turn signal lights and working brake lights.",
+            "C. A working horn designed for the vehicle.",
+            "D. All of the above."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What is the rule for driving in flex lanes?",
+          "answers": [
+            "A. Always drive in the leftmost lane.",
+            "B. Always drive in the rightmost lane.",
+            "C. Use any lane that is available.",
+            "D. Follow the signs and signals to determine which lane to use."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What will happen if you fail the driving skills test in three attempts?",
+          "answers": [
+            "A. You will be asked to retake the test immediately.",
+            "B. You will be given a temporary license.",
+            "C. You will not be allowed to take the test again.",
+            "D. The consequences will be determined by the examiner."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What does a Class D driver license allow you to do?",
+          "answers": [
+            "A. Operate commercial vehicles.",
+            "B. Operate motorcycles.",
+            "C. Operate private passenger vehicles.",
+            "D. Operate taxis."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What are the requirements for the vehicle used in the driving skills test?",
+          "answers": [
+            "A. The vehicle can be unregistered and not comply with vehicle safety laws.",
+            "B. The vehicle must be properly registered and comply with vehicle safety laws.",
+            "C. The vehicle can be any vehicle, regardless of its condition.",
+            "D. The vehicle doesn't need to be safe or registered."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What is the correct method for parallel parking?",
+          "answers": [
+            "A. Park perpendicular to the curb.",
+            "B. Park at an angle to the curb.",
+            "C. Park parallel to the curb, aligning your vehicle with the one in front and behind.",
+            "D. Park in any way that fits the vehicle into the space."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "1. If you are stopped by the police while driving, what should you do?",
+          "answers": [
+            "A. Keep driving and ignore the police.",
+            "B. Speed up to show you are not afraid.",
+            "C. Pull over to the side of the road, turn off the engine, and wait for the police officer.",
+            "D. Exit the vehicle and approach the police officer."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What should you do when you are stopped by the police?",
+          "answers": [
+            "A. Pull over to the right side of the road.",
+            "B. Stay in the car and keep your hands on the wheel.",
+            "C. Do not reach for anything until the officer gives you instructions.",
+            "D. All of the above."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What should you avoid doing that can get you a traffic citation or cause a crash?",
+          "answers": [
+            "A. Following traffic signals.",
+            "B. Speeding, beating traffic signals, or other reckless behaviors.",
+            "C. Driving within the speed limit.",
+            "D. Following traffic rules and regulations."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What should your vehicle have for the driving skills test?",
+          "answers": [
+            "A. The rear plate must show current registration.",
+            "B. Both front and back turn signal lights and working brake lights.",
+            "C. A working horn designed for the vehicle.",
+            "D. All of the above."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What does a flashing yellow arrow signal mean?",
+          "answers": [
+            "A. Stop and do not proceed",
+            "B. Proceed with caution in the direction indicated by the arrow",
+            "C. You must yield to oncoming traffic",
+            "D. Both B and C"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What should your vehicle have for the driving skills test?",
+          "answers": [
+            "A. The rear plate must show current registration.",
+            "B. Both front and back turn signal lights and working brake lights.",
+            "C. A working horn designed for the vehicle.",
+            "D. All of the above."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What should you do when you are approaching a police/traffic stop?",
+          "answers": [
+            "A. Continue driving at the same speed and ignore the stop.",
+            "B. Speed up to pass the stop quickly.",
+            "C. Stop at the stop, following the instructions of the officer.",
+            "D. Slow down and proceed through without stopping."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What should you do when you see a slow moving vehicle ahead?",
+          "answers": [
+            "A. Overtake the vehicle without signaling.",
+            "B. Tailgate the vehicle until it speeds up.",
+            "C. Pass the vehicle when it is safe to do so.",
+            "D. Honk continuously until the vehicle moves faster."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What does a green arrow displayed on a traffic light mean?",
+          "answers": [
+            "You must stop",
+            "You can proceed in the direction of the arrow if the way is clear",
+            "You must yield to oncoming traffic",
+            "You must turn in the direction of the arrow"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What does a rectangular white sign with black lettering indicate?",
+          "answers": [
+            "Regulatory, such as speed limit",
+            "Warning or caution",
+            "Construction zone",
+            "School zone"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What does a green arrow signal mean?",
+          "answers": [
+            "A. You can proceed, but only in the direction indicated by the arrow",
+            "B. You must stop and yield to oncoming traffic",
+            "C. You must yield to pedestrians and vehicles already in the intersection",
+            "D. All of the above"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What does a flashing red traffic signal mean?",
+          "answers": [
+            "A. Proceed with caution",
+            "B. Stop, yield the right-of-way, and proceed when it's safe",
+            "C. Slow down and prepare to stop",
+            "D. Traffic signal is out of order"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What does a red traffic light mean?",
+          "answers": ["Proceed with caution", "Stop", "Yield", "Go"],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "2. How should you behave when driving near a slow moving vehicle?",
+          "answers": [
+            "A. Overtake the vehicle without any caution.",
+            "B. Honk continuously until the vehicle speeds up.",
+            "C. Follow the vehicle closely.",
+            "D. Keep a safe distance and overtake only when it's safe."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What is the examiner's role during the driving skills test?",
+          "answers": [
+            "A. To ask questions or give directions.",
+            "B. To engage in general conversation.",
+            "C. To provide recommendations for possible improvement.",
+            "D. To check the condition of your vehicle."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What is the rule for intersections when the light turns yellow?",
+          "answers": [
+            "A. Speed up to go through the intersection before the light turns red.",
+            "B. Slow down and proceed through the intersection without caution.",
+            "C. Stop before entering the intersection if you can do so safely.",
+            "D. Continue at the same speed."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What should you do when parking on a hill?",
+          "answers": [
+            "A. Park parallel to the curb with your wheels turned away from it.",
+            "B. Park perpendicular to the curb with your wheels turned towards it.",
+            "C. Park parallel to the curb with your wheels turned towards it.",
+            "D. Park at any angle that feels comfortable."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What is the purpose of the driving skills test?",
+          "answers": [
+            "A. To demonstrate your driving ability.",
+            "B. To test your knowledge of traffic laws.",
+            "C. To check the condition of your vehicle.",
+            "D. To evaluate your ability to follow directions."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What is the requirement for the vehicle used in the driving skills test?",
+          "answers": [
+            "A. The vehicle can be any type, as long as it is drivable.",
+            "B. The vehicle must be a luxury car.",
+            "C. The vehicle must be properly registered and comply with vehicle safety laws.",
+            "D. The vehicle must be a sports car."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What does a yellow diamond-shaped sign indicate?",
+          "answers": ["Stop", "Yield", "Warning or caution", "No passing zone"],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        }
+      ],
+      "passingScore": 32,
+      "isPremium": false
+    },
+    {
+      "name": "Utah Car Practice Test #2",
+      "questions": [
+        {
+          "question": "2. What is required for the driving skills test?",
+          "answers": [
+            "A properly registered vehicle that complies with vehicle safety laws",
+            "A vehicle with a valid insurance",
+            "A vehicle with a full tank of gas",
+            "A vehicle with a functioning radio"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What is one of the significant causes of traffic-related deaths according to the Utah Highway Safety Office?",
+          "answers": [
+            "A. Not using turn signals",
+            "B. Not having a working horn",
+            "C. Not having a driver\u2019s side window that rolls down",
+            "D. The question does not provide enough information"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What should your vehicle have for the driving skills test?",
+          "answers": [
+            "A. The rear plate must show current registration",
+            "B. Both front and back turn signal lights and working brake lights",
+            "C. A working horn designed for the vehicle",
+            "D. All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What does a yellow sign with a black arrow curving to the left followed by a straight arrow indicate?",
+          "answers": [
+            "Left turn only",
+            "Keep left",
+            "Left curve ahead followed by straight road",
+            "Road curves to the left"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What is one of the things that you will be scored on during the driving skills test?",
+          "answers": [
+            "A. Your ability to play loud music while driving.",
+            "B. Your ability to drive with one hand.",
+            "C. Your general behavior and attitude.",
+            "D. Your ability to text while driving."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What should you ensure your vehicle has before your driving skills test?",
+          "answers": [
+            "A. Tires with no bald spots",
+            "B. Adequate brake pressure",
+            "C. A driver\u2019s side window that rolls down",
+            "D. All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What does a red arrow signal mean?",
+          "answers": [
+            "A. You can turn in the direction of the arrow after stopping.",
+            "B. You cannot turn in the direction of the arrow.",
+            "C. You must yield to oncoming traffic before turning.",
+            "D. You can turn in the direction of the arrow without stopping."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What should you do when approaching a roundabout?",
+          "answers": [
+            "Speed up and enter the roundabout without yielding.",
+            "Stop completely before entering the roundabout.",
+            "Yield to traffic already in the roundabout.",
+            "Enter the roundabout without looking for other vehicles."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What does a flashing yellow light at an intersection mean?",
+          "answers": [
+            "A. Stop completely and wait for green light.",
+            "B. Proceed with caution.",
+            "C. The light is about to turn red.",
+            "D. The light is about to turn green."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What is one of the requirements for the vehicle you provide for the driving skills test?",
+          "answers": [
+            "The vehicle must have a custom horn.",
+            "The vehicle must have a front plate.",
+            "The vehicle must have tires with no bald spots.",
+            "The vehicle must have a driver's side window that doesn't roll down."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What should your vehicle have for the driving skills test?",
+          "answers": [
+            "A driver\u2019s side window that does not roll down.",
+            "Tires with bald spots.",
+            "A working horn designed for the vehicle.",
+            "Both front and back turn signal lights and non-working brake lights."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "2. How should you behave when approaching a slow moving vehicle?",
+          "answers": [
+            "A. Overtake the vehicle without signaling.",
+            "B. Honk continuously until the vehicle moves faster.",
+            "C. Tailgate the vehicle to pressure the driver to speed up.",
+            "D. Maintain a safe distance and overtake when it's safe."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "3. How should you park when parking between two cars?",
+          "answers": [
+            "Park at an angle.",
+            "Park parallel to the cars.",
+            "Park perpendicular to the cars.",
+            "Park as close as possible to one car."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What is the rule for freeway driving?",
+          "answers": [
+            "You can drive at any speed you want.",
+            "You should always drive in the left lane.",
+            "You should follow the speed limit and keep a safe distance from other vehicles.",
+            "You can change lanes without signaling."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What is the requirement for the rear plate of the vehicle for the driving skills test?",
+          "answers": [
+            "The rear plate must show expired registration.",
+            "The rear plate must show current registration.",
+            "Front plate is required after January 1, 2025.",
+            "Both front and back plates are not required."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What is the correct procedure for a three-point turn?",
+          "answers": [
+            "Turn right, reverse, turn left.",
+            "Turn left, reverse, turn right.",
+            "Turn right, go forward, turn left.",
+            "None of the above."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What should you do when you are approaching a slow moving vehicle?",
+          "answers": [
+            "Honk your horn to make them speed up.",
+            "Pass them without signaling.",
+            "Slow down and pass when it's safe to do so.",
+            "Tailgate them until they speed up."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What should you be aware of when approaching trains and railroad crossings?",
+          "answers": [
+            "You should always stop before crossing",
+            "You should speed up to cross before the train arrives",
+            "You should always yield to the train",
+            "You should ignore the train and proceed as normal"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What does a red octagon shaped sign indicate?",
+          "answers": ["Stop", "Yield", "Do not enter", "Speed limit"],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What is not required in your vehicle for the driving skills test after January 1, 2025?",
+          "answers": [
+            "A. A driver\u2019s side window that rolls down",
+            "B. Tires with no bald spots",
+            "C. Adequate brake pressure",
+            "D. Front plate"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What is required for the vehicle used in the driving skills test?",
+          "answers": [
+            "A. The vehicle must be a sports car.",
+            "B. The vehicle must be properly registered and comply with vehicle safety laws.",
+            "C. The vehicle must be a rental car.",
+            "D. The vehicle must be a luxury car."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What will you be scored on during the driving skills test?",
+          "answers": [
+            "A. General behavior and attitude",
+            "B. The use of proper driving techniques",
+            "C. Both A and B",
+            "D. None of the above"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What will the examiner score you on during the driving skills test?",
+          "answers": [
+            "Your ability to engage in general conversation.",
+            "Your ability to follow the examiner's directions and perform specific driving maneuvers.",
+            "Your ability to answer questions about the vehicle.",
+            "Your ability to drive at high speeds."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What is the purpose of the driving skills test?",
+          "answers": [
+            "To demonstrate your ability to drive at high speeds.",
+            "To demonstrate your driving ability and compliance with vehicle safety laws.",
+            "To demonstrate your ability to engage in general conversation.",
+            "To demonstrate your ability to answer questions about the vehicle."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What does a yellow diamond shaped sign with two cars, one black and one red, indicate?",
+          "answers": [
+            "Two way traffic",
+            "No passing zone",
+            "Merge",
+            "Lane ends"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What are significant causes of traffic-related deaths as identified in statistics published by the Utah Highway Safety Office?",
+          "answers": [
+            "Distracted driving",
+            "Speeding",
+            "Drunk driving",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "1. When parking on a hill, what should you do?",
+          "answers": [
+            "Turn your wheels away from the curb.",
+            "Turn your wheels towards the curb.",
+            "Leave your wheels straight.",
+            "None of the above."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What is one of the things you may be asked to do during the driving skills test?",
+          "answers": [
+            "Drive at high speeds.",
+            "Engage in general conversation.",
+            "Step on the brake pedal to see if it works properly.",
+            "Answer questions about the vehicle."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What does a yellow diamond shaped sign with a black symbol of a pedestrian indicate?",
+          "answers": [
+            "School zone",
+            "Pedestrian crossing",
+            "No pedestrians allowed",
+            "Watch for children"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What does a green arrow signal displayed with a red light mean?",
+          "answers": [
+            "A. You can proceed in the direction of the arrow if the way is clear.",
+            "B. You must stop and wait for the green light.",
+            "C. You can turn in the direction of the arrow after stopping.",
+            "D. You cannot turn in the direction of the arrow."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What should you do when you see a train at a railroad crossing?",
+          "answers": [
+            "Speed up to beat the train.",
+            "Ignore the train and continue driving.",
+            "Stop and wait for the train to pass.",
+            "Drive around the crossing gates if they are down."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What does a solid yellow line on your side of the road indicate?",
+          "answers": [
+            "A. You can pass other vehicles if it's safe.",
+            "B. You can't pass other vehicles.",
+            "C. You can change lanes if it's safe.",
+            "D. It's a parking zone."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What should you do when you are approaching a police/traffic stop?",
+          "answers": [
+            "Speed up and pass quickly.",
+            "Slow down and move over if possible.",
+            "Ignore it and continue driving normally.",
+            "Stop your car and wait for instructions."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What should you do when you are stopped by a police officer while driving?",
+          "answers": [
+            "A. Keep driving and ignore the officer.",
+            "B. Pull over to the right side of the road, turn off your engine and wait for the officer.",
+            "C. Speed up and try to outrun the officer.",
+            "D. Stop in the middle of the road and get out of your car."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What is the correct procedure when approaching a railroad crossing?",
+          "answers": [
+            "A. Speed up to cross before the train arrives.",
+            "B. Stop, look, and listen for an approaching train before proceeding.",
+            "C. Ignore the warning signals and cross the tracks.",
+            "D. Cross the tracks immediately without checking for a train."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What does a white line across your lane at an intersection indicate?",
+          "answers": [
+            "A. You must stop before the line when the light is red.",
+            "B. You can stop anywhere in the intersection.",
+            "C. You can cross the line if the light is yellow.",
+            "D. You must stop after the line when the light is red."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What is the correct website to visit for additional driver license information and forms?",
+          "answers": [
+            "www.dld.utah.com",
+            "www.dld.utah.net",
+            "www.dld.utah.org",
+            "www.dld.utah.gov"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What happens if you fail the driving skills test three times?",
+          "answers": [
+            "You will be given a temporary license.",
+            "You will be asked to take a written test instead.",
+            "You will have to wait several days or weeks before attempting additional tests.",
+            "You will be asked to take a different type of driving test."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What does a white rectangular sign with a red circle and a red line through it followed by a number indicate?",
+          "answers": [
+            "No entry",
+            "Speed limit",
+            "No passing zone",
+            "Do not exceed the indicated speed"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What services does the Driver License Division (DLD) provide?",
+          "answers": [
+            "Driver License (Class D), Commercial Driver License (CDL), Driving Privilege Cards (DPC)",
+            "Limited-Term Driver License, Identification Cards, Limited-Term Identification Cards",
+            "Endorsements (CDL, Taxi, Motorcycle)",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        }
+      ],
+      "passingScore": 32,
+      "isPremium": false
+    },
+    {
+      "name": "Utah Car Practice Test #3",
+      "questions": [
+        {
+          "question": "2. What does a flashing red traffic signal mean?",
+          "answers": [
+            "Proceed with caution.",
+            "Stop, yield the right-of-way, and proceed when it is safe.",
+            "The signal is about to change to green.",
+            "The signal is about to change to yellow."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "2. When parking downhill, you should turn your wheels:",
+          "answers": [
+            "A. Towards the curb",
+            "B. Away from the curb",
+            "C. Parallel to the curb",
+            "D. Any direction, it doesn't matter"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "3. When you are required to stop by a police officer, you should:",
+          "answers": [
+            "A. Stop immediately in the lane you are in",
+            "B. Pull over to the right side of the road and stop",
+            "C. Continue driving until you find a convenient place to stop",
+            "D. Speed up and try to outrun the police"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "5. How long will the driving skills test approximately last?",
+          "answers": ["10 minutes", "20 minutes", "30 minutes", "40 minutes"],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What is one of the requirements for the vehicle used in the driving skills test?",
+          "answers": [
+            "The rear plate must show expired registration",
+            "The vehicle must have tires with bald spots",
+            "The vehicle must have a broken horn",
+            "Both front and back turn signal lights and working brake lights"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What is required for the rear plate of your vehicle for the driving skills test?",
+          "answers": [
+            "It must show current registration.",
+            "It is not required.",
+            "It must be removed.",
+            "It must be broken."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What is a significant part of the driving skills test?",
+          "answers": [
+            "Engaging in general conversation with the examiner",
+            "Doing unsafe or illegal maneuvers",
+            "Following the directions of the examiner",
+            "Ignoring the examiner's directions"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What is required for the vehicle used in the driving skills test?",
+          "answers": [
+            "A. It must be a luxury vehicle.",
+            "B. It must be properly registered and comply with vehicle safety laws.",
+            "C. It must be a rental vehicle.",
+            "D. It must be a sports car."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What is the correct behavior at intersections when the light turns yellow?",
+          "answers": [
+            "A. Speed up to go through the intersection before the light turns red.",
+            "B. Slow down and proceed through the intersection without caution.",
+            "C. Stop before entering the intersection if you can do so safely.",
+            "D. Continue at the same speed regardless of the light color."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What should your vehicle have for the driving skills test?",
+          "answers": [
+            "A. The rear plate must show current registration (front plate not required after January 1, 2025.)",
+            "B. Both front and back turn signal lights and working brake lights.",
+            "C. A working horn designed for the vehicle.",
+            "D. All of the above."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What should you check before taking the driving skills test?",
+          "answers": [
+            "If your tires have bald spots.",
+            "If your brake lights are working.",
+            "If your horn is working.",
+            "All of the above."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What does a red traffic light mean?",
+          "answers": [
+            "A. Proceed with caution",
+            "B. Stop",
+            "C. Yield to oncoming traffic",
+            "D. The light is about to turn green"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "1. When parking uphill with a curb, you should turn your wheels:",
+          "answers": [
+            "A. Towards the curb",
+            "B. Away from the curb",
+            "C. Parallel to the curb",
+            "D. Any direction, it doesn't matter"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What is required for the vehicle used in the driving skills test?",
+          "answers": [
+            "A. The vehicle must be properly registered and comply with vehicle safety laws.",
+            "B. The vehicle must have a valid insurance.",
+            "C. The vehicle must have a full tank of gas.",
+            "D. The vehicle must be a certain color."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What should you do when approaching a railroad crossing?",
+          "answers": [
+            "A. Speed up to beat the train.",
+            "B. Stop, look, and listen for any oncoming trains before crossing.",
+            "C. Ignore the warning signs and proceed.",
+            "D. Cross immediately without checking for trains."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What should you do if you are being pulled over by the police?",
+          "answers": [
+            "A. Speed up and try to evade them.",
+            "B. Pull over to the side of the road safely and promptly.",
+            "C. Ignore them and continue driving.",
+            "D. Come to an immediate stop in the middle of the road."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What are some of the services provided by the Driver License Division (DLD)?",
+          "answers": [
+            "A. Offering free driving lessons.",
+            "B. Providing vehicle registration.",
+            "C. Issuing Driver License (Class D), Commercial Driver License (CDL), Driving Privilege Cards (DPC).",
+            "D. Providing vehicle insurance."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What does a solid yellow line on your side of the center line mean?",
+          "answers": [
+            "You may pass if the road ahead is clear.",
+            "You may not pass.",
+            "You may pass if the oncoming traffic is at a safe distance.",
+            "You may pass if you are at a safe distance from the oncoming traffic."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What does a rectangular white sign with black lettering indicate?",
+          "answers": [
+            "A. Regulatory sign",
+            "B. Warning sign",
+            "C. Construction and maintenance sign",
+            "D. School zone"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What does a yellow diamond-shaped sign indicate?",
+          "answers": [
+            "A. Stop sign ahead",
+            "B. Traffic signal ahead",
+            "C. Warning or caution",
+            "D. No passing zone"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What should your vehicle have for the driving skills test?",
+          "answers": [
+            "A driver\u2019s side window that doesn't roll down",
+            "A driver\u2019s side window that rolls down",
+            "A horn that doesn't work",
+            "Tires with bald spots"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What should you do if you approach an intersection with a non-operational traffic signal?",
+          "answers": [
+            "Proceed as if the intersection is a four-way stop.",
+            "Proceed through the intersection without stopping.",
+            "Stop and wait for the signal to start working again.",
+            "Honk your horn to alert other drivers and proceed through the intersection."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. How many times can you fail the driving skills test before you are required to wait several days or weeks before reattempting?",
+          "answers": ["Once", "Twice", "Thrice", "Four times"],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "4. When you are required to stop at a railroad crossing, you should stop:",
+          "answers": [
+            "A. Immediately after crossing the railroad tracks",
+            "B. 15 feet away from the nearest rail",
+            "C. 5 feet away from the nearest rail",
+            "D. On the railroad tracks"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What should you do when you approach a police/traffic stop?",
+          "answers": [
+            "A. Speed up to get past the stop as quickly as possible.",
+            "B. Ignore the stop and continue driving.",
+            "C. Slow down and move over a lane if possible.",
+            "D. Stop your vehicle in the middle of the road."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What is the purpose of the driving skills test?",
+          "answers": [
+            "To demonstrate your ability to drive fast.",
+            "To demonstrate your ability to drive without using turn signals.",
+            "To demonstrate your general behavior, attitude, and use of proper driving techniques.",
+            "To demonstrate your ability to drive with a broken horn."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What does a five-sided sign indicate?",
+          "answers": [
+            "A. Stop",
+            "B. School zone or school crossing",
+            "C. No passing zone",
+            "D. Yield"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What are you required to demonstrate during your driving skills test?",
+          "answers": [
+            "Your ability to drive fast.",
+            "Your ability to drive without using turn signals.",
+            "Your driving ability and compliance with vehicle safety laws.",
+            "Your ability to drive with a broken horn."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What is one of the topics covered in the driver license manual?",
+          "answers": [
+            "A. The best places to park in the city.",
+            "B. How to negotiate the best price for a car.",
+            "C. How to handle police/traffic stops.",
+            "D. How to change a tire."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What is the correct behavior when approaching trains and railroad crossings?",
+          "answers": [
+            "A. Speed up to beat the train.",
+            "B. Ignore the signals and continue driving.",
+            "C. Stop, look, and listen for the train before proceeding.",
+            "D. Drive around the gates if they are down."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What does a circular sign with a red border and a white background indicate?",
+          "answers": [
+            "A. Yield",
+            "B. Do not enter",
+            "C. Railroad crossing",
+            "D. Stop"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What does a white rectangular sign with black lettering indicate?",
+          "answers": [
+            "Warning or caution.",
+            "Regulatory information.",
+            "School zone.",
+            "No passing zone."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What should your vehicle have for the driving skills test?",
+          "answers": [
+            "Bald tires and a broken horn.",
+            "Current registration on the rear plate, working turn signal lights, working brake lights, a working horn, tires with no bald spots, adequate brake pressure, and a driver\u2019s side window that rolls down.",
+            "A broken brake light and a driver\u2019s side window that doesn't roll down.",
+            "A front plate and a broken horn."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What should you be aware of when visiting the Driver License Division website?",
+          "answers": [
+            "A. Imitator sites that do not end in .gov.",
+            "B. Sites that offer free driving lessons.",
+            "C. Sites that offer discounted licenses.",
+            "D. Sites that offer free vehicle registration."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. How should you behave when encountering a slow moving vehicle on the road?",
+          "answers": [
+            "A. Tailgate the vehicle to pressure them to speed up.",
+            "B. Honk continuously until they move out of the way.",
+            "C. Overtake them without checking for oncoming traffic.",
+            "D. Pass them only when it is safe and legal to do so."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What is the correct way to behave in a roundabout?",
+          "answers": [
+            "A. Yield to pedestrians and bicycles as they have the right of way.",
+            "B. Do not stop in the roundabout.",
+            "C. Use your turn signals to let others know your intentions.",
+            "D. All of the above."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "5. When parallel parking, you should be within what distance from the curb?",
+          "answers": [
+            "A. 6 inches",
+            "B. 12 inches",
+            "C. 18 inches",
+            "D. 24 inches"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What is one of the things you will be scored on during the driving skills test?",
+          "answers": [
+            "A. Your ability to play the radio while driving.",
+            "B. Your ability to drive with one hand.",
+            "C. Your general behavior and attitude.",
+            "D. Your ability to eat and drink while driving."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What does a yellow diamond-shaped sign with a black symbol indicate?",
+          "answers": [
+            "No passing zone.",
+            "School zone.",
+            "Warning or caution.",
+            "Regulatory information."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What significant information does the Utah Highway Safety Office publish?",
+          "answers": [
+            "A. The best routes to take during rush hour.",
+            "B. The most fuel-efficient cars on the market.",
+            "C. The best car insurance companies.",
+            "D. Statistics related to significant causes of traffic-related deaths."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        }
+      ],
+      "passingScore": 32,
+      "isPremium": false
+    },
+    {
+      "name": "Utah Car Practice Test #4",
+      "questions": [
+        {
+          "question": "15. Where can you find statistics on significant causes of traffic-related deaths?",
+          "answers": [
+            "In the Utah Highway Safety Office.",
+            "On the License Division website.",
+            "In the driving skills test handbook.",
+            "None of the above."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "4. When parking between two cars, you should:",
+          "answers": [
+            "A. Leave your car in neutral.",
+            "B. Ensure you are at least 5 feet away from each car.",
+            "C. Park as close as possible to the car in front.",
+            "D. Ensure you are an equal distance between the two cars."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What does a yellow diamond-shaped sign indicate?",
+          "answers": ["Stop", "Yield", "Warning or caution", "No entry"],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "7. What does a red arrow displayed on a traffic light mean?",
+          "answers": [
+            "You must stop and you cannot go in the direction of the arrow",
+            "You may go in the direction of the arrow after coming to a full stop",
+            "You should prepare to stop",
+            "You have the right-of-way"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "14. What percentage of the questions will relate to significant causes of traffic-related deaths?",
+          "answers": ["25%", "50%", "75%", "100%"],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "8. When making a three-point turn, you should:",
+          "answers": [
+            "A. Make the turn without checking for oncoming traffic.",
+            "B. Make the turn as quickly as possible.",
+            "C. Make the turn only when it is safe and legal to do so.",
+            "D. Make the turn at any intersection."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "14. What should you do when approaching a train crossing?",
+          "answers": [
+            "Speed up to beat the train",
+            "Stop, look, and listen for trains before proceeding",
+            "Ignore the crossing signals",
+            "Drive around the crossing gates"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "9. When making a left turn, you should:",
+          "answers": [
+            "A. Turn into the far right lane.",
+            "B. Turn into the far left lane.",
+            "C. Turn into the nearest lane to the left that is safe.",
+            "D. Turn into any lane that is safe."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "3. When parking on a hill, you should:",
+          "answers": [
+            "A. Always park parallel to the curb.",
+            "B. Turn your wheels away from the curb when facing downhill.",
+            "C. Turn your wheels towards the curb when facing uphill.",
+            "D. Always leave your car in neutral."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "6. What should you do if you are asked to take a review examination by the division?",
+          "answers": [
+            "A. Ignore the request and continue driving as usual.",
+            "B. Comply with the request and take the examination.",
+            "C. Argue with the division about the necessity of the examination.",
+            "D. Take the examination but not seriously."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What should you do when approaching a train crossing?",
+          "answers": [
+            "A. Speed up to beat the train.",
+            "B. Stop, look, and listen for trains before proceeding.",
+            "C. Ignore the crossing signs and continue driving.",
+            "D. Drive around any lowered gates."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "14. What does a red octagon-shaped sign mean?",
+          "answers": ["Stop", "Yield", "Warning or caution", "No entry"],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "10. What services does the Driver License Division (DLD) provide?",
+          "answers": [
+            "Driver License (Class D)",
+            "Commercial Driver License (CDL)",
+            "Identification Cards",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What does a flashing yellow light indicate at an intersection?",
+          "answers": [
+            "Stop",
+            "Proceed with caution",
+            "The light is about to turn red",
+            "The light is about to turn green"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "9. What does a flashing red light at an intersection mean?",
+          "answers": [
+            "Proceed with caution",
+            "Stop and proceed when it's safe",
+            "The light is about to turn green",
+            "The light is broken"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "6. When stopping your vehicle, you should:",
+          "answers": [
+            "Stop without signaling.",
+            "Stop with your vehicle halfway in the intersection.",
+            "Stop at least 5 feet from the crosswalk.",
+            "Stop at the stop line, before the crosswalk, or before entering the intersection."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "7. What is required for vehicle equipment?",
+          "answers": [
+            "Proper lighting",
+            "Working brakes",
+            "Seat belts",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "11. When steering, you should:",
+          "answers": [
+            "A. Hold the steering wheel with one hand.",
+            "B. Hold the steering wheel with both hands.",
+            "C. Steer with your knees.",
+            "D. Steer with your elbows."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "11. What should you do to pass your driving skills test?",
+          "answers": [
+            "A. Ignore the examiner and focus on the road.",
+            "B. Engage in general conversation with the examiner.",
+            "C. Study the handbook, relax, and do your best.",
+            "D. Argue with the examiner about the test."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "12. What should you do if you encounter a street legal all-terrain vehicle on the road?",
+          "answers": [
+            "A. Speed past it as quickly as possible.",
+            "B. Honk at it to move out of the way.",
+            "C. Treat it as you would any other vehicle on the road.",
+            "D. Ignore it and continue driving as you were."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "14. When you are stopped by a police officer, you should:",
+          "answers": [
+            "Stay in your vehicle with your hands clearly visible.",
+            "Exit your vehicle and approach the officer.",
+            "Argue with the officer about the reason for the stop.",
+            "Refuse to provide your license and registration."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "13. What does a do not enter sign indicate?",
+          "answers": [
+            "You can enter",
+            "You cannot enter",
+            "You must stop",
+            "You must yield"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "11. The speed limit in a residential area is typically:",
+          "answers": ["20 mph.", "25 mph.", "30 mph.", "35 mph."],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "15. What is required for vehicle equipment?",
+          "answers": [
+            "Proper lighting",
+            "Working brakes",
+            "Seat belts",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What should you do if the examiner gives you directions during the test?",
+          "answers": [
+            "A. Ignore the directions and continue driving.",
+            "B. Follow the directions of the examiner.",
+            "C. Ask the examiner to stop talking.",
+            "D. Pull over and end the test."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "11. What will the examiner do during the test?",
+          "answers": [
+            "The examiner will ask questions or give you directions.",
+            "The examiner will engage in general conversation.",
+            "The examiner will give you advice on how to improve your driving.",
+            "None of the above."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What should you do when you are approaching an intersection at the speed limit and the light turns yellow?",
+          "answers": [
+            "A. Slow down and proceed through the intersection without caution.",
+            "B. Speed up to go through the intersection before the light turns red.",
+            "C. Stop before entering the intersection if you can do so safely.",
+            "D. Continue at the same speed and ignore the yellow light."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "1. When changing lanes, you should:",
+          "answers": [
+            "Change lanes without looking.",
+            "Change lanes only when there are no vehicles in the lane you are moving to.",
+            "Signal your intentions and check your mirrors and blind spot before changing lanes.",
+            "Change lanes only during the day."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "10. What does a school zone sign indicate?",
+          "answers": [
+            "You must stop for school buses",
+            "You must yield to school buses",
+            "You must drive at a lower speed limit",
+            "You must not drive in this area"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "9. What is the proper driving technique when approaching a yellow traffic light?",
+          "answers": [
+            "A. Speed up to beat the red light.",
+            "B. Continue at the same speed and ignore the yellow light.",
+            "C. Stop before entering the intersection if you can do so safely.",
+            "D. Slow down but continue through the intersection."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "11. What does a railroad crossing sign indicate?",
+          "answers": [
+            "You must stop for trains",
+            "You must yield to trains",
+            "Trains are not allowed",
+            "Trains must yield to vehicles"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "11. What should be your general behavior and attitude during the driving skills test?",
+          "answers": [
+            "A. Aggressive and impatient.",
+            "B. Calm and respectful.",
+            "C. Nervous and unsure.",
+            "D. Indifferent and nonchalant."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What is required for the rear plate of your vehicle for the driving skills test?",
+          "answers": [
+            "It must show current registration.",
+            "It must have a sticker indicating the vehicle's make and model.",
+            "It must be painted in a reflective color.",
+            "None of the above."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "12. What will you be scored on during the driving skills test?",
+          "answers": [
+            "A. Your ability to engage in general conversation with the examiner.",
+            "B. Your ability to ignore the examiner and focus on the road.",
+            "C. Your specific driving maneuvers.",
+            "D. Your ability to argue with the examiner about the test."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "14. When changing lanes, you should:",
+          "answers": [
+            "A. Change lanes without signaling.",
+            "B. Change lanes only when it is safe and legal to do so.",
+            "C. Change lanes at any time.",
+            "D. Change lanes without checking your mirrors."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "15. When approaching a police/traffic stop, you should:",
+          "answers": [
+            "A. Speed up and pass the stop as quickly as possible.",
+            "B. Slow down and move over a lane if possible.",
+            "C. Continue at the same speed and ignore the stop.",
+            "D. Stop and wait for the police to wave you through."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "14. What does a no passing zone sign indicate?",
+          "answers": [
+            "You can pass other vehicles",
+            "You cannot pass other vehicles",
+            "You must pass other vehicles",
+            "Other vehicles must pass you"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What does a stop sign mean?",
+          "answers": ["Yield", "Proceed with caution", "Stop", "Speed up"],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "7. What does a no parking sign mean?",
+          "answers": [
+            "You can park here",
+            "You cannot park here",
+            "You must park here",
+            "Parking is recommended"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "13. What is the purpose of the driving skills test?",
+          "answers": [
+            "To demonstrate your driving ability.",
+            "To provide the vehicle for the driving skills test.",
+            "To comply with vehicle safety laws.",
+            "All of the above."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "7. When making a U-turn, you should:",
+          "answers": [
+            "A. Make the turn without checking for oncoming traffic.",
+            "B. Make the turn as quickly as possible.",
+            "C. Make the turn only when it is safe and legal to do so.",
+            "D. Make the turn at any intersection."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What is a requirement for the driver's side window for the driving skills test?",
+          "answers": [
+            "It must be tinted.",
+            "It must roll down.",
+            "It must have a sticker indicating the driver's license number.",
+            "None of the above."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "6. What should you do when approaching a train crossing?",
+          "answers": [
+            "Speed up to beat the train",
+            "Stop, look, and listen for trains before proceeding",
+            "Ignore the crossing signals",
+            "Drive around the crossing gates"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What is a requirement for the vehicle's horn for the driving skills test?",
+          "answers": [
+            "It must be able to play a specific tune.",
+            "It must be designed for the vehicle.",
+            "It must be audible from a specific distance.",
+            "None of the above."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What is the significant cause of traffic-related deaths as identified in the statistics published by the Utah Highway Safety Office?",
+          "answers": [
+            "Speeding",
+            "Drunk driving",
+            "Not wearing seat belts",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "15. What does a roundabout sign indicate?",
+          "answers": [
+            "You must stop",
+            "You must yield",
+            "You must drive in a circular pattern",
+            "You can drive in any direction"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "3. When passing another vehicle, you should:",
+          "answers": [
+            "Pass on the right at all times.",
+            "Pass on the left at all times.",
+            "Only pass when it is safe and legal to do so.",
+            "Pass without signaling."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "12. What is the purpose of the driving skills test?",
+          "answers": [
+            "To test your knowledge of traffic rules",
+            "To test your driving ability",
+            "To test your ability to park",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "7. What is a requirement for the vehicle's turn signal lights for the driving skills test?",
+          "answers": [
+            "They must be of a specific color.",
+            "They must be working.",
+            "They must be of a specific size.",
+            "None of the above."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "13. Traffic controls are used to:",
+          "answers": [
+            "Regulate the flow of traffic.",
+            "Communicate the rules of the road.",
+            "Prevent accidents.",
+            "All of the above."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "12. What should you do to pass your driving skills test?",
+          "answers": [
+            "You should study this handbook.",
+            "You should relax.",
+            "You should do your best.",
+            "All of the above."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "6. What is a requirement for the vehicle's brake lights for the driving skills test?",
+          "answers": [
+            "They must be of a specific color.",
+            "They must be working.",
+            "They must be of a specific size.",
+            "None of the above."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "13. What is not required for the vehicle used in the driving skills test?",
+          "answers": [
+            "A. A working horn designed for the vehicle.",
+            "B. Tires with bald spots.",
+            "C. A driver\u2019s side window that does not roll down.",
+            "D. Both front and back turn signal lights and working brake lights."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What is the purpose of vehicle equipment checks?",
+          "answers": [
+            "A. To ensure the vehicle is safe to drive.",
+            "B. To make sure the vehicle looks good.",
+            "C. To increase the vehicle's speed.",
+            "D. To make the vehicle louder."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "6. What does a double yellow line in the middle of the road indicate?",
+          "answers": [
+            "You may pass when it is safe to do so",
+            "You may not pass",
+            "The speed limit is about to change",
+            "There is a school zone ahead"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "8. What does a speed limit sign indicate?",
+          "answers": [
+            "The minimum speed you must drive",
+            "The maximum speed you can drive",
+            "The recommended speed",
+            "The speed at which you must stop"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "6. What is the maximum number of driving skills tests you can take in a day?",
+          "answers": ["A. One", "B. Two", "C. Three", "D. Four"],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "15. What does a yellow triangle-shaped sign with a red border mean?",
+          "answers": ["Stop", "Yield", "Warning or caution", "No entry"],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "10. How long will your driving skills test last?",
+          "answers": [
+            "About 20 minutes.",
+            "About 30 minutes.",
+            "About 40 minutes.",
+            "About 50 minutes."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "7. What is the purpose of the driving skills test?",
+          "answers": [
+            "A. To test your ability to speed and evade traffic.",
+            "B. To demonstrate your driving ability and compliance with road rules and regulations.",
+            "C. To show off your car's capabilities.",
+            "D. To test your ability to drive with distractions."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What are you required to demonstrate during the driving skills test?",
+          "answers": [
+            "Your driving ability",
+            "Your knowledge of traffic rules",
+            "Your ability to park",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What should your vehicle have for the driving skills test?",
+          "answers": [
+            "A working horn designed for the vehicle.",
+            "Both front and back turn signal lights and working brake lights.",
+            "Tires with no bald spots.",
+            "All of the above."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "10. Pavement markings are used to:",
+          "answers": [
+            "Indicate where you may pass other vehicles.",
+            "Indicate which lane you should be in for a turn.",
+            "Separate lanes of traffic.",
+            "All of the above."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "9. What should you do if you have any questions before your driving skills test begins?",
+          "answers": [
+            "You should ask the examiner.",
+            "You should look up the answers online.",
+            "You should ask a friend.",
+            "None of the above."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "9. What does a pedestrian crossing sign indicate?",
+          "answers": [
+            "Pedestrians are not allowed",
+            "Pedestrians must yield to vehicles",
+            "Vehicles must yield to pedestrians",
+            "Vehicles must stop for pedestrians"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "12. What does a one-way sign indicate?",
+          "answers": [
+            "You can only drive in one direction",
+            "You can drive in any direction",
+            "You must stop",
+            "You must yield"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "13. What should you do when you encounter a slow moving vehicle?",
+          "answers": [
+            "Honk your horn",
+            "Overtake without caution",
+            "Follow at a safe distance and overtake when safe",
+            "Tailgate the vehicle"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "13. What should you do when you see a train approaching a railroad crossing?",
+          "answers": [
+            "A. Try to beat the train across the tracks.",
+            "B. Stop, look, and listen for the train before proceeding.",
+            "C. Ignore the train and continue driving.",
+            "D. Drive around the lowered gates."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What does a yellow traffic light mean?",
+          "answers": ["Stop", "Speed up", "Yield", "Prepare to stop"],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "15. What is required for the rear plate of the vehicle used in the driving skills test?",
+          "answers": [
+            "A. It must show current registration.",
+            "B. It does not need to show current registration.",
+            "C. It can be unregistered.",
+            "D. It does not need to be present."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "5. When steering, you should:",
+          "answers": [
+            "Always steer with one hand.",
+            "Always steer with both hands.",
+            "Steer with your knees when necessary.",
+            "Steer with your feet when necessary."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "14. What is the purpose of the vehicle safety laws?",
+          "answers": [
+            "A. To ensure that vehicles are safe to drive.",
+            "B. To make sure that vehicles are expensive.",
+            "C. To increase the speed of vehicles.",
+            "D. To make vehicles louder."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. How should you behave when encountering slow moving vehicles on the road?",
+          "answers": [
+            "A. Honk your horn continuously until they speed up.",
+            "B. Tailgate them to pressure them into speeding up.",
+            "C. Pass them when it is safe to do so.",
+            "D. Speed past them without checking for oncoming traffic."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What does a solid white line between lanes of traffic indicate?",
+          "answers": [
+            "You may change lanes if it is safe to do so",
+            "You should not cross this line to change lanes",
+            "This line indicates a pedestrian crossing",
+            "This line indicates a bike lane"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "6. When stopping your vehicle, you should:",
+          "answers": [
+            "A. Stop abruptly without warning.",
+            "B. Stop slowly and gradually.",
+            "C. Stop with your car's rear aligned with the car behind.",
+            "D. Stop at least 5 feet away from the car in front."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What does a green arrow displayed on a traffic light mean?",
+          "answers": [
+            "Stop",
+            "Yield to oncoming traffic",
+            "You may proceed in the direction of the arrow",
+            "You must turn in the direction of the arrow"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What is the correct driving posture?",
+          "answers": [
+            "A. Leaning back with one hand on the wheel.",
+            "B. Sitting upright with both hands on the wheel.",
+            "C. Leaning forward with both hands on the wheel.",
+            "D. Sitting back with one hand on the wheel."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "10. Who are the only occupants allowed in the vehicle during the driving skills test?",
+          "answers": [
+            "A. The applicant, the examiner, and a parent or guardian.",
+            "B. The applicant and a friend.",
+            "C. The applicant and the examiner.",
+            "D. The applicant, the examiner, and the applicant's driving instructor."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "8. What is required when towing a vehicle?",
+          "answers": [
+            "Proper hitching equipment",
+            "Safety chains",
+            "Brake lights on the towed vehicle",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "10. When making a right turn, you should:",
+          "answers": [
+            "A. Turn into the far left lane.",
+            "B. Turn into the far right lane.",
+            "C. Turn into the nearest lane to the right that is safe.",
+            "D. Turn into any lane that is safe."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "8. What is required for the vehicle used in the driving skills test?",
+          "answers": [
+            "A. The vehicle must be properly registered and comply with vehicle safety laws.",
+            "B. The vehicle can be unregistered and not comply with vehicle safety laws.",
+            "C. The vehicle does not need to be registered but must comply with vehicle safety laws.",
+            "D. The vehicle can be registered but does not need to comply with vehicle safety laws."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What is a requirement for the vehicle's tires for the driving skills test?",
+          "answers": [
+            "They must be of a specific brand.",
+            "They must have no bald spots.",
+            "They must be inflated to a specific pressure.",
+            "None of the above."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What should you do before your driving skills test begins?",
+          "answers": [
+            "A. Ask the examiner any questions you have.",
+            "B. Ignore the examiner and start the test.",
+            "C. Start the car and drive off.",
+            "D. Argue with the examiner about the test."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "7. What happens if you fail to pass the driving skills test in three attempts?",
+          "answers": [
+            "A. You can retake the test immediately.",
+            "B. You are expected to practice before taking another test.",
+            "C. You can retake the test without practicing.",
+            "D. You are not allowed to retake the test."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What does a yield sign mean?",
+          "answers": [
+            "Stop",
+            "Proceed with caution",
+            "Give way to other traffic",
+            "Speed up"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What should you do when approaching a slow moving vehicle?",
+          "answers": [
+            "Honk your horn",
+            "Overtake without caution",
+            "Follow at a safe distance and overtake when safe",
+            "Tailgate the vehicle"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What does a green traffic light mean?",
+          "answers": ["Stop", "Proceed if safe", "Yield", "Speed up"],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "8. What is a requirement for the vehicle's brake pressure for the driving skills test?",
+          "answers": [
+            "It must be at a specific level.",
+            "It must be adequate.",
+            "It must be adjustable.",
+            "None of the above."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "8. When driving on a freeway, you should:",
+          "answers": [
+            "Drive slower than the flow of traffic.",
+            "Drive faster than the flow of traffic.",
+            "Drive at the same speed as the flow of traffic.",
+            "Drive at any speed you feel comfortable with."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "12. When signaling, you should:",
+          "answers": [
+            "A. Signal only when there are other vehicles around.",
+            "B. Signal at least 100 feet before turning.",
+            "C. Signal at least 50 feet before turning.",
+            "D. Signal only when turning."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What should you do when you are being pulled over by a police officer?",
+          "answers": [
+            "A. Speed up and try to outrun the police officer.",
+            "B. Ignore the police officer and continue driving.",
+            "C. Pull over to the side of the road in a safe manner and wait for the officer to approach your vehicle.",
+            "D. Immediately stop your vehicle in the middle of the road."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "4. When signaling for a turn, you should:",
+          "answers": [
+            "Signal at least 50 feet before the turn.",
+            "Signal at least 100 feet before the turn.",
+            "Signal at least 200 feet before the turn.",
+            "Signal at least 500 feet before the turn."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "13. What does a yellow traffic light mean?",
+          "answers": [
+            "Stop",
+            "Proceed with caution",
+            "The light is about to turn red",
+            "The light is about to turn green"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "10. What does a solid yellow line on your side of the center line mean?",
+          "answers": [
+            "You may pass when it is safe to do so",
+            "You may not pass",
+            "There is a school zone ahead",
+            "The speed limit is about to change"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "10. What is the duration of the driving skills test?",
+          "answers": [
+            "A. 10 minutes",
+            "B. 20 minutes",
+            "C. 30 minutes",
+            "D. 40 minutes"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "9. What is the valid domain for the Driver License Division website?",
+          "answers": [".com", ".net", ".org", ".gov"],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "11. What is a significant cause of traffic-related deaths?",
+          "answers": [
+            "Distracted driving",
+            "Speeding",
+            "Drunk driving",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What should you do when you are stopped by the police?",
+          "answers": [
+            "Drive away quickly",
+            "Argue with the officer",
+            "Cooperate and follow the officer's instructions",
+            "Ignore the officer"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "9. What should you do during the driving skills test?",
+          "answers": [
+            "A. Engage in general conversation with the examiner.",
+            "B. Ignore the examiner and focus on the road.",
+            "C. Follow the directions of the examiner.",
+            "D. Ask the examiner to stop talking."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "14. What will you not be asked to do during the driving skills test?",
+          "answers": [
+            "A. Follow the directions of the examiner.",
+            "B. Do anything unsafe or illegal.",
+            "C. Engage in general conversation with the examiner.",
+            "D. Demonstrate your specific driving maneuvers."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "13. When passing another vehicle, you should:",
+          "answers": [
+            "A. Pass on the right whenever possible.",
+            "B. Pass on the left whenever possible.",
+            "C. Pass only when it is safe and legal to do so.",
+            "D. Pass at any time."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What does a red traffic light signal mean?",
+          "answers": [
+            "Proceed with caution",
+            "Stop",
+            "Go",
+            "Yield to oncoming traffic"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "12. What does a dashed white line between lanes of traffic indicate?",
+          "answers": [
+            "You may change lanes if it is safe to do so",
+            "You should not cross this line to change lanes",
+            "This line indicates a pedestrian crossing",
+            "This line indicates a bike lane"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "11. What does a green traffic light mean?",
+          "answers": [
+            "Stop",
+            "Proceed if the intersection is clear",
+            "Yield to oncoming traffic",
+            "The light is about to turn red"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "5. When parallel parking, you should:",
+          "answers": [
+            "A. Park at least 5 feet away from the curb.",
+            "B. Park as close as possible to the car in front.",
+            "C. Park with your car's rear aligned with the car behind.",
+            "D. Park within 12 inches of the curb."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What does a red traffic light mean?",
+          "answers": ["Proceed with caution", "Stop", "Yield", "Speed up"],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "8. What is the significant cause of traffic-related deaths?",
+          "answers": [
+            "A. Proper use of seat belts.",
+            "B. Observing traffic rules and regulations.",
+            "C. Speeding and reckless driving.",
+            "D. Regular vehicle maintenance."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What must the vehicle used for the driving skills test comply with?",
+          "answers": [
+            "Vehicle safety laws",
+            "Vehicle registration requirements",
+            "Both A and B",
+            "None of the above"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What should your vehicle have for the driving skills test?",
+          "answers": [
+            "A. A working horn designed for the vehicle.",
+            "B. Tires with bald spots.",
+            "C. A driver\u2019s side window that does not roll down.",
+            "D. Both front and back turn signal lights and working brake lights."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What should you do when you are approaching a yellow light at an intersection?",
+          "answers": [
+            "A. Speed up to go through the intersection before the light turns red.",
+            "B. Slow down and proceed through the intersection without caution.",
+            "C. Stop before entering the intersection if you can do so safely.",
+            "D. Continue at the same speed and ignore the yellow light."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "2. When parking your vehicle, you should:",
+          "answers": [
+            "Park in any direction, regardless of the direction of traffic.",
+            "Park at least 15 feet away from fire hydrants.",
+            "Always park on a hill.",
+            "Both A and B."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "8. What does a white rectangular sign with black lettering indicate?",
+          "answers": [
+            "Regulatory information",
+            "Warning",
+            "School zone",
+            "Construction zone"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "15. When approaching a train crossing, you should:",
+          "answers": [
+            "Always stop, regardless of whether a train is coming.",
+            "Stop if you see a train coming, but proceed if you do not.",
+            "Proceed without stopping, regardless of whether a train is coming.",
+            "Stop if the signals are flashing or if a train is visible, but proceed with caution if the signals are not flashing."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "12. When approaching a roundabout, you should:",
+          "answers": [
+            "Always stop before entering the roundabout.",
+            "Yield to traffic already in the roundabout.",
+            "Speed up to merge with the traffic in the roundabout.",
+            "Honk your horn to alert other drivers."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What should you do when towing another vehicle?",
+          "answers": [
+            "A. Drive as fast as possible to get to your destination quickly.",
+            "B. Ignore any sway or instability from the towed vehicle.",
+            "C. Ensure the towed vehicle is securely attached and drive at a safe speed.",
+            "D. Let the towed vehicle steer itself."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "15. What should you do if you are asked to take a review examination by the division?",
+          "answers": [
+            "A. Ignore the request and continue driving as usual.",
+            "B. Comply with the request and take the examination.",
+            "C. Argue with the division about the necessity of the examination.",
+            "D. Take the examination but not seriously."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "9. When approaching an intersection, you should:",
+          "answers": [
+            "Always speed up to get through the intersection as quickly as possible.",
+            "Always slow down and prepare to stop if necessary.",
+            "Always stop at the intersection, even if the light is green.",
+            "Always honk your horn to alert other drivers."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "6. What does a no U-turn sign mean?",
+          "answers": [
+            "You can make a U-turn",
+            "You cannot make a U-turn",
+            "You must make a U-turn",
+            "U-turns are recommended"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What is expected of you if you fail the driving skills test?",
+          "answers": [
+            "A. You can retake the test immediately.",
+            "B. You are expected to practice before taking another test.",
+            "C. You can retake the test without practicing.",
+            "D. You are not allowed to retake the test."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "7. When making turns, you should:",
+          "answers": [
+            "Always turn from the left lane.",
+            "Always turn from the right lane.",
+            "Turn from the lane that is closest to the direction you want to go.",
+            "Turn from any lane."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        }
+      ],
+      "passingScore": 96,
+      "isPremium": true
+    }
+  ],
+  "cdl": [],
+  "motorcycle": [
+    {
+      "name": "Utah Motorcycle Practice Test #1",
+      "questions": [
+        {
+          "question": "2. What is one of the safety-related factors examiners may score on during the on-motorcycle test?",
+          "answers": [
+            "A. Your ability to ride with one hand.",
+            "B. Your ability to ride without using the brakes.",
+            "C. Your ability to make critical decisions and carry them out.",
+            "D. Your ability to ride at high speeds."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What determines the restriction on your motorcycle endorsement?",
+          "answers": [
+            "The color of your motorcycle",
+            "The brand of your motorcycle",
+            "The size of the motorcycle you test on",
+            "Your age"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If the motorcycle you test on is a 250 cc motorcycle, you will be restricted to riding motorcycles less than what cc?",
+          "answers": ["A. 500 cc", "B. 549 cc", "C. 599 cc", "D. 649 cc"],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "5. All operators of any motor vehicle, including motorcycles, must comply with what?",
+          "answers": [
+            "A. Only motorcycle-specific traffic rules and regulations.",
+            "B. Only car-specific traffic rules and regulations.",
+            "C. The same traffic rules and regulations.",
+            "D. None of the above."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If you test on a motorcycle 90 cc or less, what will be your riding restriction?",
+          "answers": [
+            "No restriction",
+            "Restricted to riding motorcycles 90 cc or less",
+            "Restricted to riding motorcycles 249 cc or less",
+            "Restricted to riding motorcycles 500 cc or less"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What are the requirements for every motorized vehicle driven/ridden on public roads or highways?",
+          "answers": [
+            "A. They need to be insured, registered and licensed/endorsed.",
+            "B. They only need to be insured.",
+            "C. They only need to be registered.",
+            "D. They only need to be licensed/endorsed."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What is expected of you in terms of adjusting to traffic situations?",
+          "answers": [
+            "A. Adjust speed and position to the traffic situation.",
+            "B. Always maintain the same speed regardless of traffic.",
+            "C. Always ride in the center of the lane regardless of traffic.",
+            "D. Ignore traffic and focus on the road ahead."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What is one of the skills you may be tested for during the on-motorcycle test?",
+          "answers": [
+            "A. Your ability to perform wheelies.",
+            "B. Your ability to ride without a helmet.",
+            "C. Your ability to accelerate, brake and turn safely.",
+            "D. Your ability to ride with a passenger."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What skills may be tested on a motorcycle test?",
+          "answers": [
+            "A. Ability to accelerate, brake and turn safely",
+            "B. Ability to see, be seen and communicate with others",
+            "C. Ability to adjust speed and position to the traffic situation",
+            "D. All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What must you provide for the skills test at the driver license office?",
+          "answers": [
+            "A. Your own car.",
+            "B. Your own motorcycle.",
+            "C. A rented motorcycle.",
+            "D. A borrowed motorcycle."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What must you provide for the skills test at the driver license office?",
+          "answers": [
+            "A. You must provide your own car.",
+            "B. You must provide your own motorcycle.",
+            "C. The DMV will provide a motorcycle for you.",
+            "D. You do not need to provide anything."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "1. Utah law requires how many rear-view mirrors on every motorcycle?",
+          "answers": ["A. None", "B. One", "C. Two", "D. Three"],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What skills are included in on-motorcycle tests to determine your ability to handle normal and hazardous traffic situations?",
+          "answers": [
+            "A. Basic vehicle control and crash-avoidance skills.",
+            "B. Only basic vehicle control skills.",
+            "C. Only crash-avoidance skills.",
+            "D. None of the above."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What is required for every motorized vehicle driven/ridden on public roads or highways?",
+          "answers": [
+            "A. It needs to be insured, registered, and licensed/endorsed.",
+            "B. It only needs to be insured.",
+            "C. It only needs to be registered.",
+            "D. It only needs to be licensed/endorsed."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What skills may be tested during the on-motorcycle tests?",
+          "answers": [
+            "Your ability to know your motorcycle and your riding limits.",
+            "Your ability to accelerate, brake and turn safely.",
+            "Your ability to adjust speed and position to the traffic situation.",
+            "All of the above."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What is required for the motorcycle skills test at the driver license office?",
+          "answers": [
+            "A. You must provide your own motorcycle for the skills test.",
+            "B. You must rent a motorcycle from the DMV.",
+            "C. You can use any vehicle for the skills test.",
+            "D. You do not need a motorcycle for the skills test."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "3. Every motorized vehicle driven/ridden on public roads or highways needs to be what?",
+          "answers": [
+            "A. Insured, registered and licensed/endorsed.",
+            "B. Only insured.",
+            "C. Only registered.",
+            "D. Only licensed/endorsed."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "5. If you test on a three-wheeled motorcycle, what will be your riding restriction?",
+          "answers": [
+            "A. No restrictions",
+            "B. Restricted to riding only three-wheeled motorcycles",
+            "C. Restricted to riding motorcycles less than 649 cc",
+            "D. Restricted to riding only 250 cc motorcycles"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What is the requirement for rear-view mirrors on a motorcycle according to Utah law?",
+          "answers": [
+            "A. No rear-view mirrors are required.",
+            "B. One rear-view mirror is required.",
+            "C. Two rear-view mirrors are required.",
+            "D. Three rear-view mirrors are required."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What skills are included in on-motorcycle tests to determine your ability?",
+          "answers": [
+            "A. Basic vehicle control and crash-avoidance skills.",
+            "B. Ability to ride at high speed.",
+            "C. Ability to perform stunts on a motorcycle.",
+            "D. Ability to ride without a helmet."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If you test on a 250 cc motorcycle, what will be your riding restriction?",
+          "answers": [
+            "A. No restriction.",
+            "B. Restricted to riding motorcycles less than 649 cc.",
+            "C. Restricted to riding motorcycles more than 649 cc.",
+            "D. Restricted to riding only 250 cc motorcycles."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "1. Utah law requires how many rear-view mirrors on every motorcycle?",
+          "answers": ["A. One", "B. Two", "C. Three", "D. Four"],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What skills are tested in on-motorcycle tests?",
+          "answers": [
+            "A. Your ability to handle normal and hazardous traffic situations.",
+            "B. Your ability to ride at high speeds.",
+            "C. Your ability to perform tricks on a motorcycle.",
+            "D. Your knowledge of motorcycle parts."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "1. Utah law requires two rear-view mirrors on every motorcycle.",
+          "answers": ["True", "False"],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If you test on a 250 cc motorcycle, what will be your riding restriction?",
+          "answers": [
+            "A. No restrictions",
+            "B. Restricted to riding motorcycles less than 649 cc",
+            "C. Restricted to riding motorcycles more than 649 cc",
+            "D. Restricted to riding only 250 cc motorcycles"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What factors related to safety might examiners score on?",
+          "answers": [
+            "Your ability to know your motorcycle and your riding limits",
+            "Your ability to see, be seen and communicate with others",
+            "Your ability to stop, turn and swerve quickly",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "3. Every motorized vehicle driven/ridden on public roads or highways needs to be:",
+          "answers": [
+            "A. Insured, registered and licensed/endorsed",
+            "B. Only insured",
+            "C. Only registered",
+            "D. Only licensed/endorsed"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What skills may be tested for your ability during the on-motorcycle test?",
+          "answers": [
+            "Knowing your motorcycle and your riding limits",
+            "Accelerating, braking, and turning safely",
+            "Seeing, being seen, and communicating with others",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What factors may examiners score on during the on-motorcycle tests?",
+          "answers": [
+            "Factors related to the brand of your motorcycle.",
+            "Factors related to your personal appearance.",
+            "Factors related to safety.",
+            "Factors related to your age."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If the motorcycle you test on is a 250 cc motorcycle, you will be restricted to riding motorcycles less than 649 cc.",
+          "answers": ["True", "False"],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "5. If you test on a motorcycle 249 cc or less, what will be your riding restriction?",
+          "answers": [
+            "No restriction",
+            "Restricted to riding motorcycles 90 cc or less",
+            "Restricted to riding motorcycles 249 cc or less",
+            "Restricted to riding motorcycles 500 cc or less"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What does Utah law require regarding rear-view mirrors on a motorcycle?",
+          "answers": [
+            "A. No rear-view mirrors are required.",
+            "B. One rear-view mirror is required.",
+            "C. Two rear-view mirrors are required.",
+            "D. Three rear-view mirrors are required."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What must an applicant successfully complete to obtain a motorcycle endorsement?",
+          "answers": [
+            "The written test only.",
+            "The skills test only.",
+            "Both the written test and the skills test.",
+            "All four parts of the motorcycle skills test."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "5. If you test on a three-wheeled motorcycle, you will be restricted to riding only three-wheeled motorcycles.",
+          "answers": ["True", "False"],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "3. Every motorized vehicle driven/ridden on public roads or highways needs to be insured, registered, and licensed/endorsed.",
+          "answers": ["True", "False"],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What happens if you test on a three-wheeled motorcycle?",
+          "answers": [
+            "You will be restricted to riding only three-wheeled motorcycles.",
+            "You will be allowed to ride any type of motorcycle.",
+            "You will be given a special license.",
+            "None of the above."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What should you know about your motorcycle?",
+          "answers": [
+            "A. The color of your motorcycle.",
+            "B. The brand of your motorcycle.",
+            "C. Your motorcycle and your riding limits.",
+            "D. The year your motorcycle was made."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What must you provide for the skills test at the driver license office?",
+          "answers": [
+            "Your own helmet.",
+            "Your own motorcycle.",
+            "Your own safety gear.",
+            "All of the above."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If you test on a 250 cc motorcycle, what will be your riding restriction?",
+          "answers": [
+            "A. You will be restricted to riding motorcycles less than 649 cc.",
+            "B. You will be restricted to riding motorcycles less than 500 cc.",
+            "C. You will be restricted to riding motorcycles less than 250 cc.",
+            "D. There will be no restriction on your riding."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What skills might you be tested on during your on-motorcycle test?",
+          "answers": [
+            "Ability to accelerate, brake and turn safely",
+            "Ability to adjust speed and position to the traffic situation",
+            "Ability to make critical decisions and carry them out",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        }
+      ],
+      "passingScore": 32,
+      "isPremium": false
+    },
+    {
+      "name": "Utah Motorcycle Practice Test #2",
+      "questions": [
+        {
+          "question": "4. What is the restriction if you test on a motorcycle 249 cc or less?",
+          "answers": [
+            "You will be restricted to riding motorcycles 90 cc or less.",
+            "You will be restricted to riding motorcycles 249 cc or less.",
+            "You will be restricted to riding motorcycles 500 cc or less.",
+            "There will be no restrictions."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "4. When operating a motorcycle, you must have what in your possession?",
+          "answers": [
+            "A. A valid driver's license",
+            "B. Proof of insurance",
+            "C. A helmet",
+            "D. All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What is the purpose of the tiered licensing system for motorcycle endorsements?",
+          "answers": [
+            "To restrict riders to motorcycles of a certain size.",
+            "To ensure that riders are tested on the largest motorcycles possible.",
+            "To allow riders to choose their own restrictions.",
+            "To limit the number of motorcycles on the road."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "3. Does every motorized vehicle driven/ridden on public roads or highways need to be insured, registered and licensed/endorsed?",
+          "answers": ["True", "False"],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "4. If you test on a three-wheeled motorcycle, will you be restricted to riding only three-wheeled motorcycles?",
+          "answers": ["True", "False"],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What factors related to safety may examiners score on?",
+          "answers": [
+            "Ability to make critical decisions and carry them out.",
+            "Ability to communicate with others.",
+            "Ability to adjust speed and position to the traffic situation.",
+            "All of the above."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What is required for the motorcycle skills test at the driver license office?",
+          "answers": [
+            "You must provide your own motorcycle",
+            "The office will provide a motorcycle",
+            "You can choose to bring your own motorcycle or use one provided by the office",
+            "None of the above"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What factors may examiners score on during on-motorcycle tests?",
+          "answers": [
+            "Your ability to ride with one hand",
+            "Your ability to ride at high speeds",
+            "Factors related to safety",
+            "Your ability to ride without using brakes"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "1. Does Utah law require two rear-view mirrors on every motorcycle?",
+          "answers": ["True", "False"],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What happens if you test on a three-wheeled motorcycle?",
+          "answers": [
+            "You will be restricted to riding only three-wheeled motorcycles",
+            "You will be restricted to riding only two-wheeled motorcycles",
+            "You will be allowed to ride any type of motorcycle",
+            "You will not be allowed to ride any type of motorcycle"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What must you provide for the skills test at the driver license office?",
+          "answers": [
+            "Your own car",
+            "Your own motorcycle",
+            "A rented motorcycle",
+            "A borrowed motorcycle"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What is included in on-motorcycle tests to determine your ability?",
+          "answers": [
+            "Basic vehicle control and crash-avoidance skills",
+            "Ability to perform wheelies",
+            "Ability to ride without using turn signals",
+            "Ability to ride at maximum speed"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What is one of the skills that may be tested during the on-motorcycle test?",
+          "answers": [
+            "Your ability to know your motorcycle and your riding limits.",
+            "Your ability to ride without a helmet.",
+            "Your ability to ride with one hand.",
+            "Your ability to ride without using turn signals."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If the motorcycle you test on is a 250 cc motorcycle, what will be your riding restriction?",
+          "answers": [
+            "Restricted to riding motorcycles less than 649 cc",
+            "Restricted to riding motorcycles less than 500 cc",
+            "Restricted to riding motorcycles more than 649 cc",
+            "No restrictions"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If you test on a 250 cc motorcycle, what will be your riding restriction?",
+          "answers": [
+            "You will be restricted to riding motorcycles less than 649 cc",
+            "You will be restricted to riding motorcycles less than 500 cc",
+            "You will be restricted to riding motorcycles more than 649 cc",
+            "There will be no restrictions"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What are you tested on in the on-motorcycle tests?",
+          "answers": [
+            "Your ability to handle normal and hazardous traffic situations",
+            "Your ability to ride at high speeds",
+            "Your ability to perform stunts on the motorcycle",
+            "Your ability to ride without a helmet"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What does Utah law require for every motorcycle?",
+          "answers": [
+            "A single rear-view mirror",
+            "Two rear-view mirrors",
+            "Three rear-view mirrors",
+            "No rear-view mirrors"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What skills may be tested for your ability during on-motorcycle tests?",
+          "answers": [
+            "Your knowledge of motorcycle mechanics",
+            "Your ability to accelerate, brake and turn safely",
+            "Your ability to perform stunts",
+            "Your ability to ride without a helmet"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "3. Every motorized vehicle driven/ridden on public roads or highways needs to be:",
+          "answers": [
+            "A. Insured",
+            "B. Registered",
+            "C. Licensed/endorsed",
+            "D. All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What is required for every motorized vehicle driven/ridden on public roads or highways?",
+          "answers": [
+            "They need to be insured, registered and licensed/endorsed",
+            "They only need to be insured",
+            "They only need to be registered",
+            "They only need to be licensed/endorsed"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If you test on a 250 cc motorcycle, what will be your riding restriction?",
+          "answers": [
+            "No restriction",
+            "Restricted to riding motorcycles less than 649 cc",
+            "Restricted to riding motorcycles more than 649 cc",
+            "Restricted to riding only 250 cc motorcycles"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What are the basic vehicle control and crash-avoidance skills included in on-motorcycle tests?",
+          "answers": [
+            "Knowing your motorcycle and your riding limits",
+            "Accelerating, braking and turning safely",
+            "Seeing, being seen and communicating with others",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What skills are included in on-motorcycle tests to determine your ability to handle normal and hazardous traffic situations?",
+          "answers": [
+            "Basic vehicle control and crash-avoidance skills",
+            "Advanced vehicle control and crash-avoidance skills",
+            "Basic vehicle control skills only",
+            "Crash-avoidance skills only"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If you test on a 250 cc motorcycle, you will be restricted to riding motorcycles less than what cc?",
+          "answers": ["A. 500 cc", "B. 649 cc", "C. 750 cc", "D. 1000 cc"],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What will you be restricted to if you test on a three-wheeled motorcycle?",
+          "answers": [
+            "Riding only two-wheeled motorcycles",
+            "Riding only three-wheeled motorcycles",
+            "Riding only four-wheeled motorcycles",
+            "No restrictions"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "1. Utah law requires how many rear-view mirrors on every motorcycle?",
+          "answers": ["A. None", "B. One", "C. Two", "D. Three"],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What is one of the factors that examiners may score on during the on-motorcycle test?",
+          "answers": [
+            "Your ability to perform wheelies.",
+            "Your ability to ride at high speeds.",
+            "Your ability to ride without a license.",
+            "Your ability to make critical decisions and carry them out."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If you test on a 250 cc motorcycle, will you be restricted to riding motorcycles less than 649 cc?",
+          "answers": ["True", "False"],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What skills are included in on-motorcycle tests to determine your ability to handle normal and hazardous traffic situations?",
+          "answers": [
+            "A. Basic vehicle control",
+            "B. Crash-avoidance skills",
+            "C. Ability to make critical decisions",
+            "D. All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "5. Are motorcycle skills tests given by appointment only in most offices?",
+          "answers": ["True", "False"],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What does Utah law require for every motorcycle?",
+          "answers": [
+            "A single rear-view mirror",
+            "Two rear-view mirrors",
+            "A single side-view mirror",
+            "Two side-view mirrors"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "1. If you test on a motorcycle 90 cc or less, what will be your riding restriction?",
+          "answers": [
+            "You will be restricted to riding motorcycles 90 cc or less.",
+            "You will be restricted to riding motorcycles 249 cc or less.",
+            "You will be restricted to riding motorcycles 500 cc or less.",
+            "There will be no restrictions."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What does every motorized vehicle driven/ridden on public roads or highways need to have?",
+          "answers": [
+            "Only insurance",
+            "Only registration",
+            "Only license/endorsement",
+            "Insurance, registration and license/endorsement"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What is one of the basic vehicle controls that you should be able to perform?",
+          "answers": [
+            "Accelerate, brake and turn safely",
+            "Ride without using the brakes",
+            "Ride without using the clutch",
+            "Ride without using the accelerator"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What does Utah law requires for every motorcycle?",
+          "answers": [
+            "One rear-view mirror",
+            "Two rear-view mirrors",
+            "Three rear-view mirrors",
+            "No rear-view mirrors"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What is required for the motorcycle skills test at the driver license office?",
+          "answers": [
+            "You must provide your own motorcycle",
+            "You must provide your own helmet",
+            "You must provide your own insurance",
+            "You must provide your own examiner"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What should you adjust according to the traffic situation?",
+          "answers": [
+            "Your helmet",
+            "Your speed and position",
+            "Your motorcycle's color",
+            "Your motorcycle's engine noise"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What does every motorized vehicle driven/ridden on public roads or highways need?",
+          "answers": [
+            "To be insured, registered and licensed/endorsed",
+            "Only to be insured",
+            "Only to be registered",
+            "Only to be licensed/endorsed"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What skills may be tested during the on-motorcycle tests?",
+          "answers": [
+            "Ability to handle normal and hazardous traffic situations.",
+            "Knowledge about motorcycle parts.",
+            "Ability to ride at high speeds.",
+            "Ability to perform stunts on a motorcycle."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What is required for the on-motorcycle skills test at the driver license office?",
+          "answers": [
+            "You must bring your own car",
+            "You must bring your own motorcycle",
+            "You must bring your own bicycle",
+            "You must bring your own skateboard"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        }
+      ],
+      "passingScore": 32,
+      "isPremium": false
+    },
+    {
+      "name": "Utah Motorcycle Practice Test #3",
+      "questions": [
+        {
+          "question": "3. What is required for every motorized vehicle driven/ridden on public roads or highways?",
+          "answers": [
+            "A. Insurance, registration, and license/endorsement",
+            "B. Only insurance and registration",
+            "C. Only insurance and license/endorsement",
+            "D. Only registration and license/endorsement"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "4. Who is responsible for providing a motorcycle for the skills test at the driver license office?",
+          "answers": [
+            "A. The applicant",
+            "B. The examiner",
+            "C. The driver license office",
+            "D. Any of the above"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "4. When operating a motorcycle, you must have in your:",
+          "answers": [
+            "A. Helmet",
+            "B. Gloves",
+            "C. Possession a valid driver's license",
+            "D. Motorcycle boots"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What factors related to safety may examiners score on?",
+          "answers": [
+            "A. Your ability to make critical decisions and carry them out",
+            "B. Your ability to adjust speed and position to the traffic situation",
+            "C. Your ability to stop, turn and swerve quickly",
+            "D. All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What skills may be tested during the on-motorcycle skill test?",
+          "answers": [
+            "Your ability to know your motorcycle and your riding limits",
+            "Your ability to accelerate, brake and turn safely",
+            "Your ability to adjust speed and position to the traffic situation",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If the motorcycle you test on is a 250 cc motorcycle, you will be restricted to riding motorcycles less that 649 cc. Is this statement true or false?",
+          "answers": ["True", "False"],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What skills are included in on-motorcycle tests to determine your ability to handle normal and hazardous traffic situations?",
+          "answers": [
+            "A. Basic vehicle control",
+            "B. Crash-avoidance skills",
+            "C. Ability to make critical decisions",
+            "D. All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "3. Every motorized vehicle driven/ridden on public roads or highways needs to be:",
+          "answers": [
+            "A. Insured",
+            "B. Registered",
+            "C. Licensed/Endorsed",
+            "D. All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "1. Utah law requires two rear-view mirrors on every motorcycle. Is this statement true or false?",
+          "answers": ["True", "False"],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If you test on a motorcycle 90 cc or less, to what size of motorcycles will you be restricted?",
+          "answers": [
+            "A. 50 cc or less",
+            "B. 70 cc or less",
+            "C. 90 cc or less",
+            "D. 100 cc or less"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If you test on a 250 cc motorcycle, what will be your riding restriction?",
+          "answers": [
+            "A. Restricted to riding motorcycles less than 500 cc",
+            "B. Restricted to riding motorcycles less than 649 cc",
+            "C. No restrictions",
+            "D. Restricted to riding motorcycles less than 250 cc"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What factors may examiners score on related to safety?",
+          "answers": [
+            "Your ability to adjust speed and position to the traffic situation.",
+            "Your ability to stop, turn and swerve quickly.",
+            "Your ability to make critical decisions and carry them out.",
+            "All of the above."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What skills are included in on-motorcycle tests to determine your ability to handle normal and hazardous traffic situations?",
+          "answers": [
+            "A. Accelerating, braking and turning safely",
+            "B. Knowing your motorcycle and your riding limits",
+            "C. Seeing, being seen and communicating with others",
+            "D. All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What skills are tested for in the on-motorcycle skill test?",
+          "answers": [
+            "Ability to accelerate, brake and turn safely",
+            "Ability to adjust speed and position to the traffic situation",
+            "Ability to stop, turn and swerve quickly",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What is important to be able to do in traffic situations?",
+          "answers": [
+            "Adjust speed and position.",
+            "Communicate with others.",
+            "Stop, turn and swerve quickly.",
+            "All of the above."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What must you provide for the skills test at the driver license office?",
+          "answers": [
+            "A. Your own car",
+            "B. Your own motorcycle",
+            "C. A borrowed motorcycle",
+            "D. A rented motorcycle"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "4. If you test on a 250 cc motorcycle, what will be your riding restriction?",
+          "answers": [
+            "You will be restricted to riding motorcycles less than 649 cc",
+            "You will be restricted to riding motorcycles more than 649 cc",
+            "You will be restricted to riding motorcycles exactly 649 cc",
+            "There will be no restrictions"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If the motorcycle you test on is a 250 cc motorcycle, you will be restricted to riding motorcycles less than what cc?",
+          "answers": ["A. 500 cc", "B. 600 cc", "C. 649 cc", "D. 700 cc"],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What does the Utah law require for every motorcycle?",
+          "answers": [
+            "A. One rear-view mirror",
+            "B. Two rear-view mirrors",
+            "C. Three rear-view mirrors",
+            "D. No rear-view mirrors"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "5. Every motorized vehicle driven/ridden on public roads or highways needs to be insured, registered and licensed/endorsed. True or False?",
+          "answers": [
+            "True",
+            "False",
+            "It depends on the state",
+            "It depends on the type of vehicle"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What is important to know about your motorcycle?",
+          "answers": [
+            "Its speed limit.",
+            "Its color.",
+            "Its riding limits.",
+            "Its brand."
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What does the size of the motorcycle used at the time of the skills test determine?",
+          "answers": [
+            "A. The color of your motorcycle license",
+            "B. The restriction on your motorcycle endorsement",
+            "C. The validity period of your motorcycle license",
+            "D. The cost of your motorcycle license"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What skills are tested in on-motorcycle tests?",
+          "answers": [
+            "A. Only basic vehicle control",
+            "B. Only crash-avoidance skills",
+            "C. Both basic vehicle control and crash-avoidance skills",
+            "D. Neither basic vehicle control nor crash-avoidance skills"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What skills are included in on-motorcycle tests to determine your ability to handle normal and hazardous traffic situations?",
+          "answers": [
+            "Knowing your motorcycle and your riding limits.",
+            "Accelerating, braking and turning safely.",
+            "Seeing, being seen and communicating with others.",
+            "All of the above."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "3. Every motorized vehicle driven/ridden on public roads or highways needs to be insured, registered and licensed/endorsed. Is this statement true or false?",
+          "answers": ["True", "False"],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "3. Utah law requires how many rear-view mirrors on every motorcycle?",
+          "answers": ["One", "Two", "Three", "Four"],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What factors related to safety might examiners score on during the on-motorcycle skill test?",
+          "answers": [
+            "Your ability to see, be seen, and communicate with others",
+            "Your ability to stop, turn and swerve quickly",
+            "Your ability to make critical decisions and carry them out",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If you test on a 250 cc motorcycle, what will be your riding restriction?",
+          "answers": [
+            "A. No restrictions",
+            "B. Restricted to riding motorcycles less than 649 cc",
+            "C. Restricted to riding motorcycles more than 649 cc",
+            "D. Restricted to riding only 250 cc motorcycles"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What is required for every motorized vehicle driven/ridden on public roads or highways?",
+          "answers": [
+            "A. To be insured, registered and licensed/endorsed",
+            "B. To be insured only",
+            "C. To be registered only",
+            "D. To be licensed/endorsed only"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What must you provide for the on-motorcycle skills test at the driver license office?",
+          "answers": [
+            "Your own helmet",
+            "Your own motorcycle",
+            "Your own gloves",
+            "Your own insurance"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What skills are included in the on-motorcycle tests?",
+          "answers": [
+            "A. Basic vehicle control and crash-avoidance skills",
+            "B. Advanced vehicle control skills",
+            "C. Basic vehicle control skills only",
+            "D. Crash-avoidance skills only"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What is the minimum requirement for rear-view mirrors on a motorcycle according to Utah law?",
+          "answers": [
+            "A. One rear-view mirror",
+            "B. Two rear-view mirrors",
+            "C. Three rear-view mirrors",
+            "D. No rear-view mirrors are required"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "3. If you test on a three-wheeled motorcycle, what restriction will be applied to your license?",
+          "answers": [
+            "You will be restricted to riding only three-wheeled motorcycles",
+            "You will be restricted to riding only two-wheeled motorcycles",
+            "You will be restricted to riding only four-wheeled motorcycles",
+            "There will be no restrictions"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "5. If you test on a three-wheeled motorcycle, will you be restricted to riding only three-wheeled motorcycles?",
+          "answers": ["Yes", "No"],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What must you provide for the skills test at the driver license office?",
+          "answers": [
+            "Your own helmet.",
+            "Your own motorcycle.",
+            "Your own protective gear.",
+            "All of the above."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What is the purpose of the tiered licensing system for motorcycle endorsements?",
+          "answers": [
+            "A. To increase the cost of motorcycle licenses",
+            "B. To restrict riders to motorcycles of a certain size based on their skills test",
+            "C. To make the licensing process more complicated",
+            "D. To allow all riders to ride any size of motorcycle"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "1. Utah law requires how many rear-view mirrors on every motorcycle?",
+          "answers": ["A. One", "B. Two", "C. Three", "D. None"],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If you test on a three-wheeled motorcycle, what will be your riding restriction?",
+          "answers": [
+            "You will be restricted to riding only three-wheeled motorcycles",
+            "You will be restricted to riding only two-wheeled motorcycles",
+            "You will be restricted to riding only four-wheeled motorcycles",
+            "There will be no restrictions"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What must you successfully complete to obtain a motorcycle endorsement?",
+          "answers": [
+            "The written test",
+            "The on-motorcycle skills test",
+            "The vision test",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What skills may be tested during your on-motorcycle test?",
+          "answers": [
+            "Your ability to know your motorcycle and your riding limits.",
+            "Your ability to accelerate, brake and turn safely.",
+            "Your ability to see, be seen and communicate with others.",
+            "All of the above."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        }
+      ],
+      "passingScore": 32,
+      "isPremium": false
+    },
+    {
+      "name": "Utah Motorcycle Practice Test #4",
+      "questions": [
+        {
+          "question": "15. Why is it important to make critical decisions and carry them out while riding a motorcycle?",
+          "answers": [
+            "A. To ensure you can handle normal and hazardous traffic situations",
+            "B. To prevent accidents and ensure your safety",
+            "C. To make sure other drivers are aware of your presence",
+            "D. All of the above"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What is required for every motorized vehicle driven/ridden on public roads or highways?",
+          "answers": [
+            "They need to be insured, registered and licensed/endorsed",
+            "They only need to be insured",
+            "They only need to be registered",
+            "They only need to be licensed/endorsed"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "7. What is the primary purpose of knowing your motorcycle and your riding limits?",
+          "answers": [
+            "A. To impress others with your knowledge",
+            "B. To ensure you can handle normal and hazardous traffic situations",
+            "C. To be able to perform stunts on your motorcycle",
+            "D. To be able to ride at high speeds"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "3. Every motorized vehicle driven/ridden on public roads or highways needs to be:",
+          "answers": [
+            "A. Insured, registered and licensed/endorsed",
+            "B. Registered and licensed/endorsed only",
+            "C. Insured and licensed/endorsed only",
+            "D. Insured and registered only"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "13. What happens if you test on a motorcycle with a sidecar?",
+          "answers": [
+            "You will be restricted to riding only motorcycles with sidecars",
+            "You will be able to ride any type of motorcycle",
+            "You will be restricted to riding only motorcycles without sidecars",
+            "None of the above"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "11. What should you be able to do quickly while riding a motorcycle?",
+          "answers": [
+            "Stop, turn and swerve",
+            "Only stop",
+            "Only turn",
+            "Only swerve"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "6. What should you do to adjust to the traffic situation?",
+          "answers": [
+            "Adjust speed and position.",
+            "Ride at a constant speed.",
+            "Ignore other vehicles.",
+            "Ride in the middle of the lane."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "9. What is the importance of being seen and communicating with others while riding a motorcycle?",
+          "answers": [
+            "It helps other drivers be aware of your presence",
+            "It helps you avoid accidents",
+            "It helps you pass the test",
+            "Both A and B"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What is expected of you during the motorcycle skills test?",
+          "answers": [
+            "You must provide your own motorcycle",
+            "You must successfully complete all parts of the test",
+            "Both A and B",
+            "None of the above"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What does Utah law require for every motorcycle?",
+          "answers": [
+            "Two rear-view mirrors",
+            "One rear-view mirror",
+            "Three rear-view mirrors",
+            "No rear-view mirrors"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What is the restriction if you test on a motorcycle 249 cc or less?",
+          "answers": [
+            "A. You will be restricted to riding motorcycles 250 cc or less.",
+            "B. You will be restricted to riding motorcycles 90 cc or less.",
+            "C. There will be no restriction.",
+            "D. You will be restricted to riding motorcycles 500 cc or less."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "4. Which of the following is not a skill you may be tested for on a motorcycle?",
+          "answers": [
+            "A. Accelerate, brake and turn safely",
+            "B. See, be seen and communicate with others",
+            "C. Adjust speed and position to the traffic situation",
+            "D. Perform wheelies and stunts"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "12. What decisions should you be able to make and carry out while riding a motorcycle?",
+          "answers": [
+            "Critical decisions",
+            "Only decisions related to speed",
+            "Only decisions related to direction",
+            "Only decisions related to safety"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What is included in on-motorcycle tests to determine your ability to handle normal and hazardous traffic situations?",
+          "answers": [
+            "Basic vehicle control and crash-avoidance skills.",
+            "Ability to ride without a helmet.",
+            "Ability to ride at high speeds.",
+            "Ability to perform stunts."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "1. Utah law requires how many rear-view mirrors on every motorcycle?",
+          "answers": [
+            "A. One",
+            "B. Two",
+            "C. Three",
+            "D. No mirrors are required"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "7. What is expected during the on-motorcycle skill test?",
+          "answers": [
+            "Provide your own motorcycle",
+            "Successfully complete all parts of the test",
+            "Both A and B",
+            "None of the above"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "8. What is included in the on-motorcycle skill test?",
+          "answers": [
+            "Basic vehicle control",
+            "Crash-avoidance skills",
+            "Both A and B",
+            "None of the above"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "8. How should you stop, turn and swerve quickly?",
+          "answers": [
+            "By ignoring traffic signals",
+            "By practicing and being aware of your surroundings",
+            "By speeding up",
+            "By not using your brakes"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "3. Does every motorized vehicle driven/ridden on public roads or highways need to be insured, registered, and licensed/endorsed?",
+          "answers": [
+            "Yes, without exception",
+            "No, not all vehicles",
+            "Only motorcycles",
+            "Only cars"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What happens if you test on a three-wheeled motorcycle?",
+          "answers": [
+            "You will be restricted to riding only three-wheeled motorcycles",
+            "You will be able to ride any type of motorcycle",
+            "You will be restricted to riding only two-wheeled motorcycles",
+            "None of the above"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What does Utah law require on every motorcycle?",
+          "answers": [
+            "A single rear-view mirror",
+            "Two rear-view mirrors",
+            "Three rear-view mirrors",
+            "No rear-view mirrors"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "10. Why is it important to make critical decisions and carry them out while riding a motorcycle?",
+          "answers": [
+            "A. To ensure you can handle normal and hazardous traffic situations",
+            "B. To prevent accidents and ensure your safety",
+            "C. To make sure other drivers are aware of your presence",
+            "D. All of the above"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If the motorcycle you test on is a 250 cc motorcycle, will you be restricted to riding motorcycles less than 649 cc?",
+          "answers": [
+            "True",
+            "False",
+            "Only if you fail the test",
+            "Only if you pass the test"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If you test on a 250 cc motorcycle, you will be restricted to riding motorcycles less than what cc?",
+          "answers": [
+            "A. 500 cc",
+            "B. 649 cc",
+            "C. 750 cc",
+            "D. No restriction"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What factors related to safety may examiners score on?",
+          "answers": [
+            "A. Ability to see, be seen and communicate with others.",
+            "B. Ability to adjust speed and position to the traffic situation.",
+            "C. Ability to stop, turn and swerve quickly.",
+            "D. All of the above."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "11. Why is it important to stop, turn and swerve quickly?",
+          "answers": [
+            "To avoid accidents",
+            "To pass the test",
+            "To communicate with other drivers",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "14. Why is it important to adjust your speed and position to the traffic situation?",
+          "answers": [
+            "A. To ensure you can stop, turn, and swerve quickly if necessary",
+            "B. To make sure other drivers are aware of your presence",
+            "C. To prevent accidents and ensure your safety",
+            "D. All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "15. What is the importance of knowing your motorcycle?",
+          "answers": [
+            "It helps you ride safely",
+            "It helps you pass the test",
+            "It helps you avoid accidents",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "10. What is the purpose of a motorcycle skills test?",
+          "answers": [
+            "To determine your ability to handle normal and hazardous traffic situations.",
+            "To show off your stunts.",
+            "To test your ability to ride at high speeds.",
+            "To test your ability to ride without a helmet."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "13. What factors related to safety may examiners score on?",
+          "answers": [
+            "Your ability to handle normal and hazardous traffic situations",
+            "Your ability to handle only normal traffic situations",
+            "Your ability to handle only hazardous traffic situations",
+            "None of the above"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "13. When are motorcycle skills tests given?",
+          "answers": [
+            "By appointment only in most offices.",
+            "On a walk-in basis.",
+            "On weekends only.",
+            "On weekdays only."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "15. What is important in crash-avoidance skills?",
+          "answers": [
+            "Ability to stop, turn and swerve quickly.",
+            "Ability to ride at high speeds.",
+            "Ability to ride without a helmet.",
+            "Ability to perform stunts."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "15. When can you proceed through a red light at an intersection?",
+          "answers": [
+            "When you are turning right and have come to a complete stop",
+            "When there is no traffic coming from the other direction",
+            "When you are in a hurry",
+            "Never, you must always wait for the light to turn green"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What factors may examiners score on related to safety?",
+          "answers": [
+            "Your ability to stop, turn and swerve quickly",
+            "Your ability to make critical decisions and carry them out",
+            "Your ability to adjust speed and position to the traffic situation",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "7. What is important for communication while riding a motorcycle?",
+          "answers": [
+            "To see, be seen and communicate with others.",
+            "To use hand signals only.",
+            "To use horn only.",
+            "To ignore other vehicles."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What skills might be tested in an on-motorcycle test?",
+          "answers": [
+            "Ability to accelerate, brake and turn safely",
+            "Ability to see, be seen and communicate with others",
+            "Ability to adjust speed and position to the traffic situation",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "14. What should you be able to do safely while riding a motorcycle?",
+          "answers": [
+            "Accelerate, brake and turn",
+            "Only accelerate",
+            "Only brake",
+            "Only turn"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "10. What is the importance of knowing your motorcycle and your riding limits?",
+          "answers": [
+            "It helps in controlling the motorcycle",
+            "It helps in avoiding accidents",
+            "It helps in making critical decisions",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "7. What skills are included in on-motorcycle tests?",
+          "answers": [
+            "Basic vehicle control and crash-avoidance skills",
+            "Advanced vehicle control and crash-avoidance skills",
+            "Only basic vehicle control skills",
+            "Only crash-avoidance skills"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "9. What is important about making critical decisions and carrying them out?",
+          "answers": [
+            "You should ignore them",
+            "You should make them quickly without thinking",
+            "You should make them based on safety and carry them out effectively",
+            "You should let other drivers make decisions for you"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "14. What is required for every motorized vehicle driven/ridden on public roads or highways?",
+          "answers": [
+            "Insurance",
+            "Registration",
+            "License/endorsement",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What must you provide for the skills test at the driver license office?",
+          "answers": [
+            "Your own car",
+            "Your own motorcycle",
+            "A rented motorcycle",
+            "A borrowed motorcycle"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "6. How should you adjust your speed and position in traffic situations?",
+          "answers": [
+            "Randomly",
+            "Based on the traffic situation",
+            "Based on your comfort level",
+            "Based on the speed of other vehicles"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If you test on a 250 cc motorcycle, what will be your riding restriction?",
+          "answers": [
+            "You can ride motorcycles of any cc",
+            "You will be restricted to riding motorcycles less than 649 cc",
+            "You will be restricted to riding motorcycles more than 250 cc",
+            "You will be restricted to riding motorcycles less than 250 cc"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What should you know for safe motorcycle operation?",
+          "answers": [
+            "Your motorcycle and your riding limits",
+            "How to see, be seen and communicate with others",
+            "How to adjust speed and position to the traffic situation",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "10. Why is it important to adjust speed and position to the traffic situation?",
+          "answers": [
+            "To avoid accidents",
+            "To pass the test",
+            "To communicate with other drivers",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "13. Why is it important to see, be seen, and communicate with others while riding a motorcycle?",
+          "answers": [
+            "A. To make sure other drivers are aware of your presence",
+            "B. To ensure you can respond to changes in the traffic situation",
+            "C. To prevent accidents and ensure your safety",
+            "D. All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "15. What is not a requirement for the motorcycle you test on for the skills test at the driver license office?",
+          "answers": [
+            "It must be a 250 cc motorcycle",
+            "It must have two rear-view mirrors",
+            "It must be insured, registered, and licensed/endorsed",
+            "None of the above"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "15. What is the importance of being able to stop, turn and swerve quickly?",
+          "answers": [
+            "It helps in avoiding accidents",
+            "It helps in controlling the motorcycle",
+            "It helps in making critical decisions",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "14. What is the maximum speed limit in a residential area unless otherwise posted?",
+          "answers": ["20 mph", "25 mph", "30 mph", "35 mph"],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What is necessary to handle normal and hazardous traffic situations on a motorcycle?",
+          "answers": [
+            "Knowing your motorcycle and your riding limits",
+            "Being able to accelerate, brake and turn safely",
+            "Being able to see, be seen and communicate with others",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What does Utah law require for every motorcycle?",
+          "answers": [
+            "A single rear-view mirror",
+            "Two rear-view mirrors",
+            "A single side-view mirror",
+            "Two side-view mirrors"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If you test on a 250 cc motorcycle, what restriction will you have?",
+          "answers": [
+            "No restrictions",
+            "Restricted to riding motorcycles less than 649 cc",
+            "Restricted to riding motorcycles more than 649 cc",
+            "Restricted to riding only 250 cc motorcycles"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What factors may examiners score on related to safety?",
+          "answers": [
+            "A. Your ability to make critical decisions and carry them out",
+            "B. Your ability to stop, turn and swerve quickly",
+            "C. Your ability to adjust speed and position to the traffic situation",
+            "D. All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What is one of the factors examiners may score on during a motorcycle skills test?",
+          "answers": [
+            "Your ability to make critical decisions and carry them out.",
+            "Your ability to ride without a helmet.",
+            "Your ability to ride at high speeds.",
+            "Your ability to perform stunts."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "7. What skills may be tested for your ability to handle traffic situations?",
+          "answers": [
+            "Stopping, turning, and swerving quickly",
+            "Making critical decisions and carrying them out",
+            "Adjusting speed and position to the traffic situation",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "8. What factors related to safety may examiners score on?",
+          "answers": [
+            "Your ability to see, be seen, and communicate with others",
+            "Your ability to adjust speed and position to the traffic situation",
+            "Your ability to stop, turn, and swerve quickly",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "6. What is the purpose of on-motorcycle tests?",
+          "answers": [
+            "To determine your ability to handle normal and hazardous traffic situations",
+            "To assess your knowledge of motorcycle parts",
+            "To evaluate your ability to ride at high speeds",
+            "None of the above"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "6. What is a key aspect of safe motorcycle operation?",
+          "answers": [
+            "Being able to stop, turn and swerve quickly",
+            "Being able to make critical decisions and carry them out",
+            "Being able to adjust speed and position to the traffic situation",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "12. What should you be able to carry out to pass the on-motorcycle skill test?",
+          "answers": [
+            "Critical decisions",
+            "Speed adjustments",
+            "Position adjustments",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "8. Why is it important to see, be seen, and communicate with others while riding a motorcycle?",
+          "answers": [
+            "A. To make sure other drivers are aware of your presence",
+            "B. To ensure you can respond to changes in the traffic situation",
+            "C. To prevent accidents and ensure your safety",
+            "D. All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What happens if you test on a three-wheeled motorcycle?",
+          "answers": [
+            "You will be restricted to riding only three-wheeled motorcycles.",
+            "You will be allowed to ride any type of motorcycle.",
+            "You will be allowed to ride only two-wheeled motorcycles.",
+            "None of the above."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What should you know about your motorcycle and your riding limits?",
+          "answers": [
+            "You should exceed them to show your skills",
+            "You should ignore them",
+            "You should know them and respect them",
+            "You should not be aware of them"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "12. What is the primary purpose of knowing your motorcycle and your riding limits?",
+          "answers": [
+            "A. To impress others with your knowledge",
+            "B. To ensure you can handle normal and hazardous traffic situations",
+            "C. To be able to perform stunts on your motorcycle",
+            "D. To be able to ride at high speeds"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "10. What should you be able to do in terms of seeing, being seen and communicating with others?",
+          "answers": [
+            "You should be able to see, be seen and communicate with others",
+            "You should only be able to see others",
+            "You should only be able to be seen by others",
+            "You should only be able to communicate with others"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "8. What is important for handling hazardous traffic situations?",
+          "answers": [
+            "To stop, turn and swerve quickly.",
+            "To accelerate quickly.",
+            "To ignore other vehicles.",
+            "To ride in the middle of the lane."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "4. Do you need to provide your own motorcycle for the skills test at the driver license office?",
+          "answers": [
+            "Yes",
+            "No",
+            "Only if the motorcycle is above 500 cc",
+            "Only if the motorcycle is below 500 cc"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "12. How should you see, be seen and communicate with others on the road?",
+          "answers": [
+            "By ignoring other drivers",
+            "By using hand signals only",
+            "By using your horn constantly",
+            "By being aware of your surroundings, using signals and maintaining visibility"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "10. What skills are included in on-motorcycle tests?",
+          "answers": [
+            "Basic vehicle control and crash-avoidance skills",
+            "Speed racing skills",
+            "Stunt riding skills",
+            "Off-road riding skills"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "11. What is the primary purpose of the on-motorcycle skill test?",
+          "answers": [
+            "A. To test your knowledge of motorcycle parts",
+            "B. To determine your ability to handle normal and hazardous traffic situations",
+            "C. To assess your ability to perform stunts on a motorcycle",
+            "D. To evaluate your ability to ride at high speeds"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "11. What is required to obtain a motorcycle endorsement?",
+          "answers": [
+            "Successfully complete all parts of the motorcycle skills test.",
+            "Successfully perform stunts.",
+            "Successfully ride without a helmet.",
+            "Successfully ride at high speeds."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "10. What should you know to pass the on-motorcycle skill test?",
+          "answers": [
+            "Your motorcycle",
+            "Your riding limits",
+            "How to accelerate, brake, and turn safely",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "1. Does Utah law require two rear-view mirrors on every motorcycle?",
+          "answers": [
+            "True",
+            "False",
+            "Only if the motorcycle is above 500 cc",
+            "Only if the motorcycle is below 500 cc"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What must all operators of any motor vehicle, including motorcycles, comply with?",
+          "answers": [
+            "The same traffic rules and regulations",
+            "Different traffic rules and regulations",
+            "Only the rules and regulations specific to motorcycles",
+            "Only the rules and regulations specific to their type of vehicle"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "15. What should you be able to adjust to the traffic situation while riding a motorcycle?",
+          "answers": [
+            "Your speed and position",
+            "Only your speed",
+            "Only your position",
+            "Neither your speed nor your position"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What is required for every motorized vehicle driven/ridden on public roads or highways?",
+          "answers": [
+            "To be insured, registered and licensed/endorsed",
+            "To be insured only",
+            "To be registered only",
+            "To be licensed/endorsed only"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What is the restriction if you test on a motorcycle 90 cc or less?",
+          "answers": [
+            "A. You will be restricted to riding motorcycles 250 cc or less.",
+            "B. You will be restricted to riding motorcycles 90 cc or less.",
+            "C. There will be no restriction.",
+            "D. You will be restricted to riding motorcycles 500 cc or less."
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "12. Why is it important to make critical decisions and carry them out?",
+          "answers": [
+            "To avoid accidents",
+            "To pass the test",
+            "To communicate with other drivers",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What skills are included in on-motorcycle tests to determine your ability to handle normal and hazardous traffic situations?",
+          "answers": [
+            "Knowing your motorcycle and your riding limits",
+            "Accelerating, braking, and turning safely",
+            "Seeing, being seen, and communicating with others",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "2. If you test on a 250 cc motorcycle, what will be your riding restriction?",
+          "answers": [
+            "You will be restricted to riding motorcycles less than 649 cc",
+            "You will be restricted to riding motorcycles more than 649 cc",
+            "There will be no restriction on the cc of the motorcycle you can ride",
+            "You will be restricted to riding only 250 cc motorcycles"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "7. What factors related to safety might examiners score on?",
+          "answers": [
+            "Your ability to make critical decisions and carry them out",
+            "Your ability to stop, turn and swerve quickly",
+            "Your ability to adjust speed and position to the traffic situation",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "14. What is included in basic vehicle control?",
+          "answers": [
+            "Ability to accelerate, brake and turn safely.",
+            "Ability to ride at high speeds.",
+            "Ability to ride without a helmet.",
+            "Ability to perform stunts."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "11. What is the purpose of on-motorcycle tests?",
+          "answers": [
+            "To show off your skills",
+            "To determine your ability to handle normal and hazardous traffic situations",
+            "To test your knowledge of motorcycle parts",
+            "To test your ability to ride without a helmet"
+          ],
+          "correctAnswerIndex": 1,
+          "imageUrl": null
+        },
+        {
+          "question": "9. What should you know for a motorcycle skill test?",
+          "answers": [
+            "Your motorcycle and your riding limits.",
+            "How to perform stunts.",
+            "How to ride without a helmet.",
+            "How to ride at high speeds."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "4. What must you provide for the motorcycle skills test at the driver license office?",
+          "answers": [
+            "Your own motorcycle.",
+            "A borrowed motorcycle.",
+            "A rented motorcycle.",
+            "Any of the above."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "12. What is included in the on-motorcycle skill test?",
+          "answers": [
+            "Basic vehicle control",
+            "Crash-avoidance skills",
+            "Both A and B",
+            "None of the above"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "14. What is the importance of accelerating, braking and turning safely?",
+          "answers": [
+            "It helps you avoid accidents",
+            "It helps you pass the test",
+            "It helps other drivers be aware of your presence",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What skills are included in on-motorcycle tests?",
+          "answers": [
+            "A. Ability to handle normal and hazardous traffic situations.",
+            "B. Knowledge of motorcycle.",
+            "C. Ability to accelerate, brake and turn safely.",
+            "D. All of the above."
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "6. What should you adjust to the traffic situation?",
+          "answers": ["Speed", "Position", "Helmet", "Both A and B"],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "2. What might you be tested for during a motorcycle skills test?",
+          "answers": [
+            "Your ability to accelerate, brake, and turn safely.",
+            "Your ability to ride without using the brakes.",
+            "Your ability to ride with one hand.",
+            "Your ability to ride while texting."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "13. What factors related to safety may examiners score on?",
+          "answers": [
+            "Your ability to speed",
+            "Your ability to do stunts",
+            "Your ability to handle normal and hazardous traffic situations",
+            "Your ability to ride without a helmet"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "3. What is required for every motorized vehicle driven/ridden on public roads or highways?",
+          "answers": [
+            "Only insurance",
+            "Only registration",
+            "Insurance, registration and license/endorsement",
+            "None of the above"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What must you have in your possession when operating a motorcycle?",
+          "answers": [
+            "A valid motorcycle license",
+            "A valid driver's license",
+            "A valid insurance card",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "9. What should you be able to do in traffic situations?",
+          "answers": [
+            "Accelerate, brake and turn safely",
+            "Only accelerate safely",
+            "Only brake safely",
+            "Only turn safely"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "8. What should you know about your motorcycle and your riding limits?",
+          "answers": [
+            "You should know your motorcycle and your riding limits",
+            "You should only know your motorcycle",
+            "You should only know your riding limits",
+            "Neither is important to know"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "9. Why is it important to adjust your speed and position to the traffic situation?",
+          "answers": [
+            "A. To ensure you can stop, turn, and swerve quickly if necessary",
+            "B. To make sure other drivers are aware of your presence",
+            "C. To prevent accidents and ensure your safety",
+            "D. All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "9. What is included in the on-motorcycle skill test?",
+          "answers": [
+            "Basic vehicle control",
+            "Crash-avoidance skills",
+            "Making critical decisions and carrying them out",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "9. What are you expected to do during the on-motorcycle skill test?",
+          "answers": [
+            "Accelerate, brake and turn safely",
+            "See, be seen and communicate with others",
+            "Adjust speed and position to the traffic situation",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "11. What is expected in the on-motorcycle skill test?",
+          "answers": [
+            "You must provide your own motorcycle",
+            "You must successfully complete all parts to obtain a motorcycle endorsement",
+            "Both A and B",
+            "None of the above"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "7. How should you adjust your speed and position to the traffic situation?",
+          "answers": [
+            "Speed up to get ahead of traffic",
+            "Slow down to let all traffic pass",
+            "Adjust according to the traffic flow and road conditions",
+            "Maintain a constant speed regardless of traffic"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "13. What is the importance of being able to see, be seen and communicate with others while riding a motorcycle?",
+          "answers": [
+            "It helps in avoiding accidents",
+            "It helps in controlling the motorcycle",
+            "It helps in making critical decisions",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "12. What might be adjusted due to space availability at certain driver license offices?",
+          "answers": [
+            "The test.",
+            "The motorcycle.",
+            "The helmet.",
+            "The speed limit."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "8. What is the importance of knowing your motorcycle and your riding limits?",
+          "answers": [
+            "It helps you ride safely",
+            "It helps you pass the test",
+            "It helps you avoid accidents",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "14. What is the importance of being able to adjust speed and position to the traffic situation?",
+          "answers": [
+            "It helps in avoiding accidents",
+            "It helps in controlling the motorcycle",
+            "It helps in making critical decisions",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "5. What is tiered licensing in terms of motorcycle endorsements?",
+          "answers": [
+            "A. The restriction will be determined by the size of the motorcycle used at the time of the skills test.",
+            "B. The restriction will be determined by the speed of the motorcycle used at the time of the skills test.",
+            "C. The restriction will be determined by the color of the motorcycle used at the time of the skills test.",
+            "D. The restriction will be determined by the brand of the motorcycle used at the time of the skills test."
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "6. What should you do to accelerate, brake and turn safely?",
+          "answers": [
+            "Speed up as much as possible",
+            "Ignore other traffic",
+            "Practice and respect the rules of the road",
+            "Ride in the middle of the road"
+          ],
+          "correctAnswerIndex": 2,
+          "imageUrl": null
+        },
+        {
+          "question": "11. What should you be able to do to pass the on-motorcycle skill test?",
+          "answers": [
+            "See, be seen, and communicate with others",
+            "Adjust speed and position to the traffic situation",
+            "Stop, turn, and swerve quickly",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "6. What is the primary purpose of the on-motorcycle skill test?",
+          "answers": [
+            "A. To determine your ability to handle normal and hazardous traffic situations",
+            "B. To test your knowledge of motorcycle parts",
+            "C. To assess your ability to perform stunts on a motorcycle",
+            "D. To evaluate your ability to ride at high speeds"
+          ],
+          "correctAnswerIndex": 0,
+          "imageUrl": null
+        },
+        {
+          "question": "13. What is required to obtain a motorcycle endorsement?",
+          "answers": [
+            "Passing the on-motorcycle skill test",
+            "Having your own motorcycle",
+            "Having two rear-view mirrors on your motorcycle",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        },
+        {
+          "question": "1. What is included in on-motorcycle tests to determine your ability to handle normal and hazardous traffic situations?",
+          "answers": [
+            "Your knowledge of traffic rules",
+            "Your ability to accelerate, brake and turn safely",
+            "Your ability to communicate with others",
+            "All of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "imageUrl": null
+        }
+      ],
+      "passingScore": 96,
+      "isPremium": true
+    }
+  ]
+}

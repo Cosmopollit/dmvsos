@@ -9,6 +9,8 @@ function TestContent() {
   const params = useSearchParams();
   const state = params.get('state') || 'washington';
   const category = params.get('category') || 'car';
+  const lang = params.get('lang') || 'en';
+  const langFolder = lang === 'zh' ? 'cn' : lang;
 
   const [user, setUser] = useState(null);
   const [questions, setQuestions] = useState([]);
@@ -25,7 +27,7 @@ function TestContent() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`/data/${state}.json`)
+    fetch(`/data/${langFolder}/${state}.json`)
       .then(r => r.json())
       .then(d => {
         const categoryMap = { dmv: 'car', cdl: 'cdl', moto: 'motorcycle' };
@@ -37,7 +39,7 @@ function TestContent() {
         }
         setLoading(false);
       });
-  }, [state, category, user]);
+  }, [state, category, user, lang]);
 
   if (loading) return (
     <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">

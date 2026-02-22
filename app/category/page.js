@@ -39,6 +39,7 @@ function CategoryContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const state = searchParams.get('state') ?? '';
+  const lang = searchParams.get('lang') || 'en';
 
   return (
     <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
@@ -55,7 +56,7 @@ function CategoryContent() {
           <button
             key={cat.id}
             type="button"
-            onClick={() => router.push(`/test?state=${state}&category=${cat.id}`)}
+            onClick={() => router.push(`/test?state=${state}&category=${cat.id}&lang=${lang}`)}
             className="bg-white border border-[#E2E8F0] rounded-2xl p-5 flex items-center gap-5 hover:border-[#2563EB] hover:shadow-md transition-all text-left shadow-sm"
           >
             <div className="w-14 h-14 rounded-xl flex items-center justify-center text-3xl flex-shrink-0"

@@ -41,6 +41,9 @@ export default function Home() {
     'Wisconsin (WI)', 'Wyoming (WY)'
   ];
 
+  const langToCode = { English: 'en', 'Русский': 'ru', 'Español': 'es', '中文': 'zh', 'Українська': 'ua' };
+  const langCode = langToCode[lang] || 'en';
+
   function stateToSlug(displayState) {
     if (!displayState) return '';
     const name = displayState.replace(/\s*\([A-Z]{2}\)\s*$/, '').trim();
@@ -50,7 +53,7 @@ export default function Home() {
   const handleStartAsGuest = () => {
     const stateCode = stateToSlug(state);
     if (!stateCode) return;
-    router.push(`/category?state=${stateCode}`);
+    router.push(`/category?state=${stateCode}&lang=${langCode}`);
   };
 
   async function handleGoogleSignIn() {
@@ -141,7 +144,7 @@ export default function Home() {
           <>
             <button
               type="button"
-              onClick={() => { const slug = stateToSlug(state); if (slug) router.push(`/category?state=${slug}`); }}
+              onClick={() => { const slug = stateToSlug(state); if (slug) router.push(`/category?state=${slug}&lang=${langCode}`); }}
               disabled={!state}
               className={`w-full py-4 rounded-xl font-semibold text-[15px] flex items-center justify-center gap-2 transition-all ${
                 state
