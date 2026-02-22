@@ -22,6 +22,7 @@ function formatDate(createdAt) {
 export default function Profile() {
   const router = useRouter();
   const [user, setUser] = useState(null);
+  const [isPro, setIsPro] = useState(false);
   const [loading, setLoading] = useState(true);
   const [sessions, setSessions] = useState([]);
 
@@ -36,6 +37,16 @@ export default function Profile() {
       setLoading(false);
     }, 500);
   }, []);
+
+  useEffect(() => {
+    if (!user?.email) return;
+    supabase
+      .from('profiles')
+      .select('is_pro')
+      .eq('email', user.email)
+      .single()
+      .then(({ data: profile }) => setIsPro(profile?.is_pro ?? false));
+  }, [user?.email]);
 
   useEffect(() => {
     if (user) {
@@ -66,12 +77,19 @@ export default function Profile() {
           </div>
           <h2 className="text-xl font-bold text-[#1E293B] mb-1">{user.user_metadata?.full_name || 'User'}</h2>
           <p className="text-sm text-[#94A3B8] mb-5">{user.email}</p>
-          <span className="inline-block bg-[#EFF6FF] text-[#2563EB] text-xs font-bold px-3 py-1.5 rounded-full mb-6">FREE PLAN</span>
+          <span className={`inline-block text-xs font-bold px-3 py-1.5 rounded-full mb-6 ${isPro ? 'bg-[#FEF3C7] text-[#B45309]' : 'bg-[#EFF6FF] text-[#2563EB]'}`}>
+            {isPro ? '👑 PRO PLAN' : 'FREE PLAN'}
+          </span>
+          {isPro && (
+            <p className="text-sm text-[#16A34A] font-medium mb-4">✅ You have full access to all tests</p>
+          )}
           <div className="flex flex-col gap-3">
-            <button type="button" onClick={() => router.push('/upgrade')}
-              className="w-full bg-[#F59E0B] text-[#0B1C3D] py-3.5 rounded-xl font-semibold text-sm hover:bg-[#FBBF24] transition border-0">
-              Upgrade to Pro — $39/mo
-            </button>
+            {!isPro && (
+              <button type="button" onClick={() => router.push('/upgrade')}
+                className="w-full bg-[#F59E0B] text-[#0B1C3D] py-3.5 rounded-xl font-semibold text-sm hover:bg-[#FBBF24] transition border-0">
+                Upgrade to Pro — $39/mo
+              </button>
+            )}
             <button type="button" onClick={async () => { await supabase.auth.signOut(); router.push('/'); }}
               className="w-full bg-white border border-[#E2E8F0] text-[#1E293B] py-3.5 rounded-xl font-semibold text-sm hover:border-[#94A3B8] hover:bg-[#F8FAFC] transition">
               Sign Out
