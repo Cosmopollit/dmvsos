@@ -69,20 +69,15 @@ export default function Home() {
   }
 
   return (
-    <main style={{ fontFamily: 'DM Sans, sans-serif' }} className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6 relative overflow-hidden">
+    <main style={{ fontFamily: 'DM Sans, sans-serif' }} className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center py-10 px-6 relative overflow-hidden">
 
-      {/* User bar (top right) */}
+      {/* User pill (top right) */}
       {user && (
-        <div className="fixed top-4 right-4 z-10 flex items-center gap-3 bg-white/95 backdrop-blur rounded-xl border border-[#E2E8F0] px-4 py-2 shadow-sm">
-          <div className="text-right">
-            <p className="text-sm font-medium text-[#1E293B]">{user.user_metadata?.full_name || user.email}</p>
-            {user.user_metadata?.full_name && user.email && (
-              <p className="text-xs text-[#94A3B8]">{user.email}</p>
-            )}
-          </div>
-          <button onClick={handleSignOut}
-            className="text-xs font-semibold text-[#94A3B8] hover:text-[#DC2626] transition px-2 py-1 rounded-lg hover:bg-[#FEF2F2]">
-            Sign Out
+        <div className="fixed top-4 right-4 z-10 flex items-center gap-2 bg-white border border-[#E2E8F0] rounded-full pl-3 pr-1 py-1.5 shadow-sm">
+          <span className="text-xs font-medium text-[#1E293B] max-w-[120px] truncate">{user.user_metadata?.full_name || user.email}</span>
+          <button onClick={handleSignOut} type="button"
+            className="text-xs font-medium text-[#94A3B8] hover:text-[#DC2626] transition px-2.5 py-1 rounded-full hover:bg-[#FEF2F2]">
+            Sign out
           </button>
         </div>
       )}
@@ -94,7 +89,7 @@ export default function Home() {
         style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 70%)' }} />
 
       {/* Brand */}
-      <div className="text-center mb-8">
+      <div className="text-center mb-6">
         <div className="inline-flex items-center gap-3 mb-2">
           <div className="w-11 h-11 bg-[#0B1C3D] rounded-xl flex items-center justify-center">
             <span className="text-[#F59E0B] text-lg font-bold">✦</span>
@@ -106,14 +101,14 @@ export default function Home() {
         <p className="text-sm text-[#94A3B8]">Free DMV practice tests for all 50 states</p>
       </div>
 
-      {/* Language bar */}
-      <div className="flex gap-2 mb-6 flex-wrap justify-center">
+      {/* Language bar - single row */}
+      <div className="flex gap-2 mb-6 justify-center flex-nowrap">
         {langs.map((l) => (
-          <button key={l.name} onClick={() => setLang(l.name)}
-            className={`px-3 py-1 rounded-full text-xs font-medium border-[1.5px] transition-all ${
+          <button key={l.name} onClick={() => setLang(l.name)} type="button"
+            className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border border-[#E2E8F0] transition-all ${
               lang === l.name
                 ? 'bg-[#0B1C3D] text-white border-[#0B1C3D]'
-                : 'border-[#E2E8F0] text-[#94A3B8] hover:border-[#2563EB] hover:text-[#2563EB]'
+                : 'bg-white text-[#94A3B8] hover:border-[#2563EB] hover:text-[#2563EB]'
             }`}>
             {l.flag} {l.name}
           </button>
@@ -142,59 +137,85 @@ export default function Home() {
           {states.map(s => <option key={s}>{s}</option>)}
         </select>
 
-        {/* Guest button */}
-        <div className="mb-3">
-          <button
-            onClick={handleStartAsGuest}
-            disabled={!state}
-            className={`w-full py-4 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 transition-all ${
-              state
-                ? 'bg-[#0B1C3D] text-white hover:bg-[#132248] hover:-translate-y-px hover:shadow-lg cursor-pointer'
-                : 'bg-[#E2E8F0] text-[#94A3B8] cursor-not-allowed'
-            }`}
-          >
-            🚗 Start as Guest
-            <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide ${state ? 'bg-[#FEF3C7] text-[#B45309]' : 'bg-[#CBD5E1] text-[#64748B]'}`}>No signup</span>
-          </button>
-          {!state && (
-            <p className="text-xs text-[#94A3B8] text-center mt-2">Please select your state first</p>
-          )}
-        </div>
+        {user ? (
+          <>
+            <button
+              type="button"
+              onClick={() => { const slug = stateToSlug(state); if (slug) router.push(`/category?state=${slug}`); }}
+              disabled={!state}
+              className={`w-full py-4 rounded-xl font-semibold text-[15px] flex items-center justify-center gap-2 transition-all ${
+                state
+                  ? 'bg-[#2563EB] text-white hover:bg-[#1D4ED8] cursor-pointer'
+                  : 'bg-[#E2E8F0] text-[#94A3B8] cursor-not-allowed'
+              }`}
+            >
+              Start Practicing →
+            </button>
+            {!state && (
+              <p className="text-xs text-[#94A3B8] text-center mt-2">Please select your state first</p>
+            )}
+            <button type="button" onClick={() => router.push('/profile')}
+              className="mt-4 text-sm text-[#2563EB] hover:underline">
+              My Profile
+            </button>
+          </>
+        ) : (
+          <>
+            {/* Guest button */}
+            <div className="mb-3">
+              <button
+                onClick={handleStartAsGuest}
+                disabled={!state}
+                className={`w-full py-4 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 transition-all ${
+                  state
+                    ? 'bg-[#0B1C3D] text-white hover:bg-[#132248] hover:-translate-y-px hover:shadow-lg cursor-pointer'
+                    : 'bg-[#E2E8F0] text-[#94A3B8] cursor-not-allowed'
+                }`}
+              >
+                🚗 Start as Guest
+                <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide ${state ? 'bg-[#FEF3C7] text-[#B45309]' : 'bg-[#CBD5E1] text-[#64748B]'}`}>No signup</span>
+              </button>
+              {!state && (
+                <p className="text-xs text-[#94A3B8] text-center mt-2">Please select your state first</p>
+              )}
+            </div>
 
-        {/* Divider */}
-        <div className="flex items-center gap-3 my-6">
-          <div className="flex-1 h-px bg-[#E2E8F0]" />
-          <span className="text-xs text-[#94A3B8] font-medium whitespace-nowrap">or save your progress</span>
-          <div className="flex-1 h-px bg-[#E2E8F0]" />
-        </div>
+            {/* Divider */}
+            <div className="flex items-center gap-3 my-6">
+              <div className="flex-1 h-px bg-[#E2E8F0]" />
+              <span className="text-xs text-[#94A3B8] font-medium whitespace-nowrap">or save your progress</span>
+              <div className="flex-1 h-px bg-[#E2E8F0]" />
+            </div>
 
-        {/* Google */}
-        <button onClick={handleGoogleSignIn} className="w-full bg-white text-[#1E293B] border-[1.5px] border-[#E2E8F0] py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#F8FAFC] hover:-translate-y-px hover:shadow transition-all">
-          🔵 Continue with Google
-        </button>
+            {/* Google */}
+            <button onClick={handleGoogleSignIn} type="button" className="w-full bg-white text-[#1E293B] border-[1.5px] border-[#E2E8F0] py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#F8FAFC] hover:-translate-y-px hover:shadow transition-all">
+              🔵 Continue with Google
+            </button>
 
-        {/* Apple */}
-        <button className="w-full bg-black text-white py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 hover:bg-[#1a1a1a] hover:-translate-y-px hover:shadow-lg transition-all">
-          🍎 Continue with Apple
-        </button>
+            {/* Apple */}
+            <button type="button" className="w-full bg-black text-white py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 hover:bg-[#1a1a1a] hover:-translate-y-px hover:shadow-lg transition-all">
+              🍎 Continue with Apple
+            </button>
 
-        {/* Info */}
-        <div className="mt-5 bg-[rgba(26,86,219,0.04)] border border-[rgba(26,86,219,0.12)] rounded-[10px] p-3 flex gap-3">
-          <span className="text-base flex-shrink-0 mt-0.5">💡</span>
-          <p className="text-[12.5px] text-[#475569] leading-relaxed">
-            <span className="text-[#2563EB] font-semibold">Guest mode:</span> Practice right away. Sign in anytime to save your score.
-          </p>
-        </div>
+            {/* Info */}
+            <div className="mt-5 bg-[rgba(26,86,219,0.04)] border border-[rgba(26,86,219,0.12)] rounded-[10px] p-3 flex gap-3">
+              <span className="text-base flex-shrink-0 mt-0.5">💡</span>
+              <p className="text-[12.5px] text-[#475569] leading-relaxed">
+                <span className="text-[#2563EB] font-semibold">Guest mode:</span> Practice right away. Sign in anytime to save your score.
+              </p>
+            </div>
+          </>
+        )}
 
       </div>
 
       {/* Pricing */}
-      <div className="w-full max-w-[560px] mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="w-full max-w-[560px] mt-10 grid grid-cols-1 sm:grid-cols-2 gap-5">
         {/* Free plan */}
-        <div className="bg-white rounded-2xl p-6 border-2 border-[#E2E8F0]">
-          <h3 className="text-lg font-bold text-[#1E293B] mb-1">FREE</h3>
+        <div className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-sm">
+          <h3 className="text-base font-bold text-[#1E293B] mb-0.5">FREE</h3>
           <p className="text-2xl font-bold text-[#0B1C3D] mb-4">$0</p>
-          <ul className="space-y-2 text-sm text-[#475569]">
+          <ul className="space-y-2.5 text-sm text-[#64748B]">
             <li>3 practice tests per state</li>
             <li>Car (DMV) only</li>
             <li>English only</li>
@@ -202,25 +223,25 @@ export default function Home() {
           </ul>
         </div>
         {/* Pro plan */}
-        <div className="bg-[#0B1C3D] rounded-2xl p-6 border-2 border-[#F59E0B] relative">
+        <div className="bg-[#0B1C3D] rounded-2xl p-6 border border-[#1e3a5f] relative shadow-sm">
           <span className="absolute top-3 right-3 text-[10px] font-bold text-[#F59E0B] uppercase tracking-wide">Popular</span>
-          <h3 className="text-lg font-bold text-white mb-1">PRO</h3>
+          <h3 className="text-base font-bold text-white mb-0.5">PRO</h3>
           <p className="text-2xl font-bold text-white mb-4">$39<span className="text-sm font-normal text-[#94A3B8]">/mo</span></p>
-          <ul className="space-y-2 text-sm text-[#CBD5E1] mb-5">
+          <ul className="space-y-2.5 text-sm text-[#CBD5E1] mb-6">
             <li>All tests for all 50 states</li>
             <li>Car, CDL, Motorcycle</li>
             <li>4 languages (EN, RU, ES, ZH)</li>
             <li>Detailed results + explanations</li>
           </ul>
-          <button onClick={() => router.push('/upgrade')}
-            className="w-full bg-[#F59E0B] text-[#0B1C3D] py-3 rounded-xl font-semibold text-sm hover:bg-[#FBBF24] hover:-translate-y-0.5 hover:shadow-lg transition-all">
+          <button type="button" onClick={() => router.push('/upgrade')}
+            className="w-full bg-[#F59E0B] text-[#0B1C3D] py-3 rounded-xl font-semibold text-sm hover:bg-[#FBBF24] transition-all">
             Upgrade $39/mo
           </button>
         </div>
       </div>
 
       {/* Footer */}
-      <p className="text-xs text-[#94A3B8] mt-5 text-center leading-relaxed">
+      <p className="text-xs text-[#94A3B8] mt-8 text-center leading-relaxed max-w-md">
         By continuing, you agree to our{' '}
         <a href="#" className="text-[#2563EB] font-medium">Terms</a> and{' '}
         <a href="#" className="text-[#2563EB] font-medium">Privacy Policy</a>.<br />
