@@ -1,12 +1,21 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 
 export default function Home() {
   const [lang, setLang] = useState('English');
   const [state, setState] = useState('');
+  const [user, setUser] = useState(null);
   const router = useRouter();
+
+  useEffect(() => {
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user) {
+        setUser(session.user);
+      }
+    });
+  }, []);
 
   const langs = [
     { flag: '🇺🇸', name: 'English' },
@@ -48,13 +57,35 @@ export default function Home() {
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: window.location.origin + '/category'
+        redirectTo: window.location.origin,
+        skipBrowserRedirect: false,
       }
-    });
+    })
+  }
+
+  async function handleSignOut() {
+    await supabase.auth.signOut();
+    setUser(null);
   }
 
   return (
     <main style={{ fontFamily: 'DM Sans, sans-serif' }} className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6 relative overflow-hidden">
+
+      {/* User bar (top right) */}
+      {user && (
+        <div className="fixed top-4 right-4 z-10 flex items-center gap-3 bg-white/95 backdrop-blur rounded-xl border border-[#E2E8F0] px-4 py-2 shadow-sm">
+          <div className="text-right">
+            <p className="text-sm font-medium text-[#1E293B]">{user.user_metadata?.full_name || user.email}</p>
+            {user.user_metadata?.full_name && user.email && (
+              <p className="text-xs text-[#94A3B8]">{user.email}</p>
+            )}
+          </div>
+          <button onClick={handleSignOut}
+            className="text-xs font-semibold text-[#94A3B8] hover:text-[#DC2626] transition px-2 py-1 rounded-lg hover:bg-[#FEF2F2]">
+            Sign Out
+          </button>
+        </div>
+      )}
 
       {/* Background blobs */}
       <div className="fixed top-[-200px] right-[-200px] w-[600px] h-[600px] rounded-full pointer-events-none"
