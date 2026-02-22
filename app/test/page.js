@@ -260,7 +260,7 @@ function TestContent() {
               <li>✅ All 40 questions per test</li>
               <li>✅ All 50 states, 3 categories, 4 languages</li>
             </ul>
-            <button type="button" onClick={() => router.push('/upgrade')}
+            <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}`)}
               className="w-full bg-[#F59E0B] text-[#0B1C3D] py-4 rounded-xl font-bold text-base hover:bg-[#FBBF24] hover:-translate-y-0.5 hover:shadow-lg transition-all mb-3">
               {tex.upgradeCta}
             </button>

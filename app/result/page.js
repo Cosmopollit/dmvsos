@@ -67,14 +67,14 @@ function ResultContent() {
               passed ? 'bg-[#F0FDF4] text-[#16A34A]' : 'bg-[#FEF2F2] text-[#DC2626]'
             }`}
           >
-            {passed ? 'PASSED' : 'NOT PASSED'}
+            {passed ? tex.passed : tex.notPassed}
           </div>
           <div className="text-5xl font-bold text-[#0B1C3D] mb-1">{percent}%</div>
           <p className="text-[#94A3B8] text-sm mb-2">
-            You answered {score} out of {total} questions correctly
+            {(tex.resultText || 'You answered {score} out of {total} correctly').replace(/\{score\}/g, String(score)).replace(/\{total\}/g, String(total))}
           </p>
           {elapsed > 0 && (
-            <p className="text-[#94A3B8] text-sm mb-6">Completed in {formatTime(elapsed)}</p>
+            <p className="text-[#94A3B8] text-sm mb-6">{tex.completedIn} {formatTime(elapsed)}</p>
           )}
           {elapsed === 0 && <div className="mb-6" />}
           <div className="w-full h-1.5 bg-[#E2E8F0] rounded-full mb-6">
@@ -120,7 +120,7 @@ function ResultContent() {
         {/* Question-by-question review */}
         {questions.length > 0 && (
           <div className="bg-white rounded-2xl p-6 w-full shadow-sm border border-[#E2E8F0]">
-            <h2 className="text-lg font-bold text-[#0B1C3D] mb-4">Question review</h2>
+            <h2 className="text-lg font-bold text-[#0B1C3D] mb-4">{tex.questionReview}</h2>
             <ul className="space-y-4">
               {questions.map((q, i) => {
                 const correct = userAnswers[i] === q.correctAnswerIndex;
@@ -140,7 +140,7 @@ function ResultContent() {
                         </p>
                         {!correct && correctText != null && (
                           <p className="text-sm text-[#16A34A] mt-1">
-                            Correct: <strong>{stripAnswer(correctText)}</strong>
+                            {tex.correct}: <strong>{stripAnswer(correctText)}</strong>
                           </p>
                         )}
                       </div>
@@ -158,7 +158,7 @@ function ResultContent() {
           <p className="text-[#94A3B8] text-sm mb-4">Get access to all 50 states, all categories, 4 languages</p>
           <button
             type="button"
-            onClick={() => router.push('/upgrade')}
+            onClick={() => router.push(`/upgrade?lang=${lang}`)}
             className="w-full bg-[#F59E0B] text-[#0B1C3D] py-3 rounded-xl font-semibold text-sm hover:bg-[#FBBF24] transition-all"
           >
             Upgrade $39/mo
@@ -171,7 +171,7 @@ function ResultContent() {
           onClick={() => router.push('/category')}
           className="w-full bg-[#2563EB] text-white py-3.5 rounded-xl font-semibold text-base hover:bg-[#1D4ED8] transition-all"
         >
-          🔄 Try Again
+          {tex.tryAgain}
         </button>
         {wrongQuestions.length > 0 && (
           <button
@@ -190,7 +190,7 @@ function ResultContent() {
           onClick={() => router.push('/')}
           className="w-full bg-white border border-[#E2E8F0] text-[#1E293B] py-3.5 rounded-xl font-semibold text-base hover:border-[#2563EB] hover:text-[#2563EB] hover:bg-[#F8FAFC] transition-all"
         >
-          Home
+          {tex.home}
         </button>
       </div>
     </main>

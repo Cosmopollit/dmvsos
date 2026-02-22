@@ -1,9 +1,14 @@
 'use client';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { t } from '@/lib/translations';
 
-export default function Upgrade() {
+function UpgradeContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const lang = searchParams.get('lang') || 'en';
+  const tex = t[lang] || t.en;
+
   const [loading, setLoading] = useState(false);
 
   async function handleSubscribe() {
@@ -16,6 +21,8 @@ export default function Upgrade() {
       setLoading(false);
     }
   }
+
+  const features = Array.isArray(tex.upgradeFeatures) ? tex.upgradeFeatures : [];
 
   return (
     <main className="min-h-screen bg-[#0B1C3D] flex flex-col items-center justify-center p-6">
@@ -30,10 +37,12 @@ export default function Upgrade() {
       <div className="text-center mb-8 max-w-lg">
         <div className="text-5xl mb-4">👑</div>
         <h1 className="text-3xl font-bold text-white mb-3">
-          Practice tonight.<br />Pass tomorrow.
+          {(tex.upgradeHero || 'Practice tonight.\nPass tomorrow.').split('\n').map((line, i, arr) => (
+            <span key={i}>{line}{i < arr.length - 1 ? <br /> : null}</span>
+          ))}
         </h1>
         <p className="text-[#94A3B8] text-lg">
-          Thousands of immigrants passed their DMV test with DMVSOS. You&apos;re next.
+          {tex.upgradeSubtext}
         </p>
       </div>
 
@@ -66,14 +75,7 @@ export default function Upgrade() {
         </div>
 
         <div className="space-y-3 mb-6">
-          {[
-            '✅ All 40 questions — same as real DMV',
-            '✅ All 50 states covered',
-            '✅ Car, CDL & Motorcycle tests',
-            '✅ 5 languages — study in your language',
-            '✅ Updated monthly — never outdated',
-            '✅ Unlimited practice — retry until ready',
-          ].map((f, i) => (
+          {features.map((f, i) => (
             <div key={i} className="text-[#1E293B] text-sm">{f}</div>
           ))}
         </div>
@@ -83,24 +85,23 @@ export default function Upgrade() {
           disabled={loading}
           className="w-full bg-[#F59E0B] text-black font-bold py-4 rounded-xl text-lg hover:bg-[#D97706] transition disabled:opacity-70"
         >
-          {loading ? 'Redirecting…' : '🚗 Get Pro Access — $39/mo'}
+          {loading ? '…' : (tex.upgradeCta || '🚗 Get Pro Access — $39/mo')}
         </button>
 
         <p className="text-center text-xs text-gray-400 mt-3">
-          Cancel anytime · No hidden fees · Instant access
+          {tex.upgradeCancel}
         </p>
       </div>
 
       {/* Testimonial */}
       <div className="bg-[#1E3A5F] rounded-2xl p-6 w-full max-w-md mb-6">
         <p className="text-white text-sm italic mb-3">
-          &quot;I was so nervous about the DMV test. Practiced with DMVSOS for 2 days and passed on my first try!&quot;
+          {tex.upgradeTestimonial}
         </p>
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-full bg-[#F59E0B] flex items-center justify-center text-black font-bold text-sm">M</div>
           <div>
-            <div className="text-white text-sm font-semibold">Maria S.</div>
-            <div className="text-[#94A3B8] text-xs">California, 2025</div>
+            <div className="text-white text-sm font-semibold">{tex.upgradeTestimonialAuthor}</div>
           </div>
         </div>
       </div>
@@ -109,5 +110,13 @@ export default function Upgrade() {
         ← Back
       </button>
     </main>
+  );
+}
+
+export default function Upgrade() {
+  return (
+    <Suspense fallback={<main className="min-h-screen bg-[#0B1C3D] flex items-center justify-center"><p className="text-[#94A3B8]">Loading…</p></main>}>
+      <UpgradeContent />
+    </Suspense>
   );
 }

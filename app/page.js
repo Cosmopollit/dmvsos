@@ -259,7 +259,7 @@ export default function Home() {
               <li>{tex.feature5}</li>
             </ul>
             <p className="text-sm font-semibold text-[#F59E0B] mb-4">{tex.proNote}</p>
-            <button type="button" onClick={() => router.push('/upgrade')}
+            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}`)}
               className="w-full bg-[#F59E0B] text-[#0B1C3D] py-4 rounded-xl font-bold text-base hover:bg-[#FBBF24] transition-all">
               {tex.upgradBtn}
             </button>

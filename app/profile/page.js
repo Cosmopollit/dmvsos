@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 
 function formatState(s) {
@@ -21,6 +21,8 @@ function formatDate(createdAt) {
 
 export default function Profile() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const lang = searchParams.get('lang') || 'en';
   const [user, setUser] = useState(null);
   const [isPro, setIsPro] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -85,7 +87,7 @@ export default function Profile() {
           )}
           <div className="flex flex-col gap-3">
             {!isPro && (
-              <button type="button" onClick={() => router.push('/upgrade')}
+              <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}`)}
                 className="w-full bg-[#F59E0B] text-[#0B1C3D] py-3.5 rounded-xl font-semibold text-sm hover:bg-[#FBBF24] transition border-0">
                 Upgrade to Pro — $39/mo
               </button>
