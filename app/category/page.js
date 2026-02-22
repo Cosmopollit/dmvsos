@@ -1,38 +1,12 @@
 'use client';
 import { Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { t } from '@/lib/translations';
 
 const categories = [
-  {
-    id: 'dmv',
-    icon: '🚗',
-    title: 'Car (DMV)',
-    desc: 'Standard driver license test',
-    questions: 40,
-    time: '25 min',
-    color: '#2563EB',
-    bg: '#EFF6FF',
-  },
-  {
-    id: 'cdl',
-    icon: '🚛',
-    title: 'Truck (CDL)',
-    desc: 'Commercial driver license test',
-    questions: 50,
-    time: '35 min',
-    color: '#16A34A',
-    bg: '#F0FDF4',
-  },
-  {
-    id: 'moto',
-    icon: '🏍️',
-    title: 'Motorcycle',
-    desc: 'Motorcycle license test',
-    questions: 30,
-    time: '20 min',
-    color: '#D97706',
-    bg: '#FFFBEB',
-  },
+  { id: 'dmv', icon: '🚗', titleKey: 'car', descKey: 'carDesc', questions: 40, time: '25 min', color: '#2563EB', bg: '#EFF6FF' },
+  { id: 'cdl', icon: '🚛', titleKey: 'truck', descKey: 'truckDesc', questions: 50, time: '35 min', color: '#16A34A', bg: '#F0FDF4' },
+  { id: 'moto', icon: '🏍️', titleKey: 'motorcycle', descKey: 'motoDesc', questions: 30, time: '20 min', color: '#D97706', bg: '#FFFBEB' },
 ];
 
 function CategoryContent() {
@@ -40,6 +14,7 @@ function CategoryContent() {
   const searchParams = useSearchParams();
   const state = searchParams.get('state') ?? '';
   const lang = searchParams.get('lang') || 'en';
+  const tex = t[lang] || t.en;
 
   return (
     <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
@@ -47,8 +22,8 @@ function CategoryContent() {
         <span className="text-2xl font-bold text-[#0B1C3D]">
           DMV<span className="text-[#2563EB]">SOS</span>
         </span>
-        <h2 className="text-xl font-bold text-[#1E293B] mt-4 mb-1">Choose your test</h2>
-        <p className="text-sm text-[#94A3B8]">Select the license type you are preparing for</p>
+        <h2 className="text-xl font-bold text-[#1E293B] mt-4 mb-1">{tex.chooseTest}</h2>
+        <p className="text-sm text-[#94A3B8]">{tex.selectLicense}</p>
       </div>
 
       <div className="w-full max-w-md flex flex-col gap-4">
@@ -64,8 +39,8 @@ function CategoryContent() {
               {cat.icon}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="font-bold text-[#1E293B] text-lg">{cat.title}</div>
-              <div className="text-sm text-[#94A3B8] mt-0.5 mb-2">{cat.desc}</div>
+              <div className="font-bold text-[#1E293B] text-lg">{tex[cat.titleKey]}</div>
+              <div className="text-sm text-[#94A3B8] mt-0.5 mb-2">{tex[cat.descKey]}</div>
               <div className="flex gap-2 flex-wrap">
                 <span className="text-xs font-medium px-2.5 py-1 rounded-full"
                   style={{ background: cat.bg, color: cat.color }}>
@@ -84,7 +59,7 @@ function CategoryContent() {
 
       <button type="button" onClick={() => router.push('/')}
         className="mt-8 text-sm text-[#94A3B8] hover:text-[#2563EB] transition">
-        ← Back
+        {tex.back}
       </button>
     </main>
   );

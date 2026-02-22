@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import { supabase } from '@/lib/supabase';
+import { t } from '@/lib/translations';
 
 function TestContent() {
   const router = useRouter();
@@ -11,6 +12,7 @@ function TestContent() {
   const category = params.get('category') || 'car';
   const lang = params.get('lang') || 'en';
   const langFolder = lang === 'zh' ? 'cn' : lang;
+  const tex = t[lang] || t.en;
 
   const [user, setUser] = useState(null);
   const [questions, setQuestions] = useState([]);
@@ -98,7 +100,7 @@ function TestContent() {
         <div className="flex items-center justify-between mb-5">
           <button type="button" onClick={() => router.push('/category')}
             className="text-sm text-[#94A3B8] hover:text-[#2563EB] transition">
-            ← Back
+            {tex.back}
           </button>
           <span className="text-sm font-medium text-[#94A3B8]">{current + 1} / {total}</span>
         </div>
@@ -141,7 +143,7 @@ function TestContent() {
         {showAnswer && (
           <div className="bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl p-4 mb-5">
             <p className="text-sm text-[#1E40AF] leading-relaxed">
-              ✅ Correct answer: <strong>{q.answers[q.correctAnswerIndex]}</strong>
+              ✅ {tex.correct}: <strong>{q.answers[q.correctAnswerIndex]}</strong>
             </p>
           </div>
         )}
@@ -149,7 +151,7 @@ function TestContent() {
         {showAnswer && !(showUpgradeBanner && !user && current === 19) && (
           <button type="button" onClick={handleNext}
             className="w-full bg-[#2563EB] text-white py-3.5 rounded-xl font-semibold text-base hover:bg-[#1D4ED8] transition-all">
-            {current + 1 < total ? 'Next Question →' : 'See Results →'}
+            {current + 1 < total ? tex.next : tex.seeResults}
           </button>
         )}
 
@@ -159,18 +161,18 @@ function TestContent() {
       {showUpgradeBanner && !user && current === 19 && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
           <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-xl border border-[#E2E8F0] text-center">
-            <h2 className="text-2xl font-bold text-[#0B1C3D] mb-2">🔓 Unlock Full Access</h2>
+            <h2 className="text-2xl font-bold text-[#0B1C3D] mb-2">{tex.upgradeTitle}</h2>
             <p className="text-[#475569] text-sm leading-relaxed mb-4">
-              Join thousands of immigrants who passed their DMV test with DMVSOS
+              {tex.upgradeDesc}
             </p>
             <p className="text-[#2563EB] font-semibold text-sm mb-5">99% pass rate after full preparation</p>
             <ul className="text-left text-sm text-[#475569] space-y-2 mb-6">
               <li>✅ All 40 questions per test</li>
               <li>✅ All 50 states, 3 categories, 4 languages</li>
             </ul>
-            <button onClick={() => router.push('/upgrade')}
+            <button type="button" onClick={() => router.push('/upgrade')}
               className="w-full bg-[#F59E0B] text-[#0B1C3D] py-4 rounded-xl font-bold text-base hover:bg-[#FBBF24] hover:-translate-y-0.5 hover:shadow-lg transition-all mb-3">
-              Upgrade to Pro — $39/mo
+              {tex.upgradeCta}
             </button>
             <button onClick={handleGoogleSignIn}
               className="text-sm text-[#2563EB] hover:underline">
