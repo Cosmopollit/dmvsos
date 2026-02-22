@@ -16,7 +16,7 @@ export default function Home() {
   useEffect(() => {
     const timer = setInterval(() => {
       setActiveStep(prev => prev < 3 ? prev + 1 : 0);
-    }, 1500);
+    }, 2000);
     return () => clearInterval(timer);
   }, []);
 
@@ -75,22 +75,6 @@ export default function Home() {
     return name.toLowerCase().replace(/\s+/g, '-');
   }
 
-  const handleStartAsGuest = () => {
-    const stateCode = stateToSlug(state);
-    if (!stateCode) return;
-    router.push(`/category?state=${stateCode}&lang=${langCode}`);
-  };
-
-  async function handleGoogleSignIn() {
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: window.location.origin,
-        skipBrowserRedirect: false,
-      }
-    })
-  }
-
   async function handleSignOut() {
     await supabase.auth.signOut();
     setUser(null);
@@ -98,12 +82,11 @@ export default function Home() {
 
   const stateEmoji = { 'Washington (WA)': '🏔️', 'California (CA)': '🌴', 'New York (NY)': '🗽', 'Texas (TX)': '🤠', 'Florida (FL)': '🌊' };
   const steps = [
-    { emoji: '📱', label: tex.step1, color: '#3B82F6' },
-    { emoji: '🏛️', label: tex.step2, color: '#8B5CF6' },
-    { emoji: '🚗', label: tex.step3, color: '#10B981' },
-    { emoji: '🌴', label: tex.step4, color: '#F59E0B' },
+    { emoji: '📱', label: tex.step1, msg: tex.stepMsg1, color: '#3B82F6' },
+    { emoji: '🏛️', label: tex.step2, msg: tex.stepMsg2, color: '#8B5CF6' },
+    { emoji: '🪪', label: tex.step3, msg: tex.stepMsg3, color: '#10B981' },
+    { emoji: '🚗', label: tex.step4, msg: tex.stepMsg4, color: '#F59E0B' },
   ];
-  const carPosition = (activeStep / 3) * 100;
 
   return (
     <main style={{ fontFamily: 'DM Sans, sans-serif', background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }} className="min-h-screen flex flex-col items-center py-8 px-4">
@@ -195,151 +178,104 @@ export default function Home() {
           ))}
         </select>
 
-        {user ? (
-          <>
-            <button
-              type="button"
-              onClick={() => { const slug = stateToSlug(state); if (slug) router.push(`/category?state=${slug}&lang=${langCode}`); }}
-              disabled={!state}
-              className={`w-full py-4 rounded-xl font-semibold text-[15px] flex items-center justify-center gap-2 transition-all ${state ? 'btn-pulse' : ''} ${
-                state
-                  ? 'bg-[#2563EB] text-white hover:bg-[#1D4ED8] cursor-pointer'
-                  : 'bg-[#E2E8F0] text-[#94A3B8] cursor-not-allowed'
-              }`}
-            >
-              {tex.startPracticing}
-            </button>
-            {state && (
-              <p className="text-xs text-gray-400 mt-2 text-center">🟢 {liveCount} {tex.practicingNow}</p>
-            )}
-            {!state && (
-              <p className="text-xs text-[#94A3B8] text-center mt-2">{tex.selectStateFirst}</p>
-            )}
-          </>
-        ) : (
-          <>
-            {/* Guest button */}
-            <div className="mb-3">
-              <button
-                onClick={handleStartAsGuest}
-                disabled={!state}
-                className={`w-full py-4 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 transition-all ${
-                  state
-                    ? 'bg-[#0B1C3D] text-white hover:bg-[#132248] hover:-translate-y-px hover:shadow-lg cursor-pointer'
-                    : 'bg-[#E2E8F0] text-[#94A3B8] cursor-not-allowed'
-                }`}
-              >
-                {tex.startAsGuest}
-                <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide ${state ? 'bg-[#FEF3C7] text-[#B45309]' : 'bg-[#CBD5E1] text-[#64748B]'}`}>No signup</span>
-              </button>
-              {state && (
-                <p className="text-xs text-gray-400 mt-2 text-center">🟢 {liveCount} {tex.practicingNow}</p>
-              )}
-              {!state && (
-                <p className="text-xs text-[#94A3B8] text-center mt-2">{tex.selectStateFirst}</p>
-              )}
-            </div>
-
-            {/* Divider */}
-            <div className="flex items-center gap-3 my-6">
-              <div className="flex-1 h-px bg-[#E2E8F0]" />
-              <span className="text-xs text-[#94A3B8] font-medium whitespace-nowrap">{tex.orSaveProgress}</span>
-              <div className="flex-1 h-px bg-[#E2E8F0]" />
-            </div>
-
-            {/* Google */}
-            <button onClick={handleGoogleSignIn} type="button" className="w-full bg-white text-[#1E293B] border-[1.5px] border-[#E2E8F0] py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#F8FAFC] hover:-translate-y-px hover:shadow transition-all">
-              {tex.continueGoogle}
-            </button>
-
-            {/* Apple */}
-            <button type="button" className="w-full bg-black text-white py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 hover:bg-[#1a1a1a] hover:-translate-y-px hover:shadow-lg transition-all">
-              {tex.continueApple}
-            </button>
-
-            {/* Info */}
-            <div className="mt-5 bg-[rgba(26,86,219,0.04)] border border-[rgba(26,86,219,0.12)] rounded-[10px] p-3 flex gap-3">
-              <span className="text-base flex-shrink-0 mt-0.5">💡</span>
-              <p className="text-[12.5px] text-[#475569] leading-relaxed">
-                <span className="text-[#2563EB] font-semibold">Guest mode:</span> Practice right away. Sign in anytime to save your score.
-              </p>
-            </div>
-          </>
+        {/* Single primary CTA */}
+        <button
+          type="button"
+          onClick={() => { const slug = stateToSlug(state); if (slug) router.push(`/category?state=${slug}&lang=${langCode}`); }}
+          disabled={!state}
+          className={`w-full py-4 rounded-xl font-semibold text-[15px] flex items-center justify-center gap-2 transition-all ${state ? 'btn-pulse' : ''} ${
+            state
+              ? 'bg-[#2563EB] text-white hover:bg-[#1D4ED8] cursor-pointer'
+              : 'bg-[#E2E8F0] text-[#94A3B8] cursor-not-allowed'
+          }`}
+        >
+          {state ? tex.oneCtaBtn : tex.selectStateFirst}
+        </button>
+        <p className="text-xs text-gray-400 mt-2 text-center">{tex.noSignupRequired}</p>
+        {state && (
+          <p className="text-xs text-gray-400 mt-0.5 text-center">🟢 {liveCount} {tex.practicingNow}</p>
         )}
+        <button
+          type="button"
+          onClick={() => router.push(`/login?lang=${langCode}`)}
+          className="w-full mt-4 text-xs text-[#94A3B8] hover:text-[#2563EB] transition"
+        >
+          {tex.alreadyHaveAccount}
+        </button>
 
         </div>
       </div>
 
-      {/* How it works - animated steps */}
-      <div className="w-full max-w-lg mx-auto text-center mb-8 px-4">
-        <h2 className="text-xl font-bold text-[#0B1C3D] mb-6">
+      {/* How it works - interactive steps */}
+      <div className="w-full max-w-lg mx-auto mb-8 px-4">
+        <h2 className="text-center text-lg font-bold text-[#0B1C3D] mb-6">
           {tex.howItWorks}
         </h2>
-        <div className="w-full max-w-lg mx-auto mb-8">
-          <div className="flex items-center justify-center gap-3 flex-wrap">
-            {steps.map((step, i) => (
-              <div key={i} className="flex items-center gap-3">
-                <div
-                  className="flex flex-col items-center relative"
-                  style={{
-                    transform: activeStep === i ? 'scale(1.5) translateY(-4px)' : 'scale(1)',
-                    filter: activeStep === i ? 'drop-shadow(0 4px 6px rgba(0,0,0,0.2))' : 'none',
-                    transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                    opacity: activeStep === i ? 1 : 0.4
-                  }}
-                >
-                  <div className="relative flex flex-col items-center" style={{ minWidth: 50, minHeight: 50 }}>
-                    {activeStep === i && (
-                      <div
-                        style={{
-                          position: 'absolute',
-                          width: '50px',
-                          height: '50px',
-                          borderRadius: '50%',
-                          background: steps[activeStep].color,
-                          opacity: 0.15,
-                          filter: 'blur(10px)',
-                          transform: 'translate(-50%, -50%)',
-                          top: '50%',
-                          left: '50%'
-                        }}
-                      />
-                    )}
-                    <span className="text-3xl relative z-10">{step.emoji}</span>
-                  </div>
-                  <span
-                    className="text-xs mt-1 font-medium transition-all duration-500"
-                    style={{ color: activeStep === i ? step.color : '#9CA3AF' }}
-                  >
-                    {step.label}
-                  </span>
-                </div>
-                {i < 3 && (
-                  <span
-                    className="text-gray-300 text-xl transition-all duration-500"
-                    style={{ opacity: activeStep > i ? 1 : 0.3 }}
-                  >
-                    →
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-          {/* Road animation */}
-          <div className="relative mt-4 h-8 bg-gray-100 rounded-full overflow-hidden border border-gray-200">
-            <div className="absolute inset-0 flex items-center px-4 gap-3">
-              {[...Array(8)].map((_, i) => (
-                <div key={i} className="h-0.5 w-6 bg-gray-300 rounded" />
-              ))}
-            </div>
+
+        <div className="grid grid-cols-4 gap-2">
+          {steps.map((step, i) => (
             <div
-              className="absolute top-1 text-xl transition-all duration-700 ease-in-out"
-              style={{ left: `calc(${carPosition}% - 12px)` }}
+              key={i}
+              onClick={() => setActiveStep(i)}
+              className="flex flex-col items-center p-3 rounded-2xl cursor-pointer"
+              style={{
+                background: activeStep === i ? `${step.color}18` : 'white',
+                border: `2px solid ${activeStep === i ? step.color : '#F1F5F9'}`,
+                transform: activeStep === i ? 'translateY(-6px)' : 'translateY(0)',
+                boxShadow: activeStep === i ? `0 8px 20px ${step.color}30` : '0 2px 8px rgba(0,0,0,0.05)',
+                transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+              }}
             >
-              🚗
+              <span
+                className="text-3xl mb-2"
+                style={{
+                  transform: activeStep === i ? 'scale(1.3)' : 'scale(1)',
+                  filter: activeStep === i ? `drop-shadow(0 4px 8px ${step.color}60)` : 'none',
+                  transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                  display: 'block',
+                }}
+              >
+                {step.emoji}
+              </span>
+              <span
+                className="text-xs text-center font-semibold leading-tight"
+                style={{
+                  color: activeStep === i ? step.color : '#94A3B8',
+                  transition: 'color 0.3s'
+                }}
+              >
+                {step.label}
+              </span>
             </div>
-          </div>
+          ))}
         </div>
+
+        <div className="flex justify-center gap-2 mt-5">
+          {steps.map((step, i) => (
+            <div
+              key={i}
+              onClick={() => setActiveStep(i)}
+              className="rounded-full cursor-pointer"
+              style={{
+                width: activeStep === i ? '28px' : '8px',
+                height: '8px',
+                background: activeStep === i ? steps[i].color : '#E2E8F0',
+                transition: 'all 0.4s ease',
+              }}
+            />
+          ))}
+        </div>
+
+        <p
+          className="text-center text-sm font-medium mt-4"
+          style={{
+            color: steps[activeStep].color,
+            transition: 'color 0.3s',
+            minHeight: '20px'
+          }}
+        >
+          {steps[activeStep].msg}
+        </p>
       </div>
 
       {/* Testimonials */}
