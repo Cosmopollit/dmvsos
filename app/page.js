@@ -305,6 +305,18 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+          <div className="bg-white rounded-2xl p-5 shadow-sm">
+            <div className="flex gap-1 mb-2">⭐⭐⭐⭐⭐</div>
+            <p className="text-sm text-[#475569] mb-3">"I was so nervous I was sure I'd fail. But after practicing here every day, I walked into the DOl in Tacoma feeling ready. Passed my written test on the first try!"</p>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center font-bold text-green-600 text-sm">S</div>
+              <div>
+                <div className="text-sm font-semibold text-[#0B1C3D]">Sarah M.</div>
+                <div className="text-xs text-gray-400">Tacoma, WA</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
