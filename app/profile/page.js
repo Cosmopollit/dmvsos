@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 
@@ -19,7 +19,7 @@ function formatDate(createdAt) {
   return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
-export default function Profile() {
+function ProfileContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang') || 'en';
@@ -159,5 +159,13 @@ export default function Profile() {
         <button type="button" onClick={() => router.push('/')} className="mt-6 text-sm text-[#94A3B8] hover:text-[#2563EB] transition">← Back to Home</button>
       </div>
     </main>
+  );
+}
+
+export default function Profile() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ProfileContent />
+    </Suspense>
   );
 }
