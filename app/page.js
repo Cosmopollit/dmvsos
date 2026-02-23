@@ -140,11 +140,11 @@ export default function Home() {
         })()}
       </header>
 
-      {/* Language bar - centered */}
-      <div className="flex flex-wrap gap-2 justify-center mb-6 w-full max-w-lg mx-auto px-4">
+      {/* Language bar - single row, scroll on mobile */}
+      <div className="flex flex-nowrap gap-1.5 justify-center mb-4 overflow-x-auto pb-1 w-full max-w-lg mx-auto px-4">
         {langs.map((l) => (
           <button key={l.name} onClick={() => setLang(l.name)} type="button"
-            className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium border border-[#E2E8F0] transition-all ${
+            className={`shrink-0 text-xs py-1 px-2.5 rounded-full whitespace-nowrap font-medium border border-[#E2E8F0] transition-all ${
               lang === l.name
                 ? 'bg-[#0B1C3D] text-white border-[#0B1C3D]'
                 : 'bg-white text-[#94A3B8] hover:border-[#2563EB] hover:text-[#2563EB]'
@@ -162,7 +162,6 @@ export default function Home() {
         <p className="text-sm text-[#94A3B8] mb-7 leading-relaxed">{tex.heroSub}</p>
 
         {/* State */}
-        <label className="text-xs font-semibold text-[#1E293B] uppercase tracking-widest mb-2 block">{tex.yourState}</label>
         <select
           ref={stateSelectRef}
           value={state}
@@ -189,7 +188,7 @@ export default function Home() {
           }}
           className={`w-full py-4 rounded-xl font-semibold text-[15px] flex items-center justify-center gap-2 transition-all bg-[#2563EB] text-white hover:bg-[#1D4ED8] cursor-pointer ${state ? 'btn-pulse' : ''}`}
         >
-          {state ? tex.oneCtaBtn : tex.chooseStateBtn}
+          {state ? tex.ctaReady : tex.ctaNoState}
         </button>
         <div className="flex flex-wrap gap-2 justify-center mt-3">
           <span className="text-xs text-gray-400">{tex.trust1}</span>
