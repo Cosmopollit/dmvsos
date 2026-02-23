@@ -19,6 +19,8 @@ export default function sitemap() {
     { url: baseUrl, changeFrequency: 'weekly', priority: 1.0 },
     { url: `${baseUrl}/login`, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${baseUrl}/upgrade`, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/terms`, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${baseUrl}/privacy`, changeFrequency: 'yearly', priority: 0.3 },
   ];
 
   const categoryPages = states.map(state => ({
