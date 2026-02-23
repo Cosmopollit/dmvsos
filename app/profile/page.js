@@ -30,15 +30,17 @@ function ProfileContent() {
   const [sessions, setSessions] = useState([]);
 
   useEffect(() => {
-    setTimeout(async () => {
-      const { data } = await supabase.auth.getSession();
+    let cancelled = false;
+    supabase.auth.getSession().then(({ data }) => {
+      if (cancelled) return;
       if (data?.session?.user) {
         setUser(data.session.user);
       } else {
         router.push('/');
       }
       setLoading(false);
-    }, 500);
+    });
+    return () => { cancelled = true; };
   }, []);
 
   useEffect(() => {

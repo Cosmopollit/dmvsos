@@ -133,13 +133,14 @@ function TestContent() {
   );
 
   // Free user: auto-start with 20 questions
-  if (!isPro && !testMode && allQuestions.length) {
-    const sliced = allQuestions.slice(0, 20);
-    // Use a microtask to avoid setting state during render
-    Promise.resolve().then(() => {
-      setQuestions(sliced);
+  useEffect(() => {
+    if (!isPro && isPro !== null && !testMode && allQuestions.length) {
+      setQuestions(allQuestions.slice(0, 20));
       setTestMode('free');
-    });
+    }
+  }, [isPro, testMode, allQuestions]);
+
+  if (!isPro && !testMode && allQuestions.length) {
     return (
       <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
         <div className="text-center">
