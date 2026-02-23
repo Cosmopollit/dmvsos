@@ -20,11 +20,11 @@ function UpgradeContent() {
     setError(false);
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      const headers = { method: 'POST' };
+      const fetchOpts = { method: 'POST' };
       if (session?.access_token) {
-        headers.headers = { 'Authorization': `Bearer ${session.access_token}` };
+        fetchOpts.headers = { 'Authorization': `Bearer ${session.access_token}` };
       }
-      const res = await fetch('/api/create-checkout', headers);
+      const res = await fetch('/api/create-checkout', fetchOpts);
       const data = await res.json();
       if (data?.url) window.location.href = data.url;
       else setError(true);
@@ -96,6 +96,7 @@ function UpgradeContent() {
         </div>
 
         <button
+          type="button"
           onClick={handleSubscribe}
           disabled={loading}
           className="w-full bg-[#F59E0B] text-black font-bold py-4 rounded-xl text-lg hover:bg-[#D97706] transition disabled:opacity-70"
@@ -126,7 +127,7 @@ function UpgradeContent() {
         </div>
       </div>
 
-      <button onClick={() => router.push('/')} className="text-[#94A3B8] text-sm hover:text-white">
+      <button type="button" onClick={() => router.push('/')} className="text-[#94A3B8] text-sm hover:text-white">
         {tex.back}
       </button>
     </main>

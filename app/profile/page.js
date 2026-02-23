@@ -12,7 +12,7 @@ function formatState(s) {
 }
 
 function formatCategory(c) {
-  const map = { car: 'Car', cdl: 'CDL', motorcycle: 'Motorcycle' };
+  const map = { car: 'Car', dmv: 'Car', cdl: 'CDL', motorcycle: 'Motorcycle', moto: 'Motorcycle' };
   return map[c] || c;
 }
 
@@ -33,7 +33,7 @@ function ProfileContent() {
   useEffect(() => {
     if (loading) return;
     if (!user) router.push('/');
-  }, [user, loading]);
+  }, [user, loading, router]);
 
   useEffect(() => {
     if (user) {
