@@ -15,7 +15,9 @@ function TestContent() {
 
   const [user, setUser] = useState(null);
   const [isPro, setIsPro] = useState(false);
+  const [allQuestions, setAllQuestions] = useState([]);
   const [questions, setQuestions] = useState([]);
+  const [testMode, setTestMode] = useState(null); // null = choosing, 'free' | 'real' | 'extended' | 'marathon'
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
   const [userAnswers, setUserAnswers] = useState([]);
@@ -29,9 +31,10 @@ function TestContent() {
   const formatTime = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
 
   useEffect(() => {
+    if (!testMode || testMode === null) return;
     const interval = setInterval(() => setElapsed(e => e + 1), 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [testMode]);
 
   useEffect(() => {
     if (!motivationalMessage) return;
@@ -69,6 +72,7 @@ function TestContent() {
         const raw = sessionStorage.getItem('retryQuestions');
         const data = raw ? JSON.parse(raw) : [];
         setQuestions(Array.isArray(data) ? data : []);
+        setTestMode('retry');
       } catch {
         setQuestions([]);
       }
@@ -86,7 +90,7 @@ function TestContent() {
       .eq('language', lang)
       .then(({ data, error }) => {
         if (error || !data?.length) {
-          setQuestions([]);
+          setAllQuestions([]);
           setLoading(false);
           return;
         }
@@ -98,10 +102,21 @@ function TestContent() {
           imageUrl: null,
         }));
         const shuffled = mapped.sort(() => Math.random() - 0.5);
-        setQuestions(isPro ? shuffled : shuffled.slice(0, 20));
+        setAllQuestions(shuffled);
+        if (!isPro) {
+          setQuestions(shuffled.slice(0, 20));
+          setTestMode('free');
+        }
         setLoading(false);
       });
   }, [state, category, user, isPro, lang, params]);
+
+  function startWithMode(mode) {
+    const limits = { real: 40, extended: 80, marathon: Infinity };
+    const limit = limits[mode] || 40;
+    setQuestions(allQuestions.slice(0, Math.min(limit, allQuestions.length)));
+    setTestMode(mode);
+  }
 
   if (loading) return (
     <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
@@ -112,11 +127,48 @@ function TestContent() {
     </main>
   );
 
-  if (!questions.length) return (
+  if (!loading && !allQuestions.length && !questions.length) return (
     <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
       <p className="text-[#94A3B8]">No questions found.</p>
     </main>
   );
+
+  if (isPro && !testMode) {
+    const totalAvailable = allQuestions.length;
+    const modes = [
+      { id: 'real', icon: '🎯', label: tex.modeReal, desc: tex.modeRealDesc, count: Math.min(40, totalAvailable), color: '#2563EB', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' },
+      { id: 'extended', icon: '📚', label: tex.modeExtended, desc: tex.modeExtendedDesc, count: Math.min(80, totalAvailable), color: '#7C3AED', gradient: 'linear-gradient(135deg, #F5F3FF, #EDE9FE)' },
+      { id: 'marathon', icon: '🏆', label: tex.modeMarathon, desc: tex.modeMarathonDesc, count: totalAvailable, color: '#D97706', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)' },
+    ];
+    return (
+      <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
+        <div className="w-full max-w-md">
+          <button type="button" onClick={() => router.push('/category')}
+            className="text-sm text-[#94A3B8] hover:text-[#2563EB] transition mb-6">
+            {tex.back}
+          </button>
+          <h2 className="text-xl font-bold text-[#1E293B] mb-2">{tex.chooseMode}</h2>
+          <p className="text-sm text-[#94A3B8] mb-6">{totalAvailable} {tex.modeQuestions}</p>
+          <div className="flex flex-col gap-3">
+            {modes.map(m => (
+              <button key={m.id} type="button" onClick={() => startWithMode(m.id)}
+                className="rounded-2xl p-5 flex items-center gap-4 hover:shadow-lg transition-all text-left border-2 border-white/60 shadow-md"
+                style={{ background: m.gradient }}>
+                <span className="text-3xl">{m.icon}</span>
+                <div className="flex-1">
+                  <div className="font-bold text-[#1E293B]">{m.label}</div>
+                  <div className="text-sm text-[#64748B] mt-0.5">{m.desc}</div>
+                </div>
+                <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-white/70" style={{ color: m.color }}>
+                  {m.count}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   const q = questions[current];
   const total = questions.length;
