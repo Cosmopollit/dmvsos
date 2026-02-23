@@ -120,6 +120,14 @@ function TestContent() {
     setTestMode(mode);
   }
 
+  // Free user: auto-start with 20 questions
+  useEffect(() => {
+    if (!isPro && isPro !== null && !testMode && allQuestions.length) {
+      setQuestions(allQuestions.slice(0, 20));
+      setTestMode('free');
+    }
+  }, [isPro, testMode, allQuestions]);
+
   // Wait for both auth and questions to load
   const loading = loadingQuestions || isPro === null;
 
@@ -131,14 +139,6 @@ function TestContent() {
       </div>
     </main>
   );
-
-  // Free user: auto-start with 20 questions
-  useEffect(() => {
-    if (!isPro && isPro !== null && !testMode && allQuestions.length) {
-      setQuestions(allQuestions.slice(0, 20));
-      setTestMode('free');
-    }
-  }, [isPro, testMode, allQuestions]);
 
   if (!isPro && !testMode && allQuestions.length) {
     return (
