@@ -12,6 +12,7 @@ function TestContent() {
   const state = params.get('state') || 'washington';
   const category = params.get('category') || 'car';
   const lang = params.get('lang') || getSavedLang();
+  const isRetry = params.get('retry') === 'true';
   const tex = t[lang] || t.en;
 
   const [isPro, setIsPro] = useState(null); // null = loading, true/false = resolved
@@ -67,7 +68,6 @@ function TestContent() {
 
   // Load questions — does NOT depend on isPro
   useEffect(() => {
-    const isRetry = params.get('retry') === 'true';
     if (isRetry) {
       try {
         const raw = sessionStorage.getItem('retryQuestions');
@@ -110,7 +110,7 @@ function TestContent() {
         setAllQuestions(mapped);
         setLoadingQuestions(false);
       });
-  }, [state, category, lang]);
+  }, [state, category, lang, isRetry]);
 
   function startWithMode(mode) {
     const limits = { real: 40, extended: 80, marathon: Infinity };
@@ -218,6 +218,7 @@ function TestContent() {
     setShowAnswer(true);
     const correct = index === q.correctAnswerIndex;
     if (correct) setScore(s => s + 1);
+    setUserAnswers((prev) => [...prev, index]);
     const arr = correct ? tex.motivationalCorrect : tex.motivationalWrong;
     const msg = arr[Math.floor(Math.random() * arr.length)];
     setMotivationalMessage({ text: msg, phase: 'show' });
@@ -229,13 +230,12 @@ function TestContent() {
       return;
     }
     if (current + 1 < total) {
-      setUserAnswers((prev) => [...prev, selected]);
       setCurrent((c) => c + 1);
       setSelected(null);
       setShowAnswer(false);
     } else {
-      const finalScore = score + (selected === q.correctAnswerIndex ? 1 : 0);
-      const finalUserAnswers = [...userAnswers, selected];
+      const finalScore = userAnswers.reduce((acc, ans, i) => acc + (ans === questions[i].correctAnswerIndex ? 1 : 0), 0);
+      const finalUserAnswers = userAnswers;
       const langParam = new URLSearchParams(window.location.search).get('lang') || 'en';
       sessionStorage.setItem(
         'testResults',
@@ -297,8 +297,8 @@ function TestContent() {
         <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E2E8F0] mb-5">
 
           {q.imageUrl && (
-            <img src={q.imageUrl} alt="Question"
-              className="w-full rounded-xl mb-5 border border-[#E2E8F0]" />
+            <img src={q.imageUrl} alt=""
+              className="w-full rounded-xl mb-5 border border-[#E2E8F0]" loading="lazy" />
           )}
 
           <p className="text-[17px] font-bold text-[#1E293B] leading-relaxed mb-6">

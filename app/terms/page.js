@@ -1,19 +1,16 @@
-'use client';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Terms() {
-  const router = useRouter();
-
   return (
     <main className="min-h-screen bg-[#F8FAFC] py-12 px-4">
       <div className="max-w-2xl mx-auto">
-        <a href="/" className="flex items-center gap-2 mb-8">
+        <Link href="/" className="flex items-center gap-2 mb-8">
           <Image src="/logo.png" alt="DMVSOS" width={36} height={36} className="rounded-xl" />
           <span className="text-xl font-bold text-[#0B1C3D]">
             DMV<span className="text-[#2563EB]">SOS</span>
           </span>
-        </a>
+        </Link>
 
         <div className="bg-white rounded-2xl shadow-sm border border-[#E2E8F0] p-8">
           <h1 className="text-2xl font-bold text-[#0B1C3D] mb-6">Terms of Service</h1>
@@ -110,12 +107,9 @@ export default function Terms() {
           </div>
         </div>
 
-        <button
-          onClick={() => router.push('/')}
-          className="mt-6 text-sm text-[#94A3B8] hover:text-[#2563EB] transition"
-        >
+        <Link href="/" className="inline-block mt-6 text-sm text-[#94A3B8] hover:text-[#2563EB] transition">
           &larr; Back to Home
-        </button>
+        </Link>
       </div>
     </main>
   );

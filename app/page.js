@@ -13,7 +13,7 @@ export default function Home() {
   const [state, setState] = useState('');
   const [user, setUser] = useState(null);
   const [isPro, setIsPro] = useState(false);
-  const [liveCount] = useState(() => Math.floor(Math.random() * 40) + 15);
+  const liveCount = 47;
   const [activeStep, setActiveStep] = useState(0);
   const stateSelectRef = useRef(null);
   const router = useRouter();
@@ -120,7 +120,7 @@ export default function Home() {
           const firstName = raw.split(/\s+/)[0] || raw.split('@')[0] || '?';
           const initial = (raw || '?')[0].toUpperCase();
           return (
-            <div className="absolute top-4 right-4 flex items-center gap-2 bg-white border border-[#E2E8F0] rounded-full pl-1.5 pr-2.5 py-1 shadow-sm">
+            <div className="absolute top-0 right-0 sm:top-4 sm:right-4 flex items-center gap-2 bg-white border border-[#E2E8F0] rounded-full pl-1.5 pr-2.5 py-1 shadow-sm z-10">
               <button
                 type="button"
                 onClick={() => router.push('/profile')}
