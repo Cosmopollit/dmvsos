@@ -3,9 +3,12 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { t } from '@/lib/translations';
+import { getSavedLang, saveLang } from '@/lib/lang';
+
+const codeToName = { en: 'English', ru: 'Русский', es: 'Español', zh: '中文', ua: 'Українська' };
 
 export default function Home() {
-  const [lang, setLang] = useState('English');
+  const [lang, setLang] = useState(() => codeToName[getSavedLang()] || 'English');
   const [state, setState] = useState('');
   const [user, setUser] = useState(null);
   const [isPro, setIsPro] = useState(false);
@@ -143,7 +146,7 @@ export default function Home() {
       {/* Language bar - single row, scroll on mobile */}
       <div className="flex flex-nowrap gap-1.5 justify-center mb-4 overflow-x-auto pb-1 w-full max-w-lg mx-auto px-4">
         {langs.map((l) => (
-          <button key={l.name} onClick={() => setLang(l.name)} type="button"
+          <button key={l.name} onClick={() => { setLang(l.name); saveLang(langToCode[l.name] || 'en'); }} type="button"
             className={`shrink-0 text-xs py-1 px-2.5 rounded-full whitespace-nowrap font-medium border border-[#E2E8F0] transition-all ${
               lang === l.name
                 ? 'bg-[#0B1C3D] text-white border-[#0B1C3D]'

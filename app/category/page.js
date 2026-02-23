@@ -2,6 +2,7 @@
 import { Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { t } from '@/lib/translations';
+import { getSavedLang } from '@/lib/lang';
 
 const categories = [
   { id: 'dmv', icon: '🚗', titleKey: 'catCar', descKey: 'carDesc', questions: 40, time: '25 min', color: '#2563EB', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', badge: null, emojiSize: 'text-6xl' },
@@ -13,7 +14,7 @@ function CategoryContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const state = searchParams.get('state') ?? '';
-  const lang = searchParams.get('lang') || 'en';
+  const lang = searchParams.get('lang') || getSavedLang();
   const tex = t[lang] || t.en;
 
   return (

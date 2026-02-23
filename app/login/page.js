@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { t } from '@/lib/translations';
+import { getSavedLang } from '@/lib/lang';
 
 const GoogleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" className="shrink-0">
@@ -22,7 +23,7 @@ const AppleIcon = () => (
 function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const lang = searchParams.get('lang') || 'en';
+  const lang = searchParams.get('lang') || getSavedLang();
   const tex = t[lang] || t.en;
 
   async function handleGoogleSignIn() {

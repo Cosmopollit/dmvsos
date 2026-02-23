@@ -3,6 +3,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useState, useEffect } from 'react';
 import { t } from '@/lib/translations';
 import { supabase } from '@/lib/supabase';
+import { getSavedLang } from '@/lib/lang';
 
 function ResultContent() {
   const router = useRouter();
@@ -32,7 +33,7 @@ function ResultContent() {
   const elapsed = testResults?.elapsed ?? 0;
   const state = testResults?.state ?? 'washington';
   const category = testResults?.category ?? 'car';
-  const lang = testResults?.lang ?? 'en';
+  const lang = testResults?.lang ?? getSavedLang();
   const wrongQuestions = questions.filter((q, i) => userAnswers[i] !== q.correctAnswerIndex);
   const tex = t[lang] || t.en;
   const formatTime = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
@@ -168,7 +169,7 @@ function ResultContent() {
         {/* Buttons */}
         <button
           type="button"
-          onClick={() => router.push('/category')}
+          onClick={() => router.push(`/category?state=${state}&lang=${lang}`)}
           className="w-full bg-[#2563EB] text-white py-3.5 rounded-xl font-semibold text-base hover:bg-[#1D4ED8] transition-all"
         >
           {tex.tryAgain}

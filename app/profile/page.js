@@ -2,6 +2,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { getSavedLang } from '@/lib/lang';
 
 function formatState(s) {
   if (!s) return '—';
@@ -22,7 +23,7 @@ function formatDate(createdAt) {
 function ProfileContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const lang = searchParams.get('lang') || 'en';
+  const lang = searchParams.get('lang') || getSavedLang();
   const [user, setUser] = useState(null);
   const [isPro, setIsPro] = useState(false);
   const [loading, setLoading] = useState(true);

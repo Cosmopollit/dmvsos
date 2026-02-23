@@ -2,12 +2,12 @@
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { t } from '@/lib/translations';
+import { getSavedLang } from '@/lib/lang';
 
 function UpgradeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const storedLang = typeof window !== 'undefined' ? (() => { try { return JSON.parse(sessionStorage.getItem('testResults') || '{}').lang; } catch { return null; } })() : null;
-  const lang = searchParams.get('lang') || storedLang || 'en';
+  const lang = searchParams.get('lang') || getSavedLang();
   const tex = t[lang] || t.en;
 
   const [loading, setLoading] = useState(false);
@@ -109,7 +109,7 @@ function UpgradeContent() {
         </div>
       </div>
 
-      <button onClick={() => router.back()} className="text-[#94A3B8] text-sm hover:text-white">
+      <button onClick={() => router.push('/')} className="text-[#94A3B8] text-sm hover:text-white">
         {tex.back}
       </button>
     </main>

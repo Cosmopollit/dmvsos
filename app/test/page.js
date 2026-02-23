@@ -4,13 +4,14 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import { supabase } from '@/lib/supabase';
 import { t } from '@/lib/translations';
+import { getSavedLang } from '@/lib/lang';
 
 function TestContent() {
   const router = useRouter();
   const params = useSearchParams();
   const state = params.get('state') || 'washington';
   const category = params.get('category') || 'car';
-  const lang = params.get('lang') || 'en';
+  const lang = params.get('lang') || getSavedLang();
   const tex = t[lang] || t.en;
 
   const [isPro, setIsPro] = useState(null); // null = loading, true/false = resolved
@@ -244,7 +245,7 @@ function TestContent() {
           total,
         });
       }
-      router.push(`/result?score=${finalScore}&total=${total}`);
+      router.push(`/result?score=${finalScore}&total=${total}&lang=${lang}`);
     }
   }
 
@@ -263,7 +264,7 @@ function TestContent() {
 
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2">
-            <button type="button" onClick={() => router.push('/category')}
+            <button type="button" onClick={() => router.push(`/category?state=${state}&lang=${lang}`)}
               className="text-sm text-[#94A3B8] hover:text-[#2563EB] transition">
               {tex.back}
             </button>
