@@ -52,7 +52,8 @@ function ProfileContent() {
       .select('is_pro')
       .eq('email', user.email)
       .single()
-      .then(({ data: profile }) => setIsPro(profile?.is_pro ?? false));
+      .then(({ data: profile }) => setIsPro(profile?.is_pro ?? false))
+      .catch(() => setIsPro(false));
   }, [user?.email]);
 
   useEffect(() => {
@@ -63,7 +64,8 @@ function ProfileContent() {
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(10)
-        .then(({ data }) => setSessions(data || []));
+        .then(({ data }) => setSessions(data || []))
+        .catch(() => setSessions([]));
     }
   }, [user]);
 
@@ -169,7 +171,7 @@ function ProfileContent() {
 
 export default function Profile() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center"><div className="w-6 h-6 border-2 border-[#94A3B8] border-t-transparent rounded-full animate-spin" /></main>}>
       <ProfileContent />
     </Suspense>
   );

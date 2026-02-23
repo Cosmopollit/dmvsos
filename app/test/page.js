@@ -62,7 +62,7 @@ function TestContent() {
         .eq('email', u.email)
         .single();
       setIsPro(profile?.is_pro ?? false);
-    });
+    }).catch(() => setIsPro(false));
   }, []);
 
   // Load questions — does NOT depend on isPro

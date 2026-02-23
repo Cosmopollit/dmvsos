@@ -47,7 +47,8 @@ export default function Home() {
       .select('is_pro')
       .eq('email', user.email)
       .single()
-      .then(({ data: profile }) => setIsPro(profile?.is_pro ?? false));
+      .then(({ data: profile }) => setIsPro(profile?.is_pro ?? false))
+      .catch(() => setIsPro(false));
   }, [user?.email]);
 
   const langs = [

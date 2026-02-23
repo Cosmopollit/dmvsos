@@ -15,7 +15,7 @@ function ResultContent() {
 
   const [user, setUser] = useState(null);
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setUser(data.session?.user));
+    supabase.auth.getSession().then(({ data }) => setUser(data.session?.user)).catch(() => {});
   }, []);
 
   const [testResults, setTestResults] = useState(null);
@@ -200,7 +200,7 @@ function ResultContent() {
 
 export default function Result() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">Loading…</div>}>
+    <Suspense fallback={<main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center"><div className="w-6 h-6 border-2 border-[#94A3B8] border-t-transparent rounded-full animate-spin" /></main>}>
       <ResultContent />
     </Suspense>
   );

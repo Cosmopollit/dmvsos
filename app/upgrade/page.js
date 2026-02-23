@@ -12,13 +12,18 @@ function UpgradeContent() {
   const tex = t[lang] || t.en;
 
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   async function handleSubscribe() {
     setLoading(true);
+    setError(false);
     try {
       const res = await fetch('/api/create-checkout', { method: 'POST' });
       const data = await res.json();
       if (data?.url) window.location.href = data.url;
+      else setError(true);
+    } catch {
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -92,6 +97,11 @@ function UpgradeContent() {
           {loading ? '…' : (tex.upgradeCta || '🚗 Get Pro Access — $9.99/mo')}
         </button>
 
+        {error && (
+          <p className="text-center text-xs text-red-500 font-medium mt-3">
+            {tex.checkoutError || 'Something went wrong. Please try again.'}
+          </p>
+        )}
         <p className="text-center text-xs text-gray-400 mt-3">
           {tex.upgradeCancel}
         </p>
@@ -119,7 +129,7 @@ function UpgradeContent() {
 
 export default function Upgrade() {
   return (
-    <Suspense fallback={<main className="min-h-screen bg-[#0B1C3D] flex items-center justify-center"><p className="text-[#94A3B8]">Loading…</p></main>}>
+    <Suspense fallback={<main className="min-h-screen bg-[#0B1C3D] flex items-center justify-center"><div className="w-6 h-6 border-2 border-[#94A3B8] border-t-transparent rounded-full animate-spin" /></main>}>
       <UpgradeContent />
     </Suspense>
   );
