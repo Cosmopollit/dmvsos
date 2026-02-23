@@ -84,9 +84,9 @@ export default function Home() {
       <header className="relative w-full max-w-lg mx-auto mb-6 px-4">
         <div className="flex flex-col items-center text-center">
           <a href="/" className="cursor-pointer hover:opacity-90 transition">
-            <Image src="/logo.png" alt="DMVSOS" width={48} height={48} className="rounded-xl mx-auto mb-1" />
-            <div className="text-[22px] sm:text-[26px] font-bold text-[#0B1C3D] tracking-tight">
-              DMV<span className="text-[#2563EB]">SOS</span>
+            <Image src="/logo.png" alt="DMVSOS" width={40} height={40} className="rounded-xl mx-auto mb-1" />
+            <div className="text-[22px] sm:text-[26px] font-black text-[#0B1C3D] tracking-tight">
+              DMVSOS
             </div>
             <p className="text-sm text-[#94A3B8]">{tex.slogan}</p>
           </a>
@@ -140,8 +140,7 @@ export default function Home() {
       <div id="state-selector" className="w-full max-w-lg mx-auto px-4 mb-8">
         <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 border border-[#E2E8F0]/40" style={{ borderTop: '4px solid #2563EB' }}>
 
-        <h2 className="text-[22px] font-bold text-[#1E293B] mb-1">{tex.heroTitle}</h2>
-        <p className="text-sm text-[#94A3B8] mb-7 leading-relaxed">{tex.heroSub}</p>
+        <p className="text-sm text-[#94A3B8] mb-5">{tex.selectStateLabel}</p>
 
         {/* State */}
         <select

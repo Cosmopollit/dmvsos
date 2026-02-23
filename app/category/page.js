@@ -23,8 +23,8 @@ function CategoryContent() {
         ✕
       </button>
       <div className="text-center mb-8">
-        <span className="text-2xl font-bold text-[#0B1C3D]">
-          DMV<span className="text-[#2563EB]">SOS</span>
+        <span className="text-2xl font-black text-[#0B1C3D] tracking-tight">
+          DMVSOS
         </span>
         <h2 className="text-xl font-bold text-[#1E293B] mt-4 mb-1">{tex.chooseTest}</h2>
         <p className="text-sm text-[#94A3B8]">{tex.selectLicense}</p>
