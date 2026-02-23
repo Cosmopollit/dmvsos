@@ -3,6 +3,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useState, useEffect } from 'react';
 import { t } from '@/lib/translations';
 import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/lib/AuthContext';
 import { getSavedLang } from '@/lib/lang';
 
 function ResultContent() {
@@ -13,10 +14,7 @@ function ResultContent() {
   const percent = Math.round((score / total) * 100);
   const passed = total > 0 && score / total >= 0.7;
 
-  const [user, setUser] = useState(null);
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setUser(data.session?.user)).catch(() => {});
-  }, []);
+  const { user } = useAuth();
 
   const [testResults, setTestResults] = useState(null);
   useEffect(() => {

@@ -2,6 +2,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
 import { getSavedLang } from '@/lib/lang';
 
@@ -26,35 +27,13 @@ function ProfileContent() {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang') || getSavedLang();
   const tex = t[lang] || t.en;
-  const [user, setUser] = useState(null);
-  const [isPro, setIsPro] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { user, isPro, loading } = useAuth();
   const [sessions, setSessions] = useState([]);
 
   useEffect(() => {
-    let cancelled = false;
-    supabase.auth.getSession().then(({ data }) => {
-      if (cancelled) return;
-      if (data?.session?.user) {
-        setUser(data.session.user);
-      } else {
-        router.push('/');
-      }
-      setLoading(false);
-    });
-    return () => { cancelled = true; };
-  }, []);
-
-  useEffect(() => {
-    if (!user?.email) return;
-    supabase
-      .from('profiles')
-      .select('is_pro')
-      .eq('email', user.email)
-      .single()
-      .then(({ data: profile }) => setIsPro(profile?.is_pro ?? false))
-      .catch(() => setIsPro(false));
-  }, [user?.email]);
+    if (loading) return;
+    if (!user) router.push('/');
+  }, [user, loading]);
 
   useEffect(() => {
     if (user) {

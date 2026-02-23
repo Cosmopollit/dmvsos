@@ -3,16 +3,16 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 
 const codeToName = { en: 'English', ru: 'Русский', es: 'Español', zh: '中文', ua: 'Українська' };
 
 export default function Home() {
+  const { user, isPro } = useAuth();
   const [lang, setLang] = useState(() => codeToName[getSavedLang()] || 'English');
   const [state, setState] = useState('');
-  const [user, setUser] = useState(null);
-  const [isPro, setIsPro] = useState(false);
   const liveCount = 47;
   const [activeStep, setActiveStep] = useState(0);
   const stateSelectRef = useRef(null);
@@ -28,29 +28,6 @@ export default function Home() {
   const langToCode = { English: 'en', 'Русский': 'ru', 'Español': 'es', '中文': 'zh', 'Українська': 'ua' };
   const langCode = langToCode[lang] || 'en';
   const tex = t[langCode] || t.en;
-
-  useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session?.user) {
-        setUser(session.user);
-      } else {
-        setUser(null);
-        setIsPro(false);
-      }
-    });
-    return () => subscription?.unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    if (!user?.email) return;
-    supabase
-      .from('profiles')
-      .select('is_pro')
-      .eq('email', user.email)
-      .single()
-      .then(({ data: profile }) => setIsPro(profile?.is_pro ?? false))
-      .catch(() => setIsPro(false));
-  }, [user?.email]);
 
   const langs = [
     { flag: '🇺🇸', name: 'English' },
@@ -84,7 +61,6 @@ export default function Home() {
 
   async function handleSignOut() {
     await supabase.auth.signOut();
-    setUser(null);
   }
 
   const stateOptions = states.map((display) => ({ name: display, code: stateToSlug(display) }));

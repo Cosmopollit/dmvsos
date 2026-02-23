@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
 import { getSavedLang } from '@/lib/lang';
 
@@ -15,7 +16,7 @@ function TestContent() {
   const isRetry = params.get('retry') === 'true';
   const tex = t[lang] || t.en;
 
-  const [isPro, setIsPro] = useState(null); // null = loading, true/false = resolved
+  const { isPro, loading: authLoading } = useAuth();
   const [allQuestions, setAllQuestions] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [testMode, setTestMode] = useState(null); // null = not started, 'free' | 'real' | 'extended' | 'marathon'
@@ -48,23 +49,6 @@ function TestContent() {
       return () => clearTimeout(t);
     }
   }, [motivationalMessage]);
-
-  // Auth check — runs once
-  useEffect(() => {
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      const u = session?.user ?? null;
-      if (!u?.email) {
-        setIsPro(false);
-        return;
-      }
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('is_pro')
-        .eq('email', u.email)
-        .single();
-      setIsPro(profile?.is_pro ?? false);
-    }).catch(() => setIsPro(false));
-  }, []);
 
   // Load questions — does NOT depend on isPro
   useEffect(() => {
@@ -127,14 +111,14 @@ function TestContent() {
 
   // Free user: auto-start with 20 questions
   useEffect(() => {
-    if (!isPro && isPro !== null && !testMode && allQuestions.length) {
+    if (!isPro && !authLoading && !testMode && allQuestions.length) {
       setQuestions(allQuestions.slice(0, 20));
       setTestMode('free');
     }
-  }, [isPro, testMode, allQuestions]);
+  }, [isPro, authLoading, testMode, allQuestions]);
 
   // Wait for both auth and questions to load
-  const loading = loadingQuestions || isPro === null;
+  const loading = loadingQuestions || authLoading;
 
   if (loading) return (
     <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
@@ -255,14 +239,24 @@ function TestContent() {
     }
   }
 
-  async function handleGoogleSignIn() {
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}${window.location.pathname}${window.location.search}`
+  // Keyboard shortcuts: 1-4 to select answer, Enter/Space to advance
+  useEffect(() => {
+    function onKeyDown(e) {
+      if (showUpgradeBanner) return;
+      const key = e.key;
+      if (!showAnswer && ['1', '2', '3', '4'].includes(key)) {
+        const idx = parseInt(key) - 1;
+        if (idx < (questions[current]?.answers?.length || 0)) {
+          handleSelect(idx);
+        }
+      } else if (showAnswer && (key === 'Enter' || key === ' ')) {
+        e.preventDefault();
+        handleNext();
       }
-    });
-  }
+    }
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  });
 
   return (
     <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
@@ -364,9 +358,9 @@ function TestContent() {
               className="w-full bg-[#F59E0B] text-[#0B1C3D] py-4 rounded-xl font-bold text-base hover:bg-[#FBBF24] hover:-translate-y-0.5 hover:shadow-lg transition-all mb-3">
               {tex.upgradeCta}
             </button>
-            <button onClick={handleGoogleSignIn}
-              className="text-sm text-[#2563EB] hover:underline">
-              {tex.continueGoogle}
+            <button type="button" onClick={() => router.push(`/result?score=${score}&total=${questions.length}&lang=${lang}`)}
+              className="text-sm text-[#94A3B8] hover:text-[#64748B] transition">
+              {tex.seeResults}
             </button>
           </div>
         </div>
