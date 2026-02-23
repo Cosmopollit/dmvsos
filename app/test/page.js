@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import { supabase } from '@/lib/supabase';
@@ -124,6 +124,29 @@ function TestContent() {
     }
   }, [isPro, authLoading, testMode, allQuestions]);
 
+  // Keyboard shortcuts: 1-4 to select answer, Enter/Space to advance
+  // Must be before early returns to satisfy Rules of Hooks
+  const handleSelectRef = useRef(null);
+  const handleNextRef = useRef(null);
+  useEffect(() => {
+    if (!testMode || !questions.length) return;
+    function onKeyDown(e) {
+      if (showUpgradeBanner) return;
+      const key = e.key;
+      if (!showAnswer && ['1', '2', '3', '4'].includes(key)) {
+        const idx = parseInt(key) - 1;
+        if (idx < (questions[current]?.answers?.length || 0)) {
+          handleSelectRef.current?.(idx);
+        }
+      } else if (showAnswer && (key === 'Enter' || key === ' ')) {
+        e.preventDefault();
+        handleNextRef.current?.();
+      }
+    }
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  });
+
   // Wait for both auth and questions to load
   const loading = loadingQuestions || authLoading;
 
@@ -222,6 +245,8 @@ function TestContent() {
     setMotivationalMessage({ text: msg, phase: 'show' });
   }
 
+  handleSelectRef.current = handleSelect;
+
   async function handleNext() {
     if (!isPro && total === 20 && current === 19) {
       setShowUpgradeBanner(true);
@@ -252,25 +277,7 @@ function TestContent() {
       router.push(`/result?score=${finalScore}&total=${total}&lang=${lang}`);
     }
   }
-
-  // Keyboard shortcuts: 1-4 to select answer, Enter/Space to advance
-  useEffect(() => {
-    function onKeyDown(e) {
-      if (showUpgradeBanner) return;
-      const key = e.key;
-      if (!showAnswer && ['1', '2', '3', '4'].includes(key)) {
-        const idx = parseInt(key) - 1;
-        if (idx < (questions[current]?.answers?.length || 0)) {
-          handleSelect(idx);
-        }
-      } else if (showAnswer && (key === 'Enter' || key === ' ')) {
-        e.preventDefault();
-        handleNext();
-      }
-    }
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  });
+  handleNextRef.current = handleNext;
 
   return (
     <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
