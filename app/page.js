@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
 import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
@@ -105,7 +106,7 @@ export default function Home() {
       <header className="relative w-full max-w-lg mx-auto mb-6 px-4">
         <div className="flex flex-col items-center text-center">
           <a href="/" className="cursor-pointer hover:opacity-90 transition">
-            <img src="/logo.png" alt="DMVSOS" className="w-12 h-12 rounded-xl mx-auto mb-1" />
+            <Image src="/logo.png" alt="DMVSOS" width={48} height={48} className="rounded-xl mx-auto mb-1" />
             <div className="text-[22px] sm:text-[26px] font-bold text-[#0B1C3D] tracking-tight">
               DMV<span className="text-[#2563EB]">SOS</span>
             </div>

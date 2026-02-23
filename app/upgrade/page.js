@@ -1,6 +1,7 @@
 'use client';
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import { t } from '@/lib/translations';
 import { getSavedLang } from '@/lib/lang';
 
@@ -31,7 +32,7 @@ function UpgradeContent() {
       {/* Logo */}
       <a href="/" className="inline-block">
         <div className="flex items-center gap-3 mb-8 cursor-pointer hover:opacity-80">
-          <img src="/logo.png" alt="DMVSOS" className="w-10 h-10 rounded-xl" />
+          <Image src="/logo.png" alt="DMVSOS" width={40} height={40} className="rounded-xl" />
           <span className="text-2xl font-bold text-white">DMV<span className="text-[#F59E0B]">SOS</span></span>
         </div>
       </a>

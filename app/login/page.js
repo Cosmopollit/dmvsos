@@ -1,6 +1,7 @@
 'use client';
 import { Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
 import { t } from '@/lib/translations';
 import { getSavedLang } from '@/lib/lang';
@@ -40,7 +41,7 @@ function LoginContent() {
     <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
       <div className="w-full max-w-sm bg-white rounded-2xl shadow-lg border border-[#E2E8F0] p-8">
         <a href="/" className="flex items-center gap-2 justify-center mb-6">
-          <img src="/logo.png" alt="DMVSOS" className="w-10 h-10 rounded-xl" />
+          <Image src="/logo.png" alt="DMVSOS" width={40} height={40} className="rounded-xl" />
           <span className="text-xl font-bold text-[#0B1C3D]">
             DMV<span className="text-[#2563EB]">SOS</span>
           </span>

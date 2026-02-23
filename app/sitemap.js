@@ -12,23 +12,31 @@ export default function sitemap() {
     'virginia', 'washington', 'west-virginia', 'wisconsin', 'wyoming'
   ];
 
+  const categories = ['dmv', 'cdl', 'moto'];
   const baseUrl = 'https://dmvsos.com';
 
   const staticPages = [
-    { url: baseUrl, priority: 1.0 },
-    { url: `${baseUrl}/category`, priority: 0.8 },
-    { url: `${baseUrl}/upgrade`, priority: 0.9 },
+    { url: baseUrl, changeFrequency: 'weekly', priority: 1.0 },
+    { url: `${baseUrl}/login`, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${baseUrl}/upgrade`, changeFrequency: 'monthly', priority: 0.8 },
   ];
 
-  const statePages = states.map(state => ({
-    url: `${baseUrl}/test?state=${state}&category=dmv`,
-    priority: 0.7,
+  const categoryPages = states.map(state => ({
+    url: `${baseUrl}/category?state=${state}`,
+    changeFrequency: 'monthly',
+    priority: 0.8,
   }));
 
-  return [...staticPages, ...statePages].map(page => ({
-    url: page.url,
+  const testPages = states.flatMap(state =>
+    categories.map(cat => ({
+      url: `${baseUrl}/test?state=${state}&category=${cat}`,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    }))
+  );
+
+  return [...staticPages, ...categoryPages, ...testPages].map(page => ({
+    ...page,
     lastModified: new Date(),
-    changeFrequency: 'monthly',
-    priority: page.priority,
   }));
 }
