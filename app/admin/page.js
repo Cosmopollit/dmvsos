@@ -3,8 +3,6 @@
 import { useState, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 
-const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'changeme';
-
 const STATE_OPTIONS = [
   'Alabama (AL)', 'Alaska (AK)', 'Arizona (AZ)', 'Arkansas (AR)',
   'California (CA)', 'Colorado (CO)', 'Connecticut (CT)', 'Delaware (DE)',
@@ -59,12 +57,21 @@ export default function AdminPage() {
   const fileInputRefs = useRef({});
   const csvInputRef = useRef(null);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (password === ADMIN_PASSWORD) {
-      setAuthenticated(true);
-      setPasswordError(false);
-    } else {
+    try {
+      const res = await fetch('/api/admin-auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+      if (res.ok) {
+        setAuthenticated(true);
+        setPasswordError(false);
+      } else {
+        setPasswordError(true);
+      }
+    } catch {
       setPasswordError(true);
     }
   };

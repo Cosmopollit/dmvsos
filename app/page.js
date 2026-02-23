@@ -30,7 +30,7 @@ export default function Home() {
   const tex = t[langCode] || t.en;
 
   useEffect(() => {
-    supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
         setUser(session.user);
       } else {
@@ -38,6 +38,7 @@ export default function Home() {
         setIsPro(false);
       }
     });
+    return () => subscription?.unsubscribe();
   }, []);
 
   useEffect(() => {

@@ -31,7 +31,7 @@ export default function Success() {
             {tex.welcomePro || 'Welcome to DMVSOS Pro! You now have access to all tests.'}
           </p>
 
-          <button onClick={() => router.push(`/category?lang=${lang}`)}
+          <button onClick={() => router.push(`/?lang=${lang}`)}
             className="w-full bg-[#2563EB] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#1D4ED8] hover:-translate-y-0.5 hover:shadow-lg transition-all mb-3">
             {tex.startPracticing || 'Start practicing'}
           </button>

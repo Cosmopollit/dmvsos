@@ -2,6 +2,7 @@
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
+import { supabase } from '@/lib/supabase';
 import { t } from '@/lib/translations';
 import { getSavedLang } from '@/lib/lang';
 
@@ -18,7 +19,12 @@ function UpgradeContent() {
     setLoading(true);
     setError(false);
     try {
-      const res = await fetch('/api/create-checkout', { method: 'POST' });
+      const { data: { session } } = await supabase.auth.getSession();
+      const headers = { method: 'POST' };
+      if (session?.access_token) {
+        headers.headers = { 'Authorization': `Bearer ${session.access_token}` };
+      }
+      const res = await fetch('/api/create-checkout', headers);
       const data = await res.json();
       if (data?.url) window.location.href = data.url;
       else setError(true);
