@@ -13,19 +13,18 @@ function TestContent() {
   const lang = params.get('lang') || 'en';
   const tex = t[lang] || t.en;
 
-  const [user, setUser] = useState(null);
-  const [isPro, setIsPro] = useState(false);
+  const [isPro, setIsPro] = useState(null); // null = loading, true/false = resolved
   const [allQuestions, setAllQuestions] = useState([]);
   const [questions, setQuestions] = useState([]);
-  const [testMode, setTestMode] = useState(null); // null = choosing, 'free' | 'real' | 'extended' | 'marathon'
+  const [testMode, setTestMode] = useState(null); // null = not started, 'free' | 'real' | 'extended' | 'marathon'
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
   const [userAnswers, setUserAnswers] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
   const [score, setScore] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loadingQuestions, setLoadingQuestions] = useState(true);
   const [showUpgradeBanner, setShowUpgradeBanner] = useState(false);
-  const [motivationalMessage, setMotivationalMessage] = useState(null); // { text, phase: 'show'|'fade' }
+  const [motivationalMessage, setMotivationalMessage] = useState(null);
   const [elapsed, setElapsed] = useState(0);
 
   const formatTime = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
@@ -48,10 +47,10 @@ function TestContent() {
     }
   }, [motivationalMessage]);
 
+  // Auth check — runs once
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       const u = session?.user ?? null;
-      setUser(u);
       if (!u?.email) {
         setIsPro(false);
         return;
@@ -65,6 +64,7 @@ function TestContent() {
     });
   }, []);
 
+  // Load questions — does NOT depend on isPro
   useEffect(() => {
     const isRetry = params.get('retry') === 'true';
     if (isRetry) {
@@ -76,20 +76,10 @@ function TestContent() {
       } catch {
         setQuestions([]);
       }
-      setLoading(false);
+      setLoadingQuestions(false);
       return;
     }
-    // Reset state on every run to avoid stale data
-    setTestMode(null);
-    setQuestions([]);
-    setAllQuestions([]);
-    setCurrent(0);
-    setScore(0);
-    setUserAnswers([]);
-    setSelected(null);
-    setShowAnswer(false);
-    setElapsed(0);
-    setLoading(true);
+    setLoadingQuestions(true);
     const categoryMap = { dmv: 'car', cdl: 'cdl', moto: 'motorcycle' };
     const mappedCategory = categoryMap[category] || category;
     supabase
@@ -101,7 +91,7 @@ function TestContent() {
       .then(({ data, error }) => {
         if (error || !data?.length) {
           setAllQuestions([]);
-          setLoading(false);
+          setLoadingQuestions(false);
           return;
         }
         const strip = s => (s || '').replace(/^[A-DА-Га-гa-d]\.\s*/, '').trim();
@@ -111,24 +101,26 @@ function TestContent() {
           correctAnswerIndex: row.correct_answer,
           imageUrl: null,
         }));
-        const shuffled = mapped.sort(() => Math.random() - 0.5);
-        setAllQuestions(shuffled);
-        if (isPro) {
-          // Pro users will see mode selector (testMode stays null)
-        } else {
-          setQuestions(shuffled.slice(0, 20));
-          setTestMode('free');
-        }
-        setLoading(false);
+        setAllQuestions(mapped.sort(() => Math.random() - 0.5));
+        setLoadingQuestions(false);
       });
-  }, [state, category, isPro, lang]);
+  }, [state, category, lang]);
 
   function startWithMode(mode) {
     const limits = { real: 40, extended: 80, marathon: Infinity };
     const limit = limits[mode] || 40;
     setQuestions(allQuestions.slice(0, Math.min(limit, allQuestions.length)));
+    setCurrent(0);
+    setScore(0);
+    setUserAnswers([]);
+    setSelected(null);
+    setShowAnswer(false);
+    setElapsed(0);
     setTestMode(mode);
   }
+
+  // Wait for both auth and questions to load
+  const loading = loadingQuestions || isPro === null;
 
   if (loading) return (
     <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
@@ -139,6 +131,25 @@ function TestContent() {
     </main>
   );
 
+  // Free user: auto-start with 20 questions
+  if (!isPro && !testMode && allQuestions.length) {
+    const sliced = allQuestions.slice(0, 20);
+    // Use a microtask to avoid setting state during render
+    Promise.resolve().then(() => {
+      setQuestions(sliced);
+      setTestMode('free');
+    });
+    return (
+      <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-4xl mb-4">⏳</div>
+          <p className="text-[#94A3B8]">Loading questions...</p>
+        </div>
+      </main>
+    );
+  }
+
+  // Pro user: show mode selector
   if (isPro && !testMode && allQuestions.length) {
     const totalAvailable = allQuestions.length;
     const modes = [
