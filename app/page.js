@@ -174,27 +174,40 @@ export default function Home() {
           ))}
         </select>
 
-        {/* Single primary CTA - always blue */}
-        <button
-          type="button"
-          onClick={() => {
-            if (state) {
-              const slug = stateToSlug(state);
-              if (slug) router.push(`/category?state=${slug}&lang=${langCode}`);
-            } else {
-              document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' });
-              stateSelectRef.current?.focus();
-            }
-          }}
-          className={`w-full py-4 rounded-xl font-semibold text-[15px] flex items-center justify-center gap-2 transition-all bg-[#2563EB] text-white hover:bg-[#1D4ED8] cursor-pointer ${state ? 'btn-pulse' : ''}`}
-        >
-          {state ? tex.ctaReady : tex.ctaNoState}
-        </button>
-        <div className="flex flex-wrap gap-2 justify-center mt-3">
-          <span className="text-xs text-gray-400">{tex.trust1}</span>
-          <span className="text-xs text-gray-400">{tex.trust2}</span>
-          <span className="text-xs text-gray-400">{tex.trust3}</span>
-        </div>
+        {/* Single primary CTA - blue by default, amber for Pro when state selected */}
+        {(() => {
+          const isProWithState = user && isPro && state;
+          const buttonLabel = !state ? tex.ctaNoState : (isProWithState ? tex.ctaProReady : tex.ctaReady);
+          const isAmber = isProWithState;
+          return (
+            <>
+              <button
+                type="button"
+                onClick={() => {
+                  if (state) {
+                    const slug = stateToSlug(state);
+                    if (slug) router.push(`/category?state=${slug}&lang=${langCode}`);
+                  } else {
+                    document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' });
+                    stateSelectRef.current?.focus();
+                  }
+                }}
+                className={`w-full py-4 rounded-xl font-semibold text-[15px] flex items-center justify-center gap-2 transition-all text-white cursor-pointer ${state ? 'btn-pulse' : ''} ${isAmber ? 'bg-[#F59E0B] hover:bg-[#D97706]' : 'bg-[#2563EB] hover:bg-[#1D4ED8]'}`}
+              >
+                {buttonLabel}
+              </button>
+              {isPro && state ? (
+                <p className="text-xs text-center mt-3 text-[#B45309] font-medium">{tex.proActive}</p>
+              ) : (
+                <div className="flex flex-wrap gap-2 justify-center mt-3">
+                  <span className="text-xs text-gray-400">{tex.trust1}</span>
+                  <span className="text-xs text-gray-400">{tex.trust2}</span>
+                  <span className="text-xs text-gray-400">{tex.trust3}</span>
+                </div>
+              )}
+            </>
+          );
+        })()}
         {state && (
           <p className="text-xs text-gray-400 mt-2 text-center">🟢 {liveCount} {tex.practicingNow}</p>
         )}
