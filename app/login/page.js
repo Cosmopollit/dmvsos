@@ -46,7 +46,7 @@ function LoginContent() {
           </span>
         </a>
         <h1 className="text-lg font-bold text-[#1E293B] text-center mb-2">{tex.signInTitle}</h1>
-        <p className="text-sm text-[#94A3B8] text-center mb-6">Save your progress and access all tests</p>
+        <p className="text-sm text-[#94A3B8] text-center mb-6">{tex.signInSubtitle || 'Save your progress and access all tests'}</p>
         <button
           onClick={handleGoogleSignIn}
           type="button"
@@ -57,10 +57,12 @@ function LoginContent() {
         </button>
         <button
           type="button"
-          className="w-full bg-black text-white py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 hover:bg-[#1a1a1a] transition-all"
+          className="w-full bg-black text-white py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 opacity-40 cursor-not-allowed transition-all"
+          disabled
         >
           <AppleIcon />
           {tex.continueApple}
+          <span className="text-xs opacity-70">{tex.comingSoon || 'Coming soon'}</span>
         </button>
         <button
           type="button"

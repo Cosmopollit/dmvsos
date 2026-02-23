@@ -2,6 +2,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { t } from '@/lib/translations';
 import { getSavedLang } from '@/lib/lang';
 
 function formatState(s) {
@@ -24,6 +25,7 @@ function ProfileContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang') || getSavedLang();
+  const tex = t[lang] || t.en;
   const [user, setUser] = useState(null);
   const [isPro, setIsPro] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -83,28 +85,28 @@ function ProfileContent() {
           <h2 className="text-xl font-bold text-[#1E293B] mb-1">{user.user_metadata?.full_name || 'User'}</h2>
           <p className="text-sm text-[#94A3B8] mb-5">{user.email}</p>
           <span className={`inline-block text-xs font-bold px-3 py-1.5 rounded-full mb-6 ${isPro ? 'bg-[#FEF3C7] text-[#B45309]' : 'bg-[#EFF6FF] text-[#2563EB]'}`}>
-            {isPro ? '👑 PRO PLAN' : 'FREE PLAN'}
+            {isPro ? '👑 PRO' : 'FREE'}
           </span>
           {isPro && (
-            <p className="text-sm text-[#16A34A] font-medium mb-4">✅ You have full access to all tests</p>
+            <p className="text-sm text-[#16A34A] font-medium mb-4">{tex.proFullAccess || '✅ You have full access to all tests'}</p>
           )}
           <div className="flex flex-col gap-3">
             {!isPro && (
               <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}`)}
                 className="w-full bg-[#F59E0B] text-[#0B1C3D] py-3.5 rounded-xl font-semibold text-sm hover:bg-[#FBBF24] transition border-0">
-                Upgrade to Pro — $9.99/mo
+                {tex.upgradeCta}
               </button>
             )}
             <button type="button" onClick={async () => { await supabase.auth.signOut(); router.push('/'); }}
               className="w-full bg-white border border-[#E2E8F0] text-[#1E293B] py-3.5 rounded-xl font-semibold text-sm hover:border-[#94A3B8] hover:bg-[#F8FAFC] transition">
-              Sign Out
+              {tex.signOut || 'Sign Out'}
             </button>
           </div>
         </div>
 
         {sessions.length > 0 && (
           <div className="bg-white rounded-2xl p-6 w-full mt-5 shadow-sm border border-[#E2E8F0]">
-            <h3 className="text-base font-bold text-[#0B1C3D] mb-4">Test history</h3>
+            <h3 className="text-base font-bold text-[#0B1C3D] mb-4">{tex.testHistory || 'Test history'}</h3>
             {(() => {
               const totalTests = sessions.length;
               const pcts = sessions.map((s) => (s.total > 0 ? (s.score / s.total) * 100 : 0));
@@ -114,15 +116,15 @@ function ProfileContent() {
                 <>
                   <div className="grid grid-cols-3 gap-3 mb-4">
                     <div className="bg-[#F8FAFC] rounded-xl px-3 py-2.5 text-center">
-                      <p className="text-xs text-[#94A3B8]">Total tests</p>
+                      <p className="text-xs text-[#94A3B8]">{tex.totalTests || 'Total tests'}</p>
                       <p className="text-lg font-bold text-[#0B1C3D]">{totalTests}</p>
                     </div>
                     <div className="bg-[#F8FAFC] rounded-xl px-3 py-2.5 text-center">
-                      <p className="text-xs text-[#94A3B8]">Average score</p>
+                      <p className="text-xs text-[#94A3B8]">{tex.avgScore || 'Average score'}</p>
                       <p className="text-lg font-bold text-[#0B1C3D]">{avgPct}%</p>
                     </div>
                     <div className="bg-[#F8FAFC] rounded-xl px-3 py-2.5 text-center">
-                      <p className="text-xs text-[#94A3B8]">Best score</p>
+                      <p className="text-xs text-[#94A3B8]">{tex.bestScore || 'Best score'}</p>
                       <p className="text-lg font-bold text-[#0B1C3D]">{bestPct}%</p>
                     </div>
                   </div>
@@ -146,7 +148,7 @@ function ProfileContent() {
                                 passed ? 'bg-[#F0FDF4] text-[#16A34A]' : 'bg-[#FEF2F2] text-[#DC2626]'
                               }`}
                             >
-                              {passed ? 'Passed' : 'Not passed'}
+                              {passed ? (tex.passed || 'Passed') : (tex.notPassed || 'Not passed')}
                             </span>
                           </div>
                         </li>
@@ -159,7 +161,7 @@ function ProfileContent() {
           </div>
         )}
 
-        <button type="button" onClick={() => router.push('/')} className="mt-6 text-sm text-[#94A3B8] hover:text-[#2563EB] transition">← Back to Home</button>
+        <button type="button" onClick={() => router.push('/')} className="mt-6 text-sm text-[#94A3B8] hover:text-[#2563EB] transition">{tex.back}</button>
       </div>
     </main>
   );

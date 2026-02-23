@@ -350,10 +350,10 @@ function TestContent() {
             <p className="text-[#475569] text-sm leading-relaxed mb-4">
               {tex.upgradeDesc}
             </p>
-            <p className="text-[#2563EB] font-semibold text-sm mb-5">99% pass rate after full preparation</p>
+            <p className="text-[#2563EB] font-semibold text-sm mb-5">{tex.upgradePassRate || '99% pass rate after full preparation'}</p>
             <ul className="text-left text-sm text-[#475569] space-y-2 mb-6">
-              <li>✅ All 40 questions per test</li>
-              <li>✅ All 50 states, 3 categories, 4 languages</li>
+              <li>{tex.upgradeFeature1 || '✅ All 40 questions per test'}</li>
+              <li>{tex.upgradeFeature2 || '✅ All 50 states, 3 categories, 4 languages'}</li>
             </ul>
             <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}`)}
               className="w-full bg-[#F59E0B] text-[#0B1C3D] py-4 rounded-xl font-bold text-base hover:bg-[#FBBF24] hover:-translate-y-0.5 hover:shadow-lg transition-all mb-3">
@@ -361,7 +361,7 @@ function TestContent() {
             </button>
             <button onClick={handleGoogleSignIn}
               className="text-sm text-[#2563EB] hover:underline">
-              Continue with Google to sign in
+              {tex.continueGoogle}
             </button>
           </div>
         </div>

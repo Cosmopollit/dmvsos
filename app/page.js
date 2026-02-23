@@ -400,10 +400,10 @@ export default function Home() {
 
       {/* Footer */}
       <p className="text-xs text-[#94A3B8] mt-8 text-center leading-relaxed max-w-lg mx-auto px-4">
-        By continuing, you agree to our{' '}
-        <a href="#" className="text-[#2563EB] font-medium">Terms</a> and{' '}
-        <a href="#" className="text-[#2563EB] font-medium">Privacy Policy</a>.<br />
-        Free for everyone. No credit card needed.
+        {tex.footerLegal || 'By continuing, you agree to our'}{' '}
+        <a href="/terms" className="text-[#2563EB] font-medium">{tex.terms || 'Terms'}</a> {tex.and || 'and'}{' '}
+        <a href="/privacy" className="text-[#2563EB] font-medium">{tex.privacy || 'Privacy Policy'}</a>.<br />
+        {tex.footerFree || 'Free for everyone. No credit card needed.'}
       </p>
 
     </main>
