@@ -25,6 +25,7 @@ export async function GET(request) {
     await supabase.auth.exchangeCodeForSession(code)
   }
 
-  const next = requestUrl.searchParams.get('next') || '/';
+  let next = requestUrl.searchParams.get('next') || '/';
+  if (!next.startsWith('/') || next.startsWith('//')) next = '/';
   return NextResponse.redirect(requestUrl.origin + next)
 }

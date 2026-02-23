@@ -110,6 +110,7 @@ function TestContent() {
     setCurrent(0);
     setScore(0);
     setUserAnswers([]);
+    userAnswersRef.current = [];
     setSelected(null);
     setShowAnswer(false);
     setElapsed(0);
@@ -126,8 +127,11 @@ function TestContent() {
 
   // Keyboard shortcuts: 1-4 to select answer, Enter/Space to advance
   // Must be before early returns to satisfy Rules of Hooks
+  // Refs for keyboard shortcuts (must be before early returns for Rules of Hooks)
   const handleSelectRef = useRef(null);
   const handleNextRef = useRef(null);
+  // Ref for synchronous answer tracking (avoids React state batching race condition)
+  const userAnswersRef = useRef([]);
   useEffect(() => {
     if (!testMode || !questions.length) return;
     function onKeyDown(e) {
@@ -145,7 +149,7 @@ function TestContent() {
     }
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  });
+  }, [testMode, questions.length, showAnswer, current, showUpgradeBanner]);
 
   // Wait for both auth and questions to load
   const loading = loadingQuestions || authLoading;
@@ -239,7 +243,10 @@ function TestContent() {
     setShowAnswer(true);
     const correct = index === q.correctAnswerIndex;
     if (correct) setScore(s => s + 1);
-    setUserAnswers((prev) => [...prev, index]);
+    // Track answers both in state and ref (ref is synchronous, avoids race condition)
+    const updatedAnswers = [...userAnswersRef.current, index];
+    userAnswersRef.current = updatedAnswers;
+    setUserAnswers(updatedAnswers);
     const arr = correct ? tex.motivationalCorrect : tex.motivationalWrong;
     const msg = arr[Math.floor(Math.random() * arr.length)];
     setMotivationalMessage({ text: msg, phase: 'show' });
@@ -257,12 +264,13 @@ function TestContent() {
       setSelected(null);
       setShowAnswer(false);
     } else {
-      const finalScore = userAnswers.reduce((acc, ans, i) => acc + (ans === questions[i]?.correctAnswerIndex ? 1 : 0), 0);
-      const finalUserAnswers = userAnswers;
+      // Use ref for answers — guaranteed to include the last answer (no batching race)
+      const allAnswers = userAnswersRef.current;
+      const finalScore = allAnswers.reduce((acc, ans, i) => acc + (ans === questions[i]?.correctAnswerIndex ? 1 : 0), 0);
       const langParam = new URLSearchParams(window.location.search).get('lang') || 'en';
       sessionStorage.setItem(
         'testResults',
-        JSON.stringify({ questions, userAnswers: finalUserAnswers, elapsed, state, category, lang: langParam })
+        JSON.stringify({ questions, userAnswers: allAnswers, elapsed, state, category, lang: langParam })
       );
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
@@ -272,7 +280,7 @@ function TestContent() {
           category,
           score: finalScore,
           total,
-        });
+        }).catch(() => {});
       }
       router.push(`/result?score=${finalScore}&total=${total}&lang=${lang}`);
     }

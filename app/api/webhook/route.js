@@ -51,6 +51,30 @@ export async function POST(request) {
         console.error('Webhook: subscription.deleted missing customer email', subscription.customer);
       }
     }
+
+    if (event.type === 'customer.subscription.updated') {
+      const subscription = event.data.object;
+      const inactive = ['past_due', 'canceled', 'unpaid', 'incomplete_expired'];
+      if (inactive.includes(subscription.status)) {
+        const customer = await stripe.customers.retrieve(subscription.customer);
+        if (customer?.email) {
+          await supabase.from('profiles').update({ is_pro: false }).eq('email', customer.email);
+        }
+      }
+    }
+
+    if (event.type === 'invoice.payment_failed') {
+      const invoice = event.data.object;
+      const customerEmail = invoice.customer_email;
+      if (customerEmail) {
+        await supabase.from('profiles').update({ is_pro: false }).eq('email', customerEmail);
+      } else if (invoice.customer) {
+        const customer = await stripe.customers.retrieve(invoice.customer);
+        if (customer?.email) {
+          await supabase.from('profiles').update({ is_pro: false }).eq('email', customer.email);
+        }
+      }
+    }
   } catch (err) {
     console.error('Webhook processing error:', err.message);
     return new Response('Webhook processing error', { status: 500 });
