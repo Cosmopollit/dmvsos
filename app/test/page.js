@@ -371,7 +371,7 @@ function TestContent() {
 
 export default function Test() {
   return (
-    <Suspense>
+    <Suspense fallback={<main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center"><div className="w-6 h-6 border-2 border-[#94A3B8] border-t-transparent rounded-full animate-spin" /></main>}>
       <TestContent />
     </Suspense>
   );

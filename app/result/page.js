@@ -36,16 +36,13 @@ function ResultContent() {
   const tex = t[lang] || t.en;
   const formatTime = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
 
-  const [email, setEmail] = useState('');
-  const [emailSubmitted, setEmailSubmitted] = useState(false);
-  const [emailLoading, setEmailLoading] = useState(false);
-  async function handleSaveResults(e) {
-    e.preventDefault();
-    if (!email.trim()) return;
-    setEmailLoading(true);
-    await supabase.auth.signInWithOtp({ email: email.trim() });
-    setEmailLoading(false);
-    setEmailSubmitted(true);
+  async function handleGoogleSignIn() {
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.href,
+      },
+    });
   }
 
   function stripQuestion(s) {
@@ -86,33 +83,19 @@ function ResultContent() {
           </div>
         </div>
 
-        {/* Email capture for guests */}
+        {/* Sign in to save results */}
         {!user && (
-          <div className="bg-white rounded-2xl p-6 w-full shadow-sm border border-[#E2E8F0]">
+          <div className="bg-white rounded-2xl p-6 w-full shadow-sm border border-[#E2E8F0] text-center">
             <h3 className="text-lg font-bold text-[#0B1C3D] mb-1">💾 {tex.saveResults}</h3>
             <p className="text-sm text-[#94A3B8] mb-4">{tex.saveSubtext}</p>
-            {emailSubmitted ? (
-              <p className="text-[#16A34A] font-medium text-sm">{tex.checkEmail}</p>
-            ) : (
-              <form onSubmit={handleSaveResults} className="flex flex-col gap-3">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  className="w-full px-4 py-3 rounded-xl border border-[#E2E8F0] text-[#1E293B] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent"
-                  required
-                  disabled={emailLoading}
-                />
-                <button
-                  type="submit"
-                  disabled={emailLoading}
-                  className="w-full bg-[#2563EB] text-white py-3 rounded-xl font-semibold text-sm hover:bg-[#1D4ED8] transition disabled:opacity-60"
-                >
-                  {emailLoading ? '…' : tex.saveBtn}
-                </button>
-              </form>
-            )}
+            <button
+              type="button"
+              onClick={handleGoogleSignIn}
+              className="w-full bg-white text-[#1E293B] border border-[#E2E8F0] py-3 rounded-xl font-medium text-sm flex items-center justify-center gap-3 hover:bg-[#F8FAFC] hover:border-[#2563EB] transition-all"
+            >
+              <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2.04a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3z"/></svg>
+              {tex.continueGoogle}
+            </button>
           </div>
         )}
 

@@ -23,6 +23,7 @@ export const metadata = {
     url: 'https://dmvsos.com',
     siteName: 'DMVSOS',
     type: 'website',
+    images: [{ url: 'https://dmvsos.com/logo.png', width: 512, height: 512, alt: 'DMVSOS' }],
   },
   twitter: {
     card: 'summary_large_image',
