@@ -7,6 +7,7 @@ import { t } from '@/lib/translations';
 export default function Home() {
   const [lang, setLang] = useState('English');
   const [state, setState] = useState('');
+  const [stateSearch, setStateSearch] = useState('');
   const [user, setUser] = useState(null);
   const [isPro, setIsPro] = useState(false);
   const [liveCount] = useState(() => Math.floor(Math.random() * 40) + 15);
@@ -82,6 +83,7 @@ export default function Home() {
   }
 
   const stateEmoji = { 'Washington (WA)': '🏔️', 'California (CA)': '🌴', 'New York (NY)': '🗽', 'Texas (TX)': '🤠', 'Florida (FL)': '🌊' };
+  const stateOptions = states.map((display) => ({ name: display, code: stateToSlug(display) }));
   const steps = [
     { emoji: '📱', label: tex.step1, msg: tex.stepMsg1, color: '#3B82F6' },
     { emoji: '🏛️', label: tex.step2, msg: tex.stepMsg2, color: '#8B5CF6' },
@@ -161,18 +163,32 @@ export default function Home() {
         <h2 className="text-[22px] font-bold text-[#1E293B] mb-1">{tex.heroTitle}</h2>
         <p className="text-sm text-[#94A3B8] mb-7 leading-relaxed">{tex.heroSub}</p>
 
-        {/* State */}
-        <select
-          ref={stateSelectRef}
-          value={state}
-          onChange={e => setState(e.target.value)}
-          className="w-full px-4 py-4 border-2 border-[#E2E8F0] rounded-[10px] text-base text-[#1E293B] bg-[#F8FAFC] mb-6 focus:outline-none focus:border-[#2563EB] transition cursor-pointer"
-        >
-          <option value="">{tex.selectState}</option>
-          {states.map(s => (
-            <option key={s} value={s}>{stateEmoji[s] ? `${s} ${stateEmoji[s]}` : s}</option>
-          ))}
-        </select>
+        {/* State search */}
+        <div className="relative mb-6">
+          <input
+            ref={stateSelectRef}
+            type="text"
+            value={stateSearch}
+            onChange={e => setStateSearch(e.target.value)}
+            placeholder={tex.searchState}
+            className="w-full py-4 px-4 rounded-xl border-2 border-gray-100 focus:border-blue-500 outline-none text-base text-[#1E293B] bg-[#F8FAFC]"
+          />
+          {stateSearch && (
+            <div className="absolute z-10 w-full bg-white rounded-xl shadow-xl border border-gray-100 mt-1 max-h-48 overflow-y-auto">
+              {stateOptions
+                .filter((s) => s.name.toLowerCase().includes(stateSearch.toLowerCase()))
+                .map((s) => (
+                  <div
+                    key={s.code}
+                    onClick={() => { setState(s.code); setStateSearch(s.name); }}
+                    className="px-4 py-3 hover:bg-blue-50 cursor-pointer text-sm font-medium text-gray-700 border-b border-gray-50 last:border-0"
+                  >
+                    {stateEmoji[s.name] ? `${s.name} ${stateEmoji[s.name]}` : s.name}
+                  </div>
+                ))}
+            </div>
+          )}
+        </div>
 
         {/* Single primary CTA - blue by default, amber for Pro when state selected */}
         {(() => {
@@ -185,8 +201,7 @@ export default function Home() {
                 type="button"
                 onClick={() => {
                   if (state) {
-                    const slug = stateToSlug(state);
-                    if (slug) router.push(`/category?state=${slug}&lang=${langCode}`);
+                    router.push(`/category?state=${state}&lang=${langCode}`);
                   } else {
                     document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' });
                     stateSelectRef.current?.focus();
