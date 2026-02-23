@@ -80,18 +80,25 @@ function TestContent() {
           return;
         }
         const strip = s => (s || '').replace(/^[A-DА-Га-гa-d]\.\s*/, '').trim();
-        const mapped = data.map(row => ({
-          question: row.question_text,
-          answers: [row.option_a, row.option_b, row.option_c, row.option_d].filter(Boolean).map(strip),
-          correctAnswerIndex: row.correct_answer,
-          imageUrl: null,
-        }));
+        const mapped = data.map(row => {
+          const answers = [row.option_a, row.option_b, row.option_c, row.option_d].filter(Boolean).map(strip);
+          return {
+            question: row.question_text || '',
+            answers,
+            correctAnswerIndex: row.correct_answer ?? 0,
+            imageUrl: row.image_url || null,
+          };
+        }).filter(row => row.answers.length >= 2);
         // Fisher-Yates shuffle
         for (let i = mapped.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [mapped[i], mapped[j]] = [mapped[j], mapped[i]];
         }
         setAllQuestions(mapped);
+        setLoadingQuestions(false);
+      })
+      .catch(() => {
+        setAllQuestions([]);
         setLoadingQuestions(false);
       });
   }, [state, category, lang, isRetry]);
@@ -183,13 +190,20 @@ function TestContent() {
   }
 
   if (!questions.length) return (
-    <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
-      <p className="text-[#94A3B8]">{tex.noQuestionsFound}</p>
+    <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
+      <div className="text-center max-w-sm">
+        <div className="text-5xl mb-4">📭</div>
+        <h2 className="text-lg font-bold text-[#0B1C3D] mb-2">{tex.noQuestionsFound}</h2>
+        <button type="button" onClick={() => router.push(`/category?state=${state}&lang=${lang}`)}
+          className="mt-4 bg-[#2563EB] text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-[#1D4ED8] transition">
+          {tex.back}
+        </button>
+      </div>
     </main>
   );
 
   const q = questions[current];
-  if (!q) return null;
+  if (!q || !q.answers?.length) return null;
   const total = questions.length;
   const progress = (current / total) * 100;
   const answered = showAnswer ? current + 1 : current;
@@ -218,7 +232,7 @@ function TestContent() {
       setSelected(null);
       setShowAnswer(false);
     } else {
-      const finalScore = userAnswers.reduce((acc, ans, i) => acc + (ans === questions[i].correctAnswerIndex ? 1 : 0), 0);
+      const finalScore = userAnswers.reduce((acc, ans, i) => acc + (ans === questions[i]?.correctAnswerIndex ? 1 : 0), 0);
       const finalUserAnswers = userAnswers;
       const langParam = new URLSearchParams(window.location.search).get('lang') || 'en';
       sessionStorage.setItem(
@@ -318,7 +332,7 @@ function TestContent() {
           </div>
         </div>
 
-        {showAnswer && (
+        {showAnswer && q.answers[q.correctAnswerIndex] && (
           <div className="bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl p-4 mb-5">
             <p className="text-sm text-[#1E40AF] leading-relaxed">
               ✅ {tex.correct}: <strong>{q.answers[q.correctAnswerIndex].replace(/^[A-DА-Га-гa-d]\.\s*/, '')}</strong>
