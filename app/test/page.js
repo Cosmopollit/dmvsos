@@ -158,9 +158,13 @@ function TestContent() {
       { id: 'marathon', icon: '🏆', label: tex.modeMarathon, desc: tex.modeMarathonDesc, count: totalAvailable, color: '#D97706', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)' },
     ];
     return (
-      <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
+      <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6 relative">
+        <button type="button" onClick={() => router.push(`/category?state=${state}&lang=${lang}`)}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">
+          ✕
+        </button>
         <div className="w-full max-w-md">
-          <button type="button" onClick={() => router.push('/category')}
+          <button type="button" onClick={() => router.push(`/category?state=${state}&lang=${lang}`)}
             className="text-sm text-[#94A3B8] hover:text-[#2563EB] transition mb-6">
             {tex.back}
           </button>

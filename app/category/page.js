@@ -5,8 +5,8 @@ import { t } from '@/lib/translations';
 
 const categories = [
   { id: 'dmv', icon: '🚗', titleKey: 'catCar', descKey: 'carDesc', questions: 40, time: '25 min', color: '#2563EB', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', badge: null, emojiSize: 'text-6xl' },
-  { id: 'cdl', icon: '🚛', titleKey: 'catCdl', descKey: 'truckDesc', questions: 50, time: '35 min', color: '#0EA5E9', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)', badge: '💼 Professional', emojiSize: 'text-4xl' },
-  { id: 'moto', icon: '🏍️', titleKey: 'catMoto', descKey: 'motoDesc', questions: 30, time: '20 min', color: '#D97706', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)', badge: '⚡ Quick', emojiSize: 'text-4xl' },
+  { id: 'cdl', icon: '🚛', titleKey: 'catCdl', descKey: 'truckDesc', questions: 50, time: '35 min', color: '#0EA5E9', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)', badge: null, emojiSize: 'text-4xl' },
+  { id: 'moto', icon: '🏍️', titleKey: 'catMoto', descKey: 'motoDesc', questions: 30, time: '20 min', color: '#D97706', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)', badge: null, emojiSize: 'text-4xl' },
 ];
 
 function CategoryContent() {
@@ -18,7 +18,7 @@ function CategoryContent() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-6 relative" style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}>
-      <button type="button" onClick={() => router.back()} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">
+      <button type="button" onClick={() => router.push('/')} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">
         ✕
       </button>
       <div className="text-center mb-8">
