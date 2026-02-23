@@ -53,7 +53,7 @@ function ResultContent() {
     return (s || '').replace(/^\d+\.\s*/, '');
   }
   function stripAnswer(s) {
-    return (s || '').replace(/^[A-D]\.\s*/, '');
+    return (s || '').replace(/^[A-DА-Га-гa-d]\.\s*/, '');
   }
 
   return (

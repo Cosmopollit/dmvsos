@@ -11,7 +11,6 @@ function TestContent() {
   const state = params.get('state') || 'washington';
   const category = params.get('category') || 'car';
   const lang = params.get('lang') || 'en';
-  const langFolder = lang === 'zh' ? 'cn' : lang;
   const tex = t[lang] || t.en;
 
   const [user, setUser] = useState(null);
@@ -77,16 +76,29 @@ function TestContent() {
       return;
     }
     setLoading(true);
-    fetch(`/data/${langFolder}/${state}.json`)
-      .then(r => r.json())
-      .then(d => {
-        const categoryMap = { dmv: 'car', cdl: 'cdl', moto: 'motorcycle' };
-        const mappedCategory = categoryMap[category] || category;
-        const test = d[mappedCategory]?.[0];
-        if (test) {
-          const shuffled = [...test.questions].sort(() => Math.random() - 0.5);
-          setQuestions(isPro ? shuffled : shuffled.slice(0, 20));
+    const categoryMap = { dmv: 'car', cdl: 'cdl', moto: 'motorcycle' };
+    const mappedCategory = categoryMap[category] || category;
+    supabase
+      .from('questions')
+      .select('*')
+      .eq('state', state)
+      .eq('category', mappedCategory)
+      .eq('language', lang)
+      .then(({ data, error }) => {
+        if (error || !data?.length) {
+          setQuestions([]);
+          setLoading(false);
+          return;
         }
+        const strip = s => (s || '').replace(/^[A-DА-Га-гa-d]\.\s*/, '').trim();
+        const mapped = data.map(row => ({
+          question: row.question_text,
+          answers: [row.option_a, row.option_b, row.option_c, row.option_d].filter(Boolean).map(strip),
+          correctAnswerIndex: row.correct_answer,
+          imageUrl: null,
+        }));
+        const shuffled = mapped.sort(() => Math.random() - 0.5);
+        setQuestions(isPro ? shuffled : shuffled.slice(0, 20));
         setLoading(false);
       });
   }, [state, category, user, isPro, lang, params]);
@@ -218,7 +230,7 @@ function TestContent() {
                 <button key={i} type="button" onClick={() => handleSelect(i)}
                   className={`w-full text-left px-4 py-3.5 rounded-xl text-sm transition-all ${style} ${!showAnswer ? 'hover:border-[#2563EB] hover:bg-[#EFF6FF] hover:text-[#2563EB]' : ''}`}>
                   <span className="font-semibold mr-3 text-[#0B1C3D]">{['A', 'B', 'C', 'D'][i]}.</span>
-                  {opt.replace(/^[A-D]\.\s*/, '')}
+                  {opt.replace(/^[A-DА-Га-гa-d]\.\s*/, '')}
                 </button>
               );
             })}
@@ -228,7 +240,7 @@ function TestContent() {
         {showAnswer && (
           <div className="bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl p-4 mb-5">
             <p className="text-sm text-[#1E40AF] leading-relaxed">
-              ✅ {tex.correct}: <strong>{q.answers[q.correctAnswerIndex].replace(/^[A-D]\.\s*/i, '')}</strong>
+              ✅ {tex.correct}: <strong>{q.answers[q.correctAnswerIndex].replace(/^[A-DА-Га-гa-d]\.\s*/, '')}</strong>
             </p>
           </div>
         )}
