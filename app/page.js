@@ -7,7 +7,6 @@ import { t } from '@/lib/translations';
 export default function Home() {
   const [lang, setLang] = useState('English');
   const [state, setState] = useState('');
-  const [stateSearch, setStateSearch] = useState('');
   const [user, setUser] = useState(null);
   const [isPro, setIsPro] = useState(false);
   const [liveCount] = useState(() => Math.floor(Math.random() * 40) + 15);
@@ -82,7 +81,6 @@ export default function Home() {
     setUser(null);
   }
 
-  const stateEmoji = { 'Washington (WA)': '🏔️', 'California (CA)': '🌴', 'New York (NY)': '🗽', 'Texas (TX)': '🤠', 'Florida (FL)': '🌊' };
   const stateOptions = states.map((display) => ({ name: display, code: stateToSlug(display) }));
   const steps = [
     { emoji: '📱', label: tex.step1, msg: tex.stepMsg1, color: '#3B82F6' },
@@ -163,32 +161,19 @@ export default function Home() {
         <h2 className="text-[22px] font-bold text-[#1E293B] mb-1">{tex.heroTitle}</h2>
         <p className="text-sm text-[#94A3B8] mb-7 leading-relaxed">{tex.heroSub}</p>
 
-        {/* State search */}
-        <div className="relative mb-6">
-          <input
-            ref={stateSelectRef}
-            type="text"
-            value={stateSearch}
-            onChange={e => setStateSearch(e.target.value)}
-            placeholder={tex.searchState}
-            className="w-full py-4 px-4 rounded-xl border-2 border-gray-100 focus:border-blue-500 outline-none text-base text-[#1E293B] bg-[#F8FAFC]"
-          />
-          {stateSearch && (
-            <div className="absolute z-10 w-full bg-white rounded-xl shadow-xl border border-gray-100 mt-1 max-h-48 overflow-y-auto">
-              {stateOptions
-                .filter((s) => s.name.toLowerCase().includes(stateSearch.toLowerCase()))
-                .map((s) => (
-                  <div
-                    key={s.code}
-                    onClick={() => { setState(s.code); setStateSearch(s.name); }}
-                    className="px-4 py-3 hover:bg-blue-50 cursor-pointer text-sm font-medium text-gray-700 border-b border-gray-50 last:border-0"
-                  >
-                    {stateEmoji[s.name] ? `${s.name} ${stateEmoji[s.name]}` : s.name}
-                  </div>
-                ))}
-            </div>
-          )}
-        </div>
+        {/* State */}
+        <select
+          ref={stateSelectRef}
+          value={state}
+          onChange={e => setState(e.target.value)}
+          className="w-full py-4 px-4 rounded-xl border-2 border-gray-100 focus:border-blue-500 outline-none text-base bg-white text-gray-700 cursor-pointer appearance-none"
+          style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 16px center' }}
+        >
+          <option value="">{tex.selectState}</option>
+          {stateOptions.map(s => (
+            <option key={s.code} value={s.code}>{s.name}</option>
+          ))}
+        </select>
 
         {/* Single primary CTA - blue by default, amber for Pro when state selected */}
         {(() => {
