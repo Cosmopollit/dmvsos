@@ -138,8 +138,8 @@ export default function Home() {
                 )}
               </button>
               <button onClick={handleSignOut} type="button"
-                className="hidden sm:block text-[11px] text-[#94A3B8] hover:text-[#64748B] hover:underline transition">
-                Sign out
+                className="text-[11px] text-[#94A3B8] hover:text-[#64748B] hover:underline transition">
+                ✕
               </button>
             </div>
           );

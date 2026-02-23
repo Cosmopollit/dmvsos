@@ -102,7 +102,12 @@ function TestContent() {
           correctAnswerIndex: row.correct_answer,
           imageUrl: null,
         }));
-        setAllQuestions(mapped.sort(() => Math.random() - 0.5));
+        // Fisher-Yates shuffle
+        for (let i = mapped.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [mapped[i], mapped[j]] = [mapped[j], mapped[i]];
+        }
+        setAllQuestions(mapped);
         setLoadingQuestions(false);
       });
   }, [state, category, lang]);
@@ -254,7 +259,7 @@ function TestContent() {
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}${window.location.pathname}?${window.location.search}`
+        redirectTo: `${window.location.origin}${window.location.pathname}${window.location.search}`
       }
     });
   }

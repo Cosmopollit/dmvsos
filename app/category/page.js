@@ -5,9 +5,9 @@ import { t } from '@/lib/translations';
 import { getSavedLang } from '@/lib/lang';
 
 const categories = [
-  { id: 'dmv', icon: '🚗', titleKey: 'catCar', descKey: 'carDesc', questions: 40, time: '25 min', color: '#2563EB', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', badge: null, emojiSize: 'text-6xl' },
-  { id: 'cdl', icon: '🚛', titleKey: 'catCdl', descKey: 'truckDesc', questions: 50, time: '35 min', color: '#0EA5E9', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)', badge: null, emojiSize: 'text-4xl' },
-  { id: 'moto', icon: '🏍️', titleKey: 'catMoto', descKey: 'motoDesc', questions: 30, time: '20 min', color: '#D97706', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)', badge: null, emojiSize: 'text-4xl' },
+  { id: 'dmv', icon: '🚗', titleKey: 'catCar', descKey: 'carDesc', questions: 40, timeMin: 25, color: '#2563EB', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', badge: null, emojiSize: 'text-6xl' },
+  { id: 'cdl', icon: '🚛', titleKey: 'catCdl', descKey: 'truckDesc', questions: 50, timeMin: 35, color: '#0EA5E9', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)', badge: null, emojiSize: 'text-4xl' },
+  { id: 'moto', icon: '🏍️', titleKey: 'catMoto', descKey: 'motoDesc', questions: 30, timeMin: 20, color: '#D97706', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)', badge: null, emojiSize: 'text-4xl' },
 ];
 
 function CategoryContent() {
@@ -54,10 +54,10 @@ function CategoryContent() {
               <div className="text-sm text-[#64748B] mt-0.5 mb-2">{tex[cat.descKey]}</div>
               <div className="flex gap-2 flex-wrap">
                 <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-white/70" style={{ color: cat.color }}>
-                  {cat.questions} questions
+                  {cat.questions} {tex.questionsLabel || 'questions'}
                 </span>
                 <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-white/70" style={{ color: cat.color }}>
-                  ⏱ {cat.time}
+                  ⏱ {cat.timeMin} {tex.minLabel || 'min'}
                 </span>
               </div>
             </div>
