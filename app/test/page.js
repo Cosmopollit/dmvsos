@@ -79,6 +79,16 @@ function TestContent() {
       setLoading(false);
       return;
     }
+    // Reset state on every run to avoid stale data
+    setTestMode(null);
+    setQuestions([]);
+    setAllQuestions([]);
+    setCurrent(0);
+    setScore(0);
+    setUserAnswers([]);
+    setSelected(null);
+    setShowAnswer(false);
+    setElapsed(0);
     setLoading(true);
     const categoryMap = { dmv: 'car', cdl: 'cdl', moto: 'motorcycle' };
     const mappedCategory = categoryMap[category] || category;
@@ -103,13 +113,15 @@ function TestContent() {
         }));
         const shuffled = mapped.sort(() => Math.random() - 0.5);
         setAllQuestions(shuffled);
-        if (!isPro) {
+        if (isPro) {
+          // Pro users will see mode selector (testMode stays null)
+        } else {
           setQuestions(shuffled.slice(0, 20));
           setTestMode('free');
         }
         setLoading(false);
       });
-  }, [state, category, user, isPro, lang, params]);
+  }, [state, category, isPro, lang]);
 
   function startWithMode(mode) {
     const limits = { real: 40, extended: 80, marathon: Infinity };
@@ -127,13 +139,7 @@ function TestContent() {
     </main>
   );
 
-  if (!loading && !allQuestions.length && !questions.length) return (
-    <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
-      <p className="text-[#94A3B8]">No questions found.</p>
-    </main>
-  );
-
-  if (isPro && !testMode) {
+  if (isPro && !testMode && allQuestions.length) {
     const totalAvailable = allQuestions.length;
     const modes = [
       { id: 'real', icon: '🎯', label: tex.modeReal, desc: tex.modeRealDesc, count: Math.min(40, totalAvailable), color: '#2563EB', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' },
@@ -170,7 +176,14 @@ function TestContent() {
     );
   }
 
+  if (!questions.length) return (
+    <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
+      <p className="text-[#94A3B8]">No questions found.</p>
+    </main>
+  );
+
   const q = questions[current];
+  if (!q) return null;
   const total = questions.length;
   const progress = (current / total) * 100;
   const answered = showAnswer ? current + 1 : current;
