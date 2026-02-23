@@ -124,7 +124,7 @@ function TestContent() {
     <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
       <div className="text-center">
         <div className="text-4xl mb-4">⏳</div>
-        <p className="text-[#94A3B8]">Loading questions...</p>
+        <p className="text-[#94A3B8]">{tex.loadingQuestions}</p>
       </div>
     </main>
   );
@@ -134,7 +134,7 @@ function TestContent() {
       <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
         <div className="text-center">
           <div className="text-4xl mb-4">⏳</div>
-          <p className="text-[#94A3B8]">Loading questions...</p>
+          <p className="text-[#94A3B8]">{tex.loadingQuestions}</p>
         </div>
       </main>
     );
@@ -184,7 +184,7 @@ function TestContent() {
 
   if (!questions.length) return (
     <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
-      <p className="text-[#94A3B8]">No questions found.</p>
+      <p className="text-[#94A3B8]">{tex.noQuestionsFound}</p>
     </main>
   );
 
