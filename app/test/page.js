@@ -274,13 +274,13 @@ function TestContent() {
       );
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
-        await supabase.from('test_sessions').insert({
-          user_id: session.user.id,
-          state,
-          category,
-          score: finalScore,
-          total,
-        }).catch(() => {});
+        const row = { user_id: session.user.id, state, category, score: finalScore, total, lang };
+        const { error: insErr } = await supabase.from('test_sessions').insert(row);
+        if (insErr) {
+          // Fallback: lang column may not exist yet
+          const { lang: _lang, ...rowNoLang } = row;
+          await supabase.from('test_sessions').insert(rowNoLang).catch(() => {});
+        }
       }
       router.push(`/result?score=${finalScore}&total=${total}&lang=${lang}`);
     }
