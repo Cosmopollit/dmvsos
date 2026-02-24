@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase'; // used for storage only
 
 const STATE_OPTIONS = [
   'Alabama (AL)', 'Alaska (AK)', 'Arizona (AZ)', 'Arkansas (AR)',
@@ -141,40 +141,27 @@ export default function AdminPage() {
     }
     try {
       const q = questions[editingIndex];
-      if (q?.id) {
-        const { error } = await supabase.from('questions').update(row).eq('id', q.id);
-        if (error) throw error;
-        setQuestions((prev) => {
-          const next = [...prev];
-          next[editingIndex] = {
-            ...next[editingIndex],
-            question: row.question_text,
-            answers: [row.option_a, row.option_b, row.option_c, row.option_d],
-            correctAnswerIndex: row.correct_answer,
-            state: row.state,
-            category: row.category,
-            language: row.language,
-          };
-          return next;
-        });
-      } else {
-        const { data, error } = await supabase.from('questions').insert(row).select('id').single();
-        if (error) throw error;
-        setQuestions((prev) => {
-          const next = [...prev];
-          next[editingIndex] = {
-            ...next[editingIndex],
-            id: data?.id,
-            question: row.question_text,
-            answers: [row.option_a, row.option_b, row.option_c, row.option_d],
-            correctAnswerIndex: row.correct_answer,
-            state: row.state,
-            category: row.category,
-            language: row.language,
-          };
-          return next;
-        });
-      }
+      const res = await fetch('/api/admin/questions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password, action: 'save', id: q?.id || null, row }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to save');
+      setQuestions((prev) => {
+        const next = [...prev];
+        next[editingIndex] = {
+          ...next[editingIndex],
+          id: q?.id || data.id,
+          question: row.question_text,
+          answers: [row.option_a, row.option_b, row.option_c, row.option_d],
+          correctAnswerIndex: row.correct_answer,
+          state: row.state,
+          category: row.category,
+          language: row.language,
+        };
+        return next;
+      });
       handleCancelEdit();
     } catch (err) {
       setSaveError(err.message || 'Failed to save.');
@@ -251,7 +238,7 @@ export default function AdminPage() {
       if (s === 'D' || s === '3') return 3;
       return 0;
     };
-    let inserted = 0;
+    const csvRows = [];
     const errors = [];
     for (let i = 1; i < lines.length; i++) {
       const line = lines[i];
@@ -270,27 +257,25 @@ export default function AdminPage() {
         errors.push(`Row ${i + 1}: missing question or option A`);
         continue;
       }
-      try {
-        const { error } = await supabase.from('questions').insert({
-          state,
-          category,
-          language,
-          question_text,
-          option_a,
-          option_b,
-          option_c,
-          option_d,
-          correct_answer: correct,
-        });
-        if (error) throw error;
-        inserted++;
-      } catch (err) {
-        errors.push(`Row ${i + 1}: ${err.message || 'insert failed'}`);
-      }
+      csvRows.push({ state, category, language, question_text, option_a, option_b, option_c, option_d, correct_answer: correct });
     }
-    const successText = inserted > 0 ? `Uploaded ${inserted} question(s).` : '';
-    const errorText = errors.length > 0 ? (errors.length > 3 ? `Errors: ${errors.slice(0, 3).join('; ')}... and ${errors.length - 3} more.` : errors.join('; ')) : '';
-    setCsvMessage({ type: errors.length > 0 ? 'error' : 'success', text: [successText, errorText].filter(Boolean).join(' ') });
+    try {
+      const res = await fetch('/api/admin/questions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password, action: 'csv-upload', rows: csvRows }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Upload failed');
+      const inserted = data.inserted || 0;
+      const serverErrors = data.errors || [];
+      errors.push(...serverErrors);
+      const successText = inserted > 0 ? `Uploaded ${inserted} question(s).` : '';
+      const errorText = errors.length > 0 ? (errors.length > 3 ? `Errors: ${errors.slice(0, 3).join('; ')}... and ${errors.length - 3} more.` : errors.join('; ')) : '';
+      setCsvMessage({ type: errors.length > 0 ? 'error' : 'success', text: [successText, errorText].filter(Boolean).join(' ') });
+    } catch (err) {
+      setCsvMessage({ type: 'error', text: err.message || 'Upload failed' });
+    }
   };
 
   const handleImageSelect = async (questionIndex, file) => {

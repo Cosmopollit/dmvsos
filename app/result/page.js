@@ -14,7 +14,7 @@ function ResultContent() {
   const percent = Math.round((score / total) * 100);
   const passed = total > 0 && score / total >= 0.7;
 
-  const { user } = useAuth();
+  const { user, isPro } = useAuth();
 
   const [testResults, setTestResults] = useState(null);
   useEffect(() => {
@@ -40,7 +40,7 @@ function ResultContent() {
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: window.location.href,
+        redirectTo: window.location.origin,
       },
     });
   }
@@ -134,8 +134,8 @@ function ResultContent() {
           </div>
         )}
 
-        {/* Upgrade banner */}
-        <div className="bg-[#0B1C3D] rounded-2xl p-6 w-full border border-[#1e3a5f] shadow-sm">
+        {/* Upgrade banner — hidden for Pro users */}
+        {!isPro && <div className="bg-[#0B1C3D] rounded-2xl p-6 w-full border border-[#1e3a5f] shadow-sm">
           <p className="text-white font-semibold text-base mb-1">{tex.upgradeModalTitle}</p>
           <p className="text-[#94A3B8] text-sm mb-4">{tex.upgradeBannerDesc}</p>
           <button
@@ -145,7 +145,7 @@ function ResultContent() {
           >
             {tex.upgradeCta}
           </button>
-        </div>
+        </div>}
 
         {/* Buttons */}
         <button
