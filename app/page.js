@@ -51,8 +51,51 @@ export default function Home() {
     { emoji: '🚗', label: tex.step4, msg: tex.stepMsg4, color: '#F59E0B' },
   ];
 
+  const faqJsonLd = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'How many questions are on the DMV written test?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Most states have between 20 and 50 questions on the DMV written knowledge test. The passing score is typically 80%. DMVSOS provides state-specific practice tests that match your state\'s actual exam format.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Can I take the DMV practice test in Spanish or other languages?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Yes! DMVSOS offers free DMV practice tests in English, Spanish, Russian, Chinese, and Ukrainian. Choose your preferred language and practice with real DMV-style questions.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Is this DMV practice test free?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Yes, DMVSOS offers a free tier with limited daily practice questions for all 50 US states. A Pro plan at $9.99/month unlocks unlimited questions, detailed explanations, and all test types (Car, CDL, Motorcycle).',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'What types of DMV tests can I practice for?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'DMVSOS covers Car (regular driver\'s license), CDL (Commercial Driver\'s License), and Motorcycle permit tests for all 50 US states.',
+        },
+      },
+    ],
+  });
+
   return (
     <main style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }} className="min-h-screen flex flex-col items-center py-8 px-4">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: faqJsonLd }}
+      />
 
       {/* Background blobs */}
       <div className="fixed top-[-200px] right-[-200px] w-[600px] h-[600px] rounded-full pointer-events-none"
