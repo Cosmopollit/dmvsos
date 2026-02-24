@@ -19,7 +19,7 @@ function CategoryContent() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-6 relative" style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}>
-      <button type="button" onClick={() => router.push('/')} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">
+      <button type="button" aria-label="Close" onClick={() => router.push('/')} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">
         ✕
       </button>
       <div className="text-center mb-8">

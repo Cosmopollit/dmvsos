@@ -30,12 +30,16 @@ function TestContent() {
   const [motivationalMessage, setMotivationalMessage] = useState(null);
   const [elapsed, setElapsed] = useState(0);
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
+  const startTimeRef = useRef(null);
 
   const formatTime = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
 
   useEffect(() => {
     if (!testMode || testMode === null) return;
-    const interval = setInterval(() => setElapsed(e => e + 1), 1000);
+    startTimeRef.current = Date.now();
+    const interval = setInterval(() => {
+      setElapsed(Math.floor((Date.now() - startTimeRef.current) / 1000));
+    }, 1000);
     return () => clearInterval(interval);
   }, [testMode]);
 

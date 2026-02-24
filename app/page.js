@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
+import { STATE_OPTIONS, stateToSlug } from '@/lib/states';
 
 const codeToName = { en: 'English', ru: 'Русский', es: 'Español', zh: '中文', ua: 'Українська' };
 
@@ -38,33 +39,11 @@ export default function Home() {
     { flag: '🇺🇦', name: 'Українська' },
   ];
 
-  const states = [
-    'Alabama (AL)', 'Alaska (AK)', 'Arizona (AZ)', 'Arkansas (AR)',
-    'California (CA)', 'Colorado (CO)', 'Connecticut (CT)', 'Delaware (DE)',
-    'Florida (FL)', 'Georgia (GA)', 'Hawaii (HI)', 'Idaho (ID)',
-    'Illinois (IL)', 'Indiana (IN)', 'Iowa (IA)', 'Kansas (KS)',
-    'Kentucky (KY)', 'Louisiana (LA)', 'Maine (ME)', 'Maryland (MD)',
-    'Massachusetts (MA)', 'Michigan (MI)', 'Minnesota (MN)', 'Mississippi (MS)',
-    'Missouri (MO)', 'Montana (MT)', 'Nebraska (NE)', 'Nevada (NV)',
-    'New Hampshire (NH)', 'New Jersey (NJ)', 'New Mexico (NM)', 'New York (NY)',
-    'North Carolina (NC)', 'North Dakota (ND)', 'Ohio (OH)', 'Oklahoma (OK)',
-    'Oregon (OR)', 'Pennsylvania (PA)', 'Rhode Island (RI)', 'South Carolina (SC)',
-    'South Dakota (SD)', 'Tennessee (TN)', 'Texas (TX)', 'Utah (UT)',
-    'Vermont (VT)', 'Virginia (VA)', 'Washington (WA)', 'West Virginia (WV)',
-    'Wisconsin (WI)', 'Wyoming (WY)'
-  ];
-
-  function stateToSlug(displayState) {
-    if (!displayState) return '';
-    const name = displayState.replace(/\s*\([A-Z]{2}\)\s*$/, '').trim();
-    return name.toLowerCase().replace(/\s+/g, '-');
-  }
-
   async function handleSignOut() {
     await supabase.auth.signOut();
   }
 
-  const stateOptions = states.map((display) => ({ name: display, code: stateToSlug(display) }));
+  const stateOptions = STATE_OPTIONS.map((display) => ({ name: display, code: stateToSlug(display) }));
   const steps = [
     { emoji: '📱', label: tex.step1, msg: tex.stepMsg1, color: '#3B82F6' },
     { emoji: '🏛️', label: tex.step2, msg: tex.stepMsg2, color: '#8B5CF6' },
@@ -73,7 +52,7 @@ export default function Home() {
   ];
 
   return (
-    <main style={{ fontFamily: 'DM Sans, sans-serif', background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }} className="min-h-screen flex flex-col items-center py-8 px-4">
+    <main style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }} className="min-h-screen flex flex-col items-center py-8 px-4">
 
       {/* Background blobs */}
       <div className="fixed top-[-200px] right-[-200px] w-[600px] h-[600px] rounded-full pointer-events-none"
@@ -115,7 +94,8 @@ export default function Home() {
                 )}
               </button>
               <button onClick={handleSignOut} type="button"
-                className="text-[11px] text-[#94A3B8] hover:text-[#64748B] hover:underline transition">
+                className="text-[11px] text-[#94A3B8] hover:text-[#64748B] hover:underline transition"
+                aria-label="Sign out">
                 ✕
               </button>
             </div>
@@ -127,6 +107,7 @@ export default function Home() {
       <div className="flex flex-nowrap gap-1.5 justify-center mb-4 overflow-x-auto pb-1 w-full max-w-lg mx-auto px-4">
         {langs.map((l) => (
           <button key={l.name} onClick={() => { setLang(l.name); saveLang(langToCode[l.name] || 'en'); }} type="button"
+            aria-label={`Switch language to ${l.name}`}
             className={`shrink-0 text-xs py-1 px-2.5 rounded-full whitespace-nowrap font-medium border border-[#E2E8F0] transition-all ${
               lang === l.name
                 ? 'bg-[#0B1C3D] text-white border-[#0B1C3D]'
