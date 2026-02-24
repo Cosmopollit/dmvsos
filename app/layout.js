@@ -12,6 +12,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+};
+
 export const metadata = {
   title: 'DMVSOS — Free DMV Practice Tests for All 50 States',
   description: 'Free DMV practice tests for all 50 US states. Car, CDL, and Motorcycle tests in English, Russian, Spanish, and Chinese. Pass your DMV test on the first try.',

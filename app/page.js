@@ -13,7 +13,8 @@ export default function Home() {
   const { user, isPro } = useAuth();
   const [lang, setLang] = useState(() => codeToName[getSavedLang()] || 'English');
   const [state, setState] = useState('');
-  const liveCount = 47;
+  // Randomized social proof range (not live data)
+  const [liveCount] = useState(() => Math.floor(Math.random() * 30) + 30);
   const [activeStep, setActiveStep] = useState(0);
   const stateSelectRef = useRef(null);
   const router = useRouter();

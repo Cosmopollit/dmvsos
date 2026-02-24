@@ -1,44 +1,48 @@
+const states = [
+  'alabama', 'alaska', 'arizona', 'arkansas', 'california', 'colorado',
+  'connecticut', 'delaware', 'florida', 'georgia', 'hawaii', 'idaho',
+  'illinois', 'indiana', 'iowa', 'kansas', 'kentucky', 'louisiana',
+  'maine', 'maryland', 'massachusetts', 'michigan', 'minnesota', 'mississippi',
+  'missouri', 'montana', 'nebraska', 'nevada', 'new-hampshire', 'new-jersey',
+  'new-mexico', 'new-york', 'north-carolina', 'north-dakota', 'ohio', 'oklahoma',
+  'oregon', 'pennsylvania', 'rhode-island', 'south-carolina', 'south-dakota',
+  'tennessee', 'texas', 'utah', 'vermont', 'virginia', 'washington',
+  'west-virginia', 'wisconsin', 'wyoming',
+];
+
+const categories = ['dmv', 'cdl', 'moto'];
+const languages = ['en', 'ru', 'es', 'zh', 'ua'];
+
 export default function sitemap() {
-  const states = [
-    'alabama', 'alaska', 'arizona', 'arkansas', 'california',
-    'colorado', 'connecticut', 'delaware', 'florida', 'georgia',
-    'hawaii', 'idaho', 'illinois', 'indiana', 'iowa', 'kansas',
-    'kentucky', 'louisiana', 'maine', 'maryland', 'massachusetts',
-    'michigan', 'minnesota', 'mississippi', 'missouri', 'montana',
-    'nebraska', 'nevada', 'new-hampshire', 'new-jersey', 'new-mexico',
-    'new-york', 'north-carolina', 'north-dakota', 'ohio', 'oklahoma',
-    'oregon', 'pennsylvania', 'rhode-island', 'south-carolina',
-    'south-dakota', 'tennessee', 'texas', 'utah', 'vermont',
-    'virginia', 'washington', 'west-virginia', 'wisconsin', 'wyoming'
-  ];
-
-  const categories = ['dmv', 'cdl', 'moto'];
   const baseUrl = 'https://dmvsos.com';
+  const now = new Date().toISOString();
 
-  const staticPages = [
-    { url: baseUrl, changeFrequency: 'weekly', priority: 1.0 },
-    { url: `${baseUrl}/login`, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${baseUrl}/upgrade`, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${baseUrl}/terms`, changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${baseUrl}/privacy`, changeFrequency: 'yearly', priority: 0.3 },
+  const pages = [
+    { url: baseUrl, lastModified: now, changeFrequency: 'weekly', priority: 1 },
+    { url: `${baseUrl}/upgrade`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/login`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${baseUrl}/terms`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${baseUrl}/privacy`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
   ];
 
-  const categoryPages = states.map(state => ({
-    url: `${baseUrl}/category?state=${state}`,
-    changeFrequency: 'monthly',
-    priority: 0.8,
-  }));
+  for (const st of states) {
+    for (const lang of languages) {
+      pages.push({
+        url: `${baseUrl}/category?state=${st}&lang=${lang}`,
+        lastModified: now,
+        changeFrequency: 'weekly',
+        priority: 0.7,
+      });
+      for (const cat of categories) {
+        pages.push({
+          url: `${baseUrl}/test?state=${st}&category=${cat}&lang=${lang}`,
+          lastModified: now,
+          changeFrequency: 'weekly',
+          priority: 0.6,
+        });
+      }
+    }
+  }
 
-  const testPages = states.flatMap(state =>
-    categories.map(cat => ({
-      url: `${baseUrl}/test?state=${state}&category=${cat}`,
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    }))
-  );
-
-  return [...staticPages, ...categoryPages, ...testPages].map(page => ({
-    ...page,
-    lastModified: new Date(),
-  }));
+  return pages;
 }

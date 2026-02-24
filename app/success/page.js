@@ -31,11 +31,11 @@ export default function Success() {
             {tex.welcomePro || 'Welcome to DMVSOS Pro! You now have access to all tests.'}
           </p>
 
-          <button onClick={() => router.push(`/?lang=${lang}`)}
+          <button type="button" onClick={() => router.push(`/?lang=${lang}`)}
             className="w-full bg-[#2563EB] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#1D4ED8] hover:-translate-y-0.5 hover:shadow-lg transition-all mb-3">
             {tex.startPracticing || 'Start practicing'}
           </button>
-          <button onClick={() => router.push('/')}
+          <button type="button" onClick={() => router.push('/')}
             className="w-full bg-white border-2 border-[#E2E8F0] text-[#1E293B] py-3 rounded-xl font-semibold text-base hover:border-[#2563EB] hover:text-[#2563EB] transition-all">
             {tex.home || 'Go to home'}
           </button>
