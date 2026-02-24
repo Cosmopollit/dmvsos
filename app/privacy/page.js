@@ -14,6 +14,7 @@ export default function Privacy() {
 
         <div className="bg-white rounded-2xl shadow-sm border border-[#E2E8F0] p-8">
           <h1 className="text-2xl font-bold text-[#0B1C3D] mb-6">Privacy Policy</h1>
+          <p className="text-xs text-[#94A3B8] mb-2 italic">This document is available in English only / Этот документ доступен только на английском языке</p>
           <p className="text-sm text-[#94A3B8] mb-6">Last updated: February 23, 2026</p>
 
           <div className="space-y-6 text-[#334155] text-[15px] leading-relaxed">

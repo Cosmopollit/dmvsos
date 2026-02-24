@@ -1,7 +1,7 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
+import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
@@ -29,6 +29,7 @@ function TestContent() {
   const [showUpgradeBanner, setShowUpgradeBanner] = useState(false);
   const [motivationalMessage, setMotivationalMessage] = useState(null);
   const [elapsed, setElapsed] = useState(0);
+  const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
 
   const formatTime = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
 
@@ -297,7 +298,7 @@ function TestContent() {
               className="text-sm text-[#94A3B8] hover:text-[#2563EB] transition">
               {tex.back}
             </button>
-            <button type="button" onClick={() => { if (window.confirm(tex.leaveConfirm)) router.push('/'); }}
+            <button type="button" onClick={() => setShowLeaveConfirm(true)}
               className="text-[#94A3B8] hover:text-[#2563EB] transition p-0.5"
               title="Home"
               aria-label="Home">
@@ -320,8 +321,11 @@ function TestContent() {
         <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E2E8F0] mb-5">
 
           {q.imageUrl && (
-            <img src={q.imageUrl} alt=""
-              className="w-full rounded-xl mb-5 border border-[#E2E8F0]" loading="lazy" />
+            <div className="relative w-full aspect-video mb-5">
+              <Image src={q.imageUrl} alt="" fill
+                className="rounded-xl border border-[#E2E8F0] object-contain"
+                sizes="(max-width: 640px) 100vw, 640px" />
+            </div>
           )}
 
           <p className="text-[17px] font-bold text-[#1E293B] leading-relaxed mb-6">
@@ -391,6 +395,25 @@ function TestContent() {
               className="text-sm text-[#94A3B8] hover:text-[#64748B] transition">
               {tex.seeResults}
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Leave confirmation modal */}
+      {showLeaveConfirm && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl border border-[#E2E8F0] text-center">
+            <p className="text-base font-semibold text-[#1E293B] mb-5">{tex.leaveConfirm}</p>
+            <div className="flex gap-3">
+              <button type="button" onClick={() => setShowLeaveConfirm(false)}
+                className="flex-1 py-3 rounded-xl border border-[#E2E8F0] text-[#1E293B] font-semibold text-sm hover:bg-[#F8FAFC] transition">
+                {tex.back || 'Cancel'}
+              </button>
+              <button type="button" onClick={() => router.push('/')}
+                className="flex-1 py-3 rounded-xl bg-[#DC2626] text-white font-semibold text-sm hover:bg-[#B91C1C] transition">
+                {tex.home || 'Leave'}
+              </button>
+            </div>
           </div>
         </div>
       )}

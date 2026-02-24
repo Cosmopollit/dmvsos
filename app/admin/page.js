@@ -80,14 +80,27 @@ export default function AdminPage() {
     setLoading(true);
     setLoadError('');
     const stateSlug = stateToSlug(stateLabel);
-    const langFolder = lang === 'zh' ? 'cn' : lang;
     try {
-      const res = await fetch(`/data/${langFolder}/${stateSlug}.json`);
-      if (!res.ok) throw new Error('Failed to load');
-      const data = await res.json();
-      const test = data[category]?.[0];
-      setQuestions(test?.questions ?? []);
-      if (!test?.questions?.length) setLoadError('No questions found for this selection.');
+      const { data, error } = await supabase
+        .from('questions')
+        .select('*')
+        .eq('state', stateSlug)
+        .eq('category', category)
+        .eq('language', lang)
+        .order('id', { ascending: true });
+      if (error) throw new Error(error.message);
+      const mapped = (data || []).map((row) => ({
+        id: row.id,
+        question: row.question_text,
+        answers: [row.option_a, row.option_b, row.option_c, row.option_d].filter(Boolean),
+        correctAnswerIndex: row.correct_answer,
+        imageUrl: row.image_url || null,
+        state: row.state,
+        category: row.category,
+        language: row.language,
+      }));
+      setQuestions(mapped);
+      if (!mapped.length) setLoadError('No questions found for this selection.');
     } catch (err) {
       setLoadError(err.message || 'Failed to load questions.');
       setQuestions([]);
