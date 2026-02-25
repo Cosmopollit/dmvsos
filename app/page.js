@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
@@ -14,29 +14,20 @@ export default function Home() {
   const { user, isPro } = useAuth();
   const [lang, setLang] = useState(() => codeToName[getSavedLang()] || 'English');
   const [state, setState] = useState('');
-  // Randomized social proof range (not live data)
   const [liveCount] = useState(() => Math.floor(Math.random() * 30) + 30);
-  const [activeStep, setActiveStep] = useState(0);
   const stateSelectRef = useRef(null);
   const router = useRouter();
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveStep(prev => prev < 3 ? prev + 1 : 0);
-    }, 2000);
-    return () => clearInterval(timer);
-  }, []);
 
   const langToCode = { English: 'en', 'Русский': 'ru', 'Español': 'es', '中文': 'zh', 'Українська': 'ua' };
   const langCode = langToCode[lang] || 'en';
   const tex = t[langCode] || t.en;
 
   const langs = [
-    { flag: '🇺🇸', name: 'English' },
-    { flag: '🇷🇺', name: 'Русский' },
-    { flag: '🇪🇸', name: 'Español' },
-    { flag: '🇨🇳', name: '中文' },
-    { flag: '🇺🇦', name: 'Українська' },
+    { flag: '🇺🇸', code: 'en', name: 'English' },
+    { flag: '🇷🇺', code: 'ru', name: 'Русский' },
+    { flag: '🇪🇸', code: 'es', name: 'Español' },
+    { flag: '🇨🇳', code: 'zh', name: '中文' },
+    { flag: '🇺🇦', code: 'ua', name: 'Українська' },
   ];
 
   async function handleSignOut() {
@@ -45,10 +36,33 @@ export default function Home() {
 
   const stateOptions = STATE_OPTIONS.map((display) => ({ name: display, code: stateToSlug(display) }));
   const steps = [
-    { emoji: '📱', label: tex.step1, msg: tex.stepMsg1, color: '#3B82F6' },
-    { emoji: '🏛️', label: tex.step2, msg: tex.stepMsg2, color: '#8B5CF6' },
-    { emoji: '🪪', label: tex.step3, msg: tex.stepMsg3, color: '#10B981' },
-    { emoji: '🚗', label: tex.step4, msg: tex.stepMsg4, color: '#F59E0B' },
+    { emoji: '📱', label: tex.step1, msg: tex.stepMsg1 },
+    { emoji: '🏛️', label: tex.step2, msg: tex.stepMsg2 },
+    { emoji: '🪪', label: tex.step3, msg: tex.stepMsg3 },
+    { emoji: '🚗', label: tex.step4, msg: tex.stepMsg4 },
+  ];
+
+  const testimonials = [
+    {
+      text: '"Готовился на русском языке, всё понятно и чётко. Сдал с первого раза в Bellevue."',
+      name: 'Михаил Д.', location: 'Bellevue, WA', initial: 'М',
+      bg: 'bg-blue-100', color: 'text-blue-600', border: 'border-l-blue-500',
+    },
+    {
+      text: '"Practiqué dos días en español y pasé el examen a la primera en Santa Monica."',
+      name: 'Carlos R.', location: 'Santa Monica, CA', initial: 'C',
+      bg: 'bg-orange-100', color: 'text-orange-600', border: 'border-l-orange-500',
+    },
+    {
+      text: '"用中文练习很方便，两天后在Fort Lauderdale一次通过考试！"',
+      name: 'Wei L.', location: 'Fort Lauderdale, FL', initial: 'W',
+      bg: 'bg-red-100', color: 'text-red-600', border: 'border-l-red-500',
+    },
+    {
+      text: '"I was so nervous but after practicing here every day, I passed on the first try!"',
+      name: 'Sarah M.', location: 'Tacoma, WA', initial: 'S',
+      bg: 'bg-green-100', color: 'text-green-600', border: 'border-l-green-500',
+    },
   ];
 
   const faqJsonLd = JSON.stringify({
@@ -91,7 +105,7 @@ export default function Home() {
   });
 
   return (
-    <main style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }} className="min-h-screen flex flex-col items-center py-8 px-4">
+    <main style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }} className="min-h-screen flex flex-col items-center px-4">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: faqJsonLd }}
@@ -103,71 +117,94 @@ export default function Home() {
       <div className="fixed bottom-[-150px] left-[-150px] w-[500px] h-[500px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 70%)' }} />
 
-      {/* Header: centered logo + slogan, user pill absolute top-right */}
-      <header className="relative w-full max-w-lg mx-auto mb-6 px-4">
-        <div className="flex flex-col items-center text-center">
-          <a href="/" className="cursor-pointer hover:opacity-90 transition">
-            <Image src="/logo.png" alt="DMVSOS" width={40} height={40} className="rounded-xl mx-auto mb-1" />
-            <div className="text-[22px] sm:text-[26px] font-black text-[#0B1C3D] tracking-tight">
-              DMVSOS
-            </div>
-            <p className="text-sm text-[#94A3B8]">{tex.slogan}</p>
+      {/* Compact header: logo + flag-only language switcher + user pill */}
+      <header className="w-full max-w-lg mx-auto pt-5 pb-4 px-4">
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <a href="/" className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition">
+            <Image src="/logo.png" alt="DMVSOS" width={32} height={32} className="rounded-lg" />
+            <span className="text-lg font-black text-[#0B1C3D] tracking-tight">DMVSOS</span>
           </a>
-        </div>
-        {user && (() => {
-          const raw = user.user_metadata?.full_name || user.email || '';
-          const firstName = raw.split(/\s+/)[0] || raw.split('@')[0] || '?';
-          const initial = (raw || '?')[0].toUpperCase();
-          return (
-            <div className="absolute top-0 right-0 sm:top-4 sm:right-4 flex items-center gap-2 bg-white border border-[#E2E8F0] rounded-full pl-1.5 pr-2.5 py-1 shadow-sm z-10">
-              <button
-                type="button"
-                onClick={() => router.push('/profile')}
-                className="flex items-center gap-2 min-w-0 hover:opacity-90 transition"
-              >
-                {isPro ? (
-                  <span className="text-[#F59E0B] font-medium text-xs max-w-[100px] truncate">👑 <span className="hidden sm:inline">{firstName}</span></span>
-                ) : (
-                  <>
-                    <div className="w-7 h-7 rounded-full bg-[#0B1C3D] flex items-center justify-center text-white text-[11px] font-bold shrink-0">
-                      {initial}
-                    </div>
-                    <span className="hidden sm:block text-xs font-medium text-[#1E293B] max-w-[100px] truncate">{firstName}</span>
-                  </>
-                )}
-              </button>
-              <button onClick={handleSignOut} type="button"
-                className="text-[11px] text-[#94A3B8] hover:text-[#64748B] hover:underline transition"
-                aria-label="Sign out">
-                ✕
-              </button>
+
+          {/* Right side: flags + user pill */}
+          <div className="flex items-center gap-3">
+            {/* Flag-only language switcher */}
+            <div className="flex items-center gap-1">
+              {langs.map((l) => (
+                <button
+                  key={l.code}
+                  onClick={() => { setLang(l.name); saveLang(l.code); }}
+                  type="button"
+                  aria-label={`Switch language to ${l.name}`}
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-base transition-all ${
+                    lang === l.name
+                      ? 'bg-[#0B1C3D] ring-2 ring-[#2563EB] scale-110'
+                      : 'bg-white hover:bg-gray-50 border border-gray-200'
+                  }`}
+                >
+                  {l.flag}
+                </button>
+              ))}
             </div>
-          );
-        })()}
+
+            {/* User pill */}
+            {user && (() => {
+              const raw = user.user_metadata?.full_name || user.email || '';
+              const firstName = raw.split(/\s+/)[0] || raw.split('@')[0] || '?';
+              const initial = (raw || '?')[0].toUpperCase();
+              return (
+                <div className="flex items-center gap-1.5 bg-white border border-[#E2E8F0] rounded-full pl-1.5 pr-2.5 py-1 shadow-sm">
+                  <button
+                    type="button"
+                    onClick={() => router.push('/profile')}
+                    className="flex items-center gap-1.5 min-w-0 hover:opacity-90 transition"
+                  >
+                    {isPro ? (
+                      <span className="text-[#F59E0B] font-medium text-xs">👑</span>
+                    ) : (
+                      <div className="w-6 h-6 rounded-full bg-[#0B1C3D] flex items-center justify-center text-white text-[10px] font-bold shrink-0">
+                        {initial}
+                      </div>
+                    )}
+                    <span className="hidden sm:block text-xs font-medium text-[#1E293B] max-w-[80px] truncate">{firstName}</span>
+                  </button>
+                  <button onClick={handleSignOut} type="button"
+                    className="text-[11px] text-[#94A3B8] hover:text-[#64748B] hover:underline transition"
+                    aria-label="Sign out">
+                    ✕
+                  </button>
+                </div>
+              );
+            })()}
+          </div>
+        </div>
       </header>
 
-      {/* Language bar - single row, scroll on mobile */}
-      <div className="flex flex-nowrap gap-1.5 justify-center mb-4 overflow-x-auto pb-1 w-full max-w-lg mx-auto px-4">
-        {langs.map((l) => (
-          <button key={l.name} onClick={() => { setLang(l.name); saveLang(langToCode[l.name] || 'en'); }} type="button"
-            aria-label={`Switch language to ${l.name}`}
-            className={`shrink-0 text-xs py-1 px-2.5 rounded-full whitespace-nowrap font-medium border border-[#E2E8F0] transition-all ${
-              lang === l.name
-                ? 'bg-[#0B1C3D] text-white border-[#0B1C3D]'
-                : 'bg-white text-[#94A3B8] hover:border-[#2563EB] hover:text-[#2563EB]'
-            }`}>
-            {l.flag} {l.name}
-          </button>
-        ))}
-      </div>
+      {/* Hero section */}
+      <section className="w-full max-w-lg mx-auto px-4 pt-1 pb-5 text-center">
+        {/* FREE badge */}
+        <span className="inline-block bg-[#10B981]/10 text-[#10B981] text-xs font-bold px-3 py-1 rounded-full mb-3 tracking-wide border border-[#10B981]/20">
+          {tex.freeBadge}
+        </span>
 
-      {/* Main card */}
+        {/* H1 headline with gradient text */}
+        <h1 className="text-[26px] sm:text-[32px] font-black leading-tight mb-2.5 tracking-tight"
+          style={{ background: 'linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          {tex.heroTitle}
+        </h1>
+
+        {/* Subheadline */}
+        <p className="text-sm text-[#64748B] leading-relaxed">
+          {tex.heroSub}
+        </p>
+      </section>
+
+      {/* State selector card */}
       <div id="state-selector" className="w-full max-w-lg mx-auto px-4 mb-8">
         <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 border border-[#E2E8F0]/40" style={{ borderTop: '4px solid #2563EB' }}>
 
         <p className="text-sm text-[#94A3B8] mb-5">{tex.selectStateLabel}</p>
 
-        {/* State */}
         <select
           ref={stateSelectRef}
           value={state}
@@ -181,7 +218,6 @@ export default function Home() {
           ))}
         </select>
 
-        {/* Single primary CTA - blue by default, amber for Pro when state selected */}
         {(() => {
           const isProWithState = user && isPro && state;
           const buttonLabel = !state ? tex.ctaNoState : (isProWithState ? tex.ctaProReady : tex.ctaReady);
@@ -206,9 +242,9 @@ export default function Home() {
                 <p className="text-xs text-center mt-3 text-[#B45309] font-medium">{tex.proActive}</p>
               ) : (
                 <div className="flex flex-wrap gap-2 justify-center mt-3">
-                  <span className="text-xs text-gray-400">{tex.trust1}</span>
-                  <span className="text-xs text-gray-400">{tex.trust2}</span>
-                  <span className="text-xs text-gray-400">{tex.trust3}</span>
+                  <span className="inline-flex items-center gap-1 text-xs text-[#64748B] bg-[#F1F5F9] px-2.5 py-1 rounded-full">{tex.trust1}</span>
+                  <span className="inline-flex items-center gap-1 text-xs text-[#64748B] bg-[#F1F5F9] px-2.5 py-1 rounded-full">{tex.trust2}</span>
+                  <span className="inline-flex items-center gap-1 text-xs text-[#64748B] bg-[#F1F5F9] px-2.5 py-1 rounded-full">{tex.trust3}</span>
                 </div>
               )}
             </>
@@ -228,8 +264,25 @@ export default function Home() {
         </div>
       </div>
 
-      {/* How it works - interactive steps */}
-      <div className="w-full max-w-lg mx-auto mb-8 px-4">
+      {/* Stats bar */}
+      <section className="w-full max-w-lg mx-auto px-4 mb-8">
+        <div className="grid grid-cols-4 gap-2">
+          {[
+            { value: '34K+', label: tex.statQuestions },
+            { value: '50', label: tex.statStates },
+            { value: '5', label: tex.statLanguages },
+            { value: '94%', label: tex.statPassRate },
+          ].map((stat) => (
+            <div key={stat.label} className="bg-white rounded-2xl p-3 text-center shadow-sm border border-[#E2E8F0]/60">
+              <div className="text-xl sm:text-2xl font-black text-[#0B1C3D]">{stat.value}</div>
+              <div className="text-[11px] text-[#94A3B8] font-medium mt-0.5">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* How it works — static 4-column grid */}
+      <section className="w-full max-w-lg mx-auto mb-8 px-4">
         <h2 className="text-center text-lg font-bold text-[#0B1C3D] mb-6">
           {tex.howItWorks}
         </h2>
@@ -238,133 +291,71 @@ export default function Home() {
           {steps.map((step, i) => (
             <div
               key={i}
-              onClick={() => setActiveStep(i)}
-              className="flex flex-col items-center p-3 rounded-2xl cursor-pointer"
-              style={{
-                background: activeStep === i ? `${step.color}18` : 'white',
-                border: `2px solid ${activeStep === i ? step.color : '#F1F5F9'}`,
-                transform: activeStep === i ? 'translateY(-6px)' : 'translateY(0)',
-                boxShadow: activeStep === i ? `0 8px 20px ${step.color}30` : '0 2px 8px rgba(0,0,0,0.05)',
-                transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
-              }}
+              className="flex flex-col items-center p-3 rounded-2xl bg-white border border-[#F1F5F9] shadow-sm"
             >
-              <span
-                className="text-3xl mb-2"
-                style={{
-                  transform: activeStep === i ? 'scale(1.3)' : 'scale(1)',
-                  filter: activeStep === i ? `drop-shadow(0 4px 8px ${step.color}60)` : 'none',
-                  transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                  display: 'block',
-                }}
-              >
-                {step.emoji}
-              </span>
-              <span
-                className="text-xs text-center font-semibold leading-tight"
-                style={{
-                  color: activeStep === i ? step.color : '#94A3B8',
-                  transition: 'color 0.3s'
-                }}
-              >
+              {/* Step number */}
+              <div className="w-5 h-5 rounded-full bg-[#2563EB] text-white text-[10px] font-bold flex items-center justify-center mb-2">
+                {i + 1}
+              </div>
+              <span className="text-3xl mb-2 block">{step.emoji}</span>
+              <span className="text-xs text-center font-semibold leading-tight text-[#0B1C3D]">
                 {step.label}
               </span>
+              <span className="text-[10px] text-center text-[#94A3B8] mt-1 leading-tight">
+                {step.msg}
+              </span>
             </div>
           ))}
         </div>
+      </section>
 
-        <div className="flex justify-center gap-2 mt-5">
-          {steps.map((step, i) => (
-            <div
-              key={i}
-              onClick={() => setActiveStep(i)}
-              className="rounded-full cursor-pointer"
-              style={{
-                width: activeStep === i ? '28px' : '8px',
-                height: '8px',
-                background: activeStep === i ? steps[i].color : '#E2E8F0',
-                transition: 'all 0.4s ease',
-              }}
-            />
-          ))}
-        </div>
-
-        <p
-          className="text-center text-sm font-medium mt-4"
-          style={{
-            color: steps[activeStep].color,
-            transition: 'color 0.3s',
-            minHeight: '20px'
-          }}
-        >
-          {steps[activeStep].msg}
-        </p>
-      </div>
-
-      {/* Testimonials */}
-      <div className="w-full max-w-lg mx-auto mb-8 px-4">
-        <h2 className="text-center text-xl font-bold text-[#0B1C3D] mb-6">
+      {/* Testimonials — horizontal scroll on mobile, 2x2 grid on desktop */}
+      <section className="w-full max-w-lg mx-auto mb-8 px-4">
+        <h2 className="text-center text-xl font-bold text-[#0B1C3D] mb-1">
           {tex.testimonialsTitle}
         </h2>
-        <div className="flex flex-col gap-4">
-          <div className="bg-white rounded-2xl p-5 shadow-sm">
-            <div className="flex gap-1 mb-2">⭐⭐⭐⭐⭐</div>
-            <p className="text-sm text-[#475569] mb-3">"Готовился на русском языке, всё понятно и чётко. Сдал с первого раза в Bellevue. Очень помогло что вопросы именно по Вашингтону."</p>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-600 text-sm">М</div>
-              <div>
-                <div className="text-sm font-semibold text-[#0B1C3D]">Михаил Д.</div>
-                <div className="text-xs text-gray-400">Bellevue, WA</div>
-              </div>
-            </div>
-          </div>
+        <p className="text-center text-sm text-[#64748B] mb-6">{tex.thousandsPassed}</p>
 
-          <div className="bg-white rounded-2xl p-5 shadow-sm">
-            <div className="flex gap-1 mb-2">⭐⭐⭐⭐⭐</div>
-            <p className="text-sm text-[#475569] mb-3">"Practiqué dos días en español y pasé el examen a la primera en Santa Monica. Los mejores $9.99 que gasté."</p>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center font-bold text-orange-600 text-sm">C</div>
-              <div>
-                <div className="text-sm font-semibold text-[#0B1C3D]">Carlos R.</div>
-                <div className="text-xs text-gray-400">Santa Monica, CA</div>
+        <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 sm:grid sm:grid-cols-2 sm:overflow-visible">
+          {testimonials.map((item, i) => (
+            <div
+              key={i}
+              className={`min-w-[280px] sm:min-w-0 bg-white rounded-2xl p-5 shadow-sm border-l-4 ${item.border}`}
+            >
+              <div className="flex gap-0.5 mb-2 text-sm">⭐⭐⭐⭐⭐</div>
+              <p className="text-sm text-[#475569] mb-3 leading-relaxed">{item.text}</p>
+              <div className="flex items-center gap-2">
+                <div className={`w-8 h-8 rounded-full ${item.bg} flex items-center justify-center font-bold ${item.color} text-sm`}>
+                  {item.initial}
+                </div>
+                <div>
+                  <div className="text-sm font-semibold text-[#0B1C3D]">{item.name}</div>
+                  <div className="text-xs text-gray-400">{item.location}</div>
+                </div>
               </div>
             </div>
-          </div>
-
-          <div className="bg-white rounded-2xl p-5 shadow-sm">
-            <div className="flex gap-1 mb-2">⭐⭐⭐⭐⭐</div>
-            <p className="text-sm text-[#475569] mb-3">"用中文练习很方便，两天后在Fort Lauderdale一次通过考试！"</p>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center font-bold text-red-600 text-sm">W</div>
-              <div>
-                <div className="text-sm font-semibold text-[#0B1C3D]">Wei L.</div>
-                <div className="text-xs text-gray-400">Fort Lauderdale, FL</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-2xl p-5 shadow-sm">
-            <div className="flex gap-1 mb-2">⭐⭐⭐⭐⭐</div>
-            <p className="text-sm text-[#475569] mb-3">"I was so nervous I was sure I'd fail. But after practicing here every day, I walked into the DOl in Tacoma feeling ready. Passed my written test on the first try!"</p>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center font-bold text-green-600 text-sm">S</div>
-              <div>
-                <div className="text-sm font-semibold text-[#0B1C3D]">Sarah M.</div>
-                <div className="text-xs text-gray-400">Tacoma, WA</div>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
-      </div>
+      </section>
 
       {/* Pricing */}
-      <div className="w-full max-w-lg mx-auto mb-8 px-4">
+      <section className="w-full max-w-lg mx-auto mb-8 px-4">
         <h2 className="text-xl font-bold text-[#0B1C3D] text-center mb-2">{tex.pricingHeading}</h2>
         <p className="text-sm text-[#64748B] text-center mb-6 leading-relaxed max-w-md mx-auto">{tex.pricingSubtext}</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {/* Pro plan - first so left on desktop, top on mobile */}
-          <div className="bg-[#0B1C3D] rounded-2xl p-6 border border-[#1e3a5f] shadow-sm text-center">
-            <h3 className="text-base font-bold text-white mb-1">{tex.proTitle}</h3>
-            <p className="text-sm text-[#94A3B8] mb-4">{tex.proDesc}</p>
+          {/* Pro plan */}
+          <div className="relative bg-[#0B1C3D] rounded-2xl p-6 border border-[#1e3a5f] shadow-sm text-center">
+            {/* MOST POPULAR badge */}
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#F59E0B] text-[#0B1C3D] text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap">
+              {tex.mostPopular}
+            </span>
+            <h3 className="text-base font-bold text-white mb-1 mt-2">{tex.proTitle}</h3>
+            <p className="text-sm text-[#94A3B8] mb-2">{tex.proDesc}</p>
+            {/* Prominent price */}
+            <div className="mb-4">
+              <span className="text-3xl font-black text-white">$9.99</span>
+              <span className="text-sm text-[#94A3B8]">{tex.perMonth}</span>
+            </div>
             <ul className="space-y-2 text-sm text-[#CBD5E1] mb-4 text-center list-none">
               <li>{tex.feature1}</li>
               <li>{tex.feature2}</li>
@@ -378,8 +369,10 @@ export default function Home() {
               {tex.upgradBtn}
             </button>
             <p className="text-xs text-[#94A3B8] mt-3">{tex.cancelAnytime}</p>
+            {/* Money-back guarantee */}
+            <p className="text-xs text-[#10B981] font-medium mt-2">🛡️ {tex.moneyBack}</p>
           </div>
-          {/* Free plan - second */}
+          {/* Free plan */}
           <div className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-sm flex flex-col text-center">
             <h3 className="text-base font-bold text-[#1E293B] mb-1">{tex.freeTitle}</h3>
             <p className="text-sm text-[#94A3B8] mb-3">{tex.freeDesc}</p>
@@ -399,15 +392,22 @@ export default function Home() {
             </button>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Footer */}
-      <p className="text-xs text-[#94A3B8] mt-8 text-center leading-relaxed max-w-lg mx-auto px-4">
-        {tex.footerLegal || 'By continuing, you agree to our'}{' '}
-        <a href="/terms" className="text-[#2563EB] font-medium">{tex.terms || 'Terms'}</a> {tex.and || 'and'}{' '}
-        <a href="/privacy" className="text-[#2563EB] font-medium">{tex.privacy || 'Privacy Policy'}</a>.<br />
-        {tex.footerFree || 'Free for everyone. No credit card needed.'}
-      </p>
+      {/* Footer with guarantee badge */}
+      <footer className="w-full max-w-lg mx-auto px-4 mt-8 pb-8">
+        <div className="text-center mb-4">
+          <span className="inline-flex items-center gap-1.5 text-xs text-[#10B981] font-medium bg-[#ECFDF5] px-3 py-1.5 rounded-full">
+            🛡️ {tex.guaranteeBadge}
+          </span>
+        </div>
+        <p className="text-xs text-[#94A3B8] text-center leading-relaxed">
+          {tex.footerLegal || 'By continuing, you agree to our'}{' '}
+          <a href="/terms" className="text-[#2563EB] font-medium">{tex.terms || 'Terms'}</a> {tex.and || 'and'}{' '}
+          <a href="/privacy" className="text-[#2563EB] font-medium">{tex.privacy || 'Privacy Policy'}</a>.<br />
+          {tex.footerFree || 'Free for everyone. No credit card needed.'}
+        </p>
+      </footer>
 
     </main>
   );
