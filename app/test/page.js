@@ -162,7 +162,7 @@ function TestContent() {
   if (loading) return (
     <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
       <div className="text-center">
-        <div className="text-4xl mb-4">⏳</div>
+        <div className="text-4xl mb-4 hourglass-spin">⏳</div>
         <p className="text-[#94A3B8]">{tex.loadingQuestions}</p>
       </div>
     </main>
@@ -172,7 +172,7 @@ function TestContent() {
     return (
       <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
         <div className="text-center">
-          <div className="text-4xl mb-4">⏳</div>
+          <div className="text-4xl mb-4 hourglass-spin">⏳</div>
           <p className="text-[#94A3B8]">{tex.loadingQuestions}</p>
         </div>
       </main>

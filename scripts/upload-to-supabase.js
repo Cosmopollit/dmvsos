@@ -11,7 +11,7 @@ if (!SERVICE_KEY) {
 }
 
 const BASE = path.join(__dirname, '..', 'public', 'data');
-const LANG_MAP = { en: 'en', ru: 'ru', es: 'es', cn: 'zh' };
+const LANG_MAP = { en: 'en', ru: 'ru', es: 'es', cn: 'zh', ua: 'ua' };
 const BATCH_SIZE = 200;
 const DELAY_MS = 300;
 

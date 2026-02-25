@@ -34,6 +34,8 @@ export default function Home() {
     await supabase.auth.signOut();
   }
 
+  const [demoSelected, setDemoSelected] = useState(null);
+  const [demoRevealed, setDemoRevealed] = useState(false);
   const stateOptions = STATE_OPTIONS.map((display) => ({ name: display, code: stateToSlug(display) }));
   const steps = [
     { emoji: '📱', label: tex.step1, msg: tex.stepMsg1 },
@@ -187,14 +189,20 @@ export default function Home() {
 
       {/* Hero section */}
       <section className="w-full max-w-lg mx-auto px-4 pt-1 pb-5 text-center">
-        {/* FREE badge */}
-        <span className="inline-block bg-[#10B981]/10 text-[#10B981] text-xs font-semibold px-3 py-1 rounded-full mb-4 tracking-widest uppercase border border-[#10B981]/20">
-          {tex.freeBadge}
-        </span>
+        {/* Version badge */}
+        {isPro ? (
+          <span className="inline-block bg-[#F59E0B]/10 text-[#F59E0B] text-xs font-semibold px-3 py-1 rounded-full mb-4 tracking-widest uppercase border border-[#F59E0B]/20">
+            👑 {tex.proBadge}
+          </span>
+        ) : (
+          <span className="inline-block bg-[#10B981]/10 text-[#10B981] text-xs font-semibold px-3 py-1 rounded-full mb-4 tracking-widest uppercase border border-[#10B981]/20">
+            {tex.freeBadge}
+          </span>
+        )}
 
-        {/* H1 headline — DM Sans, Styrene-like */}
-        <h1 className="text-[32px] sm:text-[42px] font-medium text-[#0B1C3D] leading-[1.1] mb-3"
-          style={{ fontFamily: "'DM Sans', var(--font-dm-sans), sans-serif", letterSpacing: '-0.03em' }}>
+        {/* H1 headline — DM Sans, Anthropic-style */}
+        <h1 className="text-[32px] sm:text-[42px] font-semibold text-[#0B1C3D] leading-[1.13] mb-3 whitespace-pre-line"
+          style={{ fontFamily: "'DM Sans', var(--font-dm-sans), sans-serif", letterSpacing: '-0.025em' }}>
           {tex.heroTitle}
         </h1>
 
@@ -264,16 +272,17 @@ export default function Home() {
 
       {/* Stats bar */}
       <section className="w-full max-w-lg mx-auto px-4 mb-8">
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-5 gap-2">
           {[
+            { value: '5K+', label: tex.statUsers },
             { value: '34K+', label: tex.statQuestions },
             { value: '50', label: tex.statStates },
             { value: '5', label: tex.statLanguages },
             { value: '94%', label: tex.statPassRate },
           ].map((stat) => (
             <div key={stat.label} className="bg-white rounded-2xl p-3 text-center shadow-sm border border-[#E2E8F0]/60">
-              <div className="text-xl sm:text-2xl font-black text-[#0B1C3D]">{stat.value}</div>
-              <div className="text-[11px] text-[#94A3B8] font-medium mt-0.5">{stat.label}</div>
+              <div className="text-lg sm:text-xl font-black text-[#0B1C3D]">{stat.value}</div>
+              <div className="text-[10px] text-[#94A3B8] font-medium mt-0.5">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -304,6 +313,54 @@ export default function Home() {
               </span>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Motivator: 50% fail stat */}
+      <section className="w-full max-w-lg mx-auto mb-8 px-4">
+        <div className="bg-[#FEF3C7] border border-[#FDE68A] rounded-2xl p-5 text-center">
+          <p className="text-sm font-bold text-[#92400E] mb-1">{tex.failStatTitle}</p>
+          <p className="text-sm text-[#78350F] leading-relaxed">{tex.failStatText}</p>
+        </div>
+      </section>
+
+      {/* Demo question */}
+      <section className="w-full max-w-lg mx-auto mb-8 px-4">
+        <h2 className="text-center text-lg font-bold text-[#0B1C3D] mb-4">{tex.demoTitle}</h2>
+        <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#E2E8F0]/60">
+          <p className="text-sm font-semibold text-[#1E293B] mb-4">{tex.demoQuestion}</p>
+          <div className="flex flex-col gap-2">
+            {[
+              { key: 0, label: 'A', text: tex.demoA },
+              { key: 1, label: 'B', text: tex.demoB },
+              { key: 2, label: 'C', text: tex.demoC },
+              { key: 3, label: 'D', text: tex.demoD },
+            ].map((opt) => {
+              const isCorrect = opt.key === 1;
+              const isSelected = demoSelected === opt.key;
+              let bg = 'bg-[#F8FAFC] hover:bg-[#EFF6FF] border-[#E2E8F0]';
+              if (demoRevealed && isSelected && isCorrect) bg = 'bg-[#D1FAE5] border-[#10B981]';
+              if (demoRevealed && isSelected && !isCorrect) bg = 'bg-[#FEE2E2] border-[#DC2626]';
+              if (demoRevealed && !isSelected && isCorrect) bg = 'bg-[#D1FAE5] border-[#10B981]';
+              return (
+                <button
+                  key={opt.key}
+                  type="button"
+                  onClick={() => { if (!demoRevealed) { setDemoSelected(opt.key); setDemoRevealed(true); } }}
+                  className={`w-full text-left px-4 py-3 rounded-xl border text-sm transition-all ${bg} ${demoRevealed ? 'cursor-default' : 'cursor-pointer'}`}
+                >
+                  <span className="font-semibold text-[#64748B] mr-2">{opt.label}.</span>
+                  <span className="text-[#1E293B]">{opt.text}</span>
+                </button>
+              );
+            })}
+          </div>
+          {demoRevealed && (
+            <div className={`mt-4 p-3 rounded-xl text-sm ${demoSelected === 1 ? 'bg-[#ECFDF5] text-[#065F46]' : 'bg-[#FEF2F2] text-[#991B1B]'}`}>
+              <p className="font-medium">{demoSelected === 1 ? tex.demoCorrect : tex.demoWrong}</p>
+              <p className="mt-1 text-xs opacity-80">{tex.demoCta}</p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -350,16 +407,18 @@ export default function Home() {
             <h3 className="text-base font-bold text-white mb-1 mt-2">{tex.proTitle}</h3>
             <p className="text-sm text-[#94A3B8] mb-2">{tex.proDesc}</p>
             {/* Prominent price */}
-            <div className="mb-4">
+            <div className="mb-2">
               <span className="text-3xl font-black text-white">$9.99</span>
               <span className="text-sm text-[#94A3B8]">{tex.perMonth}</span>
             </div>
-            <ul className="space-y-2 text-sm text-[#CBD5E1] mb-4 text-center list-none">
+            <p className="text-xs text-[#94A3B8] mb-4 leading-relaxed italic">{tex.proSavings}</p>
+            <ul className="space-y-2 text-sm text-[#CBD5E1] mb-4 text-left list-none">
               <li>{tex.feature1}</li>
               <li>{tex.feature2}</li>
               <li>{tex.feature3}</li>
               <li>{tex.feature4}</li>
               <li>{tex.feature5}</li>
+              <li>{tex.feature6}</li>
             </ul>
             <p className="text-sm font-semibold text-[#F59E0B] mb-4">{tex.proNote}</p>
             <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}`)}
@@ -388,6 +447,20 @@ export default function Home() {
             >
               {tex.startFree}
             </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Pass Guarantee block */}
+      <section className="w-full max-w-lg mx-auto mb-8 px-4">
+        <div className="bg-[#ECFDF5] border border-[#A7F3D0] rounded-2xl p-6 text-center">
+          <div className="text-3xl mb-2">🛡️</div>
+          <h3 className="text-base font-bold text-[#065F46] mb-2">{tex.guaranteeTitle}</h3>
+          <p className="text-sm text-[#047857] leading-relaxed mb-4">{tex.guaranteeText}</p>
+          <div className="flex flex-col gap-1.5">
+            <span className="text-xs text-[#059669] font-medium">✓ {tex.guaranteeBullet1}</span>
+            <span className="text-xs text-[#059669] font-medium">✓ {tex.guaranteeBullet2}</span>
+            <span className="text-xs text-[#059669] font-medium">✓ {tex.guaranteeBullet3}</span>
           </div>
         </div>
       </section>

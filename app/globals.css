@@ -25,3 +25,12 @@ body {
 .btn-pulse {
   animation: pulse-soft 2s infinite;
 }
+
+@keyframes spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.hourglass-spin {
+  display: inline-block;
+  animation: spin-slow 1.5s ease-in-out infinite;
+}
