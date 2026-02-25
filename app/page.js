@@ -192,9 +192,9 @@ export default function Home() {
           {tex.freeBadge}
         </span>
 
-        {/* H1 headline — Anthropic style: large, thin, tight tracking */}
-        <h1 className="text-[32px] sm:text-[42px] font-normal text-[#0B1C3D] leading-[1.1] mb-3"
-          style={{ letterSpacing: '-0.04em' }}>
+        {/* H1 headline — DM Sans, Styrene-like */}
+        <h1 className="text-[32px] sm:text-[42px] font-medium text-[#0B1C3D] leading-[1.1] mb-3"
+          style={{ fontFamily: "'DM Sans', var(--font-dm-sans), sans-serif", letterSpacing: '-0.03em' }}>
           {tex.heroTitle}
         </h1>
 
