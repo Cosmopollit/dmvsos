@@ -430,15 +430,17 @@ export default function Home() {
             <p className="text-xs text-[#10B981] font-medium mt-2">🛡️ {tex.moneyBack}</p>
           </div>
           {/* Free plan */}
-          <div className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-sm flex flex-col text-center">
+          <div className="rounded-2xl p-6 border border-[#BFDBFE] shadow-sm flex flex-col text-center" style={{ background: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' }}>
             <h3 className="text-base font-bold text-[#1E293B] mb-1">{tex.freeTitle}</h3>
-            <p className="text-sm text-[#94A3B8] mb-3">{tex.freeDesc}</p>
+            <p className="text-sm text-[#64748B] mb-3">{tex.freeDesc}</p>
             <p className="text-2xl font-bold text-[#0B1C3D] mb-4">$0</p>
-            <ul className="space-y-2 text-sm text-[#94A3B8] mb-4 text-center list-none">
+            <ul className="space-y-2 text-sm text-[#475569] mb-4 text-center list-none">
               <li>{tex.freeFeature1}</li>
               <li>{tex.freeFeature2}</li>
               <li>{tex.freeFeature3}</li>
               <li>{tex.freeFeature4}</li>
+              <li>{tex.freeFeature5}</li>
+              <li>{tex.freeFeature6}</li>
             </ul>
             <button
               type="button"

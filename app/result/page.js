@@ -114,6 +114,11 @@ function ResultContent() {
                       correct ? 'bg-[#F0FDF4] border-[#16A34A]' : 'bg-[#FEF2F2] border-[#DC2626]'
                     }`}
                   >
+                    {q.imageUrl && (
+                      <div className="flex justify-center mb-3">
+                        <img src={q.imageUrl} alt="" className="h-20 rounded-lg border border-[#E2E8F0] object-contain" />
+                      </div>
+                    )}
                     <div className="flex gap-2 items-start">
                       <span className="text-lg shrink-0">{correct ? '✅' : '❌'}</span>
                       <div className="min-w-0">
