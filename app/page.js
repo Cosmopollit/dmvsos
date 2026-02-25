@@ -123,7 +123,7 @@ export default function Home() {
           {/* Logo */}
           <a href="/" className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition">
             <Image src="/logo.png" alt="DMVSOS" width={32} height={32} className="rounded-lg" />
-            <span className="text-lg font-black text-[#0B1C3D] tracking-tight">DMVSOS</span>
+            <span className="text-lg font-bold text-[#0B1C3D]" style={{ letterSpacing: '-0.02em' }}>DMVSOS</span>
           </a>
 
           {/* Right side: flags + user pill */}
