@@ -117,68 +117,73 @@ export default function Home() {
       <div className="fixed bottom-[-150px] left-[-150px] w-[500px] h-[500px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 70%)' }} />
 
-      {/* Compact header: logo + flag-only language switcher + user pill */}
-      <header className="w-full max-w-lg mx-auto pt-5 pb-4 px-4">
+      {/* Header: logo + login/user pill */}
+      <header className="w-full max-w-lg mx-auto pt-5 pb-3 px-4">
         <div className="flex items-center justify-between">
-          {/* Logo */}
           <a href="/" className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition">
             <Image src="/logo.png" alt="DMVSOS" width={32} height={32} className="rounded-lg" />
             <span className="text-lg font-bold text-[#0B1C3D]" style={{ letterSpacing: '-0.02em' }}>DMVSOS</span>
           </a>
 
-          {/* Right side: flags + user pill */}
-          <div className="flex items-center gap-3">
-            {/* Flag-only language switcher */}
-            <div className="flex items-center gap-1">
-              {langs.map((l) => (
+          {user ? (() => {
+            const raw = user.user_metadata?.full_name || user.email || '';
+            const firstName = raw.split(/\s+/)[0] || raw.split('@')[0] || '?';
+            const initial = (raw || '?')[0].toUpperCase();
+            return (
+              <div className="flex items-center gap-1.5 bg-white border border-[#E2E8F0] rounded-full pl-1.5 pr-2.5 py-1 shadow-sm">
                 <button
-                  key={l.code}
-                  onClick={() => { setLang(l.name); saveLang(l.code); }}
                   type="button"
-                  aria-label={`Switch language to ${l.name}`}
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-base transition-all ${
-                    lang === l.name
-                      ? 'bg-[#0B1C3D] ring-2 ring-[#2563EB] scale-110'
-                      : 'bg-white hover:bg-gray-50 border border-gray-200'
-                  }`}
+                  onClick={() => router.push('/profile')}
+                  className="flex items-center gap-1.5 min-w-0 hover:opacity-90 transition"
                 >
-                  {l.flag}
+                  {isPro ? (
+                    <span className="text-[#F59E0B] font-medium text-xs">👑</span>
+                  ) : (
+                    <div className="w-6 h-6 rounded-full bg-[#0B1C3D] flex items-center justify-center text-white text-[10px] font-bold shrink-0">
+                      {initial}
+                    </div>
+                  )}
+                  <span className="hidden sm:block text-xs font-medium text-[#1E293B] max-w-[80px] truncate">{firstName}</span>
                 </button>
-              ))}
-            </div>
-
-            {/* User pill */}
-            {user && (() => {
-              const raw = user.user_metadata?.full_name || user.email || '';
-              const firstName = raw.split(/\s+/)[0] || raw.split('@')[0] || '?';
-              const initial = (raw || '?')[0].toUpperCase();
-              return (
-                <div className="flex items-center gap-1.5 bg-white border border-[#E2E8F0] rounded-full pl-1.5 pr-2.5 py-1 shadow-sm">
-                  <button
-                    type="button"
-                    onClick={() => router.push('/profile')}
-                    className="flex items-center gap-1.5 min-w-0 hover:opacity-90 transition"
-                  >
-                    {isPro ? (
-                      <span className="text-[#F59E0B] font-medium text-xs">👑</span>
-                    ) : (
-                      <div className="w-6 h-6 rounded-full bg-[#0B1C3D] flex items-center justify-center text-white text-[10px] font-bold shrink-0">
-                        {initial}
-                      </div>
-                    )}
-                    <span className="hidden sm:block text-xs font-medium text-[#1E293B] max-w-[80px] truncate">{firstName}</span>
-                  </button>
-                  <button onClick={handleSignOut} type="button"
-                    className="text-[11px] text-[#94A3B8] hover:text-[#64748B] hover:underline transition"
-                    aria-label="Sign out">
-                    ✕
-                  </button>
-                </div>
-              );
-            })()}
-          </div>
+                <button onClick={handleSignOut} type="button"
+                  className="text-[11px] text-[#94A3B8] hover:text-[#64748B] hover:underline transition"
+                  aria-label="Sign out">
+                  ✕
+                </button>
+              </div>
+            );
+          })() : (
+            <button
+              type="button"
+              onClick={() => router.push(`/login?lang=${langCode}`)}
+              className="text-sm font-medium text-[#2563EB] hover:text-[#1D4ED8] transition"
+            >
+              {tex.signInTitle}
+            </button>
+          )}
         </div>
       </header>
+
+      {/* Language switcher — separate row, compact */}
+      <div className="w-full max-w-lg mx-auto px-4 pb-3">
+        <div className="flex items-center justify-center gap-1.5">
+          {langs.map((l) => (
+            <button
+              key={l.code}
+              onClick={() => { setLang(l.name); saveLang(l.code); }}
+              type="button"
+              aria-label={`Switch language to ${l.name}`}
+              className={`w-8 h-8 rounded-full flex items-center justify-center text-base transition-all ${
+                lang === l.name
+                  ? 'bg-[#0B1C3D] ring-2 ring-[#2563EB] scale-110'
+                  : 'bg-white hover:bg-gray-50 border border-gray-200'
+              }`}
+            >
+              {l.flag}
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* Hero section */}
       <section className="w-full max-w-lg mx-auto px-4 pt-1 pb-5 text-center">
@@ -254,14 +259,6 @@ export default function Home() {
         {state && (
           <p className="text-xs text-gray-400 mt-2 text-center">🟢 {liveCount} {tex.practicingNow}</p>
         )}
-        <button
-          type="button"
-          onClick={() => router.push(`/login?lang=${langCode}`)}
-          className="w-full mt-4 text-xs text-[#94A3B8] hover:text-[#2563EB] transition"
-        >
-          {tex.alreadyHaveAccount}
-        </button>
-
         </div>
       </div>
 
