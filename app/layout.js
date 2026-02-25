@@ -1,13 +1,13 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Geist_Mono } from "next/font/google";
 import { cookies } from "next/headers";
 import "./globals.css";
 import { AuthProvider } from "@/lib/AuthContext";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin", "cyrillic"],
 });
 
 const geistMono = Geist_Mono({
@@ -76,7 +76,7 @@ export default async function RootLayout({ children }) {
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>{children}</AuthProvider>
         <Analytics />

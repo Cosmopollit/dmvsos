@@ -183,18 +183,19 @@ export default function Home() {
       {/* Hero section */}
       <section className="w-full max-w-lg mx-auto px-4 pt-1 pb-5 text-center">
         {/* FREE badge */}
-        <span className="inline-block bg-[#10B981]/10 text-[#10B981] text-xs font-bold px-3 py-1 rounded-full mb-3 tracking-wide border border-[#10B981]/20">
+        <span className="inline-block bg-[#10B981]/10 text-[#10B981] text-xs font-semibold px-3 py-1 rounded-full mb-4 tracking-widest uppercase border border-[#10B981]/20">
           {tex.freeBadge}
         </span>
 
-        {/* H1 headline with gradient text */}
-        <h1 className="text-[26px] sm:text-[32px] font-black leading-tight mb-2.5 tracking-tight"
-          style={{ background: 'linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+        {/* H1 headline — Anthropic style: large, light weight, tight tracking */}
+        <h1 className="text-[30px] sm:text-[38px] font-medium text-[#0B1C3D] leading-[1.15] mb-3"
+          style={{ letterSpacing: '-0.03em' }}>
           {tex.heroTitle}
         </h1>
 
         {/* Subheadline */}
-        <p className="text-sm text-[#64748B] leading-relaxed">
+        <p className="text-[15px] font-normal leading-relaxed"
+          style={{ color: '#64748B', letterSpacing: '-0.01em' }}>
           {tex.heroSub}
         </p>
       </section>
