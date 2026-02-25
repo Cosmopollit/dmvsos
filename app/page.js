@@ -187,9 +187,9 @@ export default function Home() {
           {tex.freeBadge}
         </span>
 
-        {/* H1 headline — Anthropic style: large, light weight, tight tracking */}
-        <h1 className="text-[30px] sm:text-[38px] font-medium text-[#0B1C3D] leading-[1.15] mb-3"
-          style={{ letterSpacing: '-0.03em' }}>
+        {/* H1 headline — Anthropic style: large, thin, tight tracking */}
+        <h1 className="text-[32px] sm:text-[42px] font-normal text-[#0B1C3D] leading-[1.1] mb-3"
+          style={{ letterSpacing: '-0.04em' }}>
           {tex.heroTitle}
         </h1>
 
