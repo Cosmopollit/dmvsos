@@ -7,6 +7,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { STATE_OPTIONS, stateToSlug } from '@/lib/states';
+import { flags } from '@/lib/flags';
 
 const codeToName = { en: 'English', ru: 'Русский', es: 'Español', zh: '中文', ua: 'Українська' };
 
@@ -23,11 +24,11 @@ export default function Home() {
   const tex = t[langCode] || t.en;
 
   const langs = [
-    { label: 'EN', flag: 'fi-us', code: 'en', name: 'English' },
-    { label: 'RU', flag: 'fi-ru', code: 'ru', name: 'Русский' },
-    { label: 'ES', flag: 'fi-es', code: 'es', name: 'Español' },
-    { label: 'ZH', flag: 'fi-cn', code: 'zh', name: '中文' },
-    { label: 'UA', flag: 'fi-ua', code: 'ua', name: 'Українська' },
+    { label: 'EN', flag: flags.us, code: 'en', name: 'English' },
+    { label: 'RU', flag: flags.ru, code: 'ru', name: 'Русский' },
+    { label: 'ES', flag: flags.es, code: 'es', name: 'Español' },
+    { label: 'ZH', flag: flags.cn, code: 'zh', name: '中文' },
+    { label: 'UA', flag: flags.ua, code: 'ua', name: 'Українська' },
   ];
 
   async function handleSignOut() {
@@ -181,7 +182,7 @@ export default function Home() {
                   : 'bg-white text-[#64748B] hover:bg-gray-50 border border-gray-200'
               }`}
             >
-              <span className={`fi ${l.flag}`} style={{ marginRight: 4 }} /> {l.label}
+              <span className="shrink-0">{l.flag}</span> {l.label}
             </button>
           ))}
         </div>

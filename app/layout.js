@@ -78,7 +78,6 @@ export default async function RootLayout({ children }) {
   return (
     <html lang={lang}>
       <head>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/6.6.0/css/flag-icons.min.css" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
