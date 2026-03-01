@@ -28,24 +28,26 @@ export const viewport = {
 
 export const metadata = {
   metadataBase: new URL('https://dmvsos.com'),
-  title: 'DMVSOS — Free DMV Practice Tests for All 50 States',
-  description: 'Free DMV practice tests for all 50 US states. Car, CDL, and Motorcycle tests in English, Russian, Spanish, and Chinese. Pass your DMV test on the first try.',
+  title: 'DMVSOS — Pass Your DMV Test First Try',
+  description: 'Free DMV practice tests for all 50 states in 5 languages. No signup required.',
   keywords: 'DMV practice test, driving test, DMV test 2026, free DMV test',
   icons: {
     icon: '/logo.png',
     apple: '/apple-touch-icon.png',
   },
   openGraph: {
-    title: 'DMVSOS — Free DMV Practice Tests',
-    description: 'Pass your DMV test on the first try. Free practice tests for all 50 states.',
+    title: 'DMVSOS — Pass Your DMV Test First Try',
+    description: 'Free DMV practice tests for all 50 states in 5 languages. No signup required.',
     url: 'https://dmvsos.com',
     siteName: 'DMVSOS',
     type: 'website',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'DMVSOS — Free DMV Practice Tests' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'DMVSOS — Free DMV Practice Tests',
-    description: 'Pass your DMV test on the first try.',
+    title: 'DMVSOS — Pass Your DMV Test First Try',
+    description: 'Free DMV practice tests for all 50 states in 5 languages. No signup required.',
+    images: ['/og-image.png'],
   },
   alternates: {
     canonical: 'https://dmvsos.com',
