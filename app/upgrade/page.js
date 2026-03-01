@@ -65,17 +65,17 @@ function UpgradeContent() {
       <div className="flex gap-6 mb-8 text-center">
         <div>
           <div className="text-2xl font-bold text-[#F59E0B]">94%</div>
-          <div className="text-xs text-[#94A3B8]">pass rate</div>
+          <div className="text-xs text-[#94A3B8]">{tex.statPassRate}</div>
         </div>
         <div className="w-px bg-[#1E3A5F]"></div>
         <div>
           <div className="text-2xl font-bold text-[#F59E0B]">50</div>
-          <div className="text-xs text-[#94A3B8]">states</div>
+          <div className="text-xs text-[#94A3B8]">{tex.statStates}</div>
         </div>
         <div className="w-px bg-[#1E3A5F]"></div>
         <div>
           <div className="text-2xl font-bold text-[#F59E0B]">5</div>
-          <div className="text-xs text-[#94A3B8]">languages</div>
+          <div className="text-xs text-[#94A3B8]">{tex.statLanguages}</div>
         </div>
       </div>
 
@@ -83,10 +83,10 @@ function UpgradeContent() {
       <div className="bg-white rounded-2xl p-8 w-full max-w-md mb-6">
         <div className="flex justify-between items-start mb-6">
           <div>
-            <div className="text-sm font-bold text-[#F59E0B] mb-1">PRO PLAN</div>
+            <div className="text-sm font-bold text-[#F59E0B] mb-1">{tex.proPlanLabel}</div>
             <div className="text-4xl font-bold text-[#0B1C3D]">$9.99<span className="text-lg font-normal text-gray-400">/mo</span></div>
           </div>
-          <span className="bg-[#F59E0B] text-black text-xs font-bold px-3 py-1 rounded-full">POPULAR</span>
+          <span className="bg-[#F59E0B] text-black text-xs font-bold px-3 py-1 rounded-full">{tex.mostPopular}</span>
         </div>
 
         <div className="space-y-3 mb-6">

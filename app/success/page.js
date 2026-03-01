@@ -1,5 +1,6 @@
 'use client';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { t } from '@/lib/translations';
 import { getSavedLang } from '@/lib/lang';
 
@@ -9,17 +10,13 @@ export default function Success() {
   const tex = t[lang] || t.en;
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
+    <main className="min-h-screen flex flex-col items-center justify-center p-6" style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}>
       <div className="w-full max-w-md text-center">
         {/* Logo */}
-        <div className="inline-flex items-center gap-3 mb-8">
-          <div className="w-11 h-11 bg-[#0B1C3D] rounded-xl flex items-center justify-center">
-            <span className="text-[#F59E0B] text-lg font-bold">✦</span>
-          </div>
-          <span className="text-[26px] font-bold text-[#0B1C3D] tracking-tight">
-            DMV<span className="text-[#2563EB]">SOS</span>
-          </span>
-        </div>
+        <a href="/" className="inline-flex items-center gap-2 mb-8 hover:opacity-90 transition">
+          <Image src="/logo.png" alt="DMVSOS" width={40} height={40} className="rounded-xl" />
+          <span className="text-[26px] font-bold text-[#0B1C3D] tracking-tight">DMVSOS</span>
+        </a>
 
         {/* Success card */}
         <div className="bg-white rounded-2xl p-8 shadow-lg border border-[#E2E8F0] mb-6">

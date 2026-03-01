@@ -1,5 +1,5 @@
 'use client';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
@@ -21,11 +21,23 @@ const AppleIcon = () => (
   </svg>
 );
 
+const FacebookIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="white" className="shrink-0">
+    <path d="M18 9a9 9 0 1 0-10.406 8.89v-6.29H5.309V9h2.285V7.017c0-2.258 1.344-3.505 3.4-3.505.985 0 2.015.176 2.015.176v2.215h-1.135c-1.118 0-1.467.694-1.467 1.406V9h2.496l-.399 2.6h-2.097v6.29A9.003 9.003 0 0 0 18 9z"/>
+  </svg>
+);
+
 function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang') || getSavedLang();
   const tex = t[lang] || t.en;
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [emailLoading, setEmailLoading] = useState(false);
+  const [emailError, setEmailError] = useState('');
 
   async function handleGoogleSignIn() {
     await supabase.auth.signInWithOAuth({
@@ -37,13 +49,47 @@ function LoginContent() {
     });
   }
 
+  async function handleAppleSignIn() {
+    await supabase.auth.signInWithOAuth({
+      provider: 'apple',
+      options: {
+        redirectTo: window.location.origin,
+        skipBrowserRedirect: false,
+      },
+    });
+  }
+
+  async function handleFacebookSignIn() {
+    await supabase.auth.signInWithOAuth({
+      provider: 'facebook',
+      options: {
+        redirectTo: window.location.origin,
+        skipBrowserRedirect: false,
+      },
+    });
+  }
+
+  async function handleEmailAuth(e) {
+    e.preventDefault();
+    setEmailLoading(true);
+    setEmailError('');
+    try {
+      const { error } = isSignUp
+        ? await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin } })
+        : await supabase.auth.signInWithPassword({ email, password });
+      if (error) { setEmailError(error.message); }
+      else { router.push('/'); }
+    } catch { setEmailError(tex.somethingWentWrong || 'Something went wrong'); }
+    finally { setEmailLoading(false); }
+  }
+
   return (
-    <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
+    <main className="min-h-screen flex flex-col items-center justify-center p-6" style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}>
       <div className="w-full max-w-sm bg-white rounded-2xl shadow-lg border border-[#E2E8F0] p-8">
         <a href="/" className="flex items-center gap-2 justify-center mb-6">
           <Image src="/logo.png" alt="DMVSOS" width={40} height={40} className="rounded-xl" />
           <span className="text-xl font-bold text-[#0B1C3D]">
-            DMV<span className="text-[#2563EB]">SOS</span>
+            DMVSOS
           </span>
         </a>
         <h1 className="text-lg font-bold text-[#1E293B] text-center mb-2">{tex.signInTitle}</h1>
@@ -58,13 +104,64 @@ function LoginContent() {
         </button>
         <button
           type="button"
-          className="w-full bg-black text-white py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 opacity-40 cursor-not-allowed transition-all"
-          disabled
+          onClick={handleAppleSignIn}
+          className="w-full bg-black text-white py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#1a1a1a] transition-all"
         >
           <AppleIcon />
           {tex.continueApple}
-          <span className="text-xs opacity-70">{tex.comingSoon || 'Coming soon'}</span>
         </button>
+        <button
+          type="button"
+          onClick={handleFacebookSignIn}
+          className="w-full bg-[#1877F2] text-white py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#166FE5] transition-all"
+        >
+          <FacebookIcon />
+          {tex.continueFacebook}
+        </button>
+
+        {/* Divider */}
+        <div className="flex items-center gap-3 my-4">
+          <div className="flex-1 h-px bg-[#E2E8F0]" />
+          <span className="text-xs text-[#94A3B8]">{tex.orContinueWith}</span>
+          <div className="flex-1 h-px bg-[#E2E8F0]" />
+        </div>
+
+        {/* Email form */}
+        <form onSubmit={handleEmailAuth} className="space-y-3">
+          <input
+            type="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            placeholder={tex.emailPlaceholder}
+            required
+            className="w-full px-4 py-3 rounded-xl border border-[#E2E8F0] text-sm text-[#1E293B] placeholder-[#94A3B8] focus:border-[#2563EB] focus:outline-none transition"
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            placeholder={tex.passwordPlaceholder}
+            required
+            minLength={6}
+            className="w-full px-4 py-3 rounded-xl border border-[#E2E8F0] text-sm text-[#1E293B] placeholder-[#94A3B8] focus:border-[#2563EB] focus:outline-none transition"
+          />
+          {emailError && <p className="text-xs text-[#DC2626]">{emailError}</p>}
+          <button
+            type="submit"
+            disabled={emailLoading}
+            className="w-full bg-[#2563EB] text-white py-3 rounded-xl font-medium text-[15px] hover:bg-[#1D4ED8] transition-all disabled:opacity-60"
+          >
+            {emailLoading ? '...' : (isSignUp ? tex.createAccount : tex.signInTitle)}
+          </button>
+          <button
+            type="button"
+            onClick={() => { setIsSignUp(!isSignUp); setEmailError(''); }}
+            className="w-full text-xs text-[#94A3B8] hover:text-[#2563EB] transition"
+          >
+            {isSignUp ? tex.hasAccount : tex.noAccount}
+          </button>
+        </form>
+
         <button
           type="button"
           onClick={() => router.push(`/?lang=${lang}`)}
@@ -79,7 +176,7 @@ function LoginContent() {
 
 export default function Login() {
   return (
-    <Suspense fallback={<main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center"><div className="w-6 h-6 border-2 border-[#94A3B8] border-t-transparent rounded-full animate-spin" /></main>}>
+    <Suspense fallback={<main className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}><div className="w-6 h-6 border-2 border-[#94A3B8] border-t-transparent rounded-full animate-spin" /></main>}>
       <LoginContent />
     </Suspense>
   );

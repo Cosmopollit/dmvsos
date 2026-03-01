@@ -1,6 +1,7 @@
 'use client';
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
@@ -11,8 +12,8 @@ function formatState(s) {
   return s.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 }
 
-function formatCategory(c) {
-  const map = { car: 'Car', dmv: 'Car', cdl: 'CDL', motorcycle: 'Motorcycle', moto: 'Motorcycle' };
+function formatCategory(c, tex) {
+  const map = { car: tex.catCar, dmv: tex.catCar, cdl: tex.catCdl, motorcycle: tex.catMoto, moto: tex.catMoto };
   return map[c] || c;
 }
 
@@ -49,24 +50,35 @@ function ProfileContent() {
   }, [user]);
 
   if (loading) return (
-    <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
-      <p className="text-sm text-[#94A3B8]">Loading...</p>
+    <main className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}>
+      <p className="text-sm text-[#94A3B8]">{tex.loading}</p>
     </main>
   );
 
   if (!user) return null;
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
+    <main className="min-h-screen flex flex-col items-center pt-6 p-6" style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}>
       <div className="w-full max-w-md flex flex-col items-center">
+        <div className="w-full flex items-center justify-between mb-5">
+          <button type="button" onClick={() => router.push('/')}
+            className="text-sm text-[#94A3B8] hover:text-[#2563EB] transition font-medium">
+            {tex.back}
+          </button>
+          <a href="/" className="flex items-center gap-1.5 cursor-pointer hover:opacity-90 transition">
+            <Image src="/logo.png" alt="DMVSOS" width={24} height={24} className="rounded-md" />
+            <span className="text-sm font-bold text-[#0B1C3D]">DMVSOS</span>
+          </a>
+          <div className="w-12" />
+        </div>
         <div className="bg-white rounded-2xl p-8 w-full shadow-sm border border-[#E2E8F0] text-center">
           <div className="w-16 h-16 rounded-full bg-[#0B1C3D] flex items-center justify-center text-white text-2xl font-bold mx-auto mb-5">
             {user.email?.[0].toUpperCase()}
           </div>
-          <h2 className="text-xl font-bold text-[#1E293B] mb-1">{user.user_metadata?.full_name || 'User'}</h2>
+          <h2 className="text-xl font-bold text-[#1E293B] mb-1">{user.user_metadata?.full_name || tex.signInTitle || 'User'}</h2>
           <p className="text-sm text-[#94A3B8] mb-5">{user.email}</p>
           <span className={`inline-block text-xs font-bold px-3 py-1.5 rounded-full mb-6 ${isPro ? 'bg-[#FEF3C7] text-[#B45309]' : 'bg-[#EFF6FF] text-[#2563EB]'}`}>
-            {isPro ? '👑 PRO' : 'FREE'}
+            {isPro ? `👑 ${tex.proBadge}` : tex.freeBadge}
           </span>
           {isPro && (
             <p className="text-sm text-[#16A34A] font-medium mb-4">{tex.proFullAccess || '✅ You have full access to all tests'}</p>
@@ -120,7 +132,7 @@ function ProfileContent() {
                           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                             <span className="font-medium text-[#1E293B]">{formatState(s.state)}</span>
                             <span className="text-[#94A3B8]">·</span>
-                            <span className="text-[#1E293B]">{formatCategory(s.category)}</span>
+                            <span className="text-[#1E293B]">{formatCategory(s.category, tex)}</span>
                             <span className="text-[#94A3B8]">·</span>
                             <span className="font-semibold">{s.score}/{s.total}</span>
                             <span className="text-[#94A3B8]">{formatDate(s.created_at)}</span>
@@ -142,7 +154,6 @@ function ProfileContent() {
           </div>
         )}
 
-        <button type="button" onClick={() => router.push('/')} className="mt-6 text-sm text-[#94A3B8] hover:text-[#2563EB] transition">{tex.back}</button>
       </div>
     </main>
   );
@@ -150,7 +161,7 @@ function ProfileContent() {
 
 export default function Profile() {
   return (
-    <Suspense fallback={<main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center"><div className="w-6 h-6 border-2 border-[#94A3B8] border-t-transparent rounded-full animate-spin" /></main>}>
+    <Suspense fallback={<main className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}><div className="w-6 h-6 border-2 border-[#94A3B8] border-t-transparent rounded-full animate-spin" /></main>}>
       <ProfileContent />
     </Suspense>
   );

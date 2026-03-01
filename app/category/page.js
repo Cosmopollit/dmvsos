@@ -65,9 +65,6 @@ function CategoryContent() {
                   <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-white/70" style={{ color: cat.color }}>
                     {questionLabel}
                   </span>
-                  <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-white/70" style={{ color: cat.color }}>
-                    ⏱ {cat.timeMin} {tex.minLabel || 'min'}
-                  </span>
                 </div>
               </div>
               <div className="text-[#94A3B8] text-lg shrink-0">→</div>

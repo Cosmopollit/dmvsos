@@ -7,17 +7,17 @@ import { STATE_OPTIONS, stateToSlug } from '@/lib/states';
 import { flags } from '@/lib/flags';
 
 const CATEGORIES = [
-  { id: 'car', icon: '🚗', label: 'Car (DMV)' },
-  { id: 'cdl', icon: '🚛', label: 'CDL' },
-  { id: 'moto', icon: '🏍️', label: 'Motorcycle' },
+  { id: 'car', icon: '🚗', titleKey: 'car' },
+  { id: 'cdl', icon: '🚛', titleKey: 'truck' },
+  { id: 'moto', icon: '🏍️', titleKey: 'motorcycle' },
 ];
 
 const codeToName = { en: 'English', ru: 'Русский', es: 'Español', zh: '中文', ua: 'Українська' };
 
-export default function ManualSelector() {
+export default function ManualSelector({ serverLang }) {
   const [state, setState] = useState('');
   const [category, setCategory] = useState('car');
-  const [lang, setLang] = useState(() => codeToName[getSavedLang()] || 'English');
+  const [lang, setLang] = useState(() => codeToName[serverLang || getSavedLang()] || 'English');
   const stateSelectRef = useRef(null);
   const router = useRouter();
 
@@ -126,8 +126,8 @@ export default function ManualSelector() {
                   }`}
               >
                 <span>{cat.icon}</span>
-                <span className="hidden sm:inline">{cat.label}</span>
-                <span className="sm:hidden">{cat.label.split(' ')[0]}</span>
+                <span className="hidden sm:inline">{tex[cat.titleKey]}</span>
+                <span className="sm:hidden">{tex[cat.titleKey].split(' ')[0]}</span>
               </button>
             ))}
           </div>

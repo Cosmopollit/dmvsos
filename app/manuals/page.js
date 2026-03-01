@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { cookies } from 'next/headers';
+import { t } from '@/lib/translations';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 import { getStatesWithManuals } from '@/lib/manual-parser';
 import ManualSelector from './ManualSelector';
@@ -34,6 +36,10 @@ async function fetchManualIndex() {
 export default async function ManualsPage() {
   const index = await fetchManualIndex();
   const statesWithManuals = getStatesWithManuals();
+
+  const cookieStore = await cookies();
+  const lang = cookieStore.get('dmvsos_lang')?.value || 'en';
+  const tex = t[lang] || t.en;
 
   // Count total PDFs
   let totalPdfs = 0;
@@ -74,21 +80,21 @@ export default async function ManualsPage() {
             <span className="text-lg font-bold text-[#0B1C3D]" style={{ letterSpacing: '-0.02em' }}>DMVSOS</span>
           </Link>
           <Link href="/" className="text-sm font-medium text-[#2563EB] hover:text-[#1D4ED8] transition">
-            Practice Tests
+            {tex.manualsPracticeTests}
           </Link>
         </div>
       </header>
 
       {/* Interactive selector (client component with lang switcher + hero + card) */}
-      <ManualSelector />
+      <ManualSelector serverLang={lang} />
 
       {/* Stats bar */}
       <section className="w-full max-w-lg mx-auto px-4 mb-8">
         <div className="grid grid-cols-3 gap-2">
           {[
-            { value: '50', label: 'States' },
-            { value: String(totalPdfs || '190+'), label: 'PDFs' },
-            { value: '20+', label: 'Languages' },
+            { value: '50', label: tex.manualsTitle },
+            { value: String(totalPdfs || '190+'), label: tex.manualsStatPdfs },
+            { value: '20+', label: tex.statLanguages },
           ].map((stat) => (
             <div key={stat.label} className="bg-white rounded-2xl p-3 text-center shadow-sm border border-[#E2E8F0]/60">
               <div className="text-lg sm:text-xl font-black text-[#0B1C3D]">{stat.value}</div>
@@ -101,7 +107,7 @@ export default async function ManualsPage() {
       {/* Browse all states */}
       <section className="w-full max-w-lg mx-auto mb-8 px-4">
         <h2 className="text-center text-lg font-bold text-[#0B1C3D] mb-5">
-          Browse All States
+          {tex.manualsBrowse}
         </h2>
 
         <div className="grid grid-cols-2 gap-2">
@@ -152,16 +158,16 @@ export default async function ManualsPage() {
       <section className="w-full max-w-lg mx-auto mb-8 px-4">
         <div className="bg-[#0B1C3D] rounded-2xl p-6 border border-[#1e3a5f] shadow-sm text-center">
           <h2 className="text-base font-bold text-white mb-2">
-            Ready to practice?
+            {tex.manualsReady}
           </h2>
           <p className="text-sm text-[#94A3B8] mb-4">
-            After studying your state&apos;s manual, take a free practice test.
+            {tex.manualsReadySub}
           </p>
           <Link
             href="/"
             className="inline-flex items-center gap-2 px-6 py-3 bg-[#2563EB] text-white rounded-xl font-semibold hover:bg-[#1D4ED8] transition-colors"
           >
-            Take a Free Practice Test →
+            {tex.manualsReadyCta}
           </Link>
         </div>
       </section>

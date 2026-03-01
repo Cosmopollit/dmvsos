@@ -1,8 +1,10 @@
 'use client';
 import { useState } from 'react';
+import { t } from '@/lib/translations';
 
-export default function ManualContent({ sections }) {
+export default function ManualContent({ sections, lang = 'en' }) {
   const [openSections, setOpenSections] = useState({ 0: true });
+  const tex = t[lang] || t.en;
 
   function toggleSection(index) {
     setOpenSections(prev => ({ ...prev, [index]: !prev[index] }));
@@ -27,7 +29,7 @@ export default function ManualContent({ sections }) {
           onClick={expandAll}
           className="text-xs text-[#2563EB] hover:underline font-medium"
         >
-          Expand all
+          {tex.manualsExpandAll}
         </button>
         <span className="text-[#CBD5E1]">|</span>
         <button
@@ -35,13 +37,13 @@ export default function ManualContent({ sections }) {
           onClick={collapseAll}
           className="text-xs text-[#2563EB] hover:underline font-medium"
         >
-          Collapse all
+          {tex.manualsCollapseAll}
         </button>
       </div>
 
       {/* Table of Contents */}
       <nav className="bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] p-4 mb-6">
-        <h3 className="text-sm font-bold text-[#1A2B4A] mb-2">Table of Contents</h3>
+        <h3 className="text-sm font-bold text-[#1A2B4A] mb-2">{tex.manualsToc}</h3>
         <ol className="space-y-1">
           {sections.map((section, i) => (
             <li key={i}>
