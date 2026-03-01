@@ -50,4 +50,9 @@ next-env.d.ts
 .verify-answers-*-report.json
 .verify-answers-*-rollback.json
 .expand-images-progress.json
+.expand-images-report.json
+.verify-images-progress.json
+.verify-images-*-progress.json
+.verify-images-strict-*-progress.json
 .download-manuals-progress.json
+.write-explanations-*-progress.json
