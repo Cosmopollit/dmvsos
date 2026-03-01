@@ -23,11 +23,11 @@ export default function Home() {
   const tex = t[langCode] || t.en;
 
   const langs = [
-    { label: 'EN', code: 'en', name: 'English' },
-    { label: 'RU', code: 'ru', name: 'Русский' },
-    { label: 'ES', code: 'es', name: 'Español' },
-    { label: 'ZH', code: 'zh', name: '中文' },
-    { label: 'UA', code: 'ua', name: 'Українська' },
+    { label: 'EN', flag: 'fi-us', code: 'en', name: 'English' },
+    { label: 'RU', flag: 'fi-ru', code: 'ru', name: 'Русский' },
+    { label: 'ES', flag: 'fi-es', code: 'es', name: 'Español' },
+    { label: 'ZH', flag: 'fi-cn', code: 'zh', name: '中文' },
+    { label: 'UA', flag: 'fi-ua', code: 'ua', name: 'Українська' },
   ];
 
   async function handleSignOut() {
@@ -181,7 +181,7 @@ export default function Home() {
                   : 'bg-white text-[#64748B] hover:bg-gray-50 border border-gray-200'
               }`}
             >
-              {l.label}
+              <span className={`fi ${l.flag}`} style={{ marginRight: 4 }} /> {l.label}
             </button>
           ))}
         </div>
