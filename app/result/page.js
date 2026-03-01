@@ -130,6 +130,11 @@ function ResultContent() {
                             {tex.correct}: <strong>{stripAnswer(correctText)}</strong>
                           </p>
                         )}
+                        {q.explanation && (
+                          <p className="text-sm text-[#64748B] mt-1">
+                            {q.explanation}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </li>

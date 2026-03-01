@@ -39,3 +39,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# scripts: manual text extraction cache
+.manuals-text/
+
+# scripts: progress/rollback/report files
+.match-signs-v2-progress.json
+.match-signs-v2-*-progress.json
+.verify-answers-*-progress.json
+.verify-answers-*-report.json
+.verify-answers-*-rollback.json
+.expand-images-progress.json
+.download-manuals-progress.json

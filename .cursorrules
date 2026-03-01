@@ -34,3 +34,6 @@ Site: dmvsos.com
 ## Design Style
 - Clean, professional, mobile-first
 - Colors: navy #0B1C3D, blue #
+mkdir -p public/data
+cp /Users/cosmopollit/Downloads/dmv-sos-ai-generated-tests/output/en/washington.json public/data/washington.json
+

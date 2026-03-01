@@ -92,6 +92,7 @@ function TestContent() {
             answers,
             correctAnswerIndex: row.correct_answer ?? 0,
             imageUrl: row.image_url || null,
+            explanation: row.explanation || null,
           };
         }).filter(row => row.answers.length >= 2);
         // Fisher-Yates shuffle
@@ -360,6 +361,11 @@ function TestContent() {
             <p className="text-sm text-[#1E40AF] leading-relaxed">
               ✅ {tex.correct}: <strong>{q.answers[q.correctAnswerIndex].replace(/^[A-DА-Га-гa-d]\.\s*/, '')}</strong>
             </p>
+            {q.explanation && (
+              <p className="text-sm text-[#1E40AF]/80 leading-relaxed mt-2">
+                {q.explanation}
+              </p>
+            )}
           </div>
         )}
 
