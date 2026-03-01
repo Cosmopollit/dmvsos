@@ -133,7 +133,8 @@ function TestContent() {
   }, [state, category, lang, isRetry]);
 
   function startWithMode(mode) {
-    const limits = { real: 40, extended: 80, marathon: Infinity };
+    const realLimits = { dmv: 40, car: 40, cdl: 50, moto: 30, motorcycle: 30 };
+    const limits = { real: realLimits[category] || 40, extended: 80, marathon: Infinity };
     const limit = limits[mode] || 40;
     setQuestions(allQuestions.slice(0, Math.min(limit, allQuestions.length)));
     setCurrent(0);
@@ -180,6 +181,30 @@ function TestContent() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [testMode, questions.length, showAnswer, current, showUpgradeBanner]);
 
+  function handleBack() {
+    if (isPro && testMode && testMode !== 'free') {
+      setTestMode(null);
+      setQuestions([]);
+      setCurrent(0);
+      setScore(0);
+      setUserAnswers([]);
+      userAnswersRef.current = [];
+      setSelected(null);
+      setShowAnswer(false);
+      setElapsed(0);
+      setRemaining(0);
+      setShowUpgradeBanner(false);
+      setShowTimeUp(false);
+    } else {
+      router.push(`/category?state=${state}&lang=${lang}`);
+    }
+  }
+
+  // Set translated page title
+  useEffect(() => {
+    if (tex.practiceTestTitle) document.title = tex.practiceTestTitle;
+  }, [tex.practiceTestTitle]);
+
   // Wait for both auth and questions to load
   const loading = loadingQuestions || authLoading;
 
@@ -207,7 +232,7 @@ function TestContent() {
   if (isPro && !testMode && allQuestions.length) {
     const totalAvailable = allQuestions.length;
     const modes = [
-      { id: 'real', icon: '🎯', label: tex.modeReal, desc: tex.modeRealDesc, count: Math.min(40, totalAvailable), color: '#2563EB', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', time: `⏱ ${Math.floor(initialTime / 60)} ${tex.minLabel}` },
+      { id: 'real', icon: '🎯', label: tex.modeReal, desc: tex.modeRealDesc, count: Math.min(({ dmv: 40, car: 40, cdl: 50, moto: 30, motorcycle: 30 })[category] || 40, totalAvailable), color: '#2563EB', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', time: `⏱ ${Math.floor(initialTime / 60)} ${tex.minLabel}` },
       { id: 'extended', icon: '📚', label: tex.modeExtended, desc: tex.modeExtendedDesc, count: Math.min(80, totalAvailable), color: '#7C3AED', gradient: 'linear-gradient(135deg, #F5F3FF, #EDE9FE)' },
       { id: 'marathon', icon: '🏆', label: tex.modeMarathon, desc: tex.modeMarathonDesc, count: totalAvailable, color: '#D97706', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)' },
     ];
@@ -343,7 +368,7 @@ function TestContent() {
 
         {/* Header with nav */}
         <div className="flex items-center justify-between mb-3">
-          <button type="button" onClick={() => router.push(`/category?state=${state}&lang=${lang}`)}
+          <button type="button" onClick={handleBack}
             className="text-sm text-[#94A3B8] hover:text-[#2563EB] transition font-medium">
             {tex.back}
           </button>

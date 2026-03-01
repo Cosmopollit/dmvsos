@@ -8,8 +8,8 @@ import { useAuth } from '@/lib/AuthContext';
 
 const categories = [
   { id: 'dmv', icon: '🚗', titleKey: 'catCar', descKey: 'carDesc', freeQuestions: 20, proQuestions: 40, timeMin: 25, color: '#2563EB', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', emojiSize: 'text-6xl' },
-  { id: 'cdl', icon: '🚛', titleKey: 'catCdl', descKey: 'truckDesc', freeQuestions: 20, proQuestions: 40, timeMin: 35, color: '#0EA5E9', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)', emojiSize: 'text-4xl' },
-  { id: 'moto', icon: '🏍️', titleKey: 'catMoto', descKey: 'motoDesc', freeQuestions: 20, proQuestions: 40, timeMin: 20, color: '#D97706', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)', emojiSize: 'text-4xl' },
+  { id: 'cdl', icon: '🚛', titleKey: 'catCdl', descKey: 'truckDesc', freeQuestions: 20, proQuestions: 50, timeMin: 35, color: '#0EA5E9', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)', emojiSize: 'text-4xl' },
+  { id: 'moto', icon: '🏍️', titleKey: 'catMoto', descKey: 'motoDesc', freeQuestions: 20, proQuestions: 30, timeMin: 20, color: '#D97706', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)', emojiSize: 'text-4xl' },
 ];
 
 function CategoryContent() {
