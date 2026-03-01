@@ -160,6 +160,7 @@ function TestContent() {
   // Refs for keyboard shortcuts (must be before early returns for Rules of Hooks)
   const handleSelectRef = useRef(null);
   const handleNextRef = useRef(null);
+  const handlePrevRef = useRef(null);
   // Ref for synchronous answer tracking (avoids React state batching race condition)
   const userAnswersRef = useRef([]);
   useEffect(() => {
@@ -167,7 +168,9 @@ function TestContent() {
     function onKeyDown(e) {
       if (showUpgradeBanner) return;
       const key = e.key;
-      if (!showAnswer && ['1', '2', '3', '4'].includes(key)) {
+      if (key === 'ArrowLeft') {
+        handlePrevRef.current?.();
+      } else if (!showAnswer && ['1', '2', '3', '4'].includes(key)) {
         const idx = parseInt(key) - 1;
         if (idx < (questions[current]?.answers?.length || 0)) {
           handleSelectRef.current?.(idx);
@@ -199,6 +202,21 @@ function TestContent() {
       router.push(`/category?state=${state}&lang=${lang}`);
     }
   }
+
+  function handlePrev() {
+    if (current <= 0) return;
+    const prevIndex = current - 1;
+    const prevAnswer = userAnswersRef.current[prevIndex];
+    setCurrent(prevIndex);
+    if (prevAnswer !== undefined) {
+      setSelected(prevAnswer);
+      setShowAnswer(true);
+    } else {
+      setSelected(null);
+      setShowAnswer(false);
+    }
+  }
+  handlePrevRef.current = handlePrev;
 
   // Set translated page title
   useEffect(() => {
@@ -307,8 +325,8 @@ function TestContent() {
   const q = questions[current];
   if (!q || !q.answers?.length) return null;
   const total = questions.length;
-  const progress = (current / total) * 100;
-  const answered = showAnswer ? current + 1 : current;
+  const answered = userAnswersRef.current.length;
+  const progress = (answered / total) * 100;
   const correctCount = score;
   const wrongCount = answered - correctCount;
 
@@ -335,9 +353,16 @@ function TestContent() {
       return;
     }
     if (current + 1 < total) {
-      setCurrent((c) => c + 1);
-      setSelected(null);
-      setShowAnswer(false);
+      const nextIndex = current + 1;
+      const nextAnswer = userAnswersRef.current[nextIndex];
+      setCurrent(nextIndex);
+      if (nextAnswer !== undefined) {
+        setSelected(nextAnswer);
+        setShowAnswer(true);
+      } else {
+        setSelected(null);
+        setShowAnswer(false);
+      }
     } else {
       // Use ref for answers — guaranteed to include the last answer (no batching race)
       const allAnswers = userAnswersRef.current;
@@ -455,11 +480,21 @@ function TestContent() {
           </p>
         )}
 
-        {showAnswer && !showUpgradeBanner && (
-          <button type="button" onClick={handleNext}
-            className="w-full bg-[#2563EB] text-white py-3.5 rounded-xl font-semibold text-base hover:bg-[#1D4ED8] transition-all">
-            {current + 1 < total ? tex.next : tex.seeResults}
-          </button>
+        {!showUpgradeBanner && (
+          <div className="flex gap-3">
+            {current > 0 && (
+              <button type="button" onClick={handlePrev}
+                className="px-5 py-3.5 rounded-xl font-semibold text-base border border-[#E2E8F0] text-[#64748B] hover:border-[#2563EB] hover:text-[#2563EB] transition-all">
+                {tex.prevQuestion}
+              </button>
+            )}
+            {showAnswer && (
+              <button type="button" onClick={handleNext}
+                className="flex-1 bg-[#2563EB] text-white py-3.5 rounded-xl font-semibold text-base hover:bg-[#1D4ED8] transition-all">
+                {current + 1 < total ? tex.next : tex.seeResults}
+              </button>
+            )}
+          </div>
         )}
 
       </div>
