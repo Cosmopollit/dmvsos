@@ -467,6 +467,39 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Free Driver Manuals section */}
+      <section className="w-full max-w-lg mx-auto mb-8 px-4">
+        <h2 className="text-lg font-bold text-[#0B1C3D] text-center mb-4">
+          {tex.manualsSectionTitle || 'Free DMV Driver Manuals'}
+        </h2>
+        <p className="text-sm text-[#64748B] text-center mb-4">
+          {tex.manualsSectionDesc || 'Study the official driver handbook for your state before taking the test.'}
+        </p>
+        <div className="grid grid-cols-2 gap-2">
+          {[
+            { slug: 'california', name: 'California' },
+            { slug: 'texas', name: 'Texas' },
+            { slug: 'florida', name: 'Florida' },
+            { slug: 'new-york', name: 'New York' },
+            { slug: 'washington', name: 'Washington' },
+            { slug: 'illinois', name: 'Illinois' },
+          ].map(s => (
+            <a
+              key={s.slug}
+              href={`/manuals/${s.slug}`}
+              className="p-3 rounded-xl border border-[#E2E8F0] bg-white text-sm font-medium text-[#1A2B4A] hover:border-[#2563EB] hover:bg-[#F0F4FF] transition-colors text-center"
+            >
+              {s.name}
+            </a>
+          ))}
+        </div>
+        <div className="text-center mt-3">
+          <a href="/manuals" className="text-sm font-medium text-[#2563EB] hover:underline">
+            {tex.viewAllManuals || 'View all 50 state manuals →'}
+          </a>
+        </div>
+      </section>
+
       {/* Footer with guarantee badge */}
       <footer className="w-full max-w-lg mx-auto px-4 mt-8 pb-8">
         <div className="text-center mb-4">

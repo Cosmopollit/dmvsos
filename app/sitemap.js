@@ -25,6 +25,22 @@ export default function sitemap() {
     { url: `${baseUrl}/privacy`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
   ];
 
+  // Manual pages
+  pages.push({
+    url: `${baseUrl}/manuals`,
+    lastModified: now,
+    changeFrequency: 'weekly',
+    priority: 0.9,
+  });
+  for (const st of states) {
+    pages.push({
+      url: `${baseUrl}/manuals/${st}`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    });
+  }
+
   for (const st of states) {
     for (const lang of languages) {
       pages.push({

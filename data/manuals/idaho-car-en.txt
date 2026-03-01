@@ -1,0 +1,4341 @@
+Idaho DRIVER’S
+HANDBOOK
+JULY 2025
+
+-- 1 of 139 --
+
+Cover photo provided by Travis Ingle
+. The Idaho Driver’s Handbook paraphrases the
+language of Idaho statutes. Courts go by the actual
+language of the statutes, not this text.
+The Idaho Transportation Department (ITD) is committed to
+compliance with Title VI of the Civil Rights Act of 1964 and all
+related regulations and directives. ITD assures that no person
+shall on the grounds of race, color, national origin, gender,
+age, or disability be excluded from participation in, be denied
+the benefits of, or be otherwise subjected to discrimination
+under any ITD service, program, or activity. The department
+also 	assures 	that 	every 	effort 	will 	be 	made 	to 	prevent
+discrimination through the impacts of its Programs, policies,
+and activities on minority and low-income populations. In
+addition, the department will take reasonable steps to provide
+meaningful access to services for persons with limited English
+proficiency.
+Scan the QR code to view the most up-to-date handbook online.
+
+-- 2 of 139 --
+
+INTRODUCTION
+As 	more 	motorists 	share 	Idaho’s 	highways, 	it 	becomes
+increasingly important that you always safely operate a motor
+vehicle. Becoming a safe driver takes time and practice. By
+knowing, understanding, and following Idaho’s traffic laws,
+you will be able to safely operate a motor vehicle smoothly,
+defensively, with common sense and in a variety of traffic
+situations. Your life, as well as the lives of your family, friends,
+and other drivers depends on it.
+Anyone operating a motor vehicle on public highways in
+Idaho must have a valid driver’s license. You can be licensed
+in Idaho when you are 15 years of age. However, if you are
+under 17 years of age, you must first successfully complete an
+approved driver’s training program and the graduated driver’s
+license program.
+ITD and its agents will provide reasonable accommodations
+to persons with disabilities and equal accessibility to our
+facilities, programs, and services. Skills test examiners must
+provide an equal skills test to all applicants regardless of the
+existence of a disability.
+ITD does not issue international driving permits for Idaho
+drivers. Customers need to contact the American Automobile
+Association (AAA) to obtain these permits.
+3
+
+-- 3 of 139 --
+
+New Residents
+Upon moving to Idaho, you will need to apply for an Idaho
+driver’s license within 30 days of residing in Idaho, whether
+your out-of-state license has expired or not. If you have a
+Commercial Driver’s License (CDL), you are required to be
+licensed in Idaho within 30 days of residing in Idaho.
+Students
+Students attending a college or university in Idaho who hold
+a valid driver’s license from another state and who claim
+residency in that state are not required to obtain an Idaho
+driver’s license.
+U.S. Military
+U.S. Military on active duty, their spouse, and dependents who
+hold a valid driver’s license from another state and who claim
+residency in that state are not required to obtain an Idaho
+driver’s license.
+4
+
+-- 4 of 139 --
+
+FEES
+(All fees are non-refundable)
+STAR CARD or NON-STAR CARD Driver’s License (Class D)
+• 	1 year (age 17 or 20)............................................................................. $20.00
+• 	3 year (under age 15 to 18)................................................................... $30.00
+• 	3 year (age 18 to 21) ............................................................................. $30.00
+• 	4 year (age 21 and over) ....................................................................... $35.00
+• 	8 year (age 21 to 62) ............................................................................. $60.00
+Instruction Permit (IP)................................................................................... $20.00
+Knowledge Test .............................................................................................. $5.00
+Skills Test ($6.50 paid to county DMV and up to $28.50 to Skills Test Examiner ) ... $35.00
+Duplicate ...................................................................................................... $20.00
+Driver Training Instruction Permit/Supervised Instruction Permit ................. $21.50
+(Fee includes $6.50 fee collected in advance for skills test receipt)
+STAR CARD or NON-STAR CARD
+Commercial Driver’s License (CDL) (Class A, B or C)
+• 	1 year (age 20) ...................................................................................... $15.00
+• 	3 year (age 18 to 21) ............................................................................. $30.00
+• 	4 year (age 21 and over) ....................................................................... $40.00
+• 	8 year (age 21 and over) ....................................................................... $60.00
+Instruction Permit (must have Idaho Class D) .............................................. $29.00
+Knowledge Test .............................................................................................. $5.00
+Skills Test ($10 paid to county DMV and up to $190 to Skills Test Examiner ) ...... $200.00
+Endorsement Knowledge Test........................................................................ $5.00
+Additional Endorsement ............................................................................... $20.00
+Duplicate ...................................................................................................... $20.00
+CDL Driver’s License Upgrade ..................................................................... $30.00
+Seasonal CDL Driver’s License (6 months).................................................. $44.00
+Motorcycle
+Instruction Permit (must have Idaho Class D) .............................................. $15.00
+Duplicate....................................................................................................... $20.00
+Knowledge Test .............................................................................................. $5.00
+Skills Test (paid to Skills Test Examiner) ...................................................... $25.00
+M Endorsement ............................................................................................ $15.00
+STAR or NON-STAR Identification Card
+• 	Under age 18......................................................................................... $10.00
+• 	Age 18 to 21 .......................................................................................... $10.00
+• 	4 year (age 21 and over) ....................................................................... $15.00
+• 	8 year (age 21 and over) ....................................................................... $25.00
+• 	Duplicate (same fee as original cost)
+Eligible customers who renew online will qualify for a $5.00 discount off of their
+driver’s license renewal. Note: The discount only applies to driver’s licenses and
+not identification cards.
+Note: All Retest Fees are the Same as the Original Test Fees.
+5
+
+-- 5 of 139 --
+
+Table of Contents
+INTRODUCTION .................................................................3
+New Residents ......................................................................4
+Students ................................................................................4
+U.S. Military ...........................................................................4
+FEES.....................................................................................5
+PRACTICE TEST ANSWERS ..........................................11
+ONE DRIVER, ONE LICENSE, ONE RECORD..............12
+What is Real ID....................................................................13
+What is a STAR Card ..........................................................13
+Misuse of a Driver’s License ...............................................13
+Where to Get an Idaho Credential.......................................14
+Your Photograph..................................................................14
+Types of Credentials............................................................14
+Class A, B, and C ................................................................15
+Class D ...............................................................................15
+Driver Training Permits .......................................................15
+Class D Instruction Permits ................................................16
+Restriction When Under 16 ................................................16
+Restriction When Under 17 ................................................16
+Under 18 and 21 years of age ............................................17
+Foreign Class D ..................................................................17
+Foreign CDL .......................................................................17
+Motorcycle Instruction Permits ...........................................18
+Graduated Driver’s License (GDL) Program .......................19
+Driver Training .....................................................................19
+Motorcycle Endorsement.....................................................20
+Requirements for an Idaho Driver’s License .......................21
+Documents ..........................................................................21
+Proof of Age & Identity.........................................................21
+Table 1 – Acceptable Photo Identity Documents .................22
+Table 2 – Acceptable Secondary Identity Documents .........23
+Social Security Card or Number for Verification ..................24
+Proof of Idaho Residency ....................................................24
+Acceptable Lawful Presence Documents (If Applicable) .....24
+Visual/Medical Certification (If Applicable)...........................25
+Proof of Completion of Driver’s Training (If Under 17) ........25
+6
+
+-- 6 of 139 --
+
+Liability Signer (If Under 18) ................................................26
+Verification of School Compliance (VOC)............................26
+STAR Card ..........................................................................27
+Designations Added to Credentials .....................................27
+Donor Designation: .............................................................27
+Veteran’s Designation: ........................................................27
+Medical Information: ...........................................................28
+Permanent Disability Notation: ...........................................28
+Selective Service Registration: ...........................................28
+Name Change on Credential ...............................................29
+Address Change..................................................................29
+Renewals.............................................................................30
+Duplicates............................................................................30
+Extensions ...........................................................................31
+Lost or Stolen Credential .....................................................31
+Required Testing..................................................................32
+Medical/Visual Screening: ..................................................32
+Knowledge Test: Class D (Non-Commercial) .....................32
+Skills Test: Class D (Non-Commercial) ...............................33
+Additional Circumstances for a Required Skills Test: ..........33
+Scheduling a skills test: ......................................................34
+Restricted skills test: ...........................................................34
+Required documents to bring for the skills test:...................34
+Passengers..........................................................................35
+Skills Test Examiner Vehicle Inspection .............................36
+Applicant Vehicle Knowledge & Inspection ........................36
+Driving Skills .......................................................................36
+Critical Driving Errors (CDE)................................................37
+Results.................................................................................37
+VEHICLE EQUIPMENT & SAFETY .................................38
+Operating a Vehicle Without the Owner’s Consent .............38
+Required Equipment............................................................38
+Child Restraints are Required .............................................40
+Seat Belts & Shoulder Straps ..............................................41
+Equipment Not Allowed .......................................................42
+Other Laws You Need to Know............................................43
+Antique Vehicles & Street Rods...........................................43
+7
+
+-- 7 of 139 --
+
+8
+HIGHWAY & VEHICLE KNOWLEDGE ............................44
+Signs, Signals, & Pavement Markings.................................44
+Traffic Signs .........................................................................44
+Turn Prohibition & Lane Control Signs ................................45
+Work Zone Signs .................................................................46
+School Safety Patrols ..........................................................48
+Warning Signs .....................................................................49
+Guide Signs .........................................................................53
+Barricades ...........................................................................54
+Traffic Signals ......................................................................55
+Pedestrian Crossings ..........................................................56
+Pavement Markings .............................................................58
+Intersections ........................................................................60
+Map of Idaho Highways .......................................................67
+TRAFFIC LAWS & THE RULES OF THE ROAD ...........68
+Speed Limits ........................................................................68
+Stopping ..............................................................................69
+Turns ...................................................................................72
+Keep to the Right .................................................................74
+Right-of-Way & Yield ...........................................................74
+Pedestrians & Right-of-Way ................................................75
+Yielding to Other Drivers .....................................................75
+Passing ................................................................................76
+Funeral Processions ............................................................78
+Slow-Moving Vehicle ...........................................................79
+Following Distances.............................................................79
+Keep a Space Cushion ........................................................80
+Parking ................................................................................80
+Parking on a Hill or Incline ...................................................81
+No-Parking Zones................................................................81
+Handicapped Parking ..........................................................82
+Backing ................................................................................82
+Freeway Driving...................................................................83
+Travel Plans .........................................................................83
+Entering a Freeway .............................................................83
+Possible Entrance Problems ...............................................84
+Don’t Drive Too Fast or Slow ...............................................85
+
+-- 8 of 139 --
+
+Changing Lanes ..................................................................85
+Leaving the Freeway ...........................................................85
+THE DRIVING TASK .........................................................86
+Starting Out .........................................................................87
+Your Mood Affects Your Driving ...........................................88
+Watch for Problem Drivers .................................................88
+Defensive Driving ................................................................89
+Distracted Driving ...............................................................91
+Things that Can Distract Your Attention...............................91
+Ways to Keep From Getting Distracted ...............................92
+Cell Phones .........................................................................92
+Fatigue & Highway Hypnosis...............................................93
+Unattended Vehicles............................................................93
+Alive at 25............................................................................94
+SHARING THE ROAD ......................................................95
+Emergency Vehicles ............................................................95
+Pedestrians..........................................................................95
+Children at Play ...................................................................97
+Horseback Riders ................................................................97
+Bicyclists..............................................................................98
+Motorcycles .......................................................................103
+Large Vehicles ...................................................................104
+Idaho’s 511 Traveler Services ...........................................107
+Mountain Driving................................................................107
+Wildlife Areas.....................................................................107
+Open Range ......................................................................108
+Night Driving ......................................................................108
+Snow Removal Equipment ................................................109
+Fog, Smoke, Dust, or Rain ................................................ 110
+Rain & Hydroplaning.......................................................... 111
+Flash Floods ...................................................................... 112
+Winter Driving .................................................................... 113
+Getting Stranded During Winter Weather.......................... 114
+Handling Emergencies ...................................................... 115
+Skidding............................................................................. 115
+Stopping Quickly................................................................ 116
+9
+
+-- 9 of 139 --
+
+10
+BE PREPARED ...............................................................117
+If You Have Car Trouble .................................................... 117
+Avoiding Crashes .............................................................. 118
+Protecting Yourself in a Crash ........................................... 118
+If You Hit an Unattended Vehicle ....................................... 119
+A Crash With an Uninsured Driver .................................... 119
+Oncoming Car in Your Lane .............................................. 119
+Tire Blowouts .....................................................................120
+Running Off the Road ........................................................120
+At the Scene of the Crash .................................................120
+Crashes & the Law ............................................................121
+WHAT AFFECTS YOUR DRIVING PRIVILEGE AND
+RECORD ..........................................................................122
+The Driver License Compact .............................................122
+Suspension & Point Violations System..............................123
+Reasons for Suspension ...................................................124
+Graduated Drivers License (GDL) Penalties .....................125
+Administrative License Suspension ...................................125
+Test Refusal for Alcohol, Drugs, or Other Intoxicating
+Substances ........................................................................126
+Restricted Driving Permit ...................................................127
+Ignition Interlock Device ....................................................127
+Getting Your Driving Privileges Back .................................127
+How Much is Too Much .....................................................128
+Is Beer Safer Than Hard Liquor.........................................129
+How Drinking Affects You ..................................................129
+How Drinking Affects Driving .............................................129
+Open Container Law..........................................................130
+Drugs & Driving .................................................................130
+Impaired Driving ................................................................131
+Strategies to Prevent Impaired Driving ..............................131
+Driving Under The Influence ..............................................131
+What to Expect and Do When Stopped by Law Enforcement 132
+PRACTICE TEST QUESTIONS .....................................134
+
+-- 10 of 139 --
+
+PRACTICE TEST ANSWERS
+1. c 	4. c 	7.d 	10. d 	13. b 	16. a 	19. a
+2. a 	5. b 	8. b 	11. b 	14. c 	17. d 	20. b
+3. c 	6. d 	9. c 	12. b 	15. c 	18. d
+11
+
+-- 11 of 139 --
+
+ONE DRIVER, ONE LICENSE,
+ONE RECORD
+When 	applying 	for 	an 	Idaho 	driver’s 	license, 	you 	must
+surrender any driver’s license or identification card (ID card)
+issued to you from another state, U.S. Territory, or the District
+of Columbia. When transferring from one of those jurisdictions,
+you will be required to pass a Class D knowledge test (and
+skills test if your license has been expired for 25 months or
+more), even if you were previously licensed in Idaho.
+When you obtain a credential in another jurisdiction, your Idaho
+credential will be canceled. If you apply again in Idaho for a
+credential, you are considered a new applicant in Idaho and
+must reapply and retest. When you are applying for an Idaho
+Commercial Driver’s License (CDL), you must surrender any
+driver’s license(s) issued to you by any jurisdiction(s) – foreign
+or domestic.
+If you are from a foreign country and are issued a Class D Idaho
+driver’s license you are not required to surrender your foreign
+driver’s license. However, you are not allowed to show or use
+your foreign driver‘s license for operating a motor vehicle. If
+you do, you could be cited and fined for a misdemeanor.
+Accommodations for applicants with disabilities:
+Reasonable 	accommodations 	will 	be 	made 	to 	provide
+persons with disabilities equal accessibility to ITD’s facilities,
+programs, and services, in accordance with the Americans
+with Disabilities Act (ADA), when requested. Please allow the
+county DMV two weeks to complete the arrangements.
+12
+
+-- 12 of 139 --
+
+WHAT IS REAL ID
+Passed by Congress in 2005, the REAL ID Act enacted the 9/11
+Commission’s recommendation that the federal government
+“set standards for the issuance of sources of identification, such
+as driver’s licenses.” The Act established minimum security
+standards for state-issued driver’s licenses and identification
+cards and prohibits federal agencies from accepting, for
+official purposes, driver’s licenses and identification cards
+from states that do not meet these standards.
+WHAT IS A STAR CARD
+The Star Card is Idaho’s Real ID. It is an Idaho driver’s license
+or identification (ID) card that adds a star to show it is in
+compliance with the federal Real ID security standards. While
+the Star Card is not mandatory, starting May 7, 2025, you will
+not be able to fly commercially or enter a federal building, such
+as a military base or the Idaho National Laboratory, without it
+or a valid passport.
+For more information, please visit itd.idaho.gov/starcard.
+MISUSE OF A DRIVER’S LICENSE
+You must carry your driver’s license when operating a motor
+vehicle. Any misuse or mutilation of your driver’s license,
+instruction permit, or ID card is a misdemeanor. If your license
+gets worn, broken, or damaged you need to get a duplicate.
+Providing False Information – If you knowingly provide false
+information on a driver’s license, ID card, or permit application,
+you are subject to prosecution for perjury and your credential
+will be canceled. When you apply for a new driver’s license or
+permit, duplicate driver’s license, or driver’s license renewal,
+your driving record with ITD and the Problem Driver Pointer
+13
+
+-- 13 of 139 --
+
+System (PDPS) through the National Driver Register (NDR) will
+be examined. If there are any outstanding license suspensions,
+revocations, cancellations, etc. in any jurisdiction, they must
+be cleared before you can be issued a driver’s license.
+WHERE TO GET AN IDAHO CREDENTIAL
+Idaho driver’s licenses, ID cards, and instruction permits are
+issued through the county sheriff’s driver’s license offices. The
+list of office locations and phone numbers can be found at itd.
+idaho.gov/dmv (click on the Driver’s License/ID Cards tab).
+YOUR PHOTOGRAPH
+Your new driver’s license, instruction permit, or ID card will
+include a photo showing a full front view of your face. Before
+your photo is taken at the county driver’s license office, you will
+be asked remove anything that covers your face or head (i.e.
+hat or sunglasses). An exception may be made for medical or
+religious purposes.
+TYPES OF CREDENTIALS
+Types of credentials that Idaho issues:
+• 	Driver’s Licenses
+๚ 	Commercial Driver’s Licenses (CDL)
+Class A, B, and C
+๚ 	Class D – Non-Commercial Driver’s License (DL)
+• 	Permits
+๚ 	Commercial Learner’s Permit (CLP)
+๚ 	Class D Instruction Permit (IP)
+๚ 	Driver Training Permit (DT)
+๚ 	Motorcycle Instruction Permit (MIP)
+• 	Identification Cards (ID)
+14
+
+-- 14 of 139 --
+
+CLASS A, B, AND C
+Class 	A, 	B, 	and 	C 	licenses 	are 	Commercial 	Driver’s
+Licenses 	(CDLs) 	that 	allow 	a 	person 	to 	operate 	certain
+types 	of 	commercial 	vehicles. A commercial 	vehicle, 	for
+driver’s licensing purposes, is a vehicle that either has a
+manufactured gross vehicle weight rating of 26,001 pounds
+or more, is placarded for hazardous materials, or designed
+to transport 16 or more passengers (including the driver).
+See the Commercial Driver’s License Manual for detailed
+information about commercial driver’s licensing applications,
+requirements, and endorsements.
+CLASS D
+Class 	D 	driver’s 	licenses 	allow 	drivers 	to 	operate 	non-
+commercial motor vehicles. The requirements for drivers
+from any of the U.S. Territories applying for an Idaho DL are
+the same as if moving to Idaho from out-of-state. Applicants
+surrender their DL from that territory and pass the knowledge
+test but they do not need to take the skills test.
+DRIVER TRAINING PERMITS
+Driver Training Permits (DT) allow anyone 14 1/2 and under
+17 years of age to attend any public school or private driver
+training program. The permit expires 5 days after the permit
+holder’s 18th birthday. The permit expiration for people 17 1/2
+years of age and older is 6 months (180 days). While you are
+enrolled in a driver training program, the DT permit is valid
+only to operate a vehicle with a driver’s training instructor.
+When you have successfully completed a driver training
+program and the instructor has given you the driver training
+permit, you will be eligible to begin the supervised instruction
+period required by Idaho’s Graduated Driver’s License (GDL)
+program.
+15
+
+-- 15 of 139 --
+
+16
+The documents required to get a DT are the same as those
+required for a driver’s license and are listed on the following
+pages. All applicants under the age of 18 must have a parent
+or guardian, who has verifiable custody of guardianship, sign
+as the liability signer, assuming the obligation of the applicant.
+At 18 years of age, you may apply for a Class D Instruction
+Permit without a liability signer.
+CLASS D INSTRUCTION PERMITS
+Class D Instruction Permits (IP) allow an applicant who is
+17 years of age or older to practice safely operating a motor
+vehicle for one (1) year when accompanied by an adult
+(someone who is 18 years of age or older) who holds a valid
+driver’s license. You must pass a knowledge test to be issued
+an instruction permit. The permit may be renewed one (1)
+time without requiring the permit holder to retake and pass
+the Class D knowledge test, provided the previous knowledge
+test was taken within the past 12 months. Anyone 17 years of
+age or older may take driver’s training with either the Driver
+Training or Supervised Instruction Permit (if they have taken
+a driver’s education course) or with the Class D Instruction
+Permit.
+RESTRICTION WHEN UNDER 16
+Daylight only travel is allowed unless you have a valid licensed
+driver who is at least 21 years of age sitting in the front seat
+beside you. Daylight is defined as 5:00a to 10:00p local time.
+RESTRICTION WHEN UNDER 17
+During the first 6 months from the date the license was issued,
+the number of passengers in the vehicle who are under the
+age of 17 shall be limited to not more than one passenger,
+unless the passenger(s) are related to the driver by blood,
+adoption or marriage.
+
+-- 16 of 139 --
+
+UNDER 18 AND 21 YEARS OF AGE
+For those under 18 and 21 years of age, your driver’s license
+or ID card will show “Under 21 until month/day/year,” and your
+license or ID card will expire five days after your 21st birthday.
+If you are 15 to 17 years of age, your driver’s license or ID card
+will show “Under 18 until month/day/year,” and your driver’s
+license or ID card will expire five days after your 18th birthday.
+FOREIGN CLASS D
+If you are a foreign applicant applying for an Idaho Class D
+(non-commercial) driver’s license and have not been issued a
+CDL in any jurisdiction, you are not required to surrender your
+foreign driver’s license or provide a driving record. If drivers
+from Korea or Taiwan choose not to surrender their foreign
+driver’s license, they must take the skills test. Drivers from
+Germany do not have to surrender their license or take the
+skills test. All other foreign drivers must take a skills test. No
+foreign drivers are exempt from the knowledge test.
+FOREIGN CDL
+Foreign CDL drivers are foreign drivers from any country other
+than Mexico or Canada, holding a temporary work visa for
+the United States, and who may apply and test for an Idaho
+non-domiciled commercial instruction permit or CDL, and not
+have to surrender their home country license. If you become
+a permanent legal resident or citizen of the United States and
+resident of Idaho, you must surrender the Idaho non-domicile
+CDL and any other licenses to receive an Idaho CDL, without
+retesting unless you are upgrading or adding endorsements.
+If you are from Canada or Mexico, you are not allowed to
+purchase a non-resident CDL. Canadian and Mexican CDL
+holders are only required to surrender their driver’s license if
+they change their permanent residence from their country of
+origin to the United States. If they reside in Idaho, they can
+17
+
+-- 17 of 139 --
+
+apply for an Idaho CDL. When surrendering a CDL issued
+in Mexico or Canada you must provide a driving record no
+older than 30 days. You will be required to take the Class
+D knowledge test and the required test(s) for any additional
+endorsements you want added to your CDL.
+MOTORCYCLE INSTRUCTION PERMITS
+Motorcycle Instruction Permits (MIP) are available for those
+who want to learn how to operate a motorcycle. You must
+have a valid Idaho driver’s license to apply for an MIP. You
+must also take and pass a motorcycle knowledge test. The
+MIP may be renewed one (1) time without requiring the permit
+holder to retake and pass the motorcycle knowledge test,
+provided the previous knowledge test was taken within the
+past 12 months. Any person under 21 years of age will be
+required to take a knowledge test and successfully complete
+an approved Motorcycle Rider Training Course. (See the
+Motorcycle Riders Handbook for more information.)
+18
+
+-- 18 of 139 --
+
+GRADUATED DRIVER’S LICENSE (GDL)
+PROGRAM
+Anyone under 17 years of age who has not been issued a
+driver’s 	license 	in 	Idaho 	must 	successfully 	complete 	an
+approved 	driver’s 	training 	program 	and 	comply 	with 	the
+requirements of the GDL program. Under this program, you
+will be required to complete a minimum 6-month, violation-
+free supervised instruction period, during which you must:
+• 	Be accompanied by a valid licensed driver at least 21
+years of age who is occupying the front seat beside the
+driver (no other passengers are allowed in the front seat).
+• 	Ensure that all occupants are wearing seat belts or child
+restraints if required.
+• 	Observe all laws regarding alcohol and other intoxicating
+substances.
+• 	Accumulate at least 50 hours of supervised driving time,
+ten hours of which must be at night.
+If you are convicted of violating any traffic laws while you are
+operating a vehicle under the supervised instruction period,
+the permit will be canceled and you must reapply for a new
+permit. Your minimum 6 months of supervised driving time
+starts over again with the issuance of a new permit. Once
+you have successfully met the requirements of the GDL, you
+will be required to take and pass a knowledge and skills test
+before being issued a driver’s license.
+DRIVER TRAINING
+An approved Idaho Driver Training (DT) program consists of
+a required 30 hours of classroom instruction, 6 hours of in-car
+experience observing other student drivers, and 6 hours of
+behind-the-wheel practice with an approved DT instructor. DT
+is required for anyone under 17 years of age who is applying for
+an Idaho driver’s license. You must purchase a Driver Training
+19
+
+-- 19 of 139 --
+
+Instruction Permit before attending any DT class.
+The Idaho Department of Education provides approved DT
+courses through public schools in most Idaho school districts.
+The courses are open to all Idaho residents between the ages
+of 14 ½ and 21, even if they are not public school students. DT
+classes are also available through private DT schools (refer to
+sde.idaho.gov/student-engagement/driver-ed/).
+If you are under 17 years of age and have completed DT in
+another state (while a resident of that state) but have not been
+licensed in that state, you will be required to provide acceptable
+proof of completion of an approved DT course from that state.
+If you are not surrendering an out-of-state license, you will
+also be required to complete a supervised driving period prior
+to licensing. More information can be found at the link above.
+MOTORCYCLE ENDORSEMENT
+Motorcycle (M) Endorsements are required on all licenses
+when a motorcycle rider operates on public highways. A
+motorcycle is defined as a motor vehicle that has a seat
+or saddle for the use of the rider and is designed to travel
+with not more than three wheels in contact with the ground.
+Tractors 	and 	mopeds 	are 	not 	classified 	as 	motorcycles.
+You must pass the motorcycle knowledge and skills test or
+successfully complete an approved motorcycle rider training
+course before receiving an M endorsement on your driver’s
+license. 	If 	you 	are 	surrendering 	an 	out-of-state 	driver’s
+license with an M endorsement that is expired fewer than 25
+months, you must take and pass a motorcycle knowledge
+test. If the Idaho or out-of-state license with or without an M
+endorsement has been expired for more than 25 months, you
+must take a motorcycle knowledge and skills test. (See the
+Motorcycle Riders Handbook for more information about the
+M endorsement.)
+20
+
+-- 20 of 139 --
+
+REQUIREMENTS FOR AN
+IDAHO DRIVER’S LICENSE
+New Applicants – Idaho considers new applicants to be
+individuals who:
+• 	Have never been licensed in Idaho or any jurisdiction
+• 	Are returning to Idaho after getting a driver’s license or ID
+card in another jurisdiction
+• 	Are surrendering a license from another jurisdiction
+• 	Have an Idaho driver’s license that has been expired for
+25 months or more.
+DOCUMENTS
+New applicants applying for an Idaho credential are required
+to provide the following to the county driver’s license office:
+• 	Proof of Age and Identity (see below)
+• 	Social Security Card or Number Verification
+• 	Proof of Idaho Residency
+• 	Proof of US Citizenship
+• 	Acceptable Lawful Presence Documents (if applicable)
+• 	Visual/Medical Certification (if applicable)
+• 	Driver Training Completion (if under 17 years of age)
+• 	Liability Signer (if under 18 years of age)
+• 	Verification of School Compliance – VOC (if under 18
+years of age)
+PROOF OF AGE & IDENTITY
+The county driver’s license offices are required by law to verify
+your age and identity before issuing you a driver’s license or
+ID card. Surrendering a state-issued driver’s license or ID
+card (with photo) along with a US birth certificate that contains
+your full legal name and date of birth, is sufficient to prove
+age and identity. Photocopies or faxes of these documents
+will not be accepted. Note: if your name has changed due to
+a legal name change or marriage, you will need to provide
+21
+
+-- 21 of 139 --
+
+documentation linking your birth name to your current legal
+name. This is most commonly done with a certified marriage
+certificate or court ordered name change documents.
+Note: 	Driver 	privilege 	cards, 	which 	differ 	from 	standard
+driver’s licenses and Real ID cards, are not acceptable for
+proof of age and identity.
+Driver’s licenses and ID cards issued from other states
+are not acceptable forms of identity in Idaho unless they
+are accompanied by a US birth certificate or equivalent.
+Minor children (under the age of 18) do not need a photo ID.
+Parents or legal guardians can provide their own photo ID
+along with the child’s certified original birth certificate and, if
+needed, documentation to support guardianship. If the minor
+child brings in an acceptable photo ID from the list provided, no
+extra identification from a parent or guardian will be necessary
+(See Table 1).
+When providing a birth certificate, it must be accompanied by
+an acceptable photo identity document listed in Table 1 below.
+If the birth certificate does not match your current name (such
+as maiden name vs. married named) a secondary document,
+such as a certified marriage certificate from Table 2, must be
+provided.
+TABLE 1 – ACCEPTABLE PHOTO IDENTITY DOCUMENTS
+• 	Idaho issued driver’s license or identification card expired
+less than 5 years
+• 	Out-of-state issued driver’s license or identification card
+expired less than 5 years
+• 	Acceptable valid Department of Homeland Security
+(DHS) photo card/document
+• 	U.S. Military ID card or U.S. Retired Military card
+• 	U.S. Military Dependent’s card
+• 	Valid U.S. Passport or U.S. Passport card
+22
+
+-- 22 of 139 --
+
+• 	Original citizenship/naturalization document
+• 	Foreign passport
+• 	Concealed Weapons Permit issued by the state of Idaho
+not expired for more than 1 year
+• 	Veteran’s Universal Access Card with photo
+• 	Native American ID card with photo
+• 	Transportation Workers Identity Credential (TWIC)
+• 	Junior or senior high school (not college or university)
+photo card
+• 	Junior or senior high school, college, university or military
+annual yearbook
+• 	Idaho Department of Corrections photo ID card
+• 	Idaho Department of Juvenile Corrections photo ID card
+Note: “Foreign Nationals” can provide a foreign passport in lieu of
+the U.S. certified birth certificate. In compliance with the National
+Driver’s License Agreement, the foreign passport is the only
+acceptable document to provide proof of legal name and date
+of birth. To establish identity, a foreign national will need a valid
+foreign passport and acceptable lawful presence documentation.
+Table 2 below contains acceptable secondary documents that can
+be used to assist in confirming your identity. Secondary documents
+alone are not sufficient. These documents must contain your
+name and enough information to establish proof of all or part of
+what is contained on the primary document from Table 1.
+TABLE 2 – ACCEPTABLE SECONDARY IDENTITY DOCUMENTS
+• 	Certified court name change document
+• 	Certified marriage certificate meeting Idaho standards
+with seal & document number showing it was recorded
+• 	Certified divorce document from a court or state vital records
+• 	Guardianship or custody documents, notarized or court
+certified
+• 	U.S. Military discharge paper (form #DD214)
+All documents submitted must be acceptable to the
+county drivers license office and ITD.
+23
+
+-- 23 of 139 --
+
+24
+SOCIAL SECURITY CARD OR NUMBER FOR
+VERIFICATION
+Your social security number must be verified through the Social
+Security Administration’s Social Security Online Verification
+system. It will not be printed on your Idaho driver’s license or
+ID card.
+PROOF OF IDAHO RESIDENCY
+You must reside inside Idaho’s borders to be issued an Idaho
+driver’s license or ID card. You will be required to show proof
+of physical address with documents such as lease or rental
+agreements, utility bills, employment records, school enrollment
+records, etc. Documents must be dated within 1 year.
+ACCEPTABLE LAWFUL PRESENCE
+DOCUMENTS (IF APPLICABLE)
+Individuals who are not lawfully present in the United States
+are not eligible for an Idaho driver’s license or ID card. Proof
+of lawful presence may be required for a new issuance or
+renewal, if you have not previously provided proof of U.S.
+citizenship or ITD does not have record of it.
+Acceptable lawful presence documents include:
+• 	Certified Original U.S. Birth Certificate
+• 	Valid U.S. Passport or Passport Card
+• 	Certificate of Birth Abroad
+• 	Original Certificate of Naturalization/Citizenship
+• 	Permanent Resident Card or Resident-Alien Card
+• 	Employment Authorization Card
+• 	Valid Foreign Passport and I-94 (Arrival/Departure Record)
+
+-- 24 of 139 --
+
+If you are not a citizen or permanent legal resident of the United
+States, the expiration date on your driver’s license will be the
+same date as your end of lawful stay in the United States
+as indicated on your documents issued by the Department of
+Homeland Security, or four years, whichever is less. If your
+Department of Homeland Security documents do not show an
+expiration date, the expiration date on the driver’s license will
+be one year from the date of issuance of the driver’s license.
+VISUAL/MEDICAL CERTIFICATION (IF
+APPLICABLE)
+If you have a visual and/or medical condition that could affect
+your driving, you may be required to provide a statement from
+your physician certifying that you can safely operate a motor
+vehicle. The necessary form may be obtained from the local
+county DMV agent.
+If you have questions regarding any physical or mental
+condition that may affect your ability to safely operate a motor
+vehicle, contact ITD. If you have had eye surgery to improve
+your vision, the restriction on your driver’s license may be
+removed 	with 	a 	physician’s 	note. 	Contact 	ITD 	for 	more
+information.
+PROOF OF COMPLETION OF DRIVER’S
+TRAINING (IF UNDER 17)
+If you are under 17 years of age, you must provide proof that
+you have completed an approved driver’s training program.
+You must also provide proof that the supervised instruction
+permit requirement has been met. See the Driver Training
+section of this manual for more information about these
+requirements.
+25
+
+-- 25 of 139 --
+
+LIABILITY SIGNER (IF UNDER 18)
+If you are under 18 years of age, you need to have a parent or
+legal guardian with you to sign consent for you to be licensed.
+The signer assumes legal responsibility for your actions as a
+driver. If the liability signer is not the mother or father listed
+on your birth certificate, you must also provide acceptable
+legal documents (e.g. adoption records with updated birth
+certificate or court-ordered guardianship documents) to show
+the signer has authority to consent. The identity of the liability
+signer will be verified. If the signer’s name is different from the
+one appearing on your birth certificate, additional documents
+such as a marriage license or divorce decree may be required
+to verify relationship. If the liability signer cannot be present
+to sign the application at the county DMV, the liability signer
+must complete a power of attorney form, giving another
+person authority to sign for them. While you are under 18
+years of age, the liability signer may withdraw consent at any
+time, which will cause the department to cancel your driving
+credential. If you are married, your spouse, who must be at
+least 18 years of age, may sign for you.
+VERIFICATION OF SCHOOL COMPLIANCE
+(VOC) (IF UNDER 18 YEARS OF AGE)
+If you are under 18 years of age, you will need to provide
+acceptable proof of enrollment and attendance in, or graduation
+from, a recognized high school or equivalent program. This
+proof can be in the form of a verification of compliance slip
+from an acceptable school or program you are attending,
+a high school diploma, or a general education certificate
+of completion. When signing the liability statement, your
+parent(s) or legal guardian must also sign a statement that
+you are in compliance with the school attendance provisions
+of Idaho Code.
+26
+
+-- 26 of 139 --
+
+STAR CARD
+The following additional documentation will be required to
+obtain a Star Card (Real ID):
+• 	Proof of identity, photo, and lawful presence (e.g. certified
+birth certificate, permanent resident card, etc.)
+• 	Name change documents for proof of identity (if applicable)
+(e.g. certified marriage certificate, court ordered name
+change, etc.)
+• 	Social security number for verification with the Social
+Security Administration
+• 	Two proofs of Idaho residency with physical address.
+• 	A list of other acceptable documents is available on the
+ITD website
+For more information on obtaining a Star Card, visit itd.idaho.
+gov/starcard/
+DESIGNATIONS ADDED TO CREDENTIALS
+DONOR DESIGNATION:
+• 	If you are 15 years of age or older, you may request to
+have the “DONOR” designation appear on your driver’s
+license or ID card. The designation identifies your wish
+to donate your organs and/or tissue upon your death to
+those waiting for transplants. If you’re under 18 years
+of age you must have consent from your parent or adult
+guardian to be an organ donor. Organ donor information
+can be found at yesIdaho.org. You may also elect to
+contribute an additional $2 to the organ donation fund.
+VETERAN’S DESIGNATION:
+• 	If you would like a veteran’s designation on your driver’s
+license or ID card, you must provide a DD214 form
+indicating honorable discharge. A list of other acceptable
+documents is available on the ITD website
+27
+
+-- 27 of 139 --
+
+MEDICAL INFORMATION:
+When you apply for a driver’s license, instruction permit, or
+ID card, you can request to have a notation placed on the
+back of the driver’s license or ID card regarding any medical
+condition(s) you have. This may alert emergency personnel or
+those assisting you in an emergency.
+PERMANENT DISABILITY NOTATION:
+• 	Individuals may request the notation “permanently
+disabled” on their driver’s license, instruction permit, or ID
+card if that person:
+๚ 	Has a permanent disability, and
+๚ 	Presents written certification from a licensed
+physician, licensed physician’s assistant, or licensed
+advanced-practice professional nurse verifying
+that the person’s stated impairment qualifies as a
+permanent disability as provided in Idaho Code,
+section 49-117, and
+๚ 	ITD determines that the person meets all other
+requirements for issuance of a driver’s license,
+instruction permit, or ID card.
+๚ 	Individuals who have received non-expiring disability
+placards or disability license plates may present
+the corresponding registration document to the
+county driver’s license office to have the “permanent
+disability” notation included on their driver’s license,
+instruction permit, or ID card.
+SELECTIVE SERVICE REGISTRATION:
+• 	Federal law requires all males who are 18 to 25 years
+of age to register with the Selective Service System.
+The Selective Service System receives notification of all
+applicants who say “no,” that they have not registered for
+Selective Service.
+28
+
+-- 28 of 139 --
+
+NAME CHANGE ON CREDENTIAL
+To change the name that is shown on your driver’s license or
+ID card you must apply for a duplicate or, if you are eligible,
+you may make the change as you renew your driver’s license.
+You will need to provide the county driver’s license office
+with legal proof of your new name, such as a state-certified
+marriage certificate meeting Idaho standards, court-certified
+divorce decree, or court documents. Note: your name must
+be updated with the Social Security Administration prior to
+applying for a duplicate.
+ADDRESS CHANGE
+You must notify ITD within 30 days when your address
+changes. You must do this by either completing a change of
+address form available at any county driver’s license office
+or online at itd.idaho.gov (DMV > DMV Online > Update
+Address) or paper form. You may also notify the department
+in writing by email or mail.
+If you would like an address change to show on your actual
+driver’s license or ID card, you will need to apply for a duplicate,
+unless you are eligible to renew the driver’s license or ID card.
+Your record must show your actual physical address, however
+a post office box, general delivery, highway contract (HC)
+route number or rural route, or another address may be given
+for your mailing address.
+For your own protection, DO NOT:
+• 	Lend anyone your driver’s license, instruction permit, or
+ID card
+• 	Use anyone else’s driver’s license, instruction permit, or
+ID card
+• 	Display or possess a fraudulent/altered driver’s license,
+permit, or ID card 29
+
+-- 29 of 139 --
+
+• 	Keep a driver’s license, permit, or ID card if it has been
+canceled
+• 	Allow an unlicensed driver to drive your vehicle (in case
+of a crash, both the driver and the owner of the vehicle
+are responsible for the damage, injury, or death when
+permissions to drive the vehicle have been given).
+RENEWALS
+If you are 21 years of age or older, you may renew your Idaho
+Class D or CDL driver’s license in person up to 25 months
+before the expiration date, unless you have a hazardous
+materials endorsement on your CDL. A renewal is valid for
+either four years or eight years, or to the end of your lawful
+stay in the United States. If you are between 21 and 62 years
+of age, you may choose the eight-year renewal for your Class
+D or commercial driver’s license. Vision screening is required
+at all renewals and, if failed, examiner may require a Vision
+Exam form to be filled out by an eye doctor/specialist. Medical
+Exam forms may also be required depending on pre-existing
+conditions or observations.
+If the Idaho (Class D or CDL) or out-of-state (Class D only)
+driver’s license has been expired for 25 months or more, you will
+be required to take all applicable knowledge and skills test(s). If
+the out-of-state CDL has been expired for more than 12 months
+and you wish to retain CDL privileges, you will be required to
+take the class D knowledge and skills tests, all knowledge tests
+pertinent to the CDL, and a skills test in the class of vehicle that
+matches the class of CDL you are applying for.
+DUPLICATES
+If your Idaho credential is lost, damaged or destroyed, you
+may obtain a duplicate by applying at any county driver’s
+license office or online. If you are temporarily residing out of
+state, a paper application may be submitted. In most cases,
+the county driver’s license office should be able to identify you
+30
+
+-- 30 of 139 --
+
+from the digital photo on file along with any other documentation
+you can bring that identifies you (see previous pages for
+lists of acceptable documents). If you find your lost driver’s
+license or ID card after a duplicate has been issued, it must be
+destroyed, or surrendered to the county driver’s license office.
+The new duplicate driver’s license or ID card issued to you is
+the driver’s license that should be retained.
+EXTENSIONS
+Your Idaho driver’s license will expire on your birthday as
+indicated on your license. If you are temporarily out of state at
+that time, you may apply for an extension of up to 12 months
+for $10.00. If necessary, you can request a second, and final,
+12-month extension upon reapplication for $10.00.
+A 	CDL 	may 	be 	extended, 	but 	a 	hazardous 	materials
+endorsement cannot be extended.
+If you are on active duty or a dependent of an active-duty
+military personnel in the U.S. armed forces, you may, during
+the active-duty period, apply for as many extensions as are
+needed, at $10.00 per application. For more information or an
+application for an extension, contact ITD.
+LOST OR STOLEN CREDENTIAL
+Idaho residents whose driver’s license, DT/SIP, CLP, or ID
+card is lost, stolen, mutilated, destroyed, confiscated, etc.,
+must visit a county DMV office and declare the reason for
+applying for a duplicate.
+Applicants who are new to the State of Idaho and who have
+lost a valid out-of-state driver’s license or ID card are required
+to provide documentation as outlined previously to assist in
+identity verification.
+31
+
+-- 31 of 139 --
+
+REQUIRED TESTING
+Applicants must be 15 years of age or older to take the
+knowledge and skills tests.
+MEDICAL/VISUAL SCREENING:
+Your vision will be tested and you must meet a minimum
+standard of 20/40 vision in at least one eye, with or without
+corrective lenses. If you wear glasses or contacts during the
+vision screening, a lens restriction will be placed on your
+driver’s license. If a lens restriction is placed on your driver’s
+license, you must always wear your glasses or contacts when
+operating a motor vehicle or you may be cited and have your
+driving privileges suspended. If you have a medical condition
+that may affect your ability to safely operate a vehicle, the
+county DMV agent may request a medical to be completed by
+your physician prior to issuing you a driver’s license.
+KNOWLEDGE TEST: CLASS D (NON-COMMERCIAL)
+If you are a new applicant, transferring your out-of-state driver’s
+license, or your Idaho driver’s license has been expired for 25
+months or more, you must take the knowledge test. Knowledge
+test questions are taken directly from information included
+in the Driver’s Handbook. The knowledge test consists of 40
+questions; you can miss up to six (6) questions before failing the
+test. The knowledge test is available in English, Arabic, Chinese,
+Farsi, 	French, 	Korean, 	Russian, 	Serbo-Croation, 	Spanish,
+Swahili, Vietnamese, and American Sign Language (ASL).
+Web-based driver practice tests are not an accurate representation
+of Idaho knowledge tests, with the exception of the sample test
+questions provided by ITD through the itd.idaho.gov website.
+IF YOU FAIL A KNOWLEDGE TEST, YOU MUST WAIT
+THREE 	(3) 	DAYS 	TO 	RETEST. YOU 	WILL ALSO 	BE
+REQUIRED TO PAY THE KNOWLEDGE TEST FEE AGAIN.
+32
+
+-- 32 of 139 --
+
+SKILLS TEST: CLASS D (NON-COMMERCIAL)
+To ensure an applicant for a class D driver’s license understands
+the rules of the road, it is beneficial for the applicant to pass
+the knowledge test prior to taking the skills test. However,
+tests may be taken in either order. Skills tests may only be
+scheduled 	during 	daylight 	hours 	and 	during 	acceptable
+weather conditions. Twelve or fewer errors is a passing score.
+IF YOU FAIL A SKILLS TEST, YOU MUST WAIT THREE
+(3) DAYS TO RETEST. YOU WILL ALSO BE REQUIRED
+TO 	PAY 	BOTH 	TEST 	FEES 	AGAIN 	(COUNTY 	AND
+SKILLS TEST EXAMINER).
+Who is required to take a skills test? Those who:
+• 	Have never been licensed before
+• 	Have completed an approved driver’s training course
+and the SIP (under 17)—skills test eligibility dates are
+strictly enforced
+• 	Are driving on an instruction permit (17 years of age or
+older) and want to become a licensed driver
+• 	Have vision that does not meet minimum standards
+• 	Have a recurring skills test requirement due to a medical
+or visual condition
+• 	Present a foreign license, if there is no reciprocity agreement
+• 	Present an Idaho or out-of-state driver’s license that has
+been expired 25 months or more—does not apply to
+Commercial Driver’s Licenses (CDL).
+ADDITIONAL CIRCUMSTANCES FOR A REQUIRED SKILLS TEST:
+• 	Having any mental or physical impairment that might
+affect the safe operation of a motor vehicle
+• 	When a county agent has concerns about an applicant’s
+ability to safely operate a motor vehicle regardless of
+prior license, experience, or age
+33
+
+-- 33 of 139 --
+
+SCHEDULING A SKILLS TEST:
+Idaho 	has 	third 	party 	contractors 	who 	administer 	all
+Class D skills tests. Applicants required to take a skills
+test 	are 	referred 	to 	the 	website 	(itd.idaho.gov/itddmv)
+to 	obtain 	contact 	information 	for 	skills 	test 	examiners.
+Click on the DRIVER’S LICENSE/ ID CARDS tab then scroll
+down and click on SKILLS TEST. Contact the skills test
+examiner of your choice. If the skills test examiner cannot
+be reached, leave a voicemail with your name and phone
+number. They will not return calls unless a voicemail with your
+information is provided.
+RESTRICTED SKILLS TEST:
+Notify the skills test examiner if you require or would like a
+restricted skills test. Restricted skills tests are for applicants
+who are unable to drive outside of their specific restrictions or
+proposed restrictions or only want to drive to and from certain
+locations. A restricted driver’s license gives applicants some
+mobility while only allowing them to safely operate a motor
+vehicle within their abilities. If you do not want a restricted
+driver’s license, you must complete the entire skills test route
+without any modifications. You must discuss all options with
+the skills test examiner prior to taking the skills test.
+REQUIRED DOCUMENTS TO BRING FOR THE SKILLS TEST:
+• 	Proof of Identity (with photo): A state-issued (Idaho
+or another jurisdiction) photo ID or driver’s license,
+instruction permit, supervised instruction permit,
+passport, school ID, yearbook, etc.
+• 	Vehicle Permission (written or verbal in person): If
+you are not the owner of the vehicle being used for the
+skills test, permission to use the vehicle must be provided
+to the skills test examiner either in written format or
+in person verbally. (Permission over the phone is not
+acceptable.)
+34
+
+-- 34 of 139 --
+
+• 	Vehicle Insurance (not expired): A paper or digital copy
+of valid proof of insurance must be in the vehicle during
+the skills test. An SR22 is not valid proof of insurance.
+• 	Vehicle Registration (not expired): Valid, not a photo
+copy, must be in the vehicle during the skills test, and
+signed by the registrant.
+• 	Skills Test Receipt: Only required for identity verification
+if no state-issued credential (Idaho or another jurisdiction)
+is provided as proof of identity. Photo identification is still
+required if a skills test receipt is provided.
+• 	Skills Test Evaluation Form (if applicable): Form
+provided by ITD for use by the skills test examiner is
+required for a medical caution (reevaluation) or skills test
+requirement at the time of the skills test.
+PASSENGERS
+Passengers are not allowed during the skills test. Exceptions
+may be made for the following categories of passengers
+(These specific passengers must be 18 years of age or older
+with valid identification and must sign the liability waiver):
+• 	Parent or Legal Guardian: Only one (1) parent or legal
+guardian may accompany a minor (17 years of age or
+younger) during the skills test.
+• 	Translator: Translators are not required to be certified or
+have a valid driver’s license. Applicants are responsible
+for procuring a translator if deemed necessary.
+• 	Law Enforcement: An officer may accompany a current
+inmate during a skills test.
+• 	Missionaries: A religious missionary companion may
+accompany the applicant during a skills test if requested.
+35
+
+-- 35 of 139 --
+
+SKILLS TEST EXAMINER VEHICLE INSPECTION
+The skills test examiner will inspect and verify that all items
+listed below meet Idaho Code and ITD standards:
+• 	Passenger door, passenger seatbelt, rear-view / side
+mirrors (rear-view or both side mirrors), windshield (no
+cracks or obstructions), tires (must have at least 2/32” of
+an inch or more of tread. Studded tires are not allowed
+May 1 to September 30, dashboard gauges / lights (no
+critical lights or gauges are illuminated).
+• 	Vehicles with dealer plates cannot be used for skills tests
+unless the applicant is a dealer or a full-time salesperson.
+This must be proven by providing a state-issued dealer’s
+ID card.
+• 	Rental cars are not allowed to be used for taking a skills
+test if the applicant is not a licensed driver or is under the
+age of 25.
+If the provided motor vehicle does not meet standards, another
+skills test will be scheduled contingent upon bringing a safe
+and roadworthy vehicle or repairing the current motor vehicle.
+APPLICANT VEHICLE KNOWLEDGE & INSPECTION
+You 	must 	be 	able 	to 	locate 	and/or 	demonstrate 	to 	the
+skills test examiner that the following items are functioning
+properly: 	driver 	door, 	driver 	seatbelt, 	brake 	lights, 	turn
+signals, headlights, windshield wipers, hazards / emergency
+lights, driver window, horn, emergency / parking brake, and
+defroster/defogger, as well as properly demonstrate all three
+arm signals. You can miss 3 or fewer to continue to the driving
+portion of the skills test.
+DRIVING SKILLS
+You must be able to demonstrate the essential driving skills to
+safely operate a motor vehicle while abiding by Idaho traffic
+laws. Twelve or fewer errors is a passing score.
+36
+
+-- 36 of 139 --
+
+The skills test includes:
+Commercial/residential 	driving, 	curve, 	intersections 	–
+(controlled, 	uncontrolled, 	railroad, 	roundabout), 	interstate
+(freeway), lane changes, parking lot, turns – (right, left, U-turn),
+and parking – ( stall & curb), etc.
+During the skills test, you will be scored on:
+Acceleration/deceleration, attentiveness, stopping (complete/
+unnecessary), lane position, right-of-way, signaling, spacing,
+speed control, steering control, unnecessary stops, parking
+(stall & curb), traffic checks, etc.
+CRITICAL DRIVING ERRORS (CDE)
+A driving skill performed or not performed that may result in
+an incident/accident, injury, or death. If a CDE occurs, the
+error constitutes an automatic FAIL and the skills test ends
+immediately. The CDE’s can be any of the following actions:
+dangerous action, disobeys emergency or safety vehicle,
+disobeys police or safety personnel, disobeys traffic sign or
+signal, drives up onto the curb or sidewalk, intervention by
+or disobeys skills test examiner, habitual violation (missing
+5 or more of same scored skill), lane violation, passenger
+interference, speeding, street parking (more than 18” from the
+curb & impeding traffic), and striking an object.
+RESULTS
+Upon completion of the skills test, you will be notified of your
+score. If you pass, the skills test examiner will provide you with
+your skills test in a sealed envelope to deliver to the county
+DMV. The envelope must not be opened. If it is determined the
+envelope has been opened or tampered with, your results will
+be held pending ITD verification and approval. If you fail, the
+skills test examiner will submit the failed skills test results to
+ITD to record on your driving record. You do not have driving
+privileges until the passing skills test results are recorded on
+your driving record and a driver’s license is issued.
+37
+
+-- 37 of 139 --
+
+VEHICLE EQUIPMENT &
+SAFETY.
+OPERATING A VEHICLE WITHOUT
+THE OWNER’S CONSENT.
+Any person who will operate a vehicle not his own, without the
+consent of the owner, and with intent to temporarily
+deprive the owner of his possession of such vehicle, without
+intent to steal the vehicle, will be guilty of a misdemeanor.
+Under Idaho law, you may not drive any vehicle that
+is mechanically unsafe. If your vehicle needs repairs,
+lacks vital equipment, or presents some other danger,
+you are responsible for correcting the problem.
+Idaho does not require an annual safety inspection, but if
+you are stopped by a police officer who finds your vehicle is
+unsafe or lacks proper equipment, the officer may issue you
+a citation.
+REQUIRED EQUIPMENT.
+• 	Brakes: All vehicles must have two brake systems
+designed so that if one fails the other still works. Foot
+brakes must stop a vehicle that is traveling 20 miles per
+hour on dry pavement within a distance of 25 feet. The
+emergency or parking brake must stop the vehicle within
+55 feet under similar conditions, and must hold the car
+stationary on a hill when parked.
+• 	Headlights: Two headlamps (with high and low beams)
+are required and must be aimed to light the road without
+blinding oncoming drivers. High beams must allow the
+driver to see people and vehicles at least 350 feet away.
+Low beams must light the roadway at least 100 feet
+ahead. Must not cover headlights with any reflective,
+opaque, or non-transparent material.
+38
+
+-- 38 of 139 --
+
+• 	Stop or Brake Lights: All motor vehicles must have
+functioning red or amber brake lights visible for at least
+100 feet to the rear in normal sunlight. Brake lights must
+be designed to come on when you apply the foot brake.
+Keep the brake light lenses clean.
+• 	Taillights: Vehicles built before January 1, 1956, and
+motorcycles must have at least one red light mounted
+on the rear. All other motor vehicles, trailers, and semi-
+trailers must have at least two red lights mounted on the
+left and right rear, visible from 500 feet to the rear.
+• 	Turn Signals: All motor vehicles built after January
+1, 1955, must have flashing electric left and right turn
+signals on the front and rear with a switch that can be
+controlled by the driver and be visible from 100 feet. The
+front signals must be white or amber and the rear signals
+must be red or amber.
+• 	Tires: Each tire should have at least 2/32” or more of
+tread.
+• 	Horns: All motor vehicles must have a horn that can be
+heard at least 200 feet away. Horns with unreasonably
+loud or harsh sounds are prohibited.
+39
+
+-- 39 of 139 --
+
+• 	Windows and Windshields Must:
+๚ 	Be made of approved safety glass.
+๚ 	Be replaced when damage to the glass obstructs
+the driver’s view.
+๚ 	Be kept free of signs or stickers not required by law.
+๚ 	Not be blocked by any object placed or hung in
+the vehicle .
+๚ 	Be kept free of frost, snow, dirt or anything else
+that obscures the driver’s visibility.
+๚ 	Not be treated with a mirror surface or other
+substance that makes them difficult to see through,
+even from the outside.
+• 	Windshield Wipers: All motor vehicles must be
+equipped with wipers to keep the windshield clear of rain,
+snow, or other moisture.
+• 	Mirrors: All motor vehicles must have a rear view mirror
+that provides a view of the highway for at least 200 feet
+to the rear. If a load or trailer obscures the driver’s normal
+view through the rear window, the vehicle must have two
+additional mirrors, one on each side of the vehicle. If no
+rear-view mirror is present, they must have 2 side mirrors
+(1 left, 1 right).
+• 	Mufflers: All motor vehicles must have a muffler that is in
+good working order and prevents loud or unusual noise.
+• 	Fenders and Flaps: All motor vehicles, trailers and
+semitrailers must have fenders, wheel covers or flaps to
+prevent mud, water or other material from being thrown
+from the wheels up onto other vehicles.
+CHILD RESTRAINTS ARE REQUIRED.
+Automobile crashes are the leading cause of death for
+American children over one year of age. Some 1,500 children
+die in auto crashes each year. Another 100,000 are injured.
+Most of these deaths and injuries can be avoided if parents
+take the time to buckle their children into an approved child
+
+-- 40 of 139 --
+
+restraint system. Idaho law requires anyone carrying children
+6 years of age or younger in a non-commercial motor vehicle
+to properly protect children in approved child car safety seats.
+The law applies to cars manufactured with car safety belts
+after January 1, 1966.
+Proper protection means:
+• Using approved safety seats (seats that meet federal
+safety standards).
+• Fitting children snugly into safety seats with the straps
+that are attached to the seat.
+• Securing safety seats to the vehicle
+• Using safety seats on every trip.
+Additional recommendations for child seat use from National
+Highway Traffic Safety Administration include the following:
+• 	Always read child seat manufacturers’ instructions and
+the vehicle owner’s manual for important information on
+height and weight limits, and how to properly install the
+car seat using the seat belt or the LATCH (Lower Anchors
+and Tethers for Children) system.
+• 	All children younger than 13 years should ride in the back
+seat.
+• 	Children in rear-facing car seats should never ride in front
+of an active passenger air bag.
+• 	View National Highway Traffic Safety Administration’s
+new child restraint guidelines.
+(https://www.nhtsa.gov/equipment/car-seats-and-booster-
+seats)
+SEAT BELTS & SHOULDER STRAPS.
+Idaho law requires all occupants to wear safety belts and/or
+shoulder straps when riding in a motor vehicle equipped with
+these devices by the factory. Studies by the NHTSA show that
+when worn, safety belts:
+41
+
+-- 41 of 139 --
+
+• Reduce your chances of serious injury in an auto crash
+by 50%.
+• Are 60-70% effective in preventing fatalities in auto
+crashes.
+Safety belts also help drivers maintain control of their car on
+winding or rough roads or when trying to avoid a collision.
+EQUIPMENT NOT ALLOWED.
+• Red or blue emergency lights. These are authorized for
+emergency vehicles only.
+• Sirens, bells, and whistles.
+• Any muffler cut-out or bypass that makes the exhaust
+system amplify or increase noise.
+• More than two spotlights.
+• More than two auxiliary lights in front.
+• More than two fog lights in front.
+• More than two cowl or fender lights.
+• Studded Snow Tires.
+๚ Studded snow tires may be used only from October
+1 to April 30. Some years, the Idaho Transportation
+Department adjusts the dates due to weather conditions.
+42
+
+-- 42 of 139 --
+
+OTHER LAWS YOU NEED TO KNOW.
+• 	Lights: Headlamps and tail lamps must be lighted from
+sunset to sunrise and when poor visibility makes them
+necessary for safety. Headlamps must be dimmed 500
+feet before meeting and 200 feet before overtaking
+another vehicle. When lights are needed for driving, use
+headlamps, not parking lights.
+• 	Keep Windows and Windshield Clear: Windows and
+windshields must be kept clean of signs, posters, and
+stickers except those required by law. You must also
+clean windows of ice, snow, or dirt before driving to
+ensure that you have maximum visibility in all directions.
+• 	Obstructing Driver’s View: It is illegal for passengers
+or freight to obstruct a driver’s view or interfere with the
+operation of a vehicle.
+• 	Overhanging Loads: When vehicle loads extend four
+feet or more beyond the rear of a vehicle, a red flag at
+least 18 inches square must be displayed at the end of
+the load. At night, the flag must be replaced by a red light
+visible for at least 500 feet. The vehicle’s load must not
+extend outside the fenders on the left side or more than
+six inches outside the fenders on the right.
+• 	Reckless Driving: You must not recklessly drive a
+vehicle with willful disregard for the safety of people or
+property either on a public road or private property.
+• 	Inattentive Driving: While driving, you must give your
+full attention to the safe operation of your vehicle. Failure
+to do so may cause you to be cited for inattentive driving.
+ANTIQUE VEHICLES & STREET RODS.
+Equipment requirements for antique vehicles and street
+rods may vary from the requirements for regular passenger
+vehicles. Please contact ITD in Boise at 208-584-4343 for
+additional information.
+43
+
+-- 43 of 139 --
+
+HIGHWAY & VEHICLE
+KNOWLEDGE
+SIGNS, SIGNALS, & PAVEMENT MARKINGS
+Traffic 	control 	devices 	include 	traffic 	signals, 	signs, 	and
+pavement markings. Traffic control may also be provided
+by law enforcement officers, highway personnel, or school
+crossing guards. You must obey these directions.
+TRAFFIC SIGNS
+There are several types of traffic signs including regulatory,
+warning, work zone, guide, and other types of signs. You
+should learn to recognize them by color and shape as well as
+the messages or symbols they carry.
+Regulatory Signs: Regulatory signs are generally black and
+white, although some are red and white.
+Stop: When approaching a stop sign, you
+must stop at a clearly marked stop line.
+If no stop line, then stop before entering
+the crosswalk on the near side of the
+intersection. If no crosswalk, then stop at
+the point nearest the intersecting highway
+where the driver has a view of approaching
+traffic on the intersecting highway before entering it.
+Yield: Yield right-of-way. You must slow
+down and yield the right-of-way to other
+vehicles and pedestrians in the intersection
+you 	are 	crossing 	or 	highway 	you 	are
+entering. If necessary, stop before crossing
+the intersection or entering the highway. If
+pedestrians are in or about to enter the
+44
+
+-- 44 of 139 --
+
+crosswalk, stop until they have crossed the highway, then
+proceed. Slow down, so that you may safely yield the right-of-
+way to other vehicles or pedestrians.
+Do Not Enter: You may not enter this
+section of highway from the direction you
+are traveling.
+Speed Limit: The maximum speed limit on a section of road
+(under ideal driving conditions).
+Keep Right of Island: The road ahead is
+divided. Stay on the right side of the island or
+barrier.
+TURN PROHIBITION & LANE CONTROL
+SIGNS
+45
+
+-- 45 of 139 --
+
+WORK ZONE SIGNS
+Work 	zones 	are 	hazardous 	areas 	for 	both 	workers 	and
+motorists. These are commonly identified with orange signs,
+cones, drums, barricades, or flashing arrow panels. Here are
+some tips for travel through work zones:
+• 	Pay attention: Be aware of hazards, like uneven
+pavement, narrow lanes, heavy equipment, and gravel.
+• 	Watch for signs: Regulatory signs are generally black
+and white or red and white. Warning signs in a work zone
+are orange and black. Do not go around or move any
+barriers or signs to cross over a road that is closed to
+traffic.
+Lane Shift: All lanes will shift according
+to the sign. Stay in your lane as it shifts
+slightly.
+46
+
+-- 46 of 139 --
+
+.
+Be Prepared to Stop: Slow down and be
+prepared to stop for road work ahead.
+Slow 	Moving 	Vehicle 	Sign: 	You 	are
+approaching a slow moving vehicle. You
+should 	slow 	down 	and 	approach 	the
+vehicle with caution. This sign is primarily
+used on off road vehicles (farm equipment,
+construction equipment, etc.).
+“Road 	Closed” 	signs 	mean 	that 	the
+work zone cannot be entered, except by
+authorized personnel.
+“Road Closed To Thru Traffic” or “Road Closed, Local
+Traffic Only” signs mean that the work zone is open to local
+residential or commercial traffic, but the traffic must not use
+the work zone as a travel route unless they have a reason to
+stop within the work zone. When closure signs are properly
+placed, continuous trips through a work zone are prohibited.
+Other signs should be available to direct you around the work
+zone.
+47
+
+-- 47 of 139 --
+
+Slow down. Fines for speeding are
+increased in work zones where the
+signage indicates.
+• 	Watch where you are going. Workers are just inches
+away from traffic, working both night and day.
+• 	Do not follow too closely. Leave plenty of space
+between you and the car ahead.
+• 	Plan ahead. Speeding, inattentive driving, failing to
+yield the right-of-way, and improper lane changes also
+contribute to crashes in work zones. Allow for the few
+extra minutes and minimize distractions, such as a cell
+phone and the car stereo.
+SCHOOL SAFETY PATROLS
+You must follow any directions issued by a school safety patrol
+official while driving your motor vehicle. These officials are
+appointed by the school and will have a badge, appropriate
+clothing, 	or 	insignia 	marked 	“School 	Patrol”, 	while 	in
+performance of their duties. They will display “STOP” or other
+proper directional signs at school crossings or other points
+where school children are crossing a public street or highway.
+48
+
+-- 48 of 139 --
+
+WARNING SIGNS
+Most warning signs are black on yellow and diamond-shaped.
+They also include the fluorescent yellow/green school warning
+signs. These signs warn you about an unexpected condition.
+You may need to slow down or take other action. Some
+common warning signs follow.
+Open Range: You are traveling in an area
+where livestock have the right-of-way and
+are allowed to roam freely and unfenced.
+3-Way Intersection: You are approaching
+a 3-way “T” intersection and will have to
+turn either to the right or the left. You must
+stop and yield to drivers approaching from
+the other two directions.
+Intersection/Crossroad: There is another
+road ahead which crosses the road you are
+on. Watch carefully for cross-traffic in your
+path.
+Traffic Signal Ahead: These signs are
+used 	on 	roads 	with 	higher 	speeds 	or
+where the view of the intersection or light is
+blocked. Be ready for an intersection and a
+stop light.
+49
+
+-- 49 of 139 --
+
+Merging Traffic: If you are on the main
+road and see this sign, be prepared for
+other cars and trucks entering into your
+lane.
+Two-Way Traffic: This sign warns about a
+transition from a multi-lane divided highway
+to a two-lane, two-way section of highway.
+Lane 	Ends/Merge 	Left: 	Two 	lanes 	of
+traffic will soon become one lane of traffic.
+Merging traffic must yield.
+Added 	Lane: 	Two 	highways 	are
+converging. Watch for traffic in the left lane
+which may move into the right lane. Before
+moving into the left lane (if needed) check
+to make sure it is clear while signaling
+before changing lanes.
+School Zone: You are nearing a school
+area with a crossing. Watch for children
+and the marked school crossing. There are
+increased penalties for violation of school
+zone speed limits. The color of this sign
+may be yellow or fluorescent yellow/green.
+50
+
+-- 50 of 139 --
+
+School Crossing: Watch out for children,
+reduce speed, and obey crossing guard
+signals. The color of this sign may be
+yellow or fluorescent yellow/green.
+Pedestrian 	Crossing: 	Watch 	out 	for
+people 	crossing 	the 	road. 	Pedestrians
+have the right-of-way, and you may have
+to stop for them. The color of this sign
+may be fluorescent yellow/green. The sign
+may have flashing lights that indicate a
+pedestrian is crossing.
+Divided Highway Begins: You are getting
+close to the place where two-way traffic will
+be divided by a center strip.
+Divided Highway Ends: Two-way traffic
+ahead will no longer be divided by a center
+strip. Watch out for oncoming cars.
+Low Clearance: Indicates the overhead
+clearance above the highway is very low.
+51
+
+-- 51 of 139 --
+
+Railroad Crossing: This sign gives you
+early 	warning 	of 	a 	railroad 	crossing(s)
+ahead. Be prepared to stop before you get
+to the tracks if a train is approaching the
+crossing.
+Slippery When Wet: Road ahead may
+become 	slippery 	in 	wet 	weather. 	Slow
+down under these conditions.
+Hill: This sign is a warning to all vehicles
+that the road goes down a steep hill. You
+should check your brakes before going
+down the hill.
+No Passing Zone: This pennant-shaped
+sign will be on the left-hand side of the road
+or highway in addition to a “DO NOT PASS”
+sign or pavement markings. It warns you of
+a no passing zone for your lane of traffic.
+Share 	the 	Road: 	This 	sign 	is 	placed
+below a bicycle symbol sign and is used
+on highways where bike lanes are not
+provided. It serves as a warning to drivers
+and bicyclists that they need to share the
+highway. The signs may be placed where
+there are narrow lanes, narrow shoulders,
+high traffic volumes or speeds.
+52
+
+-- 52 of 139 --
+
+-
+Animal 	Crossing: 	Watch 	for 	animals
+crossing the highway.
+Emergency Notification System Sign:
+This sign is posted at or near a railroad
+crossing 	and 	lists 	the 	railroad’s 	phone
+number along with the location specific
+crossing 	number. 	The 	sign 	displays
+information needed to notify the railroad
+of an emergency situation or of a warning
+device malfunction.
+GUIDE SIGNS
+Guide signs are either white on green for directional and
+distance, white on blue for motorist’s services, or white on
+brown for cultural, historical, or scenic points of interest.
+53
+
+-- 53 of 139 --
+
+BARRICADES
+Highway departments and construction crews often perform
+work that requires traffic lanes or entire roads to be temporarily
+or permanently closed. If a lane or road is closed to traffic,
+one of three types of barricades will be placed in the road
+as a warning to drivers. Barricades are either red and white
+(permanent) or orange and white (temporary). Even though
+barricades can be of different colors, the instructions they give
+to drivers are the same.
+The V-shaped pattern on this barricade
+means that the road is closed and traffic
+can proceed no further.
+The lines on this barricade angle down to
+the left, indicating that traffic must pass the
+barricade on the left side.
+The lines on this barricade angle down to
+the right, indicating that traffic must pass
+the barricade on the right side.
+The barricades may have flashing lights on
+them especially at night.
+54
+
+-- 54 of 139 --
+
+TRAFFIC SIGNALS
+Traffic signals are lights that regulate
+the 	flow 	of 	traffic 	mainly 	through
+intersections. 	Vertical 	traffic 	lights
+have a red light at the top, a yellow
+light in the middle, and a green light
+at the bottom. Horizontal traffic lights
+have a red light on the far left, a
+yellow light in the middle, and a green light on the far right.
+• 	Red Light: A steady red circular indication means stop.
+Come to a complete stop before you reach the stop line,
+crosswalk, or intersection. You can make a turn on a red
+light unless posted “no turn on red.”
+• 	Flashing Red Light: A flashing red indication means
+stop. You must come to a complete stop, yield to cross
+traffic or pedestrians, and then proceed when clear.
+• 	Steady Red Arrow: While the steady red arrow
+indication is displayed, no turn is permitted in the
+direction of the arrow until a green or yellow light
+indication allows movement.
+• 	Yellow Light: A yellow light means caution. An amber or
+yellow circular indication warns that the signal is about
+to change to red. If you have not entered the intersection
+and can come to a safe stop, you should do so. If you are
+already in the intersection, you should continue moving
+and clear it safely.
+• 	Flashing Yellow Light: A flashing circular yellow
+indication means caution. You should slow down, look
+carefully for hazards, and proceed with caution.
+• 	Solid Yellow Arrow: The solid yellow indication with an
+arrow means the signal for the turn is changing. If you
+have not entered the intersection and you can come to
+a safe stop, you should do so. If you are already in the
+intersection, you should continue the turn and clear the
+intersection safely. 55
+
+-- 55 of 139 --
+
+• 	Flashing Yellow Arrow: The flashing yellow arrow
+means turns are allowed after yielding to oncoming traffic
+and pedestrians in crosswalks.
+• 	Green Circular Light: A green circular indication means
+“go.” You may proceed forward. If you are in the left-turn
+lane, you must yield to oncoming traffic and pedestrians
+in crosswalks before turning left. You should not enter the
+intersection unless there is sufficient space on the other
+side of the intersection for your vehicle to completely
+pass through the intersection, so you are not blocking the
+intersection, regardless of a traffic control signal to proceed.
+• 	Doghouse Signal: Most commonly used to indicate
+protected left turns. The yellow light indicates that the
+protected left turn movement is ending.
+Note: Whenever a traffic signal is not functioning, treat the
+intersection as a four-way stop.
+PEDESTRIAN CROSSINGS
+Pedestrian 	crossing 	beacons 	allow 	pedestrians 	to 	cross
+the highway and permit drivers to proceed as soon as the
+pedestrians have passed. The Pedestrian Hybrid Beacon
+(sometimes 	called 	HAWK) 	consists 	of 	two 	red 	lenses
+positioned over a single yellow lens. The traffic lights are
+located on a mast arm over the highway and on the roadside.
+Unlike a standard traffic signal, intersections with pedestrian
+hybrid beacons do not have any traffic signals facing the side
+56
+
+-- 56 of 139 --
+
+street approaches. Any side street that is controlled by a
+stop sign will continue to be controlled by a stop sign when a
+pedestrian hybrid beacon is in place. Before turning a corner,
+watch for people about to cross the street.
+1. The signal light the driver sees is unlit until the pedestrian
+pushes the crosswalk button.
+2. Then it turns to a flashing yellow light that warns drivers
+approaching the crosswalk to slow down.
+3. The flashing yellow light is followed by a solid yellow light,
+telling drivers to prepare to stop.
+4. Two solid red lights indicate to drivers to stop at the stop
+line. Vehicles must stop completely when the signal lights
+are steady red.
+5. When the red lights flash alternately, the driver must stop,
+yield to pedestrians in the crosswalk, and proceed when the
+crosswalk is clear. Normal vehicle traffic can resume when the
+light turns dark again.
+6. The signal light the driver sees is unlit and they may
+proceed if the crosswalk is clear.
+57
+
+-- 57 of 139 --
+
+PAVEMENT MARKINGS
+The lines and symbols that are painted on the highways divide
+lanes, tell you where it is not safe to pass other vehicles, where
+you may not change lanes, which lanes to use for turns, where
+pedestrians may walk, and where you must stop for signs or
+traffic signals.
+A Dashed Yellow Line – A dashed yellow
+line means that vehicles in either lane can
+cross the line if it is safe to do so.
+Double Solid Yellow Lines – Two solid
+yellow lines mean that neither lane of
+traffic can cross the lines unless they are
+turning (if it is safe to do so). A driver can
+cross a double yellow line when turning
+left into or out of a driveway or entrance to
+a business. No passing is allowed.
+A 	Solid 	Yellow 	Line 	and 	A 	Dashed
+Yellow Line – One solid yellow line and
+one dashed yellow line means that only
+vehicles in the lane with the dashed line
+(lower lane in this drawing) can cross the
+lines to pass other vehicles.
+Shared 	Lanes 	– 	Center 	lanes 	are
+reserved for making left turns (or U-turns
+when 	they 	are 	permitted) 	from 	either
+direction of travel. Shared center lanes
+are marked on each side by a solid and
+yellow dashed lines. You may not travel
+in the shared turn lanes or interfere with
+another vehicle preparing to make a turn
+from the center turn lane.
+58
+
+-- 58 of 139 --
+
+Edge Lines – Solid white lines may be
+located along the side of the road to show
+where the edge of the road is located. At
+night or in bad weather, they help you
+stay on the road.
+A 	Solid 	White 	Lane 	Line 	– 	Avoid
+changing lanes where a solid white line
+separates lanes of traffic moving in the
+same direction.
+A Solid 	White 	Line 	With 	a 	Bicycle
+Insignia – Located along the side of the
+road, this indicates the area is designated
+for 	bicycle 	traffic 	only. 	Bicycles 	must
+travel in the same direction as adjacent
+traffic.
+Dashed 	White 	Lane 	Lines 	– 	On
+highways 	with 	more 	than 	one 	lane
+moving in one direction, traffic lanes are
+separated by broken white lines. Drive
+within these lines. Never straddle them.
+Cross over them only when it is safe to
+change lanes.
+Double Solid White Lane Lines – Lane
+changes are prohibited in areas where
+this type of marking is present.
+Dashed Bike Lane Lines – The dashed
+bike lane line indicates that drivers turning
+right can merge to the right and bicyclists
+turning left can merge to the left. These
+are always found at intersections or some
+driveway areas. Bicyclists should move
+59
+
+-- 59 of 139 --
+
+left, out of the bike lane, if they are going straight, to prevent a
+turning car from colliding with the bicycle. Both users must be
+aware of each other, and if a bike is already in that area, right
+turning drivers must yield. If a car is already there, the bicyclist
+must move to the left.
+Green 	Pavement 	in 	Bicycle 	Lanes
+Green 	paint 	emphasizes 	where 	two
+movements cross over each other. Some
+bicycle lanes and bicycle lane extensions
+through intersections are painted green
+for 	additional 	emphasis. 	Drivers 	must
+be aware that bikes may be present and
+bicyclists must be aware that vehicles
+cross the bike lane in this area.
+INTERSECTIONS
+Railroad Crossings
+Railroad 	(RR) 	crossings 	should 	always 	be 	considered
+dangerous. Drivers should listen and look both ways for an
+approaching train and for signals indicating an approaching
+train. Never proceed until you are certain it is safe to do so.
+When required to stop, you should do so within 50 feet but no
+less than 15 feet from the nearest rail of the crossing.
+The chance of death or serious injury in a collision between
+a train and a motor vehicle is 40 times greater than for other
+highway crashes. The stopping distance for a 150-car freight
+train traveling 50 miles per hour is 7,000 feet or 1 and 1/3
+miles. It is up to you to protect your life and the lives of your
+passengers at a railroad crossing.
+60
+
+-- 60 of 139 --
+
+Learn the signs and devices that highway departments and
+railroad companies put up to warn you of danger at a RR
+crossing:
+• 	Many times, pavements are marked in advance of a
+crossing with an X and the letters RR.
+• 	Railroad cross buck signs can be found at most
+crossings.
+• 	Flashing-light signals are often combined with cross buck
+signs at crossings on busy streets and highways. You
+must stop when the lights are actively flashing and may
+only proceed when you can do so safely.
+• 	Gates are used to stop automobile traffic at many
+particularly dangerous crossings. You must never drive
+through, under or around a crossing gate that is lowered
+or being lowered.
+You can avoid a tragedy by following a few safety tips:
+• 	Expect a train at any time. Always be careful at a
+crossing.
+• 	Never stop your vehicle when any part of your vehicle is
+on the track.
+• 	When in traffic, never proceed across the tracks unless
+there is adequate room for the full length of your vehicle.
+• 	Never drive around lowered gates or fail to heed a
+warning signal, even if you can’t see a train approaching.
+• 	Never shift gears while driving through a crossing; this may
+cause your vehicle to stall on the tracks.
+• 	Never race a train to a crossing.
+• 	Watch out for a second train. Do not proceed until you
+are sure no train is approaching on another track.
+• 	Watch out for vehicles that must stop at crossings. Some
+buses and trucks are required to stop at all railroad
+crossings.
+• 	Look both ways as you approach a railroad crossing,
+even if the flashing-light signal is not functioning.
+61
+
+-- 61 of 139 --
+
+Roundabouts (aka Rotary or Traffic Circle)
+The roundabout is a one-way circular intersection where you
+must always turn right to enter and exit. The most common
+sign seen when approaching a roundabout is a warning sign
+with an arrow in a circle pattern. In a roundabout intersection,
+all drivers must yield the right-of-way to vehicles that are
+already in the circle.
+Drivers must enter the roundabout counter-clockwise and merge
+into the circle, whether they need to make a right turn, a left turn, a
+U-turn, or continue forward straight through the intersection.
+How do I drive it?
+• 	Slow down.
+• 	Obey all traffic signs and pavement markings.
+• 	Yield to pedestrians and bicyclists when entering and
+exiting the roundabout.
+• 	Yield to traffic on your left already in the roundabout.
+• 	Keep your speed low.
+• 	As you approach your exit, turn your right turn signal on.
+62
+
+-- 62 of 139 --
+
+Thru-Turn
+A thru-turn is a method of managing intersection traffic by
+prohibiting direct left turns.
+How do I drive it?
+To complete a left turn in a thru-turn intersection, continue
+through the intersection, perform a U-turn downstream at the
+next traffic signal from the traffic signal/intersection you just
+went through, as directed by lane markings, head back toward
+the intersection, and make a right turn.
+63
+
+-- 63 of 139 --
+
+Single Point Urban Interchange
+A single point urban interchange or SPUI (pronounced SPOO-
+EE), gets its name from the traffic signals that control turns
+from a “single point” at the center of the interchange.
+How do I drive it?
+Make sure to stop at the stop lines so you won’t be too far out
+in the intersection where you might impede cross-traffic.
+Going Straight (Orange Arrow)
+• 	Stay in one of the two through lanes.
+• 	Turning left onto highway (green arrow)
+• 	Enter the left-turn lanes (marked with a left arrow).
+Exiting Highway (Blue Arrow)
+• 	The exit ramp divides traffic into lanes for turning left and
+right.
+• 	If you exit the freeway by mistake, you cannot travel
+straight across the highway and get on at the other
+side. You need to turn left or right onto the intersecting
+highway and find a safe place to turn around to return to
+the correct entrance to the freeway.
+• 	Exit the highway to travel on the cross street (yellow and
+blue arrows).
+• 	Turning right – Drivers will stay in the right lane when
+exiting the interstate. Yield, turn right, and merge onto the
+highway. Watch for pedestrians.
+64
+
+-- 64 of 139 --
+
+• 	Turning left – Drivers exit the interstate in the left lane
+and merge into traffic onto the highway. Watch for
+pedestrians.
+Walking or Bicycling
+The interchange includes crosswalks, bicycle paths, and
+pedestrian 	signals. 	Bicyclists 	and 	pedestrians 	use 	the
+signalized pedestrian crossing and then are directed to the
+center pedestrian island in the middle of the interchange.
+Diverging Diamond Interchange – DDI
+A 	Diverging 	Diamond 	Interchange, 	or 	DDI, 	temporarily
+channels traffic lanes to the left side of the highway in order to
+create direct access with the interstate.
+How do I drive it?
+Drivers will notice that opposing traffic crosses at the signals
+on each side of the bridge/overpass. Drivers will need to
+follow the road signs, signals, raised islands, and pavement
+markings. Motorists will need to stop at the stop lines to ensure
+they are not out in the intersection where they could impede
+cross-traffic, pedestrians, or bicyclists.
+65
+
+-- 65 of 139 --
+
+Going Straight over the Interchange
+As drivers approach the intersection, they will proceed through
+the traffic signal at the entrance to the interchange and follow
+their lane to the opposite side of the overpass. They then
+proceed through the second traffic signal and follow their lane
+back to the right side of the road. Road signs, signals, and
+pavement markings will help guide drivers to where they need
+to go.
+Turning onto the Highway
+As drivers approach the interchange in the left lane, they
+will proceed through the traffic signal at the entrance to the
+interchange and follow their lane to the opposite side of the
+road. Once they cross the bridge, they will make a left-hand
+turn onto the highway.
+66
+
+-- 66 of 139 --
+
+MAP OF IDAHO HIGHWAYS
+67
+
+-- 67 of 139 --
+
+TRAFFIC LAWS & THE RULES OF
+THE ROAD
+Idaho’s traffic laws and safe driving practices are the “Rules
+of the Road” that allow the safe and orderly movement of
+vehicles, bicycles, and pedestrians. They affect many driving
+activities such as stopping, driving speed, yielding the right-
+of-way, passing other vehicles, and parking.
+SPEED LIMITS
+The following are important aspects of Idaho law concerning
+speed limits.
+• 	Idaho’s “basic rule” law: Idaho law has a basic rule
+requiring you to drive at a speed that is “reasonable
+and prudent” at all times. This applies to all roads and
+highways where maximum and minimum speed limits
+are set by law or posted. Whenever you are driving, you
+need to think about how your speed affects other traffic
+(including pedestrians and bicycle riders). You also need
+to think about the road surface (the presence of ice,
+snow, rain, or rough pavement), hazards at intersections,
+visibility, oncoming traffic, curves, and any other
+conditions that may affect safety. If you drive too slow
+for existing conditions and are impeding the safe flow
+of traffic (even if under the posted speed limit), you are
+violating the “basic rule” law.
+• 	Maximum speeds: 75 miles per hour on interstates
+unless otherwise posted. (80 may be allowed where
+posted). Vehicles with 5 or more axles and over 26,000
+pounds, shall not exceed 10 miles per hour less than
+posted speed on non-urban interstate highways (65 or 70
+miles per hour) and shall not exceed 65 miles per hour
+on urban interstate highways. Vehicles shall not exceed
+65 miles per hour on state highways (70 may be allowed
+68
+
+-- 68 of 139 --
+
+where posted). 55 miles per hour up to 70 is allowed in
+other locations unless otherwise posted. Maximum speed
+in any residential, business, or urban district is 35 miles
+per hour unless otherwise posted.
+• 	Minimum speeds: It is illegal to drive so slowly that you
+disrupt the normal flow of traffic. You may not operate a
+vehicle in the extreme left-hand lane for a period of time
+that impedes the flow of other traffic traveling at a lawful
+rate of speed.
+• 	School zones: Observe posted speed limits in school
+zones.
+• 	Work zones: Observe posted speed limits in designated
+work zones. Violating a work zone speed limit can result
+in an enhanced, fixed penalty.
+• 	Racing: It’s illegal to engage in any vehicle race, speed
+exhibition, or speed contest on any public road, street, or
+highway.
+STOPPING
+Idaho law requires you to:
+• 	STOP at a clearly marked stop line or before entering the
+crosswalk on the near side of the intersection or at the
+point nearest the intersecting highway before entering it.
+• 	STOP for any flashing red indication; it is the same as a
+stop sign.
+• 	STOP for any steady red arrow indication; it is the same
+as a stop sign. You may not make a turn at the red arrow
+until a green or yellow light indication allows movement.
+• 	STOP for any steady red circular traffic indication and
+remain stopped behind the stop line. If there is no stop
+line, stop before entering the crosswalk. You may turn
+right after stopping and yielding to cross-traffic except
+where posted otherwise. You may turn left onto a one-
+way street after stopping and yielding to cross-traffic
+unless left turns are not allowed. In all other cases,
+69
+
+-- 69 of 139 --
+
+wait until the indication turns green before proceeding.
+When a green arrow is shown along with a steady red
+indication, you may proceed only in the direction of the
+green arrow.
+• 	STOP or slow down at an intersection when necessary
+to yield right-of-way to a pedestrian crossing within a
+marked or unmarked crosswalk.
+• 	STOP at a railway crossing when a train is coming or
+when wigwag or flashing signals, gates, or a watchman
+indicate the approach of a train.
+• 	STOP when entering a street from an alley, building,
+driveway, or private road. Stop before crossing the
+sidewalk and yield to pedestrians and traffic.
+• 	STOP upon the request of any police officer.
+• 	STOP for emergency or police vehicles sounding a siren
+or flashing red or blue lights. Pull over to the nearest
+edge or curb on the right side of the highway and clear of
+any intersection, and remain stopped until the emergency
+vehicle has passed, or the police officer has indicated
+you may proceed.
+• 	STOP when you are involved in a crash.
+• 	STOP for a school bus that is loading or unloading
+students. Traffic must stop and remain stopped as long
+as the red lights near the top of the bus are flashing and/
+or the stop arm on the left side of the bus is extended.
+You must stop when approaching a
+school bus that is displaying flashing
+red lights while stopped to pick up or
+drop off children. You must remain
+stopped until all children are clear of
+the roadway and the bus.
+You do not have to stop if you are
+traveling in the opposite direction on
+highways with four or more lanes if
+two lanes are going in each direction.
+70
+
+-- 70 of 139 --
+
+Stop signals: When slowing down or stopping, you must
+give a signal to other drivers. You may use either the brake-
+operated signal lights on the rear of your vehicle or an arm
+signal.
+Speed & Stopping: The speed at which you are traveling
+determines how much time you have to react and how long it
+takes you to stop.
+Driving too fast is a major cause of motor vehicle crashes.
+When combined with other violations, mechanical failure, or
+errors in judgment, speeding often leads to disaster.
+Stopping Behind a Vehicle
+When stopping behind another vehicle, a safe driving habit
+is to leave enough distance between the vehicles to see the
+rear tires (where they touch the ground) of the vehicle in front
+of you. This may keep you from hitting the vehicle in front of
+you if someone crashes into the rear of your vehicle or allow
+you room to go around a stalled vehicle without backing and
+causing a traffic hazard.
+71
+
+-- 71 of 139 --
+
+TURNS
+Many motor vehicle crashes are caused by improper turns.
+Always use a turn signal when you:
+• 	Change lanes or pass another vehicle
+• 	Exit a roundabout
+• 	Turn at an intersection or into a driveway
+• 	Enter or leave a freeway or interstate highway
+• 	Pull away from a parked position along a road or street to
+enter the traffic lane
+• 	Pull over to the side of the road
+Proper signaling may prevent a rear-end collision. Signals
+must start at least 100 feet (in business or residential areas)
+or five seconds (on freeways or highways) before you turn or
+change lanes. If you plan to turn just beyond an intersection,
+signal just after you pass through the intersection so you won’t
+confuse other drivers. You may use either electric turn signals
+or arm signals.
+The correct arm signals are:
+• 	Left: Your arm and hand extended straight out the
+window.
+• 	Right: Your arm and hand extended upward out the
+window.
+• 	Slow or Stop: Your arm and hand extended
+downward out the window (see illustration).
+72
+
+-- 72 of 139 --
+
+• 	Right Turns: Signal and approach the intersection in
+the right-hand lane, staying as close to the right curb as
+is reasonable. Yield the right-of-way to pedestrians and
+vehicles that have the right-of-way. Watch for bicycles
+that are approaching from the right between your vehicle
+and the curb. Then turn into the right-hand lane of the
+cross street. Do not swing wide.
+• 	Left Turns: Signal and approach the intersection in the
+lane closest to the left that is open to traffic going your
+direction. If you are on a two-lane road, you should move
+to the left side of your lane. Yield the right-of-way to
+pedestrians and oncoming vehicles. When safe, turn into
+the nearest lane where traffic moves in the direction you
+want to go. Do not cut the corner.
+• 	Vehicles in the left lane must turn left: Vehicles in
+the right lane may turn left or continue straight ahead.
+Vehicles turning left must remain in their lane of travel
+until after completing the turn.
+• 	Turning at a Red Light: At a steady red light, you may
+turn right after stopping and yielding to cross traffic,
+unless otherwise posted. When turning left, from a one-
+way street, onto a one-way street, you may proceed from
+a steady red light after stopping and yielding for cross-
+traffic, unless otherwise posted.
+• 	U-Turns: U-turns are not legal if no U-turn signs are
+posted. U-turns may not be made on any curve, or the
+approach of or near the crest of a hill, where the vehicle
+cannot be seen by approaching vehicles from either
+direction within 500 feet, or a no passing zone. Stop and
+yield to all traffic before completing a U-turn.
+73
+
+-- 73 of 139 --
+
+Solid pavement markings in the center of the road indicate
+that a U-turn is prohibited.
+1. 	Pull to the far right edge
+of the road and stop.
+2. 	Check to the front and
+rear of vehicle, and your
+left-rear blind spot. If
+clear, signal and turn
+sharply left while moving
+slowly.
+3. 	When your vehicle is
+headed toward the
+target area, recheck to
+the rear of the vehicle
+and accelerate to the
+speed of the traffic.
+KEEP TO THE RIGHT
+In most cases, the law requires that you stay as far to the right
+side of the road as possible. The exceptions are:
+• 	When preparing to make a left turn
+• 	When passing another vehicle going in the same direction
+• 	When on a highway with more than two lanes where the
+right lane is designated for slow traffic
+• 	When entering the left lane temporarily in order to avoid
+an obstruction, a pedestrian, or an animal
+• 	When traveling on a road restricted to one-way traffic
+• 	When traveling on a road with two or more lanes traveling
+in the same direction
+RIGHT-OF-WAY & YIELD
+Idaho law defines when a vehicle or pedestrian must yield
+the right-of-way, letting another vehicle or pedestrian pass
+through an intersection first. Always remember that right-of-
+way is something to be given, not taken.
+74
+
+-- 74 of 139 --
+
+PEDESTRIANS & RIGHT-OF-WAY
+Motor vehicles must yield to a pedestrian when:
+• 	The pedestrian is in a marked or unmarked crosswalk at
+an intersection.
+• 	The vehicle is entering a street from an alley or driveway.
+• 	The pedestrian is a blind person walking with a white
+cane or guide dog.
+Pedestrians must yield to motor vehicles when:
+• 	The pedestrian is crossing a street where there is no
+crosswalk or intersection.
+• 	Directed to do so by a traffic signal at an intersection or
+crosswalk.
+YIELDING TO OTHER DRIVERS
+You must yield to other drivers:
+• 	As you approach a yield sign, always slow down and be
+prepared to stop.
+• 	When entering a street from an alley, driveway, or garage
+after stopping.
+• 	After stopping for a stop sign at a two-way stop, yield to
+cross-traffic.
+• 	At four-way stops , the first vehicle to arrive at a four-
+way stop has the right of way. If two vehicles arrive at
+the same time, the vehicle on the left must yield to the
+vehicle on the right.
+• 	At an unmarked or uncontrolled intersection (no signs
+or signals), if two vehicles arrive at the same time, the
+vehicle on the left must yield to the vehicle on the right.
+• 	At an unmarked or uncontrolled three-way “T”
+intersection where you will have to turn either right or left,
+you must stop and/or yield to any drivers approaching
+from the other two directions.
+75
+
+-- 75 of 139 --
+
+• 	When making a left turn, always yield to oncoming traffic
+in the intersection unless directed otherwise by a traffic-
+control device.
+• 	In work zones, yield to all vehicles or pedestrians working
+on a highway construction project.
+• 	When a stop light is not functioning due to a power
+outage, yield to other drivers in the same manner as four-
+way stops.
+PASSING
+Passing and being passed are normal parts of driving but
+can increase the chances of a crash. Idaho’s mountains and
+winding river canyons make passing risky on many two-lane
+highways.
+If you must pass, do so only when you won’t interfere with
+oncoming traffic or the vehicle you’re passing. Wait until you’re
+certain you have enough time to pass safely. Before returning
+to your own lane, signal and wait until you can see the vehicle
+you’re passing in your rear-view mirror.
+If you start to pass but decide you can’t make it, pull back and
+wait for another opening. “No Passing” signs and pavement
+markings can tell you where passing is prohibited or unsafe,
+but only you can tell when it is safe.
+Passing is prohibited when you are in or approaching the
+following areas:
+• 	Hills, curves, or other obstructions on two-lane roads that
+prevent you from seeing oncoming vehicles that might
+pose a hazard
+• 	Within 100 feet of an intersection, unless otherwise
+indicated by traffic-control devices
+• 	Within 100 feet of a railroad crossing, unless otherwise
+indicated by traffic-control devices
+76
+
+-- 76 of 139 --
+
+• 	Within 100 feet of a bridge or tunnel when the view is
+obstructed
+• 	When a school bus is stopped to load or unload
+passengers
+• 	When a vehicle ahead of you has stopped at a marked or
+unmarked crosswalk to let a pedestrian cross
+• 	When you must go off the pavement or roadway to pass
+Passing 	Speed 	Limit 	Exception: 	If 	you 	are 	driving 	a
+passenger vehicle, motorcycle or pickup, not towing another
+vehicle, you may exceed the posted speed limit by up to 15
+miles per hour while passing another vehicle that is traveling
+below the posted speed limit on a two-lane roadway. The
+posted speed limit must be 55 miles per hour or greater. This
+does not apply in work zones. You must return to the right-
+hand lane and reduce speed to the posted speed limit as soon
+as practicable.
+Passing on the Right
+You may pass a vehicle on the right only in the situations listed
+below and only if you can do so safely. This movement shall
+not be made by driving off the roadway.
+Passing on the right is prohibited except:
+• 	When the vehicle you’re overtaking on a two-lane, two-
+way road is signaling to turn left
+• 	On a one-way or multi-lane street with two or more lanes
+going your direction
+When Passing Other Vehicles
+• 	Check your mirrors and blind spots, someone else may
+be trying to pass you. Turn on your left turn signal, then
+move into the left lane.
+• 	Wait until you have passed the vehicle and can see it in
+your rear-view mirror before turning on your right turn
+signal and moving back into the right lane.
+77
+
+-- 77 of 139 --
+
+• 	If the vehicle you’re passing begins to drift toward you,
+use your horn.
+• 	Complete a pass before coming within 200 feet of
+oncoming traffic.
+• 	Complete a pass before you reach a “No Passing” zone
+marked with signs or pavement markings.
+When Being Passed
+• 	Help other drivers pass you safely. Move to the right side
+of your lane to give them more room and a better view of
+the road ahead.
+• 	Don’t speed up. Maintain a steady speed or slow down.
+• 	Watch for trouble. If the other driver miscalculates, your
+quick reaction can reduce the chances of being involved
+in a crash.
+FUNERAL PROCESSIONS
+If you see a funeral procession on the road, do not drive between
+or join vehicles in the formation unless you are authorized to
+do so by a police officer. Do not pass the procession in the
+right lane on a multi-lane highway unless the procession is in
+the farthest left lane.
+You may not enter an intersection when the procession
+is proceeding through (regardless of the color of the traffic
+light) unless you can do so without crossing the path of the
+procession. Always give funeral processions the right of way.
+All vehicles in a funeral procession are required to have their
+headlights and tail lights turned on. The first and last vehicles
+in the procession must also have their warning lights flashing
+to indicate the beginning and ending points of the formation.
+78
+
+-- 78 of 139 --
+
+SLOW-MOVING VEHICLE
+Any vehicle traveling slower than the normal speed of traffic
+delaying three or more other vehicles in a rural area or on a
+two-lane highway must turn off the road wherever safe to let
+the other vehicles pass.
+Slow-moving vehicles designed to travel no faster than 25 miles
+per hour may travel on public highways during daylight hours
+only (30 minutes before sunrise to 30 minutes after sunset),
+except for snow removal and farm equipment operated on
+non-interstate highways and equipped with flashing lights
+visible for 500 feet. All slow-moving vehicles must have a foot
+brake, turn signals, and must display the approved emblem
+for slow-moving vehicles.
+FOLLOWING DISTANCES
+“Tailgating” (driving too close to the car ahead) is a common
+cause of crashes. When following another car, you must leave
+yourself enough space to stop in any situation. You must also
+be sure your brakes are in good shape. Know how quickly
+they will stop you under any conditions. Test them often,
+particularly when the road is wet, icy or snowy.
+The three-second following distance rule is the minimum
+recommended safest procedure to use. At high speeds or in
+bad weather you will need to increase your following distance.
+The three-second rule is explained in the illustration below. It
+works like this:
+• 	Choose a fixed object, such as a sign or tree ahead of
+the car in front of you.
+• 	As the car ahead passes the object, count off three
+seconds (one-thousand-one, one-thousand-two, one-
+thousand-three). 79
+
+-- 79 of 139 --
+
+• 	If it takes at least three seconds before you pass the
+object, you have enough distance for a sudden stop.
+• 	In bad weather, the three seconds should be increased
+several times to give an extra margin of safety.
+KEEP A SPACE CUSHION
+To avoid a collision, you need time to react to danger. Try
+to keep plenty of space between your car and others on all
+sides. Stay in the middle of your lane and always make sure
+there is enough room ahead to stop or pass safely. If a car
+follows too closely, slow down and let it pass.
+PARKING
+When parking on a public road, you must park parallel to and
+within 18 inches of the curb or edge of the roadway, facing
+in the same direction as traffic on your side of the road. Set
+the parking brake (only if the car is left running) and, if you
+have an automatic transmission, shift to park; if you have a
+manual transmission, leave the car in gear. Remove the keys
+and secure your car.
+80
+
+-- 80 of 139 --
+
+PARKING ON A HILL OR INCLINE
+To 	keep 	your 	vehicle 	from
+rolling into traffic when parked
+on 	a 	hill, 	turn 	your 	front
+wheels 	(1) 	sharply 	toward
+and against the curb or edge
+of the road if you are facing
+downhill, 	or 	(2) 	if 	you 	are
+facing uphill, turn your wheels
+sharply away and against the
+curb (if there is no curb, turn
+the wheels sharply toward the
+edge of the road).
+NO-PARKING ZONES
+Parking is not allowed:
+• 	In bike lanes
+• 	On sidewalks
+• 	On the street side of any parked vehicle.
+(This is known as “double parking”)
+• 	In intersections
+• 	Within 50 feet of railroad tracks
+• 	On bridges or overpasses
+• 	In front of a driveway
+• 	Within 15 feet of a fire hydrant
+• 	Within 20 feet of a crosswalk
+• 	Within 30 feet of a stop sign, yield sign, or traffic signal
+• 	Within 20 feet of a fire station driveway
+• 	On any controlled-access highway (freeway)
+• 	Where prohibited by signs or a red-painted curb
+81
+
+-- 81 of 139 --
+
+HANDICAPPED PARKING
+The symbol shown here indicates parking
+spaces reserved for handicapped persons.
+Vehicles 	displaying 	this 	symbol 	on 	their
+license plate or a special card may park in
+handicapped 	spaces. 	Non-handicapped
+drivers are prohibited from parking in such
+spaces and may be fined for violations. A
+handicapped person may park automobiles displaying the
+handicapped 	symbol 	in 	reserved 	parking 	spaces 	without
+paying and for unlimited time.
+BACKING
+Backing requires extra caution because it is difficult for drivers
+to see behind their vehicles. Here are some rules you should
+follow whenever you have to back up:
+• 	Check behind the vehicle before you get in. Children or
+small objects are hard to see from the driver’s seat.
+• 	Put your right arm on the back of the passenger seat and
+look over your shoulder directly through the rear window.
+Don’t rely on your mirrors.
+• 	Back slowly. Your vehicle is more difficult to control while
+backing. Continue looking back until you come to a
+complete stop.
+Whenever possible, avoid backing up in traffic. If you have
+passed your exit on an interstate, never back or try to turn
+around; go on to the next exit.
+Backing is always prohibited on freeways, expressways, and
+other controlled-access highways, including the shoulder.
+Elsewhere, backing is prohibited unless it can be done safely
+and without interfering with other traffic.
+82
+
+-- 82 of 139 --
+
+FREEWAY DRIVING
+Freeways, interstates, expressways, and toll roads offer fast
+and efficient routes of travel. They’re usually safer than other
+kinds of roads because they have one-way traffic, a limited
+number 	of 	entrances, 	and 	other 	special 	safety 	features.
+However, they can encourage boredom and fatigue that the
+driver must guard against. Where designated and as weather
+conditions permit, vehicles may travel at speeds up to 80 miles
+per hour on rural interstates (70 for heavy trucks), and up to
+65 on urban interstate highways, unless otherwise posted. At
+these speeds, a single error can be disastrous.
+TRAVEL PLANS
+Before starting a long freeway trip, make yourself a travel
+plan. Plan for food, rest, and fuel stops. On short trips, know
+the name, route, entrance, and exit numbers. Let someone
+know your travel plans, your route of travel, the length of time
+you will be gone and when to expect you back.
+ENTERING A FREEWAY
+Freeway entrances usually have three basic parts: an entrance
+ramp, an acceleration lane, and a merging area.
+While on the entrance ramp you have a chance to observe
+traffic conditions on the freeway. The ramp will straighten out
+into the acceleration lane where you should accelerate to the
+speed of freeway traffic. In the merging area, you must blend
+into the flow of traffic on the freeway’s outside lane.
+83
+
+-- 83 of 139 --
+
+Follow these procedures:
+• 	Before you enter the ramp, make sure it’s the one
+you want. If you enter the wrong entrance by mistake,
+never try to back up or turn around through the
+median. Freeway median crossovers are for highway
+maintenance or emergency vehicle use only; it is illegal
+for any other vehicles to use them.
+• 	If you need to get off the freeway or change directions,
+wait until the next exit to do so.
+• 	Once on the ramp, check traffic around you and on the
+freeway. Signal and begin looking over your left shoulder
+for a gap in the traffic large enough for your vehicle to fit
+into without crowding anyone.
+• 	As the ramp straightens, accelerate to the speed of the
+freeway traffic so you can blend in smoothly. Remember,
+you must yield to the traffic already on the highway.
+• 	Once you’re traveling at the speed of traffic, you can
+make a simple lane change, merge with the flow of
+vehicles, and turn off your turn signal.
+POSSIBLE ENTRANCE PROBLEMS
+The suggestions above were written with an ideal freeway
+entrance in mind. On older freeway entrances or freeways built
+with limited space, the ramp, acceleration lane, or merging
+area may be shorter than normal. 	In such places, or when
+traffic is heavy, you may have to take extra precautions.
+For example, in heavy traffic, gaps are hard to find. If there’s
+no opening, you may have to slow down before reaching the
+end of the acceleration lane.
+Sometimes a short acceleration lane combined with heavy
+traffic will force you to stop. When that happens, be sure to
+leave enough room ahead so you can accelerate up to the
+speed of freeway traffic as you merge. Wait until there is a gap
+large enough for you to reach cruising speed without
+84
+
+-- 84 of 139 --
+
+interfering with oncoming vehicles. Then signal your entrance
+and accelerate as rapidly as you can to blend in with the traffic
+flow.
+DON’T DRIVE TOO FAST OR SLOW
+Once on the freeway, you should maintain a steady speed
+and keep up with the flow of traffic. Where designated and as
+weather conditions permit, vehicles may travel up to 80 miles
+per hour on rural interstate highways and 65 on urban interstates
+highways, unless otherwise posted. A minimum speed may also
+be posted. If you can’t or don’t want to drive at the posted speed
+on a freeway, choose another kind of road to travel.
+CHANGING LANES
+Most of the time you should drive in the far right or center lane of
+the freeway. The left lane is for higher-speed traffic and passing.
+During rush hours, you should avoid the right lane to allow room
+for drivers entering the freeway. Always signal for at least five
+seconds before making a lane change or exiting a freeway.
+Median Strip: It’s illegal to drive across a barrier or unpaved strip
+that separates two halves of a roadway, except at an authorized
+opening or crossover. This is not allowed on interstate highways
+(freeways); crossovers are for emergency vehicles only.
+LEAVING THE FREEWAY
+Getting off a freeway can be a simple maneuver if you know
+which exit to take and follow the signs marking the lane for that
+exit.
+85
+
+-- 85 of 139 --
+
+Follow these procedures:
+• 	If you are not already in the correct lane, about a half mile
+before the exit, signal and move into the lane nearest
+the exit. Signal, then move into the deceleration lane
+provided to let you slow down without interrupting the
+flow of traffic.
+• 	An exit speed may be posted. Adjust your speed
+accordingly as you drive through the ramp.
+• 	As you leave the ramp and enter another thoroughfare,
+you may be driving in more complicated, dangerous
+traffic than on the freeway. Be alert and adjust to the new
+conditions and slower speeds.
+THE DRIVING TASK
+When you slide behind the wheel of a motor vehicle, you take
+responsibility for the lives of people around you. To be a safe
+driver, you must know the rules of the road and respect them.
+You must also know and follow proper driving procedures.
+Just as importantly, you must have a good attitude. Courtesy
+and consideration are essential to good driving.
+Professional drivers will tell you it takes more than basic skills to
+make a good driver. After mastering those skills, a driver must
+still learn the fine points of good driving, including the mental
+and physical conditions that affect performance on the road.
+Driver error causes more than 90% of highway crashes. Your
+ability to drive safely depends not only on what you know, but
+how you feel and what you were doing before you sat behind
+the wheel.
+Most important, be patient. Try not to let heavy traffic get on
+your nerves. Never change your mind at the last minute or
+act too quickly. Don’t rely on warnings or signals from other
+drivers. Depend on your own alertness, not theirs.
+86
+
+-- 86 of 139 --
+
+Developing good driving habits is as easy as falling into bad
+ones. Start out by establishing sound habits, and you can drive
+safely all your life. Below are some tips on how to cultivate a
+safe-driving routine.
+STARTING OUT
+Before you get into your vehicle, always look in front and back
+of it to see if there is a child or obstacle you might run over.
+Once inside, take a moment to get ready for driving. Adjust
+your seat and mirrors, buckle your safety belt, and check to
+see that passengers are properly seated and buckled, so they
+won’t interfere with your driving.
+Develop a routine for starting your car, too. With the hand
+brake set, ensure the vehicle is in park or neutral and start the
+engine. Holding the foot brake (and clutch if you have one),
+shift to the proper gear. Then release the parking brake and
+prepare to pull out.
+There is an important, five-step procedure to follow when you
+start from the curb, pull into a parking space or change lanes.
+Always:
+1. 	Check mirrors.
+2. 	Signal for the required five seconds or 100 feet before
+moving your vehicle.
+3. 	Glance over your shoulder in the direction you’re going to
+move.
+4. 	When it is safe to do so, make your move gradually and
+smoothly.
+5. 	Cancel the turn signal.
+87
+
+-- 87 of 139 --
+
+YOUR MOOD AFFECTS YOUR DRIVING
+You should be aware of how getting behind the wheel can
+affect your behavior. Taking control of the power and speed of
+a car often reveals a person’s character. To drive safely, you
+must find the maturity to share the road and help your fellow
+travelers.
+If you’re worried or distracted, you can’t count on being alert
+enough to drive safely. Quarrels, misunderstandings, financial
+problems, 	illness 	in 	the 	family, 	personal 	fears, 	or 	over-
+confidence make you far more likely to have a crash. If you’re
+upset, let someone else drive.
+Concentration is vital to safe driving. The driver’s seat is no place
+for daydreaming, window shopping, intense conversation, or
+looking at scenery. There have been too many crashes after
+which the surviving driver said, “I don’t know what happened.”
+WATCH FOR PROBLEM DRIVERS
+Give a lot of room to drivers who may not see you. These
+include:
+• 	Drivers entering from intersections or driveways where
+the view is blocked by buildings, fences, trees, or other
+cars
+• 	Drivers backing out of driveways or parking spaces
+• 	Drivers whose windows are covered with ice or snow
+Allow extra room for people who may be distracted by
+something they’re doing. For example:
+• 	Delivery and construction workers
+• 	Children playing
+• 	Drivers who are talking, tending children, or are otherwise
+distracted
+• 	Tourists trying to figure out a complicated intersection
+• 	Drivers looking for a house number.
+88
+
+-- 88 of 139 --
+
+.
+Sometimes, you must also give extra room to a driver who
+gets in trouble. If other drivers make mistakes, help them
+out. Watch out for:
+• 	Drivers who pass as you approach a curve, hill, or an
+oncoming car. Slow down and let them back into your
+lane quickly.
+• 	Make room for any driver who is about to be forced into
+your lane by a car, pedestrian, bicyclist, obstacle, or a
+reduction in the number of lanes.
+DEFENSIVE DRIVING
+Most crashes are caused by driver error. Be prepared
+to react promptly to emergencies by driving with both
+hands placed on opposite sides of the steering wheel at
+approximately the nine o’clock and three o’clock positions.
+Check your owner’s manual for proper hand-placement if
+your vehicle is equipped with airbags.
+You can reduce your chances of crashing by knowing and
+using the standard crash prevention formula:
+Scanning: To be a defensive
+driver, you have to see what
+is going on. Avoid a fixed,
+straight-ahead stare that may
+let you drift off in daydreams.
+Keep your eyes moving and
+learn to read the road.
+Look Ahead: Good drivers keep an eye on what’s happening
+about ten to 15 seconds ahead. That’s about a block in city
+driving. By doing this, you’ll avoid the kind of last minute lane
+changes, turns, and stops that often cause crashes.
+Look to The Sides: As you approach any place where other
+cars, people or animals may cross your path, look to both
+sides. Don’t rely on traffic lights or stop signs. Always watch
+89
+
+-- 89 of 139 --
+
+out for other drivers, they may run the light.
+Look Behind: Check the traffic behind you frequently (several
+times a minute) so you’ll know if somebody is tailgating,
+coming up too fast or trying to pass. Most rear-end collisions
+are caused by vehicles following too closely.
+Blind 	Spots: 	These 	are
+areas near the left and right
+rear corners of your vehicle
+that are not visible in your
+mirrors (see below). If your
+vehicle does not have a right-
+side 	view 	mirror, 	the 	right
+blind spot will be larger than the one on the left. Never rely on
+your mirrors alone. Before you make any move to the side,
+quickly turn your head to see if your blind spot is clear. Also,
+avoid driving in someone else’s blind spot. It’s as important for
+other drivers to see you as for you to see them.
+Identify: Scan the road ahead for potential hazards such as
+a vehicle, pedestrian, animal, or situation that could force you
+to slow down, speed up, or turn.
+Predict: After spotting a potential hazard, predict what will
+happen; it’s safest to predict the worst. For example, if you
+see children playing on a street corner, prepare for one of
+them to run in front of you.
+Decide What To Do: The key to defensive driving is making
+a sound decision ahead of time rather than reacting to danger
+at the last second.
+Execute: The final step is to execute your decision in a
+smooth, predictable manner in time to avoid a crash.
+90
+
+-- 90 of 139 --
+
+DISTRACTED DRIVING
+If you do not give your full attention to driving a vehicle, bad
+things can happen very quickly. Seeing and reacting safely to
+sudden changes can keep you from being in a crash. To drive
+safely, you must pay full attention at all times. That will give
+you enough time to react. People’s lives are in your hands.
+THINGS THAT CAN DISTRACT YOUR
+ATTENTION
+Anything that draws your attention away from the road can
+distract you. Distractions like the ones below can cause
+crashes:
+• 	Texting or talking on phone
+• 	Eating
+• 	Reading or writing
+• 	Changing the radio station or lighting a
+cigarette
+• 	Applying makeup or shaving
+• 	Looking for things inside your vehicle
+• 	Dealing with children or pets
+If something distracts you, even for a few seconds, you may
+not see a hazard that can cause a crash. Think how quickly a
+small child can run into your traffic lane from between parked
+cars. Think how fast a bicycle rider can zoom into your path.
+They need you to see them before it is too late. Think how
+quickly the car in front of you could brake and you run into
+them.
+91
+
+-- 91 of 139 --
+
+WAYS TO KEEP FROM GETTING
+DISTRACTED
+• 	Pre-set your favorite radio stations before you begin to
+drive.
+• 	Load your tapes or CDs before you begin to drive.
+• 	Keep the stereo volume low enough so that you can still
+hear things outside your car. You must be able to hear
+emergency sirens, car horns, screeching tires, and other
+sounds outside your car. They can alert you to danger
+and keep you from getting in a crash.
+• 	Have someone in the front seat act as your co-pilot. They
+can look at a phone or maps and tell you where to turn
+or what to look for ahead. If you are driving alone, make
+sure you know the route you want to drive “before” you
+get in the car.
+• 	Do not eat while driving.
+• 	Teach children to behave well while in a car. It’s hard to
+pay attention to the road while tending to children.
+• 	Place pets in a pet carrier to make sure they do not
+cause problems while you are driving.
+If you are lost in thought and not paying attention, pull the
+car to the side of the road and stop. Taking a short break can
+make your drive safer and much more enjoyable. This is the
+reason rest areas are placed along highways.
+CELL PHONES
+In Idaho, reading, writing, or sending of written communication
+(text messaging) while driving is illegal and considered an
+infraction. It does not apply to hands-free devices without the
+use of either hand. A ticket resulting in a conviction of this law
+will not result in points on a driver’s record. It will result in a fine,
+but will only be considered a moving violation when the driver
+is in operation of a commercial motor vehicle. Many crashes
+are caused by people who try to text or dial cell phones while
+92
+
+-- 92 of 139 --
+
+driving. Texting while driving is six times more dangerous than
+driving impaired. If you must use a cell phone, park in a safe
+place before making the call or engaging in text messaging.
+FATIGUE & HIGHWAY HYPNOSIS
+Stop driving when you feel drowsy. Pull off the highway at the
+first rest stop or service area. If you’re feeling drowsy, get off
+the road and take a nap. Drowsiness is one of the greatest
+killers in interstate highway driving. Don’t rely on “stay awake”
+drugs or energy drinks. They can make your driving even more
+dangerous. On long trips, exercise your eyes as you drive.
+Freeway drivers often suffer highway hypnosis, drowsiness
+brought on by monotony and the drone of wind and tires. Keep
+shifting your eyes from one area of the roadway to another
+and focus them on various objects near and far, left and right.
+UNATTENDED VEHICLES
+Unattended vehicles on the traveled portion of a highway at
+any time create a potential danger to public safety and are
+subject to immediate removal (towing). Unattended vehicles
+that are off the traveled portion but are on the paved portion
+of a highway create a potential danger to public safety during
+darkness (especially if the vehicle has no lights on or lit
+warning devices nearby). Vehicles, if left unattended, must
+be removed prior to darkness or be subject to towing at the
+owner’s expense.
+93
+
+-- 93 of 139 --
+
+ALIVE AT 25
+Alive at 25 is a defensive driving course offered for those who
+are 15 through 24 years old. Law enforcement presents traffic
+safety strategies for young drivers who are over-represented
+in 	crash 	statistics, 	emphasizing 	responsible 	choices 	and
+decision-making while driving or riding as a passenger. To
+register for a course, visit www.aliveat25.us.
+94
+
+-- 94 of 139 --
+
+SHARING THE ROAD
+At times, the experience of having a mix of cars, trucks,
+motorcycles, bicyclists, and pedestrians using the roadway
+complicates driving and increases hazards for everyone.
+The key to minimizing these hazards is being courteous and
+respectful of the rights of others and maintaining a heightened
+awareness of potential problems. Caution and awareness on
+your part may prevent serious injuries or death.
+EMERGENCY VEHICLES
+When being approached by an emergency or police vehicle
+sounding a siren or flashing red or blue lights, you must
+immediately pull to the nearest curb or the edge on the right
+side of the roadway and stop. Remain stopped until the
+emergency vehicle has passed ahead of you.
+When you are approaching an emergency or police vehicle
+that is stopped with lights flashing or a tow truck or incident
+response vehicle, you are required to immediately reduce your
+speed below the posted speed limit and proceed with caution.
+If you are traveling on a road with two or more lanes traveling
+in the same direction, you are also required to change lanes
+into a lane that is not adjacent to the emergency vehicle, as
+soon as possible, if it is safe to do so.
+PEDESTRIANS
+Vehicle-pedestrian collisions account for a significant number
+of traffic deaths. When driving a motor vehicle, you must be
+aware of pedestrian activity, particularly in residential areas,
+near schools, school crossings, trail crossings, parking lots,
+intersections, crosswalks, bus stops, playgrounds, and parks.
+95
+
+-- 95 of 139 --
+
+Always use extreme caution when driving in areas where
+there may be pedestrians, as they may walk in front of your
+vehicle unexpectedly.
+Motor vehicles must yield to pedestrians when:
+• 	The pedestrian is in a marked or unmarked crosswalk at
+an intersection.
+• 	The motor vehicle is entering a street from an alley or
+driveway.
+• 	The pedestrian is carrying a clearly visible white cane or
+accompanied by a service dog.
+Pedestrians must yield to motor vehicles when:
+• 	The pedestrian is crossing a street where there is no
+crosswalk or intersection.
+• 	The pedestrian is directed to do so by a traffic signal at
+an intersection or crosswalk.
+As a motorist, you must be alert for pedestrians who may
+unexpectedly crossing the street in front of you. Here are
+some examples to be aware of:
+• 	A pedestrian is crossing where there is no painted
+crosswalk. You must stop and let them finish crossing,
+even if you technically have the right-of-way.
+• 	You are waiting at a red light when a pedestrian steps
+into the crosswalk right before the light turns green. You
+must wait for the pedestrian to cross before proceeding.
+• 	You are approaching an intersection on a street with two
+lanes going in the same direction. One vehicle in the right
+lane has stopped for a pedestrian to cross. You are in the
+left lane. DO NOT pass the other vehicle. You must wait
+for the pedestrian to cross and then be sure it is safe to
+proceed.
+• 	You see some children playing or walking near the street,
+or you are in an area where children are likely to be
+(schools, neighborhoods, playgrounds, etc.). Slow down
+96
+
+-- 96 of 139 --
+
+and be prepared for them to unexpectedly run into the
+street.
+• 	When driving at night, or when visibility is reduced due to
+rain, snow, fog or sun glare, realize that it will be difficult
+to see pedestrians entering the street. Exercise extreme
+caution in these conditions.
+Many studies have shown that when pedestrians are hit by a
+motor vehicle, the rate of fatalities increases dramatically with
+an increase in the speed of a motor vehicle. Reducing your
+speed and watching carefully for pedestrians saves lives.
+CHILDREN AT PLAY
+Take extra care when driving in residential areas, school
+zones, and at times and places where children are likely to be
+found near the roadway. Before getting into your vehicle, walk
+around it to be sure no children are playing near it whom you
+may not be able to see from the driver’s seat.
+When backing out of a driveway, watch for children who may
+run behind your vehicle. Be alert when vehicles are parked
+along the roadway. Darting into traffic from between or around
+a parked car is a common cause of serious injury to children.
+They are often too short to be seen easily when playing near
+parked cars, so use extra caution when you see any children
+near the roadway. They may have an unseen playmate who
+cannot see you either.
+HORSEBACK RIDERS
+People riding horses are allowed to use most public roads.
+They also have the same rights as motor vehicle drivers and
+must obey the same rules.
+When approaching someone riding a horse, take care to avoid
+frightening the animal—slow down and allow plenty of room
+97
+
+-- 97 of 139 --
+
+when passing. Never sound your horn because you may
+frighten the horse and cause an accident. If you encounter
+a rider who is having difficulty controlling an animal, be sure
+to use extreme caution when going around them. Stop if
+necessary to prevent becoming part of the hazard.
+BICYCLISTS
+Every year, the number of bicyclists increases on Idaho
+roadways. 	Cycling 	has 	become 	an 	important 	means 	of
+transportation as well as recreation.
+Bicyclists are legally allowed to ride on all Idaho roadways
+and have the same rights as drivers, and are required to ride
+with the flow of traffic. They must ride as close to the right-
+hand curb or edge of the roadway as safety allows, except
+when passing, turning left, avoiding an obstacle, or when the
+roadway does not allow a bicycle and motor vehicle to travel
+safely side by side.
+To increase the safety margin when passing a bicyclist, move into
+the left lane if possible. If you are not able to change lanes, pass
+with as much clearance as possible. A safe margin is at least
+three (3) feet. This may require waiting for a break in oncoming
+traffic. When passing children on bicycles, slow down and be
+aware that they may unpredictably swerve into your lane.
+In Idaho, bicyclists do not need to come to a complete stop
+at stop signs. They must, however, yield to the right-of-way of
+vehicles in, or already at, the intersection (or close enough to
+constitute a potential hazard), and then proceed with caution
+through the intersection.
+Bicyclists may proceed with caution through a red light after
+stopping and yielding the right-of-way to vehicles already in
+the intersection (or close enough to constitute a potential
+98
+
+-- 98 of 139 --
+
+hazard). They do not need to come to a complete stop when
+turning right on a red light. However, they must yield the right-
+of-way to vehicles already in the intersection (or close enough
+to constitute a potential hazard).
+Bicyclists 	are 	relatively 	unprotected 	compared 	to 	motor
+vehicle drivers and most collisions result in injury to the
+cyclist. Therefore, motor vehicle drivers should be alert and
+use extreme caution when encountering them.
+The wide variety of road users requires drivers to always
+be alert. Taking your eyes off the road for just a second or
+briefly ignoring safe driving practices can result in a tragedy.
+Safely “sharing the road” with bicyclists requires cooperation,
+patience, and understanding.
+Right Turns When Stopped: When stopped, never look only
+to the left before turning right. Always look left, right and to the
+rear, checking the right first. A bicyclist riding against traffic
+or on the sidewalk may be approaching on your right. Also, a
+bicyclist may be pulled up alongside to turn right. A crash is
+easily preventable if you look in all directions before turning.
+Right Turns When Moving: If you are preparing for a right
+turn and a bicyclist is ahead of you, do not assume that you
+can beat the bicyclist to the turn. Misjudgment can result in
+a broadside crash called the “right hook.” Avoid right-hook
+crashes by slowing and remaining behind the bicyclist until
+they ride past the point where you will turn. On streets with
+bike lanes, remember that you are turning across a dedicated
+travel lane. Always look for and expect bicyclists.
+Intersections: When proceeding through or turning at an
+intersection, always scan the corners of the intersection more
+than once. An approaching bicyclist can easily travel 50 to
+100 feet in a few seconds, so what you saw on your first look
+99
+
+-- 99 of 139 --
+
+may change. Looking one last time before proceeding is a
+good safety practice.
+Dashed Bike Lane Lines: Dashed lines indicate a merging
+movement is allowed and expected. Check for bicyclists first.
+When turning right at an intersection, you may occupy the
+bike lane in the dashed line area. This prevents bicyclists from
+approaching along your right side and forces them to blend
+into the lane of traffic that will best suit their intentions when
+going through the intersection.
+Sidewalks: Bicyclists can legally ride on sidewalks in most
+communities, although there is no legal requirement to use
+them. Young children usually ride on the sidewalk, so be
+extremely cautious when pulling in or out of a driveway.
+Children: Be aware that children riding along the street
+often change direction unexpectedly, so pass them with extra
+caution and distance.
+Being in a Hurry: Never rush a turn or squeeze past a bicyclist
+just to beat traffic or a traffic light.
+Be Patient: The design of some streets and highways requires
+that, for safety, bicyclists must occupy the travel lane by riding
+in the center, not to the right. Do not follow too closely to the
+bicyclist. These are usually brief stretches of narrow roadway
+where it is unsafe for a driver to pass a bicyclist.
+Expect Bicyclists: Bicyclists are not as noticeable as motor
+vehicles. Their position on the road, smaller size, and slower
+speed, requires drivers to consciously look for them. Always
+drive with the expectation that bicyclists are on the road.
+Passing Distance: A typical 12-foot-wide travel lane is not
+wide enough to safely share with a bicyclist. Cycling instructors
+and riding manuals teach bicyclists to ride at least three (3)
+100
+
+-- 100 of 139 --
+
+feet from the edge of pavement to avoid accumulated edge
+debris and have enough space to the right, away from traffic, for
+an emergency maneuver. Three (3) feet is the minimum passing
+space that drivers should leave when passing a bicyclist. Higher
+speeds require more passing space. Always wait until you can
+see oncoming traffic and then safely pass by moving partially or
+fully into the other lane. This delay is usually brief.
+Communication: If you want to make sure a bicyclist sees
+you, wave a hand or nod your head, and wait for the bicyclist’s
+reaction.
+Honking: Never honk when close to a bicyclist; it may startle
+the bicyclist and cause an unexpected reaction.
+Parallel 	Parking: 	Ensure 	a 	bicyclist 	is 	not 	approaching
+before opening the driver’s door. When you are about to exit
+the car, reach across your body for the door handle with your
+opposite hand. This forces you to turn toward the side view
+mirror and look over your shoulder to be sure a bicyclist is not
+coming. This maneuver will help avoid the most common type
+of accident involving bicyclists.
+Be Predictable: Road safety depends upon predictability.
+Always use your turn signal. Bicyclists and other drivers will
+appreciate knowing your intent to turn or change lanes.
+Bike Lanes: Parking in bike lanes is not allowed. These are
+designated travel lanes for bicyclists and should not be blocked.
+Sharrows: A shared-lane marking or “sharrow” is a street
+marking placed in the travel lane to indicate where people
+should preferably cycle.
+A shared-lane marking is used to:
+• 	Assist bicyclists with lateral positioning in a shared lane
+101
+
+-- 101 of 139 --
+
+with on-street parallel parking in order to reduce the chance
+of a bicyclist impacting the open door of a parked vehicle.
+• 	Assist bicyclists with lateral positioning in lanes that are
+too narrow for a motor vehicle and a bicycle to travel side
+by side within the same traffic lane
+• 	Alert road users of the lateral location bicyclists are likely
+to occupy within the traveled way
+• 	Encourage safe passing of bicyclists by drivers
+• 	Reduce the incidence of wrong-way bicycling
+The Bicycles May Use Full Lane sign may be used in addition
+to, or instead of, the shared lane markings.
+Bicycle Publications
+Bicycle use, whether for recreation or transportation, can be
+enjoyable and safe if you know and follow the basic rules of
+the road and understand sharing the road with motor vehicles.
+Bicycle commuting is easy, but it may require some small
+adjustments to your daily routine.
+For information, or to order copies of publications, go to
+itd.idaho.gov > Travel > Pedestrian/Bike, or email them at
+ITDBikePed@itd.idaho.gov. You can also obtain copies at
+your county driver’s license office.
+102
+
+-- 102 of 139 --
+
+MOTORCYCLES
+Motorcyclists have the same rights and responsibilities as
+other highway users, and they must obey the same traffic
+laws.
+Motorcycles are smaller and harder to see than cars. They’re
+easily hidden in a car’s blind spot. Because it may be hard to
+judge the distance to motorcycles, or to tell how fast they are
+moving, be alert to their presence and be extra cautious.
+Approximately one-half of all motorcycle crashes involve
+another motor vehicle, so it is important to practice safe driving
+in order to help avoid collisions. Here are some situations that
+call for special attention when motorcycles are around:
+• 	Left Turns: Cars turning left in front of an oncoming
+motorcycle cause serious motor vehicle crashes. Drivers
+may fail to see a motorcycle rider in the traffic scene.
+Or a driver may fail to judge the speed of an oncoming
+motorcycle. As a driver, the correct precaution is for
+you to look and then look again. Make sure you see the
+motorcycle and know its speed before you make a left-
+turn.
+• 	Turn Signals: Most motorcycles do not have turn signals
+that turn off automatically. At times, motorcycle riders
+may forget to switch the signal off. Before you make a
+turn in front of a motorcycle with a signal flashing, be sure
+the motorcycle is turning and not continuing straight into
+your path.
+• 	Lanes: Motorcycles are entitled to the same full-lane
+width as all other motor vehicles. Good motorcycle riders
+are constantly changing positions within the lane so they
+can see and be seen, and to avoid objects in the road.
+Never move into the same lane alongside a motorcycle,
+even if the lane is wide and the motorcycle rider is riding
+far to one side. 103
+
+-- 103 of 139 --
+
+• 	Bad Weather: Weather conditions and slippery surfaces
+can be serious problems for motorcycles. Allow even
+more following room when it’s raining, or the road surface
+is slick.
+• 	Road Surface: Unusual road surfaces and irregularities
+on the road that may not affect other vehicles may create
+problems for motorcycles. Gravel, debris, pavement
+seams, small animals, and even manhole covers may
+force a motorcycle rider to change speed or direction.
+• 	Visibility: Always make a visual check for motorcycles
+by checking mirrors and blind spots before entering or
+leaving a lane of traffic or an intersection. Motorcycle
+riders are often hidden in a vehicle’s blind spot or missed
+in a quick look, due to their smaller size. Always use
+turn signals and brake lights to signal your intentions for
+turning, changing lanes, merging, slowing and stopping.
+This allows the motorcycle rider to anticipate traffic flow
+and find a safe lane position. Allow more than three (3)
+seconds following distance between your vehicle and
+the motorcycle. This allows you and the motorcycle rider
+enough time to maneuver or stop in an emergency.
+LARGE VEHICLES
+Safely sharing the road with large trucks and buses requires
+knowledge of their special limitations. Generally speaking, the
+larger they are:
+• 	The larger their blind spots
+• 	The more room they need to turn or change lanes
+• 	The longer it takes them to stop
+• 	The longer it takes them to pass
+104
+
+-- 104 of 139 --
+
+When you are near large vehicles on the road, pay special
+attention to the following:
+• 	Snowplows: Use extra caution when you encounter
+snow removal equipment; snowplow blades force snow
+up and off the road, potentially causing blizzard-like
+conditions and reduced visibility for drivers following too
+closely.
+• 	Blind Spots: Stay out of blind spots. If you are following
+a large vehicle and you are unable to see the driver’s
+mirrors, then the driver cannot see you. There are blind
+spots behind and on each side of large vehicles. Avoid
+driving alongside large vehicles for prolonged periods.
+• 	Visibility: Large vehicles can block your vision of the
+road ahead. When following large vehicles, adjust your
+following distance, so you can see most of the roadway
+ahead.
+• 	Passing: When cars cut in too soon after passing, then
+quickly slow down, drivers of large vehicles are forced to
+react with little time or room to spare. Because it takes
+longer to pass a large vehicle, you should keep a steady
+speed when passing and be sure you can see the cab of
+the large vehicle in your rear-view mirror before merging
+back into the lane.
+• 	Speeding Up and Stopping: Large vehicles are unable
+to gain speed or stop as quickly as smaller vehicles. For
+example, it takes a loaded truck with properly adjusted
+brakes 450 feet to come to a complete stop when
+traveling 55 miles per hour on a dry road. Allow extra
+space for large vehicles to speed up or stop. The drivers
+of these vehicles adjust the space between their vehicle
+and the vehicles ahead to allow for a safe following
+distance. When passing them, be sure to allow for this
+increased safety zone when returning to your lane of
+travel.
+105
+
+-- 105 of 139 --
+
+• 	Turning Space: When making sharp turns, large
+vehicles sometimes require more than one lane to
+complete the turn. Be sure to allow enough room for
+these vehicles to safely complete their turns. When
+turning right, these drivers may angle into the left lane,
+so they can make the right turn without running over the
+curb or hitting something. Do not try to squeeze by on the
+right side when a large vehicle is making this type of turn.
+It is a frequent cause of crashes involving large vehicles.
+• 	Hazardous Materials: Be extra cautious near vehicles
+carrying hazardous materials. These vehicles will be
+placarded to identify what they are carrying. All vehicles
+carrying hazardous materials must stop at all railroad
+crossings, so be prepared to stop if you are following
+one.
+• 	Long, Steep Grades: When traveling up or down steep
+grades, large vehicles travel slowly. On four-lane roads,
+they will use the right lane. Be prepared to encounter
+slow vehicles in the right lane, and do not park in or near
+“escape” or “runaway” ramps. These ramps should only
+be used to stop vehicles whose brakes have failed.
+• 	Large Loads with Pilot Vehicles: When trucks with
+large loads reach certain dimensions, they are required
+to have one or more pilot vehicles, which are specially-
+marked vehicles with amber lights that warn oncoming
+and following traffic of the large load. They also help the
+large loads navigate bridges, curves, and other hazards.
+When you encounter an oncoming pilot vehicle, reduce
+your speed and position your vehicle as far to the right as
+possible. If you are following a pilot vehicle, increase your
+following distance. Be very cautious when passing a pilot
+vehicle or the large load.
+106
+
+-- 106 of 139 --
+
+IDAHO’S 511 TRAVELER SERVICES
+For travel information, dial “511” or go to
+511.idaho.gov for up-to-date information
+on:
+• 	Emergency road closures
+• 	Highway roadwork projects
+• 	Tourism
+• 	Traffic incidents and delays
+• 	Weather-related road conditions
+If your phone company does not support 511, call 1-888-IDA-
+ROAD (1-888-432-7623) to access the 511 system.
+MOUNTAIN DRIVING
+When driving in the mountains, you should:
+• 	Pay special attention to speed limit signs and signs
+warning of curves, steep hills, or other hazards.
+• 	Stay close to the right edge of the road, away from
+oncoming traffic.
+• 	Use a lower gear to control speeds while going down
+long hills.
+• 	Never coast downhill by shifting into neutral or
+disengaging the clutch.
+• 	Watch for a solid yellow line in your lane, marking a no-
+passing zone.
+• 	Sound the horn when approaching any curve on a narrow
+road where the view is obstructed.
+WILDLIFE AREAS
+When you see a small animal in the road, think of your own
+safety. Don’t try to dodge it unless you are sure it is safe to do
+so. Big game animals, such as moose, elk, and deer, can cause
+severe damage to a vehicle. When you see a large animal on
+or near the road, slow down and proceed with caution. These
+are herd animals, and others are usually nearby.
+107
+
+-- 107 of 139 --
+
+Animals can move into the path of a vehicle so quickly that it’s
+impossible to slow down enough to safely avoid hitting them.
+In this case, you must consider running over it as the safest
+alternative, even though the crash may damage your vehicle
+and will likely kill the animal. Concentrate on keeping control
+of the vehicle before, during, and after the collision.
+Driving conditions change with the weather, light, and terrain.
+Study the following suggestions so you can react quickly and
+properly when the driving conditions change.
+OPEN RANGE
+Horses, 	cattle, 	sheep, 	goats, 	and 	other 	livestock 	under
+controlled movement over a highway or road have the right-
+of-way in Idaho. When you meet or overtake any livestock
+herds, be careful and cooperate with the workers in charge.
+Drivers must be alert for animals grazing unattended on “open
+range,” which means almost all areas outside of city limits
+and herd districts upon which livestock by custom, license,
+lease, 	or 	permit, 	are 	grazed 	or 	permitted 	to 	roam. The
+presence of fences does not necessarily mean that animals
+are not present or do not have the right-of-way. Be especially
+careful driving at night. If you strike and injure or kill livestock
+or domestic animals that are on the open range or under
+controlled movement, the owner of the animal(s) is not liable
+for damages to you or your vehicle. You may be liable for the
+injuries or death of the animal if you are found to have been
+negligent.
+NIGHT DRIVING
+About 90% of driving choices are based on what you see. At
+night, your vision is reduced. To make sure you have time to
+react to danger, always drive slowly enough so you can stop
+within the distance you can see ahead. This distance is about
+108
+
+-- 108 of 139 --
+
+350 feet when using the high beams of your headlights and
+about 100 feet when using the low beams.
+To make your night driving safer:
+• 	Increase the following distance between your vehicle and
+the one in front of you.
+• 	Turn on your headlights (not just your parking lights)
+when driving between sunset and sunrise, or when
+visibility has been reduced to below 500 feet. The gray
+hours of twilight and dawn are the most dangerous
+times of the day.
+• 	Watch for slow-moving or unlighted vehicles,
+bicyclists, pedestrians, and animals.
+• 	Allow more distance and time for passing.
+• 	Don’t drive or keep driving if you’re tired.
+• 	Never wear sunglasses when light levels are low.
+• 	Keep your windshield clean, both inside and out.
+• 	Keep your headlights clean. Dirt will dim their light and
+may distort the beam.
+• 	Avoid looking into the headlights of oncoming vehicles.
+Instead, shift your eyes down to the lower right side of
+your traffic lane. This keeps the light from hitting your
+eyes directly.
+• 	Dim your headlights to low beam when approaching or
+following another vehicle or on lighted roads.
+• 	If you must park on a highway shoulder at night, turn on
+your emergency flashers or parking lights.
+SNOW REMOVAL EQUIPMENT
+Use 	extra 	caution 	when 	encountering 	snow 	removal
+equipment; snowplow blades force snow up and off the road,
+potentially 	causing 	blizzard-like 	conditions 	and 	reduced
+visibility for drivers following too closely.
+109
+
+-- 109 of 139 --
+
+Use caution when driving in winter conditions, and cooperate
+with highway workers clearing the roads. Drivers should follow
+these tips for safe winter driving:
+• 	Remain two car lengths behind snowplow trucks for every
+10 miles per hour you drive. Sand being spread by trucks
+can damage your vehicle.
+• 	Do not pass a snowplow unless it is absolutely necessary.
+• 	If you must pass, do so only when you can clearly see
+the road ahead. Do not pass on the side where the plow
+is spraying snow. If you do, the snow’s force can knock
+your car out of control.
+• 	Do not cut back immediately in front of a snowplow truck.
+The plow blades are often covered with snow and can be
+difficult to see.
+• 	Do not brake suddenly if you are traveling in front of a
+snowplow. The heavy vehicle cannot stop as quickly as
+your automobile.
+• 	Do not abandon your car unless it is absolutely
+necessary. If you must, leave it as far off the road as
+possible. Abandoned cars can interfere with the road
+clearing process and can be extremely hazardous to
+snow removal equipment and the operators, if they are
+hidden or buried by snow.
+FOG, SMOKE, DUST, OR RAIN
+You are required to turn on your headlights in the daytime
+when vision is reduced to 500 feet or less. Low beams are
+best at such times. When you first turn on your headlights, be
+sure they are adjusted to low beams.
+It is safest not to drive in fog, dust storms, or in heavy rain. If
+you must drive during these conditions, reduce your speed.
+For safety reasons, you should not use cruise control if the
+road is wet and/or icy. Slow down more when you see red
+taillights ahead. The vehicle may be stopped or creeping along.
+110
+
+-- 110 of 139 --
+
+If conditions get too bad, pull off the road and stop. Don’t
+creep along; somebody else may crash into you. Also avoid
+using your emergency flashers while moving—other drivers
+may think you’ve stopped.
+RAIN & HYDROPLANING
+Wet roads can be as dangerous as icy roads. Always reduce
+your speed in wet weather. You’ll need more distance for
+stopping and you may skid on quick turns.
+Remember, roads are more dangerous at the start of a light rain
+when road oil and water mix to form a greasy film on the road.
+At speeds up to 35 miles per hour, most tires grip the road
+surface even when it’s wet. As speed increases, the tires can’t
+grip the road as well. At 55 miles per hour, the tires may lose
+all contact with the road. They start to “hydroplane” or ride
+on top of a film of water like a set of water skis. When that
+happens, you can’t brake, accelerate or turn. A gust of wind, a
+curve or even a lane change can cause a skid.
+To reduce the chances of hydroplaning, you should:
+• 	Slow down during rainstorms or when roads are slushy.
+• 	Slow down if the road has standing water or puddles.
+• 	Replace tires as soon as they become worn.
+• 	Keep tires properly inflated.
+If you are about to drive over a slippery area or you think your
+car has started to hydroplane:
+• 	Maintain a steady speed and keep moving in a straight line.
+• 	Slowly take your foot off the gas pedal.
+• 	Don’t try to stop or turn quickly until your tires are
+gripping the road again.
+• 	If you have to use your brakes, pump them gently (unless
+your car has an anti-lock braking system [ABS]).
+111
+
+-- 111 of 139 --
+
+FLASH FLOODS
+Flash floods are caused by intense rain that falls in a short
+amount of time. Idaho averages seven flash floods a year,
+and 	they 	generally 	occur 	during 	or 	right 	after 	a 	severe
+thunderstorm.
+In some cases, small streams a few feet wide by a few inches
+deep can swell to over 12 inches deep and 80 feet wide in
+less than five minutes. As little as six inches of fast moving
+water can knock you off your feet. Fast-moving water two feet
+deep can wash away a vehicle and reach the bottom of most
+passenger cars and cause loss of control or stalling.
+If the National Weather Service issues a Flash Flood Warning,
+or you observe water rising quickly, you should take action
+immediately.
+• 	DO NOT DRIVE through flooded areas. If you see a
+flooded roadway ahead, turn around and find another
+route to your destination.
+• 	Get far away from areas subject to flooding (dips, low
+spots, canyons, dry creek beds, or along a stream). Seek
+higher, safer ground.
+• 	Avoid areas near rivers or streams and areas that are
+already flooded. Roads that are underwater may no
+longer be intact. NEVER drive through flooded roadways.
+• 	If your vehicle stalls, leave it immediately and seek higher
+ground. Rapidly rising water may engulf the vehicle and
+sweep it away.
+• 	Be very careful at night when it is harder to see flood
+dangers.
+• 	Do not park your vehicle or camp along streams or dry
+stream beds during threatening conditions.
+112
+
+-- 112 of 139 --
+
+WINTER DRIVING
+Winter driving calls for special skills. On slippery roads, the
+keys to safety are slower speeds, gentler stops and turns, and
+longer following distances. Here are some safe-driving tips
+that will help you when roads are slick with ice or snow:
+• 	Keep your vehicle in the best possible driving condition.
+The lights, tires, brakes, windshield wipers, defroster and
+radiator are especially important for winter driving.
+• 	Keep your windows clear. Don’t start driving until the
+windows are defrosted and clean—even if you’re going
+only a short distance. Keep your windshield washer
+reservoir filled with a non-freezing solution all winter.
+• 	For safety reasons, you should not use cruise control if
+the road is wet and/or icy.
+• 	Buckle up. All occupants are required to wear safety belts
+and/or shoulder straps when riding in a vehicle equipped
+with them.
+• 	Get the feel of the road by starting out slowly and testing
+your steering control and braking ability. Avoid spinning
+your tires when you start by gently pressing your gas
+pedal until the car starts to roll. Start slowing your car
+down at least three times sooner than you normally do
+when turning or stopping.
+• 	When stopping, avoid sudden movements of the steering
+wheel and pump the brake gently. (Check your vehicle
+owner’s manual; if the vehicle has anti-lock brakes, you
+may apply steady pressure to the brake pedal.)
+• 	Use tire chains on very slippery roads. (Some states
+require chains to be carried during winter months; check
+for specific information before driving in other states.)
+• 	Be aware of potential icy areas such as shady spots,
+bridges, and overpasses. Ice may form sooner or remain
+on bridges and overpasses longer, since they are
+exposed on their undersides and are deprived of ground
+113
+
+-- 113 of 139 --
+
+warmth. Snow and ice also stay longer in shaded areas.
+• 	Studded snow tires may be used only from October
+1st to April 30th. Some years, the Idaho Transportation
+Department adjusts the dates due to weather conditions.
+GETTING STRANDED DURING
+WINTER WEATHER
+Idaho winters can be severe, particularly in the mountains.
+When traveling in winter months, be prepared in case your
+vehicle breaks down or you get into a crash. You should keep
+an emergency winter driving kit in your car. The kit should
+include:
+• 	Flashlights with extra batteries
+• 	A first aid kit
+• 	A pocket knife
+• 	At least one blanket or sleeping bag
+• 	An extra set of gloves
+• 	Socks and a wool cap
+• 	A small sack of sand or cat litter for generating traction
+under the wheels
+• 	A small shovel
+• 	Bottled water
+• 	Booster cables
+• 	Emergency flares
+• 	Energy bars or other non-perishable food items
+• 	A brightly-colored scarf to attract attention in case of an
+emergency
+• 	Waterproof matches or cigarette lighter
+• 	A map of the area where you plan to travel
+• 	Phone charger
+If you run your car for heat, make sure your exhaust pipe is
+clear of snow. If available, tie a scarf or bright cloth on the car
+antenna for snow crews to see.
+114
+
+-- 114 of 139 --
+
+Let someone know your travel plans, including estimated
+departure and arrival times, route, and where you will stay
+when you reach your destination. Make sure your cell phone is
+charged and you have access to emergency phone numbers.
+If you get stranded, stay with your vehicle if heavy snow is
+falling. Most deaths occur when people leave their car, get
+lost, and freeze.
+In case of medical emergencies in areas where roads have
+not been plowed, call the local or state police. These agencies
+will work with search and rescue personnel and the Idaho
+Transportation Department to respond to emergencies.
+HANDLING EMERGENCIES
+Emergencies appear suddenly, and you may have only a
+fraction of a second to make the right move. Lives may depend
+on your ability to react quickly. Be prepared for hazards and
+know what to do when they show up. Think before you act.
+Often, an instinctive reaction, such as slamming on your
+brakes while skidding, may be the wrong thing to do.
+On the following pages are some tips on handling common
+driving emergencies.
+SKIDDING
+Prevention: Be alert to slick road conditions that may cause
+skidding, especially during the winter. When you must stop,
+slow down in advance. Never hit the brakes so hard you lock
+the wheels or you could lose control of your car.
+In most skids, the rear wheels lose their grip on the pavement
+and slide left or right. Skidding occurs most often on ice or
+packed snow. It can also happen on wet pavement or even on
+dry pavement when traveling at high speeds or stopping quickly.
+115
+
+-- 115 of 139 --
+
+Recovery: When a skid starts, don’t panic and don’t hit the
+brake. Immediately take your foot off the gas pedal, then
+steer in the direction of the skid. For example, if your rear
+wheels slide to the right, turn your front wheels toward the
+right. Before traveling on ice or snow, prepare for trouble by
+practicing stops and skid recovery in a safe place, ideally on
+private property.
+STOPPING QUICKLY
+Many vehicles have an anti-lock braking system (ABS). Be sure
+to read the vehicle owner’s manual on how to use the ABS.
+The ABS may allow you to stop without skidding. In general,
+observe the following if you need to stop quickly with ABS:
+• 	During an emergency stop that requires hard braking,
+apply continuous pressure on the brake pedal. Do Not
+Pump the Brake Pedal as this will defeat the system’s
+design, reduce the effectiveness of the ABS, and
+increase the distance required to stop the vehicle.
+• 	The ABS will activate immediately, allowing you to retain
+full steering control during hard braking and on slippery
+surfaces; however, ABS does not decrease stopping
+distances.
+• 	During hard braking with ABS, the system actually pumps
+the brakes for you at a higher rate than you could do
+yourself. This pumping action causes a noise from the
+ABS pump motor, and you may feel a noticeable pulse
+through the brake pedal.
+• 	Do not be concerned by the noise and pulsation, because
+this is normal for ABS. Knowing you will hear the pump
+motor and feel the pulse will help you resist the natural
+instinct to remove your foot from the pedal.
+116
+
+-- 116 of 139 --
+
+Here are instructions for stopping quickly without ABS:
+• 	Press on the brake pedal as hard as you can without
+locking the brakes and bring the vehicle to a quick, safe
+stop. (You may lock the brakes and cause the vehicle to
+skid if you brake too hard.)
+• 	If the brakes lock, you will feel the vehicle begin to skid.
+Quickly let up on the brake pedal.
+• 	As soon as the vehicle stops skidding, press down on
+the brake pedal again and repeat this press and release
+cycle if necessary until the vehicle has stopped.
+Be Prepared
+IF YOU HAVE CAR TROUBLE
+When your car breaks down on the highway, make sure other
+drivers can see it. Many crashes occur because a driver didn’t
+see a stalled vehicle.
+When your car stalls, follow these rules:
+• 	If possible, pull all the way off the road.
+• 	Turn on emergency flashers.
+• 	Lift the hood to let others know you have a problem.
+• 	If you can’t get off the road, stop where people have a
+clear view of you and your car from behind. Don’t stop
+just over a hill or around a curve.
+• 	If you have emergency flares, place them 200 to 300 feet
+behind your car to give others warning.
+• 	If you don’t have flares, stand by the side of the road and
+wave traffic around. Use a white cloth or flag if you have
+it. Stay off the roadway.
+117
+
+-- 117 of 139 --
+
+AVOIDING CRASHES
+To avoid a crash, you have two choices, (1) change direction
+by steering, or (2) change speed by braking or accelerating.
+• 	Steering: If you don’t think you can stop in time, try to
+turn out of the way. If possible, stay off the brakes while
+you turn—you’ll have more control.
+• 	Braking: Many drivers slam on the brakes to avoid a
+crash. Don’t, unless you have anti-lock brakes. Locking
+your brakes may throw you into a skid and make things
+worse. Instead, you should pump your brakes hard and
+fast. You’ll have more control and stop faster.
+• 	Acceleration: When another car is about to hit you from
+the side or rear, accelerating may soften the impact or
+prevent the crash.
+PROTECTING YOURSELF IN A CRASH
+If you can’t avoid a crash, try to protect yourself in the following
+ways:
+• 	The best protection is to properly buckle your seat belt
+BEFORE you start your trip. Your chance of avoiding
+serious injury or death is increased if you are wearing
+your seat belt properly.
+• 	If you’re about to be hit from the rear and have a
+headrest, press the back of your head against it. Be
+ready to brake to avoid hitting cars ahead of you.
+• 	If you’re about to be hit from the side, be prepared to
+steer to recover from the impact.
+• 	If you’re about to be hit from the front and you’re wearing a
+seat belt, use your arms and hands to protect your face.
+118
+
+-- 118 of 139 --
+
+IF YOU HIT AN UNATTENDED VEHICLE
+You must make a reasonable effort to find the owner of an
+unattended vehicle or other property damaged in a crash in
+which you are involved. If the owner cannot be located, leave
+a note telling about the crash with your name and phone
+number. You must also notify police if the damage was more
+than $1,500 or someone was injured.
+A CRASH WITH AN UNINSURED DRIVER
+If you have recently been in a crash with an uninsured driver
+and have been unsuccessful in collecting damages, you may
+request that the driving privileges of the uninsured driver
+be suspended. After a court judgment has been entered,
+the department may suspend the driving privileges of the
+uninsured driver until you have been paid, or for up to six
+years. For more information, contact any city, county, or
+state law enforcement agency, or the Idaho Transportation
+Department.
+ONCOMING CAR IN YOUR LANE
+If you’re threatened with a head-on crash and have some time:
+• 	Slow down and try to warn the other driver by flashing
+your lights and honking your horn.
+• 	Pull to the right as far as possible. Don’t go left. The other
+driver may recover and hit you broadside.
+If you can’t avoid a crash, steer so the cars will hit at an angle
+and avoid a head-on crash.
+119
+
+-- 119 of 139 --
+
+TIRE BLOWOUTS
+Blowouts are unexpected and the driver’s natural response is
+to hit the brakes hard. Instead of stomping on the brakes:
+• 	Hold the steering wheel tightly and keep the car headed
+straight down the road.
+• 	Ease your foot off the gas pedal, but do not apply the
+brakes until you have complete control.
+• 	When the car is under control, brake gently and pull off
+the road at the nearest safe location.
+RUNNING OFF THE ROAD
+Know what to do if the wheels drop off the pavement:
+• 	Grip the wheel tightly and steer straight ahead. Stay on
+the shoulder if there are no immediate obstacle.
+• 	Take your foot off the accelerator and apply the brakes
+gently.
+• 	Once you’ve slowed down, check traffic for an opening
+and then, when it is safe, steer onto the pavement. Be
+careful not to over steer and shoot across the center line.
+AT THE SCENE OF THE CRASH
+Someday, you may come upon a traffic crash where there
+are serious injuries and people need help. If police or medical
+help is already there, don’t stop. Move on as officers direct. If
+you’re the first one to arrive, you should stop and call 911 and
+assist if you are able.
+120
+
+-- 120 of 139 --
+
+CRASHES & THE LAW
+No matter how safely you drive, chances are someday you
+may be in a crash. Even if you’re not at fault, you must know
+what to do. If you’re involved in a crash, you are required to:
+• 	Stop as near to the scene as possible without blocking
+traffic. You may move vehicles that pose a traffic hazard
+before the police arrive. Idaho’s “Quick Clearance” law
+requires anyone involved in the crash (on an interstate or
+major divided highway), that does not cause a death or
+injury, to safely move the vehicle to a shoulder, median,
+or emergency lane.
+• 	Give any help you can if someone is injured. Idaho’s
+Good Samaritan Law protects you from civil liability if
+you act in good faith. However, don’t try to move an
+injured person from a wrecked vehicle unless you have
+the necessary medical training or there is an immediate
+danger, such as fire.
+• 	Call for police and medical help as soon as possible.
+You must report to police any motor vehicle crash in
+which someone is injured or property damage is more
+than $1,500. Exchange information at the scene with
+the other people involved in the crash, including names,
+addresses, and driver’s license numbers of the injured;
+names and addresses of any witnesses; and names,
+addresses, and insurance policy numbers of the other
+vehicle owners. If you provide false information you
+may be guilty of a misdemeanor. A police officer, when
+present, will help you exchange information with the other
+drivers.
+121
+
+-- 121 of 139 --
+
+WHAT AFFECTS YOUR DRIVING
+PRIVILEGE AND RECORD
+Your 	driving 	privileges 	can 	be 	suspended, 	canceled, 	or
+revoked if you break certain laws or become a careless driver,
+even if you have not been issued a driver’s license.
+Your future driving privileges can be affected because driving
+records are maintained even for drivers who have not been
+issued a license. The Idaho Transportation Department (ITD)
+keeps a record of your crashes and moving violations, including
+those occurring in other states. Your part may prevent serious
+injuries or death.
+THE DRIVER LICENSE COMPACT
+Idaho is a member of this compact, which is an agreement
+among states to promote driver compliance with driving laws,
+ordinances, and administrative actions in member states.
+Membership is a major step necessary to maximize law
+enforcement efforts against drunk drivers and other serious
+traffic offenders. Under this compact, serious offenses and
+minor moving violations will be sent to a driver’s home state,
+and action will be taken as if the violation occurred in the
+driver’s home state.
+If you are a licensed Idaho driver and are convicted of a traffic
+offense in another state, the information on that offense will
+be sent to Idaho and placed on your driving record. If it is a
+suspendable offense, your driving privileges will be suspended
+by the Idaho Transportation Department, Division of Motor
+Vehicles.
+122
+
+-- 122 of 139 --
+
+SUSPENSION & POINT VIOLATIONS SYSTEM
+Your driving record is evaluated by a point system in which you
+receive one to four points for each moving traffic violation on
+your record. For additional information about point violations,
+visit our web site at dmv.idaho.gov.
+Under the point system, the department may take the following
+action(s) against you:
+NUMBER OF POINTS 	PENALTY
+8 to 11 in any 12 months 	Warning letter
+12 to 17 in any 12 months 	30-day suspension
+18 to 23 in any 24 months 	90-day suspension
+24 or more in any 36 months 	6-month suspension
+Points may be removed from your driving record once every
+three years by completing either an ITD-approved Defensive
+Driving Course (DDC) or a Traffic Safety Education Course
+(TSC), offered by law enforcement at the time of a stop and
+issuance of a citation in some cities in the state. Both courses
+only remove points from your driving record; they do not
+remove the conviction.
+A maximum of three (3) points may be removed from your
+driving record upon completion of an ITD-approved DDC.
+Points must be on your driving record before completion of
+the course in order to be eligible for point reduction. Defensive
+driving courses are offered in several Idaho cities and online.
+Approved courses are found at dmv.idaho.gov or by contacting
+the Idaho Transportation Department at 208-584-4343.
+A maximum of four (4) points may be removed from your
+driving record upon completion of a TSC. For points to be
+removed, the course must be offered by law enforcement
+and accepted by the driver at the time of citation. The course
+123
+
+-- 123 of 139 --
+
+must be completed within 45 days of the citation. The number
+of points removed will coincide with the number of points
+associated with the citation issued by law enforcement.
+REASONS FOR SUSPENSION
+The courts and the Idaho Transportation Department are
+authorized by law to suspend, disqualify, deny, cancel, or
+revoke the license of drivers convicted of breaking certain
+laws. Those violations include but are not limited to:
+• 	Driving while under the influence of alcohol or other drugs
+• 	Using a motor vehicle to commit a felony
+• 	Leaving the scene of a crash in which you were involved,
+when the crash caused property damage
+• 	Making false statements—oral or written—to the Idaho
+Transportation Department while under oath
+• 	Reckless driving
+• 	Failing to pay a judgment for damages in a crash
+• 	Administrative license suspension – an automatic license
+suspension for failure of an evidentiary test (breath,
+blood, or urine)
+• 	Refusing to take an evidentiary test
+• 	Fleeing from or eluding a peace officer
+• 	Leaving the scene of a crash resulting in injury or death
+• 	Unlawful use of a driver’s license or identification card
+• 	Failure to carry motor vehicle insurance
+• 	Violation of restriction (daylight only, lenses, etc.)
+• 	Failure to attend school or comply with school requirements
+• 	Failure to pay child support, or comply with visitation rights,
+or failure to comply with a subpoena for a paternity suit
+124
+
+-- 124 of 139 --
+
+GRADUATED DRIVERS LICENSE (GDL)
+PENALTIES
+All drivers under 17 years of age are subject to the following
+penalties:
+• 	A warning letter upon the first conviction for a moving
+traffic violation (this letter provides warning that future
+violations may result in the suspension of your driving
+privileges).
+• 	A 30-day suspension of driving privileges for a second
+conviction for a moving traffic violation.
+• 	A 60-day suspension of driving privileges for a third or
+subsequent conviction for a moving traffic violation.
+These penalties are in addition to the permit cancellation during
+the supervised instruction period, or any other suspension
+that may be ordered by a court or the department. The GDL
+penalty suspension periods are absolute and do not allow
+driving privileges of any kind.
+ADMINISTRATIVE LICENSE SUSPENSION
+If you are arrested for operating a motor vehicle while under
+the influence of alcohol or other intoxicating substances and
+you fail an evidentiary test by having an alcohol concentration
+over the legal limit, a peace officer will serve you immediately
+with a Notice of Suspension; the notice may be sent if blood
+or urine results show you were driving under the influence of
+alcohol or other intoxicating substances. This notice is an Idaho
+Transportation Department imposed administrative driver’s
+license suspension (ALS), that is issued in accordance with
+Section 18-8002A, Idaho Code. You have the right to request
+an administrative hearing on the suspension within seven (7)
+days of the date on the notice of suspension, before a hearing
+officer designated by the department.
+125
+
+-- 125 of 139 --
+
+The ALS penalty is a civil penalty and is separate and apart
+from any criminal penalties imposed by the court system. If you
+receive an ALS, you must comply with the ALS requirements,
+and also appear in court on your appointed date regarding the
+criminal DUI charges brought against you.
+Your notice of suspension becomes effective thirty (30) days
+after the date of service (the date you received the notice).
+For a first failure, your driving privileges will be suspended
+for a period of ninety (90) days. You will have absolutely no
+driving privileges during the first thirty (30) days of that ninety
+(90) day suspension. You will be required to have an ignition
+interlock device installed on any vehicle you drive for one (1)
+year after the end of your suspension period. Your driving
+privileges will be suspended for one year with absolutely no
+driving privileges of any kind for a second failure of the test
+within five (5) years.
+TEST REFUSAL FOR ALCOHOL, DRUGS, OR
+OTHER INTOXICATING SUBSTANCES
+Implied Consent – In Idaho, any person who drives, or is in
+physical control of, a motor vehicle has given their consent to
+take a BAC or drug test if they are suspected of driving under
+the influence, under the provisions of Section 18-8002, Idaho
+Code. If you refuse to take the test when requested to do
+so by a law enforcement officer, you are subject to a driver’s
+license suspension and a civil penalty of $250.00 under the
+provisions of Section 18-8002, Idaho Code.
+If you refuse to take the test as requested, the officer will issue
+you a notice of suspension. If the court upholds the officer’s
+findings, your license will be suspended for one year with
+absolutely no driving privileges of any kind if it is your first
+offense.
+126
+
+-- 126 of 139 --
+
+A second refusal within 10 years will result in a two-year
+absolute suspension. This penalty is in addition to any penalty
+you receive in court for a DUI conviction.
+RESTRICTED DRIVING PERMIT
+If your Idaho license is suspended, you may qualify for
+a restricted permit allowing you to drive to and from work,
+medical 	treatments, 	etc. 	If 	you 	were 	suspended 	by 	the
+department, you may apply for a restricted permit at the Idaho
+Transportation Department in Boise. If you are suspended by
+the court, you must apply for restricted driving privileges from
+the court that convicted you.
+IGNITION INTERLOCK DEVICE
+The ignition interlock device is mandatory on all administrative
+license suspensions, beginning after your suspension ends.
+If you have been convicted of driving under the influence, you
+will be required to have an ignition interlock device installed in
+any vehicle that you drive, unless the court orders otherwise.
+This device requires the driver to provide a breath sample in
+order to start the vehicle. If the sample indicates an alcohol
+content at or above a preset level, the vehicle will not start.
+The cost of installation, maintenance, and monthly fees are
+paid by the driver.
+GETTING YOUR DRIVING PRIVILEGES BACK
+When your suspension or revocation period ends, you may
+get your driving privileges back by applying to the Idaho
+Transportation Department in Boise. You will be required to
+pay a reinstatement fee of $25.00 to $285.00, depending upon
+the nature of the suspension. Multiple suspensions may carry
+multiple reinstatement fees. If your license was suspended
+127
+
+-- 127 of 139 --
+
+for certain serious offenses (reckless driving, driving under
+the influence, etc.) you must also provide proof of financial
+responsibility for three years. The acceptable form of proof
+of financial responsibility is a certified statement of liability
+insurance coverage from your insurer (an SR-22 certificate).
+Additionally, if you violate Idaho’s no-insurance laws, you will
+be required to provide proof of financial responsibility for one
+year for a first offense. If you commit a second offense in a five-
+year period, you will be required to provide proof of financial
+responsibility for three years. For more information, contact the
+Idaho Transportation Department in Boise at 208-584-4343.
+HOW MUCH IS TOO MUCH
+You cannot trust yourself or your friends to judge your ability
+to drive safely after you’ve had a few drinks. Your ability to
+drive may be impaired long before you or anyone else notices
+outward signs.
+If you drink enough to increase your alcohol concentration
+past .05, be careful. At slightly above .05, the risk of causing a
+crash doubles. At .10, the risk is six times as great. At .15, the
+risk is 25 times as great.
+128
+
+-- 128 of 139 --
+
+IS BEER SAFER THAN HARD LIQUOR
+A jigger (1.5 ounces) of 80-proof hard liquor, five ounces of
+table wine, or 12 ounces of beer all contain approximately the
+same amount of alcohol—about an ounce each. Studies have
+found the greatest percentage of people arrested for driving
+under the influence had been drinking beer.
+HOW DRINKING AFFECTS YOU
+Alcohol 	passes 	directly 	through 	your 	stomach 	and 	small
+intestine into the bloodstream, where it flows to all parts of your
+body. On an empty stomach, this process takes place almost
+immediately. On a full stomach, it takes somewhat longer. In
+either case, when the alcohol reaches your brain, it promotes
+relaxation. In large amounts, it dulls the parts of your brain
+that control inhibition, judgment, and self-control. As a result,
+you may feel stimulated, lively, and a bit giddy or foolish. After
+two to four drinks, alcohol begins to impair your reaction time,
+coordination, and balance. Your vision and ability to judge
+distance suffers too, making it harder to react to dangers ahead.
+Once alcohol is in your bloodstream, neither aspirin, black
+coffee, deep breathing, a slap in the face, exercise, nor eating
+will sober you up. Only time will return you to normal.
+Alcohol can be a mood changer producing sudden shifts in
+mood, from elation to anger. Studies show a combination of
+alcohol and anger is responsible for much of the reckless,
+aggressive driving that often causes fatal highway crashes.
+HOW DRINKING AFFECTS DRIVING
+Drinking affects your thinking; it also slows your reaction time.
+By making you feel good, alcohol may also give you false
+confidence. Such factors affect your driving in ways that a
+trained law enforcement officer can detect. Some signs of
+drunken driving are: 129
+
+-- 129 of 139 --
+
+• 	Speeding: Drinking drivers often think they can drive
+safely at high speeds.
+• 	Weaving: Even though drivers may stay in their lane,
+they may have trouble steering straight.
+• 	Slow driving: Drinking drivers may be overly cautious
+and drive slower than normal traffic.
+• 	Jerking motion: Drinking drivers often have short mental
+lapses revealed by jerky steering or acceleration.
+• 	Quick stops: Drinking drivers may make sudden stops at
+traffic signs or lights, rather than easing up to them.
+OPEN CONTAINER LAW
+Idaho’s 	open 	container 	law 	prohibits 	both 	drivers 	and
+passengers from drinking or possessing an open beverage
+container of alcohol. To transport any unsealed alcoholic
+beverages in a vehicle, the container must be in the trunk or
+behind the last upright seat if there is no trunk.
+DRUGS & DRIVING
+If you have to drive, you should avoid taking any drug that
+might hamper your ability to operate your vehicle. If you drink
+alcohol while taking certain drugs or medications, you may
+feel and be more impaired, which can affect your ability to
+perform driving-related tasks.
+• 	Prescription drugs: When your doctor writes out a
+prescription, ask the doctor if it will make you drowsy or
+otherwise affect your driving. If so, let someone else drive
+while you are taking the drug.
+• 	Over-the-counter drugs: Over-the-counter drugs
+include such things as pain relievers, lozenges, and
+cough and cold remedies. By law, these drugs must
+provide directions for use. Read the label. If driving is
+discouraged, don’t get behind the wheel.
+130
+
+-- 130 of 139 --
+
+IMPAIRED DRIVING
+Illegal drugs are dangerous when mixed with driving. Driving
+while under the influence of legal or illegal substances
+is drugged driving. It is illegal in every state. Commonly
+used illegal drugs include marijuana, heroin, cocaine,
+amphetamines and methamphetamines, and club drugs.
+Marijuana slows reaction time and impairs judgment of time and
+distance. Methamphetamine or cocaine causes aggressive and
+reckless behaviors. Opioids cause drowsiness and impaired
+memory 	and 	thinking 	skills. 	Sedatives 	(benzodiazepines,
+barbiturates, etc.) cause dizziness and drowsiness.
+STRATEGIES TO PREVENT IMPAIRED
+DRIVING
+• 	Offer to be a designated driver.
+• 	Have a designated driver take all car keys.
+• 	Get a ride to and from parties where there are drugs and
+alcohol.
+• 	Avoid going to parties where alcohol and drugs are
+present.
+• 	Talk with friends about the risks of drugged driving.
+DRIVING UNDER THE INFLUENCE
+Under Idaho law you are considered to be driving under the
+influence if your blood-alcohol concentration (BAC) is .02 or
+more if you are under 21 years of age, .04 or more if you are
+operating a commercial vehicle, and .08 or more if you are 21
+or older. An alcohol concentration of .20 or more carries even
+stiffer penalties. Even if your BAC is less than .08, you may be
+convicted of driving under the influence of other intoxicating
+substances.
+131
+
+-- 131 of 139 --
+
+If you’re convicted, the criminal penalties are:
+• 	For a first conviction: Up to six months in jail; up to a
+$1,000 fine; and mandatory driver’s license suspension
+of at least 90 days and up to 180 days (one year if you
+are under 21), with absolutely no driving privileges for the
+first 30 days. An ignition interlock restriction will likely be
+required after the suspension.
+• 	For a second conviction within 10 years: Mandatory jail
+sentence from 10 days to one year (30 days if you are
+under 21); up to a $2,000 fine; and a mandatory driver’s
+license suspension of one year (two years if you are
+under 21). An ignition interlock restriction will likely be
+required after the suspension.
+• 	For three or more convictions within 10 years: Mandatory
+jail sentence from 30 days to ten years (10 days to six
+months if under 21); up to a $5,000 fine (up to $2,000 if
+under 21); mandatory driver’s license suspension from
+one to five years (if under 21, mandatory suspension
+for 1 year or up to age 21 whichever is greater). An
+ignition interlock restriction will likely be required after the
+suspension. This conviction is a felony.
+There are enhanced penalties for CDL drivers who drive under
+the influence, up to the lifetime loss of CDL privileges.
+WHAT TO EXPECT AND DO WHEN STOPPED
+BY LAW ENFORCEMENT
+When law enforcement stops you, stay calm, activate your
+turn signal, and pull off or to the side of the roadway as soon
+and safely as possible. Turn off the ignition and radio, and stay
+in your vehicle unless directed by the officer to exit. Keep your
+hands on the steering wheel so they are easily observable.
+Cell phones and mobile devices should not be used by you or
+any of your passengers. Do not make sudden moves or
+132
+
+-- 132 of 139 --
+
+search for your driver’s license or vehicle documents – wait
+for the officer to give you instructions. If you have a weapon in
+the vehicle, inform the officer upon first contact.
+The officer may ask to see your driver’s license, proof of
+insurance, and vehicle registration. If the documents are out
+of your reach, tell the officer where they are before you reach
+for them. If the officer asks you to exit the vehicle, stay safely
+away from traffic and keep your hands in plain view.
+When the officer completes their interaction with you, they may
+issue a warning or a traffic ticket, which may include a fine. If
+you wish to contest the ticket, you will have the opportunity
+to explain your point of view of what happened in court. Your
+acceptance and signature on a traffic ticket is not an admission
+of guilt; however, the refusal to sign a traffic ticket may result
+in your arrest. If you believe the officer acted inappropriately,
+report it to the officer’s agency in a timely manner. The name
+of the officer and law enforcement agency will be on the ticket,
+or you may ask the officer to provide this information.
+Good communication from all involved parties can make a
+traffic stop a safe experience for all parties involved.
+133
+
+-- 133 of 139 --
+
+PRACTICE TEST QUESTIONS
+1. When you park parallel to a curb or edge of the roadway
+you must not be more than:
+a. 	24 inches
+b. 	6 inches
+c. 	18 inches
+d. 	Does not matter
+2. When is it legal to pass a vehicle on the right without
+leaving the pavement:
+a. 	On a two-lane, two-way highway and the vehicle you
+are passing is turning left
+b. 	The vehicle is going below the speed limit and there is
+a large shoulder on the highway
+c. 	It is never legal to pass on the right
+d. 	Only during daylight hours
+3. This sign means:
+a. 	Okay to speed
+b. 	Railroad crossing
+c. 	Intersection/crossroad
+d. 	4 way stop
+4. You do not have to stop for a school bus if:
+a. 	You are traveling in a rural area
+b. 	You are traveling in the same direction as the school
+bus on a four-lane highway with two lanes going in the
+opposite direction
+c. 	You are traveling in the opposite direction of the school
+bus on a four-lane highway with two lanes going each
+direction
+d. 	None of the above
+134
+
+-- 134 of 139 --
+
+5. Use of cell phones while driving:
+a. 	Is not a problem in Idaho
+b. 	Can distract you and cause an accident
+c. 	Is an uncommon occurrence
+d. 	Is highly recommended
+6. When you change lanes it is important to:
+a. 	Signal your intentions ahead of time
+b. 	Check your blind spot
+c. 	Make sure the lane is clear before entering it
+d. 	All of the above
+7. If traffic signals are not functioning due to a power
+outage you:
+a. 	Park your vehicle as far off the road as possible and
+wait for the power to be restored
+b. 	Use hand signals to indicate your intentions to the
+other drivers
+c. 	Turn on your hazard lights and proceed through the
+intersection without stopping
+d. 	Treat the intersections as a 4 way stop
+8. Is it legal to pass when the pavement is marked with
+solid double yellow lines:
+a. 	Yes
+b. 	No
+c. 	Only if there is no oncoming traffic
+d. 	Only if the vehicle ahead of you is driving under the
+speed limit
+135
+
+-- 135 of 139 --
+
+9. A person walking with a white/silver cane or guide dog
+is likely to be:
+a. 	A deaf person
+b. 	A person involved with a traffic study
+c. 	A blind person
+d. 	None of the above
+10. The most common color for warning lights is:
+a. 	Red
+b. 	Green
+c. 	Blue
+d. 	Yellow
+11. This sign means:
+a. 	Curve ahead
+b. 	No u turn
+c. 	No turning
+d. 	None of the above
+12. Is it legal to pass in an intersection:
+a. 	Yes
+b. 	No
+13. What is Idaho’s basic law for the driving speed:
+a. 	Always drive the posted speed
+b. 	Drive at a speed that is reasonable and prudent at all
+times
+c. 	Drive 5-10 mph below the speed limit just to be safe
+d. 	Drive at the same speed as those around you.
+136
+
+-- 136 of 139 --
+
+14. Highways with dashed white lines, can be crossed
+over:
+a. 	At any time
+b. 	Only during daylight hours
+c. 	When it is safe to do so
+d. 	Only when passing another vehicle
+15. Highways can be slick under what conditions:
+a. 	When it has just started to rain, due to oil and water
+creating a greasy mix
+b. 	When there is moisture on the road and the
+temperature is at freezing or below
+c. 	Both of the above
+d. 	None of the above
+16. Many rear-end collisions are caused by:
+a. 	Following the car ahead of you too closely
+b. 	Poor road surface
+c. 	Faulty steering control
+d. 	Persons under the age of 16
+17. As you prepare to merge with traffic on a freeway, you
+should do which of the following:
+a. 	None of these
+b. 	Stop to check traffic
+c. 	Expect others to yield the right-of-way to you
+d. 	Adjust your speed to merge smoothly
+18. The driver of a vehicle approaching a railroad grade
+crossing must:
+a. 	Stop only if a train is in sight
+b. 	Stop only if they choose to
+c. 	Never stop
+d. 	Stop within 50 feet but no less than 15 feet from the
+nearest rail of the crossing when required.
+137
+
+-- 137 of 139 --
+
+19. Normally, you should pass vehicles on the:
+a. 	Left
+b. 	Right
+c. 	Whenever you get a chance
+d. 	Only when the other driver signals it is safe
+20. This sign means:
+a. 	Divided highway ends
+b. 	Divided highway begins
+c. 	None of the above
+d. 	Divided highway ends and begins
+138
+
+-- 138 of 139 --
+
+.
+IDAHO
+DRIVER’S HANDBOOK
+Visit us online at
+dmv.idaho.gov
+Published by
+Idaho Transportation Department
+Division of Motor Vehicles
+P.O. Box 7129
+Boise, Idaho 83707-1129
+Phone: (208) 584-4343
+01-9530906
+
+-- 139 of 139 --

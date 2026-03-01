@@ -198,6 +198,14 @@ function ResultContent() {
         >
           {tex.home}
         </button>
+
+        {/* Manual link */}
+        <a
+          href={`/manuals/${state}`}
+          className="block w-full text-center text-sm text-[#2563EB] hover:underline font-medium py-2"
+        >
+          {tex.studyManual || 'Study the driver manual'} →
+        </a>
       </div>
     </main>
   );

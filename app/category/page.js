@@ -75,6 +75,18 @@ function CategoryContent() {
           );
         })}
       </div>
+
+      {/* Manual link */}
+      {state && (
+        <div className="w-full max-w-md mt-6 text-center">
+          <a
+            href={`/manuals/${state}`}
+            className="text-sm text-[#2563EB] hover:underline font-medium"
+          >
+            {tex.readManual || 'Read the driver manual for this state'} →
+          </a>
+        </div>
+      )}
     </main>
   );
 }
