@@ -1,6 +1,7 @@
 'use client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useState, useEffect } from 'react';
+import Image from 'next/image';
 import { t } from '@/lib/translations';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
@@ -55,6 +56,19 @@ function ResultContent() {
   return (
     <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center p-6">
       <div className="w-full max-w-lg flex flex-col items-center gap-5">
+        {/* Header with nav */}
+        <div className="w-full flex items-center justify-between">
+          <button type="button" onClick={() => router.push(`/category?state=${state}&lang=${lang}`)}
+            className="text-sm text-[#94A3B8] hover:text-[#2563EB] transition font-medium">
+            {tex.back}
+          </button>
+          <a href="/" className="flex items-center gap-1.5 cursor-pointer hover:opacity-90 transition">
+            <Image src="/logo.png" alt="DMVSOS" width={24} height={24} className="rounded-md" />
+            <span className="text-sm font-bold text-[#0B1C3D]">DMVSOS</span>
+          </a>
+          <div className="w-12" />
+        </div>
+
         {/* Result card */}
         <div className="bg-white rounded-2xl p-8 w-full shadow-sm border border-[#E2E8F0] text-center">
           <div className="text-5xl mb-4">{passed ? '🎉' : '😓'}</div>

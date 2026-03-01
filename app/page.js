@@ -23,11 +23,11 @@ export default function Home() {
   const tex = t[langCode] || t.en;
 
   const langs = [
-    { flag: '🇺🇸', code: 'en', name: 'English' },
-    { flag: '🇷🇺', code: 'ru', name: 'Русский' },
-    { flag: '🇪🇸', code: 'es', name: 'Español' },
-    { flag: '🇨🇳', code: 'zh', name: '中文' },
-    { flag: '🇺🇦', code: 'ua', name: 'Українська' },
+    { label: 'EN', code: 'en', name: 'English' },
+    { label: 'RU', code: 'ru', name: 'Русский' },
+    { label: 'ES', code: 'es', name: 'Español' },
+    { label: 'ZH', code: 'zh', name: '中文' },
+    { label: 'UA', code: 'ua', name: 'Українська' },
   ];
 
   async function handleSignOut() {
@@ -175,13 +175,13 @@ export default function Home() {
               onClick={() => { setLang(l.name); saveLang(l.code); }}
               type="button"
               aria-label={`Switch language to ${l.name}`}
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-base transition-all ${
+              className={`px-3 py-1.5 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
                 lang === l.name
-                  ? 'bg-[#0B1C3D] ring-2 ring-[#2563EB] scale-110'
-                  : 'bg-white hover:bg-gray-50 border border-gray-200'
+                  ? 'bg-[#0B1C3D] text-white ring-2 ring-[#2563EB]'
+                  : 'bg-white text-[#64748B] hover:bg-gray-50 border border-gray-200'
               }`}
             >
-              {l.flag}
+              {l.label}
             </button>
           ))}
         </div>

@@ -29,16 +29,29 @@ function TestContent() {
   const [showUpgradeBanner, setShowUpgradeBanner] = useState(false);
   const [motivationalMessage, setMotivationalMessage] = useState(null);
   const [elapsed, setElapsed] = useState(0);
+  const [remaining, setRemaining] = useState(0);
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
+  const [showTimeUp, setShowTimeUp] = useState(false);
   const startTimeRef = useRef(null);
+  const timeLimitRef = useRef(0);
+
+  // Time limits per category (in seconds)
+  const categoryTimeLimit = { dmv: 25 * 60, car: 25 * 60, cdl: 35 * 60, moto: 20 * 60, motorcycle: 20 * 60 };
+  const initialTime = categoryTimeLimit[category] || 25 * 60;
 
   const formatTime = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
 
   useEffect(() => {
     if (!testMode || testMode === null) return;
     startTimeRef.current = Date.now();
+    timeLimitRef.current = initialTime;
+    setRemaining(initialTime);
     const interval = setInterval(() => {
-      setElapsed(Math.floor((Date.now() - startTimeRef.current) / 1000));
+      const elapsedSec = Math.floor((Date.now() - startTimeRef.current) / 1000);
+      setElapsed(elapsedSec);
+      const rem = Math.max(0, timeLimitRef.current - elapsedSec);
+      setRemaining(rem);
+      if (rem === 0) setShowTimeUp(true);
     }, 1000);
     return () => clearInterval(interval);
   }, [testMode]);
@@ -297,23 +310,26 @@ function TestContent() {
     <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
       <div className="w-full max-w-md">
 
+        {/* Header with nav */}
+        <div className="flex items-center justify-between mb-3">
+          <button type="button" onClick={() => router.push(`/category?state=${state}&lang=${lang}`)}
+            className="text-sm text-[#94A3B8] hover:text-[#2563EB] transition font-medium">
+            {tex.back}
+          </button>
+          <a href="/" className="flex items-center gap-1.5 cursor-pointer hover:opacity-90 transition">
+            <Image src="/logo.png" alt="DMVSOS" width={24} height={24} className="rounded-md" />
+            <span className="text-sm font-bold text-[#0B1C3D]">DMVSOS</span>
+          </a>
+          <div className="w-12" />
+        </div>
+
         <div className="flex items-center justify-between mb-5">
-          <div className="flex items-center gap-2">
-            <button type="button" onClick={() => router.push(`/category?state=${state}&lang=${lang}`)}
-              className="text-sm text-[#94A3B8] hover:text-[#2563EB] transition">
-              {tex.back}
-            </button>
-            <button type="button" onClick={() => setShowLeaveConfirm(true)}
-              className="text-[#94A3B8] hover:text-[#2563EB] transition p-0.5"
-              title="Home"
-              aria-label="Home">
-              🏠
-            </button>
-          </div>
           <div className="flex items-center gap-3">
             <span className="text-sm text-[#16A34A]">✅ {correctCount}</span>
             <span className="text-sm text-[#DC2626]">❌ {wrongCount}</span>
-            <span className="text-sm text-[#94A3B8]">⏱ {formatTime(elapsed)}</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className={`text-sm font-medium ${remaining <= 60 ? 'text-[#DC2626]' : 'text-[#94A3B8]'}`}>⏱ {formatTime(remaining)}</span>
             <span className="text-sm font-medium text-[#94A3B8]">{current + 1} / {total}</span>
           </div>
         </div>
@@ -404,6 +420,32 @@ function TestContent() {
             <button type="button" onClick={() => router.push(`/result?score=${score}&total=${questions.length}&lang=${lang}`)}
               className="text-sm text-[#94A3B8] hover:text-[#64748B] transition">
               {tex.seeResults}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Time's up modal */}
+      {showTimeUp && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
+          <div className="bg-white rounded-2xl p-8 w-full max-w-sm shadow-xl border border-[#E2E8F0] text-center">
+            <h2 className="text-2xl font-bold text-[#0B1C3D] mb-4">{tex.timesUp}</h2>
+            <button type="button" onClick={() => {
+              const allAnswers = userAnswersRef.current;
+              const finalScore = allAnswers.reduce((acc, ans, i) => acc + (ans === questions[i]?.correctAnswerIndex ? 1 : 0), 0);
+              sessionStorage.setItem('testResults', JSON.stringify({ questions, userAnswers: allAnswers, elapsed, state, category, lang }));
+              router.push(`/result?score=${finalScore}&total=${questions.length}&lang=${lang}`);
+            }}
+              className="w-full bg-[#2563EB] text-white py-3.5 rounded-xl font-semibold text-base hover:bg-[#1D4ED8] transition-all mb-3">
+              {tex.seeResultsBtn}
+            </button>
+            <button type="button" onClick={() => {
+              timeLimitRef.current += 10 * 60;
+              setRemaining(r => r + 10 * 60);
+              setShowTimeUp(false);
+            }}
+              className="w-full border border-[#E2E8F0] text-[#1E293B] py-3.5 rounded-xl font-semibold text-base hover:bg-[#F8FAFC] hover:border-[#2563EB] transition-all">
+              {tex.addTime}
             </button>
           </div>
         </div>
