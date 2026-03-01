@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import { STATE_DISPLAY, STATE_SLUGS, STATE_META, CATEGORY_LABELS } from '@/lib/manual-data';
+import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 import { getStatesWithManuals } from '@/lib/manual-parser';
+import ManualSelector from './ManualSelector';
 
 const SUPABASE_URL = 'https://yaogndpgnewqffbjrsgz.supabase.co';
 const INDEX_URL = `${SUPABASE_URL}/storage/v1/object/public/manuals/manuals-index.json`;
@@ -33,7 +34,6 @@ async function fetchManualIndex() {
 export default async function ManualsPage() {
   const index = await fetchManualIndex();
   const statesWithManuals = getStatesWithManuals();
-  const year = new Date().getFullYear();
 
   // Count total PDFs
   let totalPdfs = 0;
@@ -48,7 +48,7 @@ export default async function ManualsPage() {
   const jsonLd = JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: `Free DMV Driver Manuals for All 50 States ${year}`,
+    name: 'Free DMV Driver Manuals for All 50 States',
     description: 'Official driver handbooks for all 50 US states. Download PDF manuals in multiple languages.',
     url: 'https://dmvsos.com/manuals',
     publisher: { '@type': 'Organization', name: 'DMVSOS', url: 'https://dmvsos.com' },
@@ -56,90 +56,106 @@ export default async function ManualsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#F0F4FF] to-white font-[family-name:var(--font-inter)]">
+    <main style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}
+      className="min-h-screen flex flex-col items-center px-4 font-[family-name:var(--font-inter)]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
 
+      {/* Background blobs */}
+      <div className="fixed top-[-200px] right-[-200px] w-[600px] h-[600px] rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(26,86,219,0.08) 0%, transparent 70%)' }} />
+      <div className="fixed bottom-[-150px] left-[-150px] w-[500px] h-[500px] rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 70%)' }} />
+
       {/* Header */}
-      <header className="bg-white border-b border-[#E2E8F0] sticky top-0 z-30">
-        <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 font-bold text-lg text-[#1A2B4A]">
-            DMVSOS
+      <header className="w-full max-w-lg mx-auto pt-5 pb-3 px-4">
+        <div className="flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition">
+            <img src="/logo.png" alt="DMVSOS" width={32} height={32} className="rounded-lg" />
+            <span className="text-lg font-bold text-[#0B1C3D]" style={{ letterSpacing: '-0.02em' }}>DMVSOS</span>
           </Link>
-          <div className="flex items-center gap-3">
-            <Link href="/" className="text-sm text-[#64748B] hover:text-[#1A2B4A]">
-              Back to Home
-            </Link>
-          </div>
+          <Link href="/" className="text-sm font-medium text-[#2563EB] hover:text-[#1D4ED8] transition">
+            Practice Tests
+          </Link>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-8">
-        {/* Hero */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold text-[#1A2B4A] mb-3">
-            Free DMV Driver Manuals {year}
-          </h1>
-          <p className="text-[#64748B] text-lg max-w-2xl mx-auto">
-            Official driver handbooks for all 50 US states. Read online or download PDF manuals in multiple languages.
-          </p>
-          <p className="text-sm text-[#94A3B8] mt-2">
-            50 states &middot; {totalPdfs > 0 ? `${totalPdfs} PDFs available` : 'PDF downloads available'}
-          </p>
-        </div>
+      {/* Interactive selector (client component with lang switcher + hero + card) */}
+      <ManualSelector />
 
-        {/* All states grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      {/* Stats bar */}
+      <section className="w-full max-w-lg mx-auto px-4 mb-8">
+        <div className="grid grid-cols-3 gap-2">
+          {[
+            { value: '50', label: 'States' },
+            { value: String(totalPdfs || '190+'), label: 'PDFs' },
+            { value: '20+', label: 'Languages' },
+          ].map((stat) => (
+            <div key={stat.label} className="bg-white rounded-2xl p-3 text-center shadow-sm border border-[#E2E8F0]/60">
+              <div className="text-lg sm:text-xl font-black text-[#0B1C3D]">{stat.value}</div>
+              <div className="text-[10px] text-[#94A3B8] font-medium mt-0.5">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Browse all states */}
+      <section className="w-full max-w-lg mx-auto mb-8 px-4">
+        <h2 className="text-center text-lg font-bold text-[#0B1C3D] mb-5">
+          Browse All States
+        </h2>
+
+        <div className="grid grid-cols-2 gap-2">
           {STATE_SLUGS.map(state => {
             const name = STATE_DISPLAY[state];
             const meta = STATE_META[state];
             const indexData = index?.[state];
             const hasOnlineManual = statesWithManuals.includes(state);
 
-            // Count languages from index
             let langCount = 0;
-            let catList = '';
             if (indexData) {
-              const langs = new Set(
+              langCount = new Set(
                 Object.values(indexData).flatMap(c => Object.keys(c))
-              );
-              langCount = langs.size;
-              catList = Object.keys(indexData).map(c => CATEGORY_LABELS[c] || c).join(', ');
+              ).size;
             }
 
             return (
               <Link
                 key={state}
                 href={`/manuals/${state}`}
-                className="text-left p-4 rounded-xl border border-[#E2E8F0] bg-white hover:border-[#2563EB] hover:bg-[#F0F4FF] transition-colors group"
+                className="p-3 rounded-xl border border-[#E2E8F0] bg-white hover:border-[#2563EB] hover:shadow-md transition-all group"
               >
-                <div className="font-medium text-[#1A2B4A] group-hover:text-[#2563EB]">
-                  {name}
-                </div>
-                <div className="text-xs text-[#94A3B8] mt-0.5">
-                  {meta.abbr} &middot; {meta.agency.split(' ').slice(-2).join(' ')}
-                </div>
-                {langCount > 0 && (
-                  <div className="text-sm text-[#94A3B8] mt-1">
-                    {catList} &middot; {langCount} {langCount === 1 ? 'language' : 'languages'}
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-semibold text-sm text-[#1A2B4A] group-hover:text-[#2563EB]">
+                      {name}
+                    </div>
+                    <div className="flex items-center gap-1 mt-0.5">
+                      <span className="text-[10px] text-[#94A3B8]">{meta.abbr}</span>
+                      {langCount > 0 && (
+                        <span className="text-[10px] text-[#94A3B8]">&middot; {langCount} lang</span>
+                      )}
+                    </div>
                   </div>
-                )}
-                {hasOnlineManual && (
-                  <span className="inline-block mt-2 text-xs font-medium text-[#2563EB] bg-[#EFF6FF] px-2 py-0.5 rounded-full">
-                    Read online
-                  </span>
-                )}
+                  {hasOnlineManual && (
+                    <span className="text-[10px] font-medium text-[#2563EB] bg-[#EFF6FF] px-1.5 py-0.5 rounded-full shrink-0">
+                      online
+                    </span>
+                  )}
+                </div>
               </Link>
             );
           })}
         </div>
+      </section>
 
-        {/* Bottom CTA */}
-        <div className="text-center mt-12">
-          <h2 className="text-xl font-bold text-[#1A2B4A] mb-3">
+      {/* Bottom CTA */}
+      <section className="w-full max-w-lg mx-auto mb-8 px-4">
+        <div className="bg-[#0B1C3D] rounded-2xl p-6 border border-[#1e3a5f] shadow-sm text-center">
+          <h2 className="text-base font-bold text-white mb-2">
             Ready to practice?
           </h2>
-          <p className="text-sm text-[#64748B] mb-4">
-            After studying your state&apos;s manual, take a free practice test to check your knowledge.
+          <p className="text-sm text-[#94A3B8] mb-4">
+            After studying your state&apos;s manual, take a free practice test.
           </p>
           <Link
             href="/"
@@ -148,14 +164,14 @@ export default async function ManualsPage() {
             Take a Free Practice Test →
           </Link>
         </div>
-      </main>
+      </section>
 
       {/* Footer */}
-      <footer className="border-t border-[#E2E8F0] mt-16 py-8 text-center text-sm text-[#94A3B8]">
-        <div className="max-w-5xl mx-auto px-4">
+      <footer className="w-full max-w-lg mx-auto px-4 mt-4 pb-8">
+        <p className="text-xs text-[#94A3B8] text-center leading-relaxed">
           DMVSOS.com &mdash; Free DMV Practice Tests &amp; Driver Manuals
-        </div>
+        </p>
       </footer>
-    </div>
+    </main>
   );
 }

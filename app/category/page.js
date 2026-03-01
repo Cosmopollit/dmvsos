@@ -83,7 +83,7 @@ function CategoryContent() {
             href={`/manuals/${state}`}
             className="text-sm text-[#2563EB] hover:underline font-medium"
           >
-            {tex.readManual || 'Read the driver manual for this state'} →
+            {tex.readManual} →
           </a>
         </div>
       )}

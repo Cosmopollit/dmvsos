@@ -270,6 +270,38 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Driver Manual link — context-aware */}
+      <div className="w-full max-w-lg mx-auto px-4 mb-4">
+        {(() => {
+          const manualState = state || (typeof document !== 'undefined' && document.cookie.match(/dmvsos_geo_state=([^;]+)/)?.[1]) || '';
+          const displayName = manualState
+            ? stateOptions.find(s => s.code === manualState)?.name?.replace(/\s*\([A-Z]{2}\)\s*$/, '') || manualState
+            : '';
+          const href = manualState ? `/manuals/${manualState}` : '/manuals';
+          const subtitle = manualState
+            ? tex.manualsCta.replace('{state}', displayName)
+            : tex.manualsSectionDesc;
+
+          return (
+            <a
+              href={href}
+              className="flex items-center gap-3 bg-white rounded-2xl px-4 py-3.5 shadow-sm border border-[#E2E8F0]/60 hover:border-[#2563EB] hover:shadow-md transition-all group"
+            >
+              <div className="w-9 h-9 rounded-lg bg-[#EFF6FF] flex items-center justify-center text-lg shrink-0 group-hover:bg-[#DBEAFE] transition-colors">📖</div>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-semibold text-[#0B1C3D] group-hover:text-[#2563EB]">
+                  {tex.manualsSectionTitle}
+                </div>
+                <div className="text-[11px] text-[#94A3B8]">
+                  {subtitle}
+                </div>
+              </div>
+              <div className="text-[#94A3B8] shrink-0 group-hover:text-[#2563EB]">→</div>
+            </a>
+          );
+        })()}
+      </div>
+
       {/* Stats bar */}
       <section className="w-full max-w-lg mx-auto px-4 mb-8">
         <div className="grid grid-cols-5 gap-2">
@@ -464,39 +496,6 @@ export default function Home() {
             <span className="text-xs text-[#059669] font-medium">✓ {tex.guaranteeBullet2}</span>
             <span className="text-xs text-[#059669] font-medium">✓ {tex.guaranteeBullet3}</span>
           </div>
-        </div>
-      </section>
-
-      {/* Free Driver Manuals section */}
-      <section className="w-full max-w-lg mx-auto mb-8 px-4">
-        <h2 className="text-lg font-bold text-[#0B1C3D] text-center mb-4">
-          {tex.manualsSectionTitle || 'Free DMV Driver Manuals'}
-        </h2>
-        <p className="text-sm text-[#64748B] text-center mb-4">
-          {tex.manualsSectionDesc || 'Study the official driver handbook for your state before taking the test.'}
-        </p>
-        <div className="grid grid-cols-2 gap-2">
-          {[
-            { slug: 'california', name: 'California' },
-            { slug: 'texas', name: 'Texas' },
-            { slug: 'florida', name: 'Florida' },
-            { slug: 'new-york', name: 'New York' },
-            { slug: 'washington', name: 'Washington' },
-            { slug: 'illinois', name: 'Illinois' },
-          ].map(s => (
-            <a
-              key={s.slug}
-              href={`/manuals/${s.slug}`}
-              className="p-3 rounded-xl border border-[#E2E8F0] bg-white text-sm font-medium text-[#1A2B4A] hover:border-[#2563EB] hover:bg-[#F0F4FF] transition-colors text-center"
-            >
-              {s.name}
-            </a>
-          ))}
-        </div>
-        <div className="text-center mt-3">
-          <a href="/manuals" className="text-sm font-medium text-[#2563EB] hover:underline">
-            {tex.viewAllManuals || 'View all 50 state manuals →'}
-          </a>
         </div>
       </section>
 
