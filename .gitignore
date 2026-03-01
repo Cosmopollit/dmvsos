@@ -56,3 +56,6 @@ next-env.d.ts
 .verify-images-strict-*-progress.json
 .download-manuals-progress.json
 .write-explanations-*-progress.json
+.audit-image-refs-*-progress.json
+.audit-image-refs-*-report.json
+.audit-image-refs-*-rollback.json
