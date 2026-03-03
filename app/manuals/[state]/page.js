@@ -144,7 +144,7 @@ export default async function StateManualPage({ params }) {
             </Link>
             <Link href={`/category?state=${state}&lang=${lang}`}
               className="text-xs font-semibold text-[#2563EB] hover:text-[#1D4ED8] transition">
-              {tex.manualsTakeTest?.replace('{state}', '') || 'Free Test →'}
+              {tex.startFree || 'Free Test →'}
             </Link>
           </div>
         </div>
