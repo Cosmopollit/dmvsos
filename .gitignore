@@ -62,3 +62,10 @@ next-env.d.ts
 .assign-deictic-*-progress.json
 .assign-deictic-*-rollback.json
 .assign-deictic-*-report.json
+
+# scripts: data exports and intermediate files
+all-questions.json
+questions-with-images.json
+questions-with-images-en.json
+broken-clusters.json
+broken-question-ids.json
