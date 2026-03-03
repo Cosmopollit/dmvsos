@@ -167,6 +167,20 @@ export default function Home() {
         </div>
       </header>
 
+      {/* Nav links */}
+      <nav className="w-full max-w-lg mx-auto px-4 pb-2">
+        <div className="flex items-center gap-1">
+          <a href="/dmv-test"
+            className="text-xs font-semibold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] rounded-full px-3 py-1 hover:bg-[#DBEAFE] transition-colors">
+            📋 Practice Tests
+          </a>
+          <a href="/manuals"
+            className="text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-3 py-1 hover:border-[#2563EB] hover:text-[#2563EB] transition-colors">
+            📖 Manuals
+          </a>
+        </div>
+      </nav>
+
       {/* Language switcher — separate row, compact */}
       <div className="w-full max-w-lg mx-auto px-4 pb-3">
         <div className="flex items-center justify-center gap-1.5">
