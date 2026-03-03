@@ -480,6 +480,13 @@ function TestContent() {
           </p>
         )}
 
+        {/* Q18 pre-paywall nudge */}
+        {!isPro && current === 17 && showAnswer && tex.twoQuestionsLeft && (
+          <div className="bg-[#FFF7ED] border border-[#FED7AA] rounded-xl px-4 py-3 mb-4 text-sm text-[#92400E] font-medium text-center">
+            {tex.twoQuestionsLeft}
+          </div>
+        )}
+
         {!showUpgradeBanner && (
           <div className="flex gap-3">
             {current > 0 && (
@@ -509,11 +516,11 @@ function TestContent() {
               <div className="text-4xl mb-3">👑</div>
               <h2 className="text-2xl font-bold text-[#0B1C3D] mb-2">{tex.upgradeTitle}</h2>
               <p className="text-[#475569] text-sm leading-relaxed mb-3">
-                {tex.upgradeDesc}
+                {(tex.upgradeDesc || '').replace('{percent}', String(Math.round((score / 20) * 100)))}
               </p>
               {/* Current score */}
               <p className="text-[#2563EB] font-bold text-base mb-5">
-                {(tex.upgradeScoreSoFar || 'Your score: {score}/20').replace('{score}', String(score))}
+                {(tex.upgradeScoreSoFar || 'Your score: {score}/20').replace('{score}', String(score)).replace('{percent}', String(Math.round((score / 20) * 100)))}
               </p>
               <ul className="text-left text-sm text-[#475569] space-y-2.5 mb-6">
                 <li className="flex items-start gap-2"><span className="shrink-0">✅</span><span>{(tex.upgradeFeature1 || '✅ All 40 questions per test').replace(/^✅\s*/, '')}</span></li>

@@ -454,13 +454,17 @@ export default function Home() {
               <li>{tex.feature6}</li>
             </ul>
             <p className="text-sm font-semibold text-[#F59E0B] mb-4">{tex.proNote}</p>
+            {/* Money-back guarantee — visible before CTA */}
+            <div className="flex items-center justify-center gap-1.5 mb-4">
+              <span className="text-xs font-semibold text-[#10B981] bg-[#10B981]/10 px-3 py-1.5 rounded-full border border-[#10B981]/30">
+                🛡️ {tex.moneyBack}
+              </span>
+            </div>
             <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}`)}
               className="w-full bg-[#F59E0B] text-[#0B1C3D] py-4 rounded-xl font-bold text-base hover:bg-[#FBBF24] transition-all">
               {tex.upgradBtn}
             </button>
             <p className="text-xs text-[#94A3B8] mt-3">{tex.cancelAnytime}</p>
-            {/* Money-back guarantee */}
-            <p className="text-xs text-[#10B981] font-medium mt-2">🛡️ {tex.moneyBack}</p>
           </div>
           {/* Free plan */}
           <div className="rounded-2xl p-6 border border-[#BFDBFE] shadow-sm flex flex-col text-center" style={{ background: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' }}>
