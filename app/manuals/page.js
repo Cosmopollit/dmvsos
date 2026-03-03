@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { cookies } from 'next/headers';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 import { getStatesWithManuals } from '@/lib/manual-parser';
 import ManualsLibrary from './ManualsLibrary';
@@ -31,6 +32,9 @@ async function fetchManualIndex() {
 }
 
 export default async function ManualsPage() {
+  const cookieStore = await cookies();
+  const serverLang = cookieStore.get('dmvsos_lang')?.value || 'en';
+
   const index = await fetchManualIndex();
   const statesWithManuals = getStatesWithManuals();
 
@@ -117,6 +121,7 @@ export default async function ManualsPage() {
         statesData={statesData}
         totalPdfs={totalPdfs}
         langCount={allLangs.size}
+        serverLang={serverLang}
       />
 
       {/* Footer */}
