@@ -26,8 +26,9 @@ export async function POST(request) {
       const planType = session.metadata?.plan_type || 'full_prep';
 
       if (email) {
-        // plan_expires_at = 30 days from now
-        const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+        const PLAN_DAYS = { quick_pass: 7, full_prep: 30, guaranteed_pass: 90 };
+        const days = PLAN_DAYS[planType] || 30;
+        const expiresAt = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
         const { error } = await supabase
           .from('profiles')
           .upsert(

@@ -38,8 +38,6 @@ export default function Home() {
     await supabase.auth.signOut();
   }
 
-  const [demoSelected, setDemoSelected] = useState(null);
-  const [demoRevealed, setDemoRevealed] = useState(false);
   const stateOptions = STATE_OPTIONS.map((display) => ({ name: display, code: stateToSlug(display) }));
   const steps = [
     { emoji: '📱', label: tex.step1, msg: tex.stepMsg1 },
@@ -48,39 +46,24 @@ export default function Home() {
     { emoji: '🚗', label: tex.step4, msg: tex.stepMsg4 },
   ];
 
-  const testimonials = [
-    {
-      text: '"Готовился на русском языке, всё понятно и чётко. Сдал с первого раза в Bellevue."',
-      name: 'Михаил Д.', location: 'Bellevue, WA', initial: 'М',
-      bg: 'bg-blue-100', color: 'text-blue-600', border: 'border-l-blue-500',
-    },
-    {
-      text: '"Practiqué dos días en español y pasé el examen a la primera en Santa Monica."',
-      name: 'Carlos R.', location: 'Santa Monica, CA', initial: 'C',
-      bg: 'bg-orange-100', color: 'text-orange-600', border: 'border-l-orange-500',
-    },
-    {
-      text: '"用中文练习很方便，两天后在Fort Lauderdale一次通过考试！"',
-      name: 'Wei L.', location: 'Fort Lauderdale, FL', initial: 'W',
-      bg: 'bg-red-100', color: 'text-red-600', border: 'border-l-red-500',
-    },
-    {
-      text: '"I was so nervous but after practicing here every day, I passed on the first try!"',
-      name: 'Sarah M.', location: 'Tacoma, WA', initial: 'S',
-      bg: 'bg-green-100', color: 'text-green-600', border: 'border-l-green-500',
-    },
-  ];
-
   const faqJsonLd = JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: [
       {
         '@type': 'Question',
-        name: 'How many questions are on the DMV written test?',
+        name: 'Is this a subscription? Will I be charged again?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Most states have between 20 and 50 questions on the DMV written knowledge test. The passing score is typically 80%. DMVSOS provides state-specific practice tests that match your state\'s actual exam format.',
+          text: 'No. All plans are one-time payments. No subscription, no auto-renewal, no hidden charges.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'How long does access last?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Quick Pass gives 7 days of access, Full Prep gives 30 days, and Guaranteed Pass gives 90 days.',
         },
       },
       {
@@ -88,23 +71,31 @@ export default function Home() {
         name: 'Can I take the DMV practice test in Spanish or other languages?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Yes! DMVSOS offers free DMV practice tests in English, Spanish, Russian, Chinese, and Ukrainian. Choose your preferred language and practice with real DMV-style questions.',
+          text: 'Yes! DMVSOS offers DMV practice tests in English, Spanish, Russian, Chinese, and Ukrainian for all 50 US states.',
         },
       },
       {
         '@type': 'Question',
-        name: 'Is this DMV practice test free?',
+        name: 'Does DMVSOS cover all 50 states?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Yes, DMVSOS offers a free tier with 20 practice questions per test for all 50 US states. Paid plans starting at $7.99 (30-day access) unlock the full question bank, detailed explanations, and all test types (Car, CDL, Motorcycle).',
+          text: 'Yes. DMVSOS covers all 50 US states for Car, CDL, and Motorcycle permit tests.',
         },
       },
       {
         '@type': 'Question',
-        name: 'What types of DMV tests can I practice for?',
+        name: "What's the difference between Quick Pass and Full Prep?",
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'DMVSOS covers Car (regular driver\'s license), CDL (Commercial Driver\'s License), and Motorcycle permit tests for all 50 US states.',
+          text: 'Quick Pass ($7.99) gives 7 days access to the full question bank. Full Prep ($14.99) adds detailed explanations, progress tracking, and 30 days of access.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the Pass Guarantee?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Guaranteed Pass ($39.99) includes a 100% money-back guarantee if you fail your DMV test. It also includes 90 days of access and direct support via Telegram and WhatsApp in your language.',
         },
       },
     ],
@@ -354,166 +345,122 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Motivator: 50% fail stat */}
-      <section className="w-full max-w-lg mx-auto mb-8 px-4">
-        <div className="bg-[#FEF3C7] border border-[#FDE68A] rounded-2xl p-5 text-center">
-          <p className="text-sm font-bold text-[#92400E] mb-1">{tex.failStatTitle}</p>
-          <p className="text-sm text-[#78350F] leading-relaxed">{tex.failStatText}</p>
-        </div>
-      </section>
-
-      {/* Demo question */}
-      <section className="w-full max-w-lg mx-auto mb-8 px-4">
-        <h2 className="text-center text-lg font-bold text-[#0B1C3D] mb-4">{tex.demoTitle}</h2>
-        <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#E2E8F0]/60">
-          <p className="text-sm font-semibold text-[#1E293B] mb-4">{tex.demoQuestion}</p>
-          <div className="flex flex-col gap-2">
-            {[
-              { key: 0, label: 'A', text: tex.demoA },
-              { key: 1, label: 'B', text: tex.demoB },
-              { key: 2, label: 'C', text: tex.demoC },
-              { key: 3, label: 'D', text: tex.demoD },
-            ].map((opt) => {
-              const isCorrect = opt.key === 1;
-              const isSelected = demoSelected === opt.key;
-              let bg = 'bg-[#F8FAFC] hover:bg-[#EFF6FF] border-[#E2E8F0]';
-              if (demoRevealed && isSelected && isCorrect) bg = 'bg-[#D1FAE5] border-[#10B981]';
-              if (demoRevealed && isSelected && !isCorrect) bg = 'bg-[#FEE2E2] border-[#DC2626]';
-              if (demoRevealed && !isSelected && isCorrect) bg = 'bg-[#D1FAE5] border-[#10B981]';
-              return (
-                <button
-                  key={opt.key}
-                  type="button"
-                  onClick={() => { if (!demoRevealed) { setDemoSelected(opt.key); setDemoRevealed(true); } }}
-                  className={`w-full text-left px-4 py-3 rounded-xl border text-sm transition-all ${bg} ${demoRevealed ? 'cursor-default' : 'cursor-pointer'}`}
-                >
-                  <span className="font-semibold text-[#64748B] mr-2">{opt.label}.</span>
-                  <span className="text-[#1E293B]">{opt.text}</span>
-                </button>
-              );
-            })}
-          </div>
-          {demoRevealed && (
-            <div className={`mt-4 p-3 rounded-xl text-sm ${demoSelected === 1 ? 'bg-[#ECFDF5] text-[#065F46]' : 'bg-[#FEF2F2] text-[#991B1B]'}`}>
-              <p className="font-medium">{demoSelected === 1 ? tex.demoCorrect : tex.demoWrong}</p>
-              <p className="mt-1 text-xs opacity-80">{tex.demoCta}</p>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Testimonials — horizontal scroll on mobile, 2x2 grid on desktop */}
-      <section className="w-full max-w-lg mx-auto mb-8 px-4">
-        <h2 className="text-center text-xl font-bold text-[#0B1C3D] mb-1">
-          {tex.testimonialsTitle}
-        </h2>
-        <p className="text-center text-sm text-[#64748B] mb-6">{tex.thousandsPassed}</p>
-
-        <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 sm:grid sm:grid-cols-2 sm:overflow-visible">
-          {testimonials.map((item, i) => (
-            <div
-              key={i}
-              className={`min-w-[280px] sm:min-w-0 bg-white rounded-2xl p-5 shadow-sm border-l-4 ${item.border}`}
-            >
-              <div className="flex gap-0.5 mb-2 text-sm">⭐⭐⭐⭐⭐</div>
-              <p className="text-sm text-[#475569] mb-3 leading-relaxed">{item.text}</p>
-              <div className="flex items-center gap-2">
-                <div className={`w-8 h-8 rounded-full ${item.bg} flex items-center justify-center font-bold ${item.color} text-sm`}>
-                  {item.initial}
-                </div>
-                <div>
-                  <div className="text-sm font-semibold text-[#0B1C3D]">{item.name}</div>
-                  <div className="text-xs text-gray-400">{item.location}</div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* Pricing */}
       <section className="w-full max-w-2xl mx-auto mb-8 px-4">
         <h2 className="text-xl font-bold text-[#0B1C3D] text-center mb-2">{tex.pricingHeading}</h2>
         <p className="text-sm text-[#64748B] text-center mb-6 leading-relaxed max-w-md mx-auto">{tex.pricingSubtext}</p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {/* Quick Pass */}
+          {/* Quick Pass — white, gray border */}
           <div className="bg-white rounded-2xl p-5 border border-[#E2E8F0] shadow-sm flex flex-col text-center">
             <h3 className="text-sm font-bold text-[#2563EB] mb-1">Quick Pass</h3>
             <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">$7.99</div>
-            <div className="text-xs text-[#64748B] mb-3">30 days · one payment</div>
+            <div className="text-xs text-[#64748B] mb-3">{tex.quickPassDuration || '7 days · one payment'}</div>
             <ul className="space-y-1.5 text-xs text-[#475569] mb-4 text-left flex-1">
-              <li>✓ Full question bank</li>
-              <li>✓ All 50 states</li>
-              <li>✓ Car, CDL & Motorcycle</li>
-              <li>✓ 5 languages</li>
+              {(tex.quickPassFeatures || ['Full question bank', 'All 50 states', 'Car, CDL & Motorcycle', '5 languages']).map((f, i) => (
+                <li key={i}>{f}</li>
+              ))}
             </ul>
             <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=quick_pass`)}
-              className="w-full py-2.5 rounded-xl font-semibold text-sm bg-[#F1F5F9] text-[#0B1C3D] hover:bg-[#E2E8F0] transition-all">
-              {tex.upgradeCta || 'Get Quick Pass'}
+              className="w-full py-2.5 rounded-xl font-semibold text-sm border border-[#E2E8F0] text-[#0B1C3D] hover:bg-[#F1F5F9] transition-all">
+              {tex.planGetQuickPass || 'Get Quick Pass — $7.99'}
             </button>
           </div>
-          {/* Full Prep — Most Popular */}
+          {/* Full Prep — dark navy, blue border, MOST POPULAR */}
           <div className="relative bg-[#0B1C3D] rounded-2xl p-5 border-2 border-[#2563EB] shadow-sm flex flex-col text-center">
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#2563EB] text-white text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap">
               {tex.mostPopular}
             </span>
             <h3 className="text-sm font-bold text-[#F59E0B] mb-1 mt-1">Full Prep</h3>
             <div className="text-2xl font-black text-white mb-0.5">$14.99</div>
-            <div className="text-xs text-[#94A3B8] mb-3">30 days · one payment</div>
+            <div className="text-xs text-[#94A3B8] mb-3">{tex.fullPrepDuration || '30 days · one payment'}</div>
             <ul className="space-y-1.5 text-xs text-[#CBD5E1] mb-4 text-left flex-1">
-              <li>✅ Everything in Quick Pass</li>
-              <li>✅ Challenge Bank (coming soon)</li>
-              <li>✅ Readiness Meter (coming soon)</li>
-              <li>✅ Detailed explanations</li>
+              {(tex.fullPrepFeatures || ['Everything in Quick Pass', 'Challenge Bank (coming soon)', 'Readiness Meter (coming soon)', 'Detailed explanations']).map((f, i) => (
+                <li key={i}>{f}</li>
+              ))}
             </ul>
             <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=full_prep`)}
-              className="w-full py-2.5 rounded-xl font-bold text-sm bg-[#F59E0B] text-[#0B1C3D] hover:bg-[#FBBF24] transition-all">
-              {tex.upgradeCta || 'Get Full Prep'}
+              className="w-full py-2.5 rounded-xl font-bold text-sm bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition-all animate-pulse">
+              {tex.planGetFullPrep || 'Get Full Prep — $14.99'}
             </button>
           </div>
-          {/* Guaranteed Pass */}
+          {/* Guaranteed Pass — white, gold border */}
           <div className="relative bg-white rounded-2xl p-5 border-2 border-[#F59E0B] shadow-sm flex flex-col text-center">
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#F59E0B] text-[#0B1C3D] text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap">
-              🛡️ GUARANTEED
+              {tex.planGuaranteedBadge || '🛡️ GUARANTEED'}
             </span>
             <h3 className="text-sm font-bold text-[#92400E] mb-1 mt-1">Guaranteed Pass</h3>
             <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">$39.99</div>
-            <div className="text-xs text-[#64748B] mb-3">30 days · one payment</div>
+            <div className="text-xs text-[#64748B] mb-3">{tex.guaranteedPassDuration || '90 days · one payment'}</div>
             <ul className="space-y-1.5 text-xs text-[#475569] mb-4 text-left flex-1">
-              <li>✅ Everything in Full Prep</li>
-              <li>✅ Pass or 100% refund</li>
-              <li>✅ Priority support</li>
-              <li>✅ Study checklist</li>
+              {(tex.guaranteedPassFeatures || ['Everything in Full Prep', '🛡️ Pass or 100% refund', 'Priority support', 'Study checklist']).map((f, i) => (
+                <li key={i}>{f}</li>
+              ))}
             </ul>
             <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=guaranteed_pass`)}
-              className="w-full py-2.5 rounded-xl font-semibold text-sm bg-[#0B1C3D] text-white hover:bg-[#1E3A5F] transition-all">
-              {tex.upgradeCta || 'Get Guaranteed Pass'}
+              className="w-full py-2.5 rounded-xl font-semibold text-sm bg-[#F59E0B] text-[#0B1C3D] hover:bg-[#FBBF24] transition-all">
+              {tex.planGetGuaranteedPass || 'Get Guaranteed Pass — $39.99'}
             </button>
           </div>
         </div>
-        {/* Free start link */}
-        <p className="text-center text-sm text-[#64748B] mt-4">
-          Or{' '}
+        <p className="text-center text-sm text-[#64748B] mt-4">{tex.pricingValueProp}</p>
+        <p className="text-center text-sm text-[#64748B] mt-2">
           <button type="button"
             onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
             className="text-[#2563EB] hover:underline font-medium">
-            start free — 20 questions, no signup needed →
+            {tex.pricingStartFree || 'Or start free — 20 questions, no signup needed →'}
           </button>
         </p>
       </section>
 
-      {/* Pass Guarantee block */}
+      {/* Social proof */}
       <section className="w-full max-w-lg mx-auto mb-8 px-4">
-        <div className="bg-[#ECFDF5] border border-[#A7F3D0] rounded-2xl p-6 text-center">
-          <div className="text-3xl mb-2">🛡️</div>
-          <h3 className="text-base font-bold text-[#065F46] mb-2">🛡️ Pass Guarantee — exclusive to Guaranteed Pass ($39.99)</h3>
-          <p className="text-sm text-[#047857] leading-relaxed mb-4">{tex.guaranteeText}</p>
-          <div className="flex flex-col gap-1.5">
-            <span className="text-xs text-[#059669] font-medium">✓ {tex.guaranteeBullet1}</span>
-            <span className="text-xs text-[#059669] font-medium">✓ One payment · 30 days access · No auto-renewal</span>
-            <span className="text-xs text-[#059669] font-medium">✓ {tex.guaranteeBullet3}</span>
+        <h2 className="text-lg font-bold text-[#0B1C3D] text-center mb-6">{tex.socialProofTitle}</h2>
+        <div className="grid grid-cols-3 gap-4 mb-4">
+          <div className="bg-white rounded-2xl p-4 text-center shadow-sm border border-[#E2E8F0]/60">
+            <div className="text-2xl font-black text-[#2563EB]">34K+</div>
+            <div className="text-xs text-[#94A3B8] font-medium mt-0.5">{tex.socialProofQuestionsLabel}</div>
+          </div>
+          <div className="bg-white rounded-2xl p-4 text-center shadow-sm border border-[#E2E8F0]/60">
+            <div className="text-2xl font-black text-[#2563EB]">50</div>
+            <div className="text-xs text-[#94A3B8] font-medium mt-0.5">{tex.socialProofStatesLabel}</div>
+          </div>
+          <div className="bg-white rounded-2xl p-4 text-center shadow-sm border border-[#E2E8F0]/60">
+            <div className="text-2xl font-black text-[#2563EB]">5</div>
+            <div className="text-xs text-[#94A3B8] font-medium mt-0.5">{tex.socialProofLangsLabel}</div>
           </div>
         </div>
+        <p className="text-center text-xs text-[#94A3B8]">{tex.socialProofReviews}</p>
+        <p className="text-center text-xs mt-1">
+          <a href="https://www.trustpilot.com/review/dmvsos.com" target="_blank" rel="noopener noreferrer"
+            className="text-[#2563EB] hover:underline">{tex.socialProofTrustpilot}</a>
+        </p>
+      </section>
+
+      {/* FAQ */}
+      <section className="w-full max-w-lg mx-auto mb-8 px-4">
+        <h2 className="text-lg font-bold text-[#0B1C3D] text-center mb-5">{tex.faqTitle}</h2>
+        <div className="flex flex-col gap-2">
+          {(tex.faq || []).map((item, i) => (
+            <details key={i} className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm group">
+              <summary className="px-5 py-4 text-sm font-semibold text-[#0B1C3D] cursor-pointer list-none flex items-center justify-between">
+                <span>{item.q}</span>
+                <span className="text-[#94A3B8] text-xs group-open:rotate-180 transition-transform ml-3 shrink-0">▾</span>
+              </summary>
+              <p className="px-5 pb-4 text-sm text-[#475569] leading-relaxed">{item.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="w-full max-w-lg mx-auto mb-8 px-4">
+        <button
+          type="button"
+          onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
+          className="w-full py-4 rounded-2xl font-semibold text-base bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition-all shadow-sm"
+        >
+          {tex.finalCtaText || 'Ready? Choose your state and start practicing →'}
+        </button>
       </section>
 
       {/* Footer with guarantee badge */}

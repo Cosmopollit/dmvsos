@@ -6,33 +6,6 @@ import { supabase } from '@/lib/supabase';
 import { t } from '@/lib/translations';
 import { getSavedLang } from '@/lib/lang';
 
-const PLANS = [
-  {
-    id: 'quick_pass',
-    name: 'Quick Pass',
-    price: '$7.99',
-    badge: null,
-    dark: false,
-    features: ['Full question bank', 'All 50 states', 'Car, CDL & Motorcycle', '5 languages'],
-  },
-  {
-    id: 'full_prep',
-    name: 'Full Prep',
-    price: '$14.99',
-    badge: 'MOST POPULAR',
-    dark: false,
-    features: ['Everything in Quick Pass', 'Challenge Bank (coming soon)', 'Readiness Meter (coming soon)', 'Detailed explanations'],
-  },
-  {
-    id: 'guaranteed_pass',
-    name: 'Guaranteed Pass',
-    price: '$39.99',
-    badge: '🛡️ GUARANTEED',
-    dark: true,
-    features: ['Everything in Full Prep', 'Pass or 100% refund', 'Priority support', 'Study checklist'],
-  },
-];
-
 function UpgradeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -42,6 +15,39 @@ function UpgradeContent() {
 
   const [loadingPlan, setLoadingPlan] = useState(null);
   const [error, setError] = useState(false);
+
+  const plans = [
+    {
+      id: 'quick_pass',
+      name: 'Quick Pass',
+      price: '$7.99',
+      duration: tex.quickPassDuration || '7 days · one payment',
+      badge: null,
+      style: 'outline',
+      features: tex.quickPassFeatures || ['Full question bank', 'All 50 states', 'Car, CDL & Motorcycle', '5 languages'],
+      btnLabel: tex.planGetQuickPass || 'Get Quick Pass — $7.99',
+    },
+    {
+      id: 'full_prep',
+      name: 'Full Prep',
+      price: '$14.99',
+      duration: tex.fullPrepDuration || '30 days · one payment',
+      badge: tex.mostPopular || 'MOST POPULAR',
+      style: 'blue',
+      features: tex.fullPrepFeatures || ['Everything in Quick Pass', 'Challenge Bank (coming soon)', 'Readiness Meter (coming soon)', 'Detailed explanations'],
+      btnLabel: tex.planGetFullPrep || 'Get Full Prep — $14.99',
+    },
+    {
+      id: 'guaranteed_pass',
+      name: 'Guaranteed Pass',
+      price: '$39.99',
+      duration: tex.guaranteedPassDuration || '90 days · one payment',
+      badge: tex.planGuaranteedBadge || '🛡️ GUARANTEED',
+      style: 'gold',
+      features: tex.guaranteedPassFeatures || ['Everything in Full Prep', '🛡️ Pass or 100% refund', 'Priority support', 'Study checklist'],
+      btnLabel: tex.planGetGuaranteedPass || 'Get Guaranteed Pass — $39.99',
+    },
+  ];
 
   async function handleCheckout(planId) {
     setLoadingPlan(planId);
@@ -111,40 +117,41 @@ function UpgradeContent() {
 
       {/* 3 Plan cards */}
       <div className="w-full max-w-2xl flex flex-col sm:flex-row gap-4 mb-6">
-        {PLANS.map((plan) => {
-          const isHighlighted = plan.id === 'full_prep';
+        {plans.map((plan) => {
           const isPreselected = preselect === plan.id;
+          const isBlue = plan.style === 'blue';
+          const isGold = plan.style === 'gold';
+          const isOutline = plan.style === 'outline';
           return (
             <div
               key={plan.id}
               className={`flex-1 rounded-2xl p-6 flex flex-col relative ${
-                plan.dark
-                  ? 'bg-[#0B1C3D] border-2 border-[#F59E0B]'
-                  : isHighlighted
-                  ? 'bg-white border-2 border-[#2563EB]'
+                isBlue
+                  ? 'bg-[#0B1C3D] border-2 border-[#2563EB]'
+                  : isGold
+                  ? 'bg-white border-2 border-[#F59E0B]'
                   : 'bg-white border border-[#E2E8F0]'
               } ${isPreselected ? 'ring-2 ring-[#F59E0B]' : ''}`}
             >
               {plan.badge && (
                 <span className={`absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap ${
-                  plan.dark ? 'bg-[#F59E0B] text-[#0B1C3D]' : 'bg-[#2563EB] text-white'
+                  isGold ? 'bg-[#F59E0B] text-[#0B1C3D]' : 'bg-[#2563EB] text-white'
                 }`}>
                   {plan.badge}
                 </span>
               )}
-              <div className={`text-sm font-bold mb-1 mt-1 ${plan.dark ? 'text-[#F59E0B]' : 'text-[#2563EB]'}`}>
+              <div className={`text-sm font-bold mb-1 mt-1 ${isBlue ? 'text-[#F59E0B]' : isGold ? 'text-[#92400E]' : 'text-[#2563EB]'}`}>
                 {plan.name}
               </div>
-              <div className={`text-3xl font-black mb-1 ${plan.dark ? 'text-white' : 'text-[#0B1C3D]'}`}>
+              <div className={`text-3xl font-black mb-1 ${isBlue ? 'text-white' : 'text-[#0B1C3D]'}`}>
                 {plan.price}
               </div>
-              <div className={`text-xs mb-4 ${plan.dark ? 'text-[#94A3B8]' : 'text-[#64748B]'}`}>
-                30 days · one payment
+              <div className={`text-xs mb-4 ${isBlue ? 'text-[#94A3B8]' : 'text-[#64748B]'}`}>
+                {plan.duration}
               </div>
               <ul className="space-y-2 mb-5 flex-1">
                 {plan.features.map((f, i) => (
-                  <li key={i} className={`text-xs flex items-start gap-1.5 ${plan.dark ? 'text-[#CBD5E1]' : 'text-[#475569]'}`}>
-                    <span className="shrink-0 mt-0.5">{plan.dark ? '✅' : '✓'}</span>
+                  <li key={i} className={`text-xs flex items-start gap-1.5 ${isBlue ? 'text-[#CBD5E1]' : 'text-[#475569]'}`}>
                     {f}
                   </li>
                 ))}
@@ -154,14 +161,14 @@ function UpgradeContent() {
                 onClick={() => handleCheckout(plan.id)}
                 disabled={loadingPlan !== null}
                 className={`w-full py-3 rounded-xl font-bold text-sm transition disabled:opacity-60 ${
-                  plan.dark
+                  isBlue
+                    ? 'bg-[#2563EB] text-white hover:bg-[#1D4ED8] animate-pulse'
+                    : isGold
                     ? 'bg-[#F59E0B] text-[#0B1C3D] hover:bg-[#FBBF24]'
-                    : isHighlighted
-                    ? 'bg-[#2563EB] text-white hover:bg-[#1D4ED8]'
                     : 'bg-[#F1F5F9] text-[#0B1C3D] hover:bg-[#E2E8F0]'
-                } ${isHighlighted ? 'animate-pulse' : ''}`}
+                }`}
               >
-                {loadingPlan === plan.id ? '…' : `Get ${plan.name} — ${plan.price}`}
+                {loadingPlan === plan.id ? '…' : plan.btnLabel}
               </button>
             </div>
           );
@@ -170,7 +177,7 @@ function UpgradeContent() {
 
       {/* Value prop */}
       <p className="text-[#94A3B8] text-sm text-center max-w-md mb-6">
-        🛡️ One failed test = $50+ fees + weeks waiting. Plans pay for themselves.
+        {tex.pricingValueProp || '🛡️ One failed test = $50+ fees + weeks waiting. Plans pay for themselves.'}
       </p>
 
       {error && (
