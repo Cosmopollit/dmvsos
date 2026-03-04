@@ -29,19 +29,26 @@ export async function POST(request) {
         const PLAN_DAYS = { quick_pass: 7, full_prep: 30, guaranteed_pass: 90 };
         const days = PLAN_DAYS[planType] || 30;
         const expiresAt = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
-        const { error } = await supabase
+        const updates = {
+          is_pro: true,
+          plan_type: planType,
+          plan_expires_at: expiresAt,
+          stripe_customer_id: session.customer,
+        };
+        // Update existing profile first; insert if none exists
+        const { data: updated, error: updateError } = await supabase
           .from('profiles')
-          .upsert(
-            {
-              email,
-              is_pro: true,
-              plan_type: planType,
-              plan_expires_at: expiresAt,
-              stripe_customer_id: session.customer,
-            },
-            { onConflict: 'email' }
-          );
-        if (error) console.error('Webhook: failed to activate pro:', error.message);
+          .update(updates)
+          .eq('email', email)
+          .select();
+        if (updateError) {
+          console.error('Webhook: update failed:', updateError.message);
+        } else if (!updated || updated.length === 0) {
+          const { error: insertError } = await supabase
+            .from('profiles')
+            .insert({ email, ...updates });
+          if (insertError) console.error('Webhook: insert failed:', insertError.message);
+        }
       } else {
         console.error('Webhook: checkout.session.completed missing email', session.id);
       }
