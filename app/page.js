@@ -16,6 +16,7 @@ export default function Home() {
   const [lang, setLang] = useState(() => codeToName[getSavedLang()] || 'English');
   const [state, setState] = useState('');
   const [liveCount] = useState(() => Math.floor(Math.random() * 30) + 30);
+  const [showLangMenu, setShowLangMenu] = useState(false);
   const stateSelectRef = useRef(null);
   const router = useRouter();
 
@@ -30,6 +31,8 @@ export default function Home() {
     { label: 'ZH', flag: flags.cn, code: 'zh', name: '中文' },
     { label: 'UA', flag: flags.ua, code: 'ua', name: 'Українська' },
   ];
+
+  const currentLang = langs.find(l => l.name === lang) || langs[0];
 
   async function handleSignOut() {
     await supabase.auth.signOut();
@@ -120,56 +123,85 @@ export default function Home() {
       <div className="fixed bottom-[-150px] left-[-150px] w-[500px] h-[500px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 70%)' }} />
 
-      {/* Header: logo + login/user pill */}
-      <header className="w-full max-w-lg mx-auto pt-5 pb-3 px-4">
-        <div className="flex items-center justify-between">
+      {/* Header: logo + lang dropdown + user | nav links row */}
+      <header className="w-full max-w-lg mx-auto pt-5 pb-0 px-4">
+        {/* Row 1: logo + compact lang + user/login */}
+        <div className="flex items-center justify-between pb-3">
           <a href="/" className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition">
             <Image src="/logo.png" alt="DMVSOS" width={32} height={32} className="rounded-lg" />
             <span className="text-lg font-bold text-[#0B1C3D]" style={{ letterSpacing: '-0.02em' }}>DMVSOS</span>
           </a>
+          <div className="flex items-center gap-2">
+            {/* Compact language dropdown */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setShowLangMenu(v => !v)}
+                onBlur={() => setTimeout(() => setShowLangMenu(false), 150)}
+                className="flex items-center gap-1 text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-2.5 py-1.5 hover:border-[#2563EB] transition-colors"
+              >
+                <span>{currentLang.flag}</span>
+                <span>{currentLang.label}</span>
+                <span className="text-[#94A3B8] text-[10px] ml-0.5">▾</span>
+              </button>
+              {showLangMenu && (
+                <div className="absolute right-0 top-full mt-1 bg-white border border-[#E2E8F0] rounded-xl shadow-lg z-50 py-1 min-w-[110px]">
+                  {langs.map(l => (
+                    <button
+                      key={l.code}
+                      type="button"
+                      onMouseDown={() => { setLang(l.name); saveLang(l.code); setShowLangMenu(false); }}
+                      className={`w-full text-left px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 hover:bg-[#F8FAFC] transition-colors ${lang === l.name ? 'text-[#2563EB]' : 'text-[#64748B]'}`}
+                    >
+                      <span>{l.flag}</span> <span>{l.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
-          {user ? (() => {
-            const raw = user.user_metadata?.full_name || user.email || '';
-            const firstName = raw.split(/\s+/)[0] || raw.split('@')[0] || '?';
-            const initial = (raw || '?')[0].toUpperCase();
-            return (
-              <div className="flex items-center gap-1.5 bg-white border border-[#E2E8F0] rounded-full pl-1.5 pr-2.5 py-1 shadow-sm">
-                <button
-                  type="button"
-                  onClick={() => router.push('/profile')}
-                  className="flex items-center gap-1.5 min-w-0 hover:opacity-90 transition"
-                >
-                  {isPro ? (
-                    <span className="text-[#F59E0B] font-medium text-xs">👑</span>
-                  ) : (
-                    <div className="w-6 h-6 rounded-full bg-[#0B1C3D] flex items-center justify-center text-white text-[10px] font-bold shrink-0">
-                      {initial}
-                    </div>
-                  )}
-                  <span className="hidden sm:block text-xs font-medium text-[#1E293B] max-w-[80px] truncate">{firstName}</span>
-                </button>
-                <button onClick={handleSignOut} type="button"
-                  className="text-[11px] text-[#94A3B8] hover:text-[#64748B] hover:underline transition"
-                  aria-label="Sign out">
-                  ✕
-                </button>
-              </div>
-            );
-          })() : (
-            <button
-              type="button"
-              onClick={() => router.push(`/login?lang=${langCode}`)}
-              className="text-sm font-medium text-[#2563EB] hover:text-[#1D4ED8] transition"
-            >
-              {tex.signInTitle}
-            </button>
-          )}
+            {/* User pill or sign-in */}
+            {user ? (() => {
+              const raw = user.user_metadata?.full_name || user.email || '';
+              const firstName = raw.split(/\s+/)[0] || raw.split('@')[0] || '?';
+              const initial = (raw || '?')[0].toUpperCase();
+              return (
+                <div className="flex items-center gap-1.5 bg-white border border-[#E2E8F0] rounded-full pl-1.5 pr-2.5 py-1 shadow-sm">
+                  <button
+                    type="button"
+                    onClick={() => router.push('/profile')}
+                    className="flex items-center gap-1.5 min-w-0 hover:opacity-90 transition"
+                  >
+                    {isPro ? (
+                      <span className="text-[#F59E0B] font-medium text-xs">👑</span>
+                    ) : (
+                      <div className="w-6 h-6 rounded-full bg-[#0B1C3D] flex items-center justify-center text-white text-[10px] font-bold shrink-0">
+                        {initial}
+                      </div>
+                    )}
+                    <span className="hidden sm:block text-xs font-medium text-[#1E293B] max-w-[80px] truncate">{firstName}</span>
+                  </button>
+                  <button onClick={handleSignOut} type="button"
+                    className="text-[11px] text-[#94A3B8] hover:text-[#64748B] hover:underline transition"
+                    aria-label="Sign out">
+                    ✕
+                  </button>
+                </div>
+              );
+            })() : (
+              <button
+                type="button"
+                onClick={() => router.push(`/login?lang=${langCode}`)}
+                className="text-sm font-medium text-[#2563EB] hover:text-[#1D4ED8] transition"
+              >
+                {tex.signInTitle}
+              </button>
+            )}
+          </div>
         </div>
-      </header>
 
-      {/* Nav links */}
-      <nav className="w-full max-w-lg mx-auto px-4 pb-2">
-        <div className="flex items-center gap-1">
+        {/* Row 2: nav links — centered */}
+        <div className="flex items-center justify-center gap-2 pb-3">
           <a href="/dmv-test"
             className="text-xs font-semibold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] rounded-full px-3 py-1 hover:bg-[#DBEAFE] transition-colors">
             📋 Practice Tests
@@ -179,42 +211,10 @@ export default function Home() {
             📖 Manuals
           </a>
         </div>
-      </nav>
-
-      {/* Language switcher — separate row, compact */}
-      <div className="w-full max-w-lg mx-auto px-4 pb-3">
-        <div className="flex items-center justify-center gap-1.5">
-          {langs.map((l) => (
-            <button
-              key={l.code}
-              onClick={() => { setLang(l.name); saveLang(l.code); }}
-              type="button"
-              aria-label={`Switch language to ${l.name}`}
-              className={`px-3 py-1.5 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
-                lang === l.name
-                  ? 'bg-[#0B1C3D] text-white ring-2 ring-[#2563EB]'
-                  : 'bg-white text-[#64748B] hover:bg-gray-50 border border-gray-200'
-              }`}
-            >
-              <span className="shrink-0">{l.flag}</span> {l.label}
-            </button>
-          ))}
-        </div>
-      </div>
+      </header>
 
       {/* Hero section */}
       <section className="w-full max-w-lg mx-auto px-4 pt-1 pb-5 text-center">
-        {/* Version badge */}
-        {isPro ? (
-          <span className="inline-block bg-[#F59E0B]/10 text-[#F59E0B] text-xs font-semibold px-3 py-1 rounded-full mb-4 tracking-widest uppercase border border-[#F59E0B]/20">
-            👑 {tex.proBadge}
-          </span>
-        ) : (
-          <span className="inline-block bg-[#10B981]/10 text-[#10B981] text-xs font-semibold px-3 py-1 rounded-full mb-4 tracking-widest uppercase border border-[#10B981]/20">
-            {tex.freeBadge}
-          </span>
-        )}
-
         {/* H1 headline — DM Sans, Anthropic-style */}
         <h1 className="text-[32px] sm:text-[42px] font-semibold text-[#0B1C3D] leading-[1.13] mb-3 whitespace-pre-line"
           style={{ fontFamily: "'DM Sans', var(--font-dm-sans), sans-serif", letterSpacing: '-0.025em' }}>
@@ -263,7 +263,11 @@ export default function Home() {
                     stateSelectRef.current?.focus();
                   }
                 }}
-                className={`w-full py-4 rounded-xl font-semibold text-[15px] flex items-center justify-center gap-2 transition-all text-white cursor-pointer ${state ? 'btn-pulse' : ''} ${isAmber ? 'bg-[#F59E0B] hover:bg-[#D97706]' : 'bg-[#2563EB] hover:bg-[#1D4ED8]'}`}
+                className={`w-full mt-4 py-4 rounded-xl font-semibold text-[15px] flex items-center justify-center gap-2 transition-all ${
+                  !state
+                    ? 'bg-[#E2E8F0] text-[#94A3B8] cursor-default'
+                    : `text-white cursor-pointer btn-pulse ${isAmber ? 'bg-[#F59E0B] hover:bg-[#D97706]' : 'bg-[#2563EB] hover:bg-[#1D4ED8]'}`
+                }`}
               >
                 {buttonLabel}
               </button>
@@ -285,30 +289,23 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Driver Manual link — context-aware */}
+      {/* Driver Manual link */}
       <div className="w-full max-w-lg mx-auto px-4 mb-4">
-        {(() => {
-          const href = '/manuals';
-          const subtitle = tex.manualsSectionDesc;
-
-          return (
-            <a
-              href={href}
-              className="flex items-center gap-3 bg-white rounded-2xl px-4 py-3.5 shadow-sm border border-[#E2E8F0]/60 hover:border-[#2563EB] hover:shadow-md transition-all group"
-            >
-              <div className="w-9 h-9 rounded-lg bg-[#EFF6FF] flex items-center justify-center text-lg shrink-0 group-hover:bg-[#DBEAFE] transition-colors">📖</div>
-              <div className="flex-1 min-w-0">
-                <div className="text-sm font-semibold text-[#0B1C3D] group-hover:text-[#2563EB]">
-                  {tex.manualsSectionTitle}
-                </div>
-                <div className="text-[11px] text-[#94A3B8]">
-                  {subtitle}
-                </div>
-              </div>
-              <div className="text-[#94A3B8] shrink-0 group-hover:text-[#2563EB]">→</div>
-            </a>
-          );
-        })()}
+        <a
+          href="/manuals"
+          className="flex items-center gap-3 bg-white rounded-2xl px-4 py-3.5 shadow-sm border border-[#E2E8F0]/60 hover:border-[#2563EB] hover:shadow-md transition-all group"
+        >
+          <div className="w-9 h-9 rounded-lg bg-[#EFF6FF] flex items-center justify-center text-lg shrink-0 group-hover:bg-[#DBEAFE] transition-colors">📖</div>
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-semibold text-[#0B1C3D] group-hover:text-[#2563EB]">
+              {tex.manualsSectionTitle}
+            </div>
+            <div className="text-[11px] text-[#94A3B8]">
+              {tex.manualsSectionDesc}
+            </div>
+          </div>
+          <div className="text-[#94A3B8] shrink-0 group-hover:text-[#2563EB]">→</div>
+        </a>
       </div>
 
       {/* Stats bar */}
