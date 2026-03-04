@@ -111,43 +111,46 @@ export default function ManualsLibrary({ statesData, totalPdfs, langCount, serve
         </div>
       </div>
 
-      {/* Search */}
-      <div className="relative mb-4">
-        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#94A3B8] pointer-events-none">🔍</span>
-        <input
-          type="text"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder={tex.manualsSelectPlaceholder || 'Search state... (e.g. California, NY)'}
-          className="w-full pl-11 pr-10 py-3.5 rounded-2xl border border-[#E2E8F0] bg-white text-sm text-[#0B1C3D] placeholder-[#94A3B8] shadow-sm focus:outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/10 transition"
-        />
-        {search && (
-          <button
-            type="button"
-            onClick={() => setSearch('')}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-[#94A3B8] hover:text-[#64748B] text-xl leading-none"
-          >
-            ×
-          </button>
-        )}
-      </div>
+      {/* Unified search + category control */}
+      <div className="flex flex-col gap-2 mb-6">
+        {/* Search row */}
+        <div className="relative flex items-center bg-white rounded-2xl border border-[#E2E8F0] shadow-sm px-4 py-3.5 focus-within:border-[#2563EB] focus-within:ring-2 focus-within:ring-[#2563EB]/10 transition">
+          <span className="text-[#94A3B8] mr-3 pointer-events-none text-base leading-none">🔍</span>
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder={tex.manualsSelectPlaceholder || 'Search state... (e.g. California, NY)'}
+            className="flex-1 bg-transparent text-sm text-[#0B1C3D] placeholder-[#94A3B8] outline-none"
+          />
+          {search && (
+            <button
+              type="button"
+              onClick={() => setSearch('')}
+              className="ml-2 text-[#94A3B8] hover:text-[#64748B] text-xl leading-none"
+            >
+              ×
+            </button>
+          )}
+        </div>
 
-      {/* Category filter */}
-      <div className="flex gap-2 mb-6 overflow-x-auto pb-1 scrollbar-hide">
-        {CAT_TABS_KEYS.map(({ id, labelKey }) => (
-          <button
-            key={id}
-            type="button"
-            onClick={() => setActiveCategory(id)}
-            className={`shrink-0 px-4 py-2 rounded-full text-xs font-semibold transition-all ${
-              activeCategory === id
-                ? 'bg-[#0B1C3D] text-white shadow-sm'
-                : 'bg-white border border-[#E2E8F0] text-[#64748B] hover:border-[#2563EB] hover:text-[#2563EB]'
-            }`}
-          >
-            {id !== 'all' && `${CAT_ICONS[id]} `}{tex[labelKey] || id}
-          </button>
-        ))}
+        {/* Category row — segmented control */}
+        <div className="flex bg-white rounded-2xl border border-[#E2E8F0] shadow-sm p-1 gap-1">
+          {CAT_TABS_KEYS.map(({ id, labelKey }) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setActiveCategory(id)}
+              className={`flex-1 py-2 rounded-xl text-xs font-semibold transition-all ${
+                activeCategory === id
+                  ? 'bg-[#0B1C3D] text-white shadow-sm'
+                  : 'text-[#64748B] hover:text-[#0B1C3D]'
+              }`}
+            >
+              {id !== 'all' && `${CAT_ICONS[id]} `}{tex[labelKey] || id}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Results count */}
