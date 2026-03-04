@@ -3,7 +3,6 @@
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { t } from '@/lib/translations';
-import { saveLang } from '@/lib/lang';
 
 const LANG_FLAGS = {
   en: '🇺🇸', es: '🇪🇸', ru: '🇷🇺', zh: '🇨🇳', ua: '🇺🇦',
@@ -19,14 +18,6 @@ const LANG_NAMES = {
   sw: 'Kiswahili', my: 'မြန်မာ', ne: 'नेपाली', pt: 'Português', ja: '日本語', hmn: 'Hmong',
 };
 
-const UI_LANGS = [
-  { code: 'en', label: 'EN', flag: '🇺🇸' },
-  { code: 'ru', label: 'RU', flag: '🇷🇺' },
-  { code: 'es', label: 'ES', flag: '🇪🇸' },
-  { code: 'zh', label: 'ZH', flag: '🇨🇳' },
-  { code: 'ua', label: 'UA', flag: '🇺🇦' },
-];
-
 const CAT_TABS_KEYS = [
   { id: 'all',        labelKey: 'manualsAllManuals' },
   { id: 'car',        labelKey: 'catCar' },
@@ -36,16 +27,10 @@ const CAT_TABS_KEYS = [
 const CAT_ICONS = { car: '🚗', cdl: '🚛', motorcycle: '🏍️' };
 
 export default function ManualsLibrary({ statesData, totalPdfs, langCount, serverLang }) {
-  const [lang, setLang] = useState(serverLang || 'en');
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
 
-  const tex = t[lang] || t.en;
-
-  function handleLang(code) {
-    saveLang(code);
-    setLang(code);
-  }
+  const tex = t[serverLang] || t.en;
 
   const filtered = useMemo(() => {
     let list = statesData;
@@ -68,7 +53,7 @@ export default function ManualsLibrary({ statesData, totalPdfs, langCount, serve
       {/* Hero */}
       <div className="text-center mb-8 pt-2">
         <span className="inline-block text-xs font-bold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] rounded-full px-3 py-1 mb-4 uppercase tracking-widest">
-          📚 {tex.manualsSectionTitle || 'Free Driver Manual Library'}
+          📚 Official 2026 Handbooks
         </span>
         <h1 className="text-3xl sm:text-4xl font-black text-[#0B1C3D] mb-3 leading-tight" style={{ letterSpacing: '-0.02em' }}>
           {tex.manualsHeroTitle || 'Official DMV Handbooks for All 50 States'}
@@ -76,24 +61,6 @@ export default function ManualsLibrary({ statesData, totalPdfs, langCount, serve
         <p className="text-sm text-[#64748B] leading-relaxed max-w-sm mx-auto mb-5">
           {tex.manualsHeroSub || 'The largest free driver manual collection online. Download PDF or read online — in your language.'}
         </p>
-
-        {/* UI Language switcher */}
-        <div className="flex items-center justify-center gap-1.5 mb-6 flex-wrap">
-          {UI_LANGS.map(({ code, label, flag }) => (
-            <button
-              key={code}
-              type="button"
-              onClick={() => handleLang(code)}
-              className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
-                lang === code
-                  ? 'bg-[#0B1C3D] text-white'
-                  : 'bg-white border border-[#E2E8F0] text-[#64748B] hover:border-[#2563EB] hover:text-[#2563EB]'
-              }`}
-            >
-              {flag} {label}
-            </button>
-          ))}
-        </div>
 
         {/* Stats */}
         <div className="flex items-center justify-center gap-5 flex-wrap">

@@ -239,17 +239,33 @@ export default async function StateManualPage({ params }) {
 
         {/* Online manual content */}
         {manual ? (
-          <div className="mb-8">
+          <div className="mb-6">
             <h2 className="text-lg font-bold text-[#0B1C3D] mb-4">
               {tex.manualsReadOnline.replace('{state}', name)}
             </h2>
             <ManualContent sections={manual.sections} lang={lang} />
           </div>
         ) : (
-          <div className="bg-white rounded-2xl border border-[#E2E8F0] p-8 mb-8 text-center shadow-sm">
+          <div className="bg-white rounded-2xl border border-[#E2E8F0] p-8 mb-6 text-center shadow-sm">
             <p className="text-sm text-[#94A3B8]">{tex.manualsOnlinePrep}</p>
           </div>
         )}
+
+        {/* Done reading? CTA */}
+        <div className="bg-[#EFF6FF] border border-[#BFDBFE] rounded-2xl p-6 text-center mb-8">
+          <p className="text-base font-semibold text-[#0B1C3D] mb-1">
+            {tex.manualsDoneReading || 'Done reading?'}
+          </p>
+          <p className="text-sm text-[#64748B] mb-4">
+            {tex.manualsDoneReadingDesc || 'Test your knowledge with real DMV questions'}
+          </p>
+          <Link
+            href={`/category?state=${state}&lang=${lang}`}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[#2563EB] text-white rounded-xl font-semibold hover:bg-[#1D4ED8] transition-colors text-sm"
+          >
+            {tex.manualsTakeTest.replace('{state}', name)}
+          </Link>
+        </div>
 
         {/* Other states */}
         <div className="mb-8">

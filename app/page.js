@@ -288,14 +288,8 @@ export default function Home() {
       {/* Driver Manual link — context-aware */}
       <div className="w-full max-w-lg mx-auto px-4 mb-4">
         {(() => {
-          const manualState = state || (typeof document !== 'undefined' && document.cookie.match(/dmvsos_geo_state=([^;]+)/)?.[1]) || '';
-          const displayName = manualState
-            ? stateOptions.find(s => s.code === manualState)?.name?.replace(/\s*\([A-Z]{2}\)\s*$/, '') || manualState
-            : '';
-          const href = manualState ? `/manuals/${manualState}` : '/manuals';
-          const subtitle = manualState
-            ? tex.manualsCta.replace('{state}', displayName)
-            : tex.manualsSectionDesc;
+          const href = '/manuals';
+          const subtitle = tex.manualsSectionDesc;
 
           return (
             <a

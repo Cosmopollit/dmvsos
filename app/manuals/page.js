@@ -116,6 +116,15 @@ export default async function ManualsPage() {
         </div>
       </header>
 
+      {/* Breadcrumb */}
+      <nav className="w-full max-w-lg mx-auto px-4 mb-1" aria-label="Breadcrumb">
+        <ol className="flex items-center gap-1.5 text-xs text-[#94A3B8] flex-wrap">
+          <li><Link href="/" className="hover:text-[#2563EB]">Home</Link></li>
+          <li>/</li>
+          <li className="text-[#1A2B4A] font-medium">Manuals</li>
+        </ol>
+      </nav>
+
       {/* Library UI — client component with search + filter */}
       <ManualsLibrary
         statesData={statesData}
