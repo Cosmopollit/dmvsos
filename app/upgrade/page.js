@@ -6,23 +6,55 @@ import { supabase } from '@/lib/supabase';
 import { t } from '@/lib/translations';
 import { getSavedLang } from '@/lib/lang';
 
+const PLANS = [
+  {
+    id: 'quick_pass',
+    name: 'Quick Pass',
+    price: '$7.99',
+    badge: null,
+    dark: false,
+    features: ['Full question bank', 'All 50 states', 'Car, CDL & Motorcycle', '5 languages'],
+  },
+  {
+    id: 'full_prep',
+    name: 'Full Prep',
+    price: '$14.99',
+    badge: 'MOST POPULAR',
+    dark: false,
+    features: ['Everything in Quick Pass', 'Challenge Bank (coming soon)', 'Readiness Meter (coming soon)', 'Detailed explanations'],
+  },
+  {
+    id: 'guaranteed_pass',
+    name: 'Guaranteed Pass',
+    price: '$39.99',
+    badge: '🛡️ GUARANTEED',
+    dark: true,
+    features: ['Everything in Full Prep', 'Pass or 100% refund', 'Priority support', 'Study checklist'],
+  },
+];
+
 function UpgradeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang') || getSavedLang();
+  const preselect = searchParams.get('plan');
   const tex = t[lang] || t.en;
 
-  const [loading, setLoading] = useState(false);
+  const [loadingPlan, setLoadingPlan] = useState(null);
   const [error, setError] = useState(false);
 
-  async function handleSubscribe() {
-    setLoading(true);
+  async function handleCheckout(planId) {
+    setLoadingPlan(planId);
     setError(false);
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      const fetchOpts = { method: 'POST' };
+      const fetchOpts = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ planType: planId }),
+      };
       if (session?.access_token) {
-        fetchOpts.headers = { 'Authorization': `Bearer ${session.access_token}` };
+        fetchOpts.headers['Authorization'] = `Bearer ${session.access_token}`;
       }
       const res = await fetch('/api/create-checkout', fetchOpts);
       const data = await res.json();
@@ -31,11 +63,9 @@ function UpgradeContent() {
     } catch {
       setError(true);
     } finally {
-      setLoading(false);
+      setLoadingPlan(null);
     }
   }
-
-  const features = Array.isArray(tex.upgradeFeatures) ? tex.upgradeFeatures : [];
 
   return (
     <main className="min-h-screen bg-[#0B1C3D] flex flex-col items-center justify-center p-6">
@@ -79,40 +109,80 @@ function UpgradeContent() {
         </div>
       </div>
 
-      {/* Pricing card */}
-      <div className="bg-white rounded-2xl p-8 w-full max-w-md mb-6">
-        <div className="flex justify-between items-start mb-6">
-          <div>
-            <div className="text-sm font-bold text-[#F59E0B] mb-1">{tex.proPlanLabel}</div>
-            <div className="text-4xl font-bold text-[#0B1C3D]">$9.99<span className="text-lg font-normal text-gray-400">/mo</span></div>
-          </div>
-          <span className="bg-[#F59E0B] text-black text-xs font-bold px-3 py-1 rounded-full">{tex.mostPopular}</span>
-        </div>
-
-        <div className="space-y-3 mb-6">
-          {features.map((f, i) => (
-            <div key={i} className="text-[#1E293B] text-sm">{f}</div>
-          ))}
-        </div>
-
-        <button
-          type="button"
-          onClick={handleSubscribe}
-          disabled={loading}
-          className="w-full bg-[#F59E0B] text-black font-bold py-4 rounded-xl text-lg hover:bg-[#D97706] transition disabled:opacity-70"
-        >
-          {loading ? '…' : (tex.upgradeCta || '🚗 Get Pro Access — $9.99/mo')}
-        </button>
-
-        {error && (
-          <p className="text-center text-xs text-red-500 font-medium mt-3">
-            {tex.checkoutError || 'Something went wrong. Please try again.'}
-          </p>
-        )}
-        <p className="text-center text-xs text-gray-400 mt-3">
-          {tex.upgradeCancel}
-        </p>
+      {/* 3 Plan cards */}
+      <div className="w-full max-w-2xl flex flex-col sm:flex-row gap-4 mb-6">
+        {PLANS.map((plan) => {
+          const isHighlighted = plan.id === 'full_prep';
+          const isPreselected = preselect === plan.id;
+          return (
+            <div
+              key={plan.id}
+              className={`flex-1 rounded-2xl p-6 flex flex-col relative ${
+                plan.dark
+                  ? 'bg-[#0B1C3D] border-2 border-[#F59E0B]'
+                  : isHighlighted
+                  ? 'bg-white border-2 border-[#2563EB]'
+                  : 'bg-white border border-[#E2E8F0]'
+              } ${isPreselected ? 'ring-2 ring-[#F59E0B]' : ''}`}
+            >
+              {plan.badge && (
+                <span className={`absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap ${
+                  plan.dark ? 'bg-[#F59E0B] text-[#0B1C3D]' : 'bg-[#2563EB] text-white'
+                }`}>
+                  {plan.badge}
+                </span>
+              )}
+              <div className={`text-sm font-bold mb-1 mt-1 ${plan.dark ? 'text-[#F59E0B]' : 'text-[#2563EB]'}`}>
+                {plan.name}
+              </div>
+              <div className={`text-3xl font-black mb-1 ${plan.dark ? 'text-white' : 'text-[#0B1C3D]'}`}>
+                {plan.price}
+              </div>
+              <div className={`text-xs mb-4 ${plan.dark ? 'text-[#94A3B8]' : 'text-[#64748B]'}`}>
+                30 days · one payment
+              </div>
+              <ul className="space-y-2 mb-5 flex-1">
+                {plan.features.map((f, i) => (
+                  <li key={i} className={`text-xs flex items-start gap-1.5 ${plan.dark ? 'text-[#CBD5E1]' : 'text-[#475569]'}`}>
+                    <span className="shrink-0 mt-0.5">{plan.dark ? '✅' : '✓'}</span>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <button
+                type="button"
+                onClick={() => handleCheckout(plan.id)}
+                disabled={loadingPlan !== null}
+                className={`w-full py-3 rounded-xl font-bold text-sm transition disabled:opacity-60 ${
+                  plan.dark
+                    ? 'bg-[#F59E0B] text-[#0B1C3D] hover:bg-[#FBBF24]'
+                    : isHighlighted
+                    ? 'bg-[#2563EB] text-white hover:bg-[#1D4ED8]'
+                    : 'bg-[#F1F5F9] text-[#0B1C3D] hover:bg-[#E2E8F0]'
+                } ${isHighlighted ? 'animate-pulse' : ''}`}
+              >
+                {loadingPlan === plan.id ? '…' : `Get ${plan.name} — ${plan.price}`}
+              </button>
+            </div>
+          );
+        })}
       </div>
+
+      {/* Value prop */}
+      <p className="text-[#94A3B8] text-sm text-center max-w-md mb-6">
+        🛡️ One failed test = $50+ fees + weeks waiting. Plans pay for themselves.
+      </p>
+
+      {error && (
+        <p className="text-center text-xs text-red-400 font-medium mb-4">
+          {tex.checkoutError || 'Something went wrong. Please try again.'}
+        </p>
+      )}
+
+      {/* Fine print */}
+      <p className="text-center text-xs text-[#64748B] mb-4">
+        {tex.cancelAnytime || 'One payment · 30 days access · No auto-renewal'}
+      </p>
 
       {/* Testimonial */}
       <div className="bg-[#1E3A5F] rounded-2xl p-6 w-full max-w-md mb-6">

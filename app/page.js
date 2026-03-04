@@ -96,7 +96,7 @@ export default function Home() {
         name: 'Is this DMV practice test free?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Yes, DMVSOS offers a free tier with limited daily practice questions for all 50 US states. A Pro plan at $9.99/month unlocks unlimited questions, detailed explanations, and all test types (Car, CDL, Motorcycle).',
+          text: 'Yes, DMVSOS offers a free tier with 20 practice questions per test for all 50 US states. Paid plans starting at $7.99 (30-day access) unlock the full question bank, detailed explanations, and all test types (Car, CDL, Motorcycle).',
         },
       },
       {
@@ -432,78 +432,85 @@ export default function Home() {
       </section>
 
       {/* Pricing */}
-      <section className="w-full max-w-lg mx-auto mb-8 px-4">
+      <section className="w-full max-w-2xl mx-auto mb-8 px-4">
         <h2 className="text-xl font-bold text-[#0B1C3D] text-center mb-2">{tex.pricingHeading}</h2>
         <p className="text-sm text-[#64748B] text-center mb-6 leading-relaxed max-w-md mx-auto">{tex.pricingSubtext}</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {/* Pro plan */}
-          <div className="relative bg-[#0B1C3D] rounded-2xl p-6 border border-[#1e3a5f] shadow-sm text-center">
-            {/* MOST POPULAR badge */}
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#F59E0B] text-[#0B1C3D] text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {/* Quick Pass */}
+          <div className="bg-white rounded-2xl p-5 border border-[#E2E8F0] shadow-sm flex flex-col text-center">
+            <h3 className="text-sm font-bold text-[#2563EB] mb-1">Quick Pass</h3>
+            <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">$7.99</div>
+            <div className="text-xs text-[#64748B] mb-3">30 days · one payment</div>
+            <ul className="space-y-1.5 text-xs text-[#475569] mb-4 text-left flex-1">
+              <li>✓ Full question bank</li>
+              <li>✓ All 50 states</li>
+              <li>✓ Car, CDL & Motorcycle</li>
+              <li>✓ 5 languages</li>
+            </ul>
+            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=quick_pass`)}
+              className="w-full py-2.5 rounded-xl font-semibold text-sm bg-[#F1F5F9] text-[#0B1C3D] hover:bg-[#E2E8F0] transition-all">
+              {tex.upgradeCta || 'Get Quick Pass'}
+            </button>
+          </div>
+          {/* Full Prep — Most Popular */}
+          <div className="relative bg-[#0B1C3D] rounded-2xl p-5 border-2 border-[#2563EB] shadow-sm flex flex-col text-center">
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#2563EB] text-white text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap">
               {tex.mostPopular}
             </span>
-            <h3 className="text-base font-bold text-white mb-1 mt-2">{tex.proTitle}</h3>
-            <p className="text-sm text-[#94A3B8] mb-2">{tex.proDesc}</p>
-            {/* Prominent price */}
-            <div className="mb-2">
-              <span className="text-3xl font-black text-white">$9.99</span>
-              <span className="text-sm text-[#94A3B8]">{tex.perMonth}</span>
-            </div>
-            <p className="text-xs text-[#94A3B8] mb-4 leading-relaxed italic">{tex.proSavings}</p>
-            <ul className="space-y-2 text-sm text-[#CBD5E1] mb-4 text-left list-none">
-              <li>{tex.feature1}</li>
-              <li>{tex.feature2}</li>
-              <li>{tex.feature3}</li>
-              <li>{tex.feature4}</li>
-              <li>{tex.feature5}</li>
-              <li>{tex.feature6}</li>
+            <h3 className="text-sm font-bold text-[#F59E0B] mb-1 mt-1">Full Prep</h3>
+            <div className="text-2xl font-black text-white mb-0.5">$14.99</div>
+            <div className="text-xs text-[#94A3B8] mb-3">30 days · one payment</div>
+            <ul className="space-y-1.5 text-xs text-[#CBD5E1] mb-4 text-left flex-1">
+              <li>✅ Everything in Quick Pass</li>
+              <li>✅ Challenge Bank (coming soon)</li>
+              <li>✅ Readiness Meter (coming soon)</li>
+              <li>✅ Detailed explanations</li>
             </ul>
-            <p className="text-sm font-semibold text-[#F59E0B] mb-4">{tex.proNote}</p>
-            {/* Money-back guarantee — visible before CTA */}
-            <div className="flex items-center justify-center gap-1.5 mb-4">
-              <span className="text-xs font-semibold text-[#10B981] bg-[#10B981]/10 px-3 py-1.5 rounded-full border border-[#10B981]/30">
-                🛡️ {tex.moneyBack}
-              </span>
-            </div>
-            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}`)}
-              className="w-full bg-[#F59E0B] text-[#0B1C3D] py-4 rounded-xl font-bold text-base hover:bg-[#FBBF24] transition-all">
-              {tex.upgradBtn}
+            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=full_prep`)}
+              className="w-full py-2.5 rounded-xl font-bold text-sm bg-[#F59E0B] text-[#0B1C3D] hover:bg-[#FBBF24] transition-all">
+              {tex.upgradeCta || 'Get Full Prep'}
             </button>
-            <p className="text-xs text-[#94A3B8] mt-3">{tex.cancelAnytime}</p>
           </div>
-          {/* Free plan */}
-          <div className="rounded-2xl p-6 border border-[#BFDBFE] shadow-sm flex flex-col text-center" style={{ background: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' }}>
-            <h3 className="text-base font-bold text-[#1E293B] mb-1">{tex.freeTitle}</h3>
-            <p className="text-sm text-[#64748B] mb-3">{tex.freeDesc}</p>
-            <p className="text-2xl font-bold text-[#0B1C3D] mb-4">$0</p>
-            <ul className="space-y-2 text-sm text-[#475569] mb-4 text-center list-none">
-              <li>{tex.freeFeature1}</li>
-              <li>{tex.freeFeature2}</li>
-              <li>{tex.freeFeature3}</li>
-              <li>{tex.freeFeature4}</li>
-              <li>{tex.freeFeature5}</li>
-              <li>{tex.freeFeature6}</li>
+          {/* Guaranteed Pass */}
+          <div className="relative bg-white rounded-2xl p-5 border-2 border-[#F59E0B] shadow-sm flex flex-col text-center">
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#F59E0B] text-[#0B1C3D] text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap">
+              🛡️ GUARANTEED
+            </span>
+            <h3 className="text-sm font-bold text-[#92400E] mb-1 mt-1">Guaranteed Pass</h3>
+            <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">$39.99</div>
+            <div className="text-xs text-[#64748B] mb-3">30 days · one payment</div>
+            <ul className="space-y-1.5 text-xs text-[#475569] mb-4 text-left flex-1">
+              <li>✅ Everything in Full Prep</li>
+              <li>✅ Pass or 100% refund</li>
+              <li>✅ Priority support</li>
+              <li>✅ Study checklist</li>
             </ul>
-            <button
-              type="button"
-              onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
-              className="mt-auto w-full py-3 rounded-xl font-semibold text-sm border border-[#E2E8F0] text-[#1E293B] hover:bg-[#F8FAFC] hover:border-[#2563EB] hover:text-[#2563EB] transition-all"
-            >
-              {tex.startFree}
+            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=guaranteed_pass`)}
+              className="w-full py-2.5 rounded-xl font-semibold text-sm bg-[#0B1C3D] text-white hover:bg-[#1E3A5F] transition-all">
+              {tex.upgradeCta || 'Get Guaranteed Pass'}
             </button>
           </div>
         </div>
+        {/* Free start link */}
+        <p className="text-center text-sm text-[#64748B] mt-4">
+          Or{' '}
+          <button type="button"
+            onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
+            className="text-[#2563EB] hover:underline font-medium">
+            start free — 20 questions, no signup needed →
+          </button>
+        </p>
       </section>
 
       {/* Pass Guarantee block */}
       <section className="w-full max-w-lg mx-auto mb-8 px-4">
         <div className="bg-[#ECFDF5] border border-[#A7F3D0] rounded-2xl p-6 text-center">
           <div className="text-3xl mb-2">🛡️</div>
-          <h3 className="text-base font-bold text-[#065F46] mb-2">{tex.guaranteeTitle}</h3>
+          <h3 className="text-base font-bold text-[#065F46] mb-2">🛡️ Pass Guarantee — exclusive to Guaranteed Pass ($39.99)</h3>
           <p className="text-sm text-[#047857] leading-relaxed mb-4">{tex.guaranteeText}</p>
           <div className="flex flex-col gap-1.5">
             <span className="text-xs text-[#059669] font-medium">✓ {tex.guaranteeBullet1}</span>
-            <span className="text-xs text-[#059669] font-medium">✓ {tex.guaranteeBullet2}</span>
+            <span className="text-xs text-[#059669] font-medium">✓ One payment · 30 days access · No auto-renewal</span>
             <span className="text-xs text-[#059669] font-medium">✓ {tex.guaranteeBullet3}</span>
           </div>
         </div>

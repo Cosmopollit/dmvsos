@@ -481,9 +481,9 @@ function TestContent() {
         )}
 
         {/* Q18 pre-paywall nudge */}
-        {!isPro && current === 17 && showAnswer && tex.twoQuestionsLeft && (
+        {!isPro && current === 17 && showAnswer && (
           <div className="bg-[#FFF7ED] border border-[#FED7AA] rounded-xl px-4 py-3 mb-4 text-sm text-[#92400E] font-medium text-center">
-            {tex.twoQuestionsLeft}
+            🔔 2 questions left in your free test — unlock all from $7.99
           </div>
         )}
 
@@ -509,41 +509,59 @@ function TestContent() {
       {/* Upgrade modal overlay */}
       {showUpgradeBanner && !isPro && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
-          <div className="bg-white rounded-2xl w-full max-w-md shadow-xl border border-[#E2E8F0] overflow-hidden text-center">
-            {/* Gradient accent bar */}
+          <div className="bg-white rounded-2xl w-full max-w-md shadow-xl border border-[#E2E8F0] overflow-hidden">
             <div className="h-1.5 bg-gradient-to-r from-[#F59E0B] via-[#FB923C] to-[#F59E0B]" />
-            <div className="p-8">
-              <div className="text-4xl mb-3">👑</div>
-              <h2 className="text-2xl font-bold text-[#0B1C3D] mb-2">{tex.upgradeTitle}</h2>
-              <p className="text-[#475569] text-sm leading-relaxed mb-3">
-                {(tex.upgradeDesc || '').replace('{percent}', String(Math.round((score / 20) * 100)))}
-              </p>
-              {/* Current score */}
-              <p className="text-[#2563EB] font-bold text-base mb-5">
+            <div className="p-6">
+              <h2 className="text-xl font-bold text-[#0B1C3D] mb-1 text-center">{tex.upgradeModalTitle || "You've used all 20 free questions"}</h2>
+              <p className="text-[#2563EB] font-bold text-sm mb-4 text-center">
                 {(tex.upgradeScoreSoFar || 'Your score: {score}/20').replace('{score}', String(score)).replace('{percent}', String(Math.round((score / 20) * 100)))}
               </p>
-              <ul className="text-left text-sm text-[#475569] space-y-2.5 mb-6">
-                <li className="flex items-start gap-2"><span className="shrink-0">✅</span><span>{(tex.upgradeFeature1 || '✅ All 40 questions per test').replace(/^✅\s*/, '')}</span></li>
-                <li className="flex items-start gap-2"><span className="shrink-0">✅</span><span>{(tex.upgradeFeature2 || '✅ All 50 states, 3 categories, 5 languages').replace(/^✅\s*/, '')}</span></li>
-                <li className="flex items-start gap-2"><span className="shrink-0">✅</span><span>{(tex.upgradeFeature3 || '✅ Detailed explanations for every question').replace(/^✅\s*/, '')}</span></li>
-              </ul>
-              {/* Money-back guarantee badge */}
-              <div className="flex items-center justify-center gap-1.5 mb-5">
-                <span className="text-xs font-medium text-[#16A34A] bg-[#F0FDF4] px-3 py-1 rounded-full border border-[#BBF7D0]">
-                  🛡️ {tex.guaranteeBadge || '30-day money-back guarantee'}
-                </span>
+
+              {/* 3 compact plan cards */}
+              <div className="flex gap-2 mb-4">
+                {/* Quick Pass */}
+                <div className="flex-1 border border-[#E2E8F0] rounded-xl p-3 text-center flex flex-col">
+                  <div className="text-xs font-bold text-[#2563EB] mb-0.5">Quick Pass</div>
+                  <div className="text-lg font-black text-[#0B1C3D] mb-0.5">$7.99</div>
+                  <div className="text-[10px] text-[#94A3B8] mb-2">Full bank · 30 days</div>
+                  <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=quick_pass`)}
+                    className="mt-auto w-full py-1.5 rounded-lg text-xs font-semibold bg-[#F1F5F9] text-[#0B1C3D] hover:bg-[#E2E8F0] transition">
+                    Get it
+                  </button>
+                </div>
+                {/* Full Prep */}
+                <div className="flex-1 border-2 border-[#2563EB] rounded-xl p-3 text-center flex flex-col bg-[#EFF6FF]">
+                  <div className="text-[9px] font-bold text-white bg-[#2563EB] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">POPULAR</div>
+                  <div className="text-xs font-bold text-[#2563EB] mb-0.5">Full Prep</div>
+                  <div className="text-lg font-black text-[#0B1C3D] mb-0.5">$14.99</div>
+                  <div className="text-[10px] text-[#64748B] mb-2">+ Readiness Meter</div>
+                  <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=full_prep`)}
+                    className="mt-auto w-full py-1.5 rounded-lg text-xs font-bold bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition animate-pulse">
+                    Get it
+                  </button>
+                </div>
+                {/* Guaranteed Pass */}
+                <div className="flex-1 border-2 border-[#F59E0B] rounded-xl p-3 text-center flex flex-col">
+                  <div className="text-[9px] font-bold text-[#0B1C3D] bg-[#F59E0B] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">🛡️ PASS</div>
+                  <div className="text-xs font-bold text-[#92400E] mb-0.5">Guaranteed</div>
+                  <div className="text-lg font-black text-[#0B1C3D] mb-0.5">$39.99</div>
+                  <div className="text-[10px] text-[#64748B] mb-2">100% refund if fail</div>
+                  <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=guaranteed_pass`)}
+                    className="mt-auto w-full py-1.5 rounded-lg text-xs font-semibold bg-[#0B1C3D] text-white hover:bg-[#1E3A5F] transition">
+                    Get it
+                  </button>
+                </div>
               </div>
-              <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}`)}
-                className="w-full bg-[#F59E0B] text-[#0B1C3D] py-4 rounded-xl font-bold text-base hover:bg-[#FBBF24] hover:-translate-y-0.5 hover:shadow-lg transition-all mb-3 animate-pulse">
-                {tex.upgradeCta}
-              </button>
+
+              <p className="text-center text-xs text-[#94A3B8] mb-3">One payment · 30 days access · No auto-renewal</p>
+
               <button type="button" onClick={() => {
                 const allAnswers = userAnswersRef.current;
                 const finalScore = allAnswers.reduce((acc, ans, i) => acc + (ans === questions[i]?.correctAnswerIndex ? 1 : 0), 0);
                 sessionStorage.setItem('testResults', JSON.stringify({ questions, userAnswers: allAnswers, elapsed, state, category, lang }));
                 router.push(`/result?score=${finalScore}&total=${questions.length}&lang=${lang}`);
               }}
-                className="text-sm text-[#94A3B8] hover:text-[#64748B] transition">
+                className="w-full text-sm text-[#94A3B8] hover:text-[#64748B] transition text-center">
                 {tex.seeResults}
               </button>
             </div>

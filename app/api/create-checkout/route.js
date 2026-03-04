@@ -9,8 +9,21 @@ const supabase = createClient(
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://dmvsos.com';
 
+const PLAN_PRICE_IDS = {
+  quick_pass: process.env.STRIPE_PRICE_ID_QUICK_PASS,
+  full_prep: process.env.STRIPE_PRICE_ID_FULL_PREP,
+  guaranteed_pass: process.env.STRIPE_PRICE_ID_GUARANTEED_PASS,
+};
+
 export async function POST(req) {
   try {
+    const body = await req.json().catch(() => ({}));
+    const planType = body.planType || 'full_prep';
+
+    if (!PLAN_PRICE_IDS[planType]) {
+      return Response.json({ error: 'Invalid plan type' }, { status: 400 });
+    }
+
     // Get user email from auth header
     const authHeader = req.headers.get('authorization');
     let customerEmail = null;
@@ -22,14 +35,18 @@ export async function POST(req) {
     }
 
     const sessionParams = {
-      mode: 'subscription',
+      mode: 'payment',
       payment_method_types: ['card'],
       line_items: [{
-        price: process.env.STRIPE_PRICE_ID || process.env.NEXT_PUBLIC_STRIPE_PRICE_ID,
+        price: PLAN_PRICE_IDS[planType],
         quantity: 1,
       }],
       success_url: `${SITE_URL}/success`,
-      cancel_url: `${SITE_URL}/`,
+      cancel_url: `${SITE_URL}/upgrade`,
+      metadata: {
+        plan_type: planType,
+        ...(customerEmail ? { email: customerEmail } : {}),
+      },
     };
 
     if (customerEmail) {

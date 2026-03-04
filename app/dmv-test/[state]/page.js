@@ -139,7 +139,7 @@ export default async function StateDmvTestPage({ params }) {
             name: `Is the ${name} DMV practice test free?`,
             acceptedAnswer: {
               '@type': 'Answer',
-              text: `Yes. DMVSOS provides a free ${name} DMV practice test with real knowledge test questions. A Pro plan ($9.99/mo) unlocks extended 40-question tests and detailed answer explanations.`,
+              text: `Yes. DMVSOS provides a free ${name} DMV practice test with real knowledge test questions. Paid plans from $7.99 (30-day access) unlock extended 40-question tests and detailed answer explanations.`,
             },
           },
           {
@@ -202,7 +202,7 @@ export default async function StateDmvTestPage({ params }) {
     },
     {
       q: `Is this ${name} DMV practice test free?`,
-      a: `Yes — 20 questions per test are completely free with no signup required. Pro plan ($9.99/mo) unlocks 40-question full tests and detailed explanations.`,
+      a: `Yes — 20 questions per test are completely free with no signup required. Paid plans from $7.99 (30-day access) unlock 40-question full tests and detailed explanations.`,
     },
     {
       q: `What topics does the ${name} DMV test cover?`,

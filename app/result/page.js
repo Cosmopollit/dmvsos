@@ -189,17 +189,43 @@ function ResultContent() {
         )}
 
         {/* Upgrade banner — hidden for Pro users */}
-        {!isPro && <div className="bg-[#0B1C3D] rounded-2xl p-6 w-full border border-[#1e3a5f] shadow-sm">
-          <p className="text-white font-semibold text-base mb-1">{tex.upgradeModalTitle}</p>
-          <p className="text-[#94A3B8] text-sm mb-4">{tex.upgradeBannerDesc}</p>
-          <button
-            type="button"
-            onClick={() => router.push(`/upgrade?lang=${lang}`)}
-            className="w-full bg-[#F59E0B] text-[#0B1C3D] py-3 rounded-xl font-semibold text-sm hover:bg-[#FBBF24] transition-all"
-          >
-            {tex.upgradeCta}
-          </button>
-        </div>}
+        {!isPro && (
+          <div className="bg-white rounded-2xl p-5 w-full border border-[#E2E8F0] shadow-sm">
+            <p className="text-[#0B1C3D] font-bold text-base mb-1 text-center">{tex.upgradeModalTitle || 'Unlock Full Access'}</p>
+            <p className="text-[#64748B] text-xs mb-4 text-center">One payment · 30 days access · No auto-renewal</p>
+            <div className="flex gap-2 mb-3">
+              {/* Quick Pass */}
+              <div className="flex-1 border border-[#E2E8F0] rounded-xl p-3 text-center flex flex-col">
+                <div className="text-xs font-bold text-[#2563EB] mb-0.5">Quick Pass</div>
+                <div className="text-base font-black text-[#0B1C3D] mb-2">$7.99</div>
+                <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=quick_pass`)}
+                  className="mt-auto w-full py-1.5 rounded-lg text-xs font-semibold bg-[#F1F5F9] text-[#0B1C3D] hover:bg-[#E2E8F0] transition">
+                  Get it
+                </button>
+              </div>
+              {/* Full Prep */}
+              <div className="flex-1 border-2 border-[#2563EB] rounded-xl p-3 text-center flex flex-col bg-[#EFF6FF]">
+                <div className="text-[9px] font-bold text-white bg-[#2563EB] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">POPULAR</div>
+                <div className="text-xs font-bold text-[#2563EB] mb-0.5">Full Prep</div>
+                <div className="text-base font-black text-[#0B1C3D] mb-2">$14.99</div>
+                <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=full_prep`)}
+                  className="mt-auto w-full py-1.5 rounded-lg text-xs font-bold bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition">
+                  Get it
+                </button>
+              </div>
+              {/* Guaranteed Pass */}
+              <div className="flex-1 border-2 border-[#F59E0B] rounded-xl p-3 text-center flex flex-col">
+                <div className="text-[9px] font-bold text-[#0B1C3D] bg-[#F59E0B] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">🛡️</div>
+                <div className="text-xs font-bold text-[#92400E] mb-0.5">Guaranteed</div>
+                <div className="text-base font-black text-[#0B1C3D] mb-2">$39.99</div>
+                <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=guaranteed_pass`)}
+                  className="mt-auto w-full py-1.5 rounded-lg text-xs font-semibold bg-[#0B1C3D] text-white hover:bg-[#1E3A5F] transition">
+                  Get it
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Buttons */}
         <button
