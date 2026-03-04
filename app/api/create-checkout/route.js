@@ -9,19 +9,24 @@ const supabase = createClient(
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://dmvsos.com';
 
-const PLAN_PRICE_IDS = {
-  quick_pass: process.env.STRIPE_PRICE_ID_QUICK_PASS,
-  full_prep: process.env.STRIPE_PRICE_ID_FULL_PREP,
-  guaranteed_pass: process.env.STRIPE_PRICE_ID_GUARANTEED_PASS,
-};
-
 export async function POST(req) {
   try {
+    // Read price IDs inside handler to ensure runtime env resolution
+    const PLAN_PRICE_IDS = {
+      quick_pass: process.env.STRIPE_PRICE_ID_QUICK_PASS,
+      full_prep: process.env.STRIPE_PRICE_ID_FULL_PREP,
+      guaranteed_pass: process.env.STRIPE_PRICE_ID_GUARANTEED_PASS,
+    };
+
     const body = await req.json().catch(() => ({}));
     const planType = body.planType || 'full_prep';
 
+    if (!['quick_pass', 'full_prep', 'guaranteed_pass'].includes(planType)) {
+      return Response.json({ error: 'Unknown plan type' }, { status: 400 });
+    }
+
     if (!PLAN_PRICE_IDS[planType]) {
-      return Response.json({ error: 'Invalid plan type' }, { status: 400 });
+      return Response.json({ error: `Missing price ID for ${planType}` }, { status: 500 });
     }
 
     // Get user email from auth header
