@@ -365,8 +365,8 @@ export default async function StateDmvTestPage({ params }) {
 
         {/* Pro upgrade */}
         <div className="bg-gradient-to-r from-[#0B1C3D] to-[#1E3A5F] rounded-2xl p-6 mb-8 text-center shadow-lg border border-[#1e3a5f]">
-          <div className="text-[#F59E0B] font-black text-xs mb-2 uppercase tracking-widest">👑 DMVSOS Pro</div>
-          <p className="text-white font-bold text-base mb-1">94% of Pro users pass on their first try</p>
+          <div className="text-[#F59E0B] font-black text-xs mb-2 uppercase tracking-widest">✨ Unlock Full Access</div>
+          <p className="text-white font-bold text-base mb-1">Most people fail because they practice with outdated questions</p>
           <p className="text-[#94A3B8] text-sm mb-4">Full 40-question tests · Detailed explanations · All categories</p>
           <div className="flex items-center justify-center gap-2 mb-3">
             <span className="text-xs font-semibold text-[#10B981] bg-[#10B981]/10 px-3 py-1 rounded-full border border-[#10B981]/30">

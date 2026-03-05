@@ -1,6 +1,6 @@
 export const metadata = {
   title: 'Payment Successful — DMVSOS',
-  description: 'Welcome to DMVSOS Pro! You now have access to all tests.',
+  description: 'Payment successful! You now have full access to all DMVSOS tests.',
 };
 
 export default function Layout({ children }) {
