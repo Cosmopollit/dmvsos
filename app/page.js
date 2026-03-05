@@ -12,7 +12,7 @@ import { flags } from '@/lib/flags';
 const codeToName = { en: 'English', ru: 'Русский', es: 'Español', zh: '中文', ua: 'Українська' };
 
 export default function Home() {
-  const { user, isPro } = useAuth();
+  const { user, isPro, planType } = useAuth();
   const [lang, setLang] = useState(() => codeToName[getSavedLang()] || 'English');
   const [state, setState] = useState('');
   const [liveCount] = useState(() => Math.floor(Math.random() * 30) + 30);
@@ -163,14 +163,22 @@ export default function Home() {
                     onClick={() => router.push('/profile')}
                     className="flex items-center gap-1.5 min-w-0 hover:opacity-90 transition"
                   >
-                    {isPro ? (
-                      <span className="text-[#F59E0B] font-medium text-xs">👑</span>
-                    ) : (
-                      <div className="w-6 h-6 rounded-full bg-[#0B1C3D] flex items-center justify-center text-white text-[10px] font-bold shrink-0">
-                        {initial}
-                      </div>
-                    )}
+                    <div className="w-6 h-6 rounded-full bg-[#0B1C3D] flex items-center justify-center text-white text-[10px] font-bold shrink-0">
+                      {initial}
+                    </div>
                     <span className="hidden sm:block text-xs font-medium text-[#1E293B] max-w-[80px] truncate">{firstName}</span>
+                    {planType === 'guaranteed_pass' && (
+                      <span className="hidden sm:inline text-[10px] font-semibold bg-[#FEF3C7] text-[#B45309] px-1.5 py-0.5 rounded-full whitespace-nowrap">Guaranteed</span>
+                    )}
+                    {planType === 'full_prep' && (
+                      <span className="hidden sm:inline text-[10px] font-semibold bg-[#DBEAFE] text-[#1D4ED8] px-1.5 py-0.5 rounded-full whitespace-nowrap">Full Prep</span>
+                    )}
+                    {planType === 'quick_pass' && (
+                      <span className="hidden sm:inline text-[10px] font-semibold bg-[#F3F4F6] text-[#4B5563] px-1.5 py-0.5 rounded-full whitespace-nowrap">Quick Pass</span>
+                    )}
+                    {!planType && (
+                      <span className="hidden sm:inline text-[10px] font-semibold bg-[#F3F4F6] text-[#9CA3AF] px-1.5 py-0.5 rounded-full whitespace-nowrap">Free</span>
+                    )}
                   </button>
                   <button onClick={handleSignOut} type="button"
                     className="text-[11px] text-[#94A3B8] hover:text-[#64748B] hover:underline transition"
@@ -301,13 +309,12 @@ export default function Home() {
 
       {/* Stats bar */}
       <section className="w-full max-w-lg mx-auto px-4 mb-8">
-        <div className="grid grid-cols-5 gap-2">
+        <div className="grid grid-cols-4 gap-2">
           {[
             { value: '5K+', label: tex.statUsers },
             { value: '34K+', label: tex.statQuestions },
             { value: '50', label: tex.statStates },
             { value: '5', label: tex.statLanguages },
-            { value: '94%', label: tex.statPassRate },
           ].map((stat) => (
             <div key={stat.label} className="bg-white rounded-2xl p-3 text-center shadow-sm border border-[#E2E8F0]/60">
               <div className="text-lg sm:text-xl font-black text-[#0B1C3D]">{stat.value}</div>
@@ -345,71 +352,22 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Pricing */}
-      <section className="w-full max-w-2xl mx-auto mb-8 px-4">
-        <h2 className="text-xl font-bold text-[#0B1C3D] text-center mb-2">{tex.pricingHeading}</h2>
-        <p className="text-sm text-[#64748B] text-center mb-6 leading-relaxed max-w-md mx-auto">{tex.pricingSubtext}</p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {/* Quick Pass — white, gray border */}
-          <div className="bg-white rounded-2xl p-5 border border-[#E2E8F0] shadow-sm flex flex-col text-center">
-            <h3 className="text-sm font-bold text-[#2563EB] mb-1">Quick Pass</h3>
-            <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">$7.99</div>
-            <div className="text-xs text-[#64748B] mb-3">{tex.quickPassDuration || '7 days · one payment'}</div>
-            <ul className="space-y-1.5 text-xs text-[#475569] mb-4 text-left flex-1">
-              {(tex.quickPassFeatures || ['Full question bank', 'All 50 states', 'Car, CDL & Motorcycle', '5 languages']).map((f, i) => (
-                <li key={i}>{f}</li>
-              ))}
-            </ul>
-            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=quick_pass`)}
-              className="w-full py-2.5 rounded-xl font-semibold text-sm border border-[#E2E8F0] text-[#0B1C3D] hover:bg-[#F1F5F9] transition-all">
-              {tex.planGetQuickPass || 'Get Quick Pass — $7.99'}
-            </button>
+      {/* Pricing CTA — link to /upgrade for full plan cards */}
+      <section className="w-full max-w-lg mx-auto mb-8 px-4">
+        <div className="bg-[#0B1C3D] rounded-2xl p-6 text-center">
+          <h2 className="text-lg font-bold text-white mb-1">{tex.pricingHeading}</h2>
+          <p className="text-sm text-[#94A3B8] mb-4">{tex.pricingSubtext || 'From $7.99 · One payment · No subscription'}</p>
+          <div className="flex items-center justify-center gap-3 flex-wrap mb-4">
+            <span className="text-xs font-semibold text-[#CBD5E1] bg-[#1E3A5F] px-3 py-1.5 rounded-full">Quick Pass $7.99 · 7 days</span>
+            <span className="text-xs font-bold text-white bg-[#2563EB] px-3 py-1.5 rounded-full">{tex.mostPopular || 'MOST POPULAR'} · Full Prep $14.99 · 30 days</span>
+            <span className="text-xs font-semibold text-[#B45309] bg-[#FEF3C7] px-3 py-1.5 rounded-full">🛡️ Guaranteed Pass $39.99 · 90 days</span>
           </div>
-          {/* Full Prep — dark navy, blue border, MOST POPULAR */}
-          <div className="relative bg-[#0B1C3D] rounded-2xl p-5 border-2 border-[#2563EB] shadow-sm flex flex-col text-center">
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#2563EB] text-white text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap">
-              {tex.mostPopular}
-            </span>
-            <h3 className="text-sm font-bold text-[#F59E0B] mb-1 mt-1">Full Prep</h3>
-            <div className="text-2xl font-black text-white mb-0.5">$14.99</div>
-            <div className="text-xs text-[#94A3B8] mb-3">{tex.fullPrepDuration || '30 days · one payment'}</div>
-            <ul className="space-y-1.5 text-xs text-[#CBD5E1] mb-4 text-left flex-1">
-              {(tex.fullPrepFeatures || ['Everything in Quick Pass', 'Challenge Bank (coming soon)', 'Readiness Meter (coming soon)', 'Detailed explanations']).map((f, i) => (
-                <li key={i}>{f}</li>
-              ))}
-            </ul>
-            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=full_prep`)}
-              className="w-full py-2.5 rounded-xl font-bold text-sm bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition-all animate-pulse">
-              {tex.planGetFullPrep || 'Get Full Prep — $14.99'}
-            </button>
-          </div>
-          {/* Guaranteed Pass — white, gold border */}
-          <div className="relative bg-white rounded-2xl p-5 border-2 border-[#F59E0B] shadow-sm flex flex-col text-center">
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#F59E0B] text-[#0B1C3D] text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap">
-              {tex.planGuaranteedBadge || '🛡️ GUARANTEED'}
-            </span>
-            <h3 className="text-sm font-bold text-[#92400E] mb-1 mt-1">Guaranteed Pass</h3>
-            <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">$39.99</div>
-            <div className="text-xs text-[#64748B] mb-3">{tex.guaranteedPassDuration || '90 days · one payment'}</div>
-            <ul className="space-y-1.5 text-xs text-[#475569] mb-4 text-left flex-1">
-              {(tex.guaranteedPassFeatures || ['Everything in Full Prep', '🛡️ Pass or 100% refund', 'Priority support', 'Study checklist']).map((f, i) => (
-                <li key={i}>{f}</li>
-              ))}
-            </ul>
-            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=guaranteed_pass`)}
-              className="w-full py-2.5 rounded-xl font-semibold text-sm bg-[#F59E0B] text-[#0B1C3D] hover:bg-[#FBBF24] transition-all">
-              {tex.planGetGuaranteedPass || 'Get Guaranteed Pass — $39.99'}
-            </button>
-          </div>
-        </div>
-        <p className="text-center text-sm text-[#64748B] mt-4">{tex.pricingValueProp}</p>
-        <p className="text-center text-sm text-[#64748B] mt-2">
-          <button type="button"
-            onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
-            className="text-[#2563EB] hover:underline font-medium">
-            {tex.pricingStartFree || 'Or start free — 20 questions, no signup needed →'}
+          <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}`)}
+            className="w-full py-3 rounded-xl font-bold text-sm bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition-all">
+            {tex.planGetFullPrep || 'See all plans →'}
           </button>
-        </p>
+          <p className="text-xs text-[#64748B] mt-3">{tex.cancelAnytime || 'One payment · No subscription · No auto-renewal'}</p>
+        </div>
       </section>
 
       {/* Social proof */}

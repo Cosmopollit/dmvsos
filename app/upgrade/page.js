@@ -86,7 +86,6 @@ function UpgradeContent() {
 
       {/* Hero */}
       <div className="text-center mb-8 max-w-lg">
-        <div className="text-5xl mb-4">👑</div>
         <h1 className="text-3xl font-bold text-white mb-3">
           {(tex.upgradeHero || 'Practice tonight.\nPass tomorrow.').split('\n').map((line, i, arr) => (
             <span key={i}>{line}{i < arr.length - 1 ? <br /> : null}</span>
@@ -100,8 +99,8 @@ function UpgradeContent() {
       {/* Social proof */}
       <div className="flex gap-6 mb-8 text-center">
         <div>
-          <div className="text-2xl font-bold text-[#F59E0B]">94%</div>
-          <div className="text-xs text-[#94A3B8]">{tex.statPassRate}</div>
+          <div className="text-2xl font-bold text-[#F59E0B]">34K+</div>
+          <div className="text-xs text-[#94A3B8]">{tex.statQuestions || 'questions'}</div>
         </div>
         <div className="w-px bg-[#1E3A5F]"></div>
         <div>
@@ -187,22 +186,9 @@ function UpgradeContent() {
       )}
 
       {/* Fine print */}
-      <p className="text-center text-xs text-[#64748B] mb-4">
-        {tex.cancelAnytime || 'One payment · 30 days access · No auto-renewal'}
+      <p className="text-center text-xs text-[#64748B] mb-6">
+        {tex.cancelAnytime || 'One payment · No subscription · No auto-renewal'}
       </p>
-
-      {/* Testimonial */}
-      <div className="bg-[#1E3A5F] rounded-2xl p-6 w-full max-w-md mb-6">
-        <p className="text-white text-sm italic mb-3">
-          {tex.upgradeTestimonial}
-        </p>
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-[#F59E0B] flex items-center justify-center text-black font-bold text-sm">M</div>
-          <div>
-            <div className="text-white text-sm font-semibold">{tex.upgradeTestimonialAuthor}</div>
-          </div>
-        </div>
-      </div>
 
       <button type="button" onClick={() => router.push('/')} className="text-[#94A3B8] text-sm hover:text-white">
         {tex.back}
