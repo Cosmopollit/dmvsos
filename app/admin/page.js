@@ -290,22 +290,29 @@ export default function AdminPage() {
 
   const handleImageSelect = async (questionIndex, file) => {
     if (!file) return;
+    const q = questions[questionIndex];
+    if (!q?.id) { alert('Question has no ID — save it first.'); return; }
     setUploadingIndex(questionIndex);
     const stateSlug = stateToSlug(stateLabel);
     const langFolder = lang === 'zh' ? 'cn' : lang;
-    const ext = file.name.split('.').pop() || 'jpg';
-    const path = `${stateSlug}/${langFolder}/${category}/${questionIndex}.${ext}`;
+    const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+    const path = `${stateSlug}/${langFolder}/${category}/${q.id}.${ext}`;
     try {
-      const { error } = await supabase.storage.from('question-images').upload(path, file, { upsert: true });
-      if (error) throw error;
-      const { data: { publicUrl } } = supabase.storage.from('question-images').getPublicUrl(path);
+      const form = new FormData();
+      form.append('password', password);
+      form.append('file', file);
+      form.append('questionId', String(q.id));
+      form.append('path', path);
+      const res = await fetch('/api/admin/upload-image', { method: 'POST', body: form });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Upload failed');
       setQuestions((prev) => {
         const next = [...prev];
-        next[questionIndex] = { ...next[questionIndex], imageUrl: publicUrl };
+        next[questionIndex] = { ...next[questionIndex], imageUrl: data.url };
         return next;
       });
     } catch (err) {
-      console.error('Upload failed:', err);
+      alert('Image upload failed: ' + err.message);
     } finally {
       setUploadingIndex(null);
     }
@@ -466,10 +473,16 @@ export default function AdminPage() {
                     disabled={uploadingIndex === i}
                     className="shrink-0 px-3 py-1.5 rounded-lg bg-[#0B1C3D] text-white text-sm font-medium hover:bg-[#132248] disabled:opacity-60 transition"
                   >
-                    {uploadingIndex === i ? 'Uploading…' : 'Add Image'}
+                    {uploadingIndex === i ? 'Uploading…' : (q.imageUrl ? '✓ Image' : 'Add Image')}
                   </button>
                 </div>
               </div>
+              {q.imageUrl && (
+                <div className="mt-2 flex items-center gap-2">
+                  <img src={q.imageUrl} alt="question" className="h-12 w-auto rounded border border-[#E2E8F0]" />
+                  <span className="text-xs text-green-600 font-medium">Image saved</span>
+                </div>
+              )}
               {editingIndex === i && editForm && (
                 <div className="mt-4 pt-4 border-t border-[#E2E8F0] space-y-3">
                   <label className="block text-xs font-semibold text-[#1E293B]">Question text</label>
