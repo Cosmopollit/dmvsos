@@ -2,10 +2,9 @@ import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
 async function supabaseUpdate(email, updates) {
+  const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const res = await fetch(
     `${SUPABASE_URL}/rest/v1/profiles?email=eq.${encodeURIComponent(email)}`,
     {
@@ -25,6 +24,8 @@ async function supabaseUpdate(email, updates) {
 }
 
 async function supabaseInsert(row) {
+  const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const res = await fetch(
     `${SUPABASE_URL}/rest/v1/profiles`,
     {
@@ -88,7 +89,7 @@ export async function POST(request) {
     }
   } catch (err) {
     console.error('Webhook processing error:', err.message);
-    return new Response(`Webhook processing error: ${err.message}`, { status: 500 });
+    return new Response('Webhook processing error', { status: 500 });
   }
 
   return new Response('OK', { status: 200 });
