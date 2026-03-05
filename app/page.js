@@ -292,18 +292,21 @@ export default function Home() {
       <div className="w-full max-w-lg mx-auto px-4 mb-4">
         <a
           href="/manuals"
-          className="flex items-center gap-3 bg-white rounded-2xl px-4 py-3.5 shadow-sm border border-[#E2E8F0]/60 hover:border-[#2563EB] hover:shadow-md transition-all group"
+          className="flex items-center gap-3 bg-blue-50 rounded-2xl px-4 py-4 shadow-sm border border-blue-100 border-l-4 border-l-blue-500 hover:bg-blue-100 hover:shadow-md transition-all group"
         >
-          <div className="w-9 h-9 rounded-lg bg-[#EFF6FF] flex items-center justify-center text-lg shrink-0 group-hover:bg-[#DBEAFE] transition-colors">📖</div>
+          <div className="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center text-2xl shrink-0 group-hover:bg-blue-200 transition-colors">📖</div>
           <div className="flex-1 min-w-0">
-            <div className="text-sm font-semibold text-[#0B1C3D] group-hover:text-[#2563EB]">
-              {tex.manualsSectionTitle}
+            <div className="flex items-center gap-2 mb-0.5">
+              <span className="text-sm font-bold text-[#0B1C3D] group-hover:text-[#2563EB]">
+                {tex.manualsSectionTitle}
+              </span>
+              <span className="text-[10px] font-bold bg-blue-500 text-white px-1.5 py-0.5 rounded-full leading-none">FREE</span>
             </div>
-            <div className="text-[11px] text-[#94A3B8]">
+            <div className="text-[11px] text-[#64748B]">
               {tex.manualsSectionDesc}
             </div>
           </div>
-          <div className="text-[#94A3B8] shrink-0 group-hover:text-[#2563EB]">→</div>
+          <div className="text-blue-400 shrink-0 group-hover:text-blue-600 font-bold">→</div>
         </a>
       </div>
 
