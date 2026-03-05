@@ -231,7 +231,7 @@ export default function Home() {
       <div id="state-selector" className="w-full max-w-lg mx-auto px-4 mb-8">
         <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 border border-[#E2E8F0]/40" style={{ borderTop: '4px solid #2563EB' }}>
 
-        <p className="text-sm text-[#94A3B8] mb-5">{tex.selectStateLabel}</p>
+        <p className="text-base font-semibold text-[#0B1C3D] mb-5">{tex.selectStateLabel}</p>
 
         <select
           ref={stateSelectRef}
