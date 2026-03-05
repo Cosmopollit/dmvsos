@@ -10,28 +10,21 @@ const states = [
   'west-virginia', 'wisconsin', 'wyoming',
 ];
 
-const categories = ['dmv', 'cdl', 'moto'];
-const languages = ['en', 'ru', 'es', 'zh', 'ua'];
-
 export default function sitemap() {
   const baseUrl = 'https://www.dmvsos.com';
   const now = new Date().toISOString();
 
   const pages = [
-    { url: baseUrl, lastModified: now, changeFrequency: 'weekly', priority: 1 },
-    { url: `${baseUrl}/upgrade`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${baseUrl}/login`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${baseUrl}/terms`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${baseUrl}/privacy`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
+    { url: baseUrl,                    lastModified: now, changeFrequency: 'weekly',  priority: 1.0 },
+    { url: `${baseUrl}/upgrade`,       lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/dmv-test`,      lastModified: now, changeFrequency: 'weekly',  priority: 0.9 },
+    { url: `${baseUrl}/manuals`,       lastModified: now, changeFrequency: 'weekly',  priority: 0.9 },
+    { url: `${baseUrl}/login`,         lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${baseUrl}/terms`,         lastModified: now, changeFrequency: 'yearly',  priority: 0.2 },
+    { url: `${baseUrl}/privacy`,       lastModified: now, changeFrequency: 'yearly',  priority: 0.2 },
   ];
 
-  // DMV test landing pages
-  pages.push({
-    url: `${baseUrl}/dmv-test`,
-    lastModified: now,
-    changeFrequency: 'weekly',
-    priority: 0.9,
-  });
+  // DMV test state landing pages — clean URLs, high SEO value
   for (const st of states) {
     pages.push({
       url: `${baseUrl}/dmv-test/${st}`,
@@ -41,13 +34,7 @@ export default function sitemap() {
     });
   }
 
-  // Manual pages
-  pages.push({
-    url: `${baseUrl}/manuals`,
-    lastModified: now,
-    changeFrequency: 'weekly',
-    priority: 0.9,
-  });
+  // Manual pages — state + category sub-pages
   for (const st of states) {
     pages.push({
       url: `${baseUrl}/manuals/${st}`,
@@ -55,7 +42,6 @@ export default function sitemap() {
       changeFrequency: 'monthly',
       priority: 0.8,
     });
-    // Category sub-pages: /manuals/[state]/car, /cdl, /motorcycle
     for (const cat of ['car', 'cdl', 'motorcycle']) {
       pages.push({
         url: `${baseUrl}/manuals/${st}/${cat}`,
@@ -63,25 +49,6 @@ export default function sitemap() {
         changeFrequency: 'monthly',
         priority: 0.75,
       });
-    }
-  }
-
-  for (const st of states) {
-    for (const lang of languages) {
-      pages.push({
-        url: `${baseUrl}/category?state=${st}&lang=${lang}`,
-        lastModified: now,
-        changeFrequency: 'weekly',
-        priority: 0.7,
-      });
-      for (const cat of categories) {
-        pages.push({
-          url: `${baseUrl}/test?state=${st}&category=${cat}&lang=${lang}`,
-          lastModified: now,
-          changeFrequency: 'weekly',
-          priority: 0.6,
-        });
-      }
     }
   }
 
