@@ -106,6 +106,24 @@ export default function AdminPage() {
     setSaveError('');
   };
 
+  const handleDeleteQuestion = async (i) => {
+    const q = questions[i];
+    if (!q?.id) return;
+    if (!window.confirm(`Delete question #${i + 1}?\n\n"${(q.question || '').slice(0, 80)}..."\n\nThis cannot be undone.`)) return;
+    try {
+      const res = await fetch('/api/admin/questions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password, action: 'delete', id: q.id }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to delete');
+      setQuestions((prev) => prev.filter((_, idx) => idx !== i));
+    } catch (err) {
+      alert('Delete failed: ' + err.message);
+    }
+  };
+
   const handleCancelEdit = () => {
     setEditingIndex(null);
     setEditForm(null);
@@ -427,6 +445,13 @@ export default function AdminPage() {
                     className="shrink-0 px-3 py-1.5 rounded-lg border border-[#2563EB] text-[#2563EB] text-sm font-medium hover:bg-[#EFF6FF] transition"
                   >
                     Edit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteQuestion(i)}
+                    className="shrink-0 px-3 py-1.5 rounded-lg border border-red-200 text-red-500 text-sm font-medium hover:bg-red-50 transition"
+                  >
+                    Delete
                   </button>
                   <input
                     type="file"
