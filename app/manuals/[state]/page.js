@@ -41,11 +41,11 @@ export async function generateMetadata({ params }) {
   return {
     title: `${name} DMV Driver Manual ${year} — Free PDF | DMVSOS`,
     description: `Read the official ${name} driver's handbook online or download the free PDF. Study for your ${meta.abbr} DMV written test with real questions.`,
-    alternates: { canonical: `https://dmvsos.com/manuals/${state}` },
+    alternates: { canonical: `https://www.dmvsos.com/manuals/${state}` },
     openGraph: {
       title: `${name} DMV Driver Manual ${year} — Free PDF`,
       description: `Official ${name} driver's handbook. Download PDF or read online. Available in multiple languages.`,
-      url: `https://dmvsos.com/manuals/${state}`,
+      url: `https://www.dmvsos.com/manuals/${state}`,
       siteName: 'DMVSOS',
       type: 'article',
     },
@@ -98,15 +98,15 @@ export default async function StateManualPage({ params }) {
         headline: `${name} DMV Driver Manual ${year}`,
         description: `Official ${name} driver's handbook for the ${meta.abbr} DMV written knowledge test.`,
         author: { '@type': 'Organization', name: meta.agency },
-        publisher: { '@type': 'Organization', name: 'DMVSOS', url: 'https://dmvsos.com' },
-        url: `https://dmvsos.com/manuals/${state}`,
+        publisher: { '@type': 'Organization', name: 'DMVSOS', url: 'https://www.dmvsos.com' },
+        url: `https://www.dmvsos.com/manuals/${state}`,
       },
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: tex.home,           item: 'https://dmvsos.com' },
-          { '@type': 'ListItem', position: 2, name: tex.manualsAllManuals, item: 'https://dmvsos.com/manuals' },
-          { '@type': 'ListItem', position: 3, name: name,               item: `https://dmvsos.com/manuals/${state}` },
+          { '@type': 'ListItem', position: 1, name: tex.home,           item: 'https://www.dmvsos.com' },
+          { '@type': 'ListItem', position: 2, name: tex.manualsAllManuals, item: 'https://www.dmvsos.com/manuals' },
+          { '@type': 'ListItem', position: 3, name: name,               item: `https://www.dmvsos.com/manuals/${state}` },
         ],
       },
       {

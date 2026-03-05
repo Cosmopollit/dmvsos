@@ -4,11 +4,11 @@ import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 export const metadata = {
   title: 'Free DMV Practice Tests — All 50 States 2026 | DMVSOS',
   description: 'Free DMV practice tests for all 50 US states in 5 languages. Pick your state and start practicing for your knowledge test today. No signup required.',
-  alternates: { canonical: 'https://dmvsos.com/dmv-test' },
+  alternates: { canonical: 'https://www.dmvsos.com/dmv-test' },
   openGraph: {
     title: 'Free DMV Practice Tests — All 50 States 2026',
     description: 'Free DMV practice tests for all 50 US states in English, Spanish, Russian, Chinese and Ukrainian.',
-    url: 'https://dmvsos.com/dmv-test',
+    url: 'https://www.dmvsos.com/dmv-test',
     siteName: 'DMVSOS',
     type: 'website',
     images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'DMVSOS — Free DMV Practice Tests' }],
@@ -24,14 +24,14 @@ const jsonLd = JSON.stringify({
       '@type': 'CollectionPage',
       name: 'Free DMV Practice Tests — All 50 States',
       description: 'State-specific DMV practice tests for all 50 US states in 5 languages.',
-      url: 'https://dmvsos.com/dmv-test',
-      publisher: { '@type': 'Organization', name: 'DMVSOS', url: 'https://dmvsos.com' },
+      url: 'https://www.dmvsos.com/dmv-test',
+      publisher: { '@type': 'Organization', name: 'DMVSOS', url: 'https://www.dmvsos.com' },
     },
     {
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home',      item: 'https://dmvsos.com' },
-        { '@type': 'ListItem', position: 2, name: 'DMV Tests', item: 'https://dmvsos.com/dmv-test' },
+        { '@type': 'ListItem', position: 1, name: 'Home',      item: 'https://www.dmvsos.com' },
+        { '@type': 'ListItem', position: 2, name: 'DMV Tests', item: 'https://www.dmvsos.com/dmv-test' },
       ],
     },
   ],

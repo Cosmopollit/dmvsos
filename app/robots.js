@@ -7,6 +7,6 @@ export default function robots() {
         disallow: ['/api/', '/admin', '/profile'],
       },
     ],
-    sitemap: 'https://dmvsos.com/sitemap.xml',
+    sitemap: 'https://www.dmvsos.com/sitemap.xml',
   };
 }

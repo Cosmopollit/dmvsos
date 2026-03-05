@@ -184,11 +184,11 @@ export async function generateMetadata({ params }) {
   return {
     title,
     description,
-    alternates: { canonical: `https://dmvsos.com/manuals/${state}/${cat}` },
+    alternates: { canonical: `https://www.dmvsos.com/manuals/${state}/${cat}` },
     openGraph: {
       title: `${name} ${catInfo.label} ${year} — Free PDF`,
       description,
-      url: `https://dmvsos.com/manuals/${state}/${cat}`,
+      url: `https://www.dmvsos.com/manuals/${state}/${cat}`,
       siteName: 'DMVSOS',
       type: 'article',
     },
@@ -249,16 +249,16 @@ export default async function StateManualCategoryPage({ params }) {
         headline: `${name} ${catInfo.label} ${year}`,
         description: `Official ${name} ${catInfo.labelFull} for the ${meta.abbr} ${catInfo.testLabel}.`,
         author: { '@type': 'Organization', name: meta.agency },
-        publisher: { '@type': 'Organization', name: 'DMVSOS', url: 'https://dmvsos.com' },
-        url: `https://dmvsos.com/manuals/${state}/${cat}`,
+        publisher: { '@type': 'Organization', name: 'DMVSOS', url: 'https://www.dmvsos.com' },
+        url: `https://www.dmvsos.com/manuals/${state}/${cat}`,
       },
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home',    item: 'https://dmvsos.com' },
-          { '@type': 'ListItem', position: 2, name: 'Manuals', item: 'https://dmvsos.com/manuals' },
-          { '@type': 'ListItem', position: 3, name,            item: `https://dmvsos.com/manuals/${state}` },
-          { '@type': 'ListItem', position: 4, name: catInfo.label, item: `https://dmvsos.com/manuals/${state}/${cat}` },
+          { '@type': 'ListItem', position: 1, name: 'Home',    item: 'https://www.dmvsos.com' },
+          { '@type': 'ListItem', position: 2, name: 'Manuals', item: 'https://www.dmvsos.com/manuals' },
+          { '@type': 'ListItem', position: 3, name,            item: `https://www.dmvsos.com/manuals/${state}` },
+          { '@type': 'ListItem', position: 4, name: catInfo.label, item: `https://www.dmvsos.com/manuals/${state}/${cat}` },
         ],
       },
       {

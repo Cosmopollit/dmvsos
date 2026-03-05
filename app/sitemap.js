@@ -14,7 +14,7 @@ const categories = ['dmv', 'cdl', 'moto'];
 const languages = ['en', 'ru', 'es', 'zh', 'ua'];
 
 export default function sitemap() {
-  const baseUrl = 'https://dmvsos.com';
+  const baseUrl = 'https://www.dmvsos.com';
   const now = new Date().toISOString();
 
   const pages = [

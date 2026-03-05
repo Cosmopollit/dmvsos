@@ -78,11 +78,11 @@ export async function generateMetadata({ params }) {
   return {
     title: `${name} DMV Practice Test ${year} — Free | DMVSOS`,
     description: `Free ${name} DMV practice test ${year}. Study ${exam.questions}+ real ${meta.abbr} knowledge test questions in 5 languages. Pass on your first try — no signup required.`,
-    alternates: { canonical: `https://dmvsos.com/dmv-test/${state}` },
+    alternates: { canonical: `https://www.dmvsos.com/dmv-test/${state}` },
     openGraph: {
       title: `${name} DMV Practice Test ${year} — Free`,
       description: `Free ${name} DMV practice test. Real ${meta.abbr} knowledge test questions in English, Spanish, Russian, Chinese and Ukrainian.`,
-      url: `https://dmvsos.com/dmv-test/${state}`,
+      url: `https://www.dmvsos.com/dmv-test/${state}`,
       siteName: 'DMVSOS',
       type: 'website',
       images: [{ url: '/og-image.png', width: 1200, height: 630, alt: `${name} DMV Practice Test` }],
@@ -155,9 +155,9 @@ export default async function StateDmvTestPage({ params }) {
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home',             item: 'https://dmvsos.com' },
-          { '@type': 'ListItem', position: 2, name: 'DMV Tests',        item: 'https://dmvsos.com/dmv-test' },
-          { '@type': 'ListItem', position: 3, name: `${name} DMV Test`, item: `https://dmvsos.com/dmv-test/${state}` },
+          { '@type': 'ListItem', position: 1, name: 'Home',             item: 'https://www.dmvsos.com' },
+          { '@type': 'ListItem', position: 2, name: 'DMV Tests',        item: 'https://www.dmvsos.com/dmv-test' },
+          { '@type': 'ListItem', position: 3, name: `${name} DMV Test`, item: `https://www.dmvsos.com/dmv-test/${state}` },
         ],
       },
     ],

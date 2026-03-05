@@ -27,7 +27,7 @@ export const viewport = {
 };
 
 export const metadata = {
-  metadataBase: new URL('https://dmvsos.com'),
+  metadataBase: new URL('https://www.dmvsos.com'),
   title: 'DMVSOS — Pass Your DMV Test First Try',
   description: 'Free DMV practice tests for all 50 states in 5 languages. No signup required.',
   keywords: 'DMV practice test, driving test, DMV test 2026, free DMV test',
@@ -44,7 +44,7 @@ export const metadata = {
   openGraph: {
     title: 'DMVSOS — Pass Your DMV Test First Try',
     description: 'Free DMV practice tests for all 50 states in 5 languages. No signup required.',
-    url: 'https://dmvsos.com',
+    url: 'https://www.dmvsos.com',
     siteName: 'DMVSOS',
     type: 'website',
     images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'DMVSOS — Free DMV Practice Tests' }],
@@ -56,7 +56,7 @@ export const metadata = {
     images: ['/og-image.png'],
   },
   alternates: {
-    canonical: 'https://dmvsos.com',
+    canonical: 'https://www.dmvsos.com',
   },
 };
 
@@ -66,14 +66,14 @@ const jsonLd = {
     {
       '@type': 'WebSite',
       name: 'DMVSOS',
-      url: 'https://dmvsos.com',
+      url: 'https://www.dmvsos.com',
       description: 'Free DMV practice tests for all 50 US states in multiple languages.',
     },
     {
       '@type': 'Organization',
       name: 'DMVSOS',
-      url: 'https://dmvsos.com',
-      logo: 'https://dmvsos.com/logo.png',
+      url: 'https://www.dmvsos.com',
+      logo: 'https://www.dmvsos.com/logo.png',
     },
   ],
 };
