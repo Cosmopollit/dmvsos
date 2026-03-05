@@ -32,8 +32,14 @@ export const metadata = {
   description: 'Free DMV practice tests for all 50 states in 5 languages. No signup required.',
   keywords: 'DMV practice test, driving test, DMV test 2026, free DMV test',
   icons: {
-    icon: '/logo.png',
-    apple: '/apple-touch-icon.png',
+    icon: [
+      { url: '/favicon.ico', sizes: '16x16 32x32', type: 'image/x-icon' },
+      { url: '/logo.png', sizes: '192x192', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
   },
   openGraph: {
     title: 'DMVSOS — Pass Your DMV Test First Try',
