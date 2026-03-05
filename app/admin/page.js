@@ -288,6 +288,34 @@ export default function AdminPage() {
     }
   };
 
+  const handleDeleteImage = async (questionIndex) => {
+    const q = questions[questionIndex];
+    if (!q?.id) return;
+    if (!window.confirm('Remove this image?')) return;
+    try {
+      let storagePath = null;
+      if (q.imageUrl) {
+        const match = q.imageUrl.match(/question-images\/(.+)$/);
+        if (match) storagePath = match[1];
+      }
+      const form = new FormData();
+      form.append('password', password);
+      form.append('questionId', String(q.id));
+      form.append('action', 'delete');
+      if (storagePath) form.append('path', storagePath);
+      const res = await fetch('/api/admin/upload-image', { method: 'POST', body: form });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Delete failed');
+      setQuestions((prev) => {
+        const next = [...prev];
+        next[questionIndex] = { ...next[questionIndex], imageUrl: null };
+        return next;
+      });
+    } catch (err) {
+      alert('Image delete failed: ' + err.message);
+    }
+  };
+
   const handleImageSelect = async (questionIndex, file) => {
     if (!file) return;
     const q = questions[questionIndex];
@@ -477,12 +505,6 @@ export default function AdminPage() {
                   </button>
                 </div>
               </div>
-              {q.imageUrl && (
-                <div className="mt-2 flex items-center gap-2">
-                  <img src={q.imageUrl} alt="question" className="h-12 w-auto rounded border border-[#E2E8F0]" />
-                  <span className="text-xs text-green-600 font-medium">Image saved</span>
-                </div>
-              )}
               {editingIndex === i && editForm && (
                 <div className="mt-4 pt-4 border-t border-[#E2E8F0] space-y-3">
                   <label className="block text-xs font-semibold text-[#1E293B]">Question text</label>
@@ -574,7 +596,16 @@ export default function AdminPage() {
               {q.imageUrl && (
                 <div className="mt-3 pt-3 border-t border-[#E2E8F0]">
                   <img src={q.imageUrl} alt="" className="max-h-32 rounded-lg border border-[#E2E8F0] mb-2" />
-                  <p className="text-xs text-[#94A3B8] break-all">{q.imageUrl}</p>
+                  <div className="flex items-center gap-3">
+                    <p className="text-xs text-[#94A3B8] break-all flex-1">{q.imageUrl}</p>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteImage(i)}
+                      className="shrink-0 px-3 py-1 rounded-lg border border-red-200 text-red-500 text-xs font-medium hover:bg-red-50 transition"
+                    >
+                      Remove Image
+                    </button>
+                  </div>
                 </div>
               )}
             </div>

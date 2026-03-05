@@ -9,13 +9,32 @@ export async function POST(req) {
   try {
     const formData = await req.formData();
     const password = formData.get('password');
-    const file = formData.get('file');
     const questionId = formData.get('questionId');
     const storagePath = formData.get('path');
+    const action = formData.get('action');
 
     if (password !== process.env.ADMIN_PASSWORD) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    // DELETE image
+    if (action === 'delete') {
+      if (!questionId) return Response.json({ error: 'Missing questionId' }, { status: 400 });
+
+      if (storagePath) {
+        await supabase.storage.from('question-images').remove([storagePath]);
+      }
+      const { error: dbError } = await supabase
+        .from('questions')
+        .update({ image_url: null })
+        .eq('id', questionId);
+      if (dbError) throw new Error(dbError.message);
+
+      return Response.json({ ok: true });
+    }
+
+    // UPLOAD image
+    const file = formData.get('file');
     if (!file || !questionId || !storagePath) {
       return Response.json({ error: 'Missing file, questionId, or path' }, { status: 400 });
     }
