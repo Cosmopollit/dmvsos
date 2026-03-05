@@ -9,11 +9,11 @@ const INDEX_URL = `${SUPABASE_URL}/storage/v1/object/public/manuals/manuals-inde
 
 export const metadata = {
   title: 'Free DMV Driver Manuals — All 50 States | DMVSOS',
-  description: 'The largest free driver manual library online. Official DMV handbooks for all 50 US states in 21 languages. Download PDF or read online.',
+  description: 'The largest free driver manual library online. Official DMV handbooks for all 50 US states in 27 languages. Download PDF or read online.',
   alternates: { canonical: 'https://www.dmvsos.com/manuals' },
   openGraph: {
     title: 'Free DMV Driver Manuals — All 50 States',
-    description: 'Official DMV driver handbooks for all 50 US states. Download free PDF in 21 languages including Spanish, Russian, Chinese, and more.',
+    description: 'Official DMV driver handbooks for all 50 US states. Download free PDF in 27 languages including Spanish, Russian, Chinese, and more.',
     url: 'https://www.dmvsos.com/manuals',
     siteName: 'DMVSOS',
     type: 'website',
@@ -71,7 +71,7 @@ export default async function ManualsPage() {
       {
         '@type': 'CollectionPage',
         name: 'Free DMV Driver Manuals — All 50 States',
-        description: 'Official driver handbooks for all 50 US states in 21 languages. Download PDF or read online.',
+        description: 'Official driver handbooks for all 50 US states in 27 languages. Download PDF or read online.',
         url: 'https://www.dmvsos.com/manuals',
         publisher: { '@type': 'Organization', name: 'DMVSOS', url: 'https://www.dmvsos.com' },
         numberOfItems: totalPdfs,

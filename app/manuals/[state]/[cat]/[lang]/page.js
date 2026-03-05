@@ -18,6 +18,7 @@ const LANG_FLAGS = {
   vi: '🇻🇳', ko: '🇰🇷', ar: '🇸🇦', fr: '🇫🇷', de: '🇩🇪',
   hy: '🇦🇲', hi: '🇮🇳', pa: '🇮🇳', ht: '🇭🇹', so: '🇸🇴',
   sw: '🇰🇪', my: '🇲🇲', ne: '🇳🇵', pt: '🇧🇷', ja: '🇯🇵', hmn: '🌿',
+  tl: '🇵🇭', sm: '🇼🇸', to: '🇹🇴', haw: '🌺', mh: '🇲🇭', ilo: '🇵🇭', chk: '🇫🇲',
 };
 
 const LANG_LABELS = {
@@ -25,6 +26,7 @@ const LANG_LABELS = {
   vi: 'Tiếng Việt', hy: 'Հայերեն', hi: 'हिन्दी', pa: 'ਪੰਜਾਬੀ', ht: 'Kreyòl',
   ko: '한국어', ar: 'العربية', fr: 'Français', de: 'Deutsch', so: 'Soomaali',
   sw: 'Kiswahili', my: 'မြန်မာ', ne: 'नेपाली', pt: 'Português', ja: '日本語', hmn: 'Hmong',
+  tl: 'Filipino', sm: 'Samoa', to: 'Faka-Tonga', haw: 'ʻŌlelo Hawaiʻi', mh: 'Kajin M̧ajeļ', ilo: 'Ilocano', chk: 'Chuukese',
 };
 
 // Language-specific phrases for native speakers
@@ -50,6 +52,13 @@ const LANG_NATIVE = {
   pt: { in: 'em Português',     download: 'Baixar PDF',           study: 'Estude para o exame de direção',    cta: 'Teste gratuito →' },
   ja: { in: '日本語版',          download: 'PDF ダウンロード',      study: '運転免許筆記試験の勉強',              cta: '無料テスト →' },
   hmn: { in: 'lus Hmoob',       download: 'Rub PDF',              study: 'Kawm rau kev sim tsav tsheb',       cta: 'Kev sim dawb →' },
+  tl:  { in: 'Filipino',        download: 'I-download ang PDF',   study: 'Mag-aral para sa DMV test',         cta: 'Libreng Pagsasanay →' },
+  sm:  { in: 'Gagana Sāmoa',    download: 'Lalau mai le PDF',     study: "Sauni mo le su'esu'ega",            cta: "Su'esu'e fua →" },
+  to:  { in: 'lea faka-Tonga',  download: 'Tukumai PDF',          study: 'Teuteu ki he fakamatala',           cta: 'Fakamatala tauhi →' },
+  haw: { in: 'ʻŌlelo Hawaiʻi',  download: 'Hoʻoiho PDF',         study: 'Aʻo no ka hoʻokolohua',            cta: 'Hoʻāʻo manuahi →' },
+  mh:  { in: 'Kajin M̧ajeļ',   download: 'Download PDF',         study: 'Kobban ñan test',                   cta: 'Test wōt →' },
+  ilo: { in: 'Ilocano',         download: 'I-download ti PDF',    study: 'Aralen para iti eksamen',           cta: 'Libre nga pagbasa →' },
+  chk: { in: 'Chuukese',        download: 'Download PDF',         study: 'Fen ren ewe test',                  cta: 'Free test →' },
 };
 
 // Full language name in English for SEO titles
@@ -58,6 +67,7 @@ const LANG_ENGLISH_NAME = {
   vi: 'Vietnamese', ko: 'Korean', ar: 'Arabic', fr: 'French', de: 'German',
   hy: 'Armenian', hi: 'Hindi', pa: 'Punjabi', ht: 'Haitian Creole', so: 'Somali',
   sw: 'Swahili', my: 'Burmese', ne: 'Nepali', pt: 'Portuguese', ja: 'Japanese', hmn: 'Hmong',
+  tl: 'Tagalog', sm: 'Samoan', to: 'Tongan', haw: 'Hawaiian', mh: 'Marshallese', ilo: 'Ilocano', chk: 'Chuukese',
 };
 
 async function fetchManualIndex() {

@@ -49,8 +49,12 @@ const MANUALS = {
     motorcycle: { en: 'https://dmv.alaska.gov/media/bbxnnsrr/mcman.pdf' },
   },
   arizona: {
-    car: { en: 'https://apps.azdot.gov/files/mvd/mvd-forms-lib/99-0117.pdf' },
+    car: {
+      en: 'https://apps.azdot.gov/files/mvd/mvd-forms-lib/99-0117.pdf',
+      es: 'https://apps.azdot.gov/files/mvd/mvd-forms-lib/99-0137.pdf',
+    },
     cdl: { en: 'https://apps.azdot.gov/files/mvd/mvd-forms-lib/40-7802.pdf' },
+    motorcycle: { en: 'https://apps.azdot.gov/files/mvd/mvd-forms-lib/99-0129.pdf' },
   },
   arkansas: {
     car: { en: 'https://dps.arkansas.gov/wp-content/uploads/Arkansas-DL-Manual-English.pdf' },
@@ -76,10 +80,17 @@ const MANUALS = {
     },
   },
   colorado: {
-    car: { en: 'https://dmv.colorado.gov/sites/dmv/files/documents/DR_2337_Jan2025.pdf' },
+    car: {
+      en: 'https://dmv.colorado.gov/sites/dmv/files/documents/DR_2337_Jan2025.pdf',
+      es: 'https://dmv.colorado.gov/sites/dmv/files/documents/DR_2337SP_Jan2025_Spanish.pdf',
+    },
   },
   connecticut: {
-    car: { en: 'https://portal.ct.gov/dmv/-/media/dmv/dmv-pdfs/drivers-manual-english.pdf' },
+    car: {
+      en: 'https://portal.ct.gov/dmv/-/media/dmv/dmv-pdfs/drivers-manual-english.pdf',
+      es: 'https://portal.ct.gov/dmv/-/media/dmv/dmv-pdfs/drivers-manual-spanish.pdf',
+    },
+    cdl: { en: 'https://portal.ct.gov/dmv/-/media/dmv/cdl-driver-manual-with-mod-11-and-12-ver-11-20-2024.pdf' },
   },
   delaware: {
     car: { en: 'https://dmv.de.gov/forms/driver_serv_forms/pdfs/dr_frm_manual.pdf' },
@@ -89,19 +100,61 @@ const MANUALS = {
     car: {
       en: 'https://www.flhsmv.gov/pdf/handbooks/englishdriverhandbook.pdf',
       es: 'https://www.flhsmv.gov/pdf/handbooks/spanishdriverhandbook.pdf',
+      ht: 'https://www.flhsmv.gov/pdf/handbooks/driverhandbookhaitiancreole.pdf',
+    },
+    cdl: {
+      en: 'https://www.flhsmv.gov/pdf/handbooks/englishcdlhandbook.pdf',
+      es: 'https://www.flhsmv.gov/pdf/handbooks/spanishcdlhandbook.pdf',
     },
   },
+  georgia: {
+    car: { en: 'https://dds.georgia.gov/document/document/ga-drivers-manual-2023-2024/download' },
+    cdl: { en: 'https://dds.georgia.gov/media/12646/download' },
+    motorcycle: { en: 'https://dds.georgia.gov/document/document/motorcycle-operators-manual/download' },
+  },
   hawaii: {
-    car: { en: 'https://hidot.hawaii.gov/highways/files/2021/11/ENGLISH-Original-Hawaii-Drivers-Manual.pdf' },
+    car: {
+      en:  'https://hidot.hawaii.gov/highways/files/2024/11/2023-Hawaii-Drivers-Manual_5.375x8.375_Final-r3-Digital-071924web.pdf',
+      es:  'https://hidot.hawaii.gov/highways/files/2019/04/mvso-Hawaii-Drivers-Manual_July-2017_HC_ES-US.pdf',
+      ko:  'https://hidot.hawaii.gov/highways/files/2019/04/KOR-mvso-Hawaii-Drivers-Manual_July-2017_HC_112318-FINAL-REV.pdf',
+      ja:  'https://hidot.hawaii.gov/highways/files/2019/04/JAPANESE-mvso-Hawaii-Drivers-Manual_July-2017_HC-FINAL-REV.pdf',
+      haw: 'https://hidot.hawaii.gov/highways/files/2021/11/11272-Hawaii-Drivers-Manual-r3-LR-10-24-18-HAWAIIAN.pdf',
+      zh:  'https://hidot.hawaii.gov/highways/files/2021/11/CHINESE-SIMPLIFIED-Hawaii-Drivers-Manual.pdf',
+      vi:  'https://hidot.hawaii.gov/highways/files/2021/11/VIETNAMESE-Hawaii-Drivers-Manual.pdf',
+      tl:  'https://hidot.hawaii.gov/highways/files/2021/11/TAGALOG-Hawaii-Drivers-Manual.pdf',
+      sm:  'https://hidot.hawaii.gov/highways/files/2021/11/SAMOAN-Hawaii-Drivers-Manual.pdf',
+      to:  'https://hidot.hawaii.gov/highways/files/2021/11/TONGAN-Hawaii-Drivers-Manual.pdf',
+      mh:  'https://hidot.hawaii.gov/highways/files/2021/11/MARSHALLESE-Hawaii-Drivers-Manual.pdf',
+      ilo: 'https://hidot.hawaii.gov/highways/files/2021/11/ILOCANO-Hawaii-Drivers-Manual.pdf',
+      chk: 'https://hidot.hawaii.gov/highways/files/2021/11/CHUUKESE-Hawaii-Drivers-Manual.pdf',
+    },
     cdl: { en: 'https://hidot.hawaii.gov/highways/files/2025/08/2025-06-CDL-Manual-rev.pdf' },
   },
   idaho: {
     car: { en: 'https://itd.idaho.gov/wp-content/uploads/2025/10/driver_manual.pdf' },
     cdl: { en: 'https://itd.idaho.gov/wp-content/uploads/2025/10/CDL-manual.pdf' },
   },
-  // illinois: site blocks downloads (timeout), add manually later
+  illinois: {
+    // Note: ilsos.gov blocks automated downloads — run manually or use --check first
+    car: {
+      en: 'https://www.ilsos.gov/content/dam/publications/pdf_publications/dsd_a112.pdf',
+      es: 'https://www.ilsos.gov/content/dam/publications/pdf_publications/dsd_a113.pdf',
+    },
+    motorcycle: { en: 'https://www.ilsos.gov/publications/pdf_publications/dsd_x140.pdf' },
+  },
   indiana: {
-    car: { en: 'https://www.in.gov/bmv/licenses-permits-ids/files/drivers-manual.pdf' },
+    car: {
+      en: 'https://www.in.gov/bmv/licenses-permits-ids/files/drivers-manual.pdf',
+      es: 'https://www.in.gov/bmv/licenses-permits-ids/files/drivers-manual-spanish.pdf',
+      ar: 'https://www.in.gov/bmv/licenses-permits-ids/files/drivers-manual-arabic.pdf',
+      my: 'https://www.in.gov/bmv/licenses-permits-ids/files/drivers-manual-burmese.pdf',
+      zh: 'https://www.in.gov/bmv/licenses-permits-ids/files/drivers-manual-chinese.pdf',
+      fr: 'https://www.in.gov/bmv/licenses-permits-ids/files/drivers-manual-french.pdf',
+      hi: 'https://www.in.gov/bmv/licenses-permits-ids/files/drivers-manual-hindi.pdf',
+      ja: 'https://www.in.gov/bmv/licenses-permits-ids/files/drivers-manual-japanese.pdf',
+      pa: 'https://www.in.gov/bmv/licenses-permits-ids/files/drivers-manual-punjabi.pdf',
+      vi: 'https://www.in.gov/bmv/licenses-permits-ids/files/drivers-manual-vietnamese.pdf',
+    },
   },
   iowa: {
     car: {
@@ -132,25 +185,61 @@ const MANUALS = {
   },
   maine: {
     car: { en: 'https://www.maine.gov/sos/sites/maine.gov.sos/files/inline-files/motoristhandbook.pdf' },
+    cdl: { en: 'https://www.maine.gov/sos/sites/maine.gov.sos/files/inline-files/CDL%20Manual%20Rev.%207-24.pdf' },
   },
   maryland: {
-    car: { en: 'https://mva.maryland.gov/Documents/DL-002.pdf' },
+    car: {
+      en: 'https://mva.maryland.gov/Documents/DL-002.pdf',
+      es: 'https://mva.maryland.gov/Documents/DL-002-Spanish.pdf',
+      zh: 'https://mva.maryland.gov/Documents/DL-002-Chinese.pdf',
+      vi: 'https://mva.maryland.gov/Documents/DL-002-Vietnamese.pdf',
+      fr: 'https://mva.maryland.gov/documents/dl-002-french.pdf',
+      ko: 'https://mva.maryland.gov/Documents/DL-002-Korean.pdf',
+      ne: 'https://mva.maryland.gov/Documents/DL-002-Nepali.pdf',
+      ru: 'https://mva.maryland.gov/Documents/DL-002-Russian.pdf',
+      pt: 'https://mva.maryland.gov/Documents/DL-002-Portugese.pdf',
+      hi: 'https://mva.maryland.gov/Documents/DL-002-Hindi.pdf',
+      ar: 'https://mva.maryland.gov/Documents/DL-002-Arabic.pdf',
+      ht: 'https://mva.maryland.gov/Documents/DL-002-HaitianCreole.pdf',
+    },
+    cdl: { en: 'https://mva.maryland.gov/Documents/DL-151.pdf' },
+    motorcycle: { en: 'https://mva.maryland.gov/Documents/DL-001.pdf' },
   },
   massachusetts: {
     car: {
       en: 'https://www.mass.gov/doc/english-drivers-manual/download',
-      es: 'https://www.mass.gov/doc/drivers-manual-spanish/download',
-      zh: 'https://www.mass.gov/doc/drivers-manual-chinese/download',
-      ru: 'https://www.mass.gov/doc/drivers-manual-russian/download',
-      vi: 'https://www.mass.gov/doc/drivers-manual-vietnamese/download',
-      ko: 'https://www.mass.gov/doc/drivers-manual-korean/download',
-      ht: 'https://www.mass.gov/doc/drivers-manual-haitian-creole/download',
-      pt: 'https://www.mass.gov/doc/drivers-manual-portuguese/download',
+      es: 'https://www.mass.gov/doc/spanish-drivers-manual-espanol/download',
+      zh: 'https://www.mass.gov/doc/simplified-chinese-drivers-manual-jiantizhongwen/download',
+      ru: 'https://www.mass.gov/doc/russian-drivers-manual-russkiy/download',
+      vi: 'https://www.mass.gov/doc/vietnamese-drivers-manual-tieng-viet/download',
+      ko: 'https://www.mass.gov/doc/korean-drivers-manual-hangugeo/download',
+      ht: 'https://www.mass.gov/doc/haitian-creole-drivers-manual-kreyol-ayisyen/download',
+      pt: 'https://www.mass.gov/doc/portuguese-drivers-manual-portugues/download',
+      ar: 'https://www.mass.gov/doc/arabic-drivers-manual-alrbyt/download',
+      hi: 'https://www.mass.gov/doc/hindi-drivers-manual-hainadai/download',
+      fr: 'https://www.mass.gov/doc/french-drivers-manual-francais/download',
     },
     cdl: { en: 'https://www.mass.gov/doc/cdl-manual-march-2025-version/download' },
   },
+  michigan: {
+    // Note: michigan.gov may block automated downloads — try manually if 403
+    car: {
+      en: 'https://www.michigan.gov/sos/-/media/Project/Websites/sos/Resources/Forms-and-publications/WEDMK_2022.pdf',
+      es: 'https://www.michigan.gov/sos/-/media/Project/Websites/sos/Resources/Forms-and-publications/What-Every-Driver-Must-Know---Spanish.pdf',
+      ar: 'https://www.michigan.gov/sos/-/media/Project/Websites/sos/Resources/Forms-and-publications/What-Every-Driver-Must-Know---Arabic.pdf',
+      zh: 'https://www.michigan.gov/sos/-/media/Project/Websites/sos/Resources/Forms-and-publications/What-Every-Driver-Must-Know---Chinese.pdf',
+      vi: 'https://www.michigan.gov/sos/-/media/Project/Websites/sos/Resources/Forms-and-publications/What-Every-Driver-Must-Know---Vietnamese.pdf',
+      sw: 'https://www.michigan.gov/sos/-/media/Project/Websites/sos/Resources/Forms-and-publications/What-Every-Driver-Must-Know---Swahili.pdf',
+    },
+    cdl: { en: 'https://www.michigan.gov/-/media/Project/Websites/sos/Resources/Forms-and-publications/CDL-Manual/cdlmanual.pdf' },
+  },
   minnesota: {
-    car: { en: 'https://s3.us-east-2.amazonaws.com/assets.dps.mn.gov/s3fs-public/dvs-class-d-drivers-manual-english.pdf' },
+    car: {
+      en: 'https://s3.us-east-2.amazonaws.com/assets.dps.mn.gov/s3fs-public/dvs-class-d-drivers-manual-english.pdf',
+      es: 'https://s3.us-east-2.amazonaws.com/assets.dps.mn.gov/s3fs-public/dvs-drivers-manual-spanish-2024-12.pdf',
+      hmn: 'https://s3.us-east-2.amazonaws.com/assets.dps.mn.gov/s3fs-public/dvs-drivers-manual-in-Hmong.pdf',
+      ru: 'https://assets.dps.mn.gov/files/dvs/dvs-drivers-manual-in-russian.pdf',
+    },
     cdl: { en: 'https://s3.us-east-2.amazonaws.com/assets.dps.mn.gov/s3fs-public/dvs-minnesota-commercial-drivers-license-manual.pdf' },
   },
   mississippi: {
@@ -164,24 +253,55 @@ const MANUALS = {
     car: { en: 'https://www.dojmt.gov/wp-content/uploads/Montana-Driver-Manual.pdf' },
   },
   nevada: {
-    car: { en: 'https://dmv.nv.gov/pdfforms/dlbook.pdf' },
+    car: {
+      en: 'https://dmv.nv.gov/pdfforms/dlbook.pdf',
+      es: 'https://dmv.nv.gov/pdfforms/dlbooksp.pdf',
+    },
     cdl: { en: 'https://dmv.nv.gov/pdfforms/dlbookcomm.pdf' },
+    motorcycle: { en: 'https://dmv.nv.gov/pdfforms/dlbookmotorcycle.pdf' },
+  },
+  'new-hampshire': {
+    cdl: { en: 'https://www.dmv.nh.gov/sites/g/files/ehbemt416/files/inline-documents/nhcdm.pdf' },
   },
   'new-jersey': {
-    car: { en: 'https://www.nj.gov/mvc/pdf/license/drivermanual.pdf' },
+    car: {
+      en: 'https://www.nj.gov/mvc/pdf/license/drivermanual.pdf',
+      es: 'https://www.nj.gov/mvc/pdf/license/drivermanuals.pdf',
+      zh: 'https://www.nj.gov/mvc/pdf/license/chinesemanual.pdf',
+      ko: 'https://www.nj.gov/mvc/pdf/license/Korean-driver-manual.pdf',
+    },
     cdl: { en: 'https://www.nj.gov/mvc/pdf/license/CDL_Manual.pdf' },
+    motorcycle: { en: 'https://www.nj.gov/mvc/pdf/license/mcm996.pdf' },
   },
   'new-york': {
-    car: { en: 'https://dmv.ny.gov/brochure/mv21.pdf' },
+    car: {
+      en: 'https://dmv.ny.gov/brochure/mv21.pdf',
+      es: 'https://dmv.ny.gov/brochure/mv21s.pdf',
+    },
+    motorcycle: { en: 'https://dmv.ny.gov/brochure/mv21-mc.pdf' },
   },
   'north-carolina': {
-    car: { en: 'https://www.ncdot.gov/dmv/license-id/driver-licenses/new-drivers/Documents/driver-handbook.pdf' },
+    car: {
+      en: 'https://www.ncdot.gov/dmv/license-id/driver-licenses/new-drivers/Documents/driver-handbook.pdf',
+      es: 'https://www.ncdot.gov/dmv/license-id/driver-licenses/new-drivers/Documents/driver-handbook-spanish.pdf',
+    },
   },
   ohio: {
-    car: { en: 'https://dam.assets.ohio.gov/image/upload/publicsafety.ohio.gov/hsy7607.pdf' },
+    car: {
+      en: 'https://dam.assets.ohio.gov/image/upload/publicsafety.ohio.gov/hsy7607.pdf',
+      es: 'https://publicsafety.ohio.gov/links/hsy0008.pdf',
+      so: 'https://publicsafety.ohio.gov/links/hsy7608.pdf',
+      ht: 'https://dam.assets.ohio.gov/image/upload/publicsafety.ohio.gov/hsy7609.pdf',
+    },
+  },
+  oklahoma: {
+    cdl: { en: 'https://oklahoma.gov/content/dam/service-oklahoma/Documents/CDLDriverManual.pdf' },
   },
   oregon: {
-    car: { en: 'https://www.oregon.gov/ODOT/Forms/DMV/37.pdf' },
+    car: {
+      en: 'https://www.oregon.gov/ODOT/Forms/DMV/37.pdf',
+      es: 'https://www.oregon.gov/odot/forms/dmv/37s.pdf',
+    },
   },
   pennsylvania: {
     car: {
@@ -196,14 +316,36 @@ const MANUALS = {
       ua: 'https://www.pa.gov/content/dam/copapwp-pagov/en/penndot/documents/public/dvspubsforms/bdl/bdl-manuals/pa-drivers-manual-non-commercial/ukrainian/pub%2095u.pdf',
     },
   },
+  'rhode-island': {
+    cdl: { en: 'https://dmv.ri.gov/sites/g/files/xkgbur556/files/documents/manuals/CDL_Manual.pdf' },
+  },
   tennessee: {
     car: { en: 'https://www.tn.gov/content/dam/tn/safety/documents/DL_Manual.pdf' },
   },
   texas: {
-    car: { en: 'https://www.dps.texas.gov/internetforms/Forms/DL-7.pdf' },
+    car: {
+      en: 'https://www.dps.texas.gov/internetforms/Forms/DL-7.pdf',
+      es: 'https://www.dps.texas.gov/Internetforms/Forms/DL-7S.pdf',
+    },
+    cdl: {
+      en: 'https://www.dps.texas.gov/internetforms/forms/dl-7c.pdf',
+      es: 'https://www.dps.texas.gov/internetforms/Forms/DL-7CS.pdf',
+    },
+  },
+  utah: {
+    car: {
+      en: 'https://dld.utah.gov/wp-content/uploads/Driver-Handbook.pdf',
+      es: 'https://dld.utah.gov/wp-content/uploads/MANUAL-DEL-CONDUCTOR-DE-UTAH-2024.pdf',
+    },
+    cdl: { en: 'https://dld.utah.gov/wp-content/uploads/CDL-Manual.pdf' },
+    motorcycle: { en: 'https://dld.utah.gov/wp-content/uploads/2024-Motorcycle-Handbook.pdf' },
   },
   virginia: {
-    car: { en: 'https://www.dmv.virginia.gov/sites/default/files/forms/dmv39.pdf' },
+    car: {
+      en: 'https://www.dmv.virginia.gov/sites/default/files/forms/dmv39.pdf',
+      es: 'https://www.dmv.virginia.gov/sites/default/files/forms/dmv39s.pdf',
+    },
+    cdl: { en: 'https://www.dmv.virginia.gov/sites/default/files/forms/dmv60a.pdf' },
   },
   washington: {
     car: {
@@ -218,6 +360,20 @@ const MANUALS = {
       ja: 'https://dol.wa.gov/media/pdf/4750/driver-guide-japdf',
       hi: 'https://dol.wa.gov/media/pdf/4749/driver-guide-hipdf',
       pa: 'https://dol.wa.gov/media/pdf/4752/driver-guide-papdf',
+    },
+  },
+  'west-virginia': {
+    car: { en: 'https://transportation.wv.gov/DMV/DMVFormSearch/Drivers_Licensing_Handbook_web.pdf' },
+    cdl: { en: 'https://transportation.wv.gov/DMV/DMVFormSearch/WV-CDL-Manual.pdf' },
+    motorcycle: { en: 'https://transportation.wv.gov/DMV/DMVFormSearch/Motorcycle_Operator_Manual.pdf' },
+  },
+  wisconsin: {
+    cdl: {
+      en: 'https://dot.wi.gov/Documents/dmv/shared/bds356-cdl-manual.pdf',
+      es: 'https://wisconsindot.gov/Documents/dmv/shared/bds264-span-cdl-manual.pdf',
+    },
+    motorcycle: {
+      es: 'https://wisconsindot.gov/Documents/dmv/shared/bds319-span-mc-manual.pdf',
     },
   },
 };
@@ -360,6 +516,13 @@ async function main() {
     try { progress = JSON.parse(fs.readFileSync(PROGRESS_FILE, 'utf8')); } catch { /* ignore */ }
   }
 
+  // Fetch the existing live index so we can merge rather than overwrite
+  let existingIndex = {};
+  try {
+    const idxRes = await fetch(`${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${INDEX_FILE}`);
+    if (idxRes.ok) existingIndex = await idxRes.json();
+  } catch { /* ignore — will be rebuilt */ }
+
   const index = {};
   let uploaded = 0, skipped = 0, failed = 0, total = 0;
 
@@ -432,29 +595,38 @@ async function main() {
 
   console.log(`\n\n  Done: ${uploaded} uploaded, ${skipped} skipped, ${failed} failed (${total} total)`);
 
-  // Build complete index from ALL states (not just filtered)
-  if (!STATE_ARG) {
-    // Clean index: remove states with no successful downloads
-    const cleanIndex = {};
+  // Merge new entries into the existing index and upload
+  {
+    // Start with the full existing index as the base
+    const mergedIndex = JSON.parse(JSON.stringify(existingIndex));
+
+    // Overlay only successfully uploaded/skipped entries from this run
     for (const [state, categories] of Object.entries(index)) {
-      const stateData = {};
+      if (!mergedIndex[state]) mergedIndex[state] = {};
       for (const [category, langs] of Object.entries(categories)) {
-        const langData = {};
+        if (!mergedIndex[state][category]) mergedIndex[state][category] = {};
         for (const [lang, publicUrl] of Object.entries(langs)) {
-          if (publicUrl) langData[lang] = publicUrl;
+          if (publicUrl) mergedIndex[state][category][lang] = publicUrl;
         }
-        if (Object.keys(langData).length > 0) stateData[category] = langData;
       }
-      if (Object.keys(stateData).length > 0) cleanIndex[state] = stateData;
     }
 
-    // Upload index file
-    const indexBuffer = Buffer.from(JSON.stringify(cleanIndex, null, 2));
+    // Count new entries added
+    let newEntries = 0;
+    for (const [state, categories] of Object.entries(index)) {
+      for (const [category, langs] of Object.entries(categories)) {
+        for (const [lang, publicUrl] of Object.entries(langs)) {
+          if (publicUrl && !existingIndex?.[state]?.[category]?.[lang]) newEntries++;
+        }
+      }
+    }
+
+    const indexBuffer = Buffer.from(JSON.stringify(mergedIndex, null, 2));
     if (!DRY_RUN) {
       await storageUpload(INDEX_FILE, indexBuffer, 'application/json');
-      console.log(`  Index uploaded: ${INDEX_FILE} (${Object.keys(cleanIndex).length} states)`);
+      console.log(`  Index uploaded: ${INDEX_FILE} (${Object.keys(mergedIndex).length} states, +${newEntries} new entries)`);
     } else {
-      console.log(`  [dry-run] Would upload index with ${Object.keys(cleanIndex).length} states`);
+      console.log(`  [dry-run] Would upload merged index with ${Object.keys(mergedIndex).length} states (+${newEntries} new entries)`);
     }
   }
 
