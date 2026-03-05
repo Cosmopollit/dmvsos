@@ -183,6 +183,25 @@ export default async function StateManualPage({ params }) {
           <ManualLangSwitch currentLang={lang} />
         </div>
 
+        {/* Category quick-links */}
+        {pdfCats.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-5">
+            {pdfCats.map(cat => {
+              const icons = { car: '🚗', cdl: '🚛', motorcycle: '🏍️' };
+              const labels = { car: "Driver's Handbook", cdl: 'CDL Manual', motorcycle: 'Motorcycle Handbook' };
+              return (
+                <Link
+                  key={cat}
+                  href={`/manuals/${state}/${cat}`}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#E2E8F0] bg-white hover:border-[#2563EB] hover:bg-[#EFF6FF] hover:text-[#2563EB] transition-all text-xs font-semibold text-[#475569]"
+                >
+                  {icons[cat]} {labels[cat]}
+                </Link>
+              );
+            })}
+          </div>
+        )}
+
         {/* PDF Downloads — grouped by category */}
         {pdfCats.length > 0 && (
           <div className="bg-white rounded-2xl border border-[#E2E8F0] p-5 mb-5 shadow-sm">

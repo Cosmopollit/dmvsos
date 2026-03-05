@@ -55,6 +55,15 @@ export default function sitemap() {
       changeFrequency: 'monthly',
       priority: 0.8,
     });
+    // Category sub-pages: /manuals/[state]/car, /cdl, /motorcycle
+    for (const cat of ['car', 'cdl', 'motorcycle']) {
+      pages.push({
+        url: `${baseUrl}/manuals/${st}/${cat}`,
+        lastModified: now,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      });
+    }
   }
 
   for (const st of states) {
