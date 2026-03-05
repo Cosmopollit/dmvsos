@@ -377,9 +377,9 @@ export default async function StateDmvTestPage({ params }) {
             href="/upgrade"
             className="inline-flex items-center gap-2 px-6 py-3 bg-[#F59E0B] text-[#0B1C3D] rounded-xl font-bold text-sm hover:bg-[#FBBF24] transition-colors"
           >
-            Get Pro — $9.99/mo
+            Unlock Full Access — from $7.99
           </Link>
-          <p className="text-xs text-[#64748B] mt-2">Cancel anytime · No hidden fees</p>
+          <p className="text-xs text-[#64748B] mt-2">One payment · No subscription · No auto-renewal</p>
         </div>
 
         {/* Other states */}

@@ -53,11 +53,11 @@ export default function Terms() {
             </section>
 
             <section>
-              <h2 className="font-semibold text-[#0B1C3D] mb-2">5. Pro Subscription</h2>
+              <h2 className="font-semibold text-[#0B1C3D] mb-2">5. Paid Plans</h2>
               <p>
-                DMVSOS offers a paid Pro subscription at $9.99/month. Subscriptions are billed monthly
-                through Stripe. You may cancel your subscription at any time; access continues until
-                the end of the current billing period. No refunds are provided for partial months.
+                DMVSOS offers one-time paid plans (Quick Pass, Full Prep, Guaranteed Pass) starting from $7.99,
+                processed through Stripe. Each plan provides 30–90 days of access from the date of purchase.
+                No subscription or auto-renewal. The Guaranteed Pass plan includes a full refund if you fail your DMV test.
               </p>
             </section>
 
