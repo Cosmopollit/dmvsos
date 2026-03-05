@@ -247,24 +247,21 @@ export default function Home() {
         </select>
 
         {(() => {
-          const isProWithState = user && isPro && state;
-          const buttonLabel = !state ? tex.ctaNoState : (isProWithState ? tex.ctaProReady : tex.ctaReady);
-          const isAmber = isProWithState;
+          const isAmber = user && isPro && state;
+          const stateName = state
+            ? (stateOptions.find(s => s.code === state)?.name || '').replace(/\s*\([^)]+\)$/, '')
+            : '';
+          const ctaBase = tex.ctaStart || 'Start Test';
+          const buttonLabel = state ? `${ctaBase} → ${stateName}` : `${ctaBase} →`;
           return (
             <>
               <button
                 type="button"
-                onClick={() => {
-                  if (state) {
-                    router.push(`/category?state=${state}&lang=${langCode}`);
-                  } else {
-                    document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' });
-                    stateSelectRef.current?.focus();
-                  }
-                }}
+                disabled={!state}
+                onClick={() => router.push(`/category?state=${state}&lang=${langCode}`)}
                 className={`w-full mt-4 py-4 rounded-xl font-semibold text-[15px] flex items-center justify-center gap-2 transition-all ${
                   !state
-                    ? 'bg-[#E2E8F0] text-[#94A3B8] cursor-default'
+                    ? 'bg-[#E2E8F0] text-[#94A3B8] cursor-not-allowed'
                     : `text-white cursor-pointer btn-pulse ${isAmber ? 'bg-[#F59E0B] hover:bg-[#D97706]' : 'bg-[#2563EB] hover:bg-[#1D4ED8]'}`
                 }`}
               >
