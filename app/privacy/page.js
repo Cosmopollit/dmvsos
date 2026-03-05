@@ -35,7 +35,7 @@ export default function Privacy() {
               <ul className="list-disc pl-5 mt-2 space-y-1">
                 <li>Provide and improve the practice test experience</li>
                 <li>Save your progress and test history</li>
-                <li>Process Pro subscription payments</li>
+                <li>Process one-time plan payments</li>
                 <li>Send important service updates (no marketing emails)</li>
               </ul>
             </section>
