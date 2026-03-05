@@ -116,6 +116,8 @@ function TestContent() {
             correctAnswerIndex: row.correct_answer ?? 0,
             imageUrl: row.image_url || null,
             explanation: row.explanation || null,
+            manualSection: row.manual_section || null,
+            manualReference: row.manual_reference || null,
           };
         }).filter(row => row.answers.length >= 2);
         // Fisher-Yates shuffle

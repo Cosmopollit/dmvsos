@@ -73,3 +73,8 @@ questions-with-images.json
 questions-with-images-en.json
 broken-clusters.json
 broken-question-ids.json
+.cluster-questions-*-progress.json
+.cluster-questions-*-rollback.json
+.cluster-questions-*-report.json
+.cluster-questions-summary.json
+.translate-cluster-*-progress.json
