@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { t } from '@/lib/translations';
+import StateSearchDropdown from './StateSearchDropdown';
 
 const LANG_FLAGS = {
   en: '🇺🇸', es: '🇪🇸', ru: '🇷🇺', zh: '🇨🇳', ua: '🇺🇦',
@@ -27,25 +28,14 @@ const CAT_TABS_KEYS = [
 const CAT_ICONS = { car: '🚗', cdl: '🚛', motorcycle: '🏍️' };
 
 export default function ManualsLibrary({ statesData, totalPdfs, langCount, serverLang }) {
-  const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
 
   const tex = t[serverLang] || t.en;
 
   const filtered = useMemo(() => {
-    let list = statesData;
-    if (activeCategory !== 'all') {
-      list = list.filter(s => s.categories.includes(activeCategory));
-    }
-    const q = search.trim().toLowerCase();
-    if (q) {
-      list = list.filter(s =>
-        s.name.toLowerCase().includes(q) ||
-        s.abbr.toLowerCase().includes(q)
-      );
-    }
-    return list;
-  }, [statesData, search, activeCategory]);
+    if (activeCategory === 'all') return statesData;
+    return statesData.filter(s => s.categories.includes(activeCategory));
+  }, [statesData, activeCategory]);
 
   return (
     <div className="w-full max-w-lg mx-auto px-4">
@@ -78,28 +68,13 @@ export default function ManualsLibrary({ statesData, totalPdfs, langCount, serve
         </div>
       </div>
 
-      {/* Unified search + category control */}
+      {/* Search dropdown + category control */}
       <div className="flex flex-col gap-2 mb-6">
-        {/* Search row */}
-        <div className="relative flex items-center bg-white rounded-2xl border border-[#E2E8F0] shadow-sm px-4 py-3.5 focus-within:border-[#2563EB] focus-within:ring-2 focus-within:ring-[#2563EB]/10 transition">
-          <span className="text-[#94A3B8] mr-3 pointer-events-none text-base leading-none">🔍</span>
-          <input
-            type="text"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            placeholder={tex.manualsSelectPlaceholder || 'Search state... (e.g. California, NY)'}
-            className="flex-1 bg-transparent text-sm text-[#0B1C3D] placeholder-[#94A3B8] outline-none"
-          />
-          {search && (
-            <button
-              type="button"
-              onClick={() => setSearch('')}
-              className="ml-2 text-[#94A3B8] hover:text-[#64748B] text-xl leading-none"
-            >
-              ×
-            </button>
-          )}
-        </div>
+        {/* Searchable state dropdown */}
+        <StateSearchDropdown
+          lang={serverLang}
+          placeholder={tex.manualsSelectPlaceholder || 'Search state... (e.g. California, NY)'}
+        />
 
         {/* Category row — segmented control */}
         <div className="flex bg-white rounded-2xl border border-[#E2E8F0] shadow-sm p-1 gap-1">
@@ -125,18 +100,13 @@ export default function ManualsLibrary({ statesData, totalPdfs, langCount, serve
         {filtered.length === statesData.length
           ? `${filtered.length} ${tex.manualsTitle || 'states'}`
           : `${filtered.length} / ${statesData.length} ${tex.manualsTitle || 'states'}`}
-        {search && ` — "${search}"`}
       </p>
 
       {/* State grid */}
       {filtered.length === 0 ? (
         <div className="text-center py-12">
           <div className="text-4xl mb-3">🔍</div>
-          <p className="text-[#64748B] font-medium">{tex.noQuestionsFound || `No results for "${search}"`}</p>
-          <button type="button" onClick={() => setSearch('')}
-            className="mt-3 text-sm text-[#2563EB] hover:underline">
-            ✕ {tex.home || 'Clear'}
-          </button>
+          <p className="text-[#64748B] font-medium">{tex.noQuestionsFound || 'No states found'}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-3 mb-10">
