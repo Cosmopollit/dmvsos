@@ -33,6 +33,13 @@ export default function AdminPage() {
   const [editForm, setEditForm] = useState(null);
   const [saveError, setSaveError] = useState('');
   const [csvMessage, setCsvMessage] = useState({ type: '', text: '' });
+  const [editAllIndex, setEditAllIndex] = useState(null);
+  const [editAllData, setEditAllData] = useState(null); // { en: {id, fields}, ru: ..., ... }
+  const [editAllCorrect, setEditAllCorrect] = useState('A');
+  const [editAllCorrectOriginal, setEditAllCorrectOriginal] = useState('A');
+  const [editAllActiveLang, setEditAllActiveLang] = useState('en');
+  const [editAllLoading, setEditAllLoading] = useState(false);
+  const [editAllError, setEditAllError] = useState('');
   const fileInputRefs = useRef({});
   const csvInputRef = useRef(null);
 
@@ -131,6 +138,92 @@ export default function AdminPage() {
     setEditingIndex(null);
     setEditForm(null);
     setSaveError('');
+  };
+
+  const openEditAllForm = async (q, i) => {
+    if (!q.cluster_code) return;
+    setEditAllLoading(true);
+    setEditAllError('');
+    setEditAllIndex(i);
+    setEditAllActiveLang('en');
+    try {
+      const { data, error } = await supabase
+        .from('questions')
+        .select('*')
+        .eq('cluster_code', q.cluster_code)
+        .eq('state', q.state)
+        .eq('category', q.category);
+      if (error) throw new Error(error.message);
+      const byLang = {};
+      for (const row of (data || [])) {
+        byLang[row.language] = {
+          id: row.id,
+          question_text: row.question_text || '',
+          option_a: row.option_a || '',
+          option_b: row.option_b || '',
+          option_c: row.option_c || '',
+          option_d: row.option_d || '',
+          explanation: row.explanation || '',
+          language: row.language,
+        };
+      }
+      const correctIdx = q.correctAnswerIndex ?? 0;
+      const correctLetter = ['A', 'B', 'C', 'D'][correctIdx] ?? 'A';
+      setEditAllData(byLang);
+      setEditAllCorrect(correctLetter);
+      setEditAllCorrectOriginal(correctLetter);
+    } catch (err) {
+      setEditAllError(err.message || 'Failed to load all languages');
+      setEditAllIndex(null);
+    } finally {
+      setEditAllLoading(false);
+    }
+  };
+
+  const handleCancelEditAll = () => {
+    setEditAllIndex(null);
+    setEditAllData(null);
+    setEditAllError('');
+  };
+
+  const handleSaveEditAll = async () => {
+    if (!editAllData) return;
+    setEditAllError('');
+    const correctMap = { A: 0, B: 1, C: 2, D: 3 };
+    const correctNum = correctMap[editAllCorrect] ?? 0;
+    const rows = Object.values(editAllData)
+      .filter(d => d.id)
+      .map(d => ({ id: d.id, row: { ...d, correct_answer: correctNum } }));
+    try {
+      const res = await fetch('/api/admin/questions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          password,
+          action: 'save-all-langs',
+          rows,
+          correct_answer: correctNum,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to save');
+      // Update local state for the EN question card
+      if (editAllData.en) {
+        setQuestions(prev => {
+          const next = [...prev];
+          next[editAllIndex] = {
+            ...next[editAllIndex],
+            question: editAllData.en.question_text,
+            answers: [editAllData.en.option_a, editAllData.en.option_b, editAllData.en.option_c, editAllData.en.option_d],
+            correctAnswerIndex: correctNum,
+          };
+          return next;
+        });
+      }
+      handleCancelEditAll();
+    } catch (err) {
+      setEditAllError(err.message || 'Failed to save.');
+    }
   };
 
   const handleSaveEdit = async () => {
@@ -499,6 +592,16 @@ export default function AdminPage() {
                   >
                     Edit
                   </button>
+                  {q.cluster_code && (
+                    <button
+                      type="button"
+                      onClick={() => openEditAllForm(q, i)}
+                      disabled={editAllLoading && editAllIndex === i}
+                      className="shrink-0 px-3 py-1.5 rounded-lg border border-[#7C3AED] text-[#7C3AED] text-sm font-medium hover:bg-[#F5F3FF] disabled:opacity-60 transition"
+                    >
+                      {editAllLoading && editAllIndex === i ? 'Loading…' : 'All langs'}
+                    </button>
+                  )}
                   <button
                     type="button"
                     onClick={() => handleDeleteQuestion(i)}
@@ -612,6 +715,99 @@ export default function AdminPage() {
                     <button
                       type="button"
                       onClick={handleCancelEdit}
+                      className="px-4 py-2 rounded-xl border border-[#E2E8F0] text-[#1E293B] text-sm font-medium hover:bg-[#F8FAFC] transition"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
+              {editAllIndex === i && editAllData && (
+                <div className="mt-4 pt-4 border-t border-[#E2E8F0] space-y-4">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span className="text-xs font-semibold text-[#7C3AED] uppercase tracking-wide">Edit all languages</span>
+                    <span className="text-xs text-[#64748B] font-mono">{q.cluster_code}</span>
+                  </div>
+                  {/* Shared correct answer */}
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1E293B] mb-1">Correct answer (shared for all languages)</label>
+                    <div className="flex gap-2 items-center">
+                      <select
+                        value={editAllCorrect}
+                        onChange={(e) => setEditAllCorrect(e.target.value)}
+                        className="px-3 py-2 border border-[#E2E8F0] rounded-xl text-[#1E293B] bg-[#F8FAFC] focus:outline-none focus:border-[#7C3AED]"
+                      >
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                      </select>
+                      {editAllCorrect !== editAllCorrectOriginal && (
+                        <span className="text-xs text-[#F59E0B] font-medium">will update all {Object.keys(editAllData).length} language rows</span>
+                      )}
+                    </div>
+                  </div>
+                  {/* Language tabs */}
+                  <div>
+                    <div className="flex gap-1 mb-3 flex-wrap">
+                      {['en', 'ru', 'es', 'zh', 'ua'].filter(l => editAllData[l]).map(l => (
+                        <button
+                          key={l}
+                          type="button"
+                          onClick={() => setEditAllActiveLang(l)}
+                          className={`px-3 py-1 rounded-lg text-sm font-medium transition ${editAllActiveLang === l ? 'bg-[#7C3AED] text-white' : 'border border-[#E2E8F0] text-[#64748B] hover:bg-[#F8FAFC]'}`}
+                        >
+                          {l.toUpperCase()}
+                        </button>
+                      ))}
+                    </div>
+                    {editAllData[editAllActiveLang] && (
+                      <div className="space-y-3">
+                        <div>
+                          <label className="block text-xs font-semibold text-[#1E293B] mb-1">Question text</label>
+                          <textarea
+                            value={editAllData[editAllActiveLang].question_text}
+                            onChange={(e) => setEditAllData(d => ({ ...d, [editAllActiveLang]: { ...d[editAllActiveLang], question_text: e.target.value } }))}
+                            rows={3}
+                            className="w-full px-3 py-2 border border-[#E2E8F0] rounded-xl text-[#1E293B] bg-[#F8FAFC] focus:outline-none focus:border-[#7C3AED]"
+                          />
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          {['option_a', 'option_b', 'option_c', 'option_d'].map((key, idx) => (
+                            <div key={key}>
+                              <label className="block text-xs font-semibold text-[#1E293B] mb-1">Option {['A','B','C','D'][idx]}</label>
+                              <input
+                                value={editAllData[editAllActiveLang][key]}
+                                onChange={(e) => setEditAllData(d => ({ ...d, [editAllActiveLang]: { ...d[editAllActiveLang], [key]: e.target.value } }))}
+                                className="w-full px-3 py-2 border border-[#E2E8F0] rounded-xl text-[#1E293B] bg-[#F8FAFC] focus:outline-none focus:border-[#7C3AED]"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-[#1E293B] mb-1">Explanation</label>
+                          <textarea
+                            value={editAllData[editAllActiveLang].explanation}
+                            onChange={(e) => setEditAllData(d => ({ ...d, [editAllActiveLang]: { ...d[editAllActiveLang], explanation: e.target.value } }))}
+                            rows={2}
+                            className="w-full px-3 py-2 border border-[#E2E8F0] rounded-xl text-[#1E293B] bg-[#F8FAFC] focus:outline-none focus:border-[#7C3AED]"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  {editAllError && <p className="text-sm text-red-500">{editAllError}</p>}
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={handleSaveEditAll}
+                      className="px-4 py-2 rounded-xl bg-[#7C3AED] text-white text-sm font-semibold hover:bg-[#6D28D9] transition"
+                    >
+                      Save all languages
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleCancelEditAll}
                       className="px-4 py-2 rounded-xl border border-[#E2E8F0] text-[#1E293B] text-sm font-medium hover:bg-[#F8FAFC] transition"
                     >
                       Cancel

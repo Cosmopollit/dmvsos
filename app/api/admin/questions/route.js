@@ -62,6 +62,24 @@ export async function POST(req) {
     return Response.json({ ok: true, inserted, errors });
   }
 
+  if (action === 'save-all-langs') {
+    // rows: [{ id, row }] — one per language
+    const { rows: allRows, correct_answer } = body;
+    if (!Array.isArray(allRows) || allRows.length === 0) {
+      return Response.json({ error: 'No rows provided' }, { status: 400 });
+    }
+    const errors = [];
+    for (const { id, row } of allRows) {
+      if (!id) continue;
+      // Always sync correct_answer from the shared value
+      const payload = { ...row, correct_answer };
+      const { error } = await supabase.from('questions').update(payload).eq('id', id);
+      if (error) errors.push(`${row.language}: ${error.message}`);
+    }
+    if (errors.length) return Response.json({ error: errors.join('; ') }, { status: 500 });
+    return Response.json({ ok: true });
+  }
+
   if (action === 'delete') {
     const { id } = body;
     if (!id) return Response.json({ error: 'ID required' }, { status: 400 });
