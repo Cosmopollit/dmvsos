@@ -66,7 +66,7 @@ export async function POST(request) {
       console.log(`Webhook: checkout.session.completed | email=${email} | plan=${planType}`);
 
       if (email) {
-        const PLAN_DAYS = { quick_pass: 7, full_prep: 30, guaranteed_pass: 90 };
+        const PLAN_DAYS = { quick_pass: 7, full_prep: 30, guaranteed_pass: 90, moto_pass: 30, cdl_pass: 30 };
         const days = PLAN_DAYS[planType] || 30;
         const expiresAt = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
         const updates = {

@@ -13,15 +13,17 @@ export async function POST(req) {
   try {
     // Read price IDs inside handler to ensure runtime env resolution
     const PLAN_PRICE_IDS = {
-      quick_pass: process.env.STRIPE_PRICE_ID_QUICK_PASS,
-      full_prep: process.env.STRIPE_PRICE_ID_FULL_PREP,
+      quick_pass:      process.env.STRIPE_PRICE_ID_QUICK_PASS,
+      full_prep:       process.env.STRIPE_PRICE_ID_FULL_PREP,
       guaranteed_pass: process.env.STRIPE_PRICE_ID_GUARANTEED_PASS,
+      moto_pass:       process.env.STRIPE_PRICE_ID_MOTO_PASS,
+      cdl_pass:        process.env.STRIPE_PRICE_ID_CDL_PASS,
     };
 
     const body = await req.json().catch(() => ({}));
-    const planType = body.planType || 'full_prep';
+    const planType = body.planType || 'moto_pass';
 
-    if (!['quick_pass', 'full_prep', 'guaranteed_pass'].includes(planType)) {
+    if (!['quick_pass', 'full_prep', 'guaranteed_pass', 'moto_pass', 'cdl_pass'].includes(planType)) {
       return Response.json({ error: 'Unknown plan type' }, { status: 400 });
     }
 
