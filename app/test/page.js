@@ -33,12 +33,14 @@ function TestContent() {
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
   const [showTimeUp, setShowTimeUp] = useState(false);
   const [hideExplanations, setHideExplanations] = useState(false);
+  const [showLockModal, setShowLockModal] = useState(false);
+  const [lockAnimKey, setLockAnimKey] = useState({});
   const startTimeRef = useRef(null);
   const timeLimitRef = useRef(0);
 
-  // Time limits per category (in seconds)
-  const categoryTimeLimit = { dmv: 25 * 60, car: 25 * 60, cdl: 35 * 60, moto: 20 * 60, motorcycle: 20 * 60 };
-  const initialTime = categoryTimeLimit[category] || 25 * 60;
+  // Time limits per category (in seconds) — real exam simulation
+  const categoryTimeLimit = { dmv: 60 * 60, car: 60 * 60, cdl: 60 * 60, moto: 60 * 60, motorcycle: 60 * 60 };
+  const initialTime = categoryTimeLimit[category] || 60 * 60;
 
   const formatTime = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
 
@@ -136,8 +138,8 @@ function TestContent() {
 
   function startWithMode(mode) {
     const realLimits = { dmv: 40, car: 40, cdl: 50, moto: 30, motorcycle: 30 };
-    const limits = { real: realLimits[category] || 40, extended: 80, marathon: Infinity };
-    const limit = limits[mode] || 40;
+    const limits = { free: 20, real: realLimits[category] || 40, extended: 80, marathon: Infinity };
+    const limit = limits[mode] ?? 40;
     setQuestions(allQuestions.slice(0, Math.min(limit, allQuestions.length)));
     setCurrent(0);
     setScore(0);
@@ -148,14 +150,6 @@ function TestContent() {
     setElapsed(0);
     setTestMode(mode);
   }
-
-  // Free user: auto-start with 20 questions
-  useEffect(() => {
-    if (!isPro && !authLoading && !testMode && allQuestions.length) {
-      setQuestions(allQuestions.slice(0, 20));
-      setTestMode('free');
-    }
-  }, [isPro, authLoading, testMode, allQuestions]);
 
   // Keyboard shortcuts: 1-4 to select answer, Enter/Space to advance
   // Must be before early returns to satisfy Rules of Hooks
@@ -237,76 +231,180 @@ function TestContent() {
     </main>
   );
 
-  if (!isPro && !testMode && allQuestions.length) {
-    return (
-      <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-4xl mb-4 hourglass-spin">⏳</div>
-          <p className="text-[#94A3B8]">{tex.loadingQuestions}</p>
-        </div>
-      </main>
-    );
-  }
-
-  // Pro user: show mode selector
-  if (isPro && !testMode && allQuestions.length) {
+  // Mode selector — shown to ALL users (free and pro) before test starts
+  if (!testMode && allQuestions.length) {
     const totalAvailable = allQuestions.length;
+    const realCount = Math.min(({ dmv: 40, car: 40, cdl: 50, moto: 30, motorcycle: 30 })[category] || 40, totalAvailable);
     const modes = [
-      { id: 'real', icon: '🎯', label: tex.modeReal, desc: tex.modeRealDesc, count: Math.min(({ dmv: 40, car: 40, cdl: 50, moto: 30, motorcycle: 30 })[category] || 40, totalAvailable), color: '#2563EB', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', time: `⏱ ${Math.floor(initialTime / 60)} ${tex.minLabel}` },
-      { id: 'extended', icon: '📚', label: tex.modeExtended, desc: tex.modeExtendedDesc, count: Math.min(80, totalAvailable), color: '#7C3AED', gradient: 'linear-gradient(135deg, #F5F3FF, #EDE9FE)' },
-      { id: 'marathon', icon: '🏆', label: tex.modeMarathon, desc: tex.modeMarathonDesc, count: totalAvailable, color: '#D97706', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)' },
+      {
+        id: 'free',
+        icon: '✏️',
+        label: tex.modePractice || 'Quick Practice',
+        desc: tex.modePracticeDesc || '20 questions — always free',
+        count: Math.min(20, totalAvailable),
+        color: '#16A34A',
+        gradient: 'linear-gradient(135deg, #F0FDF4, #DCFCE7)',
+        locked: false,
+      },
+      {
+        id: 'real',
+        icon: '🎯',
+        label: tex.modeReal,
+        desc: tex.modeRealDesc,
+        count: realCount,
+        color: '#2563EB',
+        gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)',
+        time: `⏱ 60 ${tex.minLabel}`,
+        locked: !isPro,
+      },
+      {
+        id: 'extended',
+        icon: '📚',
+        label: tex.modeExtended,
+        desc: tex.modeExtendedDesc,
+        count: Math.min(80, totalAvailable),
+        color: '#7C3AED',
+        gradient: 'linear-gradient(135deg, #F5F3FF, #EDE9FE)',
+        locked: !isPro,
+      },
+      {
+        id: 'marathon',
+        icon: '🏆',
+        label: tex.modeMarathon,
+        desc: tex.modeMarathonDesc,
+        count: totalAvailable,
+        color: '#D97706',
+        gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)',
+        locked: !isPro,
+      },
     ];
+
     return (
-      <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6 relative">
-        <button type="button" onClick={() => router.push(`/category?state=${state}&lang=${lang}`)}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">
-          ✕
-        </button>
-        <div className="w-full max-w-md">
+      <main className="min-h-screen flex flex-col items-center justify-center p-6 relative" style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}>
+        {/* Header */}
+        <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
           <button type="button" onClick={() => router.push(`/category?state=${state}&lang=${lang}`)}
-            className="text-sm text-[#94A3B8] hover:text-[#2563EB] transition mb-6">
+            className="text-sm text-[#94A3B8] hover:text-[#2563EB] transition font-medium">
             {tex.back}
           </button>
-          <h2 className="text-xl font-bold text-[#1E293B] mb-2">{tex.chooseMode}</h2>
-          <p className="text-sm text-[#94A3B8] mb-6">{totalAvailable} {tex.modeQuestions}</p>
+          <a href="/" className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition">
+            <Image src="/logo.png" alt="DMVSOS" width={28} height={28} className="rounded-lg" />
+            <span className="text-lg font-bold text-[#0B1C3D]" style={{ letterSpacing: '-0.02em' }}>DMVSOS</span>
+          </a>
+          <div className="w-16" />
+        </div>
+
+        <div className="w-full max-w-md mt-12">
+          <h2 className="text-xl font-bold text-[#1E293B] mb-1">{tex.chooseMode}</h2>
+          <p className="text-sm text-[#94A3B8] mb-5">{totalAvailable} {tex.modeQuestions}</p>
+
           <div className="flex flex-col gap-3">
-            {modes.map(m => (
-              <button key={m.id} type="button" onClick={() => startWithMode(m.id)}
-                className="rounded-2xl p-5 flex items-center gap-4 hover:shadow-lg transition-all text-left border-2 border-white/60 shadow-md"
-                style={{ background: m.gradient }}>
-                <span className="text-3xl">{m.icon}</span>
-                <div className="flex-1">
-                  <div className="font-bold text-[#1E293B]">{m.label}</div>
-                  <div className="text-sm text-[#64748B] mt-0.5">{m.desc}</div>
-                </div>
-                <div className="flex flex-col items-end gap-1 shrink-0">
-                  <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-white/70" style={{ color: m.color }}>
-                    {m.count}
-                  </span>
-                  {m.time && (
-                    <span className="text-[10px] font-medium text-[#94A3B8]">
-                      {m.time}
+            {modes.map(m => {
+              if (!m.locked) {
+                // Unlocked card
+                return (
+                  <button key={m.id} type="button" onClick={() => startWithMode(m.id)}
+                    className="rounded-2xl p-5 flex items-center gap-4 hover:shadow-lg transition-all text-left border-2 border-white/60 shadow-md"
+                    style={{ background: m.gradient }}>
+                    <span className="text-3xl">{m.icon}</span>
+                    <div className="flex-1">
+                      <div className="font-bold text-[#1E293B]">{m.label}</div>
+                      <div className="text-sm text-[#64748B] mt-0.5">{m.desc}</div>
+                    </div>
+                    <div className="flex flex-col items-end gap-1 shrink-0">
+                      <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-white/70" style={{ color: m.color }}>
+                        {m.count} {tex.modeQuestions}
+                      </span>
+                      {!isPro && (
+                        <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-[#DCFCE7] text-[#16A34A]">
+                          {tex.freeLabel}
+                        </span>
+                      )}
+                    </div>
+                  </button>
+                );
+              }
+
+              // Locked card — interactive lock on hover, click opens upgrade modal
+              return (
+                <button
+                  key={m.id}
+                  type="button"
+                  onMouseEnter={() => setLockAnimKey(k => ({ ...k, [m.id]: (k[m.id] || 0) + 1 }))}
+                  onClick={() => setShowLockModal(true)}
+                  className="rounded-2xl p-5 flex items-center gap-4 text-left border-2 border-white/40 shadow-md transition-all hover:shadow-lg relative overflow-hidden cursor-pointer"
+                  style={{ background: m.gradient, opacity: 0.82 }}>
+                  {/* Dimming overlay */}
+                  <div className="absolute inset-0 bg-white/30 pointer-events-none rounded-2xl" />
+                  <span className="text-3xl relative" style={{ filter: 'grayscale(0.3)' }}>{m.icon}</span>
+                  <div className="flex-1 relative">
+                    <div className="font-bold text-[#1E293B]">{m.label}</div>
+                    <div className="text-sm text-[#64748B] mt-0.5">{m.desc}</div>
+                    {m.time && (
+                      <div className="text-[11px] text-[#94A3B8] mt-1">{m.time}</div>
+                    )}
+                  </div>
+                  <div className="flex flex-col items-end gap-1.5 shrink-0 relative">
+                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-white/70 text-[#94A3B8]">
+                      {m.count} {tex.modeQuestions}
                     </span>
-                  )}
-                </div>
-              </button>
-            ))}
+                    {/* Animated lock */}
+                    <span
+                      key={lockAnimKey[m.id] || 0}
+                      className={lockAnimKey[m.id] ? 'lock-animate' : ''}
+                      style={{ fontSize: 20, lineHeight: 1 }}>
+                      🔒
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
           </div>
 
-          {/* Real exam mode toggle */}
-          <label className="flex items-start gap-3 mt-5 p-4 rounded-xl bg-white/60 border border-[#E2E8F0] cursor-pointer hover:bg-white/80 transition">
-            <input
-              type="checkbox"
-              checked={hideExplanations}
-              onChange={e => setHideExplanations(e.target.checked)}
-              className="mt-0.5 w-4 h-4 accent-[#2563EB] rounded shrink-0"
-            />
-            <div>
-              <div className="text-sm font-semibold text-[#1E293B]">{tex.hideExplanations}</div>
-              <div className="text-xs text-[#64748B] mt-0.5">{tex.hideExplanationsDesc}</div>
-            </div>
-          </label>
+          {/* Real exam mode toggle (pro only) */}
+          {isPro && (
+            <label className="flex items-start gap-3 mt-5 p-4 rounded-xl bg-white/60 border border-[#E2E8F0] cursor-pointer hover:bg-white/80 transition">
+              <input
+                type="checkbox"
+                checked={hideExplanations}
+                onChange={e => setHideExplanations(e.target.checked)}
+                className="mt-0.5 w-4 h-4 accent-[#2563EB] rounded shrink-0"
+              />
+              <div>
+                <div className="text-sm font-semibold text-[#1E293B]">{tex.hideExplanations}</div>
+                <div className="text-xs text-[#64748B] mt-0.5">{tex.hideExplanationsDesc}</div>
+              </div>
+            </label>
+          )}
         </div>
+
+        {/* Lock modal — upgrade prompt */}
+        {showLockModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-50 p-4"
+            onClick={() => setShowLockModal(false)}>
+            <div className="bg-white rounded-3xl p-7 w-full max-w-sm shadow-2xl text-center"
+              onClick={e => e.stopPropagation()}>
+              <div className="text-5xl mb-3">🔓</div>
+              <h3 className="text-xl font-bold text-[#0B1C3D] mb-2">
+                {tex.unlockTitle || 'Unlock Full Access'}
+              </h3>
+              <p className="text-sm text-[#64748B] mb-6">
+                {tex.unlockDesc || 'Get all test modes, unlimited practice, and real exam simulation.'}
+              </p>
+              <button
+                type="button"
+                onClick={() => router.push(`/upgrade?lang=${lang}`)}
+                className="w-full py-3.5 rounded-2xl font-bold text-white text-base mb-3 btn-pulse"
+                style={{ background: 'linear-gradient(135deg, #2563EB, #1D4ED8)' }}>
+                {tex.unlockCta || 'Unlock from $7.99 →'}
+              </button>
+              <button type="button" onClick={() => setShowLockModal(false)}
+                className="text-sm text-[#94A3B8] hover:text-[#64748B]">
+                {tex.back}
+              </button>
+            </div>
+          </div>
+        )}
       </main>
     );
   }
