@@ -16,17 +16,17 @@ function TestContent() {
   const isRetry = params.get('retry') === 'true';
   const tex = t[lang] || t.en;
 
-  const { isPro, hasMoto, hasCdl, loading: authLoading } = useAuth();
+  const { isPro, hasCar, hasMoto, hasCdl, loading: authLoading } = useAuth();
 
-  // Category-aware access: moto requires hasMoto, cdl requires hasCdl, car/dmv requires any isPro
+  // Category-aware access: each category needs its own plan
   const hasFullAccess = ['moto', 'motorcycle'].includes(category) ? hasMoto
     : category === 'cdl' ? hasCdl
-    : isPro;
+    : hasCar; // car/dmv → requires car_pass (or cdl_pass which includes car)
 
   // Upgrade plan to suggest based on current category
   const suggestPlan = ['moto', 'motorcycle'].includes(category) ? 'moto_pass'
     : category === 'cdl' ? 'cdl_pass'
-    : 'moto_pass'; // car → suggest moto_pass (cheapest, includes car)
+    : 'car_pass';
   const [allQuestions, setAllQuestions] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [testMode, setTestMode] = useState(null); // null = not started, 'free' | 'real' | 'extended' | 'marathon'
@@ -415,7 +415,7 @@ function TestContent() {
                 onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
                 className="w-full py-3.5 rounded-2xl font-bold text-white text-base mb-3 btn-pulse"
                 style={{ background: 'linear-gradient(135deg, #2563EB, #1D4ED8)' }}>
-                {tex.unlockCta || 'Unlock from $9.99 →'}
+                {tex.unlockCta || 'Unlock from $29.99 →'}
               </button>
               <button type="button" onClick={() => setShowLockModal(false)}
                 className="text-sm text-[#94A3B8] hover:text-[#64748B]">
@@ -602,7 +602,7 @@ function TestContent() {
         {/* Q18 pre-paywall nudge */}
         {!hasFullAccess && current === 17 && showAnswer && (
           <div className="bg-[#FFF7ED] border border-[#FED7AA] rounded-xl px-4 py-3 mb-4 text-sm text-[#92400E] font-medium text-center">
-            🔔 2 questions left in your free test  ·  unlock all from $9.99
+            🔔 2 questions left in your free test  ·  unlock all from $29.99
           </div>
         )}
 
@@ -636,27 +636,40 @@ function TestContent() {
                 {(tex.upgradeScoreSoFar || 'Your score: {score}/20').replace('{score}', String(score)).replace('{percent}', String(Math.round((score / 20) * 100)))}
               </p>
 
-              {/* 2 compact category plan cards */}
+              {/* 3 compact category plan cards */}
               <div className="flex gap-2 mb-4">
                 {/* Moto Pass */}
-                <div className="flex-1 border-2 border-[#2563EB] rounded-xl p-3 text-center flex flex-col bg-[#EFF6FF]">
+                <div className="flex-1 border border-[#E2E8F0] rounded-xl p-3 text-center flex flex-col">
                   <div className="text-xl mb-0.5">🏍️</div>
-                  <div className="text-xs font-bold text-[#2563EB] mb-0.5">Moto Pass</div>
+                  <div className="text-xs font-bold text-[#64748B] mb-0.5">Moto</div>
                   <div className="text-lg font-black text-[#0B1C3D] mb-0.5">$9.99</div>
-                  <div className="text-[10px] text-[#64748B] mb-2">Moto + Car · 30 days</div>
+                  <div className="text-[10px] text-[#94A3B8] mb-2">30 days</div>
                   <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=moto_pass`)}
+                    className="mt-auto w-full py-1.5 rounded-lg text-xs font-semibold bg-[#F1F5F9] text-[#0B1C3D] hover:bg-[#E2E8F0] transition">
+                    Get it
+                  </button>
+                </div>
+                {/* Car Pass */}
+                <div className="flex-1 border-2 border-[#2563EB] rounded-xl p-3 text-center flex flex-col bg-[#EFF6FF]">
+                  <div className="text-[9px] font-bold text-white bg-[#2563EB] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">POPULAR</div>
+                  <div className="text-xl mb-0.5">🚗</div>
+                  <div className="text-xs font-bold text-[#2563EB] mb-0.5">Auto</div>
+                  <div className="text-lg font-black text-[#0B1C3D] mb-0.5">$29.99</div>
+                  <div className="text-[10px] text-[#64748B] mb-2">30 days</div>
+                  <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=car_pass`)}
                     className="mt-auto w-full py-1.5 rounded-lg text-xs font-bold bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition">
                     Get it
                   </button>
                 </div>
                 {/* CDL Pro */}
                 <div className="flex-1 border-2 border-[#F59E0B] rounded-xl p-3 text-center flex flex-col">
+                  <div className="text-[9px] font-bold text-[#0B1C3D] bg-[#F59E0B] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">🛡️ PRO</div>
                   <div className="text-xl mb-0.5">🚛</div>
-                  <div className="text-xs font-bold text-[#92400E] mb-0.5">CDL Pro</div>
-                  <div className="text-lg font-black text-[#0B1C3D] mb-0.5">$19.99</div>
-                  <div className="text-[10px] text-[#64748B] mb-2">CDL + Car · 30 days</div>
+                  <div className="text-xs font-bold text-[#92400E] mb-0.5">CDL</div>
+                  <div className="text-lg font-black text-[#0B1C3D] mb-0.5">$59.99</div>
+                  <div className="text-[10px] text-[#64748B] mb-2">30 days</div>
                   <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=cdl_pass`)}
-                    className="mt-auto w-full py-1.5 rounded-lg text-xs font-semibold bg-[#F59E0B] text-[#0B1C3D] hover:bg-[#FBBF24] transition">
+                    className="mt-auto w-full py-1.5 rounded-lg text-xs font-semibold bg-[#0B1C3D] text-white hover:bg-[#1E3A5F] transition">
                     Get it
                   </button>
                 </div>

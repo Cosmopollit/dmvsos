@@ -23,22 +23,39 @@ function UpgradeContent() {
       icon: '🏍️',
       price: '$9.99',
       duration: '30 days · one payment',
+      badge: null,
+      style: 'outline',
+      features: [
+        '✓ Full Motorcycle question bank',
+        '✓ All 50 states · 5 languages',
+        '✓ All exam modes unlocked',
+        '✓ Real exam simulation',
+        '✓ Detailed explanations',
+      ],
+      btnLabel: 'Get Moto Pass  ·  $9.99',
+    },
+    {
+      id: 'car_pass',
+      name: 'Auto Pass',
+      icon: '🚗',
+      price: '$29.99',
+      duration: '30 days · one payment',
       badge: tex.mostPopular || 'MOST POPULAR',
       style: 'blue',
       features: [
-        '✓ Full Motorcycle question bank',
-        '✓ Car tests included',
+        '✓ Full Car question bank',
         '✓ All 50 states · 5 languages',
         '✓ All exam modes unlocked',
         '✓ Real exam simulation (60 min)',
+        '✓ Detailed explanations',
       ],
-      btnLabel: 'Get Moto Pass  ·  $9.99',
+      btnLabel: 'Get Auto Pass  ·  $29.99',
     },
     {
       id: 'cdl_pass',
       name: 'CDL Pro',
       icon: '🚛',
-      price: '$19.99',
+      price: '$59.99',
       duration: '30 days · one payment',
       badge: '🛡️ GUARANTEED',
       style: 'gold',
@@ -49,7 +66,7 @@ function UpgradeContent() {
         '✓ All exam modes unlocked',
         '🛡️ Pass or 100% refund',
       ],
-      btnLabel: 'Get CDL Pro  ·  $19.99',
+      btnLabel: 'Get CDL Pro  ·  $59.99',
     },
   ];
 
@@ -95,9 +112,7 @@ function UpgradeContent() {
             <span key={i}>{line}{i < arr.length - 1 ? <br /> : null}</span>
           ))}
         </h1>
-        <p className="text-[#94A3B8] text-base">
-          {tex.upgradeSubtext}
-        </p>
+        <p className="text-[#94A3B8] text-base">{tex.upgradeSubtext}</p>
       </div>
 
       {/* Social proof */}
@@ -106,12 +121,12 @@ function UpgradeContent() {
           <div className="text-2xl font-bold text-[#F59E0B]">35K+</div>
           <div className="text-xs text-[#94A3B8]">{tex.statQuestions || 'questions'}</div>
         </div>
-        <div className="w-px bg-[#1E3A5F]"></div>
+        <div className="w-px bg-[#1E3A5F]" />
         <div>
           <div className="text-2xl font-bold text-[#F59E0B]">50</div>
           <div className="text-xs text-[#94A3B8]">{tex.statStates}</div>
         </div>
-        <div className="w-px bg-[#1E3A5F]"></div>
+        <div className="w-px bg-[#1E3A5F]" />
         <div>
           <div className="text-2xl font-bold text-[#F59E0B]">5</div>
           <div className="text-xs text-[#94A3B8]">{tex.statLanguages}</div>
@@ -119,10 +134,10 @@ function UpgradeContent() {
       </div>
 
       {/* Free tier chip */}
-      <div className="w-full max-w-md mb-5 rounded-2xl p-4 border border-white/10 bg-white/5 flex items-center gap-4">
-        <span className="text-3xl">🚗</span>
+      <div className="w-full max-w-2xl mb-5 rounded-2xl p-4 border border-white/10 bg-white/5 flex items-center gap-4">
+        <span className="text-2xl">✏️</span>
         <div className="flex-1">
-          <div className="text-sm font-bold text-white">Car Tests · Free</div>
+          <div className="text-sm font-bold text-white">Free Practice · Car</div>
           <div className="text-xs text-[#94A3B8] mt-0.5">20 questions · always included · all 50 states</div>
         </div>
         <span className="text-xs font-semibold text-[#16A34A] bg-[#16A34A]/10 px-2.5 py-1 rounded-full border border-[#16A34A]/20 shrink-0">
@@ -130,8 +145,8 @@ function UpgradeContent() {
         </span>
       </div>
 
-      {/* 2 Plan cards */}
-      <div className="w-full max-w-md flex flex-col sm:flex-row gap-4 mb-6">
+      {/* 3 Plan cards */}
+      <div className="w-full max-w-2xl flex flex-col sm:flex-row gap-4 mb-6">
         {plans.map((plan) => {
           const isPreselected = preselect === plan.id;
           const isBlue = plan.style === 'blue';
@@ -142,7 +157,9 @@ function UpgradeContent() {
               className={`flex-1 rounded-2xl p-6 flex flex-col relative ${
                 isBlue
                   ? 'bg-[#0B1C3D] border-2 border-[#2563EB]'
-                  : 'bg-white border-2 border-[#F59E0B]'
+                  : isGold
+                  ? 'bg-white border-2 border-[#F59E0B]'
+                  : 'bg-white border border-[#E2E8F0]'
               } ${isPreselected ? 'ring-2 ring-offset-2 ring-offset-[#0B1C3D] ring-[#F59E0B]' : ''}`}
             >
               {plan.badge && (
@@ -153,7 +170,7 @@ function UpgradeContent() {
                 </span>
               )}
               <div className="text-3xl mb-3 mt-1">{plan.icon}</div>
-              <div className={`text-sm font-bold mb-1 ${isBlue ? 'text-[#F59E0B]' : 'text-[#92400E]'}`}>
+              <div className={`text-sm font-bold mb-1 ${isBlue ? 'text-[#F59E0B]' : isGold ? 'text-[#92400E]' : 'text-[#2563EB]'}`}>
                 {plan.name}
               </div>
               <div className={`text-3xl font-black mb-1 ${isBlue ? 'text-white' : 'text-[#0B1C3D]'}`}>
@@ -176,7 +193,9 @@ function UpgradeContent() {
                 className={`w-full py-3 rounded-xl font-bold text-sm transition disabled:opacity-60 ${
                   isBlue
                     ? 'bg-[#2563EB] text-white hover:bg-[#1D4ED8]'
-                    : 'bg-[#F59E0B] text-[#0B1C3D] hover:bg-[#FBBF24]'
+                    : isGold
+                    ? 'bg-[#F59E0B] text-[#0B1C3D] hover:bg-[#FBBF24]'
+                    : 'bg-[#F1F5F9] text-[#0B1C3D] hover:bg-[#E2E8F0]'
                 }`}
               >
                 {loadingPlan === plan.id ? '…' : plan.btnLabel}
@@ -184,6 +203,15 @@ function UpgradeContent() {
             </div>
           );
         })}
+      </div>
+
+      {/* CDL endorsements teaser */}
+      <div className="w-full max-w-2xl mb-5 rounded-2xl p-4 border border-white/10 bg-white/5 text-center">
+        <div className="text-xs text-[#94A3B8]">
+          <span className="text-white font-semibold">CDL Pro</span> includes general CDL knowledge ·
+          <span className="text-[#F59E0B] font-medium"> Endorsement add-ons coming soon</span>
+          {' '}(Hazmat, School Bus, Tanker, Passenger…)
+        </div>
       </div>
 
       {/* Value prop */}
@@ -197,7 +225,6 @@ function UpgradeContent() {
         </p>
       )}
 
-      {/* Fine print */}
       <p className="text-center text-xs text-[#64748B] mb-6">
         {tex.cancelAnytime || 'One payment · No subscription · No auto-renewal'}
       </p>
