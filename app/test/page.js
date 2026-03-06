@@ -236,7 +236,7 @@ function TestContent() {
     const totalAvailable = allQuestions.length;
     const realCount = Math.min(({ dmv: 40, car: 40, cdl: 50, moto: 30, motorcycle: 30 })[category] || 40, totalAvailable);
     const modes = [
-      {
+      ...(!isPro ? [{
         id: 'free',
         icon: '✏️',
         label: tex.modePractice || 'Quick Practice',
@@ -245,7 +245,7 @@ function TestContent() {
         color: '#16A34A',
         gradient: 'linear-gradient(135deg, #F0FDF4, #DCFCE7)',
         locked: false,
-      },
+      }] : []),
       {
         id: 'real',
         icon: '🎯',
