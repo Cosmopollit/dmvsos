@@ -96,9 +96,8 @@ export async function POST(request) {
             plan_type: planType,
             plan_expires_at: expiresAt,
             stripe_customer_id: customerId,
-            stripe_subscription_id: subscription.id,
           });
-          console.log(`Webhook: subscription created for ${email} | expires=${expiresAt}`);
+          console.log(`Webhook: subscription created for ${email} | sub=${subscription.id} | expires=${expiresAt}`);
         }
       } else {
         // One-time payment (legacy plans)
@@ -154,7 +153,6 @@ export async function POST(request) {
         is_pro: false,
         plan_type: null,
         plan_expires_at: null,
-        stripe_subscription_id: null,
       });
     }
 
