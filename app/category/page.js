@@ -40,37 +40,24 @@ function CategoryContent() {
       </div>
 
       <div className="w-full max-w-md flex flex-col gap-4">
-        {categories.map((cat) => {
-          const questionCount = isPro ? cat.proQuestions : cat.freeQuestions;
-          const questionLabel = isPro
-            ? `${questionCount} ${tex.questionsLabel || 'questions'}`
-            : `${questionCount} ${tex.questionsLabel || 'questions'} · ${tex.freeLabel || 'free'}`;
-          return (
-            <button
-              key={cat.id}
-              type="button"
-              onClick={() => router.push(`/test?state=${state}&category=${cat.id}&lang=${lang}`)}
-              className="rounded-2xl p-5 flex items-center gap-5 hover:shadow-lg transition-all text-left border-2 border-white/60 shadow-md"
-              style={{ background: cat.gradient }}
-            >
-              <div className={`flex-shrink-0 ${cat.emojiSize}`}>
-                {cat.icon}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-bold text-[#1E293B] text-lg">{tex[cat.titleKey]}</span>
-                </div>
-                <div className="text-sm text-[#64748B] mt-0.5 mb-2">{tex[cat.descKey]}</div>
-                <div className="flex gap-2 flex-wrap">
-                  <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-white/70" style={{ color: cat.color }}>
-                    {questionLabel}
-                  </span>
-                </div>
-              </div>
-              <div className="text-[#94A3B8] text-lg shrink-0">→</div>
-            </button>
-          );
-        })}
+        {categories.map((cat) => (
+          <button
+            key={cat.id}
+            type="button"
+            onClick={() => router.push(`/test?state=${state}&category=${cat.id}&lang=${lang}`)}
+            className="rounded-2xl p-5 flex items-center gap-5 hover:shadow-lg transition-all text-left border-2 border-white/60 shadow-md"
+            style={{ background: cat.gradient }}
+          >
+            <div className={`flex-shrink-0 ${cat.emojiSize}`}>
+              {cat.icon}
+            </div>
+            <div className="flex-1 min-w-0">
+              <span className="font-bold text-[#1E293B] text-lg">{tex[cat.titleKey]}</span>
+              <div className="text-sm text-[#64748B] mt-0.5">{tex[cat.descKey]}</div>
+            </div>
+            <div className="text-[#94A3B8] text-lg shrink-0">→</div>
+          </button>
+        ))}
       </div>
 
       {/* Manual link */}
