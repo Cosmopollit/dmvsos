@@ -9,9 +9,12 @@ const supabase = createClient(
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://dmvsos.com';
 
+// New category plans are monthly subscriptions
+// Legacy plans (quick_pass, full_prep, guaranteed_pass) were one-time payments — kept for backward compat
+const SUBSCRIPTION_PLANS = new Set(['car_pass', 'moto_pass', 'cdl_pass']);
+
 export async function POST(req) {
   try {
-    // Read price IDs inside handler to ensure runtime env resolution
     const PLAN_PRICE_IDS = {
       quick_pass:      process.env.STRIPE_PRICE_ID_QUICK_PASS,
       full_prep:       process.env.STRIPE_PRICE_ID_FULL_PREP,
@@ -35,15 +38,29 @@ export async function POST(req) {
     // Get user email from auth header
     const authHeader = req.headers.get('authorization');
     let customerEmail = null;
+    let stripeCustomerId = null;
 
     if (authHeader?.startsWith('Bearer ')) {
       const token = authHeader.slice(7);
       const { data: { user } } = await supabase.auth.getUser(token);
       customerEmail = user?.email || null;
+
+      // Look up existing Stripe customer to avoid duplicate customers
+      if (customerEmail) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('stripe_customer_id')
+          .eq('email', customerEmail)
+          .single()
+          .catch(() => ({ data: null }));
+        stripeCustomerId = profile?.stripe_customer_id || null;
+      }
     }
 
+    const isSubscription = SUBSCRIPTION_PLANS.has(planType);
+
     const sessionParams = {
-      mode: 'payment',
+      mode: isSubscription ? 'subscription' : 'payment',
       payment_method_types: ['card'],
       line_items: [{
         price: PLAN_PRICE_IDS[planType],
@@ -57,7 +74,18 @@ export async function POST(req) {
       },
     };
 
-    if (customerEmail) {
+    // For subscriptions: pass metadata to the subscription object too
+    // so renewal invoices (invoice.payment_succeeded) know the plan_type
+    if (isSubscription) {
+      sessionParams.subscription_data = {
+        metadata: { plan_type: planType, ...(customerEmail ? { email: customerEmail } : {}) },
+      };
+    }
+
+    // Attach to existing Stripe customer to prevent duplicate accounts
+    if (stripeCustomerId) {
+      sessionParams.customer = stripeCustomerId;
+    } else if (customerEmail) {
       sessionParams.customer_email = customerEmail;
     }
 
