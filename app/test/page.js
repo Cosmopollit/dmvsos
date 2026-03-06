@@ -27,6 +27,11 @@ function TestContent() {
   const suggestPlan = ['moto', 'motorcycle'].includes(category) ? 'moto_pass'
     : category === 'cdl' ? 'cdl_pass'
     : 'car_pass';
+
+  const isMoto = ['moto', 'motorcycle'].includes(category);
+  const freeLimit = isMoto ? 5 : 20;       // moto preview = 5q, car = 20q
+  const nudgeAt   = isMoto ? 3 : 17;       // show nudge at question 4 (idx 3) for moto, 18 for car
+
   const [allQuestions, setAllQuestions] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [testMode, setTestMode] = useState(null); // null = not started, 'free' | 'real' | 'extended' | 'marathon'
@@ -148,7 +153,7 @@ function TestContent() {
 
   function startWithMode(mode) {
     const realLimits = { dmv: 40, car: 40, cdl: 50, moto: 30, motorcycle: 30 };
-    const limits = { free: 20, real: realLimits[category] || 40, extended: 80, marathon: Infinity };
+    const limits = { free: freeLimit, real: realLimits[category] || 40, extended: 80, marathon: Infinity };
     const limit = limits[mode] ?? 40;
     setQuestions(allQuestions.slice(0, Math.min(limit, allQuestions.length)));
     setCurrent(0);
@@ -250,8 +255,10 @@ function TestContent() {
         id: 'free',
         icon: '✏️',
         label: tex.modePractice || 'Quick Practice',
-        desc: tex.modePracticeDesc || '20 questions  ·  always free',
-        count: Math.min(20, totalAvailable),
+        desc: isMoto
+          ? `${freeLimit} ${tex.modeQuestions || 'questions'}  ·  always free`
+          : (tex.modePracticeDesc || '20 questions  ·  always free'),
+        count: Math.min(freeLimit, totalAvailable),
         color: '#16A34A',
         gradient: 'linear-gradient(135deg, #F0FDF4, #DCFCE7)',
         locked: false,
@@ -267,7 +274,8 @@ function TestContent() {
         time: `⏱ 60 ${tex.minLabel}`,
         locked: !hasFullAccess,
       },
-      {
+      // Extended only for car/cdl — moto exam is short, 80q doesn't make sense
+      ...(!isMoto ? [{
         id: 'extended',
         icon: '📚',
         label: tex.modeExtended,
@@ -276,7 +284,7 @@ function TestContent() {
         color: '#7C3AED',
         gradient: 'linear-gradient(135deg, #F5F3FF, #EDE9FE)',
         locked: !hasFullAccess,
-      },
+      }] : []),
       {
         id: 'marathon',
         icon: '🏆',
@@ -467,7 +475,7 @@ function TestContent() {
   handleSelectRef.current = handleSelect;
 
   async function handleNext() {
-    if (!hasFullAccess && total === 20 && current === 19) {
+    if (!hasFullAccess && total === freeLimit && current === freeLimit - 1) {
       setShowUpgradeBanner(true);
       return;
     }
@@ -600,9 +608,9 @@ function TestContent() {
         )}
 
         {/* Q18 pre-paywall nudge */}
-        {!hasFullAccess && current === 17 && showAnswer && (
+        {!hasFullAccess && current === nudgeAt && showAnswer && (
           <div className="bg-[#FFF7ED] border border-[#FED7AA] rounded-xl px-4 py-3 mb-4 text-sm text-[#92400E] font-medium text-center">
-            🔔 2 questions left in your free test  ·  unlock all from $29.99
+            🔔 {freeLimit - current - 1} {tex.modeQuestions || 'questions'} left in your free test  ·  unlock all from {isMoto ? '$9.99' : '$29.99'}
           </div>
         )}
 
