@@ -38,7 +38,7 @@ function TestContent() {
   const startTimeRef = useRef(null);
   const timeLimitRef = useRef(0);
 
-  // Time limits per category (in seconds) — real exam simulation
+  // Time limits per category (in seconds)  ·  real exam simulation
   const categoryTimeLimit = { dmv: 60 * 60, car: 60 * 60, cdl: 60 * 60, moto: 60 * 60, motorcycle: 60 * 60 };
   const initialTime = categoryTimeLimit[category] || 60 * 60;
 
@@ -80,7 +80,7 @@ function TestContent() {
     }
   }, [motivationalMessage]);
 
-  // Load questions — does NOT depend on isPro
+  // Load questions  ·  does NOT depend on isPro
   useEffect(() => {
     if (isRetry) {
       try {
@@ -231,7 +231,7 @@ function TestContent() {
     </main>
   );
 
-  // Mode selector — shown to ALL users (free and pro) before test starts
+  // Mode selector  ·  shown to ALL users (free and pro) before test starts
   if (!testMode && allQuestions.length) {
     const totalAvailable = allQuestions.length;
     const realCount = Math.min(({ dmv: 40, car: 40, cdl: 50, moto: 30, motorcycle: 30 })[category] || 40, totalAvailable);
@@ -240,7 +240,7 @@ function TestContent() {
         id: 'free',
         icon: '✏️',
         label: tex.modePractice || 'Quick Practice',
-        desc: tex.modePracticeDesc || '20 questions — always free',
+        desc: tex.modePracticeDesc || '20 questions  ·  always free',
         count: Math.min(20, totalAvailable),
         color: '#16A34A',
         gradient: 'linear-gradient(135deg, #F0FDF4, #DCFCE7)',
@@ -325,15 +325,15 @@ function TestContent() {
                 );
               }
 
-              // Locked card — interactive lock on hover, click opens upgrade modal
+              // Locked card  ·  interactive lock on hover, click opens upgrade modal
               return (
                 <button
                   key={m.id}
                   type="button"
                   onMouseEnter={() => setLockAnimKey(k => ({ ...k, [m.id]: (k[m.id] || 0) + 1 }))}
                   onClick={() => setShowLockModal(true)}
-                  className="rounded-2xl p-5 flex items-center gap-4 text-left border-2 border-white/40 shadow-md transition-all hover:shadow-lg relative overflow-hidden cursor-pointer"
-                  style={{ background: m.gradient, opacity: 0.82 }}>
+                  className="rounded-2xl pt-5 px-5 pb-8 flex items-center gap-4 text-left border-2 border-white/40 shadow-md transition-all hover:shadow-lg relative overflow-hidden cursor-pointer"
+                  style={{ background: m.gradient, opacity: 0.85 }}>
                   {/* Dimming overlay */}
                   <div className="absolute inset-0 bg-white/30 pointer-events-none rounded-2xl" />
                   <span className="text-3xl relative" style={{ filter: 'grayscale(0.3)' }}>{m.icon}</span>
@@ -354,6 +354,13 @@ function TestContent() {
                       className={lockAnimKey[m.id] ? 'lock-animate' : ''}
                       style={{ fontSize: 20, lineHeight: 1 }}>
                       🔒
+                    </span>
+                  </div>
+                  {/* Guaranteed pass badge — shimmer bottom strip */}
+                  <div className="badge-shimmer absolute bottom-0 left-0 right-0 flex items-center justify-center gap-1.5 py-1.5 rounded-b-2xl">
+                    <span style={{ fontSize: 11 }}>🛡️</span>
+                    <span className="text-[10px] font-bold tracking-wider uppercase" style={{ color: '#92400E' }}>
+                      Guaranteed Pass · 99%
                     </span>
                   </div>
                 </button>
@@ -378,7 +385,7 @@ function TestContent() {
           )}
         </div>
 
-        {/* Lock modal — upgrade prompt */}
+        {/* Lock modal  ·  upgrade prompt */}
         {showLockModal && (
           <div className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-50 p-4"
             onClick={() => setShowLockModal(false)}>
@@ -464,7 +471,7 @@ function TestContent() {
         setShowAnswer(false);
       }
     } else {
-      // Use ref for answers — guaranteed to include the last answer (no batching race)
+      // Use ref for answers  ·  guaranteed to include the last answer (no batching race)
       const allAnswers = userAnswersRef.current;
       const finalScore = allAnswers.reduce((acc, ans, i) => acc + (ans === questions[i]?.correctAnswerIndex ? 1 : 0), 0);
       const langParam = new URLSearchParams(window.location.search).get('lang') || 'en';
@@ -583,7 +590,7 @@ function TestContent() {
         {/* Q18 pre-paywall nudge */}
         {!isPro && current === 17 && showAnswer && (
           <div className="bg-[#FFF7ED] border border-[#FED7AA] rounded-xl px-4 py-3 mb-4 text-sm text-[#92400E] font-medium text-center">
-            🔔 2 questions left in your free test — unlock all from $7.99
+            🔔 2 questions left in your free test  ·  unlock all from $7.99
           </div>
         )}
 
