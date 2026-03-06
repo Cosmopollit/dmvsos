@@ -29,6 +29,7 @@ const DRY_RUN = process.argv.includes('--dry-run');
 const ALL_STATES = process.argv.includes('--all');
 const STATE_ARG = process.argv.find(a => a.startsWith('--state='))?.split('=')[1];
 const LANG_ARG = process.argv.find(a => a.startsWith('--lang='))?.split('=')[1] || 'ru';
+const CATEGORY_ARG = process.argv.find(a => a.startsWith('--category='))?.split('=')[1] || 'car';
 const PARALLEL_STATES = parseInt(process.argv.find(a => a.startsWith('--parallel='))?.split('=')[1] || '1', 10);
 const CONCURRENCY = parseInt(process.argv.find(a => a.startsWith('--concurrency='))?.split('=')[1] || '3', 10);
 
@@ -279,7 +280,7 @@ async function processStateLang(state, lang) {
   console.log('  Fetching EN source questions...');
   const enQuestions = await supabaseGetAll(
     'questions',
-    `state=eq.${encodeURIComponent(state)}&category=eq.car&language=eq.en&cluster_code=not.is.null&select=id,cluster_code,question_text,option_a,option_b,option_c,option_d,explanation`
+    `state=eq.${encodeURIComponent(state)}&category=eq.${CATEGORY_ARG}&language=eq.en&cluster_code=not.is.null&select=id,cluster_code,question_text,option_a,option_b,option_c,option_d,explanation`
   );
 
   if (enQuestions.length === 0) {
@@ -295,7 +296,7 @@ async function processStateLang(state, lang) {
   console.log(`  Fetching ${langName} translations...`);
   const trQuestions = await supabaseGetAll(
     'questions',
-    `state=eq.${encodeURIComponent(state)}&category=eq.car&language=eq.${lang}&cluster_code=not.is.null&select=id,cluster_code,question_text,option_a,option_b,option_c,option_d,explanation`
+    `state=eq.${encodeURIComponent(state)}&category=eq.${CATEGORY_ARG}&language=eq.${lang}&cluster_code=not.is.null&select=id,cluster_code,question_text,option_a,option_b,option_c,option_d,explanation`
   );
 
   const trByCode = new Map(trQuestions.map(q => [q.cluster_code, q]));

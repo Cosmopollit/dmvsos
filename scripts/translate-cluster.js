@@ -28,6 +28,7 @@ const DRY_RUN    = process.argv.includes('--dry-run');
 const ALL_STATES = process.argv.includes('--all');
 const STATE_ARG  = process.argv.find(a => a.startsWith('--state='))?.split('=')[1];
 const LANG_ARG   = process.argv.find(a => a.startsWith('--lang='))?.split('=')[1];
+const CATEGORY_ARG = process.argv.find(a => a.startsWith('--category='))?.split('=')[1] || 'car';
 const CONCURRENCY = parseInt(process.argv.find(a => a.startsWith('--concurrency='))?.split('=')[1] || '5', 10);
 const PARALLEL_STATES = parseInt(process.argv.find(a => a.startsWith('--parallel='))?.split('=')[1] || '1', 10);
 
@@ -280,7 +281,7 @@ async function processState(state) {
   console.log('  Fetching EN clustered questions...');
   const enQuestions = await supabaseGetAll(
     'questions',
-    `state=eq.${encodeURIComponent(state)}&category=eq.car&language=eq.en&cluster_code=not.is.null`
+    `state=eq.${encodeURIComponent(state)}&category=eq.${CATEGORY_ARG}&language=eq.en&cluster_code=not.is.null`
   );
   console.log(`  Found ${enQuestions.length} EN questions with cluster_code`);
 
@@ -341,7 +342,7 @@ async function processState(state) {
     console.log(`    Deleting old ${lang} questions...`);
     await supabaseDelete(
       'questions',
-      `state=eq.${encodeURIComponent(state)}&category=eq.car&language=eq.${lang}`
+      `state=eq.${encodeURIComponent(state)}&category=eq.${CATEGORY_ARG}&language=eq.${lang}`
     );
 
     // Insert new translations in batches of 100

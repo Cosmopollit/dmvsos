@@ -29,6 +29,7 @@ const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
 const DRY_RUN = process.argv.includes('--dry-run');
 const ALL_STATES = process.argv.includes('--all');
 const STATE_ARG = process.argv.find(a => a.startsWith('--state='))?.split('=')[1];
+const CATEGORY_ARG = process.argv.find(a => a.startsWith('--category='))?.split('=')[1] || 'car';
 const PARALLEL_STATES = parseInt(process.argv.find(a => a.startsWith('--parallel='))?.split('=')[1] || '1', 10);
 const CONCURRENCY = parseInt(process.argv.find(a => a.startsWith('--concurrency='))?.split('=')[1] || '3', 10);
 
@@ -333,7 +334,7 @@ async function processState(state) {
   console.log('  Fetching EN car clustered questions...');
   const questions = await supabaseGetAll(
     'questions',
-    `state=eq.${encodeURIComponent(state)}&category=eq.car&language=eq.en&cluster_code=not.is.null&select=id,cluster_code,question_text,option_a,option_b,option_c,option_d,correct_answer`
+    `state=eq.${encodeURIComponent(state)}&category=eq.${CATEGORY_ARG}&language=eq.en&cluster_code=not.is.null&select=id,cluster_code,question_text,option_a,option_b,option_c,option_d,correct_answer`
   );
   console.log(`  Found: ${questions.length} questions`);
 
@@ -397,7 +398,7 @@ async function processState(state) {
             // Propagate fix to ALL language rows for this cluster+state+car
             await supabasePatch(
               'questions',
-              `cluster_code=eq.${encodeURIComponent(v.cluster_code)}&state=eq.${encodeURIComponent(state)}&category=eq.car`,
+              `cluster_code=eq.${encodeURIComponent(v.cluster_code)}&state=eq.${encodeURIComponent(state)}&category=eq.${CATEGORY_ARG}`,
               { correct_answer: v.correct_index }
             );
           } catch (e) {
@@ -412,12 +413,12 @@ async function processState(state) {
           try {
             const allLangRows = await supabaseGetAll(
               'questions',
-              `cluster_code=eq.${encodeURIComponent(v.cluster_code)}&state=eq.${encodeURIComponent(state)}&category=eq.car`
+              `cluster_code=eq.${encodeURIComponent(v.cluster_code)}&state=eq.${encodeURIComponent(state)}&category=eq.${CATEGORY_ARG}`
             );
             appendRollback(state, allLangRows.map(r => ({ ...r, _deleted_reason: v.reason })));
             await supabaseDelete(
               'questions',
-              `cluster_code=eq.${encodeURIComponent(v.cluster_code)}&state=eq.${encodeURIComponent(state)}&category=eq.car`
+              `cluster_code=eq.${encodeURIComponent(v.cluster_code)}&state=eq.${encodeURIComponent(state)}&category=eq.${CATEGORY_ARG}`
             );
           } catch (e) {
             console.error(`  DELETE ERROR (${v.cluster_code}): ${e.message}`);

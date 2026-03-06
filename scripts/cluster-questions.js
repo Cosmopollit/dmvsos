@@ -34,10 +34,19 @@ const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
 const DRY_RUN = process.argv.includes('--dry-run');
 const ALL_STATES = process.argv.includes('--all');
 const STATE_ARG = process.argv.find(a => a.startsWith('--state='))?.split('=')[1];
+const CATEGORY_ARG = process.argv.find(a => a.startsWith('--category='))?.split('=')[1] || 'car';
 const CONCURRENCY = parseInt(process.argv.find(a => a.startsWith('--concurrency='))?.split('=')[1] || '5', 10);
 const PARALLEL_STATES = parseInt(process.argv.find(a => a.startsWith('--parallel='))?.split('=')[1] || '1', 10);
 const SKIP_PHASES = (process.argv.find(a => a.startsWith('--skip-phases='))?.split('=')[1] || '')
   .split(',').map(Number).filter(Boolean);
+
+const VALID_CATEGORIES = ['car', 'cdl', 'motorcycle'];
+if (!VALID_CATEGORIES.includes(CATEGORY_ARG)) {
+  console.error(`Invalid category: ${CATEGORY_ARG}. Valid: ${VALID_CATEGORIES.join(', ')}`);
+  process.exit(1);
+}
+// Short label for cluster codes: motorcycle → moto
+const CATEGORY_SLUG = CATEGORY_ARG === 'motorcycle' ? 'moto' : CATEGORY_ARG;
 
 const MANUALS_DIR = path.join(__dirname, '..', '.manuals-text');
 const HAIKU_MODEL = 'claude-haiku-4-5-20251001';
@@ -224,7 +233,7 @@ const manualCache = {};
 
 function loadManualText(state) {
   if (manualCache[state] !== undefined) return manualCache[state];
-  const filePath = path.join(MANUALS_DIR, `${state}-car-en.txt`);
+  const filePath = path.join(MANUALS_DIR, `${state}-${CATEGORY_ARG}-en.txt`);
   manualCache[state] = fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8') : null;
   return manualCache[state];
 }
@@ -467,7 +476,7 @@ function phase4AssignCodes(state, questions) {
   );
   return sorted.map((q, i) => ({
     ...q,
-    cluster_code: `${abbr}_car_${String(i + 1).padStart(3, '0')}`,
+    cluster_code: `${abbr}_${CATEGORY_SLUG}_${String(i + 1).padStart(3, '0')}`,
   }));
 }
 
@@ -680,7 +689,7 @@ async function processState(state) {
   console.log(`  Fetching EN car questions for ${state}...`);
   const questions = await supabaseGetAll(
     'questions',
-    `state=eq.${encodeURIComponent(state)}&category=eq.car&language=eq.en&select=id,question_text,option_a,option_b,option_c,option_d,correct_answer,explanation,image_url,created_at,cluster_code`
+    `state=eq.${encodeURIComponent(state)}&category=eq.${CATEGORY_ARG}&language=eq.en&select=id,question_text,option_a,option_b,option_c,option_d,correct_answer,explanation,image_url,created_at,cluster_code`
   );
   console.log(`  Found: ${questions.length} questions`);
 
@@ -829,6 +838,7 @@ async function main() {
 
   if (DRY_RUN) console.log('\n*** DRY RUN — no DB changes will be made ***\n');
   if (PARALLEL_STATES > 1) console.log(`Running ${PARALLEL_STATES} states in parallel\n`);
+  console.log(`Category: ${CATEGORY_ARG} (cluster prefix: ${CATEGORY_SLUG})\n`);
 
   const reports = await runWithPool(states, PARALLEL_STATES);
 

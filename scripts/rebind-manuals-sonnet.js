@@ -31,6 +31,7 @@ const MISSING_ONLY = process.argv.includes('--missing-only');
 const STATE_ARG = process.argv.find(a => a.startsWith('--state='))?.split('=')[1];
 const CONCURRENCY = parseInt(process.argv.find(a => a.startsWith('--concurrency='))?.split('=')[1] || '3', 10);
 const PARALLEL_STATES = parseInt(process.argv.find(a => a.startsWith('--parallel='))?.split('=')[1] || '1', 10);
+const CATEGORY_ARG = process.argv.find(a => a.startsWith('--category='))?.split('=')[1] || 'car';
 
 const MANUALS_DIR = path.join(__dirname, '..', '.manuals-text');
 const SONNET_MODEL = 'claude-sonnet-4-6';
@@ -186,7 +187,7 @@ const manualCache = {};
 
 function loadManualText(state) {
   if (manualCache[state] !== undefined) return manualCache[state];
-  const filePath = path.join(MANUALS_DIR, `${state}-car-en.txt`);
+  const filePath = path.join(MANUALS_DIR, `${state}-${CATEGORY_ARG}-en.txt`);
   manualCache[state] = fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8') : null;
   return manualCache[state];
 }
@@ -316,7 +317,7 @@ async function processState(state) {
   }
 
   // Fetch EN car questions with cluster_code
-  let params = `state=eq.${encodeURIComponent(state)}&category=eq.car&language=eq.en&cluster_code=not.is.null&select=id,cluster_code,question_text,option_a,option_b,option_c,option_d,correct_answer,manual_reference,manual_section`;
+  let params = `state=eq.${encodeURIComponent(state)}&category=eq.${CATEGORY_ARG}&language=eq.en&cluster_code=not.is.null&select=id,cluster_code,question_text,option_a,option_b,option_c,option_d,correct_answer,manual_reference,manual_section`;
   if (MISSING_ONLY) {
     params += '&manual_reference=is.null';
   }
