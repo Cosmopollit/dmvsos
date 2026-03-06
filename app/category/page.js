@@ -1,24 +1,51 @@
 'use client';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { t } from '@/lib/translations';
-import { getSavedLang } from '@/lib/lang';
+import { getSavedLang, saveLang } from '@/lib/lang';
 import { useAuth } from '@/lib/AuthContext';
+import { STATE_OPTIONS } from '@/lib/states';
+import { flags } from '@/lib/flags';
 
 const categories = [
-  { id: 'dmv', icon: '🚗', titleKey: 'catCar', descKey: 'carDesc', freeQuestions: 20, proQuestions: 40, timeMin: 25, color: '#2563EB', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', emojiSize: 'text-6xl' },
-  { id: 'cdl', icon: '🚛', titleKey: 'catCdl', descKey: 'truckDesc', freeQuestions: 20, proQuestions: 50, timeMin: 35, color: '#0EA5E9', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)', emojiSize: 'text-4xl' },
-  { id: 'moto', icon: '🏍️', titleKey: 'catMoto', descKey: 'motoDesc', freeQuestions: 20, proQuestions: 30, timeMin: 20, color: '#D97706', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)', emojiSize: 'text-4xl' },
+  { id: 'dmv',  icon: '🚗', titleKey: 'catCar',  descKey: 'carDesc',   color: '#2563EB', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', emojiSize: 'text-6xl' },
+  { id: 'cdl',  icon: '🚛', titleKey: 'catCdl',  descKey: 'truckDesc', color: '#0EA5E9', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)', emojiSize: 'text-4xl' },
+  { id: 'moto', icon: '🏍️', titleKey: 'catMoto', descKey: 'motoDesc',  color: '#D97706', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)', emojiSize: 'text-4xl' },
 ];
+
+const langs = [
+  { label: 'EN', flag: flags.us, code: 'en' },
+  { label: 'RU', flag: flags.ru, code: 'ru' },
+  { label: 'ES', flag: flags.es, code: 'es' },
+  { label: 'ZH', flag: flags.cn, code: 'zh' },
+  { label: 'UA', flag: flags.ua, code: 'ua' },
+];
+
+// slug → "Washington" display name
+function slugToStateName(slug) {
+  if (!slug) return '';
+  const match = STATE_OPTIONS.find(s =>
+    s.replace(/\s*\([A-Z]{2}\)\s*$/, '').trim().toLowerCase().replace(/\s+/g, '-') === slug
+  );
+  return match ? match.replace(/\s*\([A-Z]{2}\)\s*$/, '').trim() : slug;
+}
 
 function CategoryContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const state = searchParams.get('state') ?? '';
-  const lang = searchParams.get('lang') || getSavedLang();
+  const [lang, setLangState] = useState(searchParams.get('lang') || getSavedLang());
+  const [showLangMenu, setShowLangMenu] = useState(false);
   const tex = t[lang] || t.en;
-  const { isPro } = useAuth();
+  const currentLang = langs.find(l => l.code === lang) || langs[0];
+  const stateName = slugToStateName(state);
+
+  function switchLang(code) {
+    setLangState(code);
+    saveLang(code);
+    setShowLangMenu(false);
+  }
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-6 relative" style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}>
@@ -31,11 +58,40 @@ function CategoryContent() {
           <Image src="/logo.png" alt="DMVSOS" width={28} height={28} className="rounded-lg" />
           <span className="text-lg font-bold text-[#0B1C3D]" style={{ letterSpacing: '-0.02em' }}>DMVSOS</span>
         </a>
-        <div className="w-16" />
+        {/* Language switcher */}
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setShowLangMenu(v => !v)}
+            onBlur={() => setTimeout(() => setShowLangMenu(false), 150)}
+            className="flex items-center gap-1 text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-2.5 py-1.5 hover:border-[#2563EB] transition-colors"
+          >
+            <span>{currentLang.flag}</span>
+            <span>{currentLang.label}</span>
+            <span className="text-[#94A3B8] text-[10px] ml-0.5">▾</span>
+          </button>
+          {showLangMenu && (
+            <div className="absolute right-0 top-full mt-1 bg-white border border-[#E2E8F0] rounded-xl shadow-lg z-50 py-1 min-w-[90px]">
+              {langs.map(l => (
+                <button
+                  key={l.code}
+                  type="button"
+                  onMouseDown={() => switchLang(l.code)}
+                  className={`w-full text-left px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 hover:bg-[#F8FAFC] transition-colors ${lang === l.code ? 'text-[#2563EB]' : 'text-[#64748B]'}`}
+                >
+                  <span>{l.flag}</span> <span>{l.label}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="text-center mb-8 mt-12">
-        <h2 className="text-xl font-bold text-[#1E293B] mt-4 mb-1">{tex.chooseTest}</h2>
+        {stateName && (
+          <p className="text-sm font-semibold text-[#2563EB] mb-1 uppercase tracking-wide">{stateName}</p>
+        )}
+        <h2 className="text-xl font-bold text-[#1E293B] mb-1">{tex.chooseTest}</h2>
         <p className="text-sm text-[#94A3B8]">{tex.selectLicense}</p>
       </div>
 
@@ -63,10 +119,7 @@ function CategoryContent() {
       {/* Manual link */}
       {state && (
         <div className="w-full max-w-md mt-6 text-center">
-          <a
-            href={`/manuals/${state}`}
-            className="text-sm text-[#2563EB] hover:underline font-medium"
-          >
+          <a href={`/manuals/${state}`} className="text-sm text-[#2563EB] hover:underline font-medium">
             {tex.readManual} →
           </a>
         </div>

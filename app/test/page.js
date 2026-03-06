@@ -295,8 +295,10 @@ function TestContent() {
         </div>
 
         <div className="w-full max-w-md mt-12">
-          <h2 className="text-xl font-bold text-[#1E293B] mb-1">{tex.chooseMode}</h2>
-          <p className="text-sm text-[#94A3B8] mb-5">{totalAvailable} {tex.modeQuestions}</p>
+          <div className="text-center mb-5">
+            <h2 className="text-xl font-bold text-[#1E293B] mb-1">{tex.chooseMode}</h2>
+            <p className="text-sm text-[#94A3B8]">{totalAvailable} {tex.modeQuestions}</p>
+          </div>
 
           <div className="flex flex-col gap-3">
             {modes.map(m => {
