@@ -82,3 +82,7 @@ broken-question-ids.json
 .verify-cluster-*-progress.json
 .verify-cluster-*-rollback.json
 .fix-translations-*-progress.json
+.images-metadata.json
+.images-matches.json
+.illinois-car-questions.json
+.quality-pass-*.log
