@@ -27,8 +27,9 @@ const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
 const DRY_RUN    = process.argv.includes('--dry-run');
 const ALL_STATES = process.argv.includes('--all');
 const STATE_ARG  = process.argv.find(a => a.startsWith('--state='))?.split('=')[1];
-const LANG_ARG   = process.argv.find(a => a.startsWith('--lang='))?.split('=')[1]; // optional: translate only one lang
+const LANG_ARG   = process.argv.find(a => a.startsWith('--lang='))?.split('=')[1];
 const CONCURRENCY = parseInt(process.argv.find(a => a.startsWith('--concurrency='))?.split('=')[1] || '5', 10);
+const PARALLEL_STATES = parseInt(process.argv.find(a => a.startsWith('--parallel='))?.split('=')[1] || '1', 10);
 
 const HAIKU_MODEL = 'claude-haiku-4-5-20251001';
 const BATCH_SIZE     = 20; // questions per translation batch
@@ -365,20 +366,18 @@ async function main() {
   console.log(`translate-cluster.js${DRY_RUN ? ' [DRY RUN]' : ''}`);
   console.log(`Languages: ${LANGS.join(', ')}`);
 
-  const states = ALL_STATES ? ALL_STATE_SLUGS : [STATE_ARG];
+  const states = (ALL_STATES ? ALL_STATE_SLUGS : [STATE_ARG]).filter(s => STATE_MAP[s]);
+  if (PARALLEL_STATES > 1) console.log(`Running ${PARALLEL_STATES} states in parallel\n`);
 
-  for (const state of states) {
-    if (!STATE_MAP[state]) {
-      console.error(`Unknown state: ${state}`);
-      continue;
-    }
-    try {
-      await processState(state);
-    } catch (err) {
-      console.error(`ERROR processing ${state}: ${err.message}`);
-      console.error(err.stack);
+  let idx = 0;
+  async function worker() {
+    while (idx < states.length) {
+      const state = states[idx++];
+      try { await processState(state); }
+      catch (err) { console.error(`ERROR ${state}: ${err.message}`); }
     }
   }
+  await Promise.all(Array.from({ length: PARALLEL_STATES }, worker));
 
   console.log('\nAll done.');
 }

@@ -27,6 +27,7 @@ const DRY_RUN    = process.argv.includes('--dry-run');
 const ALL_STATES = process.argv.includes('--all');
 const STATE_ARG  = process.argv.find(a => a.startsWith('--state='))?.split('=')[1];
 const CONCURRENCY = parseInt(process.argv.find(a => a.startsWith('--concurrency='))?.split('=')[1] || '3', 10);
+const PARALLEL_STATES = parseInt(process.argv.find(a => a.startsWith('--parallel='))?.split('=')[1] || '1', 10);
 
 const SIGNS_DIR    = path.join(__dirname, '..', 'public', 'signs');
 const SITE_URL     = 'https://www.dmvsos.com';
@@ -310,19 +311,18 @@ async function main() {
   console.log(`match-signs-cluster.js${DRY_RUN ? ' [DRY RUN]' : ''}`);
   console.log(`${SIGN_FILES.length} signs available`);
 
-  const states = ALL_STATES ? Object.keys(STATE_MAP) : [STATE_ARG];
+  const states = (ALL_STATES ? Object.keys(STATE_MAP) : [STATE_ARG]).filter(s => STATE_MAP[s]);
+  if (PARALLEL_STATES > 1) console.log(`Running ${PARALLEL_STATES} states in parallel\n`);
 
-  for (const state of states) {
-    if (!STATE_MAP[state]) {
-      console.error(`Unknown state: ${state}`);
-      continue;
-    }
-    try {
-      await processState(state);
-    } catch (err) {
-      console.error(`ERROR: ${err.message}`);
+  let idx = 0;
+  async function worker() {
+    while (idx < states.length) {
+      const state = states[idx++];
+      try { await processState(state); }
+      catch (err) { console.error(`ERROR ${state}: ${err.message}`); }
     }
   }
+  await Promise.all(Array.from({ length: PARALLEL_STATES }, worker));
 
   console.log('\nDone.');
 }

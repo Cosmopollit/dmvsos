@@ -83,7 +83,7 @@ export default function DmvTestIndexPage() {
 
         {/* Trust tags */}
         <div className="flex flex-wrap gap-2 mb-8">
-          {['34,000+ Questions', '5 Languages', 'Car · CDL · Motorcycle', '94% Pass Rate', 'Free to Start'].map(tag => (
+          {['35,000+ Questions', '5 Languages', 'Car · CDL · Motorcycle', '94% Pass Rate', 'Free to Start'].map(tag => (
             <span key={tag} className="text-xs font-semibold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] rounded-full px-3 py-1">
               {tag}
             </span>

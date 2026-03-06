@@ -35,6 +35,7 @@ const DRY_RUN = process.argv.includes('--dry-run');
 const ALL_STATES = process.argv.includes('--all');
 const STATE_ARG = process.argv.find(a => a.startsWith('--state='))?.split('=')[1];
 const CONCURRENCY = parseInt(process.argv.find(a => a.startsWith('--concurrency='))?.split('=')[1] || '5', 10);
+const PARALLEL_STATES = parseInt(process.argv.find(a => a.startsWith('--parallel='))?.split('=')[1] || '1', 10);
 const SKIP_PHASES = (process.argv.find(a => a.startsWith('--skip-phases='))?.split('=')[1] || '')
   .split(',').map(Number).filter(Boolean);
 
@@ -805,21 +806,31 @@ async function processState(state) {
 // Entry point
 // ---------------------------------------------------------------------------
 
+async function runWithPool(states, parallelN) {
+  const reports = [];
+  let idx = 0;
+  async function worker() {
+    while (idx < states.length) {
+      const state = states[idx++];
+      try {
+        const report = await processState(state);
+        if (report) reports.push(report);
+      } catch (e) {
+        console.error(`\nERROR processing ${state}: ${e.message}`);
+      }
+    }
+  }
+  await Promise.all(Array.from({ length: parallelN }, worker));
+  return reports;
+}
+
 async function main() {
   const states = ALL_STATES ? ALL_STATE_SLUGS : [STATE_ARG];
 
   if (DRY_RUN) console.log('\n*** DRY RUN — no DB changes will be made ***\n');
+  if (PARALLEL_STATES > 1) console.log(`Running ${PARALLEL_STATES} states in parallel\n`);
 
-  const reports = [];
-  for (const state of states) {
-    try {
-      const report = await processState(state);
-      if (report) reports.push(report);
-    } catch (e) {
-      console.error(`\nERROR processing ${state}: ${e.message}`);
-      console.error(e.stack);
-    }
-  }
+  const reports = await runWithPool(states, PARALLEL_STATES);
 
   if (ALL_STATES && reports.length > 0) {
     const summary = {

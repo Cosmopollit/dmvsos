@@ -167,7 +167,7 @@ export default async function StateDmvTestPage({ params }) {
   const otherStates = STATE_SLUGS.filter((_, i) => i !== stateIdx).slice(0, 8);
 
   const stats = [
-    { value: '34,000+', label: 'Questions' },
+    { value: '35,000+', label: 'Questions' },
     { value: '3',       label: 'Categories' },
     { value: '5',       label: 'Languages' },
     { value: '94%',     label: 'Pass Rate' },
