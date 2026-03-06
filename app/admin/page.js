@@ -77,6 +77,7 @@ export default function AdminPage() {
         state: row.state,
         category: row.category,
         language: row.language,
+        cluster_code: row.cluster_code || null,
       }));
       setQuestions(mapped);
       if (!mapped.length) setLoadError('No questions found for this selection.');
@@ -98,9 +99,11 @@ export default function AdminPage() {
       option_c: answers[2] ?? q.option_c ?? '',
       option_d: answers[3] ?? q.option_d ?? '',
       correct: ['A','B','C','D'][correctIdx] ?? 'A',
+      correct_original: ['A','B','C','D'][correctIdx] ?? 'A',
       language: q.language ?? lang,
       state: q.state ?? stateToSlug(stateLabel),
       category: q.category ?? category,
+      cluster_code: q.cluster_code ?? null,
     });
     setEditingIndex(i);
     setSaveError('');
@@ -151,10 +154,18 @@ export default function AdminPage() {
     }
     try {
       const q = questions[editingIndex];
+      const correctChanged = editForm.correct !== editForm.correct_original;
       const res = await fetch('/api/admin/questions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password, action: 'save', id: q?.id || null, row }),
+        body: JSON.stringify({
+          password,
+          action: 'save',
+          id: q?.id || null,
+          row,
+          cluster_code: editForm.cluster_code || null,
+          propagate_correct_answer: correctChanged && !!editForm.cluster_code,
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to save');
@@ -467,7 +478,14 @@ export default function AdminPage() {
             <div key={i} className="bg-white rounded-2xl p-5 border border-[#E2E8F0] shadow-sm">
               <div className="flex flex-wrap gap-2 items-start justify-between">
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-[#94A3B8] mb-1">Question {i + 1}</p>
+                  <div className="flex items-center gap-2 mb-1">
+                    <p className="text-sm font-medium text-[#94A3B8]">Question {i + 1}</p>
+                    {q.cluster_code && (
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-[#EFF6FF] text-[#2563EB] font-mono">
+                        {q.cluster_code}
+                      </span>
+                    )}
+                  </div>
                   <p className="text-[#1E293B] font-medium mb-2">{(q.question || '').replace(/^\d+\.\s*/, '')}</p>
                   <p className="text-sm text-[#2563EB]">
                     Correct: <strong>{q.answers?.[q.correctAnswerIndex] ?? '—'}</strong>
@@ -574,6 +592,14 @@ export default function AdminPage() {
                       </select>
                     </div>
                   </div>
+                  {editForm.cluster_code && (
+                    <p className="text-xs text-[#64748B]">
+                      Cluster: <span className="font-mono">{editForm.cluster_code}</span>
+                      {editForm.correct !== editForm.correct_original && (
+                        <span className="ml-2 text-[#F59E0B] font-medium">— correct answer will propagate to all 5 languages</span>
+                      )}
+                    </p>
+                  )}
                   {saveError && <p className="text-sm text-red-500">{saveError}</p>}
                   <div className="flex gap-2">
                     <button

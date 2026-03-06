@@ -18,14 +18,24 @@ export async function POST(req) {
   }
 
   if (action === 'save') {
-    const { id, row } = body;
+    const { id, row, cluster_code, propagate_correct_answer } = body;
     if (!row?.question_text || !row?.option_a) {
       return Response.json({ error: 'Question text and option A are required' }, { status: 400 });
     }
     if (id) {
       const { error } = await supabase.from('questions').update(row).eq('id', id);
       if (error) return Response.json({ error: error.message }, { status: 500 });
-      return Response.json({ ok: true });
+      // Propagate correct_answer to all language rows with the same cluster
+      if (propagate_correct_answer && cluster_code && row.state && row.category) {
+        await supabase
+          .from('questions')
+          .update({ correct_answer: row.correct_answer })
+          .eq('cluster_code', cluster_code)
+          .eq('state', row.state)
+          .eq('category', row.category)
+          .neq('id', id); // skip the row we already updated
+      }
+      return Response.json({ ok: true, propagated: !!(propagate_correct_answer && cluster_code) });
     }
     const { data, error } = await supabase.from('questions').insert(row).select('id').single();
     if (error) return Response.json({ error: error.message }, { status: 500 });
