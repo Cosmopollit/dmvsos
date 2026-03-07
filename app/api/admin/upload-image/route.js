@@ -24,11 +24,30 @@ export async function POST(req) {
       if (storagePath) {
         await supabase.storage.from('question-images').remove([storagePath]);
       }
+
+      // Fetch cluster info before clearing
+      const { data: q } = await supabase
+        .from('questions')
+        .select('cluster_code, state, category')
+        .eq('id', questionId)
+        .single();
+
       const { error: dbError } = await supabase
         .from('questions')
         .update({ image_url: null })
         .eq('id', questionId);
       if (dbError) throw new Error(dbError.message);
+
+      // Propagate null to all language rows in the same cluster
+      if (q?.cluster_code && q?.state && q?.category) {
+        await supabase
+          .from('questions')
+          .update({ image_url: null })
+          .eq('cluster_code', q.cluster_code)
+          .eq('state', q.state)
+          .eq('category', q.category)
+          .neq('id', questionId);
+      }
 
       return Response.json({ ok: true });
     }
@@ -54,11 +73,29 @@ export async function POST(req) {
       .from('question-images')
       .getPublicUrl(storagePath);
 
+    // Fetch cluster info before updating
+    const { data: q } = await supabase
+      .from('questions')
+      .select('cluster_code, state, category')
+      .eq('id', questionId)
+      .single();
+
     const { error: dbError } = await supabase
       .from('questions')
       .update({ image_url: publicUrl })
       .eq('id', questionId);
     if (dbError) throw new Error(dbError.message);
+
+    // Propagate image_url to all language rows in the same cluster
+    if (q?.cluster_code && q?.state && q?.category) {
+      await supabase
+        .from('questions')
+        .update({ image_url: publicUrl })
+        .eq('cluster_code', q.cluster_code)
+        .eq('state', q.state)
+        .eq('category', q.category)
+        .neq('id', questionId);
+    }
 
     return Response.json({ ok: true, url: publicUrl });
   } catch (err) {

@@ -75,7 +75,7 @@ if (!ALL_STATES && !STATE_ARG) {
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-function progressFile(state) { return path.join(__dirname, '..', `.translate-cluster-${state}-progress.json`); }
+function progressFile(state) { return path.join(__dirname, '..', `.translate-cluster-${state}-${CATEGORY_ARG}-progress.json`); }
 
 function loadProgress(state) {
   const f = progressFile(state);

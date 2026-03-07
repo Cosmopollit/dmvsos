@@ -25,17 +25,22 @@ export async function POST(req) {
     if (id) {
       const { error } = await supabase.from('questions').update(row).eq('id', id);
       if (error) return Response.json({ error: error.message }, { status: 500 });
-      // Propagate correct_answer to all language rows with the same cluster
-      if (propagate_correct_answer && cluster_code && row.state && row.category) {
-        await supabase
-          .from('questions')
-          .update({ correct_answer: row.correct_answer })
-          .eq('cluster_code', cluster_code)
-          .eq('state', row.state)
-          .eq('category', row.category)
-          .neq('id', id); // skip the row we already updated
+      // Propagate cluster-wide fields to all language rows with the same cluster
+      if (cluster_code && row.state && row.category) {
+        const clusterUpdate = {};
+        if (propagate_correct_answer) clusterUpdate.correct_answer = row.correct_answer;
+        if ('image_url' in row) clusterUpdate.image_url = row.image_url ?? null;
+        if (Object.keys(clusterUpdate).length > 0) {
+          await supabase
+            .from('questions')
+            .update(clusterUpdate)
+            .eq('cluster_code', cluster_code)
+            .eq('state', row.state)
+            .eq('category', row.category)
+            .neq('id', id); // skip the row we already updated
+        }
       }
-      return Response.json({ ok: true, propagated: !!(propagate_correct_answer && cluster_code) });
+      return Response.json({ ok: true, propagated: !!cluster_code });
     }
     const { data, error } = await supabase.from('questions').insert(row).select('id').single();
     if (error) return Response.json({ error: error.message }, { status: 500 });
