@@ -5,7 +5,16 @@ import Image from 'next/image';
 import { t } from '@/lib/translations';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
-import { getSavedLang } from '@/lib/lang';
+import { getSavedLang, saveLang } from '@/lib/lang';
+import { flags } from '@/lib/flags';
+
+const langs = [
+  { label: 'EN', flag: flags.us, code: 'en' },
+  { label: 'RU', flag: flags.ru, code: 'ru' },
+  { label: 'ES', flag: flags.es, code: 'es' },
+  { label: 'ZH', flag: flags.cn, code: 'zh' },
+  { label: 'UA', flag: flags.ua, code: 'ua' },
+];
 
 function ResultContent() {
   const router = useRouter();
@@ -19,6 +28,8 @@ function ResultContent() {
 
   const [testResults, setTestResults] = useState(null);
   const [expandedRefs, setExpandedRefs] = useState({});
+  const [langOverride, setLangOverride] = useState(null);
+  const [showLangMenu, setShowLangMenu] = useState(false);
   useEffect(() => {
     try {
       const raw = sessionStorage.getItem('testResults');
@@ -33,7 +44,9 @@ function ResultContent() {
   const elapsed = testResults?.elapsed ?? 0;
   const state = testResults?.state ?? 'washington';
   const category = testResults?.category ?? 'car';
-  const lang = testResults?.lang ?? getSavedLang();
+  const lang = langOverride ?? testResults?.lang ?? getSavedLang();
+  const currentLang = langs.find(l => l.code === lang) || langs[0];
+  function switchLang(code) { setLangOverride(code); saveLang(code); setShowLangMenu(false); }
   const wrongQuestions = questions.filter((q, i) => userAnswers[i] !== q.correctAnswerIndex);
   const tex = t[lang] || t.en;
   const formatTime = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
@@ -81,7 +94,22 @@ function ResultContent() {
             <Image src="/logo.png" alt="DMVSOS" width={24} height={24} className="rounded-md" />
             <span className="text-sm font-bold text-[#0B1C3D]">DMVSOS</span>
           </a>
-          <div className="w-12" />
+          <div className="relative">
+            <button type="button" onClick={() => setShowLangMenu(v => !v)} onBlur={() => setTimeout(() => setShowLangMenu(false), 150)}
+              className="flex items-center gap-1 text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-2.5 py-1.5 hover:border-[#2563EB] transition-colors">
+              <span>{currentLang.flag}</span><span>{currentLang.label}</span><span className="text-[#94A3B8] text-[10px] ml-0.5">▾</span>
+            </button>
+            {showLangMenu && (
+              <div className="absolute right-0 top-full mt-1 bg-white border border-[#E2E8F0] rounded-xl shadow-lg z-50 py-1 min-w-[90px]">
+                {langs.map(l => (
+                  <button key={l.code} type="button" onMouseDown={() => switchLang(l.code)}
+                    className={`w-full text-left px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 hover:bg-[#F8FAFC] transition-colors ${lang === l.code ? 'text-[#2563EB]' : 'text-[#64748B]'}`}>
+                    <span>{l.flag}</span> <span>{l.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Result card */}
@@ -209,7 +237,7 @@ function ResultContent() {
           </div>
         )}
 
-        {/* Upgrade banner — hidden for Pro users */}
+        {/* Upgrade banner  ·  hidden for Pro users */}
         {!isPro && (
           <div className="bg-white rounded-2xl p-5 w-full border border-[#E2E8F0] shadow-sm">
             <p className="text-[#0B1C3D] font-bold text-base mb-1 text-center">{tex.upgradeModalTitle || 'Unlock Full Access'}</p>

@@ -4,12 +4,24 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
 import { t } from '@/lib/translations';
-import { getSavedLang } from '@/lib/lang';
+import { getSavedLang, saveLang } from '@/lib/lang';
+import { flags } from '@/lib/flags';
+
+const langs = [
+  { label: 'EN', flag: flags.us, code: 'en' },
+  { label: 'RU', flag: flags.ru, code: 'ru' },
+  { label: 'ES', flag: flags.es, code: 'es' },
+  { label: 'ZH', flag: flags.cn, code: 'zh' },
+  { label: 'UA', flag: flags.ua, code: 'ua' },
+];
 
 function UpgradeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const lang = searchParams.get('lang') || getSavedLang();
+  const [lang, setLangState] = useState(searchParams.get('lang') || getSavedLang());
+  const [showLangMenu, setShowLangMenu] = useState(false);
+  const currentLang = langs.find(l => l.code === lang) || langs[0];
+  function switchLang(code) { setLangState(code); saveLang(code); setShowLangMenu(false); }
   const preselect = searchParams.get('plan');
   const tex = t[lang] || t.en;
 
@@ -95,7 +107,27 @@ function UpgradeContent() {
   }
 
   return (
-    <main className="min-h-screen bg-[#0B1C3D] flex flex-col items-center justify-center p-6">
+    <main className="min-h-screen bg-[#0B1C3D] flex flex-col items-center justify-center p-6 relative">
+
+      {/* Lang switcher */}
+      <div className="absolute top-4 right-4 z-10">
+        <div className="relative">
+          <button type="button" onClick={() => setShowLangMenu(v => !v)} onBlur={() => setTimeout(() => setShowLangMenu(false), 150)}
+            className="flex items-center gap-1 text-xs font-semibold text-white bg-white/10 border border-white/20 rounded-full px-2.5 py-1.5 hover:border-white/40 transition-colors">
+            <span>{currentLang.flag}</span><span>{currentLang.label}</span><span className="text-white/50 text-[10px] ml-0.5">▾</span>
+          </button>
+          {showLangMenu && (
+            <div className="absolute right-0 top-full mt-1 bg-[#1E3A5F] border border-white/20 rounded-xl shadow-lg z-50 py-1 min-w-[90px]">
+              {langs.map(l => (
+                <button key={l.code} type="button" onMouseDown={() => switchLang(l.code)}
+                  className={`w-full text-left px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 hover:bg-white/10 transition-colors ${lang === l.code ? 'text-[#F59E0B]' : 'text-[#94A3B8]'}`}>
+                  <span>{l.flag}</span> <span>{l.label}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* Logo */}
       <a href="/" className="inline-block">

@@ -5,10 +5,19 @@ import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
-import { getSavedLang } from '@/lib/lang';
+import { getSavedLang, saveLang } from '@/lib/lang';
+import { flags } from '@/lib/flags';
+
+const langs = [
+  { label: 'EN', flag: flags.us, code: 'en' },
+  { label: 'RU', flag: flags.ru, code: 'ru' },
+  { label: 'ES', flag: flags.es, code: 'es' },
+  { label: 'ZH', flag: flags.cn, code: 'zh' },
+  { label: 'UA', flag: flags.ua, code: 'ua' },
+];
 
 function formatState(s) {
-  if (!s) return '—';
+  if (!s) return ' · ';
   return s.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 }
 
@@ -18,7 +27,7 @@ function formatCategory(c, tex) {
 }
 
 function formatDate(createdAt) {
-  if (!createdAt) return '—';
+  if (!createdAt) return ' · ';
   const d = new Date(createdAt);
   return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
 }
@@ -26,7 +35,10 @@ function formatDate(createdAt) {
 function ProfileContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const lang = searchParams.get('lang') || getSavedLang();
+  const [lang, setLangState] = useState(searchParams.get('lang') || getSavedLang());
+  const [showLangMenu, setShowLangMenu] = useState(false);
+  const currentLang = langs.find(l => l.code === lang) || langs[0];
+  function switchLang(code) { setLangState(code); saveLang(code); setShowLangMenu(false); }
   const tex = t[lang] || t.en;
   const { user, isPro, loading } = useAuth();
   const [sessions, setSessions] = useState([]);
@@ -69,7 +81,22 @@ function ProfileContent() {
             <Image src="/logo.png" alt="DMVSOS" width={24} height={24} className="rounded-md" />
             <span className="text-sm font-bold text-[#0B1C3D]">DMVSOS</span>
           </a>
-          <div className="w-12" />
+          <div className="relative">
+            <button type="button" onClick={() => setShowLangMenu(v => !v)} onBlur={() => setTimeout(() => setShowLangMenu(false), 150)}
+              className="flex items-center gap-1 text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-2.5 py-1.5 hover:border-[#2563EB] transition-colors">
+              <span>{currentLang.flag}</span><span>{currentLang.label}</span><span className="text-[#94A3B8] text-[10px] ml-0.5">▾</span>
+            </button>
+            {showLangMenu && (
+              <div className="absolute right-0 top-full mt-1 bg-white border border-[#E2E8F0] rounded-xl shadow-lg z-50 py-1 min-w-[90px]">
+                {langs.map(l => (
+                  <button key={l.code} type="button" onMouseDown={() => switchLang(l.code)}
+                    className={`w-full text-left px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 hover:bg-[#F8FAFC] transition-colors ${lang === l.code ? 'text-[#2563EB]' : 'text-[#64748B]'}`}>
+                    <span>{l.flag}</span> <span>{l.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
         <div className="bg-white rounded-2xl p-8 w-full shadow-sm border border-[#E2E8F0] text-center">
           <div className="w-16 h-16 rounded-full bg-[#0B1C3D] flex items-center justify-center text-white text-2xl font-bold mx-auto mb-5">
