@@ -76,11 +76,11 @@ export async function generateMetadata({ params }) {
   const year = new Date().getFullYear();
 
   return {
-    title: `${name} DMV Practice Test ${year} — Free | DMVSOS`,
-    description: `Free ${name} DMV practice test ${year}. Study ${exam.questions}+ real ${meta.abbr} knowledge test questions in 5 languages. Pass on your first try — no signup required.`,
+    title: `${name} DMV Practice Test ${year}  ·  Free | DMVSOS`,
+    description: `Free ${name} DMV practice test ${year}. Study ${exam.questions}+ real ${meta.abbr} knowledge test questions in 5 languages. Pass on your first try  ·  no signup required.`,
     alternates: { canonical: `https://www.dmvsos.com/dmv-test/${state}` },
     openGraph: {
-      title: `${name} DMV Practice Test ${year} — Free`,
+      title: `${name} DMV Practice Test ${year}  ·  Free`,
       description: `Free ${name} DMV practice test. Real ${meta.abbr} knowledge test questions in English, Spanish, Russian, Chinese and Ukrainian.`,
       url: `https://www.dmvsos.com/dmv-test/${state}`,
       siteName: 'DMVSOS',
@@ -89,7 +89,7 @@ export async function generateMetadata({ params }) {
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${name} DMV Practice Test ${year} — Free`,
+      title: `${name} DMV Practice Test ${year}  ·  Free`,
       description: `Free ${name} DMV practice test. Real questions, 5 languages.`,
     },
   };
@@ -123,7 +123,7 @@ export default async function StateDmvTestPage({ params }) {
             name: `What is the passing score for the ${meta.abbr} DMV written test?`,
             acceptedAnswer: {
               '@type': 'Answer',
-              text: `The passing score for the ${name} (${meta.abbr}) DMV written test is ${exam.passingPct}% — you must answer ${exam.passing} out of ${exam.questions} questions correctly.`,
+              text: `The passing score for the ${name} (${meta.abbr}) DMV written test is ${exam.passingPct}%  ·  you must answer ${exam.passing} out of ${exam.questions} questions correctly.`,
             },
           },
           {
@@ -194,7 +194,7 @@ export default async function StateDmvTestPage({ params }) {
     },
     {
       q: `What is the passing score for the ${meta.abbr} DMV test?`,
-      a: `You must score ${exam.passingPct}% or higher — that means getting ${exam.passing} out of ${exam.questions} questions right.`,
+      a: `You must score ${exam.passingPct}% or higher  ·  that means getting ${exam.passing} out of ${exam.questions} questions right.`,
     },
     {
       q: `Can I take the ${name} DMV practice test in Spanish?`,
@@ -202,7 +202,7 @@ export default async function StateDmvTestPage({ params }) {
     },
     {
       q: `Is this ${name} DMV practice test free?`,
-      a: `Yes — 20 questions per test are completely free with no signup required. Paid plans from $7.99 (30-day access) unlock 40-question full tests and detailed explanations.`,
+      a: `Yes  ·  20 questions per test are completely free with no signup required. Paid plans from $7.99 (30-day access) unlock 40-question full tests and detailed explanations.`,
     },
     {
       q: `What topics does the ${name} DMV test cover?`,
@@ -250,11 +250,11 @@ export default async function StateDmvTestPage({ params }) {
 
         {/* H1 */}
         <h1 className="text-3xl sm:text-4xl font-black text-[#0B1C3D] mb-3 leading-tight" style={{ letterSpacing: '-0.02em' }}>
-          {name} DMV Practice Test {year} — Free
+          {name} DMV Practice Test {year}  ·  Free
         </h1>
         <p className="text-base text-[#64748B] mb-6 leading-relaxed">
           Practice with real {meta.abbr} knowledge test questions and pass on your first try.
-          Study in your language — available in English, Spanish, Russian, Chinese, and Ukrainian.
+          Study in your language  ·  available in English, Spanish, Russian, Chinese, and Ukrainian.
         </p>
 
         {/* Language CTA card */}
@@ -334,7 +334,7 @@ export default async function StateDmvTestPage({ params }) {
         {/* FAQ */}
         <section className="mb-8">
           <h2 className="text-lg font-bold text-[#0B1C3D] mb-4">
-            {name} DMV Test — Frequently Asked Questions
+            {name} DMV Test  ·  Frequently Asked Questions
           </h2>
           <div className="space-y-3">
             {faqs.map(({ q, a }) => (
@@ -377,7 +377,7 @@ export default async function StateDmvTestPage({ params }) {
             href="/upgrade"
             className="inline-flex items-center gap-2 px-6 py-3 bg-[#F59E0B] text-[#0B1C3D] rounded-xl font-bold text-sm hover:bg-[#FBBF24] transition-colors"
           >
-            Unlock Full Access — from $7.99
+            Unlock Full Access  ·  from $7.99
           </Link>
           <p className="text-xs text-[#64748B] mt-2">One payment · No subscription · No auto-renewal</p>
         </div>
@@ -409,7 +409,7 @@ export default async function StateDmvTestPage({ params }) {
 
       <footer className="border-t border-[#E2E8F0] py-8 text-center text-xs text-[#94A3B8]">
         <div className="max-w-lg mx-auto px-4">
-          <p>DMVSOS.com — Free DMV Practice Tests for All 50 States</p>
+          <p>DMVSOS.com  ·  Free DMV Practice Tests for All 50 States</p>
           <p className="mt-1">
             <Link href="/terms" className="hover:text-[#2563EB]">Terms</Link>
             {' · '}

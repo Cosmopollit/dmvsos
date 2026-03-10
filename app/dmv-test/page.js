@@ -2,16 +2,16 @@ import Link from 'next/link';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 
 export const metadata = {
-  title: 'Free DMV Practice Tests — All 50 States 2026 | DMVSOS',
+  title: 'Free DMV Practice Tests  ·  All 50 States 2026 | DMVSOS',
   description: 'Free DMV practice tests for all 50 US states in 5 languages. Pick your state and start practicing for your knowledge test today. No signup required.',
   alternates: { canonical: 'https://www.dmvsos.com/dmv-test' },
   openGraph: {
-    title: 'Free DMV Practice Tests — All 50 States 2026',
+    title: 'Free DMV Practice Tests  ·  All 50 States 2026',
     description: 'Free DMV practice tests for all 50 US states in English, Spanish, Russian, Chinese and Ukrainian.',
     url: 'https://www.dmvsos.com/dmv-test',
     siteName: 'DMVSOS',
     type: 'website',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'DMVSOS — Free DMV Practice Tests' }],
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'DMVSOS  ·  Free DMV Practice Tests' }],
   },
 };
 
@@ -22,7 +22,7 @@ const jsonLd = JSON.stringify({
   '@graph': [
     {
       '@type': 'CollectionPage',
-      name: 'Free DMV Practice Tests — All 50 States',
+      name: 'Free DMV Practice Tests  ·  All 50 States',
       description: 'State-specific DMV practice tests for all 50 US states in 5 languages.',
       url: 'https://www.dmvsos.com/dmv-test',
       publisher: { '@type': 'Organization', name: 'DMVSOS', url: 'https://www.dmvsos.com' },
@@ -74,7 +74,7 @@ export default function DmvTestIndexPage() {
 
         {/* Hero */}
         <h1 className="text-3xl sm:text-4xl font-black text-[#0B1C3D] mb-3 leading-tight" style={{ letterSpacing: '-0.02em' }}>
-          Free DMV Practice Tests — All 50 States {year}
+          Free DMV Practice Tests  ·  All 50 States {year}
         </h1>
         <p className="text-base text-[#64748B] mb-6 leading-relaxed">
           Pick your state to start practicing. Real knowledge test questions in
@@ -137,7 +137,7 @@ export default function DmvTestIndexPage() {
 
       <footer className="border-t border-[#E2E8F0] py-8 text-center text-xs text-[#94A3B8]">
         <div className="max-w-lg mx-auto px-4">
-          <p>DMVSOS.com — Free DMV Practice Tests for All 50 States</p>
+          <p>DMVSOS.com  ·  Free DMV Practice Tests for All 50 States</p>
           <p className="mt-1">
             <Link href="/terms" className="hover:text-[#2563EB]">Terms</Link>
             {' · '}

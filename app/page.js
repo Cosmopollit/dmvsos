@@ -199,7 +199,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Row 2: nav links — centered */}
+        {/* Row 2: nav links  ·  centered */}
         <div className="flex items-center justify-center gap-2 pb-3">
           <a href="/dmv-test"
             className="text-xs font-semibold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] rounded-full px-3 py-1 hover:bg-[#DBEAFE] transition-colors">
@@ -218,7 +218,7 @@ export default function Home() {
 
       {/* Hero section */}
       <section className="w-full max-w-md mx-auto px-4 pt-1 pb-5 text-center">
-        {/* H1 headline — DM Sans, Anthropic-style */}
+        {/* H1 headline  ·  DM Sans, Anthropic-style */}
         <h1 className="text-[32px] sm:text-[42px] font-semibold text-[#0B1C3D] leading-[1.13] mb-3 whitespace-pre-line"
           style={{ fontFamily: "'DM Sans', var(--font-dm-sans), sans-serif", letterSpacing: '-0.025em' }}>
           {tex.heroTitle}
@@ -328,7 +328,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How it works — static 4-column grid */}
+      {/* How it works  ·  static 4-column grid */}
       <section className="w-full max-w-lg mx-auto mb-8 px-4">
         <h2 className="text-center text-lg font-bold text-[#0B1C3D] mb-6">
           {tex.howItWorks}
@@ -362,7 +362,7 @@ export default function Home() {
         <p className="text-sm text-[#64748B] text-center mb-6 leading-relaxed max-w-md mx-auto">{tex.pricingSubtext}</p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
-          {/* Quick Pass — white, gray border */}
+          {/* Quick Pass  ·  white, gray border */}
           <div className="bg-white rounded-2xl p-5 border border-[#E2E8F0] shadow-sm flex flex-col text-center">
             <h3 className="text-sm font-bold text-[#2563EB] mb-1">Quick Pass</h3>
             <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">$7.99</div>
@@ -374,11 +374,11 @@ export default function Home() {
             </ul>
             <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=quick_pass`)}
               className="w-full py-2.5 rounded-xl font-semibold text-sm border border-[#E2E8F0] text-[#0B1C3D] hover:bg-[#F1F5F9] transition-all">
-              {tex.planGetQuickPass || 'Get Quick Pass — $7.99'}
+              {tex.planGetQuickPass || 'Get Quick Pass  ·  $7.99'}
             </button>
           </div>
 
-          {/* Full Prep — dark navy, blue border, MOST POPULAR */}
+          {/* Full Prep  ·  dark navy, blue border, MOST POPULAR */}
           <div className="relative bg-[#0B1C3D] rounded-2xl p-5 border-2 border-[#2563EB] shadow-sm flex flex-col text-center">
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#2563EB] text-white text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap">
               {tex.mostPopular || 'MOST POPULAR'}
@@ -393,11 +393,11 @@ export default function Home() {
             </ul>
             <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=full_prep`)}
               className="w-full py-2.5 rounded-xl font-bold text-sm bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition-all animate-pulse">
-              {tex.planGetFullPrep || 'Get Full Prep — $14.99'}
+              {tex.planGetFullPrep || 'Get Full Prep  ·  $14.99'}
             </button>
           </div>
 
-          {/* Guaranteed Pass — white, gold border */}
+          {/* Guaranteed Pass  ·  white, gold border */}
           <div className="relative bg-white rounded-2xl p-5 border-2 border-[#F59E0B] shadow-sm flex flex-col text-center">
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#F59E0B] text-[#0B1C3D] text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap">
               {tex.planGuaranteedBadge || '🛡️ GUARANTEED'}
@@ -412,7 +412,7 @@ export default function Home() {
             </ul>
             <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=guaranteed_pass`)}
               className="w-full py-2.5 rounded-xl font-semibold text-sm bg-[#F59E0B] text-[#0B1C3D] hover:bg-[#FBBF24] transition-all">
-              {tex.planGetGuaranteedPass || 'Get Guaranteed Pass — $39.99'}
+              {tex.planGetGuaranteedPass || 'Get Guaranteed Pass  ·  $39.99'}
             </button>
           </div>
 
@@ -422,7 +422,7 @@ export default function Home() {
           <button type="button"
             onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
             className="text-[#2563EB] hover:underline font-medium">
-            {tex.pricingStartFree || 'Or start free — 20 questions, no signup needed →'}
+            {tex.pricingStartFree || 'Or start free  ·  20 questions, no signup needed →'}
           </button>
         </p>
       </section>
