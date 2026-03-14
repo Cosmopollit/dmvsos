@@ -55,9 +55,9 @@ export default function Terms() {
             <section>
               <h2 className="font-semibold text-[#0B1C3D] mb-2">5. Paid Plans</h2>
               <p>
-                DMVSOS offers one-time paid plans (Quick Pass, Full Prep, Guaranteed Pass) starting from $7.99,
-                processed through Stripe. Each plan provides 30–90 days of access from the date of purchase.
-                No subscription or auto-renewal. The Guaranteed Pass plan includes a full refund if you fail your DMV test.
+                DMVSOS offers monthly subscription plans (Moto Pass, Auto Pass, CDL Pro) starting from $9.99/mo,
+                processed through Stripe. Subscriptions renew monthly and can be cancelled at any time.
+                The CDL Pro plan includes a 100% money-back guarantee if you fail your CDL test.
               </p>
             </section>
 

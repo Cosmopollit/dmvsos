@@ -31,12 +31,19 @@ function slugToStateName(slug) {
   return match ? match.replace(/\s*\([A-Z]{2}\)\s*$/, '').trim() : slug;
 }
 
+const cdlSubs = [
+  { id: 'general_knowledge', icon: '📋', titleKey: 'cdlGeneral', descKey: 'cdlGeneralDesc', color: '#0EA5E9' },
+  { id: 'air_brakes',        icon: '💨', titleKey: 'cdlAirBrakes', descKey: 'cdlAirBrakesDesc', color: '#6366F1' },
+  { id: 'combination',       icon: '🔗', titleKey: 'cdlCombination', descKey: 'cdlCombinationDesc', color: '#8B5CF6' },
+];
+
 function CategoryContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const state = searchParams.get('state') ?? '';
   const [lang, setLangState] = useState(searchParams.get('lang') || getSavedLang());
   const [showLangMenu, setShowLangMenu] = useState(false);
+  const [cdlExpanded, setCdlExpanded] = useState(false);
   const tex = t[lang] || t.en;
   const currentLang = langs.find(l => l.code === lang) || langs[0];
   const stateName = slugToStateName(state);
@@ -97,22 +104,52 @@ function CategoryContent() {
 
       <div className="w-full max-w-md flex flex-col gap-4">
         {categories.map((cat) => (
-          <button
-            key={cat.id}
-            type="button"
-            onClick={() => router.push(`/test?state=${state}&category=${cat.id}&lang=${lang}`)}
-            className="rounded-2xl p-5 flex items-center gap-5 hover:shadow-lg transition-all text-left border-2 border-white/60 shadow-md"
-            style={{ background: cat.gradient }}
-          >
-            <div className={`flex-shrink-0 ${cat.emojiSize}`}>
-              {cat.icon}
-            </div>
-            <div className="flex-1 min-w-0">
-              <span className="font-bold text-[#1E293B] text-lg">{tex[cat.titleKey]}</span>
-              <div className="text-sm text-[#64748B] mt-0.5">{tex[cat.descKey]}</div>
-            </div>
-            <div className="text-[#94A3B8] text-lg shrink-0">→</div>
-          </button>
+          <div key={cat.id}>
+            <button
+              type="button"
+              onClick={() => {
+                if (cat.id === 'cdl') {
+                  setCdlExpanded(v => !v);
+                } else {
+                  router.push(`/test?state=${state}&category=${cat.id}&lang=${lang}`);
+                }
+              }}
+              className="w-full rounded-2xl p-5 flex items-center gap-5 hover:shadow-lg transition-all text-left border-2 border-white/60 shadow-md"
+              style={{ background: cat.gradient }}
+            >
+              <div className={`flex-shrink-0 ${cat.emojiSize}`}>
+                {cat.icon}
+              </div>
+              <div className="flex-1 min-w-0">
+                <span className="font-bold text-[#1E293B] text-lg">{tex[cat.titleKey]}</span>
+                <div className="text-sm text-[#64748B] mt-0.5">{tex[cat.descKey]}</div>
+              </div>
+              <div className="text-[#94A3B8] text-lg shrink-0">
+                {cat.id === 'cdl' ? (cdlExpanded ? '▾' : '→') : '→'}
+              </div>
+            </button>
+
+            {/* CDL subcategories */}
+            {cat.id === 'cdl' && cdlExpanded && (
+              <div className="flex flex-col gap-2 mt-2 pl-4">
+                {cdlSubs.map(sub => (
+                  <button
+                    key={sub.id}
+                    type="button"
+                    onClick={() => router.push(`/test?state=${state}&category=cdl&subcategory=${sub.id}&lang=${lang}`)}
+                    className="rounded-xl p-4 flex items-center gap-4 hover:shadow-md transition-all text-left bg-white border border-[#E2E8F0]"
+                  >
+                    <div className="text-2xl flex-shrink-0">{sub.icon}</div>
+                    <div className="flex-1 min-w-0">
+                      <span className="font-semibold text-[#1E293B] text-base">{tex[sub.titleKey] || sub.id.replace(/_/g, ' ')}</span>
+                      <div className="text-xs text-[#64748B] mt-0.5">{tex[sub.descKey] || ''}</div>
+                    </div>
+                    <div className="text-[#94A3B8] text-sm shrink-0">→</div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         ))}
       </div>
 

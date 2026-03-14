@@ -34,7 +34,7 @@ function UpgradeContent() {
       name: 'Moto Pass',
       icon: '🏍️',
       price: '$9.99',
-      duration: '30 days · one payment',
+      duration: tex.planDuration || 'Monthly · Cancel anytime',
       badge: null,
       style: 'outline',
       features: [
@@ -51,7 +51,7 @@ function UpgradeContent() {
       name: 'Auto Pass',
       icon: '🚗',
       price: '$29.99',
-      duration: '30 days · one payment',
+      duration: tex.planDuration || 'Monthly · Cancel anytime',
       badge: tex.mostPopular || 'MOST POPULAR',
       style: 'blue',
       features: [
@@ -68,7 +68,7 @@ function UpgradeContent() {
       name: 'CDL Pro',
       icon: '🚛',
       price: '$59.99',
-      duration: '30 days · one payment',
+      duration: tex.planDuration || 'Monthly · Cancel anytime',
       badge: '🛡️ GUARANTEED',
       style: 'gold',
       features: [
@@ -258,7 +258,7 @@ function UpgradeContent() {
       )}
 
       <p className="text-center text-xs text-[#64748B] mb-6">
-        {tex.cancelAnytime || 'One payment · No subscription · No auto-renewal'}
+        {tex.cancelAnytime || 'Monthly subscription · Cancel anytime'}
       </p>
 
       <button type="button" onClick={() => router.push('/')} className="text-[#94A3B8] text-sm hover:text-white">

@@ -139,7 +139,7 @@ export default async function StateDmvTestPage({ params }) {
             name: `Is the ${name} DMV practice test free?`,
             acceptedAnswer: {
               '@type': 'Answer',
-              text: `Yes. DMVSOS provides a free ${name} DMV practice test with real knowledge test questions. Paid plans from $7.99 (30-day access) unlock extended 40-question tests and detailed answer explanations.`,
+              text: `Yes. DMVSOS provides a free ${name} DMV practice test with real knowledge test questions. Paid plans from $9.99/mo unlock extended 40-question tests and detailed answer explanations.`,
             },
           },
           {
@@ -202,7 +202,7 @@ export default async function StateDmvTestPage({ params }) {
     },
     {
       q: `Is this ${name} DMV practice test free?`,
-      a: `Yes  ·  20 questions per test are completely free with no signup required. Paid plans from $7.99 (30-day access) unlock 40-question full tests and detailed explanations.`,
+      a: `Yes  ·  20 questions per test are completely free with no signup required. Paid plans from $9.99/mo unlock 40-question full tests and detailed explanations.`,
     },
     {
       q: `What topics does the ${name} DMV test cover?`,
@@ -377,9 +377,9 @@ export default async function StateDmvTestPage({ params }) {
             href="/upgrade"
             className="inline-flex items-center gap-2 px-6 py-3 bg-[#F59E0B] text-[#0B1C3D] rounded-xl font-bold text-sm hover:bg-[#FBBF24] transition-colors"
           >
-            Unlock Full Access  ·  from $7.99
+            Unlock Full Access  ·  from $9.99/mo
           </Link>
-          <p className="text-xs text-[#64748B] mt-2">One payment · No subscription · No auto-renewal</p>
+          <p className="text-xs text-[#64748B] mt-2">Monthly subscription · Cancel anytime</p>
         </div>
 
         {/* Other states */}

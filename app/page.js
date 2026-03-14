@@ -52,18 +52,10 @@ export default function Home() {
     mainEntity: [
       {
         '@type': 'Question',
-        name: 'Is this a subscription? Will I be charged again?',
+        name: 'How does pricing work?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'No. All plans are one-time payments. No subscription, no auto-renewal, no hidden charges.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'How long does access last?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Quick Pass gives 7 days of access, Full Prep gives 30 days, and Guaranteed Pass gives 90 days.',
+          text: 'DMVSOS offers monthly subscription plans: Moto Pass ($9.99/mo) for motorcycle tests, Auto Pass ($29.99/mo) for car tests, and CDL Pro ($59.99/mo) for CDL tests with car included. Cancel anytime.',
         },
       },
       {
@@ -84,18 +76,10 @@ export default function Home() {
       },
       {
         '@type': 'Question',
-        name: "What's the difference between Quick Pass and Full Prep?",
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Quick Pass ($7.99) gives 7 days access to the full question bank. Full Prep ($14.99) adds detailed explanations, progress tracking, and 30 days of access.',
-        },
-      },
-      {
-        '@type': 'Question',
         name: 'What is the Pass Guarantee?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Guaranteed Pass ($39.99) includes a 100% money-back guarantee if you fail your DMV test. It also includes 90 days of access and direct support via Telegram and WhatsApp in your language.',
+          text: 'CDL Pro ($59.99/mo) includes a 100% money-back guarantee if you fail your CDL test, plus direct support via Telegram and WhatsApp in your language.',
         },
       },
     ],
@@ -167,14 +151,14 @@ export default function Home() {
                       {initial}
                     </div>
                     <span className="hidden sm:block text-xs font-medium text-[#1E293B] max-w-[80px] truncate">{firstName}</span>
-                    {planType === 'guaranteed_pass' && (
-                      <span className="hidden sm:inline text-[10px] font-semibold bg-[#FEF3C7] text-[#B45309] px-1.5 py-0.5 rounded-full whitespace-nowrap">Guaranteed</span>
+                    {['cdl_pass', 'guaranteed_pass'].includes(planType) && (
+                      <span className="hidden sm:inline text-[10px] font-semibold bg-[#FEF3C7] text-[#B45309] px-1.5 py-0.5 rounded-full whitespace-nowrap">CDL Pro</span>
                     )}
-                    {planType === 'full_prep' && (
-                      <span className="hidden sm:inline text-[10px] font-semibold bg-[#DBEAFE] text-[#1D4ED8] px-1.5 py-0.5 rounded-full whitespace-nowrap">Full Prep</span>
+                    {['car_pass', 'full_prep'].includes(planType) && (
+                      <span className="hidden sm:inline text-[10px] font-semibold bg-[#DBEAFE] text-[#1D4ED8] px-1.5 py-0.5 rounded-full whitespace-nowrap">Auto Pass</span>
                     )}
-                    {planType === 'quick_pass' && (
-                      <span className="hidden sm:inline text-[10px] font-semibold bg-[#F3F4F6] text-[#4B5563] px-1.5 py-0.5 rounded-full whitespace-nowrap">Quick Pass</span>
+                    {['moto_pass', 'quick_pass'].includes(planType) && (
+                      <span className="hidden sm:inline text-[10px] font-semibold bg-[#F3F4F6] text-[#4B5563] px-1.5 py-0.5 rounded-full whitespace-nowrap">Moto Pass</span>
                     )}
                     {!planType && (
                       <span className="hidden sm:inline text-[10px] font-semibold bg-[#F3F4F6] text-[#9CA3AF] px-1.5 py-0.5 rounded-full whitespace-nowrap">Free</span>
@@ -362,57 +346,60 @@ export default function Home() {
         <p className="text-sm text-[#64748B] text-center mb-6 leading-relaxed max-w-md mx-auto">{tex.pricingSubtext}</p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
-          {/* Quick Pass  ·  white, gray border */}
+          {/* Moto Pass  ·  white, gray border */}
           <div className="bg-white rounded-2xl p-5 border border-[#E2E8F0] shadow-sm flex flex-col text-center">
-            <h3 className="text-sm font-bold text-[#2563EB] mb-1">Quick Pass</h3>
-            <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">$7.99</div>
-            <div className="text-xs text-[#64748B] mb-3">{tex.quickPassDuration || '7 days · one payment'}</div>
+            <div className="text-3xl mb-2">🏍️</div>
+            <h3 className="text-sm font-bold text-[#2563EB] mb-1">Moto Pass</h3>
+            <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">$9.99</div>
+            <div className="text-xs text-[#64748B] mb-3">{tex.planDuration || 'Monthly · Cancel anytime'}</div>
             <ul className="space-y-1.5 text-xs text-[#475569] mb-4 text-left flex-1">
-              {(tex.quickPassFeatures || ['✓ Full question bank', '✓ All 50 states', '✓ Car, CDL & Motorcycle', '✓ 5 languages', '✓ Unlimited attempts']).map((f, i) => (
+              {['✓ Full Motorcycle question bank', '✓ All 50 states · 5 languages', '✓ All exam modes unlocked', '✓ Real exam simulation', '✓ Detailed explanations'].map((f, i) => (
                 <li key={i}>{f}</li>
               ))}
             </ul>
-            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=quick_pass`)}
+            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=moto_pass`)}
               className="w-full py-2.5 rounded-xl font-semibold text-sm border border-[#E2E8F0] text-[#0B1C3D] hover:bg-[#F1F5F9] transition-all">
-              {tex.planGetQuickPass || 'Get Quick Pass  ·  $7.99'}
+              Get Moto Pass · $9.99/mo
             </button>
           </div>
 
-          {/* Full Prep  ·  dark navy, blue border, MOST POPULAR */}
+          {/* Auto Pass  ·  dark navy, blue border, MOST POPULAR */}
           <div className="relative bg-[#0B1C3D] rounded-2xl p-5 border-2 border-[#2563EB] shadow-sm flex flex-col text-center">
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#2563EB] text-white text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap">
               {tex.mostPopular || 'MOST POPULAR'}
             </span>
-            <h3 className="text-sm font-bold text-[#F59E0B] mb-1 mt-1">Full Prep</h3>
-            <div className="text-2xl font-black text-white mb-0.5">$14.99</div>
-            <div className="text-xs text-[#94A3B8] mb-3">{tex.fullPrepDuration || '30 days · one payment'}</div>
+            <div className="text-3xl mb-2 mt-1">🚗</div>
+            <h3 className="text-sm font-bold text-[#F59E0B] mb-1">Auto Pass</h3>
+            <div className="text-2xl font-black text-white mb-0.5">$29.99</div>
+            <div className="text-xs text-[#94A3B8] mb-3">{tex.planDuration || 'Monthly · Cancel anytime'}</div>
             <ul className="space-y-1.5 text-xs text-[#CBD5E1] mb-4 text-left flex-1">
-              {(tex.fullPrepFeatures || ['Everything in Quick Pass', 'Detailed explanations', 'Progress tracking', 'Challenge Bank (coming soon)']).map((f, i) => (
+              {['✓ Full Car question bank', '✓ All 50 states · 5 languages', '✓ All exam modes unlocked', '✓ Real exam simulation (60 min)', '✓ Detailed explanations'].map((f, i) => (
                 <li key={i}>{f}</li>
               ))}
             </ul>
-            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=full_prep`)}
-              className="w-full py-2.5 rounded-xl font-bold text-sm bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition-all animate-pulse">
-              {tex.planGetFullPrep || 'Get Full Prep  ·  $14.99'}
+            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=car_pass`)}
+              className="w-full py-2.5 rounded-xl font-bold text-sm bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition-all">
+              Get Auto Pass · $29.99/mo
             </button>
           </div>
 
-          {/* Guaranteed Pass  ·  white, gold border */}
+          {/* CDL Pro  ·  white, gold border */}
           <div className="relative bg-white rounded-2xl p-5 border-2 border-[#F59E0B] shadow-sm flex flex-col text-center">
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#F59E0B] text-[#0B1C3D] text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap">
-              {tex.planGuaranteedBadge || '🛡️ GUARANTEED'}
+              🛡️ GUARANTEED
             </span>
-            <h3 className="text-sm font-bold text-[#92400E] mb-1 mt-1">Guaranteed Pass</h3>
-            <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">$39.99</div>
-            <div className="text-xs text-[#64748B] mb-3">{tex.guaranteedPassDuration || '90 days · one payment'}</div>
+            <div className="text-3xl mb-2 mt-1">🚛</div>
+            <h3 className="text-sm font-bold text-[#92400E] mb-1">CDL Pro</h3>
+            <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">$59.99</div>
+            <div className="text-xs text-[#64748B] mb-3">{tex.planDuration || 'Monthly · Cancel anytime'}</div>
             <ul className="space-y-1.5 text-xs text-[#475569] mb-4 text-left flex-1">
-              {(tex.guaranteedPassFeatures || ['Everything in Full Prep', '🛡️ Pass or 100% refund', 'Telegram & WhatsApp support', 'Full accompaniment to exam day']).map((f, i) => (
+              {['✓ Full CDL question bank', '✓ Car tests included', '✓ All 50 states · 5 languages', '✓ All exam modes unlocked', '🛡️ Pass or 100% refund'].map((f, i) => (
                 <li key={i}>{f}</li>
               ))}
             </ul>
-            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=guaranteed_pass`)}
+            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=cdl_pass`)}
               className="w-full py-2.5 rounded-xl font-semibold text-sm bg-[#F59E0B] text-[#0B1C3D] hover:bg-[#FBBF24] transition-all">
-              {tex.planGetGuaranteedPass || 'Get Guaranteed Pass  ·  $39.99'}
+              Get CDL Pro · $59.99/mo
             </button>
           </div>
 

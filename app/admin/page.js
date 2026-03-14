@@ -40,6 +40,9 @@ export default function AdminPage() {
   const [editAllActiveLang, setEditAllActiveLang] = useState('en');
   const [editAllLoading, setEditAllLoading] = useState(false);
   const [editAllError, setEditAllError] = useState('');
+  const [deleteModal, setDeleteModal] = useState(null); // { index, question, clusterRows: [{id,language},...] }
+  const [deleteLangs, setDeleteLangs] = useState({}); // { en: true, ru: true, ... }
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const fileInputRefs = useRef({});
   const csvInputRef = useRef(null);
 
@@ -119,18 +122,60 @@ export default function AdminPage() {
   const handleDeleteQuestion = async (i) => {
     const q = questions[i];
     if (!q?.id) return;
-    if (!window.confirm(`Delete question #${i + 1}?\n\n"${(q.question || '').slice(0, 80)}..."\n\nThis cannot be undone.`)) return;
+
+    // If question has cluster_code, load all language variants
+    if (q.cluster_code) {
+      try {
+        const { data, error } = await supabase
+          .from('questions')
+          .select('id, language')
+          .eq('cluster_code', q.cluster_code)
+          .eq('state', q.state)
+          .eq('category', q.category);
+        if (error) throw new Error(error.message);
+        const rows = data || [];
+        const langs = {};
+        for (const r of rows) langs[r.language] = true;
+        setDeleteModal({ index: i, question: q, clusterRows: rows });
+        setDeleteLangs(langs);
+      } catch (err) {
+        alert('Failed to load language variants: ' + err.message);
+      }
+    } else {
+      // No cluster — show modal with just current language
+      setDeleteModal({ index: i, question: q, clusterRows: [{ id: q.id, language: q.language || lang }] });
+      setDeleteLangs({ [q.language || lang]: true });
+    }
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteModal) return;
+    const { index, clusterRows } = deleteModal;
+    const idsToDelete = clusterRows
+      .filter(r => deleteLangs[r.language])
+      .map(r => r.id);
+
+    if (idsToDelete.length === 0) return;
+    setDeleteLoading(true);
+
     try {
       const res = await fetch('/api/admin/questions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password, action: 'delete', id: q.id }),
+        body: JSON.stringify({ password, action: 'delete', ids: idsToDelete }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to delete');
-      setQuestions((prev) => prev.filter((_, idx) => idx !== i));
+
+      // If current language was deleted, remove from list
+      if (deleteLangs[lang]) {
+        setQuestions((prev) => prev.filter((_, idx) => idx !== index));
+      }
+      setDeleteModal(null);
     } catch (err) {
       alert('Delete failed: ' + err.message);
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -838,6 +883,83 @@ export default function AdminPage() {
           <p className="text-center text-[#94A3B8] py-8">Select state, category, language and click Load Questions.</p>
         )}
       </div>
+
+      {/* Delete confirmation modal */}
+      {deleteModal && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
+            <h3 className="text-lg font-bold text-[#0B1C3D] mb-2">Delete Question</h3>
+            <p className="text-sm text-[#64748B] mb-4">
+              &ldquo;{(deleteModal.question.question || '').slice(0, 100)}...&rdquo;
+            </p>
+
+            {deleteModal.clusterRows.length > 1 && (
+              <>
+                <p className="text-sm font-medium text-[#1E293B] mb-2">Select languages to delete:</p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {LANGUAGES.map(({ value, label }) => {
+                    const exists = deleteModal.clusterRows.some(r => r.language === value);
+                    if (!exists) return null;
+                    return (
+                      <label key={value} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#E2E8F0] cursor-pointer hover:bg-[#F8FAFC] transition">
+                        <input
+                          type="checkbox"
+                          checked={!!deleteLangs[value]}
+                          onChange={(e) => setDeleteLangs(prev => ({ ...prev, [value]: e.target.checked }))}
+                          className="accent-[#DC2626]"
+                        />
+                        <span className="text-sm text-[#1E293B]">{label}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+                <div className="flex gap-2 mb-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const all = {};
+                      deleteModal.clusterRows.forEach(r => all[r.language] = true);
+                      setDeleteLangs(all);
+                    }}
+                    className="text-xs text-[#2563EB] hover:underline"
+                  >
+                    Select all
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDeleteLangs({})}
+                    className="text-xs text-[#64748B] hover:underline"
+                  >
+                    Deselect all
+                  </button>
+                </div>
+              </>
+            )}
+
+            <p className="text-xs text-red-500 mb-4">
+              This will delete {Object.values(deleteLangs).filter(Boolean).length} language version(s). This cannot be undone.
+            </p>
+
+            <div className="flex gap-3 justify-end">
+              <button
+                type="button"
+                onClick={() => setDeleteModal(null)}
+                className="px-4 py-2 rounded-xl border border-[#E2E8F0] text-[#64748B] text-sm font-medium hover:bg-[#F8FAFC] transition"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmDelete}
+                disabled={deleteLoading || Object.values(deleteLangs).filter(Boolean).length === 0}
+                className="px-4 py-2 rounded-xl bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition disabled:opacity-50"
+              >
+                {deleteLoading ? 'Deleting...' : `Delete (${Object.values(deleteLangs).filter(Boolean).length})`}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

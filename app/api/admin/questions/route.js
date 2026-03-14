@@ -86,8 +86,14 @@ export async function POST(req) {
   }
 
   if (action === 'delete') {
-    const { id } = body;
-    if (!id) return Response.json({ error: 'ID required' }, { status: 400 });
+    const { id, ids } = body;
+    // Support deleting multiple questions by ids array
+    if (ids && Array.isArray(ids) && ids.length > 0) {
+      const { error } = await supabase.from('questions').delete().in('id', ids);
+      if (error) return Response.json({ error: error.message }, { status: 500 });
+      return Response.json({ ok: true, deleted: ids.length });
+    }
+    if (!id) return Response.json({ error: 'ID or IDs required' }, { status: 400 });
     const { error } = await supabase.from('questions').delete().eq('id', id);
     if (error) return Response.json({ error: error.message }, { status: 500 });
     return Response.json({ ok: true });

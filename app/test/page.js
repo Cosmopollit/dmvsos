@@ -21,6 +21,7 @@ function TestContent() {
   const params = useSearchParams();
   const state = params.get('state') || 'washington';
   const category = params.get('category') || 'car';
+  const subcategory = params.get('subcategory') || null;
   const [lang, setLangState] = useState(params.get('lang') || getSavedLang());
   const [showLangMenu, setShowLangMenu] = useState(false);
   const currentLang = langs.find(l => l.code === lang) || langs[0];
@@ -41,6 +42,7 @@ function TestContent() {
     : 'car_pass';
 
   const isMoto = ['moto', 'motorcycle'].includes(category);
+  const isCdl = category === 'cdl';
   const freeLimit = isMoto ? 5 : 20;       // moto preview = 5q, car = 20q
   const nudgeAt   = isMoto ? 3 : 17;       // show nudge at question 4 (idx 3) for moto, 18 for car
 
@@ -124,13 +126,16 @@ function TestContent() {
     setLoadingQuestions(true);
     const categoryMap = { dmv: 'car', cdl: 'cdl', moto: 'motorcycle' };
     const mappedCategory = categoryMap[category] || category;
-    supabase
+    let query = supabase
       .from('questions')
       .select('*')
       .eq('state', state)
       .eq('category', mappedCategory)
-      .eq('language', lang)
-      .then(({ data, error }) => {
+      .eq('language', lang);
+    if (subcategory) {
+      query = query.eq('subcategory', subcategory);
+    }
+    query.then(({ data, error }) => {
         if (error || !data?.length) {
           setAllQuestions([]);
           setLoadingQuestions(false);
@@ -407,7 +412,7 @@ function TestContent() {
                   <div className="badge-shimmer absolute bottom-0 left-0 right-0 flex items-center justify-center gap-1.5 py-1.5 rounded-b-2xl">
                     <span style={{ fontSize: 11 }}>🛡️</span>
                     <span className="text-[10px] font-bold tracking-wider uppercase" style={{ color: '#92400E' }}>
-                      Guaranteed Pass · 99%
+                      CDL Pro · 99%
                     </span>
                   </div>
                 </button>
@@ -450,7 +455,7 @@ function TestContent() {
                 onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
                 className="w-full py-3.5 rounded-2xl font-bold text-white text-base mb-3 btn-pulse"
                 style={{ background: 'linear-gradient(135deg, #2563EB, #1D4ED8)' }}>
-                {tex.unlockCta || 'Unlock from $29.99 →'}
+                {tex.unlockCta || `Unlock from ${isMoto ? '$9.99' : isCdl ? '$59.99' : '$29.99'} →`}
               </button>
               <button type="button" onClick={() => setShowLockModal(false)}
                 className="text-sm text-[#94A3B8] hover:text-[#64748B]">
@@ -637,7 +642,7 @@ function TestContent() {
         {/* Q18 pre-paywall nudge */}
         {!hasFullAccess && current === nudgeAt && showAnswer && (
           <div className="bg-[#FFF7ED] border border-[#FED7AA] rounded-xl px-4 py-3 mb-4 text-sm text-[#92400E] font-medium text-center">
-            🔔 {freeLimit - current - 1} {tex.modeQuestions || 'questions'} left in your free test  ·  unlock all from {isMoto ? '$9.99' : '$29.99'}
+            🔔 {freeLimit - current - 1} {tex.modeQuestions || 'questions'} left in your free test  ·  unlock all from {isMoto ? '$9.99' : isCdl ? '$59.99' : '$29.99'}
           </div>
         )}
 
@@ -678,7 +683,7 @@ function TestContent() {
                   <div className="text-xl mb-0.5">🏍️</div>
                   <div className="text-xs font-bold text-[#64748B] mb-0.5">Moto</div>
                   <div className="text-lg font-black text-[#0B1C3D] mb-0.5">$9.99</div>
-                  <div className="text-[10px] text-[#94A3B8] mb-2">30 days</div>
+                  <div className="text-[10px] text-[#94A3B8] mb-2">/ month</div>
                   <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=moto_pass`)}
                     className="mt-auto w-full py-1.5 rounded-lg text-xs font-semibold bg-[#F1F5F9] text-[#0B1C3D] hover:bg-[#E2E8F0] transition">
                     Get it
@@ -690,7 +695,7 @@ function TestContent() {
                   <div className="text-xl mb-0.5">🚗</div>
                   <div className="text-xs font-bold text-[#2563EB] mb-0.5">Auto</div>
                   <div className="text-lg font-black text-[#0B1C3D] mb-0.5">$29.99</div>
-                  <div className="text-[10px] text-[#64748B] mb-2">30 days</div>
+                  <div className="text-[10px] text-[#64748B] mb-2">/ month</div>
                   <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=car_pass`)}
                     className="mt-auto w-full py-1.5 rounded-lg text-xs font-bold bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition">
                     Get it
@@ -702,7 +707,7 @@ function TestContent() {
                   <div className="text-xl mb-0.5">🚛</div>
                   <div className="text-xs font-bold text-[#92400E] mb-0.5">CDL</div>
                   <div className="text-lg font-black text-[#0B1C3D] mb-0.5">$59.99</div>
-                  <div className="text-[10px] text-[#64748B] mb-2">30 days</div>
+                  <div className="text-[10px] text-[#64748B] mb-2">/ month</div>
                   <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=cdl_pass`)}
                     className="mt-auto w-full py-1.5 rounded-lg text-xs font-semibold bg-[#0B1C3D] text-white hover:bg-[#1E3A5F] transition">
                     Get it
@@ -710,7 +715,7 @@ function TestContent() {
                 </div>
               </div>
 
-              <p className="text-center text-xs text-[#94A3B8] mb-3">One payment · 30 days access · No auto-renewal</p>
+              <p className="text-center text-xs text-[#94A3B8] mb-3">Monthly subscription · Cancel anytime</p>
 
               <button type="button" onClick={() => {
                 const allAnswers = userAnswersRef.current;

@@ -86,3 +86,6 @@ broken-question-ids.json
 .images-matches.json
 .illinois-car-questions.json
 .quality-pass-*.log
+.generate-cdl-*-progress.json
+.oregon-motorcycle-questions.json
+.pennsylvania-motorcycle-questions.json
