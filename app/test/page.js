@@ -676,41 +676,25 @@ function TestContent() {
                 {(tex.upgradeScoreSoFar || 'Your score: {score}/20').replace('{score}', String(score)).replace('{percent}', String(Math.round((score / 20) * 100)))}
               </p>
 
-              {/* 3 compact category plan cards */}
-              <div className="flex gap-2 mb-4">
-                {/* Moto Pass */}
-                <div className="flex-1 border border-[#E2E8F0] rounded-xl p-3 text-center flex flex-col">
-                  <div className="text-xl mb-0.5">🏍️</div>
-                  <div className="text-xs font-bold text-[#64748B] mb-0.5">Moto</div>
-                  <div className="text-lg font-black text-[#0B1C3D] mb-0.5">$9.99</div>
-                  <div className="text-[10px] text-[#94A3B8] mb-2">/ month</div>
-                  <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=moto_pass`)}
-                    className="mt-auto w-full py-1.5 rounded-lg text-xs font-semibold bg-[#F1F5F9] text-[#0B1C3D] hover:bg-[#E2E8F0] transition">
-                    Get it
-                  </button>
-                </div>
-                {/* Car Pass */}
-                <div className="flex-1 border-2 border-[#2563EB] rounded-xl p-3 text-center flex flex-col bg-[#EFF6FF]">
-                  <div className="text-[9px] font-bold text-white bg-[#2563EB] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">POPULAR</div>
-                  <div className="text-xl mb-0.5">🚗</div>
-                  <div className="text-xs font-bold text-[#2563EB] mb-0.5">Auto</div>
-                  <div className="text-lg font-black text-[#0B1C3D] mb-0.5">$29.99</div>
-                  <div className="text-[10px] text-[#64748B] mb-2">/ month</div>
-                  <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=car_pass`)}
-                    className="mt-auto w-full py-1.5 rounded-lg text-xs font-bold bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition">
-                    Get it
-                  </button>
-                </div>
-                {/* CDL Pro */}
-                <div className="flex-1 border-2 border-[#F59E0B] rounded-xl p-3 text-center flex flex-col">
-                  <div className="text-[9px] font-bold text-[#0B1C3D] bg-[#F59E0B] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">🛡️ PRO</div>
-                  <div className="text-xl mb-0.5">🚛</div>
-                  <div className="text-xs font-bold text-[#92400E] mb-0.5">CDL</div>
-                  <div className="text-lg font-black text-[#0B1C3D] mb-0.5">$59.99</div>
-                  <div className="text-[10px] text-[#64748B] mb-2">/ month</div>
-                  <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=cdl_pass`)}
-                    className="mt-auto w-full py-1.5 rounded-lg text-xs font-semibold bg-[#0B1C3D] text-white hover:bg-[#1E3A5F] transition">
-                    Get it
+              {/* Highlighted plan card for current category */}
+              <div className="flex justify-center mb-4">
+                <div className="w-full max-w-[200px] border-2 rounded-xl p-4 text-center flex flex-col"
+                  style={{
+                    borderColor: isCdl ? '#F59E0B' : isMoto ? '#D97706' : '#2563EB',
+                    background: isCdl ? '#FFFBEB' : isMoto ? '#FFF7ED' : '#EFF6FF',
+                  }}>
+                  {isCdl && <div className="text-[9px] font-bold text-[#0B1C3D] bg-[#F59E0B] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">🛡️ GUARANTEED</div>}
+                  {!isCdl && !isMoto && <div className="text-[9px] font-bold text-white bg-[#2563EB] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">POPULAR</div>}
+                  <div className="text-3xl mb-1">{isCdl ? '🚛' : isMoto ? '🏍️' : '🚗'}</div>
+                  <div className="text-xs font-bold mb-0.5" style={{ color: isCdl ? '#92400E' : isMoto ? '#D97706' : '#2563EB' }}>
+                    {isCdl ? 'CDL Pro' : isMoto ? 'Moto Pass' : 'Auto Pass'}
+                  </div>
+                  <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">{isCdl ? '$59.99' : isMoto ? '$9.99' : '$29.99'}</div>
+                  <div className="text-[10px] text-[#64748B] mb-3">/ month</div>
+                  <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
+                    className="w-full py-2 rounded-lg text-sm font-bold text-white transition"
+                    style={{ background: isCdl ? '#0B1C3D' : isMoto ? '#D97706' : '#2563EB' }}>
+                    {tex.getIt || 'Get it'}
                   </button>
                 </div>
               </div>

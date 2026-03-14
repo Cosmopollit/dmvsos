@@ -238,49 +238,38 @@ function ResultContent() {
         )}
 
         {/* Upgrade banner  ·  hidden for Pro users */}
-        {!isPro && (
-          <div className="bg-white rounded-2xl p-5 w-full border border-[#E2E8F0] shadow-sm">
-            <p className="text-[#0B1C3D] font-bold text-base mb-1 text-center">{tex.upgradeModalTitle || 'Unlock Full Access'}</p>
-            <p className="text-[#64748B] text-xs mb-4 text-center">Monthly subscription · Cancel anytime</p>
-            <div className="flex gap-2 mb-3">
-              {/* Moto Pass */}
-              <div className="flex-1 border border-[#E2E8F0] rounded-xl p-3 text-center flex flex-col">
-                <div className="text-xl mb-0.5">🏍️</div>
-                <div className="text-xs font-bold text-[#2563EB] mb-0.5">Moto</div>
-                <div className="text-base font-black text-[#0B1C3D] mb-0.5">$9.99</div>
-                <div className="text-[10px] text-[#94A3B8] mb-2">/ month</div>
-                <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=moto_pass`)}
-                  className="mt-auto w-full py-1.5 rounded-lg text-xs font-semibold bg-[#F1F5F9] text-[#0B1C3D] hover:bg-[#E2E8F0] transition">
-                  Get it
-                </button>
-              </div>
-              {/* Auto Pass */}
-              <div className="flex-1 border-2 border-[#2563EB] rounded-xl p-3 text-center flex flex-col bg-[#EFF6FF]">
-                <div className="text-[9px] font-bold text-white bg-[#2563EB] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">POPULAR</div>
-                <div className="text-xl mb-0.5">🚗</div>
-                <div className="text-xs font-bold text-[#2563EB] mb-0.5">Auto</div>
-                <div className="text-base font-black text-[#0B1C3D] mb-0.5">$29.99</div>
-                <div className="text-[10px] text-[#64748B] mb-2">/ month</div>
-                <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=car_pass`)}
-                  className="mt-auto w-full py-1.5 rounded-lg text-xs font-bold bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition">
-                  Get it
-                </button>
-              </div>
-              {/* CDL Pro */}
-              <div className="flex-1 border-2 border-[#F59E0B] rounded-xl p-3 text-center flex flex-col">
-                <div className="text-[9px] font-bold text-[#0B1C3D] bg-[#F59E0B] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">🛡️ PRO</div>
-                <div className="text-xl mb-0.5">🚛</div>
-                <div className="text-xs font-bold text-[#92400E] mb-0.5">CDL</div>
-                <div className="text-base font-black text-[#0B1C3D] mb-0.5">$59.99</div>
-                <div className="text-[10px] text-[#64748B] mb-2">/ month</div>
-                <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=cdl_pass`)}
-                  className="mt-auto w-full py-1.5 rounded-lg text-xs font-semibold bg-[#0B1C3D] text-white hover:bg-[#1E3A5F] transition">
-                  Get it
-                </button>
+        {!isPro && (() => {
+          const rIsMoto = ['moto', 'motorcycle'].includes(category);
+          const rIsCdl = category === 'cdl';
+          const rPlan = rIsMoto ? 'moto_pass' : rIsCdl ? 'cdl_pass' : 'car_pass';
+          return (
+            <div className="bg-white rounded-2xl p-5 w-full border border-[#E2E8F0] shadow-sm">
+              <p className="text-[#0B1C3D] font-bold text-base mb-1 text-center">{tex.upgradeModalTitle || 'Unlock Full Access'}</p>
+              <p className="text-[#64748B] text-xs mb-4 text-center">Monthly subscription · Cancel anytime</p>
+              <div className="flex justify-center mb-3">
+                <div className="w-full max-w-[200px] border-2 rounded-xl p-4 text-center flex flex-col"
+                  style={{
+                    borderColor: rIsCdl ? '#F59E0B' : rIsMoto ? '#D97706' : '#2563EB',
+                    background: rIsCdl ? '#FFFBEB' : rIsMoto ? '#FFF7ED' : '#EFF6FF',
+                  }}>
+                  {rIsCdl && <div className="text-[9px] font-bold text-[#0B1C3D] bg-[#F59E0B] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">🛡️ GUARANTEED</div>}
+                  {!rIsCdl && !rIsMoto && <div className="text-[9px] font-bold text-white bg-[#2563EB] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">POPULAR</div>}
+                  <div className="text-3xl mb-1">{rIsCdl ? '🚛' : rIsMoto ? '🏍️' : '🚗'}</div>
+                  <div className="text-xs font-bold mb-0.5" style={{ color: rIsCdl ? '#92400E' : rIsMoto ? '#D97706' : '#2563EB' }}>
+                    {rIsCdl ? 'CDL Pro' : rIsMoto ? 'Moto Pass' : 'Auto Pass'}
+                  </div>
+                  <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">{rIsCdl ? '$59.99' : rIsMoto ? '$9.99' : '$29.99'}</div>
+                  <div className="text-[10px] text-[#64748B] mb-3">/ month</div>
+                  <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=${rPlan}`)}
+                    className="w-full py-2 rounded-lg text-sm font-bold text-white transition"
+                    style={{ background: rIsCdl ? '#0B1C3D' : rIsMoto ? '#D97706' : '#2563EB' }}>
+                    {tex.getIt || 'Get it'}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* Buttons */}
         <button
