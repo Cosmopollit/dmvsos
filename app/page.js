@@ -151,16 +151,16 @@ export default function Home() {
                       {initial}
                     </div>
                     <span className="hidden sm:block text-xs font-medium text-[#1E293B] max-w-[80px] truncate">{firstName}</span>
-                    {['cdl_pass', 'guaranteed_pass'].includes(planType) && (
+                    {isPro && ['cdl_pass', 'guaranteed_pass'].includes(planType) && (
                       <span className="hidden sm:inline text-[10px] font-semibold bg-[#FEF3C7] text-[#B45309] px-1.5 py-0.5 rounded-full whitespace-nowrap">CDL Pro</span>
                     )}
-                    {['car_pass', 'full_prep'].includes(planType) && (
+                    {isPro && ['car_pass', 'full_prep'].includes(planType) && (
                       <span className="hidden sm:inline text-[10px] font-semibold bg-[#DBEAFE] text-[#1D4ED8] px-1.5 py-0.5 rounded-full whitespace-nowrap">Auto Pass</span>
                     )}
-                    {['moto_pass', 'quick_pass'].includes(planType) && (
+                    {isPro && ['moto_pass', 'quick_pass'].includes(planType) && (
                       <span className="hidden sm:inline text-[10px] font-semibold bg-[#F3F4F6] text-[#4B5563] px-1.5 py-0.5 rounded-full whitespace-nowrap">Moto Pass</span>
                     )}
-                    {!planType && (
+                    {!isPro && (
                       <span className="hidden sm:inline text-[10px] font-semibold bg-[#F3F4F6] text-[#9CA3AF] px-1.5 py-0.5 rounded-full whitespace-nowrap">Free</span>
                     )}
                   </button>

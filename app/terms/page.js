@@ -55,8 +55,10 @@ export default function Terms() {
             <section>
               <h2 className="font-semibold text-[#0B1C3D] mb-2">5. Paid Plans</h2>
               <p>
-                DMVSOS offers monthly subscription plans (Moto Pass, Auto Pass, CDL Pro) starting from $9.99/mo,
-                processed through Stripe. Subscriptions renew monthly and can be cancelled at any time.
+                DMVSOS offers monthly subscription plans processed through Stripe:
+                Moto Pass ($9.99/mo) for motorcycle tests, Auto Pass ($29.99/mo) for car tests,
+                and CDL Pro ($59.99/mo) for CDL tests with car access included.
+                Subscriptions renew monthly and can be cancelled at any time from your account.
                 The CDL Pro plan includes a 100% money-back guarantee if you fail your CDL test.
               </p>
             </section>

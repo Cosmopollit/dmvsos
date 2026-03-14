@@ -68,7 +68,7 @@ function TestContent() {
   const timeLimitRef = useRef(0);
 
   // Time limits per category (in seconds)  ·  real exam simulation
-  const categoryTimeLimit = { dmv: 60 * 60, car: 60 * 60, cdl: 60 * 60, moto: 60 * 60, motorcycle: 60 * 60 };
+  const categoryTimeLimit = { dmv: 40 * 60, car: 40 * 60, cdl: 50 * 60, moto: 30 * 60, motorcycle: 30 * 60 };
   const initialTime = categoryTimeLimit[category] || 60 * 60;
 
   const formatTime = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
@@ -671,7 +671,7 @@ function TestContent() {
           <div className="bg-white rounded-2xl w-full max-w-md shadow-xl border border-[#E2E8F0] overflow-hidden">
             <div className="h-1.5 bg-gradient-to-r from-[#F59E0B] via-[#FB923C] to-[#F59E0B]" />
             <div className="p-6">
-              <h2 className="text-xl font-bold text-[#0B1C3D] mb-1 text-center">{tex.upgradeModalTitle || "You've used all 20 free questions"}</h2>
+              <h2 className="text-xl font-bold text-[#0B1C3D] mb-1 text-center">{tex.upgradeModalTitle || `You've used all ${freeLimit} free questions`}</h2>
               <p className="text-[#2563EB] font-bold text-sm mb-4 text-center">
                 {(tex.upgradeScoreSoFar || 'Your score: {score}/20').replace('{score}', String(score)).replace('{percent}', String(Math.round((score / 20) * 100)))}
               </p>

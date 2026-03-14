@@ -10,6 +10,13 @@ const CATEGORIES = [
   { value: 'motorcycle', label: 'Motorcycle' },
 ];
 
+const CDL_SUBCATEGORIES = [
+  { value: '', label: 'All CDL' },
+  { value: 'general_knowledge', label: 'General Knowledge' },
+  { value: 'air_brakes', label: 'Air Brakes' },
+  { value: 'combination', label: 'Combination Vehicles' },
+];
+
 const LANGUAGES = [
   { value: 'en', label: 'English' },
   { value: 'ru', label: 'Russian' },
@@ -24,6 +31,7 @@ export default function AdminPage() {
   const [passwordError, setPasswordError] = useState(false);
   const [stateLabel, setStateLabel] = useState(STATE_OPTIONS[0]);
   const [category, setCategory] = useState('car');
+  const [subcategory, setSubcategory] = useState('');
   const [lang, setLang] = useState('en');
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -70,13 +78,16 @@ export default function AdminPage() {
     setLoadError('');
     const stateSlug = stateToSlug(stateLabel);
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('questions')
         .select('*')
         .eq('state', stateSlug)
         .eq('category', category)
-        .eq('language', lang)
-        .order('id', { ascending: true });
+        .eq('language', lang);
+      if (category === 'cdl' && subcategory) {
+        query = query.eq('subcategory', subcategory);
+      }
+      const { data, error } = await query.order('id', { ascending: true });
       if (error) throw new Error(error.message);
       const mapped = (data || []).map((row) => ({
         id: row.id,
@@ -552,6 +563,20 @@ export default function AdminPage() {
                 ))}
               </select>
             </div>
+            {category === 'cdl' && (
+              <div>
+                <label className="block text-xs font-semibold text-[#1E293B] uppercase tracking-wide mb-1">Subcategory</label>
+                <select
+                  value={subcategory}
+                  onChange={(e) => setSubcategory(e.target.value)}
+                  className="w-full px-3 py-2 border border-[#E2E8F0] rounded-xl text-[#1E293B] bg-[#F8FAFC] focus:outline-none focus:border-[#2563EB]"
+                >
+                  {CDL_SUBCATEGORIES.map((s) => (
+                    <option key={s.value} value={s.value}>{s.label}</option>
+                  ))}
+                </select>
+              </div>
+            )}
             <div>
               <label className="block text-xs font-semibold text-[#1E293B] uppercase tracking-wide mb-1">Language</label>
               <select

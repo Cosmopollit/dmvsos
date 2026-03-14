@@ -40,7 +40,7 @@ function ProfileContent() {
   const currentLang = langs.find(l => l.code === lang) || langs[0];
   function switchLang(code) { setLangState(code); saveLang(code); setShowLangMenu(false); }
   const tex = t[lang] || t.en;
-  const { user, isPro, loading } = useAuth();
+  const { user, isPro, planType, planExpiresAt, loading } = useAuth();
   const [sessions, setSessions] = useState([]);
 
   useEffect(() => {
@@ -104,11 +104,20 @@ function ProfileContent() {
           </div>
           <h2 className="text-xl font-bold text-[#1E293B] mb-1">{user.user_metadata?.full_name || tex.signInTitle || 'User'}</h2>
           <p className="text-sm text-[#94A3B8] mb-5">{user.email}</p>
-          <span className={`inline-block text-xs font-bold px-3 py-1.5 rounded-full mb-6 ${isPro ? 'bg-[#FEF3C7] text-[#B45309]' : 'bg-[#EFF6FF] text-[#2563EB]'}`}>
+          <span className={`inline-block text-xs font-bold px-3 py-1.5 rounded-full ${isPro ? 'bg-[#FEF3C7] text-[#B45309]' : 'bg-[#EFF6FF] text-[#2563EB]'}`}>
             {isPro ? `👑 ${tex.proBadge}` : tex.freeBadge}
           </span>
+          {isPro && planType && (
+            <p className="text-xs text-[#64748B] mt-2 mb-1">
+              {planType === 'cdl_pass' ? 'CDL Pro' : planType === 'car_pass' ? 'Auto Pass' : planType === 'moto_pass' ? 'Moto Pass' : planType.replace(/_/g, ' ')}
+              {planExpiresAt && ` · ${tex.expiresOn || 'expires'} ${planExpiresAt.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}`}
+            </p>
+          )}
           {isPro && (
             <p className="text-sm text-[#16A34A] font-medium mb-4">{tex.proFullAccess || '✅ You have full access to all tests'}</p>
+          )}
+          {!isPro && planType && (
+            <p className="text-xs text-[#DC2626] mt-2 mb-4">{tex.planExpired || 'Your plan has expired'}</p>
           )}
           <div className="flex flex-col gap-3">
             {!isPro && (
