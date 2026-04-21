@@ -349,57 +349,57 @@ export default function Home() {
           {/* Moto Pass  ·  white, gray border */}
           <div className="bg-white rounded-2xl p-5 border border-[#E2E8F0] shadow-sm flex flex-col text-center">
             <div className="text-3xl mb-2">🏍️</div>
-            <h3 className="text-sm font-bold text-[#2563EB] mb-1">Moto Pass</h3>
+            <h3 className="text-sm font-bold text-[#2563EB] mb-1">{tex.planMotoPass}</h3>
             <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">$9.99</div>
-            <div className="text-xs text-[#64748B] mb-3">{tex.planDuration || 'Monthly · Cancel anytime'}</div>
+            <div className="text-xs text-[#64748B] mb-3">{tex.planDuration}</div>
             <ul className="space-y-1.5 text-xs text-[#475569] mb-4 text-left flex-1">
-              {['✓ Full Motorcycle question bank', '✓ All 50 states · 5 languages', '✓ All exam modes unlocked', '✓ Real exam simulation', '✓ Detailed explanations'].map((f, i) => (
+              {(tex.featMoto || []).map((f, i) => (
                 <li key={i}>{f}</li>
               ))}
             </ul>
             <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=moto_pass`)}
               className="w-full py-2.5 rounded-xl font-semibold text-sm border border-[#E2E8F0] text-[#0B1C3D] hover:bg-[#F1F5F9] transition-all">
-              Get Moto Pass · $9.99/mo
+              {tex.planGetMoto}
             </button>
           </div>
 
           {/* Auto Pass  ·  dark navy, blue border, MOST POPULAR */}
           <div className="relative bg-[#0B1C3D] rounded-2xl p-5 border-2 border-[#2563EB] shadow-sm flex flex-col text-center">
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#2563EB] text-white text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap">
-              {tex.mostPopular || 'MOST POPULAR'}
+              {tex.mostPopular}
             </span>
             <div className="text-3xl mb-2 mt-1">🚗</div>
-            <h3 className="text-sm font-bold text-[#F59E0B] mb-1">Auto Pass</h3>
+            <h3 className="text-sm font-bold text-[#F59E0B] mb-1">{tex.planAutoPass}</h3>
             <div className="text-2xl font-black text-white mb-0.5">$29.99</div>
-            <div className="text-xs text-[#94A3B8] mb-3">{tex.planDuration || 'Monthly · Cancel anytime'}</div>
+            <div className="text-xs text-[#94A3B8] mb-3">{tex.planDuration}</div>
             <ul className="space-y-1.5 text-xs text-[#CBD5E1] mb-4 text-left flex-1">
-              {['✓ Full Car question bank', '✓ All 50 states · 5 languages', '✓ All exam modes unlocked', '✓ Real exam simulation (60 min)', '✓ Detailed explanations'].map((f, i) => (
+              {(tex.featCar || []).map((f, i) => (
                 <li key={i}>{f}</li>
               ))}
             </ul>
             <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=car_pass`)}
               className="w-full py-2.5 rounded-xl font-bold text-sm bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition-all">
-              Get Auto Pass · $29.99/mo
+              {tex.planGetAuto}
             </button>
           </div>
 
           {/* CDL Pro  ·  white, gold border */}
           <div className="relative bg-white rounded-2xl p-5 border-2 border-[#F59E0B] shadow-sm flex flex-col text-center">
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#F59E0B] text-[#0B1C3D] text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap">
-              🛡️ GUARANTEED
+              {tex.planGuaranteedBadge}
             </span>
             <div className="text-3xl mb-2 mt-1">🚛</div>
-            <h3 className="text-sm font-bold text-[#92400E] mb-1">CDL Pro</h3>
+            <h3 className="text-sm font-bold text-[#92400E] mb-1">{tex.planCdlPro}</h3>
             <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">$59.99</div>
-            <div className="text-xs text-[#64748B] mb-3">{tex.planDuration || 'Monthly · Cancel anytime'}</div>
+            <div className="text-xs text-[#64748B] mb-3">{tex.planDuration}</div>
             <ul className="space-y-1.5 text-xs text-[#475569] mb-4 text-left flex-1">
-              {['✓ Full CDL question bank', '✓ Car tests included', '✓ All 50 states · 5 languages', '✓ All exam modes unlocked', '🛡️ Pass or 100% refund'].map((f, i) => (
+              {(tex.featCdl || []).map((f, i) => (
                 <li key={i}>{f}</li>
               ))}
             </ul>
             <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=cdl_pass`)}
               className="w-full py-2.5 rounded-xl font-semibold text-sm bg-[#F59E0B] text-[#0B1C3D] hover:bg-[#FBBF24] transition-all">
-              Get CDL Pro · $59.99/mo
+              {tex.planGetCdl}
             </button>
           </div>
 

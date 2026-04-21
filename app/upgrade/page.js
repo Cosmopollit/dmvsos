@@ -31,54 +31,36 @@ function UpgradeContent() {
   const plans = [
     {
       id: 'moto_pass',
-      name: 'Moto Pass',
+      name: tex.planMotoPass,
       icon: '🏍️',
       price: '$9.99',
-      duration: tex.planDuration || 'Monthly · Cancel anytime',
+      duration: tex.planDuration,
       badge: null,
       style: 'outline',
-      features: [
-        '✓ Full Motorcycle question bank',
-        '✓ All 50 states · 5 languages',
-        '✓ All exam modes unlocked',
-        '✓ Real exam simulation',
-        '✓ Detailed explanations',
-      ],
-      btnLabel: 'Get Moto Pass  ·  $9.99',
+      features: tex.featMoto,
+      btnLabel: tex.planGetMoto,
     },
     {
       id: 'car_pass',
-      name: 'Auto Pass',
+      name: tex.planAutoPass,
       icon: '🚗',
       price: '$29.99',
-      duration: tex.planDuration || 'Monthly · Cancel anytime',
-      badge: tex.mostPopular || 'MOST POPULAR',
+      duration: tex.planDuration,
+      badge: tex.mostPopular,
       style: 'blue',
-      features: [
-        '✓ Full Car question bank',
-        '✓ All 50 states · 5 languages',
-        '✓ All exam modes unlocked',
-        '✓ Real exam simulation (60 min)',
-        '✓ Detailed explanations',
-      ],
-      btnLabel: 'Get Auto Pass  ·  $29.99',
+      features: tex.featCar,
+      btnLabel: tex.planGetAuto,
     },
     {
       id: 'cdl_pass',
-      name: 'CDL Pro',
+      name: tex.planCdlPro,
       icon: '🚛',
       price: '$59.99',
-      duration: tex.planDuration || 'Monthly · Cancel anytime',
-      badge: '🛡️ GUARANTEED',
+      duration: tex.planDuration,
+      badge: tex.planGuaranteedBadge,
       style: 'gold',
-      features: [
-        '✓ Full CDL question bank',
-        '✓ Car tests included',
-        '✓ All 50 states · 5 languages',
-        '✓ All exam modes unlocked',
-        '🛡️ Pass or 100% refund',
-      ],
-      btnLabel: 'Get CDL Pro  ·  $59.99',
+      features: tex.featCdl,
+      btnLabel: tex.planGetCdl,
     },
   ];
 
@@ -169,11 +151,11 @@ function UpgradeContent() {
       <div className="w-full max-w-2xl mb-5 rounded-2xl p-4 border border-white/10 bg-white/5 flex items-center gap-4">
         <span className="text-2xl">✏️</span>
         <div className="flex-1">
-          <div className="text-sm font-bold text-white">Free Practice · Car</div>
-          <div className="text-xs text-[#94A3B8] mt-0.5">20 questions · always included · all 50 states</div>
+          <div className="text-sm font-bold text-white">{tex.freePracticeLabel}</div>
+          <div className="text-xs text-[#94A3B8] mt-0.5">{tex.freePracticeDesc}</div>
         </div>
         <span className="text-xs font-semibold text-[#16A34A] bg-[#16A34A]/10 px-2.5 py-1 rounded-full border border-[#16A34A]/20 shrink-0">
-          ✓ Free
+          {tex.freePracticePrice}
         </span>
       </div>
 
@@ -240,9 +222,9 @@ function UpgradeContent() {
       {/* CDL endorsements teaser */}
       <div className="w-full max-w-2xl mb-5 rounded-2xl p-4 border border-white/10 bg-white/5 text-center">
         <div className="text-xs text-[#94A3B8]">
-          <span className="text-white font-semibold">CDL Pro</span> includes general CDL knowledge ·
-          <span className="text-[#F59E0B] font-medium"> Endorsement add-ons coming soon</span>
-          {' '}(Hazmat, School Bus, Tanker, Passenger…)
+          <span className="text-white font-semibold">{tex.planCdlPro}</span> ·
+          <span className="text-[#F59E0B] font-medium"> {tex.endorsementsSoon}</span>
+          {' '}({tex.endorsementsList})
         </div>
       </div>
 

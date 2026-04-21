@@ -109,7 +109,7 @@ function ProfileContent() {
           </span>
           {isPro && planType && (
             <p className="text-xs text-[#64748B] mt-2 mb-1">
-              {planType === 'cdl_pass' ? 'CDL Pro' : planType === 'car_pass' ? 'Auto Pass' : planType === 'moto_pass' ? 'Moto Pass' : planType.replace(/_/g, ' ')}
+              {planType === 'cdl_pass' ? tex.planCdlPro : planType === 'car_pass' ? tex.planAutoPass : planType === 'moto_pass' ? tex.planMotoPass : planType.replace(/_/g, ' ')}
               {planExpiresAt && ` · ${tex.expiresOn || 'expires'} ${planExpiresAt.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}`}
             </p>
           )}

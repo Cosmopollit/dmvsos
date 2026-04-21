@@ -245,21 +245,21 @@ function ResultContent() {
           return (
             <div className="bg-white rounded-2xl p-5 w-full border border-[#E2E8F0] shadow-sm">
               <p className="text-[#0B1C3D] font-bold text-base mb-1 text-center">{tex.upgradeModalTitle || 'Unlock Full Access'}</p>
-              <p className="text-[#64748B] text-xs mb-4 text-center">Monthly subscription · Cancel anytime</p>
+              <p className="text-[#64748B] text-xs mb-4 text-center">{tex.cancelAnytime}</p>
               <div className="flex justify-center mb-3">
                 <div className="w-full max-w-[200px] border-2 rounded-xl p-4 text-center flex flex-col"
                   style={{
                     borderColor: rIsCdl ? '#F59E0B' : rIsMoto ? '#D97706' : '#2563EB',
                     background: rIsCdl ? '#FFFBEB' : rIsMoto ? '#FFF7ED' : '#EFF6FF',
                   }}>
-                  {rIsCdl && <div className="text-[9px] font-bold text-[#0B1C3D] bg-[#F59E0B] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">🛡️ GUARANTEED</div>}
-                  {!rIsCdl && !rIsMoto && <div className="text-[9px] font-bold text-white bg-[#2563EB] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">POPULAR</div>}
+                  {rIsCdl && <div className="text-[9px] font-bold text-[#0B1C3D] bg-[#F59E0B] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">{tex.planGuaranteedBadge}</div>}
+                  {!rIsCdl && !rIsMoto && <div className="text-[9px] font-bold text-white bg-[#2563EB] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">{tex.planPopular}</div>}
                   <div className="text-3xl mb-1">{rIsCdl ? '🚛' : rIsMoto ? '🏍️' : '🚗'}</div>
                   <div className="text-xs font-bold mb-0.5" style={{ color: rIsCdl ? '#92400E' : rIsMoto ? '#D97706' : '#2563EB' }}>
-                    {rIsCdl ? 'CDL Pro' : rIsMoto ? 'Moto Pass' : 'Auto Pass'}
+                    {rIsCdl ? tex.planCdlPro : rIsMoto ? tex.planMotoPass : tex.planAutoPass}
                   </div>
                   <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">{rIsCdl ? '$59.99' : rIsMoto ? '$9.99' : '$29.99'}</div>
-                  <div className="text-[10px] text-[#64748B] mb-3">/ month</div>
+                  <div className="text-[10px] text-[#64748B] mb-3">{tex.perMonth}</div>
                   <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=${rPlan}`)}
                     className="w-full py-2 rounded-lg text-sm font-bold text-white transition"
                     style={{ background: rIsCdl ? '#0B1C3D' : rIsMoto ? '#D97706' : '#2563EB' }}>

@@ -642,7 +642,7 @@ function TestContent() {
         {/* Q18 pre-paywall nudge */}
         {!hasFullAccess && current === nudgeAt && showAnswer && (
           <div className="bg-[#FFF7ED] border border-[#FED7AA] rounded-xl px-4 py-3 mb-4 text-sm text-[#92400E] font-medium text-center">
-            🔔 {freeLimit - current - 1} {tex.modeQuestions || 'questions'} left in your free test  ·  unlock all from {isMoto ? '$9.99' : isCdl ? '$59.99' : '$29.99'}
+            🔔 {(tex.nudgeFreeLeft || '{n} questions left in your free test').replace('{n}', freeLimit - current - 1)}  ·  {tex.nudgeUnlockFrom || 'unlock all from'} {isMoto ? '$9.99' : isCdl ? '$59.99' : '$29.99'}
           </div>
         )}
 
@@ -683,14 +683,14 @@ function TestContent() {
                     borderColor: isCdl ? '#F59E0B' : isMoto ? '#D97706' : '#2563EB',
                     background: isCdl ? '#FFFBEB' : isMoto ? '#FFF7ED' : '#EFF6FF',
                   }}>
-                  {isCdl && <div className="text-[9px] font-bold text-[#0B1C3D] bg-[#F59E0B] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">🛡️ GUARANTEED</div>}
-                  {!isCdl && !isMoto && <div className="text-[9px] font-bold text-white bg-[#2563EB] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">POPULAR</div>}
+                  {isCdl && <div className="text-[9px] font-bold text-[#0B1C3D] bg-[#F59E0B] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">{tex.planGuaranteedBadge}</div>}
+                  {!isCdl && !isMoto && <div className="text-[9px] font-bold text-white bg-[#2563EB] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">{tex.planPopular}</div>}
                   <div className="text-3xl mb-1">{isCdl ? '🚛' : isMoto ? '🏍️' : '🚗'}</div>
                   <div className="text-xs font-bold mb-0.5" style={{ color: isCdl ? '#92400E' : isMoto ? '#D97706' : '#2563EB' }}>
-                    {isCdl ? 'CDL Pro' : isMoto ? 'Moto Pass' : 'Auto Pass'}
+                    {isCdl ? tex.planCdlPro : isMoto ? tex.planMotoPass : tex.planAutoPass}
                   </div>
                   <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">{isCdl ? '$59.99' : isMoto ? '$9.99' : '$29.99'}</div>
-                  <div className="text-[10px] text-[#64748B] mb-3">/ month</div>
+                  <div className="text-[10px] text-[#64748B] mb-3">{tex.perMonth}</div>
                   <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
                     className="w-full py-2 rounded-lg text-sm font-bold text-white transition"
                     style={{ background: isCdl ? '#0B1C3D' : isMoto ? '#D97706' : '#2563EB' }}>
@@ -699,7 +699,7 @@ function TestContent() {
                 </div>
               </div>
 
-              <p className="text-center text-xs text-[#94A3B8] mb-3">Monthly subscription · Cancel anytime</p>
+              <p className="text-center text-xs text-[#94A3B8] mb-3">{tex.cancelAnytime}</p>
 
               <button type="button" onClick={() => {
                 const allAnswers = userAnswersRef.current;
