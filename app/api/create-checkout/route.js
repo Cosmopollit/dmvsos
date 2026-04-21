@@ -45,13 +45,14 @@ export async function POST(req) {
       const { data: { user } } = await supabase.auth.getUser(token);
       customerEmail = user?.email || null;
 
-      // Look up existing Stripe customer to avoid duplicate customers
+      // Look up existing Stripe customer to avoid duplicate customers.
+      // ilike = case-insensitive match against profiles.email.
       if (customerEmail) {
         const { data: profile } = await supabase
           .from('profiles')
           .select('stripe_customer_id')
-          .eq('email', customerEmail)
-          .single()
+          .ilike('email', customerEmail)
+          .maybeSingle()
           .catch(() => ({ data: null }));
         stripeCustomerId = profile?.stripe_customer_id || null;
       }

@@ -47,9 +47,12 @@ async function supabaseInsert(row) {
   }
 }
 
-// Update by email — used when we have the email (checkout.session.completed)
-async function updateByEmail(email, updates) {
-  const updated = await supabasePatch(`email=eq.${encodeURIComponent(email)}`, updates);
+// Update by email — used when we have the email (checkout.session.completed).
+// Emails are normalized to lowercase to avoid mixed-case duplicates.
+async function updateByEmail(rawEmail, updates) {
+  const email = rawEmail.toLowerCase();
+  // ilike is case-insensitive — catches legacy profiles with mixed case
+  const updated = await supabasePatch(`email=ilike.${encodeURIComponent(email)}`, updates);
   if (updated.length === 0) {
     await supabaseInsert({ email, ...updates });
   }
