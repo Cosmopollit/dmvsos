@@ -30,6 +30,8 @@ function ResultContent() {
   const [expandedRefs, setExpandedRefs] = useState({});
   const [langOverride, setLangOverride] = useState(null);
   const [showLangMenu, setShowLangMenu] = useState(false);
+  // sessionStorage is client-only; must sync after hydration
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     try {
       const raw = sessionStorage.getItem('testResults');
@@ -38,6 +40,7 @@ function ResultContent() {
       setTestResults(null);
     }
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const questions = testResults?.questions ?? [];
   const userAnswers = testResults?.userAnswers ?? [];

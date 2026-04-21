@@ -69,6 +69,7 @@ export default function StateSearchDropdown({ lang = 'en', placeholder }) {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
   const [highlighted, setHighlighted] = useState(0);
+  const [lastQuery, setLastQuery] = useState(query);
   const containerRef = useRef(null);
   const inputRef = useRef(null);
   const listRef = useRef(null);
@@ -86,7 +87,11 @@ export default function StateSearchDropdown({ lang = 'en', placeholder }) {
     });
   }, [query, lang]);
 
-  useEffect(() => { setHighlighted(0); }, [query]);
+  // Reset highlight when query changes (React docs: "adjusting state based on props")
+  if (query !== lastQuery) {
+    setLastQuery(query);
+    setHighlighted(0);
+  }
 
   // Close on click outside
   useEffect(() => {

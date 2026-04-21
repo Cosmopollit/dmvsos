@@ -500,6 +500,7 @@ function TestContent() {
     userAnswersRef.current = updatedAnswers;
     setUserAnswers(updatedAnswers);
     const arr = correct ? tex.motivationalCorrect : tex.motivationalWrong;
+    // eslint-disable-next-line react-hooks/purity -- inside event handler, not render path
     const msg = arr[Math.floor(Math.random() * arr.length)];
     setMotivationalMessage({ text: msg, phase: 'show' });
   }

@@ -39,21 +39,13 @@ export default async function ManualsPage() {
   const statesWithManuals = getStatesWithManuals();
 
   // Compute per-state data
-  let totalPdfs = 0;
-  const allLangs = new Set();
-
   const statesData = STATE_SLUGS.map(slug => {
     const indexData = index?.[slug] || {};
     const categories = Object.keys(indexData);
-    const langsSet = new Set(
+    const langs = Array.from(new Set(
       Object.values(indexData).flatMap(c => Object.keys(c))
-    );
-    const langs = Array.from(langsSet);
+    ));
     const pdfCount = Object.values(indexData).reduce((sum, c) => sum + Object.keys(c).length, 0);
-
-    totalPdfs += pdfCount;
-    langs.forEach(l => allLangs.add(l));
-
     return {
       slug,
       name: STATE_DISPLAY[slug],
@@ -64,6 +56,9 @@ export default async function ManualsPage() {
       pdfCount,
     };
   });
+
+  const totalPdfs = statesData.reduce((sum, s) => sum + s.pdfCount, 0);
+  const allLangs = new Set(statesData.flatMap(s => s.langs));
 
   const jsonLd = JSON.stringify({
     '@context': 'https://schema.org',
