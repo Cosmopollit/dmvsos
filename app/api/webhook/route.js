@@ -88,36 +88,32 @@ export async function POST(request) {
 
       console.log(`Webhook: checkout.session.completed | email=${email} | plan=${planType} | mode=${session.mode}`);
 
-      if (session.mode === 'subscription') {
+      if (!email) {
+        console.warn(`Webhook: checkout.session.completed with no email | session=${session.id} | customer=${customerId}`);
+      } else if (session.mode === 'subscription') {
         // Subscription: get current_period_end from the subscription object
         const subscription = await stripe.subscriptions.retrieve(session.subscription);
         const expiresAt = new Date(subscription.current_period_end * 1000).toISOString();
-
-        if (email) {
-          await updateByEmail(email, {
-            is_pro: true,
-            plan_type: planType,
-            plan_expires_at: expiresAt,
-            stripe_customer_id: customerId,
-            stripe_subscription_id: subscription.id,
-          });
-          console.log(`Webhook: subscription created for ${email} | sub=${subscription.id} | expires=${expiresAt}`);
-        }
+        await updateByEmail(email, {
+          is_pro: true,
+          plan_type: planType,
+          plan_expires_at: expiresAt,
+          stripe_customer_id: customerId,
+          stripe_subscription_id: subscription.id,
+        });
+        console.log(`Webhook: subscription created for ${email} | sub=${subscription.id} | expires=${expiresAt}`);
       } else {
         // One-time payment (legacy plans)
         const PLAN_DAYS = { quick_pass: 7, full_prep: 30, guaranteed_pass: 90 };
         const days = PLAN_DAYS[planType] || 30;
         const expiresAt = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
-
-        if (email) {
-          await updateByEmail(email, {
-            is_pro: true,
-            plan_type: planType,
-            plan_expires_at: expiresAt,
-            ...(customerId ? { stripe_customer_id: customerId } : {}),
-          });
-          console.log(`Webhook: one-time payment for ${email} | plan=${planType} | expires=${expiresAt}`);
-        }
+        await updateByEmail(email, {
+          is_pro: true,
+          plan_type: planType,
+          plan_expires_at: expiresAt,
+          ...(customerId ? { stripe_customer_id: customerId } : {}),
+        });
+        console.log(`Webhook: one-time payment for ${email} | plan=${planType} | expires=${expiresAt}`);
       }
     }
 
@@ -140,6 +136,28 @@ export async function POST(request) {
 
       await updateByCustomerId(customerId, {
         is_pro: true,
+        plan_expires_at: expiresAt,
+        ...(planType ? { plan_type: planType } : {}),
+      });
+    }
+
+    // ── Subscription updated (billing change, scheduled cancel, status flip) ──
+    // Fires on upgrade/downgrade, payment method change, cancel_at_period_end flip,
+    // and Stripe's own state transitions (active → past_due). Mirror current_period_end
+    // into plan_expires_at so the client sees the truth. A true cancellation arrives
+    // separately as customer.subscription.deleted.
+    if (event.type === 'customer.subscription.updated') {
+      const subscription = event.data.object;
+      const customerId = subscription.customer;
+      const expiresAt = new Date(subscription.current_period_end * 1000).toISOString();
+      const planType = subscription.metadata?.plan_type;
+
+      console.log(`Webhook: customer.subscription.updated | customer=${customerId} | status=${subscription.status} | cancel_at_period_end=${subscription.cancel_at_period_end} | expires=${expiresAt}`);
+
+      // Treat only active-like statuses as Pro; past_due / unpaid etc. revoke
+      const isActive = subscription.status === 'active' || subscription.status === 'trialing';
+      await updateByCustomerId(customerId, {
+        is_pro: isActive,
         plan_expires_at: expiresAt,
         ...(planType ? { plan_type: planType } : {}),
       });
