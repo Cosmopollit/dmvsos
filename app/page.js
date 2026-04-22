@@ -1,12 +1,12 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
-import { getSavedLang, saveLang } from '@/lib/lang';
+import { getSavedLang, saveLang, hasSavedLang, detectBrowserLang, isLangBannerDismissed, dismissLangBanner } from '@/lib/lang';
 import { STATE_OPTIONS, stateToSlug } from '@/lib/states';
 import { flags } from '@/lib/flags';
 
@@ -24,6 +24,23 @@ export default function Home() {
   const langToCode = { English: 'en', 'Русский': 'ru', 'Español': 'es', '中文': 'zh', 'Українська': 'ua' };
   const langCode = langToCode[lang] || 'en';
   const tex = t[langCode] || t.en;
+
+  // ?lang=xx in URL (e.g. from a Google hreflang result) overrides the saved lang.
+  // Run once on mount; also suggest the browser language banner if nothing is saved yet.
+  const [suggestedLang, setSuggestedLang] = useState(null);
+  useEffect(() => {
+    const urlLang = new URLSearchParams(window.location.search).get('lang');
+    const valid = ['en', 'ru', 'es', 'zh', 'ua'];
+    if (urlLang && valid.includes(urlLang) && urlLang !== langCode) {
+      setLang(codeToName[urlLang]);
+      saveLang(urlLang);
+      return;
+    }
+    if (hasSavedLang() || isLangBannerDismissed()) return;
+    const detected = detectBrowserLang();
+    if (detected && detected !== langCode) setSuggestedLang(detected);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only
+  }, []);
 
   const langs = [
     { label: 'EN', flag: flags.us, code: 'en', name: 'English' },
@@ -200,6 +217,39 @@ export default function Home() {
           </span>
         </div>
       </header>
+
+      {/* Browser-language suggestion banner */}
+      {suggestedLang && (() => {
+        const suggested = langs.find(l => l.code === suggestedLang);
+        if (!suggested) return null;
+        const suggestedTex = t[suggestedLang] || t.en;
+        return (
+          <div className="w-full max-w-lg mx-auto px-4 mb-3">
+            <div className="flex items-center gap-2 bg-white border border-[#BFDBFE] rounded-xl px-3 py-2 shadow-sm">
+              <span className="text-base shrink-0">{suggested.flag}</span>
+              <button
+                type="button"
+                onClick={() => {
+                  setLang(suggested.name);
+                  saveLang(suggested.code);
+                  setSuggestedLang(null);
+                }}
+                className="flex-1 text-left text-sm font-medium text-[#2563EB] hover:text-[#1D4ED8] transition"
+              >
+                {suggestedTex.openInLanguage || `Open in ${suggested.name} →`}
+              </button>
+              <button
+                type="button"
+                onClick={() => { dismissLangBanner(); setSuggestedLang(null); }}
+                className="text-[#94A3B8] hover:text-[#64748B] text-sm px-1 shrink-0"
+                aria-label="Dismiss"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Hero section */}
       <section className="w-full max-w-md mx-auto px-4 pt-1 pb-5 text-center">
