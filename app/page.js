@@ -475,8 +475,8 @@ export default function Home() {
         </div>
         <p className="text-xs text-[#94A3B8] text-center leading-relaxed">
           {tex.footerLegal || 'By continuing, you agree to our'}{' '}
-          <a href="/terms" className="text-[#2563EB] font-medium">{tex.terms || 'Terms'}</a> {tex.and || 'and'}{' '}
-          <a href="/privacy" className="text-[#2563EB] font-medium">{tex.privacy || 'Privacy Policy'}</a>.<br />
+          <Link href="/terms" className="text-[#2563EB] font-medium">{tex.terms || 'Terms'}</Link> {tex.and || 'and'}{' '}
+          <Link href="/privacy" className="text-[#2563EB] font-medium">{tex.privacy || 'Privacy Policy'}</Link>.<br />
           {tex.footerFree || 'Free for everyone. No credit card needed.'}
         </p>
       </footer>

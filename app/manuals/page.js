@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { cookies } from 'next/headers';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 import { getStatesWithManuals } from '@/lib/manual-parser';
+import { getHreflangAlternates } from '@/lib/hreflang';
 import ManualsLibrary from './ManualsLibrary';
 
 const SUPABASE_URL = 'https://yaogndpgnewqffbjrsgz.supabase.co';
@@ -11,7 +12,7 @@ const INDEX_URL = `${SUPABASE_URL}/storage/v1/object/public/manuals/manuals-inde
 export const metadata = {
   title: 'Free DMV Driver Manuals — All 50 States | DMVSOS',
   description: 'The largest free driver manual library online. Official DMV handbooks for all 50 US states in 27 languages. Download PDF or read online.',
-  alternates: { canonical: 'https://www.dmvsos.com/manuals' },
+  alternates: getHreflangAlternates('/manuals'),
   openGraph: {
     title: 'Free DMV Driver Manuals — All 50 States',
     description: 'Official DMV driver handbooks for all 50 US states. Download free PDF in 27 languages including Spanish, Russian, Chinese, and more.',

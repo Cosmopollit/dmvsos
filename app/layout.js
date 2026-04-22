@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "@/lib/AuthContext";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { getHreflangAlternates } from "@/lib/hreflang";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -55,9 +56,7 @@ export const metadata = {
     description: 'Free DMV practice tests for all 50 states in 5 languages. No signup required.',
     images: ['/og-image.png'],
   },
-  alternates: {
-    canonical: 'https://www.dmvsos.com',
-  },
+  alternates: getHreflangAlternates('/'),
 };
 
 const jsonLd = {

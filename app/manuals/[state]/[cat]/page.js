@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { t } from '@/lib/translations';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META, LANG_NAMES } from '@/lib/manual-data';
 import { parseManual } from '@/lib/manual-parser';
+import { getHreflangAlternates } from '@/lib/hreflang';
 import ManualContent from '../ManualContent';
 
 const SUPABASE_URL = 'https://yaogndpgnewqffbjrsgz.supabase.co';
@@ -187,7 +188,7 @@ export async function generateMetadata({ params }) {
   return {
     title,
     description,
-    alternates: { canonical: `https://www.dmvsos.com/manuals/${state}/${cat}` },
+    alternates: getHreflangAlternates(`/manuals/${state}/${cat}`),
     openGraph: {
       title: `${name} ${catInfo.label} ${year} — Free PDF`,
       description,

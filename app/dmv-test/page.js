@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
+import { getHreflangAlternates } from '@/lib/hreflang';
 
 export const metadata = {
   title: 'Free DMV Practice Tests  ·  All 50 States 2026 | DMVSOS',
   description: 'Free DMV practice tests for all 50 US states in 5 languages. Pick your state and start practicing for your knowledge test today. No signup required.',
-  alternates: { canonical: 'https://www.dmvsos.com/dmv-test' },
+  alternates: getHreflangAlternates('/dmv-test'),
   openGraph: {
     title: 'Free DMV Practice Tests  ·  All 50 States 2026',
     description: 'Free DMV practice tests for all 50 US states in English, Spanish, Russian, Chinese and Ukrainian.',

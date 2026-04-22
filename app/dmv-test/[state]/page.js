@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
+import { getHreflangAlternates } from '@/lib/hreflang';
 
 const STATE_EXAM_DATA = {
   alabama:          { questions: 40, passing: 32, passingPct: 80 },
@@ -79,7 +80,7 @@ export async function generateMetadata({ params }) {
   return {
     title: `${name} DMV Practice Test ${year}  ·  Free | DMVSOS`,
     description: `Free ${name} DMV practice test ${year}. Study ${exam.questions}+ real ${meta.abbr} knowledge test questions in 5 languages. Pass on your first try  ·  no signup required.`,
-    alternates: { canonical: `https://www.dmvsos.com/dmv-test/${state}` },
+    alternates: getHreflangAlternates(`/dmv-test/${state}`),
     openGraph: {
       title: `${name} DMV Practice Test ${year}  ·  Free`,
       description: `Free ${name} DMV practice test. Real ${meta.abbr} knowledge test questions in English, Spanish, Russian, Chinese and Ukrainian.`,

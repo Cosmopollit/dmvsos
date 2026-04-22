@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { t } from '@/lib/translations';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 import { parseManual } from '@/lib/manual-parser';
+import { getHreflangAlternates } from '@/lib/hreflang';
 import ManualContent from './ManualContent';
 import ManualLangSwitch from './ManualLangSwitch';
 
@@ -44,7 +45,7 @@ export async function generateMetadata({ params }) {
   return {
     title: `${name} DMV Driver Manual ${year} — Free PDF | DMVSOS`,
     description: `Read the official ${name} driver's handbook online or download the free PDF. Study for your ${meta.abbr} DMV written test with real questions.`,
-    alternates: { canonical: `https://www.dmvsos.com/manuals/${state}` },
+    alternates: getHreflangAlternates(`/manuals/${state}`),
     openGraph: {
       title: `${name} DMV Driver Manual ${year} — Free PDF`,
       description: `Official ${name} driver's handbook. Download PDF or read online. Available in multiple languages.`,
