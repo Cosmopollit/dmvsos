@@ -2,6 +2,7 @@
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
@@ -102,10 +103,10 @@ export default function Home() {
       <header className="w-full max-w-lg mx-auto pt-5 pb-0 px-4">
         {/* Row 1: logo + compact lang + user/login */}
         <div className="flex items-center justify-between pb-3">
-          <a href="/" className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition">
+          <Link href="/" className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition">
             <Image src="/logo.png" alt="DMVSOS" width={32} height={32} className="rounded-lg" />
             <span className="text-lg font-bold text-[#0B1C3D]" style={{ letterSpacing: '-0.02em' }}>DMVSOS</span>
-          </a>
+          </Link>
           <div className="flex items-center gap-2">
             {/* Compact language dropdown */}
             <div className="relative">
@@ -185,14 +186,14 @@ export default function Home() {
 
         {/* Row 2: nav links  ·  centered */}
         <div className="flex items-center justify-center gap-2 pb-3">
-          <a href="/dmv-test"
+          <Link href="/dmv-test"
             className="text-xs font-semibold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] rounded-full px-3 py-1 hover:bg-[#DBEAFE] transition-colors">
             📋 Practice Tests
-          </a>
-          <a href="/manuals"
+          </Link>
+          <Link href="/manuals"
             className="text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-3 py-1 hover:border-[#2563EB] hover:text-[#2563EB] transition-colors">
             📖 Manuals
-          </a>
+          </Link>
           <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#94A3B8] bg-[#F8FAFC] border border-[#E2E8F0] rounded-full px-3 py-1 cursor-default select-none">
             🎓 Courses
             <span className="text-[9px] font-bold bg-[#E2E8F0] text-[#94A3B8] px-1.5 py-0.5 rounded-full leading-none">soon</span>
@@ -275,7 +276,7 @@ export default function Home() {
 
       {/* Driver Manual link */}
       <div className="w-full max-w-lg mx-auto px-4 mb-4">
-        <a
+        <Link
           href="/manuals"
           className="flex items-center gap-3 bg-blue-50 rounded-2xl px-4 py-4 shadow-sm border border-blue-100 border-l-4 border-l-blue-500 hover:bg-blue-100 hover:shadow-md transition-all group"
         >
@@ -292,7 +293,7 @@ export default function Home() {
             </div>
           </div>
           <div className="text-blue-400 shrink-0 group-hover:text-blue-600 font-bold">→</div>
-        </a>
+        </Link>
       </div>
 
       {/* Stats bar */}

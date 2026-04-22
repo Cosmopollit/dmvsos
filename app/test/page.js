@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
@@ -322,10 +323,10 @@ function TestContent() {
             className="text-sm text-[#94A3B8] hover:text-[#2563EB] transition font-medium">
             {tex.back}
           </button>
-          <a href="/" className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition">
+          <Link href="/" className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition">
             <Image src="/logo.png" alt="DMVSOS" width={28} height={28} className="rounded-lg" />
             <span className="text-lg font-bold text-[#0B1C3D]" style={{ letterSpacing: '-0.02em' }}>DMVSOS</span>
-          </a>
+          </Link>
           <div className="relative">
             <button type="button" onClick={() => setShowLangMenu(v => !v)} onBlur={() => setTimeout(() => setShowLangMenu(false), 150)}
               className="flex items-center gap-1 text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-2.5 py-1.5 hover:border-[#2563EB] transition-colors">
@@ -574,10 +575,10 @@ function TestContent() {
             className="text-sm text-[#94A3B8] hover:text-[#2563EB] transition font-medium">
             {tex.back}
           </button>
-          <a href="/" className="flex items-center gap-1.5 cursor-pointer hover:opacity-90 transition">
+          <Link href="/" className="flex items-center gap-1.5 cursor-pointer hover:opacity-90 transition">
             <Image src="/logo.png" alt="DMVSOS" width={24} height={24} className="rounded-md" />
             <span className="text-sm font-bold text-[#0B1C3D]">DMVSOS</span>
-          </a>
+          </Link>
           <div className="w-12" />
         </div>
 

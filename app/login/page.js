@@ -2,6 +2,7 @@
 import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { t } from '@/lib/translations';
 import { getSavedLang } from '@/lib/lang';
@@ -86,12 +87,12 @@ function LoginContent() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-6" style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}>
       <div className="w-full max-w-sm bg-white rounded-2xl shadow-lg border border-[#E2E8F0] p-8">
-        <a href="/" className="flex items-center gap-2 justify-center mb-6">
+        <Link href="/" className="flex items-center gap-2 justify-center mb-6">
           <Image src="/logo.png" alt="DMVSOS" width={40} height={40} className="rounded-xl" />
           <span className="text-xl font-bold text-[#0B1C3D]">
             DMVSOS
           </span>
-        </a>
+        </Link>
         <h1 className="text-lg font-bold text-[#1E293B] text-center mb-2">{tex.signInTitle}</h1>
         <p className="text-sm text-[#94A3B8] text-center mb-6">{tex.signInSubtitle || 'Save your progress and access all tests'}</p>
         <button

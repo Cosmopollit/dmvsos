@@ -2,6 +2,7 @@
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
@@ -112,12 +113,12 @@ function UpgradeContent() {
       </div>
 
       {/* Logo */}
-      <a href="/" className="inline-block">
+      <Link href="/" className="inline-block">
         <div className="flex items-center gap-3 mb-8 cursor-pointer hover:opacity-80">
           <Image src="/logo.png" alt="DMVSOS" width={40} height={40} className="rounded-xl" />
           <span className="text-2xl font-bold text-white">DMV<span className="text-[#F59E0B]">SOS</span></span>
         </div>
-      </a>
+      </Link>
 
       {/* Hero */}
       <div className="text-center mb-6 max-w-lg">

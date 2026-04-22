@@ -2,6 +2,7 @@
 import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { useAuth } from '@/lib/AuthContext';
@@ -54,10 +55,10 @@ function CategoryContent() {
         <button type="button" onClick={() => router.back()} className="text-sm text-[#94A3B8] hover:text-[#2563EB] transition font-medium">
           {tex.back}
         </button>
-        <a href="/" className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition">
+        <Link href="/" className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition">
           <Image src="/logo.png" alt="DMVSOS" width={28} height={28} className="rounded-lg" />
           <span className="text-lg font-bold text-[#0B1C3D]" style={{ letterSpacing: '-0.02em' }}>DMVSOS</span>
-        </a>
+        </Link>
         {/* Language switcher */}
         <div className="relative">
           <button
