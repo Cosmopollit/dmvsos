@@ -193,6 +193,7 @@ function ResultContent() {
                   >
                     {q.imageUrl && (
                       <div className="flex justify-center mb-3">
+                        {/* eslint-disable-next-line @next/next/no-img-element -- question images have variable aspect ratios */}
                         <img src={q.imageUrl} alt="" className="h-20 rounded-lg border border-[#E2E8F0] object-contain" />
                       </div>
                     )}

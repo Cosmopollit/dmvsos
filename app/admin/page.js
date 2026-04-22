@@ -887,6 +887,7 @@ export default function AdminPage() {
               )}
               {q.imageUrl && (
                 <div className="mt-3 pt-3 border-t border-[#E2E8F0]">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- admin preview, unknown aspect ratio */}
                   <img src={q.imageUrl} alt="" className="max-h-32 rounded-lg border border-[#E2E8F0] mb-2" />
                   <div className="flex items-center gap-3">
                     <p className="text-xs text-[#94A3B8] break-all flex-1">{q.imageUrl}</p>

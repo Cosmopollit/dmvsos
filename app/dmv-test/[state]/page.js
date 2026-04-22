@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 
@@ -226,7 +227,7 @@ export default async function StateDmvTestPage({ params }) {
       <header className="w-full max-w-lg mx-auto pt-5 pb-3 px-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition">
-            <img src="/logo.png" alt="DMVSOS" width={32} height={32} className="rounded-lg" />
+            <Image src="/logo.png" alt="DMVSOS" width={32} height={32} className="rounded-lg" />
             <span className="text-lg font-bold text-[#0B1C3D]" style={{ letterSpacing: '-0.02em' }}>DMVSOS</span>
           </Link>
           <Link href="/dmv-test" className="text-sm font-medium text-[#2563EB] hover:text-[#1D4ED8] transition">
