@@ -96,7 +96,7 @@ function TestContent() {
       if (rem === 0) setShowTimeUp(true);
     }, 1000);
     return () => clearInterval(interval);
-  }, [testMode, hasTimer]);
+  }, [testMode, hasTimer, initialTime]);
 
   useEffect(() => {
     if (!motivationalMessage) return;
@@ -167,7 +167,7 @@ function TestContent() {
         setAllQuestions([]);
         setLoadingQuestions(false);
       });
-  }, [state, category, lang, isRetry]);
+  }, [state, category, lang, isRetry, subcategory]);
 
   function startWithMode(mode) {
     const realLimits = { dmv: 40, car: 40, cdl: 50, moto: 30, motorcycle: 30 };
@@ -211,7 +211,7 @@ function TestContent() {
     }
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [testMode, questions.length, showAnswer, current, showUpgradeBanner]);
+  }, [testMode, questions, showAnswer, current, showUpgradeBanner]);
 
   function handleBack() {
     if (hasFullAccess && testMode && testMode !== 'free') {
