@@ -71,6 +71,15 @@ const LANG_ENGLISH_NAME = {
   tl: 'Tagalog', sm: 'Samoan', to: 'Tongan', haw: 'Hawaiian', mh: 'Marshallese', ilo: 'Ilocano', chk: 'Chuukese',
 };
 
+// App lang code → BCP-47/ISO-639 hreflang code
+const LANG_TO_ISO = {
+  en: 'en',  es: 'es',  ru: 'ru',  zh: 'zh-Hans',  ua: 'uk',
+  vi: 'vi',  ko: 'ko',  ar: 'ar',  fr: 'fr',       de: 'de',
+  hy: 'hy',  hi: 'hi',  pa: 'pa',  ht: 'ht',       so: 'so',
+  sw: 'sw',  my: 'my',  ne: 'ne',  pt: 'pt',       ja: 'ja',
+  hmn: 'hmn', tl: 'tl', sm: 'sm', to: 'to', haw: 'haw', mh: 'mh', ilo: 'ilo', chk: 'chk',
+};
+
 async function fetchManualIndex() {
   try {
     const res = await fetch(INDEX_URL, { next: { revalidate: 86400 } });
@@ -109,14 +118,30 @@ export async function generateMetadata({ params }) {
   const title = `${name} ${catInfo.label} in ${langEN} — Free PDF ${year} | DMVSOS`;
   const description = `Download the official ${name} ${catInfo.label} in ${langEN} (${year}) — free PDF. ${native?.study || 'Study for your DMV test'} with the official handbook ${native?.in || ''}.`;
 
+  // Build hreflang alternates from sibling lang pages that exist for this (state, cat).
+  const SITE = 'https://www.dmvsos.com';
+  const canonical = `${SITE}/manuals/${state}/${cat}/${lang}`;
+  const index = await fetchManualIndex();
+  const availableLangs = Object.keys(index?.[state]?.[cat] || {});
+  const languages = {};
+  for (const l of availableLangs) {
+    const iso = LANG_TO_ISO[l];
+    if (!iso) continue;
+    languages[iso] = `${SITE}/manuals/${state}/${cat}/${l}`;
+  }
+  // x-default: prefer English when available, else the current lang
+  languages['x-default'] = availableLangs.includes('en')
+    ? `${SITE}/manuals/${state}/${cat}/en`
+    : canonical;
+
   return {
     title,
     description,
-    alternates: { canonical: `https://www.dmvsos.com/manuals/${state}/${cat}/${lang}` },
+    alternates: { canonical, languages },
     openGraph: {
       title,
       description,
-      url: `https://www.dmvsos.com/manuals/${state}/${cat}/${lang}`,
+      url: canonical,
       siteName: 'DMVSOS',
       type: 'article',
     },
