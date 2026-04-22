@@ -468,18 +468,35 @@ function TestContent() {
     );
   }
 
-  if (!questions.length) return (
-    <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
-      <div className="text-center max-w-sm">
-        <div className="text-5xl mb-4">📭</div>
-        <h2 className="text-lg font-bold text-[#0B1C3D] mb-2">{tex.noQuestionsFound}</h2>
-        <button type="button" onClick={() => router.push(`/category?state=${state}&lang=${lang}`)}
-          className="mt-4 bg-[#2563EB] text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-[#1D4ED8] transition">
-          {tex.back}
-        </button>
-      </div>
-    </main>
-  );
+  if (!questions.length) {
+    const canFallbackToEnglish = lang !== 'en';
+    const testUrl = `/test?state=${state}&category=${category}${subcategory ? `&subcategory=${subcategory}` : ''}&lang=en`;
+    return (
+      <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
+        <div className="text-center max-w-sm">
+          <div className="text-5xl mb-4">📭</div>
+          <h2 className="text-lg font-bold text-[#0B1C3D] mb-2">
+            {canFallbackToEnglish ? (tex.notYetInLanguage || tex.noQuestionsFound) : tex.noQuestionsFound}
+          </h2>
+          {canFallbackToEnglish && (
+            <p className="text-sm text-[#64748B] mb-4">{tex.tryEnglishWhilePrepping || 'Try the English version in the meantime.'}</p>
+          )}
+          <div className="flex flex-col gap-2">
+            {canFallbackToEnglish && (
+              <button type="button" onClick={() => router.push(testUrl)}
+                className="bg-[#2563EB] text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-[#1D4ED8] transition">
+                {tex.tryInEnglish || 'Try in English 🇺🇸'}
+              </button>
+            )}
+            <button type="button" onClick={() => router.push(`/category?state=${state}&lang=${lang}`)}
+              className={`px-6 py-3 rounded-xl font-semibold text-sm transition ${canFallbackToEnglish ? 'bg-white text-[#0B1C3D] border border-[#E2E8F0] hover:bg-[#F1F5F9]' : 'bg-[#2563EB] text-white hover:bg-[#1D4ED8]'}`}>
+              {tex.back}
+            </button>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   const q = questions[current];
   if (!q || !q.answers?.length) return null;
