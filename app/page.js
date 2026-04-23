@@ -26,7 +26,8 @@ export default function Home() {
   const tex = t[langCode] || t.en;
 
   // ?lang=xx in URL (e.g. from a Google hreflang result) overrides the saved lang.
-  // Run once on mount; also suggest the browser language banner if nothing is saved yet.
+  // Also pre-select the state from the geo cookie set by proxy.js, and suggest
+  // the browser language banner if nothing is saved yet.
   const [suggestedLang, setSuggestedLang] = useState(null);
   useEffect(() => {
     const urlLang = new URLSearchParams(window.location.search).get('lang');
@@ -34,11 +35,16 @@ export default function Home() {
     if (urlLang && valid.includes(urlLang) && urlLang !== langCode) {
       setLang(codeToName[urlLang]);
       saveLang(urlLang);
-      return;
+    } else if (!hasSavedLang() && !isLangBannerDismissed()) {
+      const detected = detectBrowserLang();
+      if (detected && detected !== langCode) setSuggestedLang(detected);
     }
-    if (hasSavedLang() || isLangBannerDismissed()) return;
-    const detected = detectBrowserLang();
-    if (detected && detected !== langCode) setSuggestedLang(detected);
+    // Pre-select the user's state from Vercel geo (proxy.js writes the cookie)
+    const geoState = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('dmvsos_geo_state='))
+      ?.split('=')[1];
+    if (geoState) setState(geoState);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only
   }, []);
 

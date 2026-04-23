@@ -15,7 +15,7 @@ const REGION_TO_SLUG = {
   VA: 'virginia', WA: 'washington', WV: 'west-virginia', WI: 'wisconsin', WY: 'wyoming',
 }
 
-export async function middleware(request) {
+export async function proxy(request) {
   let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(
