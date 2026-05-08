@@ -5,6 +5,7 @@ import { AuthProvider } from "@/lib/AuthContext";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getHreflangAlternates } from "@/lib/hreflang";
+import PersonalGreeting from "./components/PersonalGreeting";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -91,7 +92,10 @@ export default async function RootLayout({ children }) {
       <body
         className={`${inter.variable} ${dmSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          {children}
+          <PersonalGreeting />
+        </AuthProvider>
         <Analytics />
         <SpeedInsights />
       </body>
