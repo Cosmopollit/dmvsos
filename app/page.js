@@ -39,14 +39,26 @@ export default function Home() {
       const detected = detectBrowserLang();
       if (detected && detected !== langCode) setSuggestedLang(detected);
     }
-    // Pre-select the user's state from Vercel geo (proxy.js writes the cookie)
-    const geoState = document.cookie
-      .split('; ')
-      .find(row => row.startsWith('dmvsos_geo_state='))
-      ?.split('=')[1];
-    if (geoState) setState(geoState);
+    // Pre-select state: prefer the user's own last pick (persisted), fall back to
+    // Vercel geo only on first visit. Many users visit through VPN/proxy, so geo
+    // is wrong more often than right — a saved choice is the trustworthy source.
+    const savedState = localStorage.getItem('dmvsos_state');
+    if (savedState) {
+      setState(savedState);
+    } else {
+      const geoState = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('dmvsos_geo_state='))
+        ?.split('=')[1];
+      if (geoState) setState(geoState);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only
   }, []);
+
+  // Persist the state so the dropdown remembers the user's pick across visits
+  useEffect(() => {
+    if (state) localStorage.setItem('dmvsos_state', state);
+  }, [state]);
 
   const langs = [
     { label: 'EN', flag: flags.us, code: 'en', name: 'English' },
