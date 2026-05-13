@@ -1,4 +1,25 @@
 /** @type {import('next').NextConfig} */
+const isDev = process.env.NODE_ENV !== 'production';
+
+// 'unsafe-eval' is only needed in dev (HMR/source maps). Production runs without it.
+const scriptSrc = isDev
+  ? "'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com"
+  : "'self' 'unsafe-inline' https://js.stripe.com";
+
+const csp = [
+  "default-src 'self'",
+  `script-src ${scriptSrc}`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https://*.supabase.co",
+  "font-src 'self' https://fonts.gstatic.com",
+  "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://accounts.google.com",
+  "frame-src https://js.stripe.com https://accounts.google.com",
+  "frame-ancestors 'none'",
+  "base-uri 'self'",
+  "form-action 'self' https://checkout.stripe.com",
+  "object-src 'none'",
+].join('; ');
+
 const nextConfig = {
   images: {
     remotePatterns: [
@@ -15,7 +36,7 @@ const nextConfig = {
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-          { key: 'Content-Security-Policy', value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.supabase.co; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://accounts.google.com; frame-src https://js.stripe.com https://accounts.google.com;" },
+          { key: 'Content-Security-Policy', value: csp },
         ],
       },
     ];
