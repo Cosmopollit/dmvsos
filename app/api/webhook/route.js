@@ -1,6 +1,14 @@
 import Stripe from 'stripe';
+import { createHash } from 'crypto';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+// Log-safe email hash: first 8 hex chars of sha256. Enough to correlate
+// events for the same user across log lines without exposing the address.
+function emailTag(email) {
+  if (!email) return 'none';
+  return createHash('sha256').update(email.toLowerCase()).digest('hex').slice(0, 8);
+}
 
 // ─── Supabase helpers (direct REST, no SDK — required for Vercel serverless) ───
 
@@ -86,7 +94,7 @@ export async function POST(request) {
       const planType = session.metadata?.plan_type || 'car_pass';
       const customerId = session.customer;
 
-      console.log(`Webhook: checkout.session.completed | email=${email} | plan=${planType} | mode=${session.mode}`);
+      console.log(`Webhook: checkout.session.completed | user=${emailTag(email)} | plan=${planType} | mode=${session.mode}`);
 
       if (!email) {
         console.warn(`Webhook: checkout.session.completed with no email | session=${session.id} | customer=${customerId}`);
@@ -101,7 +109,7 @@ export async function POST(request) {
           stripe_customer_id: customerId,
           stripe_subscription_id: subscription.id,
         });
-        console.log(`Webhook: subscription created for ${email} | sub=${subscription.id} | expires=${expiresAt}`);
+        console.log(`Webhook: subscription created | user=${emailTag(email)} | sub=${subscription.id} | expires=${expiresAt}`);
       } else {
         // One-time payment (legacy plans)
         const PLAN_DAYS = { quick_pass: 7, full_prep: 30, guaranteed_pass: 90 };
@@ -113,7 +121,7 @@ export async function POST(request) {
           plan_expires_at: expiresAt,
           ...(customerId ? { stripe_customer_id: customerId } : {}),
         });
-        console.log(`Webhook: one-time payment for ${email} | plan=${planType} | expires=${expiresAt}`);
+        console.log(`Webhook: one-time payment | user=${emailTag(email)} | plan=${planType} | expires=${expiresAt}`);
       }
     }
 
