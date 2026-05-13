@@ -29,6 +29,7 @@ const ALL_STATES = process.argv.includes('--all');
 const STATE_ARG  = process.argv.find(a => a.startsWith('--state='))?.split('=')[1];
 const LANG_ARG   = process.argv.find(a => a.startsWith('--lang='))?.split('=')[1];
 const CATEGORY_ARG = process.argv.find(a => a.startsWith('--category='))?.split('=')[1] || 'car';
+const SUBCATEGORY_ARG = process.argv.find(a => a.startsWith('--subcategory='))?.split('=')[1] || null;
 const CONCURRENCY = parseInt(process.argv.find(a => a.startsWith('--concurrency='))?.split('=')[1] || '5', 10);
 const PARALLEL_STATES = parseInt(process.argv.find(a => a.startsWith('--parallel='))?.split('=')[1] || '1', 10);
 
@@ -75,7 +76,10 @@ if (!ALL_STATES && !STATE_ARG) {
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-function progressFile(state) { return path.join(__dirname, '..', `.translate-cluster-${state}-${CATEGORY_ARG}-progress.json`); }
+function progressFile(state) {
+  const sub = SUBCATEGORY_ARG ? `-${SUBCATEGORY_ARG}` : '';
+  return path.join(__dirname, '..', `.translate-cluster-${state}-${CATEGORY_ARG}${sub}-progress.json`);
+}
 
 function loadProgress(state) {
   const f = progressFile(state);
@@ -279,11 +283,12 @@ async function processState(state) {
 
   // Fetch EN questions with cluster_code
   console.log('  Fetching EN clustered questions...');
+  const subcatFilter = SUBCATEGORY_ARG ? `&subcategory=eq.${encodeURIComponent(SUBCATEGORY_ARG)}` : '';
   const enQuestions = await supabaseGetAll(
     'questions',
-    `state=eq.${encodeURIComponent(state)}&category=eq.${CATEGORY_ARG}&language=eq.en&cluster_code=not.is.null`
+    `state=eq.${encodeURIComponent(state)}&category=eq.${CATEGORY_ARG}&language=eq.en&cluster_code=not.is.null${subcatFilter}`
   );
-  console.log(`  Found ${enQuestions.length} EN questions with cluster_code`);
+  console.log(`  Found ${enQuestions.length} EN questions with cluster_code${SUBCATEGORY_ARG ? ` (subcategory=${SUBCATEGORY_ARG})` : ''}`);
 
   if (enQuestions.length === 0) {
     console.log('  No clustered EN questions found — run cluster-questions.js first');
@@ -317,6 +322,7 @@ async function processState(state) {
         category:       en.category,
         language:       lang,
         cluster_code:   en.cluster_code,
+        subcategory:    en.subcategory   || null,
         question_text:  t.question_text  || en.question_text,
         option_a:       t.option_a       || en.option_a,
         option_b:       t.option_b       || en.option_b,
@@ -333,16 +339,16 @@ async function processState(state) {
     });
 
     if (DRY_RUN) {
-      console.log(`    [dry-run] Would delete old ${lang} questions and insert ${rows.length} new ones`);
+      console.log(`    [dry-run] Would delete old ${lang} questions${SUBCATEGORY_ARG ? ` (subcategory=${SUBCATEGORY_ARG})` : ''} and insert ${rows.length} new ones`);
       console.log(`    Sample: "${rows[0]?.question_text?.substring(0, 80)}..."`);
       continue;
     }
 
-    // Delete old translations for this state/category/lang
-    console.log(`    Deleting old ${lang} questions...`);
+    // Delete old translations for this state/category/lang (+subcategory if filtered)
+    console.log(`    Deleting old ${lang} questions${SUBCATEGORY_ARG ? ` (subcategory=${SUBCATEGORY_ARG})` : ''}...`);
     await supabaseDelete(
       'questions',
-      `state=eq.${encodeURIComponent(state)}&category=eq.${CATEGORY_ARG}&language=eq.${lang}`
+      `state=eq.${encodeURIComponent(state)}&category=eq.${CATEGORY_ARG}&language=eq.${lang}${subcatFilter}`
     );
 
     // Insert new translations in batches of 100
