@@ -146,7 +146,12 @@ export async function POST(req) {
     const session = await stripe.checkout.sessions.create(sessionParams);
     return Response.json({ url: session.url });
   } catch (err) {
-    console.error('Stripe checkout error:', err.message);
-    return Response.json({ error: 'Failed to create checkout session' }, { status: 500 });
+    console.error('Stripe checkout error:', err.message, err);
+    // TEMP: expose error detail until extension flow is stable in preview.
+    return Response.json({
+      error: 'Failed to create checkout session',
+      detail: err?.message || String(err),
+      stack: err?.stack?.split('\n').slice(0, 5).join('\n'),
+    }, { status: 500 });
   }
 }
