@@ -1,22 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/AuthContext';
-
-// Hand-picked welcomes for specific accounts. Shown once per browser, ever.
-const GREETINGS = {
-  'radioastra1938@gmail.com': {
-    name: 'Ольга',
-    title: 'С возвращением, Ольга!',
-    body: 'Pro-доступ активирован на 7 дней — все тесты, все режимы, без ограничений. Удачи на экзамене!',
-    cta: 'Поехали',
-  },
-  'anastasiyarubkevich@gmail.com': {
-    name: 'Анастасия',
-    title: 'С возвращением, Анастасия!',
-    body: 'Pro-доступ активирован на 7 дней — все тесты, все режимы, без ограничений. Удачи на экзамене!',
-    cta: 'Поехали',
-  },
-};
+import { supabase } from '@/lib/supabase';
 
 export default function PersonalGreeting() {
   const { user } = useAuth();
@@ -25,13 +10,25 @@ export default function PersonalGreeting() {
   useEffect(() => {
     if (!user?.email) return;
     const email = user.email.toLowerCase();
-    const g = GREETINGS[email];
-    if (!g) return;
     const flagKey = `dmvsos_greeted_${email}`;
     if (localStorage.getItem(flagKey)) return;
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- syncing one-shot localStorage flag
-    setGreeting(g);
-    localStorage.setItem(flagKey, '1');
+
+    let cancelled = false;
+    (async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) return;
+      const res = await fetch('/api/greeting', {
+        headers: { authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) return;
+      const { greeting: g } = await res.json();
+      if (cancelled || !g) return;
+      setGreeting(g);
+      localStorage.setItem(flagKey, '1');
+    })().catch(() => {});
+
+    return () => { cancelled = true; };
   }, [user?.email]);
 
   if (!greeting) return null;
