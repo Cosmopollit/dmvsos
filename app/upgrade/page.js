@@ -196,8 +196,11 @@ function UpgradeContent() {
               <div className={`text-3xl font-black mb-1 ${isBlue ? 'text-white' : 'text-[#0B1C3D]'}`}>
                 {plan.price}
               </div>
-              <div className={`text-xs mb-5 ${isBlue ? 'text-[#94A3B8]' : 'text-[#64748B]'}`}>
+              <div className={`text-xs ${isBlue ? 'text-[#94A3B8]' : 'text-[#64748B]'}`}>
                 {plan.duration}
+              </div>
+              <div className={`text-[10px] mb-5 mt-0.5 ${isBlue ? 'text-[#64748B]' : 'text-[#94A3B8]'}`}>
+                {tex.extensionHint}
               </div>
               <ul className="space-y-2 mb-5 flex-1">
                 {plan.features.map((f, i) => (
