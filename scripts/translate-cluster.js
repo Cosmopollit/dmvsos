@@ -33,7 +33,13 @@ const SUBCATEGORY_ARG = process.argv.find(a => a.startsWith('--subcategory='))?.
 const CONCURRENCY = parseInt(process.argv.find(a => a.startsWith('--concurrency='))?.split('=')[1] || '5', 10);
 const PARALLEL_STATES = parseInt(process.argv.find(a => a.startsWith('--parallel='))?.split('=')[1] || '1', 10);
 
-const HAIKU_MODEL = 'claude-haiku-4-5-20251001';
+const MODEL_ARG = process.argv.find(a => a.startsWith('--model='))?.split('=')[1];
+const MODELS = {
+  haiku:  'claude-haiku-4-5-20251001',
+  sonnet: 'claude-sonnet-4-6',
+  opus:   'claude-opus-4-7',
+};
+const MODEL = MODELS[MODEL_ARG] || MODELS.haiku;
 const BATCH_SIZE     = 20; // questions per translation batch
 const BATCH_SIZE_ZH  = 10; // smaller batch for Chinese (more tokens per char)
 const LANGS       = LANG_ARG ? [LANG_ARG] : ['ru', 'es', 'zh', 'ua'];
@@ -136,10 +142,12 @@ async function supabaseInsertBatch(table, rows) {
 }
 
 // ---------------------------------------------------------------------------
-// Claude helpers
+// Claude helpers — tool_use for guaranteed JSON output (no string parsing).
+// Previously parsed model text as JSON, which broke on Chinese where Sonnet
+// embedded unescaped double quotes inside string values.
 // ---------------------------------------------------------------------------
 
-async function callClaude(messages, maxTokens = 8192) {
+async function callClaudeTool(prompt, tool, maxTokens = 8192) {
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -147,37 +155,79 @@ async function callClaude(messages, maxTokens = 8192) {
       'anthropic-version': '2023-06-01',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ model: HAIKU_MODEL, max_tokens: maxTokens, messages }),
+    body: JSON.stringify({
+      model: MODEL,
+      max_tokens: maxTokens,
+      tools: [tool],
+      tool_choice: { type: 'tool', name: tool.name },
+      messages: [{ role: 'user', content: prompt }],
+    }),
   });
 
   if (res.status === 429) {
     const wait = parseInt(res.headers.get('retry-after') || '30', 10);
     console.log(`\n  Rate limited, waiting ${wait}s...`);
     await sleep(wait * 1000);
-    return callClaude(messages, maxTokens);
+    return callClaudeTool(prompt, tool, maxTokens);
   }
   if (res.status === 529) {
     console.log('\n  Overloaded, waiting 60s...');
     await sleep(60000);
-    return callClaude(messages, maxTokens);
+    return callClaudeTool(prompt, tool, maxTokens);
   }
   if (!res.ok) throw new Error(`Claude API ${res.status}: ${await res.text()}`);
 
   const data = await res.json();
-  return data.content?.[0]?.text || '';
-}
-
-function parseJSON(text) {
-  const cleaned = text.replace(/```(?:json)?\s*/g, '').replace(/```\s*/g, '').trim();
-  try { return JSON.parse(cleaned); } catch { /* fall through */ }
-  const match = cleaned.match(/(\[[\s\S]*\]|\{[\s\S]*\})/);
-  if (match) { try { return JSON.parse(match[1]); } catch { /* fall through */ } }
-  return null;
+  const toolUse = data.content?.find(b => b.type === 'tool_use');
+  if (!toolUse) throw new Error(`No tool_use block in response: ${JSON.stringify(data).slice(0, 300)}`);
+  return toolUse.input;
 }
 
 // ---------------------------------------------------------------------------
 // Translation
 // ---------------------------------------------------------------------------
+
+const TRANSLATION_FIELDS = {
+  type: 'object',
+  properties: {
+    id:            { type: 'string', description: 'Original question ID — copy verbatim, do not translate.' },
+    question_text: { type: 'string' },
+    option_a:      { type: 'string' },
+    option_b:      { type: 'string' },
+    option_c:      { type: 'string' },
+    option_d:      { type: 'string' },
+    explanation:   { type: ['string', 'null'] },
+  },
+  required: ['id', 'question_text', 'option_a', 'option_b', 'option_c', 'option_d'],
+};
+
+function batchTool(langName) {
+  return {
+    name: 'submit_translations',
+    description: `Submit ${langName} translations for the supplied DMV test questions.`,
+    input_schema: {
+      type: 'object',
+      properties: {
+        translations: { type: 'array', items: TRANSLATION_FIELDS },
+      },
+      required: ['translations'],
+    },
+  };
+}
+
+function singleTool(langName) {
+  const props = { ...TRANSLATION_FIELDS.properties };
+  delete props.id;
+  return {
+    name: 'submit_translation',
+    description: `Submit the ${langName} translation for a single DMV test question.`,
+    input_schema: {
+      type: 'object',
+      properties: props,
+      required: ['question_text', 'option_a', 'option_b', 'option_c', 'option_d'],
+    },
+  };
+}
 
 function buildTranslatePrompt(questions, langName) {
   const input = questions.map(q => ({
@@ -190,31 +240,25 @@ function buildTranslatePrompt(questions, langName) {
     explanation: q.explanation || null,
   }));
 
-  return `Translate the following US DMV car driving test questions from English to ${langName}.
+  return `Translate the following US DMV driving test questions from English to ${langName}, then call the submit_translations tool with the results.
 
 Rules:
-- Translate ONLY: question_text, option_a, option_b, option_c, option_d, explanation
-- Keep the same JSON structure and all field names in English
-- Keep the "id" field exactly as-is (do not translate)
-- Do NOT translate: abbreviations (DMV, CDL, BAC, mph, ft), proper nouns, URLs
-- If explanation is null, keep it null
-- Use natural, fluent ${langName} — not word-for-word translation
-- For road signs and traffic terms, use standard ${langName} traffic vocabulary
-- Return ONLY a valid JSON array, no markdown, no explanation
+- Translate ONLY: question_text, option_a, option_b, option_c, option_d, explanation.
+- Copy "id" verbatim — do not translate or alter it.
+- Do NOT translate: DMV, CDL, BAC, mph, ft, abbreviations, proper nouns, URLs.
+- If explanation is null in the input, keep it null in the output.
+- Use natural, fluent ${langName}. For road signs and traffic terms, use standard ${langName} traffic vocabulary.
+- Return one translation per input question, in the same order.
 
 Input:
 ${JSON.stringify(input, null, 2)}`;
 }
 
 async function translateOne(q, langName) {
-  const prompt = `Translate this US DMV test question from English to ${langName}.
-
-Return a single JSON object (not an array) with these fields:
-question_text, option_a, option_b, option_c, option_d, explanation
+  const prompt = `Translate this US DMV test question from English to ${langName}, then call the submit_translation tool with the result.
 
 Do NOT translate: DMV, CDL, BAC, mph, ft, abbreviations, URLs.
 If explanation is null keep it null.
-Return ONLY valid JSON, no markdown.
 
 Input:
 Question: ${q.question_text}
@@ -224,10 +268,8 @@ C: ${q.option_c}
 D: ${q.option_d}
 Explanation: ${q.explanation || 'null'}`;
 
-  const raw = await callClaude([{ role: 'user', content: prompt }], 2048);
-  const result = parseJSON(raw);
-  if (!result || typeof result !== 'object' || Array.isArray(result)) throw new Error('Expected JSON object');
-  if (!result.question_text) throw new Error('Missing question_text');
+  const result = await callClaudeTool(prompt, singleTool(langName), 2048);
+  if (!result?.question_text) throw new Error('Missing question_text');
   return { id: q.id, ...result };
 }
 
@@ -236,18 +278,18 @@ async function translateBatch(questions, targetLang) {
   // Chinese uses more tokens per character — use higher limit
   const maxTokens = targetLang === 'zh' ? 32000 : 16000;
   const prompt = buildTranslatePrompt(questions, langName);
+  const tool = batchTool(langName);
 
   for (let attempt = 1; attempt <= 3; attempt++) {
     try {
-      const raw = await callClaude([{ role: 'user', content: prompt }], maxTokens);
-      const result = parseJSON(raw);
-      if (!Array.isArray(result)) throw new Error('Expected JSON array');
-      if (result.length !== questions.length) throw new Error(`Got ${result.length}, expected ${questions.length}`);
-      return result;
+      const out = await callClaudeTool(prompt, tool, maxTokens);
+      const arr = out?.translations;
+      if (!Array.isArray(arr)) throw new Error('translations missing or not array');
+      if (arr.length !== questions.length) throw new Error(`Got ${arr.length}, expected ${questions.length}`);
+      return arr;
     } catch (e) {
       if (attempt === 3) {
-        // Final fallback: translate one by one
-        console.log(`\n    Batch failed, falling back to one-by-one translation...`);
+        console.log(`\n    Batch failed (${e.message}), falling back to one-by-one translation...`);
         const results = [];
         for (const q of questions) {
           try {
@@ -371,6 +413,7 @@ async function processState(state) {
 
 async function main() {
   console.log(`translate-cluster.js${DRY_RUN ? ' [DRY RUN]' : ''}`);
+  console.log(`Model: ${MODEL}`);
   console.log(`Languages: ${LANGS.join(', ')}`);
 
   const states = (ALL_STATES ? ALL_STATE_SLUGS : [STATE_ARG]).filter(s => STATE_MAP[s]);
