@@ -1,19 +1,16 @@
 import { createClient } from '@supabase/supabase-js';
+import { checkAdminPassword } from '@/lib/adminAuth';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-function authorize(password) {
-  return password === process.env.ADMIN_PASSWORD;
-}
-
 export async function POST(req) {
   const body = await req.json();
   const { password, action } = body;
 
-  if (!authorize(password)) {
+  if (!checkAdminPassword(password)) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

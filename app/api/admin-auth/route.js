@@ -1,3 +1,5 @@
+import { checkAdminPassword } from '@/lib/adminAuth';
+
 // Simple in-memory rate limiter (best-effort in serverless)
 const attempts = new Map();
 const MAX_ATTEMPTS = 5;
@@ -21,7 +23,7 @@ export async function POST(req) {
   }
   try {
     const { password } = await req.json();
-    if (password === process.env.ADMIN_PASSWORD) {
+    if (checkAdminPassword(password)) {
       return Response.json({ ok: true });
     }
     // Slow down brute force
