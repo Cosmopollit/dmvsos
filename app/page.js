@@ -91,7 +91,7 @@ export default function Home() {
         name: 'How does pricing work?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'DMVSOS offers monthly subscription plans: Moto Pass ($9.99/mo) for motorcycle tests, Auto Pass ($29.99/mo) for car tests, and CDL Pro ($59.99/mo) for CDL tests with car included. Cancel anytime.',
+          text: 'DMVSOS uses flat-rate one-time payments — no subscriptions. Moto Pass ($19.99), Auto Pass ($29.99), and CDL Pro ($49.99) each unlock 30 days of access. Extend any pass by 30 days for $9.99.',
         },
       },
       {
@@ -115,7 +115,7 @@ export default function Home() {
         name: 'What is the Pass Guarantee?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'CDL Pro ($59.99/mo) includes a 100% money-back guarantee if you fail your CDL test, plus direct support via Telegram and WhatsApp in your language.',
+          text: 'CDL Pro ($49.99, 30-day access) includes a 100% money-back guarantee if you fail your CDL test, plus direct support via Telegram and WhatsApp in your language.',
         },
       },
     ],
@@ -419,14 +419,14 @@ export default function Home() {
           <div className="bg-white rounded-2xl p-5 border border-[#E2E8F0] shadow-sm flex flex-col text-center">
             <div className="text-3xl mb-2">🏍️</div>
             <h3 className="text-sm font-bold text-[#2563EB] mb-1">{tex.planMotoPass}</h3>
-            <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">$9.99</div>
+            <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">$19.99</div>
             <div className="text-xs text-[#64748B] mb-3">{tex.planDuration}</div>
             <ul className="space-y-1.5 text-xs text-[#475569] mb-4 text-left flex-1">
               {(tex.featMoto || []).map((f, i) => (
                 <li key={i}>{f}</li>
               ))}
             </ul>
-            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=moto_pass`)}
+            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=onetime_moto`)}
               className="w-full py-2.5 rounded-xl font-semibold text-sm border border-[#E2E8F0] text-[#0B1C3D] hover:bg-[#F1F5F9] transition-all">
               {tex.planGetMoto}
             </button>
@@ -446,7 +446,7 @@ export default function Home() {
                 <li key={i}>{f}</li>
               ))}
             </ul>
-            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=car_pass`)}
+            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=onetime_auto`)}
               className="w-full py-2.5 rounded-xl font-bold text-sm bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition-all">
               {tex.planGetAuto}
             </button>
@@ -459,14 +459,14 @@ export default function Home() {
             </span>
             <div className="text-3xl mb-2 mt-1">🚛</div>
             <h3 className="text-sm font-bold text-[#92400E] mb-1">{tex.planCdlPro}</h3>
-            <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">$59.99</div>
+            <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">$49.99</div>
             <div className="text-xs text-[#64748B] mb-3">{tex.planDuration}</div>
             <ul className="space-y-1.5 text-xs text-[#475569] mb-4 text-left flex-1">
               {(tex.featCdl || []).map((f, i) => (
                 <li key={i}>{f}</li>
               ))}
             </ul>
-            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=cdl_pass`)}
+            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=onetime_cdl`)}
               className="w-full py-2.5 rounded-xl font-semibold text-sm bg-[#F59E0B] text-[#0B1C3D] hover:bg-[#FBBF24] transition-all">
               {tex.planGetCdl}
             </button>
