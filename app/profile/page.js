@@ -46,13 +46,9 @@ function ProfileContent() {
   const [extendLoading, setExtendLoading] = useState(null); // 'moto' | 'auto' | 'cdl' | null
 
   async function handleExtend(passType) {
-    // eslint-disable-next-line no-console
-    console.log('[handleExtend] start', passType);
     setExtendLoading(passType);
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      // eslint-disable-next-line no-console
-      console.log('[handleExtend] session?', !!session?.access_token);
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: {
@@ -62,16 +58,9 @@ function ProfileContent() {
         body: JSON.stringify({ planType: 'extension', passType }),
       });
       const data = await res.json();
-      // eslint-disable-next-line no-console
-      console.log('[handleExtend] status', res.status, 'data', data);
-      if (data?.url) {
-        // eslint-disable-next-line no-console
-        console.log('[handleExtend] redirecting to', data.url);
-        window.location.href = data.url;
-      }
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error('[handleExtend] error', e);
+      if (data?.url) window.location.href = data.url;
+    } catch {
+      // Network/parse error — button re-enables so user can retry.
     } finally {
       setExtendLoading(null);
     }
