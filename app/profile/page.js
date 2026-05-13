@@ -41,8 +41,43 @@ function ProfileContent() {
   const currentLang = langs.find(l => l.code === lang) || langs[0];
   function switchLang(code) { setLangState(code); saveLang(code); setShowLangMenu(false); }
   const tex = t[lang] || t.en;
-  const { user, isPro, planType, planExpiresAt, loading } = useAuth();
+  const { user, isPro, planType, planExpiresAt, activePasses, loading } = useAuth();
   const [sessions, setSessions] = useState([]);
+  const [extendLoading, setExtendLoading] = useState(null); // 'moto' | 'auto' | 'cdl' | null
+
+  async function handleExtend(passType) {
+    setExtendLoading(passType);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch('/api/create-checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+        },
+        body: JSON.stringify({ planType: 'extension', passType }),
+      });
+      const data = await res.json();
+      if (data?.url) window.location.href = data.url;
+    } catch {
+      // Network/parse error — button re-enables so user can retry.
+    } finally {
+      setExtendLoading(null);
+    }
+  }
+
+  function daysLeft(expiresAt) {
+    if (!expiresAt) return 0;
+    const ms = new Date(expiresAt) - new Date();
+    return Math.max(0, Math.ceil(ms / 86400000));
+  }
+
+  const PASS_META = {
+    moto: { icon: '🏍️', label: tex.planMotoPass },
+    auto: { icon: '🚗', label: tex.planAutoPass },
+    cdl:  { icon: '🚛', label: tex.planCdlPro },
+  };
+  const passEntries = Object.entries(activePasses || {});
 
   useEffect(() => {
     if (loading) return;
@@ -133,6 +168,41 @@ function ProfileContent() {
             </button>
           </div>
         </div>
+
+        {passEntries.length > 0 && (
+          <div className="bg-white rounded-2xl p-6 w-full mt-5 shadow-sm border border-[#E2E8F0]">
+            <h3 className="text-base font-bold text-[#0B1C3D] mb-4">{tex.yourPasses || 'Your active passes'}</h3>
+            <div className="space-y-3">
+              {passEntries.map(([type, exp]) => {
+                const left = daysLeft(exp);
+                const meta = PASS_META[type] || { icon: '🎫', label: type };
+                const lowDays = left <= 3;
+                return (
+                  <div key={type} className="flex items-center gap-3 p-3 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC]">
+                    <span className="text-2xl">{meta.icon}</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-bold text-[#0B1C3D]">{meta.label}</div>
+                      <div className={`text-xs ${lowDays ? 'text-[#DC2626]' : 'text-[#64748B]'}`}>
+                        {left} {tex.daysLeft || 'days left'}
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleExtend(type)}
+                      disabled={extendLoading !== null}
+                      className="text-xs font-semibold px-3 py-2 rounded-lg bg-[#0B1C3D] text-white hover:bg-[#1E3A5F] transition disabled:opacity-60 whitespace-nowrap"
+                    >
+                      {extendLoading === type ? '…' : (tex.extendCta || '+30 days · $9.99')}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+            <p className="text-xs text-[#94A3B8] text-center mt-4">
+              {tex.cancelAnytime}
+            </p>
+          </div>
+        )}
 
         {sessions.length > 0 && (
           <div className="bg-white rounded-2xl p-6 w-full mt-5 shadow-sm border border-[#E2E8F0]">
