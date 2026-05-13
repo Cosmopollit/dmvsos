@@ -31,10 +31,10 @@ function UpgradeContent() {
 
   const plans = [
     {
-      id: 'moto_pass',
+      id: 'onetime_moto',
       name: tex.planMotoPass,
       icon: '🏍️',
-      price: '$9.99',
+      price: '$19.99',
       duration: tex.planDuration,
       badge: null,
       style: 'outline',
@@ -42,7 +42,7 @@ function UpgradeContent() {
       btnLabel: tex.planGetMoto,
     },
     {
-      id: 'car_pass',
+      id: 'onetime_auto',
       name: tex.planAutoPass,
       icon: '🚗',
       price: '$29.99',
@@ -53,10 +53,10 @@ function UpgradeContent() {
       btnLabel: tex.planGetAuto,
     },
     {
-      id: 'cdl_pass',
+      id: 'onetime_cdl',
       name: tex.planCdlPro,
       icon: '🚛',
-      price: '$59.99',
+      price: '$49.99',
       duration: tex.planDuration,
       badge: tex.planGuaranteedBadge,
       style: 'gold',
@@ -80,6 +80,11 @@ function UpgradeContent() {
       }
       const res = await fetch('/api/create-checkout', fetchOpts);
       const data = await res.json();
+      // User already owns this type → redirect to profile/extension flow
+      if (res.status === 409 && data?.error === 'pass_already_active') {
+        router.push('/profile');
+        return;
+      }
       if (data?.url) window.location.href = data.url;
       else setError(true);
     } catch {
