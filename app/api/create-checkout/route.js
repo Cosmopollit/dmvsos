@@ -68,13 +68,19 @@ export async function POST(req) {
       customerEmail = user?.email || null;
 
       if (customerEmail) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('stripe_customer_id')
-          .ilike('email', customerEmail)
-          .maybeSingle()
-          .catch(() => ({ data: null }));
-        stripeCustomerId = profile?.stripe_customer_id || null;
+        // Wrap in try/catch — @supabase/postgrest-js builder isn't a Promise,
+        // so chaining .catch on the query was throwing TypeError. Failure here
+        // just means we'll create a fresh Stripe customer; not fatal.
+        try {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('stripe_customer_id')
+            .ilike('email', customerEmail)
+            .maybeSingle();
+          stripeCustomerId = profile?.stripe_customer_id || null;
+        } catch {
+          stripeCustomerId = null;
+        }
       }
     }
 
