@@ -9,9 +9,22 @@ const supabase = createClient(
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://dmvsos.com';
 
-// New category plans are monthly subscriptions
-// Legacy plans (quick_pass, full_prep, guaranteed_pass) were one-time payments — kept for backward compat
+// Plan taxonomy:
+// - One-time passes (new pricing): onetime_moto / onetime_auto / onetime_cdl / extension
+// - Legacy subscriptions (still honored until users migrate off): car_pass / moto_pass / cdl_pass
+// - Legacy one-time (deprecated, not exposed in UI): quick_pass / full_prep / guaranteed_pass
 const SUBSCRIPTION_PLANS = new Set(['car_pass', 'moto_pass', 'cdl_pass']);
+const ONETIME_PLANS = new Set(['onetime_moto', 'onetime_auto', 'onetime_cdl', 'extension']);
+const LEGACY_ONETIME = new Set(['quick_pass', 'full_prep', 'guaranteed_pass']);
+const ALL_PLANS = new Set([...SUBSCRIPTION_PLANS, ...ONETIME_PLANS, ...LEGACY_ONETIME]);
+
+// Maps onetime plan key → pass_type stored in active_passes/purchases.
+const ONETIME_TO_PASS_TYPE = {
+  onetime_moto: 'moto',
+  onetime_auto: 'auto',
+  onetime_cdl:  'cdl',
+  // extension is special — pass_type comes from request body
+};
 
 export async function POST(req) {
   try {
@@ -22,31 +35,38 @@ export async function POST(req) {
       car_pass:        process.env.STRIPE_PRICE_ID_CAR_PASS,
       moto_pass:       process.env.STRIPE_PRICE_ID_MOTO_PASS,
       cdl_pass:        process.env.STRIPE_PRICE_ID_CDL_PASS,
+      onetime_moto:    process.env.STRIPE_PRICE_ID_ONETIME_MOTO,
+      onetime_auto:    process.env.STRIPE_PRICE_ID_ONETIME_AUTO,
+      onetime_cdl:     process.env.STRIPE_PRICE_ID_ONETIME_CDL,
+      extension:       process.env.STRIPE_PRICE_ID_ONETIME_EXTENSION,
     };
 
     const body = await req.json().catch(() => ({}));
-    const planType = body.planType || 'car_pass';
+    const planType = body.planType || 'onetime_auto';
+    const extensionTarget = body.passType; // only used for kind='extension': 'moto' | 'auto' | 'cdl'
 
-    if (!['quick_pass', 'full_prep', 'guaranteed_pass', 'car_pass', 'moto_pass', 'cdl_pass'].includes(planType)) {
+    if (!ALL_PLANS.has(planType)) {
       return Response.json({ error: 'Unknown plan type' }, { status: 400 });
     }
-
     if (!PLAN_PRICE_IDS[planType]) {
       return Response.json({ error: `Missing price ID for ${planType}` }, { status: 500 });
     }
+    if (planType === 'extension' && !['moto', 'auto', 'cdl'].includes(extensionTarget)) {
+      return Response.json({ error: 'extension requires passType (moto|auto|cdl)' }, { status: 400 });
+    }
 
-    // Get user email from auth header
+    // ── Identify the user ────────────────────────────────────────────────
     const authHeader = req.headers.get('authorization');
+    let userId = null;
     let customerEmail = null;
     let stripeCustomerId = null;
 
     if (authHeader?.startsWith('Bearer ')) {
       const token = authHeader.slice(7);
       const { data: { user } } = await supabase.auth.getUser(token);
+      userId = user?.id || null;
       customerEmail = user?.email || null;
 
-      // Look up existing Stripe customer to avoid duplicate customers.
-      // ilike = case-insensitive match against profiles.email.
       if (customerEmail) {
         const { data: profile } = await supabase
           .from('profiles')
@@ -58,32 +78,65 @@ export async function POST(req) {
       }
     }
 
+    // ── Duplicate-buy guard for one-time 'new' purchases ────────────────
+    // If a user already has an active pass of the same type, the right action
+    // is Extension ($9.99), not a fresh purchase ($14.99-$49.99). This guard
+    // prevents accidental double-purchase and saves the user money.
+    if (userId && ONETIME_TO_PASS_TYPE[planType]) {
+      const targetType = ONETIME_TO_PASS_TYPE[planType];
+      const { data: active } = await supabase
+        .from('active_passes')
+        .select('expires_at')
+        .eq('user_id', userId)
+        .eq('pass_type', targetType)
+        .maybeSingle();
+      if (active && new Date(active.expires_at) > new Date()) {
+        return Response.json({
+          error: 'pass_already_active',
+          message: `You already have an active ${targetType} pass. Use Extension instead.`,
+          pass_type: targetType,
+          expires_at: active.expires_at,
+        }, { status: 409 });
+      }
+    }
+
+    // ── Build Stripe Checkout session ────────────────────────────────────
     const isSubscription = SUBSCRIPTION_PLANS.has(planType);
+    const isOneTime = ONETIME_PLANS.has(planType) || LEGACY_ONETIME.has(planType);
+
+    // Metadata used by webhook to route the payment correctly.
+    const metadata = {
+      plan_type: planType,
+      ...(customerEmail ? { email: customerEmail } : {}),
+      ...(userId ? { user_id: userId } : {}),
+    };
+    if (ONETIME_PLANS.has(planType)) {
+      metadata.kind = planType === 'extension' ? 'extension' : 'new';
+      metadata.pass_type = planType === 'extension'
+        ? extensionTarget
+        : ONETIME_TO_PASS_TYPE[planType];
+    }
 
     const sessionParams = {
       mode: isSubscription ? 'subscription' : 'payment',
       payment_method_types: ['card'],
-      line_items: [{
-        price: PLAN_PRICE_IDS[planType],
-        quantity: 1,
-      }],
+      line_items: [{ price: PLAN_PRICE_IDS[planType], quantity: 1 }],
       success_url: `${SITE_URL}/success`,
       cancel_url: `${SITE_URL}/upgrade`,
-      metadata: {
-        plan_type: planType,
-        ...(customerEmail ? { email: customerEmail } : {}),
-      },
+      metadata,
     };
 
-    // For subscriptions: pass metadata to the subscription object too
-    // so renewal invoices (invoice.payment_succeeded) know the plan_type
+    // Pass metadata to subscription object too (so renewal invoices see it)
     if (isSubscription) {
-      sessionParams.subscription_data = {
-        metadata: { plan_type: planType, ...(customerEmail ? { email: customerEmail } : {}) },
-      };
+      sessionParams.subscription_data = { metadata };
+    }
+    // For one-time, also stamp the PaymentIntent so charge.refunded webhooks
+    // can find the original purchase by metadata if checkout_session isn't around.
+    if (isOneTime) {
+      sessionParams.payment_intent_data = { metadata };
     }
 
-    // Attach to existing Stripe customer to prevent duplicate accounts
+    // Re-attach to existing Stripe customer to prevent duplicate accounts
     if (stripeCustomerId) {
       sessionParams.customer = stripeCustomerId;
     } else if (customerEmail) {
