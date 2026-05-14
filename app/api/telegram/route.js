@@ -285,5 +285,11 @@ export async function POST(request) {
 }
 
 export async function GET() {
-  return new Response('DMVSOS Telegram webhook', { status: 200 });
+  // Diagnostic endpoint — does NOT leak secrets, just presence flags.
+  return Response.json({
+    ok: true,
+    has_token: !!process.env.TELEGRAM_BOT_TOKEN,
+    has_admin_chat: !!process.env.TELEGRAM_ADMIN_CHAT_ID,
+    has_secret: !!process.env.TELEGRAM_WEBHOOK_SECRET,
+  });
 }
