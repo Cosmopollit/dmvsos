@@ -243,17 +243,7 @@ export async function POST(request) {
   // Command routing
   try {
     if (text.startsWith('/start')) {
-      // Surface chat_id once so the founder can set TELEGRAM_ADMIN_CHAT_ID.
-      // Only shown for first-time interaction with no admin set yet AND only
-      // if this user looks like the owner (cannot truly know — we show to all
-      // since chat_id is not sensitive on its own).
-      const intro = reply(lang, 'welcome').replace('Evgenii', 'Evgenii');
-      await sendMessage(chatId, intro);
-      if (!ADMIN_CHAT_ID) {
-        await sendMessage(chatId,
-          `🔧 Setup hint (founder only): your chat_id is <code>${chatId}</code>. ` +
-          `Add to env as <code>TELEGRAM_ADMIN_CHAT_ID=${chatId}</code> to enable /human forwarding.`);
-      }
+      await sendMessage(chatId, reply(lang, 'welcome'));
     } else if (text.startsWith('/pricing')) {
       await sendMessage(chatId, reply(lang, 'pricing'));
     } else if (text.startsWith('/states')) {
@@ -267,15 +257,13 @@ export async function POST(request) {
     } else if (text.startsWith('/')) {
       await sendMessage(chatId, reply(lang, 'unknown'));
     } else {
-      // Free-form text → forward to admin if configured, ack to user
-      if (ADMIN_CHAT_ID && String(chatId) !== String(ADMIN_CHAT_ID)) {
+      // Free-form text → forward to admin (always), ack to user
+      if (ADMIN_CHAT_ID) {
+        const isSelfMessage = String(chatId) === String(ADMIN_CHAT_ID);
         await sendMessage(ADMIN_CHAT_ID,
-          `💬 <b>From ${userName}</b> (chat_id <code>${chatId}</code>, lang ${lang}):\n\n${textRaw}`);
-        await sendMessage(chatId, reply(lang, 'forwardedAck'));
-      } else {
-        // No admin set yet — just acknowledge
-        await sendMessage(chatId, reply(lang, 'forwardedAck'));
+          `💬 <b>${isSelfMessage ? 'You wrote (test)' : 'From ' + userName}</b> (chat_id <code>${chatId}</code>, lang ${lang}):\n\n${textRaw}`);
       }
+      await sendMessage(chatId, reply(lang, 'forwardedAck'));
     }
   } catch (err) {
     console.error('Telegram handler error:', err.message);
@@ -285,23 +273,5 @@ export async function POST(request) {
 }
 
 export async function GET() {
-  // Diagnostic endpoint — does NOT leak secrets, just presence flags.
-  let getMe = null;
-  if (process.env.TELEGRAM_BOT_TOKEN) {
-    try {
-      const r = await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/getMe`);
-      const j = await r.json();
-      getMe = { ok: j.ok, username: j.result?.username, error: j.description };
-    } catch (e) {
-      getMe = { ok: false, error: e.message };
-    }
-  }
-  return Response.json({
-    ok: true,
-    has_token: !!process.env.TELEGRAM_BOT_TOKEN,
-    token_length: (process.env.TELEGRAM_BOT_TOKEN || '').length,
-    has_admin_chat: !!process.env.TELEGRAM_ADMIN_CHAT_ID,
-    has_secret: !!process.env.TELEGRAM_WEBHOOK_SECRET,
-    getMe,
-  });
+  return new Response('DMVSOS Telegram webhook', { status: 200 });
 }
