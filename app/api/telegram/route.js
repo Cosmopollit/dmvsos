@@ -286,10 +286,22 @@ export async function POST(request) {
 
 export async function GET() {
   // Diagnostic endpoint — does NOT leak secrets, just presence flags.
+  let getMe = null;
+  if (process.env.TELEGRAM_BOT_TOKEN) {
+    try {
+      const r = await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/getMe`);
+      const j = await r.json();
+      getMe = { ok: j.ok, username: j.result?.username, error: j.description };
+    } catch (e) {
+      getMe = { ok: false, error: e.message };
+    }
+  }
   return Response.json({
     ok: true,
     has_token: !!process.env.TELEGRAM_BOT_TOKEN,
+    token_length: (process.env.TELEGRAM_BOT_TOKEN || '').length,
     has_admin_chat: !!process.env.TELEGRAM_ADMIN_CHAT_ID,
     has_secret: !!process.env.TELEGRAM_WEBHOOK_SECRET,
+    getMe,
   });
 }
