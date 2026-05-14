@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase';
 import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { flags } from '@/lib/flags';
+import { PASS_META } from '@/lib/plans';
 
 const langs = [
   { label: 'EN', flag: flags.us, code: 'en' },
@@ -29,37 +30,29 @@ function UpgradeContent() {
   const [loadingPlan, setLoadingPlan] = useState(null);
   const [error, setError] = useState(false);
 
+  // Prices, IDs, icons, badges — single source of truth: lib/plans.js.
+  // Translations and CTA labels still come from tex (lib/translations.js).
   const plans = [
     {
-      id: 'onetime_moto',
+      ...PASS_META.moto,
       name: tex.planMotoPass,
-      icon: '🏍️',
-      price: '$19.99',
       duration: tex.planDuration,
-      badge: null,
-      style: 'outline',
       features: tex.featMoto,
       btnLabel: tex.planGetMoto,
     },
     {
-      id: 'onetime_auto',
+      ...PASS_META.auto,
       name: tex.planAutoPass,
-      icon: '🚗',
-      price: '$29.99',
       duration: tex.planDuration,
       badge: tex.mostPopular,
-      style: 'blue',
       features: tex.featCar,
       btnLabel: tex.planGetAuto,
     },
     {
-      id: 'onetime_cdl',
+      ...PASS_META.cdl,
       name: tex.planCdlPro,
-      icon: '🚛',
-      price: '$49.99',
       duration: tex.planDuration,
       badge: tex.planGuaranteedBadge,
-      style: 'gold',
       features: tex.featCdl,
       btnLabel: tex.planGetCdl,
     },

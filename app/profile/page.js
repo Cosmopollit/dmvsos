@@ -8,6 +8,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { flags } from '@/lib/flags';
+import { PASS_META, EXTENSION } from '@/lib/plans';
 
 const langs = [
   { label: 'EN', flag: flags.us, code: 'en' },
@@ -72,10 +73,11 @@ function ProfileContent() {
     return Math.max(0, Math.ceil(ms / 86400000));
   }
 
-  const PASS_META = {
-    moto: { icon: '🏍️', label: tex.planMotoPass },
-    auto: { icon: '🚗', label: tex.planAutoPass },
-    cdl:  { icon: '🚛', label: tex.planCdlPro },
+  // Icon + Stripe id from lib/plans.js, label from translations.
+  const PASS_DISPLAY = {
+    moto: { ...PASS_META.moto, label: tex.planMotoPass },
+    auto: { ...PASS_META.auto, label: tex.planAutoPass },
+    cdl:  { ...PASS_META.cdl,  label: tex.planCdlPro },
   };
   const passEntries = Object.entries(activePasses || {});
 
@@ -175,7 +177,7 @@ function ProfileContent() {
             <div className="space-y-3">
               {passEntries.map(([type, exp]) => {
                 const left = daysLeft(exp);
-                const meta = PASS_META[type] || { icon: '🎫', label: type };
+                const meta = PASS_DISPLAY[type] || { icon: '🎫', label: type };
                 const lowDays = left <= 3;
                 return (
                   <div key={type} className="flex items-center gap-3 p-3 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC]">
@@ -192,7 +194,7 @@ function ProfileContent() {
                       disabled={extendLoading !== null}
                       className="text-xs font-semibold px-3 py-2 rounded-lg bg-[#0B1C3D] text-white hover:bg-[#1E3A5F] transition disabled:opacity-60 whitespace-nowrap"
                     >
-                      {extendLoading === type ? '…' : (tex.extendCta || '+30 days · $9.99')}
+                      {extendLoading === type ? '…' : (tex.extendCta || `+${EXTENSION.durationDays} days · ${EXTENSION.price}`)}
                     </button>
                   </div>
                 );

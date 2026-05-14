@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 import { getHreflangAlternates } from '@/lib/hreflang';
+import { MIN_PRICE } from '@/lib/plans';
 
 const STATE_EXAM_DATA = {
   alabama:          { questions: 40, passing: 32, passingPct: 80 },
@@ -141,7 +142,7 @@ export default async function StateDmvTestPage({ params }) {
             name: `Is the ${name} DMV practice test free?`,
             acceptedAnswer: {
               '@type': 'Answer',
-              text: `Yes. DMVSOS provides a free ${name} DMV practice test with real knowledge test questions. One-time passes from $19.99 (30 days) unlock extended 40-question tests and detailed answer explanations — no subscription.`,
+              text: `Yes. DMVSOS provides a free ${name} DMV practice test with real knowledge test questions. One-time passes from ${MIN_PRICE} (30 days) unlock extended 40-question tests and detailed answer explanations — no subscription.`,
             },
           },
           {
@@ -204,7 +205,7 @@ export default async function StateDmvTestPage({ params }) {
     },
     {
       q: `Is this ${name} DMV practice test free?`,
-      a: `Yes  ·  20 questions per test are completely free with no signup required. One-time passes from $19.99 unlock 40-question full tests and detailed explanations · 30 days, no subscription.`,
+      a: `Yes  ·  20 questions per test are completely free with no signup required. One-time passes from ${MIN_PRICE} unlock 40-question full tests and detailed explanations · 30 days, no subscription.`,
     },
     {
       q: `What topics does the ${name} DMV test cover?`,
@@ -379,7 +380,7 @@ export default async function StateDmvTestPage({ params }) {
             href="/upgrade"
             className="inline-flex items-center gap-2 px-6 py-3 bg-[#F59E0B] text-[#0B1C3D] rounded-xl font-bold text-sm hover:bg-[#FBBF24] transition-colors"
           >
-            Unlock Full Access  ·  from $19.99
+            Unlock Full Access  ·  from {MIN_PRICE}
           </Link>
           <p className="text-xs text-[#64748B] mt-2">One-time payment · 30 days · No subscription</p>
         </div>

@@ -8,6 +8,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { flags } from '@/lib/flags';
+import { planForCategory } from '@/lib/plans';
 
 const langs = [
   { label: 'EN', flag: flags.us, code: 'en' },
@@ -37,13 +38,11 @@ function TestContent() {
     : category === 'cdl' ? hasCdl
     : hasCar; // car/dmv → requires car_pass (or cdl_pass which includes car)
 
-  // Upgrade plan to suggest based on current category
-  const suggestPlan = ['moto', 'motorcycle'].includes(category) ? 'onetime_moto'
-    : category === 'cdl' ? 'onetime_cdl'
-    : 'onetime_auto';
-
-  const isMoto = ['moto', 'motorcycle'].includes(category);
-  const isCdl = category === 'cdl';
+  // Plan for current category — single source of truth (lib/plans.js)
+  const plan = planForCategory(category);
+  const suggestPlan = plan.id;
+  const isMoto = plan.pass_type === 'moto';
+  const isCdl = plan.pass_type === 'cdl';
   const freeLimit = isMoto ? 5 : 20;       // moto preview = 5q, car = 20q
   const nudgeAt   = isMoto ? 3 : 17;       // show nudge at question 4 (idx 3) for moto, 18 for car
 
@@ -456,7 +455,7 @@ function TestContent() {
                 onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
                 className="w-full py-3.5 rounded-2xl font-bold text-white text-base mb-3 btn-pulse"
                 style={{ background: 'linear-gradient(135deg, #2563EB, #1D4ED8)' }}>
-                {tex.unlockCta || `Unlock from ${isMoto ? '$19.99' : isCdl ? '$49.99' : '$29.99'} →`}
+                {tex.unlockCta || `Unlock from ${plan.price} →`}
               </button>
               <button type="button" onClick={() => setShowLockModal(false)}
                 className="text-sm text-[#94A3B8] hover:text-[#64748B]">
@@ -661,7 +660,7 @@ function TestContent() {
         {/* Q18 pre-paywall nudge */}
         {!hasFullAccess && current === nudgeAt && showAnswer && (
           <div className="bg-[#FFF7ED] border border-[#FED7AA] rounded-xl px-4 py-3 mb-4 text-sm text-[#92400E] font-medium text-center">
-            🔔 {(tex.nudgeFreeLeft || '{n} questions left in your free test').replace('{n}', freeLimit - current - 1)}  ·  {tex.nudgeUnlockFrom || 'unlock all from'} {isMoto ? '$19.99' : isCdl ? '$49.99' : '$29.99'}
+            🔔 {(tex.nudgeFreeLeft || '{n} questions left in your free test').replace('{n}', freeLimit - current - 1)}  ·  {tex.nudgeUnlockFrom || 'unlock all from'} {plan.price}
           </div>
         )}
 
@@ -704,11 +703,11 @@ function TestContent() {
                   }}>
                   {isCdl && <div className="text-[9px] font-bold text-[#0B1C3D] bg-[#F59E0B] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">{tex.planGuaranteedBadge}</div>}
                   {!isCdl && !isMoto && <div className="text-[9px] font-bold text-white bg-[#2563EB] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">{tex.planPopular}</div>}
-                  <div className="text-3xl mb-1">{isCdl ? '🚛' : isMoto ? '🏍️' : '🚗'}</div>
+                  <div className="text-3xl mb-1">{plan.icon}</div>
                   <div className="text-xs font-bold mb-0.5" style={{ color: isCdl ? '#92400E' : isMoto ? '#D97706' : '#2563EB' }}>
                     {isCdl ? tex.planCdlPro : isMoto ? tex.planMotoPass : tex.planAutoPass}
                   </div>
-                  <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">{isCdl ? '$49.99' : isMoto ? '$19.99' : '$29.99'}</div>
+                  <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">{plan.price}</div>
                   <div className="text-[10px] text-[#64748B] mb-3">{tex.planDuration || '30-day access'}</div>
                   <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
                     className="w-full py-2 rounded-lg text-sm font-bold text-white transition"
