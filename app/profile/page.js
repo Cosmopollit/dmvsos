@@ -9,6 +9,7 @@ import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { flags } from '@/lib/flags';
 import { PASS_META, EXTENSION } from '@/lib/plans';
+import SupportFooter from '@/app/components/SupportFooter';
 
 const langs = [
   { label: 'EN', flag: flags.us, code: 'en' },
@@ -263,6 +264,7 @@ function ProfileContent() {
           </div>
         )}
 
+        <SupportFooter lang={lang} />
       </div>
     </main>
   );

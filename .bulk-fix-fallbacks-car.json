@@ -1,0 +1,1419 @@
+{
+  "done": {
+    "alabama|al_car_116": {
+      "ts": 1778784272337,
+      "ok": 1,
+      "err": 0
+    },
+    "alabama|al_car_165": {
+      "ts": 1778784272560,
+      "ok": 1,
+      "err": 0
+    },
+    "alabama|al_car_137": {
+      "ts": 1778784272577,
+      "ok": 1,
+      "err": 0
+    },
+    "alabama|al_car_138": {
+      "ts": 1778784274271,
+      "ok": 1,
+      "err": 0
+    },
+    "alabama|al_car_139": {
+      "ts": 1778784274744,
+      "ok": 1,
+      "err": 0
+    },
+    "alabama|al_car_018": {
+      "ts": 1778784275813,
+      "ok": 1,
+      "err": 0
+    },
+    "alabama|al_car_029": {
+      "ts": 1778784276658,
+      "ok": 1,
+      "err": 0
+    },
+    "alabama|al_car_142": {
+      "ts": 1778784277732,
+      "ok": 1,
+      "err": 0
+    },
+    "alabama|al_car_159": {
+      "ts": 1778784278250,
+      "ok": 1,
+      "err": 0
+    },
+    "alaska|ak_car_148": {
+      "ts": 1778784279335,
+      "ok": 1,
+      "err": 0
+    },
+    "alaska|ak_car_136": {
+      "ts": 1778784280270,
+      "ok": 1,
+      "err": 0
+    },
+    "alaska|ak_car_001": {
+      "ts": 1778784280309,
+      "ok": 1,
+      "err": 0
+    },
+    "arizona|az_car_126": {
+      "ts": 1778784281681,
+      "ok": 1,
+      "err": 0
+    },
+    "arizona|az_car_127": {
+      "ts": 1778784282344,
+      "ok": 1,
+      "err": 0
+    },
+    "arizona|az_car_129": {
+      "ts": 1778784283186,
+      "ok": 1,
+      "err": 0
+    },
+    "arizona|az_car_125": {
+      "ts": 1778784283707,
+      "ok": 1,
+      "err": 0
+    },
+    "arizona|az_car_103": {
+      "ts": 1778784284695,
+      "ok": 1,
+      "err": 0
+    },
+    "arizona|az_car_116": {
+      "ts": 1778784285829,
+      "ok": 1,
+      "err": 0
+    },
+    "arizona|az_car_104": {
+      "ts": 1778784286067,
+      "ok": 1,
+      "err": 0
+    },
+    "california|ca_car_039": {
+      "ts": 1778784287151,
+      "ok": 1,
+      "err": 0
+    },
+    "california|ca_car_032": {
+      "ts": 1778784287977,
+      "ok": 1,
+      "err": 0
+    },
+    "colorado|co_car_123": {
+      "ts": 1778784289078,
+      "ok": 1,
+      "err": 0
+    },
+    "california|ca_car_110": {
+      "ts": 1778784289320,
+      "ok": 1,
+      "err": 0
+    },
+    "colorado|co_car_122": {
+      "ts": 1778784289877,
+      "ok": 1,
+      "err": 0
+    },
+    "connecticut|ct_car_090": {
+      "ts": 1778784291428,
+      "ok": 1,
+      "err": 0
+    },
+    "connecticut|ct_car_126": {
+      "ts": 1778784292193,
+      "ok": 1,
+      "err": 0
+    },
+    "delaware|de_car_014": {
+      "ts": 1778784292273,
+      "ok": 1,
+      "err": 0
+    },
+    "delaware|de_car_096": {
+      "ts": 1778784293973,
+      "ok": 1,
+      "err": 0
+    },
+    "delaware|de_car_060": {
+      "ts": 1778784294028,
+      "ok": 1,
+      "err": 0
+    },
+    "delaware|de_car_025": {
+      "ts": 1778784294166,
+      "ok": 1,
+      "err": 0
+    },
+    "georgia|ga_car_068": {
+      "ts": 1778784295945,
+      "ok": 1,
+      "err": 0
+    },
+    "delaware|de_car_089": {
+      "ts": 1778784296271,
+      "ok": 1,
+      "err": 0
+    },
+    "georgia|ga_car_087": {
+      "ts": 1778784296757,
+      "ok": 1,
+      "err": 0
+    },
+    "georgia|ga_car_066": {
+      "ts": 1778784298124,
+      "ok": 1,
+      "err": 0
+    },
+    "georgia|ga_car_045": {
+      "ts": 1778784298326,
+      "ok": 1,
+      "err": 0
+    },
+    "georgia|ga_car_062": {
+      "ts": 1778784299668,
+      "ok": 1,
+      "err": 0
+    },
+    "hawaii|hi_car_084": {
+      "ts": 1778784300676,
+      "ok": 1,
+      "err": 0
+    },
+    "hawaii|hi_car_012": {
+      "ts": 1778784300904,
+      "ok": 1,
+      "err": 0
+    },
+    "hawaii|hi_car_134": {
+      "ts": 1778784303406,
+      "ok": 1,
+      "err": 0
+    },
+    "hawaii|hi_car_015": {
+      "ts": 1778784303671,
+      "ok": 1,
+      "err": 0
+    },
+    "hawaii|hi_car_103": {
+      "ts": 1778784305650,
+      "ok": 1,
+      "err": 0
+    },
+    "hawaii|hi_car_168": {
+      "ts": 1778784305763,
+      "ok": 1,
+      "err": 0
+    },
+    "hawaii|hi_car_159": {
+      "ts": 1778784307494,
+      "ok": 1,
+      "err": 0
+    },
+    "hawaii|hi_car_081": {
+      "ts": 1778784307837,
+      "ok": 1,
+      "err": 0
+    },
+    "hawaii|hi_car_099": {
+      "ts": 1778784308341,
+      "ok": 1,
+      "err": 0
+    },
+    "hawaii|hi_car_131": {
+      "ts": 1778784309696,
+      "ok": 1,
+      "err": 0
+    },
+    "hawaii|hi_car_143": {
+      "ts": 1778784310143,
+      "ok": 1,
+      "err": 0
+    },
+    "hawaii|hi_car_129": {
+      "ts": 1778784311603,
+      "ok": 1,
+      "err": 0
+    },
+    "hawaii|hi_car_126": {
+      "ts": 1778784312218,
+      "ok": 1,
+      "err": 0
+    },
+    "hawaii|hi_car_096": {
+      "ts": 1778784312344,
+      "ok": 1,
+      "err": 0
+    },
+    "hawaii|hi_car_008": {
+      "ts": 1778784314368,
+      "ok": 1,
+      "err": 0
+    },
+    "idaho|id_car_113": {
+      "ts": 1778784314921,
+      "ok": 1,
+      "err": 0
+    },
+    "illinois|il_car_083": {
+      "ts": 1778784317685,
+      "ok": 1,
+      "err": 0
+    },
+    "illinois|il_car_126": {
+      "ts": 1778784318314,
+      "ok": 1,
+      "err": 0
+    },
+    "hawaii|hi_car_160": {
+      "ts": 1778784318544,
+      "ok": 1,
+      "err": 0
+    },
+    "illinois|il_car_079": {
+      "ts": 1778784320104,
+      "ok": 1,
+      "err": 0
+    },
+    "illinois|il_car_020": {
+      "ts": 1778784320826,
+      "ok": 1,
+      "err": 0
+    },
+    "illinois|il_car_198": {
+      "ts": 1778784321168,
+      "ok": 1,
+      "err": 0
+    },
+    "illinois|il_car_031": {
+      "ts": 1778784322718,
+      "ok": 1,
+      "err": 0
+    },
+    "illinois|il_car_084": {
+      "ts": 1778784323305,
+      "ok": 1,
+      "err": 0
+    },
+    "illinois|il_car_162": {
+      "ts": 1778784324467,
+      "ok": 1,
+      "err": 0
+    },
+    "illinois|il_car_078": {
+      "ts": 1778784325637,
+      "ok": 1,
+      "err": 0
+    },
+    "illinois|il_car_039": {
+      "ts": 1778784325991,
+      "ok": 1,
+      "err": 0
+    },
+    "illinois|il_car_116": {
+      "ts": 1778784327172,
+      "ok": 1,
+      "err": 0
+    },
+    "indiana|in_car_031": {
+      "ts": 1778784327730,
+      "ok": 1,
+      "err": 0
+    },
+    "indiana|in_car_099": {
+      "ts": 1778784329215,
+      "ok": 1,
+      "err": 0
+    },
+    "iowa|ia_car_037": {
+      "ts": 1778784329530,
+      "ok": 1,
+      "err": 0
+    },
+    "kansas|ks_car_182": {
+      "ts": 1778784330060,
+      "ok": 1,
+      "err": 0
+    },
+    "kentucky|ky_car_008": {
+      "ts": 1778784331617,
+      "ok": 1,
+      "err": 0
+    },
+    "kansas|ks_car_126": {
+      "ts": 1778784332111,
+      "ok": 1,
+      "err": 0
+    },
+    "kentucky|ky_car_030": {
+      "ts": 1778784332358,
+      "ok": 1,
+      "err": 0
+    },
+    "kentucky|ky_car_050": {
+      "ts": 1778784334033,
+      "ok": 1,
+      "err": 0
+    },
+    "kentucky|ky_car_041": {
+      "ts": 1778784334724,
+      "ok": 1,
+      "err": 0
+    },
+    "louisiana|la_car_121": {
+      "ts": 1778784335488,
+      "ok": 1,
+      "err": 0
+    },
+    "louisiana|la_car_140": {
+      "ts": 1778784336739,
+      "ok": 1,
+      "err": 0
+    },
+    "maine|me_car_048": {
+      "ts": 1778784337282,
+      "ok": 1,
+      "err": 0
+    },
+    "maryland|md_car_119": {
+      "ts": 1778784338030,
+      "ok": 1,
+      "err": 0
+    },
+    "massachusetts|ma_car_056": {
+      "ts": 1778784339801,
+      "ok": 1,
+      "err": 0
+    },
+    "massachusetts|ma_car_046": {
+      "ts": 1778784340392,
+      "ok": 1,
+      "err": 0
+    },
+    "massachusetts|ma_car_114": {
+      "ts": 1778784342659,
+      "ok": 1,
+      "err": 0
+    },
+    "massachusetts|ma_car_035": {
+      "ts": 1778784342733,
+      "ok": 1,
+      "err": 0
+    },
+    "maryland|md_car_112": {
+      "ts": 1778784343574,
+      "ok": 1,
+      "err": 0
+    },
+    "massachusetts|ma_car_043": {
+      "ts": 1778784344766,
+      "ok": 1,
+      "err": 0
+    },
+    "massachusetts|ma_car_051": {
+      "ts": 1778784345259,
+      "ok": 1,
+      "err": 0
+    },
+    "minnesota|mn_car_011": {
+      "ts": 1778784346550,
+      "ok": 1,
+      "err": 0
+    },
+    "massachusetts|ma_car_121": {
+      "ts": 1778784347002,
+      "ok": 1,
+      "err": 0
+    },
+    "minnesota|mn_car_056": {
+      "ts": 1778784347662,
+      "ok": 1,
+      "err": 0
+    },
+    "minnesota|mn_car_121": {
+      "ts": 1778784349398,
+      "ok": 1,
+      "err": 0
+    },
+    "minnesota|mn_car_100": {
+      "ts": 1778784569274,
+      "ok": 1,
+      "err": 0
+    },
+    "mississippi|ms_car_114": {
+      "ts": 1778784349958,
+      "ok": 1,
+      "err": 0
+    },
+    "missouri|mo_car_002": {
+      "ts": 1778784351374,
+      "ok": 1,
+      "err": 0
+    },
+    "missouri|mo_car_144": {
+      "ts": 1778784351890,
+      "ok": 1,
+      "err": 0
+    },
+    "missouri|mo_car_053": {
+      "ts": 1778784352132,
+      "ok": 1,
+      "err": 0
+    },
+    "montana|mt_car_050": {
+      "ts": 1778784353463,
+      "ok": 1,
+      "err": 0
+    },
+    "nebraska|ne_car_080": {
+      "ts": 1778784353820,
+      "ok": 1,
+      "err": 0
+    },
+    "nebraska|ne_car_070": {
+      "ts": 1778784353917,
+      "ok": 1,
+      "err": 0
+    },
+    "nevada|nv_car_017": {
+      "ts": 1778784356792,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_052": {
+      "ts": 1778784356815,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_130": {
+      "ts": 1778784358320,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_087": {
+      "ts": 1778784360382,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_031": {
+      "ts": 1778784360904,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_056": {
+      "ts": 1778784361140,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_120": {
+      "ts": 1778784363572,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_026": {
+      "ts": 1778784364050,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_106": {
+      "ts": 1778784364738,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_024": {
+      "ts": 1778784366371,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_042": {
+      "ts": 1778784366650,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_028": {
+      "ts": 1778784369526,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_159": {
+      "ts": 1778784369538,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_166": {
+      "ts": 1778784371743,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_081": {
+      "ts": 1778784372372,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_152": {
+      "ts": 1778784373656,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_135": {
+      "ts": 1778784375559,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_093": {
+      "ts": 1778784376179,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_010": {
+      "ts": 1778784379203,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_019": {
+      "ts": 1778784379531,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_067": {
+      "ts": 1778784380047,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_149": {
+      "ts": 1778784382420,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_113": {
+      "ts": 1778784382938,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_150": {
+      "ts": 1778784382962,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_097": {
+      "ts": 1778784385956,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_074": {
+      "ts": 1778784386077,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_121": {
+      "ts": 1778784386472,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_095": {
+      "ts": 1778784388913,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_039": {
+      "ts": 1778784389686,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_125": {
+      "ts": 1778784390654,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_114": {
+      "ts": 1778784392041,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_110": {
+      "ts": 1778784392779,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_055": {
+      "ts": 1778784393845,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_057": {
+      "ts": 1778784395759,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_036": {
+      "ts": 1778784396715,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_084": {
+      "ts": 1778784396918,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_022": {
+      "ts": 1778784398437,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_046": {
+      "ts": 1778784399599,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_092": {
+      "ts": 1778784399608,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_116": {
+      "ts": 1778784401199,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_054": {
+      "ts": 1778784404239,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_034": {
+      "ts": 1778784404638,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_133": {
+      "ts": 1778784404955,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_109": {
+      "ts": 1778784407277,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_162": {
+      "ts": 1778784407382,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_050": {
+      "ts": 1778784408215,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_029": {
+      "ts": 1778784410063,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_033": {
+      "ts": 1778784410778,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_122": {
+      "ts": 1778784412874,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_146": {
+      "ts": 1778784413259,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_009": {
+      "ts": 1778784413500,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_072": {
+      "ts": 1778784415975,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_165": {
+      "ts": 1778784416056,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_154": {
+      "ts": 1778784416171,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_071": {
+      "ts": 1778784418396,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_145": {
+      "ts": 1778784419438,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_136": {
+      "ts": 1778784420201,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_016": {
+      "ts": 1778784420683,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_023": {
+      "ts": 1778784422112,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_027": {
+      "ts": 1778784423558,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_035": {
+      "ts": 1778784423936,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_158": {
+      "ts": 1778784425950,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_111": {
+      "ts": 1778784426380,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_105": {
+      "ts": 1778784426916,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_091": {
+      "ts": 1778784428521,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_151": {
+      "ts": 1778784429885,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_041": {
+      "ts": 1778784430094,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_047": {
+      "ts": 1778784431981,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_018": {
+      "ts": 1778784433213,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_126": {
+      "ts": 1778784434635,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_127": {
+      "ts": 1778784436969,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_161": {
+      "ts": 1778784437495,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_003": {
+      "ts": 1778784438906,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_155": {
+      "ts": 1778784440415,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_044": {
+      "ts": 1778784441106,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_045": {
+      "ts": 1778784442508,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_065": {
+      "ts": 1778784444452,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_064": {
+      "ts": 1778784445630,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_147": {
+      "ts": 1778784445958,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_058": {
+      "ts": 1778784447498,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_077": {
+      "ts": 1778784449130,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_008": {
+      "ts": 1778784449416,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_153": {
+      "ts": 1778784451610,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_124": {
+      "ts": 1778784453108,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_032": {
+      "ts": 1778784453739,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_099": {
+      "ts": 1778784455061,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_089": {
+      "ts": 1778784457236,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_142": {
+      "ts": 1778784457239,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_037": {
+      "ts": 1778784458137,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_040": {
+      "ts": 1778784459941,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_143": {
+      "ts": 1778784460712,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_063": {
+      "ts": 1778784461064,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_049": {
+      "ts": 1778784463481,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_030": {
+      "ts": 1778784464184,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_004": {
+      "ts": 1778784465372,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_103": {
+      "ts": 1778784467103,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_090": {
+      "ts": 1778784467923,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_140": {
+      "ts": 1778784469197,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_129": {
+      "ts": 1778784470896,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_038": {
+      "ts": 1778784471111,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_108": {
+      "ts": 1778784472590,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_167": {
+      "ts": 1778784474886,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_078": {
+      "ts": 1778784478892,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_002": {
+      "ts": 1778784478973,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_060": {
+      "ts": 1778784480108,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_001": {
+      "ts": 1778784482279,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_086": {
+      "ts": 1778784482657,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_083": {
+      "ts": 1778784484763,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_021": {
+      "ts": 1778784485434,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_119": {
+      "ts": 1778784486473,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_137": {
+      "ts": 1778784488392,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_070": {
+      "ts": 1778784490322,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_007": {
+      "ts": 1778784490377,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_073": {
+      "ts": 1778784493515,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_118": {
+      "ts": 1778784493852,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_048": {
+      "ts": 1778784496632,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_101": {
+      "ts": 1778784497272,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_061": {
+      "ts": 1778784497274,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_051": {
+      "ts": 1778784500737,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_128": {
+      "ts": 1778784501184,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_141": {
+      "ts": 1778784503411,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_148": {
+      "ts": 1778784505188,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_011": {
+      "ts": 1778784505226,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_088": {
+      "ts": 1778784506377,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_107": {
+      "ts": 1778784507889,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_139": {
+      "ts": 1778784509169,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_062": {
+      "ts": 1778784509569,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_163": {
+      "ts": 1778784512552,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_138": {
+      "ts": 1778784514134,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_013": {
+      "ts": 1778784514933,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_094": {
+      "ts": 1778784517484,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_157": {
+      "ts": 1778784517745,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_079": {
+      "ts": 1778784518151,
+      "ok": 2,
+      "err": 0
+    },
+    "new-jersey|nj_car_154": {
+      "ts": 1778784520193,
+      "ok": 1,
+      "err": 0
+    },
+    "nevada|nv_car_123": {
+      "ts": 1778784520549,
+      "ok": 2,
+      "err": 0
+    },
+    "nevada|nv_car_020": {
+      "ts": 1778784570475,
+      "ok": 2,
+      "err": 0
+    },
+    "new-mexico|nm_car_126": {
+      "ts": 1778784522177,
+      "ok": 1,
+      "err": 0
+    },
+    "north-carolina|nc_car_003": {
+      "ts": 1778784523165,
+      "ok": 1,
+      "err": 0
+    },
+    "north-carolina|nc_car_071": {
+      "ts": 1778784523628,
+      "ok": 1,
+      "err": 0
+    },
+    "north-dakota|nd_car_143": {
+      "ts": 1778784524591,
+      "ok": 1,
+      "err": 0
+    },
+    "ohio|oh_car_108": {
+      "ts": 1778784525209,
+      "ok": 1,
+      "err": 0
+    },
+    "oklahoma|ok_car_132": {
+      "ts": 1778784527065,
+      "ok": 1,
+      "err": 0
+    },
+    "oklahoma|ok_car_134": {
+      "ts": 1778784527466,
+      "ok": 1,
+      "err": 0
+    },
+    "oklahoma|ok_car_034": {
+      "ts": 1778784529128,
+      "ok": 1,
+      "err": 0
+    },
+    "oklahoma|ok_car_027": {
+      "ts": 1778784566648,
+      "ok": 1,
+      "err": 0
+    },
+    "oklahoma|ok_car_038": {
+      "ts": 1778784568208,
+      "ok": 1,
+      "err": 0
+    },
+    "oklahoma|ok_car_054": {
+      "ts": 1778784566794,
+      "ok": 1,
+      "err": 0
+    },
+    "oklahoma|ok_car_070": {
+      "ts": 1778784532336,
+      "ok": 1,
+      "err": 0
+    },
+    "pennsylvania|pa_car_119": {
+      "ts": 1778784534656,
+      "ok": 1,
+      "err": 0
+    },
+    "pennsylvania|pa_car_117": {
+      "ts": 1778784535466,
+      "ok": 1,
+      "err": 0
+    },
+    "pennsylvania|pa_car_130": {
+      "ts": 1778784536466,
+      "ok": 1,
+      "err": 0
+    },
+    "pennsylvania|pa_car_121": {
+      "ts": 1778784536849,
+      "ok": 1,
+      "err": 0
+    },
+    "pennsylvania|pa_car_120": {
+      "ts": 1778784537617,
+      "ok": 1,
+      "err": 0
+    },
+    "rhode-island|ri_car_136": {
+      "ts": 1778784538698,
+      "ok": 1,
+      "err": 0
+    },
+    "south-carolina|sc_car_162": {
+      "ts": 1778784539047,
+      "ok": 1,
+      "err": 0
+    },
+    "south-carolina|sc_car_002": {
+      "ts": 1778784539549,
+      "ok": 1,
+      "err": 0
+    },
+    "south-carolina|sc_car_001": {
+      "ts": 1778784570471,
+      "ok": 1,
+      "err": 0
+    },
+    "south-dakota|sd_car_003": {
+      "ts": 1778784541932,
+      "ok": 1,
+      "err": 0
+    },
+    "south-carolina|sc_car_092": {
+      "ts": 1778784542910,
+      "ok": 1,
+      "err": 0
+    },
+    "south-dakota|sd_car_104": {
+      "ts": 1778784544083,
+      "ok": 1,
+      "err": 0
+    },
+    "tennessee|tn_car_061": {
+      "ts": 1778784544215,
+      "ok": 1,
+      "err": 0
+    },
+    "tennessee|tn_car_117": {
+      "ts": 1778784545693,
+      "ok": 1,
+      "err": 0
+    },
+    "utah|ut_car_074": {
+      "ts": 1778784546680,
+      "ok": 1,
+      "err": 0
+    },
+    "vermont|vt_car_090": {
+      "ts": 1778784548411,
+      "ok": 1,
+      "err": 0
+    },
+    "virginia|va_car_035": {
+      "ts": 1778784549010,
+      "ok": 1,
+      "err": 0
+    },
+    "tennessee|tn_car_169": {
+      "ts": 1778784549229,
+      "ok": 1,
+      "err": 0
+    },
+    "virginia|va_car_026": {
+      "ts": 1778784550627,
+      "ok": 1,
+      "err": 0
+    },
+    "virginia|va_car_025": {
+      "ts": 1778784550969,
+      "ok": 1,
+      "err": 0
+    },
+    "virginia|va_car_112": {
+      "ts": 1778784551321,
+      "ok": 1,
+      "err": 0
+    },
+    "virginia|va_car_028": {
+      "ts": 1778784553028,
+      "ok": 1,
+      "err": 0
+    },
+    "virginia|va_car_118": {
+      "ts": 1778784553471,
+      "ok": 1,
+      "err": 0
+    },
+    "virginia|va_car_031": {
+      "ts": 1778784553837,
+      "ok": 1,
+      "err": 0
+    },
+    "washington|wa_car_005": {
+      "ts": 1778784555131,
+      "ok": 1,
+      "err": 0
+    },
+    "washington|wa_car_063": {
+      "ts": 1778784556715,
+      "ok": 1,
+      "err": 0
+    },
+    "west-virginia|wv_car_004": {
+      "ts": 1778784557223,
+      "ok": 1,
+      "err": 0
+    },
+    "washington|wa_car_120": {
+      "ts": 1778784557540,
+      "ok": 1,
+      "err": 0
+    },
+    "west-virginia|wv_car_084": {
+      "ts": 1778784559106,
+      "ok": 1,
+      "err": 0
+    },
+    "west-virginia|wv_car_035": {
+      "ts": 1778784559576,
+      "ok": 1,
+      "err": 0
+    },
+    "west-virginia|wv_car_033": {
+      "ts": 1778784559779,
+      "ok": 1,
+      "err": 0
+    },
+    "west-virginia|wv_car_023": {
+      "ts": 1778784561294,
+      "ok": 1,
+      "err": 0
+    },
+    "west-virginia|wv_car_043": {
+      "ts": 1778784562032,
+      "ok": 1,
+      "err": 0
+    },
+    "west-virginia|wv_car_069": {
+      "ts": 1778784562034,
+      "ok": 1,
+      "err": 0
+    },
+    "west-virginia|wv_car_116": {
+      "ts": 1778784563712,
+      "ok": 1,
+      "err": 0
+    },
+    "west-virginia|wv_car_103": {
+      "ts": 1778784564650,
+      "ok": 1,
+      "err": 0
+    },
+    "west-virginia|wv_car_101": {
+      "ts": 1778784564727,
+      "ok": 1,
+      "err": 0
+    },
+    "west-virginia|wv_car_130": {
+      "ts": 1778784566148,
+      "ok": 1,
+      "err": 0
+    }
+  },
+  "stats": {
+    "ok": 424,
+    "err": 0,
+    "cost_est": 1.0176000000000016
+  }
+}

@@ -8,6 +8,7 @@ import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { flags } from '@/lib/flags';
 import { PASS_META } from '@/lib/plans';
+import SupportFooter from '@/app/components/SupportFooter';
 
 const langs = [
   { label: 'EN', flag: flags.us, code: 'en' },
@@ -248,6 +249,8 @@ function UpgradeContent() {
       <button type="button" onClick={() => router.push('/')} className="text-[#94A3B8] text-sm hover:text-white">
         {tex.back}
       </button>
+
+      <SupportFooter lang={lang} dark={true} />
     </main>
   );
 }

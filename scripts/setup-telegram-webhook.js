@@ -9,6 +9,10 @@
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import dns from 'dns';
+
+// Force IPv4 — local network here doesn't route IPv6 to api.telegram.org.
+dns.setDefaultResultOrder('ipv4first');
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const envFile = readFileSync(join(__dirname, '..', '.env.local'), 'utf8');

@@ -1,0 +1,1114 @@
+{
+  "done": {
+    "alabama|al_cdl_184": {
+      "ts": 1778783223378,
+      "ok": 1,
+      "err": 0
+    },
+    "alabama|al_cdl_200": {
+      "ts": 1778783223584,
+      "ok": 1,
+      "err": 0
+    },
+    "alabama|al_cdl_017": {
+      "ts": 1778783225023,
+      "ok": 1,
+      "err": 0
+    },
+    "alaska|ak_cdl_042": {
+      "ts": 1778783226770,
+      "ok": 1,
+      "err": 0
+    },
+    "arizona|az_cdl_030": {
+      "ts": 1778783227814,
+      "ok": 1,
+      "err": 0
+    },
+    "arkansas|ar_cdl_089": {
+      "ts": 1778783235097,
+      "ok": 1,
+      "err": 0
+    },
+    "arkansas|ar_cdl_183": {
+      "ts": 1778783237331,
+      "ok": 1,
+      "err": 0
+    },
+    "arkansas|ar_cdl_013": {
+      "ts": 1778783233638,
+      "ok": 1,
+      "err": 0
+    },
+    "arkansas|ar_cdl_027": {
+      "ts": 1778783232345,
+      "ok": 1,
+      "err": 0
+    },
+    "california|ca_cdl_016": {
+      "ts": 1778783238716,
+      "ok": 1,
+      "err": 0
+    },
+    "delaware|de_cdl_041": {
+      "ts": 1778783239785,
+      "ok": 1,
+      "err": 0
+    },
+    "indiana|in_cdl_022": {
+      "ts": 1778783244568,
+      "ok": 1,
+      "err": 0
+    },
+    "georgia|ga_cdl_023": {
+      "ts": 1778783243543,
+      "ok": 1,
+      "err": 0
+    },
+    "iowa|ia_cdl_006": {
+      "ts": 1778783249163,
+      "ok": 1,
+      "err": 0
+    },
+    "iowa|ia_cdl_200": {
+      "ts": 1778783252867,
+      "ok": 1,
+      "err": 0
+    },
+    "iowa|ia_cdl_033": {
+      "ts": 1778783251921,
+      "ok": 1,
+      "err": 0
+    },
+    "mississippi|ms_cdl_184": {
+      "ts": 1778783256016,
+      "ok": 1,
+      "err": 0
+    },
+    "mississippi|ms_cdl_026": {
+      "ts": 1778783256412,
+      "ok": 1,
+      "err": 0
+    },
+    "montana|mt_cdl_016": {
+      "ts": 1778783261456,
+      "ok": 1,
+      "err": 0
+    },
+    "montana|mt_cdl_015": {
+      "ts": 1778783260217,
+      "ok": 1,
+      "err": 0
+    },
+    "montana|mt_cdl_058": {
+      "ts": 1778783263141,
+      "ok": 1,
+      "err": 0
+    },
+    "nebraska|ne_cdl_006": {
+      "ts": 1778783265191,
+      "ok": 1,
+      "err": 0
+    },
+    "new-hampshire|nh_cdl_158": {
+      "ts": 1778783267167,
+      "ok": 1,
+      "err": 0
+    },
+    "new-jersey|nj_cdl_074": {
+      "ts": 1778783285012,
+      "ok": 1,
+      "err": 0
+    },
+    "new-jersey|nj_cdl_053": {
+      "ts": 1778783282377,
+      "ok": 1,
+      "err": 0
+    },
+    "new-jersey|nj_cdl_048": {
+      "ts": 1778783280518,
+      "ok": 2,
+      "err": 0
+    },
+    "new-jersey|nj_cdl_037": {
+      "ts": 1778783284642,
+      "ok": 2,
+      "err": 0
+    },
+    "new-jersey|nj_cdl_178": {
+      "ts": 1778783290008,
+      "ok": 1,
+      "err": 0
+    },
+    "new-jersey|nj_cdl_054": {
+      "ts": 1778783287060,
+      "ok": 1,
+      "err": 0
+    },
+    "new-jersey|nj_cdl_059": {
+      "ts": 1778783287533,
+      "ok": 1,
+      "err": 0
+    },
+    "new-jersey|nj_cdl_047": {
+      "ts": 1778783289410,
+      "ok": 1,
+      "err": 0
+    },
+    "new-jersey|nj_cdl_067": {
+      "ts": 1778783290838,
+      "ok": 1,
+      "err": 0
+    },
+    "new-jersey|nj_cdl_194": {
+      "ts": 1778783297015,
+      "ok": 2,
+      "err": 0
+    },
+    "new-mexico|nm_cdl_004": {
+      "ts": 1778783293441,
+      "ok": 1,
+      "err": 0
+    },
+    "new-mexico|nm_cdl_040": {
+      "ts": 1778783308227,
+      "ok": 1,
+      "err": 0
+    },
+    "new-mexico|nm_cdl_015": {
+      "ts": 1778783309437,
+      "ok": 2,
+      "err": 0
+    },
+    "new-mexico|nm_cdl_036": {
+      "ts": 1778783304897,
+      "ok": 1,
+      "err": 0
+    },
+    "new-mexico|nm_cdl_031": {
+      "ts": 1778783305877,
+      "ok": 3,
+      "err": 0
+    },
+    "new-mexico|nm_cdl_022": {
+      "ts": 1778783302258,
+      "ok": 1,
+      "err": 0
+    },
+    "new-mexico|nm_cdl_043": {
+      "ts": 1778783309871,
+      "ok": 2,
+      "err": 0
+    },
+    "new-mexico|nm_cdl_200": {
+      "ts": 1778783311785,
+      "ok": 2,
+      "err": 0
+    },
+    "new-mexico|nm_cdl_192": {
+      "ts": 1778783311597,
+      "ok": 2,
+      "err": 0
+    },
+    "new-mexico|nm_cdl_033": {
+      "ts": 1778783303149,
+      "ok": 1,
+      "err": 0
+    },
+    "new-mexico|nm_cdl_017": {
+      "ts": 1778783306157,
+      "ok": 1,
+      "err": 0
+    },
+    "new-mexico|nm_cdl_013": {
+      "ts": 1778783307716,
+      "ok": 1,
+      "err": 0
+    },
+    "new-mexico|nm_cdl_021": {
+      "ts": 1778783311788,
+      "ok": 1,
+      "err": 0
+    },
+    "new-york|ny_cdl_189": {
+      "ts": 1778783317481,
+      "ok": 2,
+      "err": 0
+    },
+    "new-york|ny_cdl_121": {
+      "ts": 1778783320918,
+      "ok": 2,
+      "err": 0
+    },
+    "new-york|ny_cdl_116": {
+      "ts": 1778783325278,
+      "ok": 2,
+      "err": 0
+    },
+    "new-york|ny_cdl_188": {
+      "ts": 1778783318002,
+      "ok": 1,
+      "err": 0
+    },
+    "new-york|ny_cdl_168": {
+      "ts": 1778783332020,
+      "ok": 1,
+      "err": 0
+    },
+    "new-york|ny_cdl_097": {
+      "ts": 1778783324177,
+      "ok": 1,
+      "err": 0
+    },
+    "new-york|ny_cdl_135": {
+      "ts": 1778783329404,
+      "ok": 2,
+      "err": 0
+    },
+    "new-york|ny_cdl_119": {
+      "ts": 1778783326287,
+      "ok": 1,
+      "err": 0
+    },
+    "new-york|ny_cdl_118": {
+      "ts": 1778783327534,
+      "ok": 1,
+      "err": 0
+    },
+    "new-york|ny_cdl_200": {
+      "ts": 1778783328834,
+      "ok": 1,
+      "err": 0
+    },
+    "new-york|ny_cdl_130": {
+      "ts": 1778783330815,
+      "ok": 1,
+      "err": 0
+    },
+    "north-carolina|nc_cdl_024": {
+      "ts": 1778783334799,
+      "ok": 1,
+      "err": 0
+    },
+    "north-carolina|nc_cdl_185": {
+      "ts": 1778783334728,
+      "ok": 1,
+      "err": 0
+    },
+    "north-carolina|nc_cdl_186": {
+      "ts": 1778783343159,
+      "ok": 2,
+      "err": 0
+    },
+    "north-carolina|nc_cdl_019": {
+      "ts": 1778783337959,
+      "ok": 1,
+      "err": 0
+    },
+    "north-carolina|nc_cdl_035": {
+      "ts": 1778783338046,
+      "ok": 1,
+      "err": 0
+    },
+    "north-carolina|nc_cdl_009": {
+      "ts": 1778783338156,
+      "ok": 1,
+      "err": 0
+    },
+    "north-carolina|nc_cdl_058": {
+      "ts": 1778783340327,
+      "ok": 1,
+      "err": 0
+    },
+    "north-carolina|nc_cdl_067": {
+      "ts": 1778783340483,
+      "ok": 1,
+      "err": 0
+    },
+    "north-carolina|nc_cdl_015": {
+      "ts": 1778783341219,
+      "ok": 1,
+      "err": 0
+    },
+    "north-carolina|nc_cdl_050": {
+      "ts": 1778783343362,
+      "ok": 1,
+      "err": 0
+    },
+    "north-carolina|nc_cdl_198": {
+      "ts": 1778783343928,
+      "ok": 1,
+      "err": 0
+    },
+    "north-carolina|nc_cdl_183": {
+      "ts": 1778783345745,
+      "ok": 1,
+      "err": 0
+    },
+    "north-dakota|nd_cdl_018": {
+      "ts": 1778783360516,
+      "ok": 1,
+      "err": 0
+    },
+    "north-dakota|nd_cdl_005": {
+      "ts": 1778783354242,
+      "ok": 1,
+      "err": 0
+    },
+    "north-dakota|nd_cdl_009": {
+      "ts": 1778783373922,
+      "ok": 1,
+      "err": 0
+    },
+    "north-dakota|nd_cdl_007": {
+      "ts": 1778783361618,
+      "ok": 1,
+      "err": 0
+    },
+    "north-dakota|nd_cdl_113": {
+      "ts": 1778783365802,
+      "ok": 2,
+      "err": 0
+    },
+    "north-dakota|nd_cdl_027": {
+      "ts": 1778783373189,
+      "ok": 3,
+      "err": 0
+    },
+    "north-dakota|nd_cdl_177": {
+      "ts": 1778783354508,
+      "ok": 1,
+      "err": 0
+    },
+    "north-dakota|nd_cdl_181": {
+      "ts": 1778783374467,
+      "ok": 1,
+      "err": 0
+    },
+    "north-dakota|nd_cdl_123": {
+      "ts": 1778783367344,
+      "ok": 1,
+      "err": 0
+    },
+    "north-dakota|nd_cdl_046": {
+      "ts": 1778783365626,
+      "ok": 1,
+      "err": 0
+    },
+    "north-dakota|nd_cdl_010": {
+      "ts": 1778783370022,
+      "ok": 3,
+      "err": 0
+    },
+    "north-dakota|nd_cdl_021": {
+      "ts": 1778783363486,
+      "ok": 1,
+      "err": 0
+    },
+    "north-dakota|nd_cdl_017": {
+      "ts": 1778783369215,
+      "ok": 1,
+      "err": 0
+    },
+    "north-dakota|nd_cdl_032": {
+      "ts": 1778783369440,
+      "ok": 1,
+      "err": 0
+    },
+    "ohio|oh_cdl_196": {
+      "ts": 1778783383686,
+      "ok": 1,
+      "err": 0
+    },
+    "ohio|oh_cdl_062": {
+      "ts": 1778783381280,
+      "ok": 1,
+      "err": 0
+    },
+    "ohio|oh_cdl_041": {
+      "ts": 1778783383859,
+      "ok": 2,
+      "err": 0
+    },
+    "ohio|oh_cdl_064": {
+      "ts": 1778783379772,
+      "ok": 1,
+      "err": 0
+    },
+    "ohio|oh_cdl_011": {
+      "ts": 1778783387027,
+      "ok": 1,
+      "err": 0
+    },
+    "oklahoma|ok_cdl_129": {
+      "ts": 1778783396428,
+      "ok": 3,
+      "err": 0
+    },
+    "oklahoma|ok_cdl_118": {
+      "ts": 1778783390278,
+      "ok": 1,
+      "err": 0
+    },
+    "oklahoma|ok_cdl_117": {
+      "ts": 1778783397460,
+      "ok": 2,
+      "err": 0
+    },
+    "oklahoma|ok_cdl_154": {
+      "ts": 1778783399216,
+      "ok": 1,
+      "err": 0
+    },
+    "oklahoma|ok_cdl_151": {
+      "ts": 1778783403909,
+      "ok": 3,
+      "err": 0
+    },
+    "oklahoma|ok_cdl_156": {
+      "ts": 1778783401965,
+      "ok": 2,
+      "err": 0
+    },
+    "oklahoma|ok_cdl_140": {
+      "ts": 1778783404988,
+      "ok": 1,
+      "err": 0
+    },
+    "oklahoma|ok_cdl_155": {
+      "ts": 1778783400961,
+      "ok": 2,
+      "err": 0
+    },
+    "oklahoma|ok_cdl_122": {
+      "ts": 1778783406777,
+      "ok": 2,
+      "err": 0
+    },
+    "oklahoma|ok_cdl_145": {
+      "ts": 1778783397769,
+      "ok": 1,
+      "err": 0
+    },
+    "oklahoma|ok_cdl_167": {
+      "ts": 1778783400267,
+      "ok": 1,
+      "err": 0
+    },
+    "oklahoma|ok_cdl_200": {
+      "ts": 1778783404061,
+      "ok": 1,
+      "err": 0
+    },
+    "oregon|or_cdl_002": {
+      "ts": 1778783411221,
+      "ok": 1,
+      "err": 0
+    },
+    "oregon|or_cdl_005": {
+      "ts": 1778783413065,
+      "ok": 1,
+      "err": 0
+    },
+    "oregon|or_cdl_050": {
+      "ts": 1778783416683,
+      "ok": 2,
+      "err": 0
+    },
+    "oregon|or_cdl_008": {
+      "ts": 1778783428813,
+      "ok": 1,
+      "err": 0
+    },
+    "oregon|or_cdl_048": {
+      "ts": 1778783436614,
+      "ok": 2,
+      "err": 0
+    },
+    "oregon|or_cdl_014": {
+      "ts": 1778783432017,
+      "ok": 1,
+      "err": 0
+    },
+    "oregon|or_cdl_192": {
+      "ts": 1778783443531,
+      "ok": 1,
+      "err": 0
+    },
+    "oregon|or_cdl_035": {
+      "ts": 1778783428695,
+      "ok": 3,
+      "err": 0
+    },
+    "oregon|or_cdl_058": {
+      "ts": 1778783434070,
+      "ok": 2,
+      "err": 0
+    },
+    "oregon|or_cdl_022": {
+      "ts": 1778783425960,
+      "ok": 1,
+      "err": 0
+    },
+    "oregon|or_cdl_198": {
+      "ts": 1778783443184,
+      "ok": 1,
+      "err": 0
+    },
+    "oregon|or_cdl_011": {
+      "ts": 1778783429714,
+      "ok": 2,
+      "err": 0
+    },
+    "oregon|or_cdl_037": {
+      "ts": 1778783434794,
+      "ok": 1,
+      "err": 0
+    },
+    "oregon|or_cdl_044": {
+      "ts": 1778783432602,
+      "ok": 2,
+      "err": 0
+    },
+    "oregon|or_cdl_200": {
+      "ts": 1778783441001,
+      "ok": 1,
+      "err": 0
+    },
+    "oregon|or_cdl_007": {
+      "ts": 1778783440358,
+      "ok": 1,
+      "err": 0
+    },
+    "oregon|or_cdl_019": {
+      "ts": 1778783431768,
+      "ok": 1,
+      "err": 0
+    },
+    "oregon|or_cdl_010": {
+      "ts": 1778783437679,
+      "ok": 1,
+      "err": 0
+    },
+    "oregon|or_cdl_036": {
+      "ts": 1778783439807,
+      "ok": 1,
+      "err": 0
+    },
+    "oregon|or_cdl_093": {
+      "ts": 1778783442442,
+      "ok": 1,
+      "err": 0
+    },
+    "pennsylvania|pa_cdl_005": {
+      "ts": 1778783453335,
+      "ok": 2,
+      "err": 0
+    },
+    "pennsylvania|pa_cdl_028": {
+      "ts": 1778783456673,
+      "ok": 2,
+      "err": 0
+    },
+    "pennsylvania|pa_cdl_002": {
+      "ts": 1778783457192,
+      "ok": 3,
+      "err": 0
+    },
+    "pennsylvania|pa_cdl_003": {
+      "ts": 1778783450052,
+      "ok": 1,
+      "err": 0
+    },
+    "pennsylvania|pa_cdl_004": {
+      "ts": 1778783454288,
+      "ok": 3,
+      "err": 0
+    },
+    "pennsylvania|pa_cdl_196": {
+      "ts": 1778783476300,
+      "ok": 1,
+      "err": 0
+    },
+    "pennsylvania|pa_cdl_026": {
+      "ts": 1778783473692,
+      "ok": 2,
+      "err": 0
+    },
+    "pennsylvania|pa_cdl_001": {
+      "ts": 1778783460172,
+      "ok": 1,
+      "err": 0
+    },
+    "pennsylvania|pa_cdl_199": {
+      "ts": 1778783474178,
+      "ok": 2,
+      "err": 0
+    },
+    "pennsylvania|pa_cdl_023": {
+      "ts": 1778783468696,
+      "ok": 2,
+      "err": 0
+    },
+    "pennsylvania|pa_cdl_036": {
+      "ts": 1778783479926,
+      "ok": 4,
+      "err": 0
+    },
+    "pennsylvania|pa_cdl_027": {
+      "ts": 1778783467951,
+      "ok": 3,
+      "err": 0
+    },
+    "pennsylvania|pa_cdl_007": {
+      "ts": 1778783468317,
+      "ok": 1,
+      "err": 0
+    },
+    "pennsylvania|pa_cdl_009": {
+      "ts": 1778783466319,
+      "ok": 1,
+      "err": 0
+    },
+    "pennsylvania|pa_cdl_046": {
+      "ts": 1778783471123,
+      "ok": 1,
+      "err": 0
+    },
+    "pennsylvania|pa_cdl_015": {
+      "ts": 1778783476733,
+      "ok": 1,
+      "err": 0
+    },
+    "rhode-island|ri_cdl_165": {
+      "ts": 1778783493590,
+      "ok": 1,
+      "err": 0
+    },
+    "rhode-island|ri_cdl_197": {
+      "ts": 1778783499670,
+      "ok": 2,
+      "err": 0
+    },
+    "rhode-island|ri_cdl_199": {
+      "ts": 1778783500874,
+      "ok": 2,
+      "err": 0
+    },
+    "rhode-island|ri_cdl_185": {
+      "ts": 1778783493486,
+      "ok": 3,
+      "err": 0
+    },
+    "rhode-island|ri_cdl_172": {
+      "ts": 1778783493247,
+      "ok": 3,
+      "err": 0
+    },
+    "rhode-island|ri_cdl_186": {
+      "ts": 1778783496458,
+      "ok": 2,
+      "err": 0
+    },
+    "rhode-island|ri_cdl_189": {
+      "ts": 1778783496917,
+      "ok": 3,
+      "err": 0
+    },
+    "rhode-island|ri_cdl_150": {
+      "ts": 1778783488011,
+      "ok": 1,
+      "err": 0
+    },
+    "rhode-island|ri_cdl_120": {
+      "ts": 1778783488215,
+      "ok": 2,
+      "err": 0
+    },
+    "rhode-island|ri_cdl_200": {
+      "ts": 1778783498836,
+      "ok": 3,
+      "err": 0
+    },
+    "south-carolina|sc_cdl_001": {
+      "ts": 1778783516801,
+      "ok": 1,
+      "err": 0
+    },
+    "south-carolina|sc_cdl_034": {
+      "ts": 1778783522708,
+      "ok": 2,
+      "err": 0
+    },
+    "south-carolina|sc_cdl_041": {
+      "ts": 1778783514752,
+      "ok": 1,
+      "err": 0
+    },
+    "south-carolina|sc_cdl_021": {
+      "ts": 1778783506947,
+      "ok": 1,
+      "err": 0
+    },
+    "south-carolina|sc_cdl_004": {
+      "ts": 1778783521748,
+      "ok": 2,
+      "err": 0
+    },
+    "south-carolina|sc_cdl_040": {
+      "ts": 1778783517292,
+      "ok": 2,
+      "err": 0
+    },
+    "south-carolina|sc_cdl_027": {
+      "ts": 1778783521276,
+      "ok": 1,
+      "err": 0
+    },
+    "south-carolina|sc_cdl_010": {
+      "ts": 1778783523942,
+      "ok": 1,
+      "err": 0
+    },
+    "south-carolina|sc_cdl_046": {
+      "ts": 1778783529320,
+      "ok": 3,
+      "err": 0
+    },
+    "south-carolina|sc_cdl_127": {
+      "ts": 1778783527935,
+      "ok": 2,
+      "err": 0
+    },
+    "south-carolina|sc_cdl_077": {
+      "ts": 1778783526952,
+      "ok": 1,
+      "err": 0
+    },
+    "south-carolina|sc_cdl_007": {
+      "ts": 1778783518453,
+      "ok": 1,
+      "err": 0
+    },
+    "south-carolina|sc_cdl_045": {
+      "ts": 1778783530093,
+      "ok": 2,
+      "err": 0
+    },
+    "south-carolina|sc_cdl_012": {
+      "ts": 1778783524754,
+      "ok": 1,
+      "err": 0
+    },
+    "south-dakota|sd_cdl_006": {
+      "ts": 1778783545835,
+      "ok": 2,
+      "err": 0
+    },
+    "south-dakota|sd_cdl_078": {
+      "ts": 1778783544531,
+      "ok": 2,
+      "err": 0
+    },
+    "south-dakota|sd_cdl_026": {
+      "ts": 1778783539148,
+      "ok": 2,
+      "err": 0
+    },
+    "south-dakota|sd_cdl_100": {
+      "ts": 1778783548121,
+      "ok": 2,
+      "err": 0
+    },
+    "south-dakota|sd_cdl_038": {
+      "ts": 1778783546108,
+      "ok": 3,
+      "err": 0
+    },
+    "south-dakota|sd_cdl_062": {
+      "ts": 1778783548392,
+      "ok": 2,
+      "err": 0
+    },
+    "south-dakota|sd_cdl_192": {
+      "ts": 1778783549074,
+      "ok": 1,
+      "err": 0
+    },
+    "south-dakota|sd_cdl_045": {
+      "ts": 1778783542011,
+      "ok": 2,
+      "err": 0
+    },
+    "south-dakota|sd_cdl_007": {
+      "ts": 1778783541434,
+      "ok": 1,
+      "err": 0
+    },
+    "south-dakota|sd_cdl_029": {
+      "ts": 1778783550689,
+      "ok": 2,
+      "err": 0
+    },
+    "tennessee|tn_cdl_006": {
+      "ts": 1778783558120,
+      "ok": 1,
+      "err": 0
+    },
+    "tennessee|tn_cdl_004": {
+      "ts": 1778783553796,
+      "ok": 1,
+      "err": 0
+    },
+    "tennessee|tn_cdl_035": {
+      "ts": 1778783560153,
+      "ok": 2,
+      "err": 0
+    },
+    "tennessee|tn_cdl_005": {
+      "ts": 1778783560133,
+      "ok": 2,
+      "err": 0
+    },
+    "tennessee|tn_cdl_026": {
+      "ts": 1778783561261,
+      "ok": 2,
+      "err": 0
+    },
+    "tennessee|tn_cdl_002": {
+      "ts": 1778783565601,
+      "ok": 2,
+      "err": 0
+    },
+    "tennessee|tn_cdl_019": {
+      "ts": 1778783562809,
+      "ok": 1,
+      "err": 0
+    },
+    "tennessee|tn_cdl_052": {
+      "ts": 1778783563230,
+      "ok": 1,
+      "err": 0
+    },
+    "tennessee|tn_cdl_196": {
+      "ts": 1778783565192,
+      "ok": 1,
+      "err": 0
+    },
+    "texas|tx_cdl_059": {
+      "ts": 1778783574888,
+      "ok": 1,
+      "err": 0
+    },
+    "texas|tx_cdl_006": {
+      "ts": 1778783572805,
+      "ok": 2,
+      "err": 0
+    },
+    "texas|tx_cdl_007": {
+      "ts": 1778783572212,
+      "ok": 2,
+      "err": 0
+    },
+    "texas|tx_cdl_099": {
+      "ts": 1778783575875,
+      "ok": 3,
+      "err": 0
+    },
+    "texas|tx_cdl_008": {
+      "ts": 1778783574434,
+      "ok": 1,
+      "err": 0
+    },
+    "utah|ut_cdl_200": {
+      "ts": 1778783596025,
+      "ok": 1,
+      "err": 0
+    },
+    "utah|ut_cdl_083": {
+      "ts": 1778783589060,
+      "ok": 3,
+      "err": 0
+    },
+    "utah|ut_cdl_144": {
+      "ts": 1778783593494,
+      "ok": 3,
+      "err": 0
+    },
+    "utah|ut_cdl_145": {
+      "ts": 1778783590024,
+      "ok": 2,
+      "err": 0
+    },
+    "utah|ut_cdl_132": {
+      "ts": 1778783591127,
+      "ok": 1,
+      "err": 0
+    },
+    "utah|ut_cdl_141": {
+      "ts": 1778783591916,
+      "ok": 1,
+      "err": 0
+    },
+    "utah|ut_cdl_082": {
+      "ts": 1778783587717,
+      "ok": 1,
+      "err": 0
+    },
+    "utah|ut_cdl_067": {
+      "ts": 1778783585272,
+      "ok": 1,
+      "err": 0
+    },
+    "utah|ut_cdl_159": {
+      "ts": 1778783593590,
+      "ok": 1,
+      "err": 0
+    },
+    "utah|ut_cdl_131": {
+      "ts": 1778783588645,
+      "ok": 1,
+      "err": 0
+    },
+    "utah|ut_cdl_164": {
+      "ts": 1778783594391,
+      "ok": 1,
+      "err": 0
+    },
+    "vermont|vt_cdl_013": {
+      "ts": 1778783599975,
+      "ok": 2,
+      "err": 0
+    },
+    "vermont|vt_cdl_017": {
+      "ts": 1778783600151,
+      "ok": 2,
+      "err": 0
+    },
+    "vermont|vt_cdl_075": {
+      "ts": 1778783602051,
+      "ok": 3,
+      "err": 0
+    },
+    "virginia|va_cdl_165": {
+      "ts": 1778783610783,
+      "ok": 1,
+      "err": 0
+    },
+    "virginia|va_cdl_140": {
+      "ts": 1778783604510,
+      "ok": 2,
+      "err": 0
+    },
+    "virginia|va_cdl_156": {
+      "ts": 1778783608637,
+      "ok": 1,
+      "err": 0
+    },
+    "virginia|va_cdl_168": {
+      "ts": 1778783610876,
+      "ok": 1,
+      "err": 0
+    },
+    "virginia|va_cdl_147": {
+      "ts": 1778783606715,
+      "ok": 1,
+      "err": 0
+    },
+    "virginia|va_cdl_100": {
+      "ts": 1778783608539,
+      "ok": 1,
+      "err": 0
+    },
+    "washington|wa_cdl_005": {
+      "ts": 1778783618870,
+      "ok": 2,
+      "err": 0
+    },
+    "washington|wa_cdl_003": {
+      "ts": 1778783614895,
+      "ok": 2,
+      "err": 0
+    },
+    "washington|wa_cdl_004": {
+      "ts": 1778783620107,
+      "ok": 1,
+      "err": 0
+    },
+    "washington|wa_cdl_001": {
+      "ts": 1778783625246,
+      "ok": 1,
+      "err": 0
+    },
+    "washington|wa_cdl_002": {
+      "ts": 1778783628967,
+      "ok": 1,
+      "err": 0
+    },
+    "washington|wa_cdl_048": {
+      "ts": 1778783628763,
+      "ok": 2,
+      "err": 0
+    },
+    "washington|wa_cdl_034": {
+      "ts": 1778783627646,
+      "ok": 2,
+      "err": 0
+    },
+    "washington|wa_cdl_042": {
+      "ts": 1778783632234,
+      "ok": 2,
+      "err": 0
+    },
+    "washington|wa_cdl_021": {
+      "ts": 1778783631727,
+      "ok": 1,
+      "err": 0
+    },
+    "washington|wa_cdl_033": {
+      "ts": 1778783626155,
+      "ok": 3,
+      "err": 0
+    },
+    "washington|wa_cdl_054": {
+      "ts": 1778783626152,
+      "ok": 1,
+      "err": 0
+    },
+    "washington|wa_cdl_010": {
+      "ts": 1778783630084,
+      "ok": 1,
+      "err": 0
+    },
+    "washington|wa_cdl_053": {
+      "ts": 1778783632622,
+      "ok": 1,
+      "err": 0
+    },
+    "wisconsin|wi_cdl_015": {
+      "ts": 1778783635532,
+      "ok": 4,
+      "err": 0
+    },
+    "wisconsin|wi_cdl_097": {
+      "ts": 1778783636022,
+      "ok": 4,
+      "err": 0
+    },
+    "wisconsin|wi_cdl_187": {
+      "ts": 1778783636197,
+      "ok": 4,
+      "err": 0
+    },
+    "wisconsin|wi_cdl_014": {
+      "ts": 1778783639708,
+      "ok": 4,
+      "err": 0
+    }
+  },
+  "stats": {
+    "ok": 531,
+    "err": 0,
+    "cost_est": 1.2743999999999962
+  }
+}
