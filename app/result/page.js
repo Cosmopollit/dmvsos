@@ -246,7 +246,7 @@ function ResultContent() {
         {!isPro && (() => {
           const rIsMoto = ['moto', 'motorcycle'].includes(category);
           const rIsCdl = category === 'cdl';
-          const rPlan = rIsMoto ? 'moto_pass' : rIsCdl ? 'cdl_pass' : 'car_pass';
+          const rPlan = rIsMoto ? 'onetime_moto' : rIsCdl ? 'onetime_cdl' : 'onetime_auto';
           return (
             <div className="bg-white rounded-2xl p-5 w-full border border-[#E2E8F0] shadow-sm">
               <p className="text-[#0B1C3D] font-bold text-base mb-1 text-center">{tex.upgradeModalTitle || 'Unlock Full Access'}</p>
@@ -263,8 +263,8 @@ function ResultContent() {
                   <div className="text-xs font-bold mb-0.5" style={{ color: rIsCdl ? '#92400E' : rIsMoto ? '#D97706' : '#2563EB' }}>
                     {rIsCdl ? tex.planCdlPro : rIsMoto ? tex.planMotoPass : tex.planAutoPass}
                   </div>
-                  <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">{rIsCdl ? '$59.99' : rIsMoto ? '$9.99' : '$29.99'}</div>
-                  <div className="text-[10px] text-[#64748B] mb-3">{tex.perMonth}</div>
+                  <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">{rIsCdl ? '$49.99' : rIsMoto ? '$19.99' : '$29.99'}</div>
+                  <div className="text-[10px] text-[#64748B] mb-3">{tex.planDuration || '30-day access'}</div>
                   <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=${rPlan}`)}
                     className="w-full py-2 rounded-lg text-sm font-bold text-white transition"
                     style={{ background: rIsCdl ? '#0B1C3D' : rIsMoto ? '#D97706' : '#2563EB' }}>

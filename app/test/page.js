@@ -38,9 +38,9 @@ function TestContent() {
     : hasCar; // car/dmv → requires car_pass (or cdl_pass which includes car)
 
   // Upgrade plan to suggest based on current category
-  const suggestPlan = ['moto', 'motorcycle'].includes(category) ? 'moto_pass'
-    : category === 'cdl' ? 'cdl_pass'
-    : 'car_pass';
+  const suggestPlan = ['moto', 'motorcycle'].includes(category) ? 'onetime_moto'
+    : category === 'cdl' ? 'onetime_cdl'
+    : 'onetime_auto';
 
   const isMoto = ['moto', 'motorcycle'].includes(category);
   const isCdl = category === 'cdl';
@@ -456,7 +456,7 @@ function TestContent() {
                 onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
                 className="w-full py-3.5 rounded-2xl font-bold text-white text-base mb-3 btn-pulse"
                 style={{ background: 'linear-gradient(135deg, #2563EB, #1D4ED8)' }}>
-                {tex.unlockCta || `Unlock from ${isMoto ? '$9.99' : isCdl ? '$59.99' : '$29.99'} →`}
+                {tex.unlockCta || `Unlock from ${isMoto ? '$19.99' : isCdl ? '$49.99' : '$29.99'} →`}
               </button>
               <button type="button" onClick={() => setShowLockModal(false)}
                 className="text-sm text-[#94A3B8] hover:text-[#64748B]">
@@ -661,7 +661,7 @@ function TestContent() {
         {/* Q18 pre-paywall nudge */}
         {!hasFullAccess && current === nudgeAt && showAnswer && (
           <div className="bg-[#FFF7ED] border border-[#FED7AA] rounded-xl px-4 py-3 mb-4 text-sm text-[#92400E] font-medium text-center">
-            🔔 {(tex.nudgeFreeLeft || '{n} questions left in your free test').replace('{n}', freeLimit - current - 1)}  ·  {tex.nudgeUnlockFrom || 'unlock all from'} {isMoto ? '$9.99' : isCdl ? '$59.99' : '$29.99'}
+            🔔 {(tex.nudgeFreeLeft || '{n} questions left in your free test').replace('{n}', freeLimit - current - 1)}  ·  {tex.nudgeUnlockFrom || 'unlock all from'} {isMoto ? '$19.99' : isCdl ? '$49.99' : '$29.99'}
           </div>
         )}
 
@@ -708,8 +708,8 @@ function TestContent() {
                   <div className="text-xs font-bold mb-0.5" style={{ color: isCdl ? '#92400E' : isMoto ? '#D97706' : '#2563EB' }}>
                     {isCdl ? tex.planCdlPro : isMoto ? tex.planMotoPass : tex.planAutoPass}
                   </div>
-                  <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">{isCdl ? '$59.99' : isMoto ? '$9.99' : '$29.99'}</div>
-                  <div className="text-[10px] text-[#64748B] mb-3">{tex.perMonth}</div>
+                  <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">{isCdl ? '$49.99' : isMoto ? '$19.99' : '$29.99'}</div>
+                  <div className="text-[10px] text-[#64748B] mb-3">{tex.planDuration || '30-day access'}</div>
                   <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
                     className="w-full py-2 rounded-lg text-sm font-bold text-white transition"
                     style={{ background: isCdl ? '#0B1C3D' : isMoto ? '#D97706' : '#2563EB' }}>

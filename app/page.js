@@ -187,13 +187,13 @@ export default function Home() {
                       {initial}
                     </div>
                     <span className="hidden sm:block text-xs font-medium text-[#1E293B] max-w-[80px] truncate">{firstName}</span>
-                    {isPro && ['cdl_pass', 'guaranteed_pass'].includes(planType) && (
+                    {isPro && ['cdl', 'cdl_pass', 'guaranteed_pass'].includes(planType) && (
                       <span className="hidden sm:inline text-[10px] font-semibold bg-[#FEF3C7] text-[#B45309] px-1.5 py-0.5 rounded-full whitespace-nowrap">CDL Pro</span>
                     )}
-                    {isPro && ['car_pass', 'full_prep'].includes(planType) && (
+                    {isPro && ['auto', 'car_pass', 'full_prep'].includes(planType) && (
                       <span className="hidden sm:inline text-[10px] font-semibold bg-[#DBEAFE] text-[#1D4ED8] px-1.5 py-0.5 rounded-full whitespace-nowrap">Auto Pass</span>
                     )}
-                    {isPro && ['moto_pass', 'quick_pass'].includes(planType) && (
+                    {isPro && ['moto', 'moto_pass', 'quick_pass'].includes(planType) && (
                       <span className="hidden sm:inline text-[10px] font-semibold bg-[#F3F4F6] text-[#4B5563] px-1.5 py-0.5 rounded-full whitespace-nowrap">Moto Pass</span>
                     )}
                     {!isPro && (
