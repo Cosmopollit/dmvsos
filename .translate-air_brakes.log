@@ -1809,3 +1809,144 @@ Running 2 states in parallel
 
   Translating to Chinese (Simplified) (zh)...
     Batch 1/10...
+    Retry 2/3 for Chinese (Simplified) batch: Expected JSON array
+
+    Retry 1/3 for Chinese (Simplified) batch: Expected JSON array
+
+    Batch failed, falling back to one-by-one translation...
+
+    Retry 2/3 for Chinese (Simplified) batch: Expected JSON array
+
+    WARNING: Failed to translate q.aed62ff6-16cb-4e67-8a95-f31fcb2e1016: Expected JSON object, using EN
+ ok
+    Batch 2/12...
+    Batch failed, falling back to one-by-one translation...
+
+    WARNING: Failed to translate q.c4df0a6c-4792-44b5-96cc-cc392a63420d: Expected JSON object, using EN
+
+    WARNING: Failed to translate q.208c6143-3da9-4f78-aa08-1e5314cc513e: Expected JSON object, using EN
+
+    WARNING: Failed to translate q.f5d12758-29d2-4ef3-8efa-b795d1c2e8a9: Expected JSON object, using EN
+ ok
+    Batch 2/10...
+    Retry 1/3 for Chinese (Simplified) batch: Expected JSON array
+ ok
+    Batch 3/10...
+    Retry 2/3 for Chinese (Simplified) batch: Expected JSON array
+
+    Retry 1/3 for Chinese (Simplified) batch: Expected JSON array
+
+    Batch failed, falling back to one-by-one translation...
+
+    Retry 2/3 for Chinese (Simplified) batch: Expected JSON array
+
+    WARNING: Failed to translate q.b0358cd9-e84a-4f66-8fec-21b57afb64fc: Expected JSON object, using EN
+
+    WARNING: Failed to translate q.3dc07228-ba48-429f-93fc-78bff6308e7e: Expected JSON object, using EN
+ ok
+    Batch 3/12...
+    Batch failed, falling back to one-by-one translation...
+
+    Retry 1/3 for Chinese (Simplified) batch: Expected JSON array
+
+    WARNING: Failed to translate q.74828851-2c08-4255-a4d4-84d4b9528241: Expected JSON object, using EN
+ ok
+    Batch 4/10... ok
+    Batch 5/10...
+    Retry 2/3 for Chinese (Simplified) batch: Expected JSON array
+
+    Batch failed, falling back to one-by-one translation...
+ ok
+    Batch 6/10...
+    WARNING: Failed to translate q.2162d809-50fe-4ede-99cc-55b62d3a63f0: Expected JSON object, using EN
+ ok
+    Batch 4/12...
+    Retry 1/3 for Chinese (Simplified) batch: Expected JSON array
+
+    Retry 1/3 for Chinese (Simplified) batch: Expected JSON array
+
+    Retry 2/3 for Chinese (Simplified) batch: Expected JSON array
+
+    Retry 2/3 for Chinese (Simplified) batch: Expected JSON array
+
+    Batch failed, falling back to one-by-one translation...
+
+    Batch failed, falling back to one-by-one translation...
+
+    WARNING: Failed to translate q.39e66bc8-4623-4465-8884-e3b558c9a71c: Expected JSON object, using EN
+
+    WARNING: Failed to translate q.c801ad8e-77d7-4177-827d-0ee97d1ad4bb: Expected JSON object, using EN
+ ok
+    Batch 7/10... ok
+    Batch 5/12...
+    Retry 1/3 for Chinese (Simplified) batch: Expected JSON array
+ ok
+    Batch 6/12...
+    Retry 1/3 for Chinese (Simplified) batch: Expected JSON array
+
+    Retry 2/3 for Chinese (Simplified) batch: Expected JSON array
+
+    Retry 2/3 for Chinese (Simplified) batch: Expected JSON array
+
+    Batch failed, falling back to one-by-one translation...
+
+    WARNING: Failed to translate q.bdb3b53f-cc34-440e-8e31-21cdfa7bdb4b: Expected JSON object, using EN
+
+    Batch failed, falling back to one-by-one translation...
+
+    WARNING: Failed to translate q.2fcfa5bd-04d4-4a7b-a529-b8d5bc478886: Expected JSON object, using EN
+ ok
+    Batch 8/10... ok
+    Batch 7/12...
+    Retry 1/3 for Chinese (Simplified) batch: Expected JSON array
+ ok
+    Batch 8/12...
+    Retry 2/3 for Chinese (Simplified) batch: Expected JSON array
+ ok
+    Batch 9/12...
+    Batch failed, falling back to one-by-one translation...
+
+    Retry 1/3 for Chinese (Simplified) batch: Expected JSON array
+ ok
+    Batch 9/10...
+    Retry 2/3 for Chinese (Simplified) batch: Expected JSON array
+
+    Retry 1/3 for Chinese (Simplified) batch: Expected JSON array
+
+    Batch failed, falling back to one-by-one translation...
+
+    Retry 2/3 for Chinese (Simplified) batch: Expected JSON array
+
+    WARNING: Failed to translate q.a524bc7d-d983-4aa8-8ae9-4045788458e5: Expected JSON object, using EN
+ ok
+    Batch 10/12...
+    Batch failed, falling back to one-by-one translation...
+
+    Retry 1/3 for Chinese (Simplified) batch: Expected JSON array
+
+    WARNING: Failed to translate q.1e60e6bf-e18f-4544-9ddb-e6f3b4139684: Expected JSON object, using EN
+ ok
+    Batch 10/10...
+    Retry 2/3 for Chinese (Simplified) batch: Expected JSON array
+
+    Retry 1/3 for Chinese (Simplified) batch: Expected JSON array
+
+    Batch failed, falling back to one-by-one translation...
+
+    Retry 2/3 for Chinese (Simplified) batch: Expected JSON array
+
+    WARNING: Failed to translate q.b1db19c9-0e1c-4079-8ea8-9d7b6b04f028: Expected JSON object, using EN
+ ok
+    Batch 11/12...
+    Batch failed, falling back to one-by-one translation...
+
+    WARNING: Failed to translate q.2f7318b2-bf27-4964-aefb-33380e41b042: Expected JSON object, using EN
+
+    Retry 1/3 for Chinese (Simplified) batch: Expected JSON array
+ ok
+    Deleting old zh questions (subcategory=air_brakes)...
+    Inserting 100 translated questions...
+    ZH done: 100 questions inserted
+
+  Translating to Ukrainian (ua)...
+    Batch 1/5...

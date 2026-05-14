@@ -689,9 +689,22 @@ function TestContent() {
           <div className="bg-white rounded-2xl w-full max-w-md shadow-xl border border-[#E2E8F0] overflow-hidden">
             <div className="h-1.5 bg-gradient-to-r from-[#F59E0B] via-[#FB923C] to-[#F59E0B]" />
             <div className="p-6">
-              <h2 className="text-xl font-bold text-[#0B1C3D] mb-1 text-center">{tex.upgradeModalTitle || `You've used all ${freeLimit} free questions`}</h2>
-              <p className="text-[#2563EB] font-bold text-sm mb-4 text-center">
+              <h2 className="text-xl font-bold text-[#0B1C3D] mb-1 text-center">{tex.upgradeModalTitle || `20 done. The actual DMV looks just like this.`}</h2>
+              <p className="text-[#2563EB] font-bold text-sm mb-3 text-center">
                 {(tex.upgradeScoreSoFar || 'Your score: {score}/20').replace('{score}', String(score)).replace('{percent}', String(Math.round((score / 20) * 100)))}
+              </p>
+
+              {/* Body — explains weird questions, links to official handbook */}
+              <p className="text-sm text-[#475569] mb-4 text-center leading-relaxed">
+                {tex.upgradeModalBody1 || "If a question looks weird, that's how the DMV asks it. We work from your state's "}
+                <Link
+                  href={`/manuals/${state}/${isMoto ? 'motorcycle' : isCdl ? 'cdl' : 'car'}`}
+                  target="_blank"
+                  className="text-[#2563EB] underline hover:text-[#1D4ED8]"
+                >
+                  {tex.upgradeModalBodyLink || 'official driver handbook'}
+                </Link>
+                {tex.upgradeModalBody2 || ' — same source as the real test.'}
               </p>
 
               {/* Highlighted plan card for current category */}
