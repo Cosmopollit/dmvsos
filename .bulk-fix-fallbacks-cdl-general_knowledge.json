@@ -1,0 +1,409 @@
+{
+  "done": {
+    "alabama|al_cdl_gk_194": {
+      "ts": 1778796725510,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_197": {
+      "ts": 1778796727229,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_196": {
+      "ts": 1778796727318,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_200": {
+      "ts": 1778796728980,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_152": {
+      "ts": 1778796730732,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_201": {
+      "ts": 1778796731521,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_193": {
+      "ts": 1778796731857,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_122": {
+      "ts": 1778796734332,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_187": {
+      "ts": 1778796734799,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_186": {
+      "ts": 1778796735872,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_155": {
+      "ts": 1778796737457,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_150": {
+      "ts": 1778796738011,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_199": {
+      "ts": 1778796740576,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_198": {
+      "ts": 1778796741163,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_181": {
+      "ts": 1778796741326,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_121": {
+      "ts": 1778796744177,
+      "ok": 1,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_160": {
+      "ts": 1778796744390,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_153": {
+      "ts": 1778796744902,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_177": {
+      "ts": 1778796747476,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_157": {
+      "ts": 1778796747543,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_161": {
+      "ts": 1778796750864,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_151": {
+      "ts": 1778796751056,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_154": {
+      "ts": 1778796751876,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_158": {
+      "ts": 1778796753369,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_179": {
+      "ts": 1778796753870,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_120": {
+      "ts": 1778796756028,
+      "ok": 1,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_156": {
+      "ts": 1778796756227,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_180": {
+      "ts": 1778796757250,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_146": {
+      "ts": 1778796760104,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_084": {
+      "ts": 1778796760322,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_178": {
+      "ts": 1778796760465,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_143": {
+      "ts": 1778796763045,
+      "ok": 1,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_159": {
+      "ts": 1778796763679,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_162": {
+      "ts": 1778796764332,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_204": {
+      "ts": 1778796767170,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_092": {
+      "ts": 1778796767383,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_210": {
+      "ts": 1778796767929,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_170": {
+      "ts": 1778796770266,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_212": {
+      "ts": 1778796771306,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_202": {
+      "ts": 1778796771661,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_206": {
+      "ts": 1778796773300,
+      "ok": 3,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_175": {
+      "ts": 1778796775840,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_207": {
+      "ts": 1778796775862,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_203": {
+      "ts": 1778796777291,
+      "ok": 3,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_205": {
+      "ts": 1778796780191,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_208": {
+      "ts": 1778796780292,
+      "ok": 4,
+      "err": 0
+    },
+    "alabama|al_cdl_gk_213": {
+      "ts": 1778796780903,
+      "ok": 3,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_191": {
+      "ts": 1778796783070,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_192": {
+      "ts": 1778796785035,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_188": {
+      "ts": 1778796785126,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_197": {
+      "ts": 1778796786545,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_200": {
+      "ts": 1778796788597,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_102": {
+      "ts": 1778796789325,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_165": {
+      "ts": 1778796790324,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_175": {
+      "ts": 1778796791633,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_173": {
+      "ts": 1778796792986,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_177": {
+      "ts": 1778796794615,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_127": {
+      "ts": 1778796795023,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_154": {
+      "ts": 1778796797300,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_161": {
+      "ts": 1778796797487,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_148": {
+      "ts": 1778796798294,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_122": {
+      "ts": 1778796801921,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_182": {
+      "ts": 1778796804970,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_160": {
+      "ts": 1778796805314,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_146": {
+      "ts": 1778796806329,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_176": {
+      "ts": 1778796808422,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_152": {
+      "ts": 1778796809637,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_066": {
+      "ts": 1778796810664,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_150": {
+      "ts": 1778796811740,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_100": {
+      "ts": 1778796814186,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_183": {
+      "ts": 1778796814343,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_166": {
+      "ts": 1778796815686,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_147": {
+      "ts": 1778796817943,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_168": {
+      "ts": 1778796817966,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_167": {
+      "ts": 1778796819447,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_155": {
+      "ts": 1778796821260,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_174": {
+      "ts": 1778796822098,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_106": {
+      "ts": 1778796823893,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_186": {
+      "ts": 1778796825399,
+      "ok": 4,
+      "err": 0
+    },
+    "alaska|ak_cdl_gk_153": {
+      "ts": 1778796826659,
+      "ok": 4,
+      "err": 0
+    }
+  },
+  "stats": {
+    "ok": 308,
+    "err": 0,
+    "cost_est": 0.7392000000000012
+  }
+}

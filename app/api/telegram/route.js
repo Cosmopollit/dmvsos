@@ -74,7 +74,7 @@ Within 24 hours of purchase: full refund, no questions asked. Just reply here.
 
 CDL Pro Pass Guarantee: if you fail the actual DMV test and you scored 85%+ on our practice, we refund or extend 90 days (your choice).
 
-Email: maindmvsos@gmail.com`,
+Just reply here — I'll get back to you.`,
     human: `🧑‍💻 Sending your message to Evgenii (founder). He usually responds within 4 hours.
 
 What's your question? Just type it here.`,
@@ -121,7 +121,7 @@ Or type "human" and I'll forward to Evgenii.`,
 
 CDL Pro Pass Guarantee: если провалил настоящий DMV тест при условии 85%+ score на наших тестах — refund или продление на 90 дней (на выбор).
 
-Email: maindmvsos@gmail.com`,
+Просто напиши сюда — я отвечу.`,
     human: `🧑‍💻 Передаю твой вопрос Евгению (founder). Обычно отвечает в течение 4 часов.
 
 Что хочешь спросить? Просто напиши здесь.`,
