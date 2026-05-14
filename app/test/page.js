@@ -64,6 +64,13 @@ function TestContent() {
   const [hideExplanations, setHideExplanations] = useState(false);
   const [showLockModal, setShowLockModal] = useState(false);
   const [lockAnimKey, setLockAnimKey] = useState({});
+
+  // Soft email capture (mid-test, around Q10) — anonymous → captured email
+  const [showEmailCapture, setShowEmailCapture] = useState(false);
+  const [emailInput, setEmailInput] = useState('');
+  const [emailSubmitting, setEmailSubmitting] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
+  const [emailError, setEmailError] = useState('');
   const startTimeRef = useRef(null);
   const timeLimitRef = useRef(0);
 
@@ -250,6 +257,45 @@ function TestContent() {
   useEffect(() => {
     if (tex.practiceTestTitle) document.title = tex.practiceTestTitle;
   }, [tex.practiceTestTitle]);
+
+  // Soft email capture: trigger once around Q10 for anonymous visitors.
+  // Sees it once per device (localStorage flag survives reload).
+  useEffect(() => {
+    if (authLoading) return;
+    if (hasFullAccess) return;                        // already paid
+    if (typeof window === 'undefined') return;
+    if (localStorage.getItem('dmvsos_email_seen')) return;
+    // Trigger at Q10 (0-indexed = 9). For moto where freeLimit=5, skip.
+    if (freeLimit < 20) return;
+    if (current === 9 && showAnswer) {
+      setShowEmailCapture(true);
+      localStorage.setItem('dmvsos_email_seen', '1');
+    }
+  }, [current, showAnswer, authLoading, hasFullAccess, freeLimit]);
+
+  async function handleSubmitEmail(e) {
+    e.preventDefault();
+    if (emailSubmitting || !emailInput.trim()) return;
+    setEmailSubmitting(true);
+    setEmailError('');
+    try {
+      // signInWithOtp creates an auth.users row and emails a magic link.
+      // When the user clicks the link, they're signed in automatically.
+      const { error } = await supabase.auth.signInWithOtp({
+        email: emailInput.trim().toLowerCase(),
+        options: { emailRedirectTo: window.location.href },
+      });
+      if (error) {
+        setEmailError(error.message);
+      } else {
+        setEmailSent(true);
+      }
+    } catch (err) {
+      setEmailError(err?.message || 'Something went wrong');
+    } finally {
+      setEmailSubmitting(false);
+    }
+  }
 
   // Wait for both auth and questions to load
   const loading = loadingQuestions || authLoading;
@@ -682,6 +728,72 @@ function TestContent() {
         )}
 
       </div>
+
+      {/* Soft email capture overlay (Q10, anonymous) */}
+      {showEmailCapture && !hasFullAccess && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
+          <div className="bg-white rounded-2xl w-full max-w-sm shadow-xl border border-[#E2E8F0] overflow-hidden">
+            <div className="h-1.5 bg-gradient-to-r from-[#2563EB] via-[#3B82F6] to-[#2563EB]" />
+            <div className="p-6">
+              {!emailSent ? (
+                <>
+                  <h2 className="text-lg font-bold text-[#0B1C3D] mb-1 text-center">
+                    {tex.captureTitle || 'Save your progress'}
+                  </h2>
+                  <p className="text-sm text-[#64748B] mb-4 text-center">
+                    {tex.captureDesc || "We'll send a magic link. No password, no spam."}
+                  </p>
+                  <form onSubmit={handleSubmitEmail} className="space-y-3">
+                    <input
+                      type="email"
+                      value={emailInput}
+                      onChange={(e) => setEmailInput(e.target.value)}
+                      placeholder={tex.emailPlaceholder || 'you@email.com'}
+                      required
+                      autoFocus
+                      className="w-full px-4 py-3 rounded-xl border border-[#E2E8F0] text-sm focus:border-[#2563EB] focus:outline-none"
+                    />
+                    {emailError && (
+                      <p className="text-xs text-[#DC2626]">{emailError}</p>
+                    )}
+                    <button
+                      type="submit"
+                      disabled={emailSubmitting}
+                      className="w-full py-3 rounded-xl font-bold text-white text-sm bg-[#2563EB] hover:bg-[#1D4ED8] transition disabled:opacity-60"
+                    >
+                      {emailSubmitting ? '…' : (tex.captureSubmit || 'Send link')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowEmailCapture(false)}
+                      className="w-full py-2 text-xs text-[#94A3B8] hover:text-[#64748B] transition"
+                    >
+                      {tex.captureLater || 'Maybe later'}
+                    </button>
+                  </form>
+                </>
+              ) : (
+                <>
+                  <div className="text-4xl text-center mb-3">📨</div>
+                  <h2 className="text-lg font-bold text-[#0B1C3D] mb-1 text-center">
+                    {tex.captureSentTitle || 'Check your email'}
+                  </h2>
+                  <p className="text-sm text-[#64748B] mb-5 text-center">
+                    {(tex.captureSentDesc || 'We sent a magic link to {email} — click it to save your progress and continue practicing on any device.').replace('{email}', emailInput)}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setShowEmailCapture(false)}
+                    className="w-full py-3 rounded-xl font-semibold text-sm bg-[#F1F5F9] text-[#0B1C3D] hover:bg-[#E2E8F0] transition"
+                  >
+                    {tex.continueTest || 'Continue test'}
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Upgrade modal overlay */}
       {showUpgradeBanner && !hasFullAccess && (

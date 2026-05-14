@@ -1950,3 +1950,77 @@ Running 2 states in parallel
 
   Translating to Ukrainian (ua)...
     Batch 1/5...
+    Retry 2/3 for Chinese (Simplified) batch: Expected JSON array
+
+    Batch failed, falling back to one-by-one translation...
+ ok
+    Batch 2/5...
+    WARNING: Failed to translate q.ac503bd3-171d-423e-ace0-2e224cad2646: Expected JSON object, using EN
+ ok
+    Batch 12/12...
+    Retry 1/3 for Chinese (Simplified) batch: Expected JSON array
+ ok
+    Batch 3/5...
+    Retry 2/3 for Chinese (Simplified) batch: Expected JSON array
+
+    Batch failed, falling back to one-by-one translation...
+ ok
+    Batch 4/5...
+    WARNING: Failed to translate q.aa1afe80-404c-485b-aa44-1ad531198787: Expected JSON object, using EN
+ ok
+    Deleting old zh questions (subcategory=air_brakes)...
+    Inserting 120 translated questions...
+    ZH done: 120 questions inserted
+
+  Translating to Ukrainian (ua)...
+    Batch 1/6... ok
+    Batch 5/5... ok
+    Batch 2/6... ok
+    Deleting old ua questions (subcategory=air_brakes)...
+    Inserting 100 translated questions...
+    UA done: 100 questions inserted
+
+  maryland translations complete!
+
+====== MASSACHUSETTS ======
+  Fetching EN clustered questions...
+  Found 120 EN questions with cluster_code (subcategory=air_brakes)
+
+  Translating to Russian (ru)...
+    Batch 1/6... ok
+    Batch 3/6... ok
+    Batch 2/6... ok
+    Batch 4/6... ok
+    Batch 3/6... ok
+    Batch 5/6... ok
+    Batch 4/6... ok
+    Batch 6/6... ok
+    Batch 5/6... ok
+    Batch 6/6... ok
+    Deleting old ua questions (subcategory=air_brakes)...
+    Inserting 120 translated questions...
+    UA done: 120 questions inserted
+
+  maine translations complete!
+
+====== MICHIGAN ======
+  Fetching EN clustered questions...
+  Found 114 EN questions with cluster_code (subcategory=air_brakes)
+
+  Translating to Russian (ru)...
+    Batch 1/6... ok
+    Batch 2/6... ok
+    Deleting old ru questions (subcategory=air_brakes)...
+    Inserting 120 translated questions...
+    RU done: 120 questions inserted
+
+  Translating to Spanish (es)...
+    Batch 1/6... ok
+    Batch 3/6... ok
+    Batch 2/6... ok
+    Batch 4/6... ok
+    Batch 3/6... ok
+    Batch 4/6... ok
+    Batch 5/6... ok
+    Batch 5/6... ok
+    Batch 6/6...
