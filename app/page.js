@@ -10,6 +10,7 @@ import { getSavedLang, saveLang, hasSavedLang, detectBrowserLang, isLangBannerDi
 import { STATE_OPTIONS, stateToSlug } from '@/lib/states';
 import { flags } from '@/lib/flags';
 import { PASS_META, EXTENSION } from '@/lib/plans';
+import SupportFooter from '@/app/components/SupportFooter';
 
 const codeToName = { en: 'English', ru: 'Русский', es: 'Español', zh: '中文', ua: 'Українська' };
 
@@ -550,6 +551,7 @@ export default function Home() {
         </p>
       </footer>
 
+      <SupportFooter lang={langCode} />
     </main>
   );
 }

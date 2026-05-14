@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { t } from '@/lib/translations';
 import { getSavedLang } from '@/lib/lang';
+import SupportFooter from '@/app/components/SupportFooter';
 
 const GoogleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" className="shrink-0">
@@ -171,6 +172,7 @@ function LoginContent() {
           {tex.back}
         </button>
       </div>
+      <SupportFooter lang={lang} />
     </main>
   );
 }
