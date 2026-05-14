@@ -698,7 +698,7 @@ function TestContent() {
               <p className="text-sm text-[#475569] mb-4 text-center leading-relaxed">
                 {tex.upgradeModalBody1 || "If a question looks weird, that's how the DMV asks it. We work from your state's "}
                 <Link
-                  href={`/manuals/${state}/${isMoto ? 'motorcycle' : isCdl ? 'cdl' : 'car'}`}
+                  href="/manuals"
                   target="_blank"
                   className="text-[#2563EB] underline hover:text-[#1D4ED8]"
                 >
