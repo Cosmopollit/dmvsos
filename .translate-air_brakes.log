@@ -1703,3 +1703,36 @@ Running 2 states in parallel
     Batch failed, falling back to one-by-one translation...
 
     WARNING: Failed to translate q.d2b3acf3-0f87-46e0-997f-c507e1aeaf2f: Expected JSON object, using EN
+
+    WARNING: Failed to translate q.667542f7-9b7e-4dc6-a02a-81f2d5ade7e7: Expected JSON object, using EN
+ ok
+    Batch 2/4... ok
+    Batch 3/6...
+    Retry 1/3 for Chinese (Simplified) batch: Expected JSON array
+
+    Retry 2/3 for Chinese (Simplified) batch: Expected JSON array
+ ok
+    Batch 3/4...
+    Batch failed, falling back to one-by-one translation...
+
+    WARNING: Failed to translate q.b268cbb0-7188-4e00-a96e-d18169c3e6f9: Expected JSON object, using EN
+
+    WARNING: Failed to translate q.719d76b9-94e3-4490-91c0-ec53de1c1559: Expected JSON object, using EN
+ ok
+    Batch 4/6... ok
+    Batch 5/6... ok
+    Batch 4/4...
+    Retry 1/3 for Chinese (Simplified) batch: Expected JSON array
+ ok
+    Deleting old ua questions (subcategory=air_brakes)...
+    Inserting 67 translated questions...
+    UA done: 67 questions inserted
+
+  kentucky translations complete!
+
+====== MAINE ======
+  Fetching EN clustered questions...
+  Found 120 EN questions with cluster_code (subcategory=air_brakes)
+
+  Translating to Russian (ru)...
+    Batch 1/6...

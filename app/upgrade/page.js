@@ -249,7 +249,7 @@ function UpgradeContent() {
       )}
 
       <p className="text-center text-xs text-[#64748B] mb-6">
-        {tex.cancelAnytime || 'Monthly subscription · Cancel anytime'}
+        {tex.cancelAnytime || 'One-time payment · 30 days · No subscription'}
       </p>
 
       <button type="button" onClick={() => router.push('/')} className="text-[#94A3B8] text-sm hover:text-white">
