@@ -81,7 +81,7 @@ export default function Privacy() {
               </ul>
               <p className="mt-2">
                 To exercise these rights, contact us at{' '}
-                <a href="mailto:support@dmvsos.com" className="text-[#2563EB] hover:underline">support@dmvsos.com</a>.
+                <a href="mailto:maindmvsos@gmail.com" className="text-[#2563EB] hover:underline">maindmvsos@gmail.com</a>.
               </p>
             </section>
 
@@ -113,7 +113,7 @@ export default function Privacy() {
               <h2 className="font-semibold text-[#0B1C3D] mb-2">10. Contact</h2>
               <p>
                 For privacy-related questions, contact us at{' '}
-                <a href="mailto:support@dmvsos.com" className="text-[#2563EB] hover:underline">support@dmvsos.com</a>.
+                <a href="mailto:maindmvsos@gmail.com" className="text-[#2563EB] hover:underline">maindmvsos@gmail.com</a>.
               </p>
             </section>
           </div>

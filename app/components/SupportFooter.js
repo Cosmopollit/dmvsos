@@ -23,11 +23,11 @@ export default function SupportFooter({ lang = 'en', dark = false }) {
         </a>
         <span style={{ color }}>·</span>
         <a
-          href="mailto:support@dmvsos.com"
+          href="mailto:maindmvsos@gmail.com"
           className="hover:underline inline-flex items-center gap-1"
           style={{ color: linkColor }}
         >
-          ✉️ support@dmvsos.com
+          ✉️ maindmvsos@gmail.com
         </a>
       </p>
       <p className="mt-2 text-[10px]" style={{ color }}>

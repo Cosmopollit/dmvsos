@@ -106,7 +106,7 @@ export default function Terms() {
               <h2 className="font-semibold text-[#0B1C3D] mb-2">10. Contact</h2>
               <p>
                 For questions about these Terms, contact us at{' '}
-                <a href="mailto:support@dmvsos.com" className="text-[#2563EB] hover:underline">support@dmvsos.com</a>.
+                <a href="mailto:maindmvsos@gmail.com" className="text-[#2563EB] hover:underline">maindmvsos@gmail.com</a>.
               </p>
             </section>
           </div>
