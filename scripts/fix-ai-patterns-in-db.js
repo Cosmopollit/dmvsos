@@ -75,7 +75,37 @@ const RULES_RU = [
   [/наиболее\s+оптимальн(ое|ый|ого|ым)/g, 'оптимальн$1'], // "most optimal" -> just "optimal"
 ];
 
-const RULES = { ru: RULES_RU };
+// ── Rules for ES ──────────────────────────────────────────────────────────
+// Same conservative approach: remove AI intros, replace adjectives where case is invariant.
+const RULES_ES = [
+  // AI intros at start of sentence (anything up to first comma, then optional "que")
+  [/(^|\.\s+|\?\s+|!\s+)(?:Seg[uú]n|De\s+acuerdo\s+(?:al|con|a))\s+[^,.]{3,80},\s*(?:que\s+)?/g, '$1'],
+  [/(^|\.\s+|\?\s+|!\s+)(?:El\s+manual|En\s+el\s+manual)\s+[^,.]{3,80}(?:indica|se[nñ]ala|establece|estipula|menciona|dispone)[a-z]*,?\s*(?:que\s+)?/gi, '$1'],
+  [/(^|\.\s+|\?\s+|!\s+)En\s+(?:este|dicho|el\s+presente)\s+caso,?\s*/gi, '$1'],
+
+  // Safe synonym swaps that preserve grammar
+  [/de\s+manera\s+apropiada/gi, 'correctamente'],
+  [/de\s+forma\s+apropiada/gi, 'correctamente'],
+  [/de\s+manera\s+adecuada/gi, 'correctamente'],
+  [/la\s+acci[oó]n\s+m[aá]s\s+apropiada/gi, 'la mejor acción'],
+];
+
+// ── Rules for UA ──────────────────────────────────────────────────────────
+const RULES_UA = [
+  // NOTE: must include Ukrainian-specific letters in char class — а-я alone
+  // EXCLUDES і/ї/є/ґ which are needed for verb endings like "вказує".
+  // Use [\p{L}] with u flag to be safe, or explicit ranges.
+  [/(^|\.\s+|\?\s+|!\s+)(?:З[гґ]і?дно|В[іi]дпов[іi]дно\s+до)\s+[^,.]{3,80},\s*(?:що\s+)?/g, '$1'],
+  [/(^|\.\s+|\?\s+|!\s+)(?:Пос[іi]бник|У\s+пос[іi]бнику)\s+[^,.]{3,80}(?:вказу|зазнача|стверджу|описує|говорить)[\p{L}]*,?\s*(?:що\s+)?/giu, '$1'],
+  [/(^|\.\s+|\?\s+|!\s+)У\s+(?:цьому|даному|вказаному)\s+випадку,?\s*/gi, '$1'],
+
+  // Cyrillic-safe (avoid \b)
+  [/належним\s+чином/giu, 'правильно'],
+  [/найбільш\s+доцільн(е|ий|им|ого|а|ої|у)/giu, 'найкращ$1'],
+  [/доцільн(е|ий|ого|им|а|ої|у|их|і)/giu, 'правильн$1'],
+];
+
+const RULES = { ru: RULES_RU, es: RULES_ES, ua: RULES_UA };
 
 const COLS = ['question_text', 'option_a', 'option_b', 'option_c', 'option_d', 'explanation'];
 
