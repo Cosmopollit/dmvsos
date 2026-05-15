@@ -53,7 +53,34 @@ export async function POST(req) {
     for (const lang of LANGS) byLang[lang] = null;
     for (const r of data || []) byLang[r.language] = r;
 
-    return Response.json({ ok: true, byLang });
+    // Find prev/next cluster_code in the same scope (state/category/subcategory)
+    // ordered by cluster_code ASC — same order as the listing page.
+    const buildNeighborQuery = (op, asc) => {
+      let nq = supabase
+        .from('questions')
+        .select('cluster_code')
+        .eq('state', state)
+        .eq('category', category)
+        .eq('language', 'en')
+        .not('cluster_code', 'is', null)
+        [op]('cluster_code', cluster_code)
+        .order('cluster_code', { ascending: asc })
+        .limit(1);
+      if (subcategory) nq = nq.eq('subcategory', subcategory);
+      else if (category === 'cdl') nq = nq.is('subcategory', null);
+      return nq;
+    };
+    const [{ data: prevRow }, { data: nextRow }] = await Promise.all([
+      buildNeighborQuery('lt', false),
+      buildNeighborQuery('gt', true),
+    ]);
+
+    return Response.json({
+      ok: true,
+      byLang,
+      prev_code: prevRow?.[0]?.cluster_code || null,
+      next_code: nextRow?.[0]?.cluster_code || null,
+    });
   }
 
   // ─── save single language ──────────────────────────────────────────────

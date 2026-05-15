@@ -43,6 +43,9 @@ export default function ClusterDetailPage() {
   const [verifyingQuality, setVerifyingQuality] = useState(false);
   const [qualityVerdict, setQualityVerdict] = useState(null);
   const [flash, setFlash] = useState('');
+  const [prevCode, setPrevCode] = useState(null);
+  const [nextCode, setNextCode] = useState(null);
+  const [savingAndNext, setSavingAndNext] = useState(false);
   const fileInputRef = useRef(null);
 
   // Backlink that preserves state/cat/sub
@@ -82,6 +85,8 @@ export default function ClusterDetailPage() {
       const idx = typeof en?.correct_answer === 'number' ? en.correct_answer : 0;
       setCorrectIndex(idx);
       setOriginalCorrectIndex(idx);
+      setPrevCode(data.prev_code || null);
+      setNextCode(data.next_code || null);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -189,10 +194,19 @@ export default function ClusterDetailPage() {
     }
   };
 
-  const saveAll = async ({ andBack = false } = {}) => {
+  const clusterHref = (code) => {
+    const sub = subcategory ? `&sub=${subcategory}` : '';
+    return `/admin/clusters/${encodeURIComponent(code)}?state=${state}&cat=${category}${sub}`;
+  };
+  const goToCluster = (code) => { if (code) router.push(clusterHref(code)); };
+
+  const saveAll = async ({ andBack = false, andNext = false } = {}) => {
     const changes = computeDiff();
-    if (!confirmChanges(changes, andBack ? 'save all & go back' : 'save all 5 languages')) return;
-    if (andBack) setSavingAndBack(true); else setSavingAll(true);
+    const verb = andBack ? 'save all & go back' : andNext ? 'save all & go to next' : 'save all 5 languages';
+    if (!confirmChanges(changes, verb)) return;
+    if (andBack) setSavingAndBack(true);
+    else if (andNext) setSavingAndNext(true);
+    else setSavingAll(true);
     setError('');
     try {
       const rows = [];
@@ -217,16 +231,19 @@ export default function ClusterDetailPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Save-all failed');
 
-      if (andBack) {
-        router.push(backHref);
-        return;
+      if (andBack) { router.push(backHref); return; }
+      if (andNext) {
+        if (nextCode) { router.push(clusterHref(nextCode)); return; }
+        // No next — fall through to refresh + flash
       }
       showFlash(`Saved all ${data.saved} languages`);
       await fetchCluster();
     } catch (err) {
       setError(err.message);
     } finally {
-      if (andBack) setSavingAndBack(false); else setSavingAll(false);
+      if (andBack) setSavingAndBack(false);
+      else if (andNext) setSavingAndNext(false);
+      else setSavingAll(false);
     }
   };
 
@@ -395,6 +412,12 @@ export default function ClusterDetailPage() {
       <div style={{ maxWidth: 1600, margin: '0 auto' }}>
         <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, gap: 12, flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <button onClick={() => goToCluster(prevCode)} disabled={!prevCode || loading} style={navBtn} title={prevCode ? `Previous: ${prevCode}` : 'No previous cluster'}>
+              ← Prev
+            </button>
+            <button onClick={() => goToCluster(nextCode)} disabled={!nextCode || loading} style={navBtn} title={nextCode ? `Next: ${nextCode}` : 'No next cluster'}>
+              Next →
+            </button>
             <span style={{ fontFamily: 'monospace', fontSize: 14, color: '#0B1C3D', fontWeight: 600 }}>{cluster_code}</span>
             <span style={{ fontSize: 12, color: '#64748B' }}>
               {state} · {category}{subcategory ? ` / ${subcategory}` : ''}
@@ -404,11 +427,14 @@ export default function ClusterDetailPage() {
             <Link href={backHref} style={secondaryBtnLink}>
               ← Cancel & back
             </Link>
-            <button onClick={() => saveAll({ andBack: false })} disabled={savingAll || savingAndBack || loading} style={primaryBtn}>
+            <button onClick={() => saveAll({ andBack: false })} disabled={savingAll || savingAndBack || savingAndNext || loading} style={primaryBtn}>
               {savingAll ? 'Saving…' : '💾 Save'}
             </button>
-            <button onClick={() => saveAll({ andBack: true })} disabled={savingAll || savingAndBack || loading} style={primaryBtnAlt}>
+            <button onClick={() => saveAll({ andBack: true })} disabled={savingAll || savingAndBack || savingAndNext || loading} style={primaryBtnAlt}>
               {savingAndBack ? 'Saving…' : '💾 Save & back'}
+            </button>
+            <button onClick={() => saveAll({ andNext: true })} disabled={savingAll || savingAndBack || savingAndNext || loading || !nextCode} style={primaryBtnAlt} title={nextCode ? `Save & go to ${nextCode}` : 'No next cluster'}>
+              {savingAndNext ? 'Saving…' : '💾 Save & next →'}
             </button>
             <button onClick={() => retranslate()} disabled={!!retranslating || loading} style={amberBtn} title="Re-translate all 4 non-EN languages via Haiku">
               {retranslating === 'all' ? 'Translating…' : '🔄 Retranslate all'}
@@ -646,6 +672,7 @@ const primaryBtn    = { padding: '8px 16px', fontSize: 13, background: '#2563EB'
 const primaryBtnAlt = { padding: '8px 16px', fontSize: 13, background: '#16A34A', color: '#fff', border: 0, borderRadius: 6, fontWeight: 600, cursor: 'pointer' };
 const amberBtn      = { padding: '8px 16px', fontSize: 13, background: '#F59E0B', color: '#fff', border: 0, borderRadius: 6, fontWeight: 600, cursor: 'pointer' };
 const dangerBtn     = { padding: '8px 16px', fontSize: 13, background: '#DC2626', color: '#fff', border: 0, borderRadius: 6, fontWeight: 600, cursor: 'pointer' };
+const navBtn        = { padding: '6px 12px', fontSize: 13, background: '#fff', color: '#0B1C3D', border: '1px solid #CBD5E1', borderRadius: 6, fontWeight: 600, cursor: 'pointer' };
 const smallBtn       = { padding: '4px 10px', fontSize: 12, background: '#fff', color: '#2563EB', border: '1px solid #2563EB', borderRadius: 4, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' };
 const smallAmberBtn  = { padding: '4px 8px', fontSize: 12, background: '#fff', color: '#F59E0B', border: '1px solid #F59E0B', borderRadius: 4, fontWeight: 600, cursor: 'pointer' };
 const smallDangerBtn = { padding: '4px 10px', fontSize: 12, background: '#fff', color: '#DC2626', border: '1px solid #DC2626', borderRadius: 4, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' };
