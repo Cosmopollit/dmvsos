@@ -127,7 +127,7 @@ export async function POST(req) {
       mode: isSubscription ? 'subscription' : 'payment',
       payment_method_types: ['card'],
       line_items: [{ price: PLAN_PRICE_IDS[planType], quantity: 1 }],
-      success_url: `${SITE_URL}/success`,
+      success_url: `${SITE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${SITE_URL}/upgrade`,
       metadata,
       phone_number_collection: { enabled: true },
