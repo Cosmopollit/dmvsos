@@ -304,35 +304,84 @@ async function handleGroupMessage(msg, lang) {
   await sbLogHit({ ...baseHit, reply_sent: true, skipped_reason: null });
 }
 
-// ── DM message handler (existing flow) ──────────────────────────────────
+// ── DM message handler ──────────────────────────────────────────────────
 async function handleDmMessage(msg, lang) {
   const chatId = msg.chat.id;
   const userName = msg.from.first_name || msg.from.username || 'there';
+  const userId = msg.from.id;
   const textRaw = (msg.text || '').trim();
   const text = textRaw.toLowerCase();
 
   if (text.startsWith('/start')) {
     await sendMessage(chatId, dm(lang, 'welcome'));
-  } else if (text.startsWith('/pricing')) {
-    await sendMessage(chatId, dm(lang, 'pricing'));
-  } else if (text.startsWith('/states')) {
-    await sendMessage(chatId, dm(lang, 'states'));
-  } else if (text.startsWith('/languages') || text.startsWith('/lang')) {
-    await sendMessage(chatId, dm(lang, 'languages'));
-  } else if (text.startsWith('/refund')) {
-    await sendMessage(chatId, dm(lang, 'refund'));
-  } else if (text.startsWith('/human') || text === 'human' || text === 'оператор' || text === 'человек') {
-    await sendMessage(chatId, dm(lang, 'human'));
-  } else if (text.startsWith('/')) {
-    await sendMessage(chatId, dm(lang, 'unknown'));
-  } else {
-    if (ADMIN_CHAT_ID) {
-      const isSelfMessage = String(chatId) === String(ADMIN_CHAT_ID);
-      await sendMessage(ADMIN_CHAT_ID,
-        `💬 <b>${isSelfMessage ? 'You (test)' : 'From ' + userName}</b> (chat <code>${chatId}</code>, lang ${lang}):\n\n${textRaw}`);
-    }
-    await sendMessage(chatId, dm(lang, 'forwardedAck'));
+    return;
   }
+  if (text.startsWith('/pricing')) {
+    await sendMessage(chatId, dm(lang, 'pricing'));
+    return;
+  }
+  if (text.startsWith('/states')) {
+    await sendMessage(chatId, dm(lang, 'states'));
+    return;
+  }
+  if (text.startsWith('/languages') || text.startsWith('/lang')) {
+    await sendMessage(chatId, dm(lang, 'languages'));
+    return;
+  }
+  if (text.startsWith('/refund')) {
+    await sendMessage(chatId, dm(lang, 'refund'));
+    return;
+  }
+  if (text.startsWith('/human') || text === 'human' || text === 'оператор' || text === 'человек') {
+    await sendMessage(chatId, dm(lang, 'human'));
+    return;
+  }
+  if (text.startsWith('/')) {
+    await sendMessage(chatId, dm(lang, 'unknown'));
+    return;
+  }
+
+  // Free-form: try keyword detection first — if it's a DMV question,
+  // answer with a smart state-aware link directly (better than just "I'll forward").
+  const kw = matchTrigger(textRaw);
+  if (kw) {
+    const stateSlug = detectState(textRaw);
+    const isCdl = detectCdl(textRaw);
+    const reply = composeReply(lang, stateSlug, userName);
+    await sendMessage(chatId, reply);
+
+    // Notify admin (info only — already auto-handled)
+    if (ADMIN_CHAT_ID) {
+      const meta = [`lang ${lang}`];
+      if (stateSlug) meta.push(`state ${stateSlug}`);
+      if (isCdl) meta.push('🚛 CDL');
+      meta.push(`kw: ${kw}`);
+      await sendMessage(ADMIN_CHAT_ID,
+        `💡 Auto-answered DM from <b>${userName}</b> (chat <code>${chatId}</code>, ${meta.join(', ')}):\n\n<i>${escapeHtml(textRaw)}</i>`);
+    }
+
+    // Log to bot_keyword_hits for analytics (chat_id is the private chat id)
+    await sbLogHit({
+      chat_id: chatId, user_id: userId, user_name: userName,
+      message_text: textRaw.slice(0, 500),
+      matched_keyword: isCdl ? `${kw} [CDL]` : kw,
+      matched_state: stateSlug,
+      reply_sent: true, skipped_reason: null,
+    });
+    return;
+  }
+
+  // Anything else → forward to admin + ack to user
+  if (ADMIN_CHAT_ID) {
+    const isSelfMessage = String(chatId) === String(ADMIN_CHAT_ID);
+    await sendMessage(ADMIN_CHAT_ID,
+      `💬 <b>${isSelfMessage ? 'You (test)' : 'From ' + userName}</b> (chat <code>${chatId}</code>, lang ${lang}):\n\n${escapeHtml(textRaw)}`);
+  }
+  await sendMessage(chatId, dm(lang, 'forwardedAck'));
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 }
 
 // ── Webhook entry ───────────────────────────────────────────────────────
