@@ -60,14 +60,14 @@ function delta(curr, prev) {
 }
 
 export async function GET(request) {
-  // Vercel Cron sends "Authorization: Bearer <CRON_SECRET>" if you set one,
-  // or rely on Vercel's internal IP allowlist. We also accept manual calls
-  // for testing via ?key=<TELEGRAM_WEBHOOK_SECRET>.
+  // Vercel Cron sends "Authorization: Bearer <CRON_SECRET>" if set.
+  // Manual triggers: ?key=<CRON_SECRET> (preferred) or <TELEGRAM_WEBHOOK_SECRET>.
   const url = new URL(request.url);
   const key = url.searchParams.get('key');
   const cronAuth = request.headers.get('authorization');
   const isVercelCron = cronAuth?.startsWith('Bearer ') || request.headers.get('x-vercel-cron') === '1';
-  const isManualWithKey = key === process.env.TELEGRAM_WEBHOOK_SECRET;
+  const validKeys = [process.env.CRON_SECRET, process.env.TELEGRAM_WEBHOOK_SECRET].filter(Boolean);
+  const isManualWithKey = key && validKeys.includes(key);
   if (!isVercelCron && !isManualWithKey) {
     return new Response('Forbidden', { status: 403 });
   }
