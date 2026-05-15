@@ -40,16 +40,20 @@ if (cmd === 'delete') {
 }
 
 // Default: set webhook
+// allowed_updates must include callback_query (inline button taps) and
+// my_chat_member (bot added/removed from groups). Without these, the bot
+// silently ignores those events.
 const params = new URLSearchParams({
   url: WEBHOOK_URL,
   drop_pending_updates: 'true',
-  allowed_updates: JSON.stringify(['message']),
+  allowed_updates: JSON.stringify(['message', 'callback_query', 'my_chat_member']),
 });
 if (SECRET) params.set('secret_token', SECRET);
 
 const r = await fetch(`${API}/setWebhook?${params}`).then(r => r.json());
 console.log('Webhook URL:', WEBHOOK_URL);
 console.log('Secret set:', !!SECRET);
+console.log('Allowed updates: message, callback_query, my_chat_member');
 console.log('Response:', JSON.stringify(r, null, 2));
 
 // Also set bot commands so they appear in Telegram UI
@@ -58,12 +62,14 @@ const cmds = await fetch(`${API}/setMyCommands`, {
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
     commands: [
-      { command: 'start', description: 'Welcome message' },
-      { command: 'pricing', description: 'How much it costs' },
-      { command: 'states', description: 'Which US states we cover' },
-      { command: 'languages', description: 'Available languages' },
-      { command: 'refund', description: 'Refund policy' },
-      { command: 'human', description: 'Talk to Evgenii directly' },
+      { command: 'start',     description: 'Меню / Menu' },
+      { command: 'menu',      description: 'Главное меню / Main menu' },
+      { command: 'pricing',   description: 'Цены / Pricing' },
+      { command: 'states',    description: 'Штаты / States' },
+      { command: 'languages', description: 'Языки / Languages' },
+      { command: 'refund',    description: 'Возврат / Refund' },
+      { command: 'human',     description: 'Связаться / Contact founder' },
+      { command: 'lang',      description: 'Сменить язык / Change language' },
     ],
   }),
 }).then(r => r.json());
