@@ -94,3 +94,9 @@ broken-question-ids.json
 .bulk-fix-fallbacks-*.json
 .resolve-variant-c*.json
 .translate-*.log
+
+# analysis & content generator artifacts
+analysis-data.json
+funnel-*.json
+content-scripts-*.json
+content-calendar-*.json
