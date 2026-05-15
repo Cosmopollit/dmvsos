@@ -216,20 +216,18 @@ function ResultContent() {
                           </p>
                         )}
                         {q.manualReference && (
-                          <div className="mt-2">
+                          <div className="mt-2.5">
                             <button
                               type="button"
                               onClick={() => setExpandedRefs(prev => ({ ...prev, [i]: !prev[i] }))}
-                              className="flex items-center gap-1 text-xs text-[#94A3B8] hover:text-[#2563EB] transition-colors"
+                              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] bg-white border border-[#BFDBFE] rounded-full px-3 py-1.5 hover:bg-[#EFF6FF] hover:border-[#2563EB] transition-all"
                             >
-                              <span>📖</span>
-                              <span className="underline underline-offset-2">
-                                {q.manualSection || 'Driver Manual'}
-                              </span>
-                              <span className="text-[10px]">{expandedRefs[i] ? '▲' : '▼'}</span>
+                              <span className="text-sm">📖</span>
+                              <span>{q.manualSection || 'Driver Manual'}</span>
+                              <span className="text-[10px] opacity-70">{expandedRefs[i] ? '▲' : '▼'}</span>
                             </button>
                             {expandedRefs[i] && (
-                              <p className="mt-1.5 text-xs text-[#64748B] italic border-l-2 border-[#E2E8F0] pl-2 leading-relaxed">
+                              <p className="mt-2 text-xs text-[#1E40AF] italic border-l-2 border-[#2563EB] pl-3 leading-relaxed">
                                 &ldquo;{q.manualReference}&rdquo;
                               </p>
                             )}

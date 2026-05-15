@@ -391,7 +391,7 @@ export default function Home() {
         <div className="grid grid-cols-4 gap-2">
           {[
             { value: '5K+', label: tex.statUsers },
-            { value: '34K+', label: tex.statQuestions },
+            { value: '30K+', label: tex.statQuestions },
             { value: '50', label: tex.statStates },
             { value: '5', label: tex.statLanguages },
           ].map((stat) => (

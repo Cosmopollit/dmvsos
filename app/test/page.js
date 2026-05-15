@@ -700,16 +700,16 @@ function TestContent() {
                 <button
                   type="button"
                   onClick={() => setShowManualQuote(v => !v)}
-                  className="flex items-center gap-1 text-xs text-[#1E40AF]/70 hover:text-[#1E40AF] transition-colors"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] bg-white border border-[#BFDBFE] rounded-full px-3 py-1.5 hover:bg-[#EFF6FF] hover:border-[#2563EB] transition-all"
                 >
-                  <span>📖</span>
-                  <span className="underline underline-offset-2">
+                  <span className="text-sm">📖</span>
+                  <span>
                     {q.manualSection || (tex.viewInManual || 'Driver Manual')}
                   </span>
-                  <span className="text-[10px]">{showManualQuote ? '▲' : '▼'}</span>
+                  <span className="text-[10px] opacity-70">{showManualQuote ? '▲' : '▼'}</span>
                 </button>
                 {showManualQuote && (
-                  <p className="mt-1.5 text-xs text-[#1E40AF]/70 italic border-l-2 border-[#BFDBFE] pl-2 leading-relaxed">
+                  <p className="mt-2 text-xs text-[#1E40AF] italic border-l-2 border-[#2563EB] pl-3 leading-relaxed">
                     &ldquo;{q.manualReference}&rdquo;
                   </p>
                 )}
