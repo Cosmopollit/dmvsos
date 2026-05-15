@@ -9,7 +9,11 @@
 // Privacy-mode must be OFF in BotFather for group message visibility.
 // See TELEGRAM_BOT.md for setup.
 
-import { matchTrigger, detectState, detectCdl, composeReply, composeForward, isThrottled } from '@/lib/telegram-helper.js';
+import {
+  matchTrigger, detectState, detectCdl, detectCategory,
+  composeReply, composeForward, isThrottled,
+  mainMenuKeyboard, backToMenuKeyboard, statePickerKeyboard, categoryKeyboard,
+} from '@/lib/telegram-helper.js';
 
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID;
@@ -129,6 +133,8 @@ CDL Pro Pass Guarantee: refund or 90d extension if you fail the actual DMV test 
     human: `🧑‍💻 Sending your message to Evgenii (founder). Usually replies within 4 hours.`,
     forwardedAck: `✅ Got it. Evgenii will reply shortly.`,
     unknown: `Commands: /start /pricing /states /languages /refund /human`,
+    pickCategory: `🚦 Pick a license type for <b>{state}</b>:`,
+    pickState: `🗽 Which state? Pick or open the site for all 50:`,
   },
   ru: {
     welcome: `👋 Привет! Я бот поддержки DMVSOS.\n\n/pricing /states /languages /refund /human\n\nИли просто напиши вопрос — передам.`,
@@ -139,6 +145,8 @@ CDL Pro Pass Guarantee: refund or 90d extension if you fail the actual DMV test 
     human: `🧑‍💻 Передаю Евгению. Обычно отвечает в течение 4 часов.`,
     forwardedAck: `✅ Получил. Евгений ответит скоро.`,
     unknown: `Команды: /start /pricing /states /languages /refund /human`,
+    pickCategory: `🚦 Выбери категорию прав для штата <b>{state}</b>:`,
+    pickState: `🗽 В каком штате? Выбери из топ-6 или открой все 50 на сайте:`,
   },
   es: {
     welcome: `👋 ¡Hola! Bot de soporte DMVSOS.\n/pricing /states /languages /refund /human`,
@@ -149,6 +157,8 @@ CDL Pro Pass Guarantee: refund or 90d extension if you fail the actual DMV test 
     human: `🧑‍💻 Enviando a Evgenii. Responde en ~4h.`,
     forwardedAck: `✅ Recibido.`,
     unknown: `Comandos: /start /pricing /states /languages /refund /human`,
+    pickCategory: `🚦 Elige tipo de licencia para <b>{state}</b>:`,
+    pickState: `🗽 ¿Qué estado? Elige uno o abre el sitio para los 50:`,
   },
   zh: {
     welcome: `👋 你好！DMVSOS支持机器人。\n/pricing /states /languages /refund /human`,
@@ -159,6 +169,8 @@ CDL Pro Pass Guarantee: refund or 90d extension if you fail the actual DMV test 
     human: `🧑‍💻 转发给Evgenii，约4小时回复。`,
     forwardedAck: `✅ 已收到。`,
     unknown: `命令: /start /pricing /states /languages /refund /human`,
+    pickCategory: `🚦 选择 <b>{state}</b> 的驾照类型:`,
+    pickState: `🗽 哪个州？选择或在网站查看全部50个州:`,
   },
   ua: {
     welcome: `👋 Привіт! Бот підтримки DMVSOS.\n/pricing /states /languages /refund /human`,
@@ -169,6 +181,8 @@ CDL Pro Pass Guarantee: refund or 90d extension if you fail the actual DMV test 
     human: `🧑‍💻 Передаю Євгенію. Відповідає за ~4 години.`,
     forwardedAck: `✅ Прийнято.`,
     unknown: `Команди: /start /pricing /states /languages /refund /human`,
+    pickCategory: `🚦 Обери категорію прав для штату <b>{state}</b>:`,
+    pickState: `🗽 У якому штаті? Обери або відкрий сайт для всіх 50:`,
   },
 };
 function dm(lang, key) {
@@ -304,6 +318,59 @@ async function handleGroupMessage(msg, lang) {
   await sbLogHit({ ...baseHit, reply_sent: true, skipped_reason: null });
 }
 
+// ── Callback query (inline keyboard taps) ───────────────────────────────
+async function handleCallback(cb) {
+  const chatId = cb.message?.chat?.id;
+  const messageId = cb.message?.message_id;
+  const lang = pickLang(cb.from?.language_code);
+  const data = cb.data || '';
+
+  // ACK so loading spinner clears
+  await tg('answerCallbackQuery', { callback_query_id: cb.id }).catch(() => {});
+
+  if (!chatId || !messageId) return;
+
+  // menu:start | menu:pricing | menu:states | menu:languages | menu:refund | menu:human
+  if (data === 'menu:start') {
+    await tg('editMessageText', {
+      chat_id: chatId, message_id: messageId,
+      text: dm(lang, 'welcome'), parse_mode: 'HTML',
+      reply_markup: mainMenuKeyboard(lang), disable_web_page_preview: true,
+    });
+    return;
+  }
+  if (data === 'menu:states') {
+    await tg('editMessageText', {
+      chat_id: chatId, message_id: messageId,
+      text: dm(lang, 'pickState'), parse_mode: 'HTML',
+      reply_markup: statePickerKeyboard(lang), disable_web_page_preview: true,
+    });
+    return;
+  }
+  if (data.startsWith('menu:')) {
+    const key = data.slice(5);
+    await tg('editMessageText', {
+      chat_id: chatId, message_id: messageId,
+      text: dm(lang, key), parse_mode: 'HTML',
+      reply_markup: backToMenuKeyboard(lang), disable_web_page_preview: true,
+    });
+    return;
+  }
+
+  // state:<slug> → show category picker for that state
+  if (data.startsWith('state:')) {
+    const stateSlug = data.slice(6);
+    await tg('editMessageText', {
+      chat_id: chatId, message_id: messageId,
+      text: dm(lang, 'pickCategory').replace('{state}', titleCase(stateSlug)),
+      parse_mode: 'HTML',
+      reply_markup: categoryKeyboard(lang, stateSlug),
+      disable_web_page_preview: true,
+    });
+    return;
+  }
+}
+
 // ── DM message handler ──────────────────────────────────────────────────
 async function handleDmMessage(msg, lang) {
   const chatId = msg.chat.id;
@@ -312,32 +379,49 @@ async function handleDmMessage(msg, lang) {
   const textRaw = (msg.text || '').trim();
   const text = textRaw.toLowerCase();
 
-  if (text.startsWith('/start')) {
-    await sendMessage(chatId, dm(lang, 'welcome'));
+  if (text.startsWith('/start') || text === '/menu') {
+    await sendMessage(chatId, dm(lang, 'welcome'), { reply_markup: mainMenuKeyboard(lang) });
     return;
   }
   if (text.startsWith('/pricing')) {
-    await sendMessage(chatId, dm(lang, 'pricing'));
+    await sendMessage(chatId, dm(lang, 'pricing'), { reply_markup: backToMenuKeyboard(lang) });
     return;
   }
   if (text.startsWith('/states')) {
-    await sendMessage(chatId, dm(lang, 'states'));
+    await sendMessage(chatId, dm(lang, 'states'), { reply_markup: statePickerKeyboard(lang) });
     return;
   }
   if (text.startsWith('/languages') || text.startsWith('/lang')) {
-    await sendMessage(chatId, dm(lang, 'languages'));
+    await sendMessage(chatId, dm(lang, 'languages'), { reply_markup: backToMenuKeyboard(lang) });
     return;
   }
   if (text.startsWith('/refund')) {
-    await sendMessage(chatId, dm(lang, 'refund'));
+    await sendMessage(chatId, dm(lang, 'refund'), { reply_markup: backToMenuKeyboard(lang) });
     return;
   }
   if (text.startsWith('/human') || text === 'human' || text === 'оператор' || text === 'человек') {
-    await sendMessage(chatId, dm(lang, 'human'));
+    await sendMessage(chatId, dm(lang, 'human'), { reply_markup: backToMenuKeyboard(lang) });
     return;
   }
   if (text.startsWith('/')) {
-    await sendMessage(chatId, dm(lang, 'unknown'));
+    await sendMessage(chatId, dm(lang, 'unknown'), { reply_markup: mainMenuKeyboard(lang) });
+    return;
+  }
+
+  // Free-form: try smart shortcuts first
+  // (1) State name alone (e.g. "Калифорния", "Texas") → ask category
+  const stateOnly = detectState(textRaw);
+  const categoryOnly = detectCategory(textRaw);
+  const hasDmvWord = matchTrigger(textRaw); // returns null if not actually a DMV question
+
+  if (stateOnly && !hasDmvWord && textRaw.length < 60) {
+    await sendMessage(chatId, dm(lang, 'pickCategory').replace('{state}', titleCase(stateOnly)), {
+      reply_markup: categoryKeyboard(lang, stateOnly),
+    });
+    return;
+  }
+  if (categoryOnly && !stateOnly && !hasDmvWord && textRaw.length < 40) {
+    await sendMessage(chatId, dm(lang, 'pickState'), { reply_markup: statePickerKeyboard(lang) });
     return;
   }
 
@@ -384,6 +468,10 @@ function escapeHtml(s) {
   return String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 }
 
+function titleCase(slug) {
+  return slug.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+}
+
 // ── Webhook entry ───────────────────────────────────────────────────────
 export async function POST(request) {
   if (SECRET) {
@@ -402,6 +490,12 @@ export async function POST(request) {
     // Bot added/removed from a group
     if (update.my_chat_member) {
       await handleMyChatMember(update);
+      return new Response('OK', { status: 200 });
+    }
+
+    // Inline keyboard taps
+    if (update.callback_query) {
+      await handleCallback(update.callback_query);
       return new Response('OK', { status: 200 });
     }
 

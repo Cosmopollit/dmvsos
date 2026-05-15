@@ -1,4 +1,6 @@
-# Telegram bot — silent monitoring + manual reply
+# Telegram bot — silent monitoring + manual reply + DM UI
+
+
 
 `@dmvsos_support_bot` operates in two modes per group:
 
@@ -12,6 +14,43 @@
 3. **Zero spam risk.** Bot generates no group noise, so it doesn't get kicked.
 
 The trade-off: it requires you (or assistant) to actually reply. That's the point — manual reply from a real account converts much better.
+
+## DM experience (private chat with bot)
+
+Users who DM the bot get a clickable interface:
+
+- `/start` or `/menu` → inline keyboard:
+  - 💰 Pricing · 🗽 States · 🌍 Languages · 💸 Refund · 🧑‍💻 Contact · 🌐 Open site
+  - Tapping a button **edits the same message** in place (clean chat, no scroll)
+- Free-form messages handled in priority order:
+  1. State name alone ("California", "Калифорния") → category picker for that state
+  2. Category alone ("CDL", "мото") → state picker
+  3. DMV prep question ("где готовиться к DMV") → smart auto-reply with state-aware link
+  4. Anything else → forwarded to admin DM
+
+## BotFather one-time polish
+
+Run these in @BotFather to make the bot feel professional in chat lists and menus:
+
+```
+/setname        → DMVSOS Помощник (or "DMVSOS Assistant" / "DMVSOS Ayuda" per audience)
+/setdescription → Бесплатная подготовка к DMV для 50 штатов на 5 языках. Помогу с вопросами и подскажу где готовиться.
+/setabouttext   → Free DMV practice tests · 50 states · 5 languages · dmvsos.com
+/setuserpic     → upload public/logo.png from repo
+/setcommands    → paste the block below
+```
+
+Command list (`/setcommands`):
+```
+start - Открыть меню / Open menu
+pricing - Цены / Pricing
+states - Список штатов / States
+languages - Языки / Languages
+refund - Возврат / Refund policy
+human - Связаться с основателем / Talk to founder
+```
+
+After `/setcommands`, Telegram clients show a "/" hint button next to the chat input that lists these — major UX win in DM.
 
 ## One-time setup
 
