@@ -91,11 +91,81 @@ const DAYS_30_MS = 30 * 24 * 60 * 60 * 1000;
 
 // Process a one-time payment (new pass or extension).
 // Idempotent via the UNIQUE constraint on purchases.stripe_payment_intent.
+async function getOrCreateUserByEmail(email) {
+  if (!email) return null;
+  const lower = email.toLowerCase();
+  // List existing users (Supabase admin API)
+  const list = await fetch(`${SUPABASE_URL}/auth/v1/admin/users?per_page=1000`, {
+    headers: sbHeaders,
+  }).then(r => r.json()).catch(() => ({ users: [] }));
+  const found = (list.users || []).find(u => (u.email || '').toLowerCase() === lower);
+  if (found) return found.id;
+  // Create new
+  const created = await fetch(`${SUPABASE_URL}/auth/v1/admin/users`, {
+    method: 'POST',
+    headers: sbHeaders,
+    body: JSON.stringify({
+      email: lower,
+      email_confirm: true,
+      user_metadata: { source: 'anonymous_purchase', created_at: new Date().toISOString() },
+    }),
+  });
+  if (!created.ok) {
+    console.error(`failed to create user for ${emailTag(lower)}: ${created.status} ${await created.text()}`);
+    return null;
+  }
+  const newUser = await created.json();
+  return newUser.id;
+}
+
+async function sendMagicLink(email) {
+  if (!email) return;
+  await fetch(`${SUPABASE_URL}/auth/v1/admin/generate_link`, {
+    method: 'POST',
+    headers: sbHeaders,
+    body: JSON.stringify({ type: 'magiclink', email }),
+  }).catch(e => console.warn(`magic-link send failed for ${emailTag(email)}: ${e.message}`));
+}
+
+async function notifyAdmin(text) {
+  const TG_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+  const ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID;
+  if (!TG_TOKEN || !ADMIN_CHAT_ID) return;
+  await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chat_id: ADMIN_CHAT_ID, text, parse_mode: 'HTML' }),
+  }).catch(() => {});
+}
+
 async function handleOneTimePayment({ paymentIntentId, amountCents, metadata, checkoutSessionId, email }) {
-  const { user_id, pass_type, kind } = metadata;
-  if (!user_id || !pass_type || !['new', 'extension'].includes(kind)) {
-    console.warn(`one-time payment missing metadata | pi=${paymentIntentId} | meta=${JSON.stringify(metadata)}`);
+  // eslint-disable-next-line prefer-const
+  let { user_id, pass_type, kind } = metadata;
+
+  // Bail if we don't even know the pass_type — can't fulfill anything.
+  if (!pass_type || !['new', 'extension'].includes(kind)) {
+    console.warn(`one-time payment missing pass_type/kind | pi=${paymentIntentId} | meta=${JSON.stringify(metadata)}`);
+    await notifyAdmin(`🚨 <b>Stripe payment came in without pass_type/kind metadata.</b>\nPI: <code>${paymentIntentId}</code>\nEmail: ${email || '(none)'}\nAmount: $${(amountCents / 100).toFixed(2)}\nMetadata: <code>${JSON.stringify(metadata)}</code>\nNeeds manual review.`);
     return;
+  }
+
+  // Anonymous purchase fallback: no user_id in metadata but we have email from Stripe.
+  // Auto-create account and send magic-link so customer can log in.
+  if (!user_id) {
+    if (!email) {
+      console.warn(`one-time payment missing both user_id and email | pi=${paymentIntentId}`);
+      await notifyAdmin(`🚨 <b>Stripe payment with no user_id AND no email.</b>\nPI: <code>${paymentIntentId}</code>\nAmount: $${(amountCents / 100).toFixed(2)}\nCan't auto-fulfill. Refund or contact Stripe receipt email manually.`);
+      return;
+    }
+    console.log(`anonymous purchase, creating user from email | pi=${paymentIntentId} | email=${emailTag(email)}`);
+    user_id = await getOrCreateUserByEmail(email);
+    if (!user_id) {
+      await notifyAdmin(`🚨 <b>Anonymous purchase: failed to create user for</b> ${email}\nPI: <code>${paymentIntentId}</code>\nPlease run grant-pass-manual.js by hand.`);
+      return;
+    }
+    // Send magic-link so customer can log in
+    await sendMagicLink(email);
+    await notifyAdmin(`💰 <b>Anonymous purchase auto-fixed:</b> ${email} → ${pass_type} ($${(amountCents / 100).toFixed(2)})\nUser created. Magic-link sent.`);
   }
 
   // [1] Idempotency: already processed?
