@@ -89,3 +89,8 @@ broken-question-ids.json
 .generate-cdl-*-progress.json
 .oregon-motorcycle-questions.json
 .pennsylvania-motorcycle-questions.json
+
+# Bulk fix progress (resumable state, not part of repo)
+.bulk-fix-fallbacks-*.json
+.resolve-variant-c*.json
+.translate-*.log

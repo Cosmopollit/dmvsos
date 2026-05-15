@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -28,6 +28,7 @@ export default function ClusterDetailPage() {
   const [authError, setAuthError] = useState(false);
 
   const [byLang, setByLang] = useState(null);
+  const [originalByLang, setOriginalByLang] = useState(null); // snapshot for diff
   const [correctIndex, setCorrectIndex] = useState(0);
   const [originalCorrectIndex, setOriginalCorrectIndex] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -37,7 +38,10 @@ export default function ClusterDetailPage() {
   const [savingAndBack, setSavingAndBack] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [retranslating, setRetranslating] = useState(null); // 'all' | lang | null
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [deletingImage, setDeletingImage] = useState(false);
   const [flash, setFlash] = useState('');
+  const fileInputRef = useRef(null);
 
   // Backlink that preserves state/cat/sub
   const backHref = `/admin/clusters?state=${state}&cat=${category}${subcategory ? `&sub=${subcategory}` : ''}`;
@@ -70,6 +74,8 @@ export default function ClusterDetailPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed');
       setByLang(data.byLang);
+      // Deep clone for diff comparison
+      setOriginalByLang(JSON.parse(JSON.stringify(data.byLang)));
       const en = data.byLang.en;
       const idx = typeof en?.correct_answer === 'number' ? en.correct_answer : 0;
       setCorrectIndex(idx);
@@ -95,9 +101,50 @@ export default function ClusterDetailPage() {
     setTimeout(() => setFlash(''), 3000);
   };
 
+  // Compute human-readable diff between current byLang state and original snapshot.
+  // Returns array of strings like ["EN · question_text", "RU · option_b", ...]
+  // Optional `forLang` filter restricts to one language.
+  const computeDiff = (forLang = null) => {
+    if (!byLang || !originalByLang) return [];
+    const FIELDS = ['question_text', 'option_a', 'option_b', 'option_c', 'option_d', 'explanation'];
+    const changes = [];
+    const langs = forLang ? [forLang] : LANGS;
+    for (const lang of langs) {
+      const cur = byLang[lang]; const orig = originalByLang[lang];
+      if (!cur || !orig) continue;
+      for (const f of FIELDS) {
+        const a = cur[f] ?? null; const b = orig[f] ?? null;
+        if (a !== b) changes.push(`${lang.toUpperCase()} · ${f}`);
+      }
+      // EN-specific fields
+      if (lang === 'en') {
+        if ((cur.image_url ?? null) !== (orig.image_url ?? null)) changes.push('EN · image_url');
+        if ((cur.manual_reference ?? null) !== (orig.manual_reference ?? null)) changes.push('EN · manual_reference');
+        if ((cur.manual_section ?? null) !== (orig.manual_section ?? null)) changes.push('EN · manual_section');
+      }
+    }
+    // Correct answer change (shared)
+    if (correctIndex !== originalCorrectIndex && (forLang === null || forLang === 'en')) {
+      changes.push(`correct_answer · ${CORRECT_LETTERS[originalCorrectIndex]} → ${CORRECT_LETTERS[correctIndex]}`);
+    }
+    return changes;
+  };
+
+  const confirmChanges = (changes, action) => {
+    if (changes.length === 0) {
+      return confirm(`No changes detected. ${action} anyway?`);
+    }
+    const list = changes.length <= 12
+      ? changes.join('\n')
+      : changes.slice(0, 12).join('\n') + `\n... +${changes.length - 12} more`;
+    return confirm(`About to ${action}.\n\nChanges (${changes.length}):\n${list}\n\nProceed?`);
+  };
+
   const saveLang = async (lang) => {
     const row = byLang?.[lang];
     if (!row?.id) return;
+    const changes = computeDiff(lang);
+    if (!confirmChanges(changes, `save ${LANG_LABELS[lang]}`)) return;
     setSavingLang(lang); setError('');
     try {
       const payload = {
@@ -141,6 +188,8 @@ export default function ClusterDetailPage() {
   };
 
   const saveAll = async ({ andBack = false } = {}) => {
+    const changes = computeDiff();
+    if (!confirmChanges(changes, andBack ? 'save all & go back' : 'save all 5 languages')) return;
     if (andBack) setSavingAndBack(true); else setSavingAll(true);
     setError('');
     try {
@@ -181,6 +230,10 @@ export default function ClusterDetailPage() {
 
   const retranslate = async (lang = null) => {
     const target = lang ? [lang] : null;
+    const langsCount = target ? target.length : 4;
+    const estimated = (langsCount * 0.0024).toFixed(3);
+    const langLabel = lang ? LANG_LABELS[lang] : 'all 4 languages (RU + ES + ZH + UA)';
+    if (!confirm(`Re-translate ${langLabel} via Haiku?\nEstimated cost: ~$${estimated}\n\nThis will OVERWRITE existing translations.`)) return;
     setRetranslating(lang || 'all'); setError('');
     try {
       const res = await fetch('/api/admin/retranslate-cluster', {
@@ -203,6 +256,76 @@ export default function ClusterDetailPage() {
       setError(err.message);
     } finally {
       setRetranslating(null);
+    }
+  };
+
+  // ─── Image upload / delete (uses /api/admin/upload-image) ──────────────
+  const handleImagePick = () => fileInputRef.current?.click();
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const en = byLang?.en;
+    if (!en?.id) { setError('Cannot upload — EN row missing'); return; }
+
+    setUploadingImage(true); setError('');
+    try {
+      // Storage path: {state}/{lang}/{category}/{en.id}.{ext}
+      const ext = (file.name.match(/\.(jpe?g|png|webp)$/i)?.[1] || 'jpg').toLowerCase();
+      const storagePath = `${state}/en/${category}/${en.id}.${ext}`;
+
+      const fd = new FormData();
+      fd.append('password', password);
+      fd.append('questionId', en.id);
+      fd.append('path', storagePath);
+      fd.append('file', file);
+
+      const res = await fetch('/api/admin/upload-image', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Upload failed');
+
+      showFlash(`Image uploaded · propagated to all language rows`);
+      // Reset input + reload
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      await fetchCluster();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const handleImageDelete = async () => {
+    const en = byLang?.en;
+    if (!en?.id) return;
+    if (!byLang.en.image_url) return;
+    if (!confirm('Delete image for this cluster across all 5 languages?')) return;
+
+    setDeletingImage(true); setError('');
+    try {
+      // Try to derive storage path from URL — best-effort, ok if it fails (DB still cleared)
+      const url = new URL(byLang.en.image_url);
+      const publicPrefix = '/storage/v1/object/public/question-images/';
+      const storagePath = url.pathname.includes(publicPrefix)
+        ? decodeURIComponent(url.pathname.split(publicPrefix)[1])
+        : '';
+
+      const fd = new FormData();
+      fd.append('password', password);
+      fd.append('questionId', en.id);
+      fd.append('path', storagePath);
+      fd.append('action', 'delete');
+
+      const res = await fetch('/api/admin/upload-image', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Delete failed');
+
+      showFlash(`Image removed · cluster cleared`);
+      await fetchCluster();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setDeletingImage(false);
     }
   };
 
@@ -309,19 +432,53 @@ export default function ClusterDetailPage() {
                     ))}
                   </div>
                 </div>
-                <div style={{ flex: 1, minWidth: 280 }}>
-                  <label style={labelStyle}>Image URL (shared)</label>
-                  <input
-                    type="text"
-                    value={byLang.en?.image_url || ''}
-                    onChange={(e) => updateField('en', 'image_url', e.target.value || null)}
-                    placeholder="https://..."
-                    style={inputStyle}
-                  />
-                  {byLang.en?.image_url && (
-                    <img src={byLang.en.image_url} alt="" style={{ marginTop: 6, maxHeight: 80, borderRadius: 4 }}
-                      onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-                  )}
+                <div style={{ flex: 1, minWidth: 320 }}>
+                  <label style={labelStyle}>Image (shared across all 5 languages)</label>
+                  <div style={{ display: 'flex', gap: 6, marginTop: 4, alignItems: 'flex-start' }}>
+                    <div style={{ flex: 1 }}>
+                      <input
+                        type="text"
+                        value={byLang.en?.image_url || ''}
+                        onChange={(e) => updateField('en', 'image_url', e.target.value || null)}
+                        placeholder="https://... or use upload button →"
+                        style={{ ...inputStyle, fontSize: 11 }}
+                      />
+                      {byLang.en?.image_url && (
+                        <img
+                          src={byLang.en.image_url} alt=""
+                          style={{ marginTop: 6, maxHeight: 80, borderRadius: 4, border: '1px solid #E2E8F0' }}
+                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                        />
+                      )}
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        onChange={handleImageUpload}
+                        style={{ display: 'none' }}
+                      />
+                      <button
+                        onClick={handleImagePick}
+                        disabled={uploadingImage || deletingImage || !byLang.en?.id}
+                        style={smallBtn}
+                        title="Upload JPG/PNG/WebP (max 5MB) — auto-propagates to all language rows"
+                      >
+                        {uploadingImage ? '⏳ …' : '📤 Upload'}
+                      </button>
+                      {byLang.en?.image_url && (
+                        <button
+                          onClick={handleImageDelete}
+                          disabled={uploadingImage || deletingImage}
+                          style={smallDangerBtn}
+                          title="Delete image from storage and clear cluster"
+                        >
+                          {deletingImage ? '⏳ …' : '🗑 Remove'}
+                        </button>
+                      )}
+                    </div>
+                  </div>
                 </div>
                 <div style={{ minWidth: 200 }}>
                   <label style={labelStyle}>Quality score</label>
@@ -440,6 +597,7 @@ const primaryBtn    = { padding: '8px 16px', fontSize: 13, background: '#2563EB'
 const primaryBtnAlt = { padding: '8px 16px', fontSize: 13, background: '#16A34A', color: '#fff', border: 0, borderRadius: 6, fontWeight: 600, cursor: 'pointer' };
 const amberBtn      = { padding: '8px 16px', fontSize: 13, background: '#F59E0B', color: '#fff', border: 0, borderRadius: 6, fontWeight: 600, cursor: 'pointer' };
 const dangerBtn     = { padding: '8px 16px', fontSize: 13, background: '#DC2626', color: '#fff', border: 0, borderRadius: 6, fontWeight: 600, cursor: 'pointer' };
-const smallBtn      = { padding: '4px 10px', fontSize: 12, background: '#fff', color: '#2563EB', border: '1px solid #2563EB', borderRadius: 4, fontWeight: 600, cursor: 'pointer' };
-const smallAmberBtn = { padding: '4px 8px', fontSize: 12, background: '#fff', color: '#F59E0B', border: '1px solid #F59E0B', borderRadius: 4, fontWeight: 600, cursor: 'pointer' };
+const smallBtn       = { padding: '4px 10px', fontSize: 12, background: '#fff', color: '#2563EB', border: '1px solid #2563EB', borderRadius: 4, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' };
+const smallAmberBtn  = { padding: '4px 8px', fontSize: 12, background: '#fff', color: '#F59E0B', border: '1px solid #F59E0B', borderRadius: 4, fontWeight: 600, cursor: 'pointer' };
+const smallDangerBtn = { padding: '4px 10px', fontSize: 12, background: '#fff', color: '#DC2626', border: '1px solid #DC2626', borderRadius: 4, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' };
 const secondaryBtnLink = { padding: '8px 16px', fontSize: 13, background: '#fff', color: '#475569', border: '1px solid #CBD5E1', borderRadius: 6, fontWeight: 600, cursor: 'pointer', textDecoration: 'none', display: 'inline-block' };
