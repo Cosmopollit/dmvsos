@@ -225,15 +225,15 @@ export default function Home() {
         <div className="flex items-center justify-center gap-2 pb-3">
           <Link href="/dmv-test"
             className="text-xs font-semibold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] rounded-full px-3 py-1 hover:bg-[#DBEAFE] transition-colors">
-            📋 Practice Tests
+            📋 {tex.practiceTests}
           </Link>
           <Link href="/manuals"
             className="text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-3 py-1 hover:border-[#2563EB] hover:text-[#2563EB] transition-colors">
-            📖 Manuals
+            📖 {tex.navManuals}
           </Link>
           <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#94A3B8] bg-[#F8FAFC] border border-[#E2E8F0] rounded-full px-3 py-1 cursor-default select-none">
-            🎓 Courses
-            <span className="text-[9px] font-bold bg-[#E2E8F0] text-[#94A3B8] px-1.5 py-0.5 rounded-full leading-none">soon</span>
+            🎓 {tex.navCourses}
+            <span className="text-[9px] font-bold bg-[#E2E8F0] text-[#94A3B8] px-1.5 py-0.5 rounded-full leading-none">{tex.navSoon}</span>
           </span>
         </div>
       </header>
