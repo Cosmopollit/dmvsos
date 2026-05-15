@@ -9,7 +9,7 @@
 // Privacy-mode must be OFF in BotFather for group message visibility.
 // See TELEGRAM_BOT.md for setup.
 
-import { matchTrigger, detectState, composeReply, composeForward, isThrottled } from '@/lib/telegram-helper.js';
+import { matchTrigger, detectState, detectCdl, composeReply, composeForward, isThrottled } from '@/lib/telegram-helper.js';
 
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID;
@@ -254,12 +254,15 @@ async function handleGroupMessage(msg, lang) {
   if (!kw) return;
 
   const stateSlug = detectState(textRaw);
+  const isCdl = detectCdl(textRaw);
   const group = await sbGetGroup(chatId);
   const mode = group?.mode || 'silent';
 
   const baseHit = {
     chat_id: chatId, user_id: userId, user_name: userName,
-    message_text: textRaw.slice(0, 500), matched_keyword: kw, matched_state: stateSlug,
+    message_text: textRaw.slice(0, 500),
+    matched_keyword: isCdl ? `${kw} [CDL]` : kw,
+    matched_state: stateSlug,
   };
 
   if (group && !group.enabled) {
@@ -274,7 +277,7 @@ async function handleGroupMessage(msg, lang) {
 
   // ── Silent mode: forward to admin (+assistant), no group post
   if (mode === 'silent') {
-    const forward = composeForward({ chat: msg.chat, msg, userName, lang, keyword: kw, stateSlug });
+    const forward = composeForward({ chat: msg.chat, msg, userName, lang, keyword: kw, stateSlug, isCdl });
     const targets = [ADMIN_CHAT_ID, ASSISTANT_CHAT_ID].filter(Boolean);
     for (const target of targets) {
       await sendMessage(target, forward, { disable_web_page_preview: false });
