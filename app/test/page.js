@@ -66,6 +66,42 @@ function TestContent() {
   const [lockAnimKey, setLockAnimKey] = useState({});
   const [showManualQuote, setShowManualQuote] = useState(false);
 
+  // Inline bug report
+  const [showReport, setShowReport] = useState(false);
+  const [reportReason, setReportReason] = useState('');
+  const [reportComment, setReportComment] = useState('');
+  const [reportSubmitting, setReportSubmitting] = useState(false);
+  const [reportSent, setReportSent] = useState(false);
+
+  async function submitReport(questionId) {
+    if (!reportReason || reportSubmitting) return;
+    setReportSubmitting(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const headers = { 'Content-Type': 'application/json' };
+      if (session?.access_token) headers['Authorization'] = `Bearer ${session.access_token}`;
+      await fetch('/api/question-report', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          question_id: questionId,
+          language: lang,
+          reason: reportReason,
+          comment: reportComment || null,
+          user_email: session?.user?.email || null,
+        }),
+      });
+      setReportSent(true);
+      setTimeout(() => {
+        setShowReport(false);
+        setReportReason('');
+        setReportComment('');
+        setReportSent(false);
+      }, 1500);
+    } catch { /* swallow */ }
+    finally { setReportSubmitting(false); }
+  }
+
   // Soft email capture (mid-test, around Q10) — anonymous → captured email
   const [showEmailCapture, setShowEmailCapture] = useState(false);
   const [emailInput, setEmailInput] = useState('');
@@ -153,6 +189,7 @@ function TestContent() {
         const mapped = data.map(row => {
           const answers = [row.option_a, row.option_b, row.option_c, row.option_d].filter(Boolean).map(strip);
           return {
+            id: row.id,
             question: row.question_text || '',
             answers,
             correctAnswerIndex: row.correct_answer ?? 0,
@@ -186,7 +223,7 @@ function TestContent() {
     setUserAnswers([]);
     userAnswersRef.current = [];
     setSelected(null);
-    setShowAnswer(false); setShowManualQuote(false);
+    setShowAnswer(false); setShowManualQuote(false); setShowReport(false); setReportReason(""); setReportComment(""); setReportSent(false);
     setElapsed(0);
     setTestMode(mode);
   }
@@ -229,7 +266,7 @@ function TestContent() {
       setUserAnswers([]);
       userAnswersRef.current = [];
       setSelected(null);
-      setShowAnswer(false); setShowManualQuote(false);
+      setShowAnswer(false); setShowManualQuote(false); setShowReport(false); setReportReason(""); setReportComment(""); setReportSent(false);
       setElapsed(0);
       setRemaining(0);
       setShowUpgradeBanner(false);
@@ -249,7 +286,7 @@ function TestContent() {
       setShowAnswer(true);
     } else {
       setSelected(null);
-      setShowAnswer(false); setShowManualQuote(false);
+      setShowAnswer(false); setShowManualQuote(false); setShowReport(false); setReportReason(""); setReportComment(""); setReportSent(false);
     }
   }
   handlePrevRef.current = handlePrev;
@@ -585,7 +622,7 @@ function TestContent() {
         setShowAnswer(true);
       } else {
         setSelected(null);
-        setShowAnswer(false); setShowManualQuote(false);
+        setShowAnswer(false); setShowManualQuote(false); setShowReport(false); setReportReason(""); setReportComment(""); setReportSent(false);
       }
     } else {
       // Use ref for answers  ·  guaranteed to include the last answer (no batching race)
@@ -713,6 +750,86 @@ function TestContent() {
                     &ldquo;{q.manualReference}&rdquo;
                   </p>
                 )}
+              </div>
+            )}
+
+            {/* Bug report — tiny link under explanation */}
+            {q.id && !reportSent && !showReport && (
+              <div className="mt-3 text-right">
+                <button
+                  type="button"
+                  onClick={() => setShowReport(true)}
+                  className="text-[11px] text-[#94A3B8] hover:text-[#DC2626] transition-colors"
+                  title={tex.reportQuestion || 'Report a problem with this question'}
+                >
+                  🐛 {tex.reportQuestion || 'Report'}
+                </button>
+              </div>
+            )}
+
+            {showReport && !reportSent && (
+              <div className="mt-3 p-3 bg-white border border-[#FED7AA] rounded-xl">
+                <p className="text-xs font-semibold text-[#9A3412] mb-2">
+                  🐛 {tex.reportPrompt || 'What is wrong with this question?'}
+                </p>
+                <div className="flex flex-wrap gap-1.5 mb-2">
+                  {[
+                    { key: 'wrong_answer',    label: tex.reportReasonWrong || 'Wrong answer' },
+                    { key: 'bad_translation', label: tex.reportReasonTrans || 'Bad translation' },
+                    { key: 'unclear',         label: tex.reportReasonUnclear || 'Unclear' },
+                    { key: 'broken_image',    label: tex.reportReasonImage || 'Broken image' },
+                    { key: 'other',           label: tex.reportReasonOther || 'Other' },
+                  ].map(opt => (
+                    <button
+                      key={opt.key}
+                      type="button"
+                      onClick={() => setReportReason(opt.key)}
+                      className={`text-[11px] px-2 py-1 rounded-full border transition ${
+                        reportReason === opt.key
+                          ? 'bg-[#DC2626] border-[#DC2626] text-white font-semibold'
+                          : 'bg-white border-[#FED7AA] text-[#9A3412] hover:border-[#DC2626]'
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+                <textarea
+                  value={reportComment}
+                  onChange={(e) => setReportComment(e.target.value.slice(0, 500))}
+                  placeholder={tex.reportCommentPlaceholder || 'Optional: describe what is wrong...'}
+                  className="w-full text-xs p-2 border border-[#FED7AA] rounded-lg resize-none focus:outline-none focus:border-[#DC2626]"
+                  rows={2}
+                />
+                <div className="flex gap-2 mt-2">
+                  <button
+                    type="button"
+                    onClick={() => { setShowReport(false); setReportReason(''); setReportComment(''); }}
+                    className="flex-1 text-xs py-1.5 rounded-lg border border-[#E2E8F0] text-[#64748B] hover:bg-[#F8FAFC]"
+                  >
+                    {tex.cancel || 'Cancel'}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={!reportReason || reportSubmitting}
+                    onClick={() => submitReport(q.id)}
+                    className={`flex-1 text-xs py-1.5 rounded-lg font-semibold transition ${
+                      reportReason && !reportSubmitting
+                        ? 'bg-[#DC2626] text-white hover:bg-[#B91C1C]'
+                        : 'bg-[#E2E8F0] text-[#94A3B8] cursor-not-allowed'
+                    }`}
+                  >
+                    {reportSubmitting ? (tex.sending || 'Sending...') : (tex.send || 'Send')}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {reportSent && (
+              <div className="mt-3 p-2 bg-[#ECFDF5] border border-[#A7F3D0] rounded-xl text-center">
+                <p className="text-xs text-[#065F46] font-semibold">
+                  ✅ {tex.reportThanks || 'Thanks! We will check it.'}
+                </p>
               </div>
             )}
           </div>
