@@ -23,55 +23,50 @@
 5. DM админу шаблон ниже
 6. Помечай результат в этой таблице (✅ согласился / ❌ отказ / ⏳ ждём ответ)
 
-## Шаблон RU (для русско/украинских групп)
+## Шаблон RU — silent mode (default, гораздо легче проходит)
 
 ```
-Привет! Я Евгений, делаю dmvsos.com — бесплатная подготовка к DMV для
-50 штатов на 5 языках (RU/EN/UA/ES/ZH).
+Привет! Я Евгений, делаю dmvsos.com — бесплатная подготовка к DMV
+для 50 штатов на 5 языках (RU/EN/UA/ES/ZH).
 
-У нас есть Telegram-бот @dmvsos_support_bot, который помогает с вопросами
-про права. Отвечает только когда кто-то напрямую спрашивает про DMV
-(не чаще раза в час, чтобы не спамить). Админ группы может выключить
-его в любой момент командой /disable.
+Видел в этой группе люди регулярно спрашивают про права. У меня есть
+бот @dmvsos_support_bot — он НИЧЕГО не пишет в группе. Просто тихо
+пересылает мне в личку такие вопросы, чтобы я успел сам подсказать.
+Отвечаю я с личного аккаунта, без автоматики.
 
-Можно добавить его в [название группы]? Думаю будет полезно — вопросы
-про DMV в иммигрантских чатах постоянные.
-
-Если что — давай тестово на неделю, потом решишь.
+Если что-то не понравится — выключи командой /disable в группе или
+сразу кикни. Можно протестить неделю?
 ```
 
-## Шаблон ES (для латино-групп)
+## Шаблон ES — silent mode
 
 ```
 ¡Hola! Soy Evgenii, creé dmvsos.com — práctica gratis para el examen
 de DMV en los 50 estados, en 5 idiomas (EN/ES/RU/ZH/UA).
 
-Tenemos un bot de Telegram @dmvsos_support_bot que ayuda con preguntas
-sobre la licencia de conducir. Solo responde cuando alguien pregunta
-directamente sobre DMV (máximo 1 vez por hora, sin spam). Los admins
-del grupo pueden silenciarlo en cualquier momento con /disable.
+Veo que en este grupo la gente pregunta seguido sobre la licencia de
+conducir. Tengo un bot @dmvsos_support_bot que NO publica nada en el
+grupo. Solo me reenvía esas preguntas en privado para que yo pueda
+responder a tiempo. Yo respondo desde mi cuenta personal, sin bots
+automáticos.
 
-¿Podemos agregarlo a [nombre del grupo]? Creo que sería útil — las
-preguntas sobre DMV son muy frecuentes en chats de inmigrantes.
-
-Si quieres, probamos una semana y después decides.
+Si algo no te gusta — apágalo con /disable en el grupo, o sácalo.
+¿Probamos una semana?
 ```
 
-## Шаблон UA
+## Шаблон UA — silent mode
 
 ```
 Привіт! Я Євгеній, роблю dmvsos.com — безкоштовна підготовка до DMV
-для 50 штатів на 5 мовах (UA/EN/RU/ES/ZH).
+для 50 штатів на 5 мовах.
 
-У нас є Telegram-бот @dmvsos_support_bot, який допомагає з питаннями
-про права. Відповідає тільки коли хтось напряму питає про DMV
-(не частіше разу на годину, без спаму). Адмін групи може вимкнути його
-командою /disable.
+Бачив, у цій групі люди регулярно питають про права. У мене є бот
+@dmvsos_support_bot — він НІЧОГО не пише в групі. Просто тихо пересилає
+мені в особисті такі питання, щоб я встиг сам підказати. Відповідаю
+я зі свого акаунта, без автоматики.
 
-Можна додати його до [назва групи]? Думаю, буде корисно — питання про
-DMV в іммігрантських чатах постійні.
-
-Можемо тестово на тиждень — потім вирішиш.
+Якщо щось не сподобається — вимкни командою /disable у групі або
+просто кикни. Можна спробувати тиждень?
 ```
 
 ---

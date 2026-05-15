@@ -1,104 +1,90 @@
-# Telegram bot — group helper mode
+# Telegram bot — silent monitoring + manual reply
 
-`@dmvsos_support_bot` works in two modes:
+`@dmvsos_support_bot` operates in two modes per group:
 
-1. **Private chat (DM)** — `/start`, `/pricing`, `/states`, `/languages`, `/refund`, `/human`. Free-form messages forward to admin.
-2. **Group chat** — passively listens for DMV-related questions and auto-replies **at most once per hour per group**. Admins toggle with `/enable` `/disable` `/status`.
+- **silent** (default) — bot stays invisible in the group, just forwards DMV questions to your DM with deep links. You reply manually from your **personal account** to keep the human touch.
+- **autoreply** — bot posts a reply link in the group automatically (max 1/hour). Safer fallback if you can't monitor in real time.
 
-## One-time setup (REQUIRED for group mode)
+## Why silent is the default
 
-By default Telegram bots in groups only see commands (`/start`, etc.). To see normal messages and detect keywords, **privacy mode must be OFF**.
+1. **Admins say yes more often.** Pitching "a bot that watches but never posts" is an easier ask than "a bot that auto-replies".
+2. **Replies come from a real account.** People trust a person answering with context over a stock bot link.
+3. **Zero spam risk.** Bot generates no group noise, so it doesn't get kicked.
 
-1. Open Telegram → @BotFather
-2. `/mybots` → select `@dmvsos_support_bot`
-3. **Bot Settings → Group Privacy → Turn off**
-4. Confirm
+The trade-off: it requires you (or assistant) to actually reply. That's the point — manual reply from a real account converts much better.
 
-You also want:
-- **Allow Groups** → ON (Bot Settings → Allow Groups)
-- (Optional) **Group admin only commands** — keep default
+## One-time setup
 
-Verify: send the bot a `/start` in a group it's in — if it answers, privacy is off and webhook is live.
+### 1. BotFather
 
-## How auto-reply works
+In @BotFather:
+1. `/mybots` → `@dmvsos_support_bot`
+2. **Bot Settings → Group Privacy → Turn off** (required — otherwise bot sees only `/commands` in groups)
+3. **Bot Settings → Allow Groups → ON**
 
-For every group message, the bot:
-1. Checks message against keyword list (`lib/telegram-helper.js → TRIGGER_PATTERNS`)
-   - Triggers: `dmv`, `driver license`, `road test`, `cdl`, `права`, `сдавать`, `водительск`, `licencia de conducir`, `驾照`, etc. (5 languages)
-2. Detects mentioned state (e.g. "California", "Техас", "TX") and links straight to that state page
-3. Throttle: if bot already replied in this group within last 60 minutes → skip
-4. Logs every match to `bot_keyword_hits` (whether replied or skipped, with reason) — visible in `/admin/telegram-groups`
+### 2. Vercel env vars
 
-## Admin controls (in any group)
+- `TELEGRAM_ADMIN_CHAT_ID` (already set) — your personal chat_id, gets forwards
+- `TELEGRAM_ASSISTANT_CHAT_ID` *(optional)* — your assistant's chat_id, gets the same forwards
 
-- `/enable` — turn on auto-reply (default after add)
-- `/disable` — mute bot in this group
-- `/status` — show current state + reply count + last reply time
+To find a chat_id: have the person DM `@dmvsos_support_bot` once. The forward to admin includes `chat <code>NNN</code>` — that's their id.
 
-Only group admins can use these; non-admins are silently ignored.
+## Forwards (silent mode)
 
-## Bot intro on join
+When the bot detects a DMV question in a group, you get a DM like:
 
-When added to a group, bot posts once:
+> 🔔 **DMV question in Русские в Майами**
+>
+> 👤 From: @vasya · [open DM](tg://user?id=12345)
+> 🌐 Lang: RU · State: **florida**
+> 🔑 Matched: `сдав`
+>
+> _кто сдавал на права в Майами? с чего начать?_
+>
+> ↪️ [Reply in group](https://t.me/c/.../...)
 
-> 👋 Привет! Я **@dmvsos_support_bot** — помогаю с вопросами про DMV/права. Отвечаю только когда кто-то спрашивает про DMV (не чаще раза в час). Админы могут заглушить меня командой /disable.
+Tap **Reply in group** to jump straight to the message → reply from your personal account in-context.
 
-This is disclosure, not stealth. Group admins know what bot does.
+Throttle: 1 forward per group per **5 minutes** in silent mode (vs 1 hour for autoreply). Tighter so you don't miss multiple distinct questions.
+
+## Admin commands in any group (group-admins only)
+
+- `/silent` — silent mode (default)
+- `/autoreply` — bot posts reply link itself
+- `/disable` — bot inactive in this group
+- `/enable` — re-activate
+- `/status` — current mode + counters
 
 ## Dashboard
 
 `https://dmvsos.com/admin/telegram-groups` (uses `ADMIN_PASSWORD`)
 
-Shows:
-- All groups bot is in, status, reply count, last reply
-- Top keywords triggering replies → tune `TRIGGER_PATTERNS` based on what actually matches
-- Top states asked about → know where users come from
-- Last 100 matches with full message text
+Shows: groups, current mode per group, hit count, top keywords, top states, recent matches.
 
-## Outreach template — getting bot into groups
-
-The bot only works in groups admins **invite it to**. Reach out to admins of immigrant/community groups:
+## Pitch to group admins (silent angle)
 
 ```
-Привет! Я Евгений, делаю dmvsos.com — бесплатная подготовка к DMV
-для 50 штатов на 5 языках (RU/EN/UA/ES/ZH).
+Привет! Я Евгений, делаю dmvsos.com — бесплатная подготовка к DMV для
+50 штатов на 5 языках.
 
-У нас есть Telegram-бот @dmvsos_support_bot, который помогает с вопросами
-про права. Он отвечает только когда кто-то напрямую спрашивает про DMV
-(не чаще раза в час, чтобы не спамить), и админ группы может в любой
-момент его выключить командой /disable.
+Видел в этой группе люди регулярно спрашивают про права. У меня есть
+бот @dmvsos_support_bot, который НИЧЕГО не пишет в группе — он просто
+тихо мне в личку пересылает такие вопросы, чтобы я успел подсказать
+ответ. Отвечаю я сам с личного аккаунта.
 
-Можно добавить его в [название группы]? Думаю будет полезно для ваших
-участников — много вопросов про DMV в иммигрантских чатах.
-
-Если что — можем сначала тестово на неделю.
+Если что-то не понравится — выключи командой /disable в группе,
+или сразу кикни. Можно протестить неделю?
 ```
 
-## Target groups (research)
-
-Public/findable Telegram-чаты иммигрантов в США:
-- "Русские в США" (~50k)
-- "Українці в Америці" (~30k)
-- "Latinos en Estados Unidos"
-- City-specific: "Русский Хьюстон", "Русская Калифорния", "Українці Чикаго"
-- Use [tlgrm.eu/channels](https://tlgrm.eu/channels) or @SearchInChats to find
-
-**Start with 5-10 groups.** Don't blast 50 admin DMs at once — looks like spam.
-
-## Adjusting triggers
-
-If dashboard shows `topKeywords` skewed toward false positives (e.g. someone says "DMV is closed today" and we reply unhelpfully), tighten patterns in `lib/telegram-helper.js`. Possible improvements:
-
-- Require question mark or `?`-equivalent (Russian "как", "где", "сколько")
-- Negative patterns (don't trigger on "I already passed DMV")
-- Add per-state landmark keywords (e.g. "Brooklyn DMV" → New York)
-
-## Risks & mitigations
+## Risks (silent mode)
 
 | Risk | Mitigation |
 |---|---|
-| Admin kicks bot for noise | Throttle 1 reply/h, disclose intro, `/disable` available |
-| Bot replies to false-positive question | Log everything, tune patterns weekly |
-| Mass spam reports | Only operate in groups where invited by admin |
-| Telegram rate limits | Bot API has ~30 msg/sec global cap; we're nowhere near |
-| Privacy mode left ON | Bot silently doesn't see group messages — symptom: zero hits in dashboard |
+| Admin still suspicious of any bot | Pitch as personal helper, not as automation; offer 1-week trial |
+| Bot kicked anyway | Throttle, no group noise — but admin owns the call. Move on to next group |
+| You don't reply fast enough | Set push notifications on your TG, or add assistant via `TELEGRAM_ASSISTANT_CHAT_ID` |
+| Privacy mode left ON in BotFather | Zero hits in dashboard — symptom check first |
+
+## Switching a group to autoreply
+
+If a particular group says "you can post automated answers too" — send `/autoreply` in that group. Per-group toggle.

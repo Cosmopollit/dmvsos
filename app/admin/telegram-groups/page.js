@@ -82,9 +82,10 @@ export default function TelegramGroupsAdmin() {
               <tr>
                 <th className="py-2">Title</th>
                 <th>Type</th>
+                <th>Mode</th>
                 <th>Status</th>
-                <th>Replies</th>
-                <th>Last reply</th>
+                <th>Hits</th>
+                <th>Last</th>
                 <th>Added</th>
               </tr>
             </thead>
@@ -96,6 +97,11 @@ export default function TelegramGroupsAdmin() {
                     {g.username && <div className="text-xs text-[#64748B]">@{g.username}</div>}
                   </td>
                   <td className="text-[#64748B]">{g.type}</td>
+                  <td>
+                    {g.mode === 'autoreply'
+                      ? <span className="text-blue-600">📣 autoreply</span>
+                      : <span className="text-[#64748B]">🤫 silent</span>}
+                  </td>
                   <td>
                     {g.removed_at ? (
                       <span className="text-red-600">Removed</span>
@@ -115,7 +121,7 @@ export default function TelegramGroupsAdmin() {
                 </tr>
               ))}
               {groups.length === 0 && (
-                <tr><td colSpan={6} className="py-6 text-center text-[#64748B]">No groups yet. Add bot to a Telegram group to see it here.</td></tr>
+                <tr><td colSpan={7} className="py-6 text-center text-[#64748B]">No groups yet. Add bot to a Telegram group to see it here.</td></tr>
               )}
             </tbody>
           </table>

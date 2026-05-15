@@ -9,10 +9,11 @@
 // Privacy-mode must be OFF in BotFather for group message visibility.
 // See TELEGRAM_BOT.md for setup.
 
-import { matchTrigger, detectState, composeReply, isThrottled } from '@/lib/telegram-helper.js';
+import { matchTrigger, detectState, composeReply, composeForward, isThrottled } from '@/lib/telegram-helper.js';
 
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID;
+const ASSISTANT_CHAT_ID = process.env.TELEGRAM_ASSISTANT_CHAT_ID; // optional second forward target
 const SECRET = process.env.TELEGRAM_WEBHOOK_SECRET || '';
 const SUPA_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPA_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -190,20 +191,16 @@ async function handleMyChatMember(update) {
       username: chat.username || null,
       type: chat.type,
       enabled: true,
+      mode: 'silent', // default — bot doesn't post in group, only forwards to admin DM
       added_by: cm.from?.id || null,
       removed_at: null,
     });
 
-    // Intro message — disclose what bot does
-    const introByLang = {
-      en: `👋 Hi! I'm <b>@dmvsos_support_bot</b> — I help with DMV/driver-license questions. I'll only reply when someone asks something DMV-related (max once per hour). Admins can use /disable to mute me.`,
-      ru: `👋 Привет! Я <b>@dmvsos_support_bot</b> — помогаю с вопросами про DMV/права. Отвечаю только когда кто-то спрашивает про DMV (не чаще раза в час). Админы могут заглушить меня командой /disable.`,
-    };
-    await sendMessage(chat.id, introByLang.ru); // default RU; safe for our target groups
-
+    // No public intro in silent mode — bot stays invisible.
+    // Admin alert only:
     if (ADMIN_CHAT_ID) {
       await sendMessage(ADMIN_CHAT_ID,
-        `🆕 Bot added to group: <b>${chat.title}</b> (id <code>${chat.id}</code>, type ${chat.type})`);
+        `🆕 Bot added to group: <b>${chat.title}</b> (id <code>${chat.id}</code>, type ${chat.type})\nMode: <b>silent</b> (forwards questions here, doesn't post in group).\nAdmin commands in the group: /silent /autoreply /disable /enable /status`);
     }
   }
 
@@ -227,19 +224,27 @@ async function handleGroupMessage(msg, lang) {
   const userId = msg.from.id;
 
   // Admin commands first (only group admins can toggle)
-  if (textRaw.startsWith('/disable') || textRaw.startsWith('/enable') || textRaw.startsWith('/status')) {
+  const adminCmds = ['/disable', '/enable', '/status', '/silent', '/autoreply'];
+  if (adminCmds.some(c => textRaw.startsWith(c))) {
     const isAdmin = await isGroupAdmin(chatId, userId);
     if (!isAdmin) return;
     if (textRaw.startsWith('/disable')) {
       await sbUpdateGroup(chatId, { enabled: false });
-      await sendMessage(chatId, `🔕 Muted in this group. Use /enable to re-enable.`);
+      await sendMessage(chatId, `🔕 Muted. Use /enable to re-enable.`);
     } else if (textRaw.startsWith('/enable')) {
       await sbUpdateGroup(chatId, { enabled: true });
-      await sendMessage(chatId, `🔔 Re-enabled. I'll reply to DMV questions (max once per hour).`);
+      await sendMessage(chatId, `🔔 Re-enabled.`);
+    } else if (textRaw.startsWith('/silent')) {
+      await sbUpdateGroup(chatId, { mode: 'silent', enabled: true });
+      await sendMessage(chatId, `🤫 Switched to silent mode. I won't post here — just forward DMV questions to my owner privately.`);
+    } else if (textRaw.startsWith('/autoreply')) {
+      await sbUpdateGroup(chatId, { mode: 'autoreply', enabled: true });
+      await sendMessage(chatId, `📣 Switched to auto-reply mode. Max 1 reply per hour.`);
     } else {
       const g = await sbGetGroup(chatId);
-      const state = g?.enabled ? 'enabled ✅' : 'disabled 🔕';
-      await sendMessage(chatId, `Status: ${state}\nReplies sent: ${g?.reply_count || 0}\nLast reply: ${g?.last_reply_at || 'never'}`);
+      const enabled = g?.enabled ? '✅ enabled' : '🔕 disabled';
+      const mode = g?.mode || 'silent';
+      await sendMessage(chatId, `Status: ${enabled}\nMode: <b>${mode}</b>\nForwards/replies sent: ${g?.reply_count || 0}\nLast: ${g?.last_reply_at || 'never'}`);
     }
     return;
   }
@@ -249,47 +254,51 @@ async function handleGroupMessage(msg, lang) {
   if (!kw) return;
 
   const stateSlug = detectState(textRaw);
-
-  // Group enabled?
   const group = await sbGetGroup(chatId);
+  const mode = group?.mode || 'silent';
+
+  const baseHit = {
+    chat_id: chatId, user_id: userId, user_name: userName,
+    message_text: textRaw.slice(0, 500), matched_keyword: kw, matched_state: stateSlug,
+  };
+
   if (group && !group.enabled) {
-    await sbLogHit({
-      chat_id: chatId, user_id: userId, user_name: userName,
-      message_text: textRaw.slice(0, 500), matched_keyword: kw,
-      matched_state: stateSlug, reply_sent: false, skipped_reason: 'disabled',
-    });
+    await sbLogHit({ ...baseHit, reply_sent: false, skipped_reason: 'disabled' });
     return;
   }
 
-  // Throttle
-  if (group && isThrottled(group.last_reply_at)) {
-    await sbLogHit({
-      chat_id: chatId, user_id: userId, user_name: userName,
-      message_text: textRaw.slice(0, 500), matched_keyword: kw,
-      matched_state: stateSlug, reply_sent: false, skipped_reason: 'throttled',
-    });
+  if (group && isThrottled(group.last_reply_at, mode)) {
+    await sbLogHit({ ...baseHit, reply_sent: false, skipped_reason: 'throttled' });
     return;
   }
 
-  // Send reply
+  // ── Silent mode: forward to admin (+assistant), no group post
+  if (mode === 'silent') {
+    const forward = composeForward({ chat: msg.chat, msg, userName, lang, keyword: kw, stateSlug });
+    const targets = [ADMIN_CHAT_ID, ASSISTANT_CHAT_ID].filter(Boolean);
+    for (const target of targets) {
+      await sendMessage(target, forward, { disable_web_page_preview: false });
+    }
+    await sbUpsertGroup({
+      chat_id: chatId, title: msg.chat.title || null, type: msg.chat.type,
+      enabled: true, mode: 'silent',
+      last_reply_at: new Date().toISOString(),
+      reply_count: (group?.reply_count || 0) + 1,
+    });
+    await sbLogHit({ ...baseHit, reply_sent: true, skipped_reason: null });
+    return;
+  }
+
+  // ── Autoreply mode: post link in the group
   const reply = composeReply(lang, stateSlug, userName);
   await sendMessage(chatId, reply, { reply_to_message_id: msg.message_id });
-
-  // Update group state — upsert in case we somehow missed the my_chat_member event
   await sbUpsertGroup({
-    chat_id: chatId,
-    title: msg.chat.title || null,
-    type: msg.chat.type,
-    enabled: true,
+    chat_id: chatId, title: msg.chat.title || null, type: msg.chat.type,
+    enabled: true, mode: 'autoreply',
     last_reply_at: new Date().toISOString(),
     reply_count: (group?.reply_count || 0) + 1,
   });
-
-  await sbLogHit({
-    chat_id: chatId, user_id: userId, user_name: userName,
-    message_text: textRaw.slice(0, 500), matched_keyword: kw,
-    matched_state: stateSlug, reply_sent: true, skipped_reason: null,
-  });
+  await sbLogHit({ ...baseHit, reply_sent: true, skipped_reason: null });
 }
 
 // ── DM message handler (existing flow) ──────────────────────────────────
