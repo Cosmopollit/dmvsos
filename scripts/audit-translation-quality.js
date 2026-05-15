@@ -86,26 +86,33 @@ const PATTERNS = {
 };
 
 // ── Fetch ────────────────────────────────────────────────────────────────
+// Keyset pagination via id > lastId — uses PK index, no statement_timeout
 async function fetchAll(lang, state) {
   const rows = [];
-  let from = 0;
-  const PAGE = 1000;
+  let lastId = '';
+  const PAGE = 500;
   while (true) {
     const params = new URLSearchParams({
       select: 'id,state,category,language,question_text,option_a,option_b,option_c,option_d,explanation',
       language: `eq.${lang}`,
-      order: 'id',
+      order: 'id.asc',
+      limit: String(PAGE),
     });
+    if (lastId) params.set('id', `gt.${lastId}`);
     if (state) params.set('state', `eq.${state}`);
-    const res = await fetch(`${SUPA_URL}/rest/v1/questions?${params}`, {
-      headers: { ...H, Range: `${from}-${from + PAGE - 1}` },
-    });
-    if (!res.ok) throw new Error(`fetch ${res.status}: ${await res.text()}`);
+    let res;
+    for (let attempt = 0; attempt < 2; attempt++) {
+      res = await fetch(`${SUPA_URL}/rest/v1/questions?${params}`, { headers: H });
+      if (res.ok) break;
+      if (res.status === 500 && attempt === 0) { await new Promise(r => setTimeout(r, 1000)); continue; }
+      throw new Error(`fetch ${res.status}: ${await res.text()}`);
+    }
     const batch = await res.json();
+    if (batch.length === 0) break;
     rows.push(...batch);
-    if (batch.length < PAGE) break;
-    from += PAGE;
+    lastId = batch[batch.length - 1].id;
     process.stderr.write(`  ${lang} ${state || 'all'}: ${rows.length} fetched\r`);
+    if (batch.length < PAGE) break;
   }
   return rows;
 }
