@@ -28,7 +28,7 @@ select
   e.experiment,
   e.variant,
   count(distinct e.subject_key)                                         as exposed,
-  count(distinct case when s.user_id is not null then e.subject_key end) as signups,
+  count(distinct case when s.id      is not null then e.subject_key end) as signups,
   count(distinct case when p.user_id is not null then e.subject_key end) as buyers,
   round(100.0 * count(distinct case when p.user_id is not null then e.subject_key end)
         / nullif(count(distinct e.subject_key), 0), 2)                  as conv_pct
