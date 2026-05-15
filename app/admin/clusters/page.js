@@ -1,8 +1,14 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { Suspense, useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { STATE_OPTIONS, stateToSlug } from '@/lib/states';
+
+function slugToLabel(slug) {
+  if (!slug) return STATE_OPTIONS[0];
+  return STATE_OPTIONS.find(o => stateToSlug(o) === slug) || STATE_OPTIONS[0];
+}
 
 const CATEGORIES = [
   { value: 'car', label: 'Car' },
@@ -62,7 +68,8 @@ function QualityBadge({ score, issues }) {
   );
 }
 
-export default function AdminClustersPage() {
+function AdminClustersInner() {
+  const searchParams = useSearchParams();
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState(false);
@@ -74,9 +81,11 @@ export default function AdminClustersPage() {
     if (saved) { setPassword(saved); setAuthenticated(true); }
   }, []);
 
-  const [stateLabel, setStateLabel] = useState(STATE_OPTIONS[0]);
-  const [category, setCategory] = useState('car');
-  const [subcategory, setSubcategory] = useState('');
+  const urlCat = searchParams.get('cat');
+  const urlSub = searchParams.get('sub');
+  const [stateLabel, setStateLabel] = useState(() => slugToLabel(searchParams.get('state')));
+  const [category, setCategory] = useState(['car','cdl','motorcycle'].includes(urlCat) ? urlCat : 'car');
+  const [subcategory, setSubcategory] = useState(urlSub || '');
   const [filter, setFilter] = useState('');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -462,6 +471,14 @@ export default function AdminClustersPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AdminClustersPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#F1F5F9' }}>Loading…</div>}>
+      <AdminClustersInner />
+    </Suspense>
   );
 }
 
