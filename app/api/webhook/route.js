@@ -187,15 +187,21 @@ async function handleOneTimePayment({ paymentIntentId, amountCents, metadata, ch
   // but we double-check here in case of bypass or race.
   if (kind === 'new' && isActive) {
     console.warn(`auto-refund duplicate 'new' purchase | user=${user_id} | type=${pass_type} | pi=${paymentIntentId}`);
+    let refundOk = false;
     try {
       await stripe.refunds.create({
         payment_intent: paymentIntentId,
         reason: 'duplicate',
         metadata: { reason_detail: 'pass_type_already_active' },
       });
+      refundOk = true;
     } catch (e) {
       console.error(`auto-refund failed | pi=${paymentIntentId} | ${e.message}`);
     }
+    await notifyAdmin(refundOk
+      ? `↩️ <b>Auto-refunded duplicate purchase</b>\n${email || '?'} tried buying ${pass_type} again while it's still active. $${(amountCents / 100).toFixed(2)} refunded.`
+      : `🚨 <b>Auto-refund FAILED for duplicate purchase</b>\n${email || '?'} bought ${pass_type} while already active. Refund failed - check Stripe manually.\nPI: <code>${paymentIntentId}</code>`
+    ).catch(() => {});
     return; // do not insert purchase row
   }
 
@@ -320,6 +326,9 @@ export async function POST(request) {
     event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
     console.error('Webhook signature error:', err.message);
+    // Critical: signature mismatch usually means STRIPE_WEBHOOK_SECRET is wrong.
+    // Don't spam (Stripe retries), but log loudly and ping admin.
+    await notifyAdmin(`🚨 <b>Webhook signature verification failed.</b>\nCheck STRIPE_WEBHOOK_SECRET in Vercel env vars matches your Stripe webhook endpoint signing secret.\nError: <code>${err.message}</code>`).catch(() => {});
     return new Response('Webhook error', { status: 400 });
   }
 
@@ -328,15 +337,16 @@ export async function POST(request) {
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object;
       const email = session.customer_email || session.customer_details?.email || session.metadata?.email;
+      const phone = session.customer_details?.phone || null;
       const planType = session.metadata?.plan_type || 'car_pass';
       const customerId = session.customer;
       const meta = session.metadata || {};
 
-      console.log(`Webhook: checkout.session.completed | user=${emailTag(email)} | plan=${planType} | mode=${session.mode}`);
+      console.log(`Webhook: checkout.session.completed | user=${emailTag(email)} | plan=${planType} | mode=${session.mode} | phone=${phone ? 'yes' : 'no'}`);
 
       // New one-time pricing model (metadata.kind = 'new' | 'extension').
       // handleOneTimePayment already syncs profiles.is_pro / plan_expires_at.
-      // We only stamp stripe_customer_id here (the helper doesn't know it).
+      // We only stamp stripe_customer_id + phone here (the helper doesn't know them).
       if (session.mode === 'payment' && (meta.kind === 'new' || meta.kind === 'extension')) {
         await handleOneTimePayment({
           paymentIntentId: session.payment_intent,
@@ -345,8 +355,11 @@ export async function POST(request) {
           checkoutSessionId: session.id,
           email,
         });
-        if (email && customerId) {
-          await profilesUpdateByEmail(email, { stripe_customer_id: customerId })
+        if (email && (customerId || phone)) {
+          const patch = {};
+          if (customerId) patch.stripe_customer_id = customerId;
+          if (phone) patch.phone = phone;
+          await profilesUpdateByEmail(email, patch)
             .catch(e => console.warn(`customer_id sync failed: ${e.message}`));
         }
         return new Response('OK', { status: 200 });
@@ -440,7 +453,9 @@ export async function POST(request) {
     }
 
   } catch (err) {
-    console.error('Webhook processing error:', err.message);
+    console.error('Webhook processing error:', err.message, err.stack);
+    // Ping admin so we know about uncaught failures. Stripe will retry.
+    await notifyAdmin(`🚨 <b>Webhook processing error.</b>\nEvent: <code>${event?.type || 'unknown'}</code>\nID: <code>${event?.id || '-'}</code>\nError: <code>${err.message}</code>\nStripe will retry. If keeps failing, check Vercel logs.`).catch(() => {});
     return new Response('Webhook processing error', { status: 500 });
   }
 

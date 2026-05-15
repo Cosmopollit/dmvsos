@@ -130,6 +130,7 @@ export async function POST(req) {
       success_url: `${SITE_URL}/success`,
       cancel_url: `${SITE_URL}/upgrade`,
       metadata,
+      phone_number_collection: { enabled: true },
     };
 
     // Pass metadata to subscription object too (so renewal invoices see it)
