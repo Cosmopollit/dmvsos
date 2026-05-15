@@ -40,6 +40,8 @@ export default function ClusterDetailPage() {
   const [retranslating, setRetranslating] = useState(null); // 'all' | lang | null
   const [uploadingImage, setUploadingImage] = useState(false);
   const [deletingImage, setDeletingImage] = useState(false);
+  const [verifyingQuality, setVerifyingQuality] = useState(false);
+  const [qualityVerdict, setQualityVerdict] = useState(null);
   const [flash, setFlash] = useState('');
   const fileInputRef = useRef(null);
 
@@ -256,6 +258,29 @@ export default function ClusterDetailPage() {
       setError(err.message);
     } finally {
       setRetranslating(null);
+    }
+  };
+
+  // ─── Quality verify (Sonnet) ────────────────────────────────────────────
+  const verifyQuality = async () => {
+    if (!confirm(`Re-verify quality via Sonnet?\nEstimated cost: ~$0.01\n\nThis will overwrite quality_score and quality_issues on the EN row.`)) return;
+    setVerifyingQuality(true); setError(''); setQualityVerdict(null);
+    try {
+      const res = await fetch('/api/admin/verify-quality', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          password, cluster_code, state, category, subcategory,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Verify failed');
+      setQualityVerdict(data.verdict);
+      showFlash(`Quality verified: ${data.verdict.quality_score}/5 · ${data.verdict.decision} · ~$${data.cost.toFixed(4)}`);
+      await fetchCluster();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setVerifyingQuality(false);
     }
   };
 
@@ -480,16 +505,40 @@ export default function ClusterDetailPage() {
                     </div>
                   </div>
                 </div>
-                <div style={{ minWidth: 200 }}>
-                  <label style={labelStyle}>Quality score</label>
-                  <div style={{ fontSize: 16, fontWeight: 600, padding: '6px 0' }}>
-                    {byLang.en?.quality_score != null ? `${byLang.en.quality_score}/5` : '—'}
-                    {byLang.en?.quality_issues?.length > 0 && (
-                      <span style={{ color: '#DC2626', fontSize: 12, marginLeft: 8 }}>
-                        ⚠️ {byLang.en.quality_issues.join(', ')}
-                      </span>
-                    )}
+                <div style={{ minWidth: 240 }}>
+                  <label style={labelStyle}>Quality (Sonnet)</label>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
+                    <span style={{
+                      fontSize: 18, fontWeight: 700,
+                      color: byLang.en?.quality_score == null ? '#94A3B8'
+                           : byLang.en.quality_score >= 4 ? '#16A34A'
+                           : byLang.en.quality_score === 3 ? '#F59E0B' : '#DC2626',
+                    }}>
+                      {byLang.en?.quality_score != null ? `${byLang.en.quality_score}/5` : '—'}
+                    </span>
+                    <button
+                      onClick={verifyQuality}
+                      disabled={verifyingQuality}
+                      style={smallSonnetBtn}
+                      title="Run Sonnet quality verification (~$0.01)"
+                    >
+                      {verifyingQuality ? '⏳ verifying…' : '🔍 Verify'}
+                    </button>
                   </div>
+                  {byLang.en?.quality_issues?.length > 0 && (
+                    <div style={{ color: '#DC2626', fontSize: 11, marginTop: 4 }}>
+                      ⚠️ {byLang.en.quality_issues.join(', ')}
+                    </div>
+                  )}
+                  {qualityVerdict && (
+                    <div style={{ marginTop: 6, padding: 8, background: '#FEF3C7', borderRadius: 4, fontSize: 11, color: '#78350F', lineHeight: 1.4 }}>
+                      <div><strong>Verdict:</strong> {qualityVerdict.correctness_verdict} · <strong>Decision:</strong> {qualityVerdict.decision}</div>
+                      {qualityVerdict.absurd_distractors?.length > 0 && (
+                        <div><strong>Absurd:</strong> {qualityVerdict.absurd_distractors.join(', ')}</div>
+                      )}
+                      <div style={{ fontStyle: 'italic', marginTop: 4 }}>{qualityVerdict.reasoning}</div>
+                    </div>
+                  )}
                 </div>
               </div>
               {byLang.en?.manual_section && (
@@ -600,4 +649,5 @@ const dangerBtn     = { padding: '8px 16px', fontSize: 13, background: '#DC2626'
 const smallBtn       = { padding: '4px 10px', fontSize: 12, background: '#fff', color: '#2563EB', border: '1px solid #2563EB', borderRadius: 4, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' };
 const smallAmberBtn  = { padding: '4px 8px', fontSize: 12, background: '#fff', color: '#F59E0B', border: '1px solid #F59E0B', borderRadius: 4, fontWeight: 600, cursor: 'pointer' };
 const smallDangerBtn = { padding: '4px 10px', fontSize: 12, background: '#fff', color: '#DC2626', border: '1px solid #DC2626', borderRadius: 4, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' };
+const smallSonnetBtn = { padding: '4px 10px', fontSize: 12, background: '#fff', color: '#9333EA', border: '1px solid #9333EA', borderRadius: 4, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' };
 const secondaryBtnLink = { padding: '8px 16px', fontSize: 13, background: '#fff', color: '#475569', border: '1px solid #CBD5E1', borderRadius: 6, fontWeight: 600, cursor: 'pointer', textDecoration: 'none', display: 'inline-block' };

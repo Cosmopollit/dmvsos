@@ -8,7 +8,7 @@
 - **Framework:** Next.js 16.1.6 (App Router)
 - **Styling:** Tailwind CSS v4, inline styles, DM Sans (headlines) + Inter (body)
 - **Database & Auth:** Supabase (PostgreSQL + OAuth with PKCE flow)
-- **Payments:** Stripe ($9.99/month recurring subscription)
+- **Payments:** Stripe one-time purchases — Moto Pass $19.99 · Auto Pass $29.99 · CDL Pro $49.99 (30-day access) · Extension $9.99 for +30 days. Single source: `lib/plans.js`.
 - **Hosting:** Vercel (auto-deploy from `main`)
 - **AI:** Anthropic SDK (dev dependency, used in scripts for question generation/translation)
 - **Analytics:** Vercel Analytics + Speed Insights
@@ -52,7 +52,7 @@
 4. **Question loading** - From Supabase `questions` table, shuffled randomly.
 5. **Test modes** - Free (20 questions), Pro: Real (40), Extended (80), Marathon (all).
 6. **Auth** - Google & Apple OAuth via Supabase PKCE flow. Session sync middleware.
-7. **Payments** - Stripe subscription ($9.99/month) with webhook handling for activation/cancellation.
+7. **Payments** - Stripe one-time purchases: Moto/Auto/CDL passes (30-day access) + Extension ($9.99 for +30 days). Per-pass-type active_passes table; webhook activates/extends. See `lib/plans.js`.
 8. **Admin panel** - Full question management with CSV bulk upload and image support.
 9. **Test results** - Score display, error review, retry wrong answers.
 10. **Test history** - Logged to `test_sessions`, viewable in `/profile`.
@@ -134,7 +134,7 @@
 
 1. **Fonts** - DM Sans for hero headlines (Anthropic-inspired thin/large style), Inter for everything else.
 2. **Color palette** - Navy `#0B1C3D` (primary dark), Blue `#2563EB` (CTA), Amber `#F59E0B` (pro/premium), Green `#10B981` (success), Red `#DC2626` (error).
-3. **Freemium model** - Free: 20 questions per test. Pro ($9.99/month): 40/80/all question modes.
+3. **Freemium model** - Free: 20 questions per test. Pro (one-time pass, $19.99-$49.99 for 30 days): 40/80/all question modes.
 4. **Data source** - Questions served from Supabase database (not static JSON files). JSON files are source data for bulk upload scripts.
 5. **Auth** - Google + Apple OAuth only (no email/password).
 6. **Language persistence** - Saved to both localStorage (`dmvsos_lang`) and cookie (1-year expiry).

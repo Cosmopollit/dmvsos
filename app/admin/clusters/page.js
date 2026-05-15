@@ -268,11 +268,19 @@ export default function AdminClustersPage() {
   return (
     <div style={{ minHeight: '100vh', background: '#F8FAFC', padding: 20 }}>
       <div style={{ maxWidth: 1400, margin: '0 auto' }}>
-        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, gap: 10, flexWrap: 'wrap' }}>
           <h1 style={{ fontSize: 20, fontWeight: 700, color: '#0B1C3D', margin: 0 }}>
             Admin · Clusters (all languages)
           </h1>
-          <Link href="/admin" style={{ color: '#2563EB', fontSize: 14 }}>← Old admin</Link>
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+            <Link
+              href={`/admin/clusters/new?state=${stateToSlug(stateLabel)}&cat=${category}${category === 'cdl' && subcategory ? `&sub=${subcategory}` : ''}`}
+              style={{ padding: '6px 14px', fontSize: 13, background: '#16A34A', color: '#fff', borderRadius: 6, fontWeight: 600, textDecoration: 'none' }}
+            >
+              + Add question
+            </Link>
+            <Link href="/admin" style={{ color: '#2563EB', fontSize: 14 }}>← Old admin</Link>
+          </div>
         </header>
 
         {/* Filters */}

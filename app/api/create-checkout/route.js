@@ -86,7 +86,7 @@ export async function POST(req) {
 
     // ── Duplicate-buy guard for one-time 'new' purchases ────────────────
     // If a user already has an active pass of the same type, the right action
-    // is Extension ($9.99), not a fresh purchase ($14.99-$49.99). This guard
+    // is Extension ($9.99), not a fresh purchase ($19.99-$49.99). This guard
     // prevents accidental double-purchase and saves the user money.
     if (userId && ONETIME_TO_PASS_TYPE[planType]) {
       const targetType = ONETIME_TO_PASS_TYPE[planType];

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-DMVSOS (dmvsos.com) - A DMV/DOL knowledge test prep platform for US immigrants. Supports all 50 states, 3 license categories (Car, CDL, Motorcycle), and 5 languages (EN, RU, ES, ZH, UA). Freemium model with Stripe subscriptions ($9.99/mo Pro plan).
+DMVSOS (dmvsos.com) - A DMV/DOL knowledge test prep platform for US immigrants. Supports all 50 states, 3 license categories (Car, CDL, Motorcycle), and 5 languages (EN, RU, ES, ZH, UA). Freemium model with one-time Stripe purchases: Moto Pass $19.99, Auto Pass $29.99, CDL Pro $49.99 — each unlocks 30 days. Extensions $9.99 for +30 days. See `lib/plans.js` for single source of truth.
 
 ## Commands
 
