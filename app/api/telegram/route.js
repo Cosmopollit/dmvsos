@@ -2,7 +2,7 @@
 //
 // Two modes:
 //   1. Private chat (DM) — answers commands /start /pricing /states /languages
-//      /refund /human, forwards free-form text to admin.
+//      /refund /human /lang, forwards free-form text to admin.
 //   2. Group chat — listens for DMV-related questions and auto-replies once
 //      per hour per group (throttle). Admins can toggle with /enable /disable.
 //
@@ -13,6 +13,7 @@ import {
   matchTrigger, detectState, detectCdl, detectCategory,
   composeReply, composeForward, isThrottled,
   mainMenuKeyboard, backToMenuKeyboard, statePickerKeyboard, categoryKeyboard,
+  languagePickerKeyboard, LANG_PICKER_TEXT,
 } from '@/lib/telegram-helper.js';
 
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
@@ -52,6 +53,24 @@ async function sbUpdateGroup(chatId, patch) {
     headers: sbHeaders,
     body: JSON.stringify(patch),
   });
+}
+
+// User language pref (DM chat only).
+async function sbGetUserLang(chatId) {
+  try {
+    const r = await fetch(`${SUPA_URL}/rest/v1/bot_user_prefs?chat_id=eq.${chatId}&select=lang`, { headers: sbHeaders });
+    if (!r.ok) return null;
+    const rows = await r.json();
+    return rows[0]?.lang || null;
+  } catch { return null; }
+}
+
+async function sbSetUserLang(chatId, lang) {
+  await fetch(`${SUPA_URL}/rest/v1/bot_user_prefs`, {
+    method: 'POST',
+    headers: { ...sbHeaders, Prefer: 'resolution=merge-duplicates' },
+    body: JSON.stringify({ chat_id: chatId, lang, updated_at: new Date().toISOString() }),
+  }).catch(() => {});
 }
 
 async function sbLogHit(row) {
@@ -132,55 +151,55 @@ Within 24h of purchase: full refund, no questions asked.
 CDL Pro Pass Guarantee: refund or 90d extension if you fail the actual DMV test with 85%+ practice score.`,
     human: `🧑‍💻 Sending your message to Evgenii (founder). Usually replies within 4 hours.`,
     forwardedAck: `✅ Got it. Evgenii will reply shortly.`,
-    unknown: `Commands: /start /pricing /states /languages /refund /human`,
+    unknown: `Commands: /start /pricing /states /languages /refund /human /lang`,
     pickCategory: `🚦 Pick a license type for <b>{state}</b>:`,
     pickState: `🗽 Which state? Pick or open the site for all 50:`,
   },
   ru: {
-    welcome: `👋 Привет! Я бот поддержки DMVSOS.\n\n/pricing /states /languages /refund /human\n\nИли просто напиши вопрос — передам.`,
+    welcome: `👋 Привет! Я бот поддержки DMVSOS.\n\n/pricing /states /languages /refund /human /lang\n\nИли просто напиши вопрос — передам.`,
     pricing: `💰 <b>Одноразовая оплата — без подписок</b>\n\n🏍️ Moto Pass — $19.99 / 30 дней\n🚗 Auto Pass — $29.99 / 30 дней\n🚛 CDL Pro — $49.99 / 30 дней + Pass Guarantee\n\n🔄 Продление $9.99 / +30 дней\n24h полный refund.`,
     states: `🗽 Покрываем <b>все 50 штатов + DC</b>. Выбери штат на dmvsos.com.`,
     languages: `🌍 5 языков: 🇺🇸 EN · 🇷🇺 RU · 🇪🇸 ES · 🇨🇳 ZH · 🇺🇦 UA`,
     refund: `💸 24h полный refund без вопросов. CDL Pro Pass Guarantee: refund или продление 90 дней при провале с 85%+ score.`,
     human: `🧑‍💻 Передаю Евгению. Обычно отвечает в течение 4 часов.`,
     forwardedAck: `✅ Получил. Евгений ответит скоро.`,
-    unknown: `Команды: /start /pricing /states /languages /refund /human`,
+    unknown: `Команды: /start /pricing /states /languages /refund /human /lang`,
     pickCategory: `🚦 Выбери категорию прав для штата <b>{state}</b>:`,
     pickState: `🗽 В каком штате? Выбери из топ-6 или открой все 50 на сайте:`,
   },
   es: {
-    welcome: `👋 ¡Hola! Bot de soporte DMVSOS.\n/pricing /states /languages /refund /human`,
+    welcome: `👋 ¡Hola! Bot de soporte DMVSOS.\n/pricing /states /languages /refund /human /lang`,
     pricing: `💰 Pago único, sin suscripciones\n🏍️ Moto $19.99 · 🚗 Auto $29.99 · 🚛 CDL $49.99 / 30 días\nExtensión $9.99 / +30 días`,
     states: `🗽 Los 50 estados + DC en dmvsos.com.`,
     languages: `🌍 5 idiomas: EN · RU · ES · ZH · UA`,
     refund: `💸 Reembolso completo en 24h.`,
     human: `🧑‍💻 Enviando a Evgenii. Responde en ~4h.`,
     forwardedAck: `✅ Recibido.`,
-    unknown: `Comandos: /start /pricing /states /languages /refund /human`,
+    unknown: `Comandos: /start /pricing /states /languages /refund /human /lang`,
     pickCategory: `🚦 Elige tipo de licencia para <b>{state}</b>:`,
     pickState: `🗽 ¿Qué estado? Elige uno o abre el sitio para los 50:`,
   },
   zh: {
-    welcome: `👋 你好！DMVSOS支持机器人。\n/pricing /states /languages /refund /human`,
+    welcome: `👋 你好！DMVSOS支持机器人。\n/pricing /states /languages /refund /human /lang`,
     pricing: `💰 一次性付款\n🏍️ $19.99 · 🚗 $29.99 · 🚛 $49.99 / 30天`,
     states: `🗽 全美50州 + DC，在 dmvsos.com 选择`,
     languages: `🌍 5种语言`,
     refund: `💸 24小时全额退款。`,
     human: `🧑‍💻 转发给Evgenii，约4小时回复。`,
     forwardedAck: `✅ 已收到。`,
-    unknown: `命令: /start /pricing /states /languages /refund /human`,
+    unknown: `命令: /start /pricing /states /languages /refund /human /lang`,
     pickCategory: `🚦 选择 <b>{state}</b> 的驾照类型:`,
     pickState: `🗽 哪个州？选择或在网站查看全部50个州:`,
   },
   ua: {
-    welcome: `👋 Привіт! Бот підтримки DMVSOS.\n/pricing /states /languages /refund /human`,
+    welcome: `👋 Привіт! Бот підтримки DMVSOS.\n/pricing /states /languages /refund /human /lang`,
     pricing: `💰 Разова оплата, без підписок\n🏍️ $19.99 · 🚗 $29.99 · 🚛 $49.99 / 30 днів`,
     states: `🗽 Усі 50 штатів + DC на dmvsos.com.`,
     languages: `🌍 5 мов`,
     refund: `💸 Повне повернення протягом 24h.`,
     human: `🧑‍💻 Передаю Євгенію. Відповідає за ~4 години.`,
     forwardedAck: `✅ Прийнято.`,
-    unknown: `Команди: /start /pricing /states /languages /refund /human`,
+    unknown: `Команди: /start /pricing /states /languages /refund /human /lang`,
     pickCategory: `🚦 Обери категорію прав для штату <b>{state}</b>:`,
     pickState: `🗽 У якому штаті? Обери або відкрий сайт для всіх 50:`,
   },
@@ -322,13 +341,28 @@ async function handleGroupMessage(msg, lang) {
 async function handleCallback(cb) {
   const chatId = cb.message?.chat?.id;
   const messageId = cb.message?.message_id;
-  const lang = pickLang(cb.from?.language_code);
   const data = cb.data || '';
 
   // ACK so loading spinner clears
   await tg('answerCallbackQuery', { callback_query_id: cb.id }).catch(() => {});
 
   if (!chatId || !messageId) return;
+
+  // lang:<code> — user picked a language. Save and show main menu.
+  if (data.startsWith('lang:')) {
+    const newLang = data.slice(5);
+    if (!['en', 'ru', 'ua', 'es', 'zh'].includes(newLang)) return;
+    await sbSetUserLang(chatId, newLang);
+    await tg('editMessageText', {
+      chat_id: chatId, message_id: messageId,
+      text: dm(newLang, 'welcome'), parse_mode: 'HTML',
+      reply_markup: mainMenuKeyboard(newLang), disable_web_page_preview: true,
+    });
+    return;
+  }
+
+  // Resolve language from saved pref; fall back to TG auto-detect
+  const lang = (await sbGetUserLang(chatId)) || pickLang(cb.from?.language_code) || 'en';
 
   // menu:start | menu:pricing | menu:states | menu:languages | menu:refund | menu:human
   if (data === 'menu:start') {
@@ -372,14 +406,24 @@ async function handleCallback(cb) {
 }
 
 // ── DM message handler ──────────────────────────────────────────────────
-async function handleDmMessage(msg, lang) {
+async function handleDmMessage(msg, autoLang) {
   const chatId = msg.chat.id;
   const userName = msg.from.first_name || msg.from.username || 'there';
   const userId = msg.from.id;
   const textRaw = (msg.text || '').trim();
   const text = textRaw.toLowerCase();
 
-  if (text.startsWith('/start') || text === '/menu') {
+  // Resolve language: saved pref first, then Telegram-auto-detected, then EN.
+  const savedLang = await sbGetUserLang(chatId);
+  const lang = savedLang || autoLang || 'en';
+
+  // /start or /lang — always show language picker. After /start was completed
+  // before, the picker still appears (user can change at any time).
+  if (text === '/start' || text === '/lang' || text === '/language') {
+    await sendMessage(chatId, LANG_PICKER_TEXT, { reply_markup: languagePickerKeyboard() });
+    return;
+  }
+  if (text === '/menu') {
     await sendMessage(chatId, dm(lang, 'welcome'), { reply_markup: mainMenuKeyboard(lang) });
     return;
   }
