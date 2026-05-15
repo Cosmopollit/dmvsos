@@ -100,3 +100,8 @@ analysis-data.json
 funnel-*.json
 content-scripts-*.json
 content-calendar-*.json
+
+# telegram outreach artifacts (regenerated)
+groups-raw.json
+groups-enriched.json
+outreach-console.html
