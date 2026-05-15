@@ -19,11 +19,10 @@ import {
 
 // Where each service action forwards to. ASSISTANT_CHAT_ID set in env vars.
 const ACTION_ROUTING = {
-  partnership:  { to: 'admin',     tag: 'PARTNERSHIP' },
-  notary:       { to: 'admin',     tag: 'NOTARY' },
-  translations: { to: 'assistant', tag: 'TRANSLATIONS' },
-  contact:      { to: 'admin',     tag: 'CONTACT' },
-  bugs:         { to: 'admin',     tag: 'BUG' },
+  partnership: { to: 'admin',     tag: 'PARTNERSHIP' },
+  docs:        { to: 'assistant', tag: 'NOTARY/TRANSLATIONS' },
+  contact:     { to: 'admin',     tag: 'CONTACT' },
+  bugs:        { to: 'admin',     tag: 'BUG' },
 };
 const PENDING_TTL_MS = 30 * 60 * 1000; // 30 minutes
 
