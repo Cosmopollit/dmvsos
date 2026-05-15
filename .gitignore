@@ -108,3 +108,7 @@ outreach-console.html
 
 # bulk verify quality script artifacts (resumable state, not part of repo)
 .bulk-verify-quality-*.json
+
+# translation quality audit outputs (regenerated)
+translation-quality-audit.json
+translation-quality-audit.csv
