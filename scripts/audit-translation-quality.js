@@ -204,8 +204,11 @@ function scanRow(row, patterns) {
   }
 
   // ── Write JSON ─────────────────────────────────────────────────────────
-  fs.writeFileSync('translation-quality-audit.json', JSON.stringify(out, null, 2));
-  console.log(`\nWrote translation-quality-audit.json (${out.length} entries)`);
+  const suffix = LANG ? `-${LANG}` : '';
+  const jsonPath = `translation-quality-audit${suffix}.json`;
+  const csvPath = `translation-quality-audit${suffix}.csv`;
+  fs.writeFileSync(jsonPath, JSON.stringify(out, null, 2));
+  console.log(`\nWrote ${jsonPath} (${out.length} entries)`);
 
   // ── Write CSV ──────────────────────────────────────────────────────────
   const csvRows = [
@@ -221,8 +224,8 @@ function scanRow(row, patterns) {
       `"${(r.explanation || '').replace(/"/g, '""').replace(/\n/g, ' ').slice(0, 300)}"`,
     ].join(',')),
   ].join('\n');
-  fs.writeFileSync('translation-quality-audit.csv', csvRows);
-  console.log(`Wrote translation-quality-audit.csv (open in Excel/Sheets)`);
+  fs.writeFileSync(csvPath, csvRows);
+  console.log(`Wrote ${csvPath} (open in Excel/Sheets)`);
 
   console.log(`\nFix workflow:`);
   console.log(`  1. Open translation-quality-audit.csv, sort by 'score' desc`);
