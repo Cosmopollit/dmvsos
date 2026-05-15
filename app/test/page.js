@@ -64,6 +64,7 @@ function TestContent() {
   const [hideExplanations, setHideExplanations] = useState(false);
   const [showLockModal, setShowLockModal] = useState(false);
   const [lockAnimKey, setLockAnimKey] = useState({});
+  const [showManualQuote, setShowManualQuote] = useState(false);
 
   // Soft email capture (mid-test, around Q10) — anonymous → captured email
   const [showEmailCapture, setShowEmailCapture] = useState(false);
@@ -185,7 +186,7 @@ function TestContent() {
     setUserAnswers([]);
     userAnswersRef.current = [];
     setSelected(null);
-    setShowAnswer(false);
+    setShowAnswer(false); setShowManualQuote(false);
     setElapsed(0);
     setTestMode(mode);
   }
@@ -228,7 +229,7 @@ function TestContent() {
       setUserAnswers([]);
       userAnswersRef.current = [];
       setSelected(null);
-      setShowAnswer(false);
+      setShowAnswer(false); setShowManualQuote(false);
       setElapsed(0);
       setRemaining(0);
       setShowUpgradeBanner(false);
@@ -248,7 +249,7 @@ function TestContent() {
       setShowAnswer(true);
     } else {
       setSelected(null);
-      setShowAnswer(false);
+      setShowAnswer(false); setShowManualQuote(false);
     }
   }
   handlePrevRef.current = handlePrev;
@@ -584,7 +585,7 @@ function TestContent() {
         setShowAnswer(true);
       } else {
         setSelected(null);
-        setShowAnswer(false);
+        setShowAnswer(false); setShowManualQuote(false);
       }
     } else {
       // Use ref for answers  ·  guaranteed to include the last answer (no batching race)
@@ -693,6 +694,26 @@ function TestContent() {
               <p className="text-sm text-[#1E40AF]/80 leading-relaxed mt-2">
                 {q.explanation}
               </p>
+            )}
+            {q.manualReference && (
+              <div className="mt-3">
+                <button
+                  type="button"
+                  onClick={() => setShowManualQuote(v => !v)}
+                  className="flex items-center gap-1 text-xs text-[#1E40AF]/70 hover:text-[#1E40AF] transition-colors"
+                >
+                  <span>📖</span>
+                  <span className="underline underline-offset-2">
+                    {q.manualSection || (tex.viewInManual || 'Driver Manual')}
+                  </span>
+                  <span className="text-[10px]">{showManualQuote ? '▲' : '▼'}</span>
+                </button>
+                {showManualQuote && (
+                  <p className="mt-1.5 text-xs text-[#1E40AF]/70 italic border-l-2 border-[#BFDBFE] pl-2 leading-relaxed">
+                    &ldquo;{q.manualReference}&rdquo;
+                  </p>
+                )}
+              </div>
             )}
           </div>
         )}
