@@ -286,6 +286,26 @@ export default function Home() {
         </p>
       </section>
 
+      {/* Free-value strip: surfaces what's already free so users see it before paywall */}
+      <div className="w-full max-w-md mx-auto px-4 mb-5">
+        <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-[11px] font-medium text-[#475569]">
+          <span className="inline-flex items-center gap-1">🆓 {tex.freeStripPractice}</span>
+          <span className="text-[#CBD5E1]">·</span>
+          <Link href="/manuals" className="inline-flex items-center gap-1 hover:text-[#2563EB] transition-colors">
+            📖 {tex.freeStripManuals}
+          </Link>
+          <span className="text-[#CBD5E1]">·</span>
+          <span className="inline-flex items-center gap-1">📋 {tex.freeStripFormat}</span>
+          <span className="text-[#CBD5E1]">·</span>
+          <span className="inline-flex items-center gap-1">🌍 {tex.freeStripLangs}</span>
+          <span className="text-[#CBD5E1]">·</span>
+          <a href="https://t.me/dmvsos_support_bot" target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 hover:text-[#2563EB] transition-colors">
+            💬 {tex.freeStripSupport}
+          </a>
+        </div>
+      </div>
+
       {/* State selector card */}
       <div id="state-selector" className="w-full max-w-md mx-auto px-4 mb-8">
         <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 border border-[#E2E8F0]/40" style={{ borderTop: '4px solid #2563EB' }}>
