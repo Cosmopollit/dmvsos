@@ -1,11 +1,11 @@
-# Telegram bot — silent monitoring + manual reply + DM UI
+# Telegram bot - silent monitoring + manual reply + DM UI
 
 
 
 `@dmvsos_support_bot` operates in two modes per group:
 
-- **silent** (default) — bot stays invisible in the group, just forwards DMV questions to your DM with deep links. You reply manually from your **personal account** to keep the human touch.
-- **autoreply** — bot posts a reply link in the group automatically (max 1/hour). Safer fallback if you can't monitor in real time.
+- **silent** (default) - bot stays invisible in the group, just forwards DMV questions to your DM with deep links. You reply manually from your **personal account** to keep the human touch.
+- **autoreply** - bot posts a reply link in the group automatically (max 1/hour). Safer fallback if you can't monitor in real time.
 
 ## Why silent is the default
 
@@ -13,7 +13,7 @@
 2. **Replies come from a real account.** People trust a person answering with context over a stock bot link.
 3. **Zero spam risk.** Bot generates no group noise, so it doesn't get kicked.
 
-The trade-off: it requires you (or assistant) to actually reply. That's the point — manual reply from a real account converts much better.
+The trade-off: it requires you (or assistant) to actually reply. That's the point - manual reply from a real account converts much better.
 
 ## DM experience (private chat with bot)
 
@@ -50,7 +50,7 @@ refund - Возврат / Refund policy
 human - Связаться с основателем / Talk to founder
 ```
 
-After `/setcommands`, Telegram clients show a "/" hint button next to the chat input that lists these — major UX win in DM.
+After `/setcommands`, Telegram clients show a "/" hint button next to the chat input that lists these - major UX win in DM.
 
 ## One-time setup
 
@@ -58,15 +58,15 @@ After `/setcommands`, Telegram clients show a "/" hint button next to the chat i
 
 In @BotFather:
 1. `/mybots` → `@dmvsos_support_bot`
-2. **Bot Settings → Group Privacy → Turn off** (required — otherwise bot sees only `/commands` in groups)
+2. **Bot Settings → Group Privacy → Turn off** (required - otherwise bot sees only `/commands` in groups)
 3. **Bot Settings → Allow Groups → ON**
 
 ### 2. Vercel env vars
 
-- `TELEGRAM_ADMIN_CHAT_ID` (already set) — your personal chat_id, gets forwards
-- `TELEGRAM_ASSISTANT_CHAT_ID` *(optional)* — your assistant's chat_id, gets the same forwards
+- `TELEGRAM_ADMIN_CHAT_ID` (already set) - your personal chat_id, gets forwards
+- `TELEGRAM_ASSISTANT_CHAT_ID` *(optional)* - your assistant's chat_id, gets the same forwards
 
-To find a chat_id: have the person DM `@dmvsos_support_bot` once. The forward to admin includes `chat <code>NNN</code>` — that's their id.
+To find a chat_id: have the person DM `@dmvsos_support_bot` once. The forward to admin includes `chat <code>NNN</code>` - that's their id.
 
 ## Forwards (silent mode)
 
@@ -88,11 +88,11 @@ Throttle: 1 forward per group per **5 minutes** in silent mode (vs 1 hour for au
 
 ## Admin commands in any group (group-admins only)
 
-- `/silent` — silent mode (default)
-- `/autoreply` — bot posts reply link itself
-- `/disable` — bot inactive in this group
-- `/enable` — re-activate
-- `/status` — current mode + counters
+- `/silent` - silent mode (default)
+- `/autoreply` - bot posts reply link itself
+- `/disable` - bot inactive in this group
+- `/enable` - re-activate
+- `/status` - current mode + counters
 
 ## Dashboard
 
@@ -103,15 +103,15 @@ Shows: groups, current mode per group, hit count, top keywords, top states, rece
 ## Pitch to group admins (silent angle)
 
 ```
-Привет! Я Евгений, делаю dmvsos.com — бесплатная подготовка к DMV для
+Привет! Я Евгений, делаю dmvsos.com - бесплатная подготовка к DMV для
 50 штатов на 5 языках.
 
 Видел в этой группе люди регулярно спрашивают про права. У меня есть
-бот @dmvsos_support_bot, который НИЧЕГО не пишет в группе — он просто
+бот @dmvsos_support_bot, который НИЧЕГО не пишет в группе - он просто
 тихо мне в личку пересылает такие вопросы, чтобы я успел подсказать
 ответ. Отвечаю я сам с личного аккаунта.
 
-Если что-то не понравится — выключи командой /disable в группе,
+Если что-то не понравится - выключи командой /disable в группе,
 или сразу кикни. Можно протестить неделю?
 ```
 
@@ -120,10 +120,10 @@ Shows: groups, current mode per group, hit count, top keywords, top states, rece
 | Risk | Mitigation |
 |---|---|
 | Admin still suspicious of any bot | Pitch as personal helper, not as automation; offer 1-week trial |
-| Bot kicked anyway | Throttle, no group noise — but admin owns the call. Move on to next group |
+| Bot kicked anyway | Throttle, no group noise - but admin owns the call. Move on to next group |
 | You don't reply fast enough | Set push notifications on your TG, or add assistant via `TELEGRAM_ASSISTANT_CHAT_ID` |
-| Privacy mode left ON in BotFather | Zero hits in dashboard — symptom check first |
+| Privacy mode left ON in BotFather | Zero hits in dashboard - symptom check first |
 
 ## Switching a group to autoreply
 
-If a particular group says "you can post automated answers too" — send `/autoreply` in that group. Per-group toggle.
+If a particular group says "you can post automated answers too" - send `/autoreply` in that group. Per-group toggle.

@@ -19,7 +19,7 @@ export default function Hero() {
 }
 ```
 
-That's it. Assignment is sticky per user (or per anon cookie). Exposure is logged once per (user, experiment, day) — the unique index in `migrations/006_experiments.sql` makes the API idempotent.
+That's it. Assignment is sticky per user (or per anon cookie). Exposure is logged once per (user, experiment, day) - the unique index in `migrations/006_experiments.sql` makes the API idempotent.
 
 ## Defining experiments
 
@@ -34,7 +34,7 @@ my_experiment: {
 }
 ```
 
-Weights are not validated at runtime — keep them honest. Add new variants only at the end; reordering re-shuffles assignment.
+Weights are not validated at runtime - keep them honest. Add new variants only at the end; reordering re-shuffles assignment.
 
 ## Reading results
 
@@ -61,20 +61,20 @@ At 485 visitors/week, a +20% lift on signup requires ~12 weeks per variant. Unti
 
 See `EXPERIMENTS` in [lib/experiments.js](lib/experiments.js):
 
-1. **hero_copy** — current hero vs "$50 retake pain" framing. Metric: signup.
-2. **pricing_anchor** — current $19.99/$29.99/$49.99 vs +$5 each. Metric: purchase.
-3. **free_questions_cap** *(paused)* — 20 vs 30 vs 50 free questions before paywall.
+1. **hero_copy** - current hero vs "$50 retake pain" framing. Metric: signup.
+2. **pricing_anchor** - current $19.99/$29.99/$49.99 vs +$5 each. Metric: purchase.
+3. **free_questions_cap** *(paused)* - 20 vs 30 vs 50 free questions before paywall.
 
 ## Workflow
 
-1. **Hypothesis** — write it in `description`. "Higher pricing won't kill conversion because customers compare against $50 retake fee."
-2. **Ship the variants.** Keep diff small — one experiment per code change.
+1. **Hypothesis** - write it in `description`. "Higher pricing won't kill conversion because customers compare against $50 retake fee."
+2. **Ship the variants.** Keep diff small - one experiment per code change.
 3. **Wait for power.** Check the table above. Don't peek and ship early.
 4. **Decide.** Update `status` to `shipped` (winner replaces control in code) or `killed` (revert and document).
 5. **Don't run >3 simultaneously.** Interaction effects + low traffic = noise.
 
 ## When NOT to A/B
 
-- Bug fixes — just ship.
-- Strategic bets that need months to evaluate (e.g. pricing model change) — those are decisions, not tests.
+- Bug fixes - just ship.
+- Strategic bets that need months to evaluate (e.g. pricing model change) - those are decisions, not tests.
 - Anything where the loser variant would actively damage UX or trust.

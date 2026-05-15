@@ -1,9 +1,9 @@
 // Telegram bot webhook handler for @dmvsos_support_bot.
 //
 // Two modes:
-//   1. Private chat (DM) — answers commands /start /pricing /states /languages
+//   1. Private chat (DM) - answers commands /start /pricing /states /languages
 //      /refund /human /lang, forwards free-form text to admin.
-//   2. Group chat — listens for DMV-related questions and auto-replies once
+//   2. Group chat - listens for DMV-related questions and auto-replies once
 //      per hour per group (throttle). Admins can toggle with /enable /disable.
 //
 // Privacy-mode must be OFF in BotFather for group message visibility.
@@ -96,7 +96,7 @@ async function sbGetPendingAction(chatId) {
 }
 
 async function sbSetPendingAction(chatId, action) {
-  // PATCH first (existing row — preserve lang). Insert with default if row is missing.
+  // PATCH first (existing row - preserve lang). Insert with default if row is missing.
   const patchRes = await fetch(`${SUPA_URL}/rest/v1/bot_user_prefs?chat_id=eq.${chatId}`, {
     method: 'PATCH',
     headers: { ...sbHeaders, Prefer: 'return=representation' },
@@ -106,7 +106,7 @@ async function sbSetPendingAction(chatId, action) {
     const rows = await patchRes.json().catch(() => []);
     if (rows.length > 0) return;
   }
-  // No row existed — insert with EN default
+  // No row existed - insert with EN default
   await fetch(`${SUPA_URL}/rest/v1/bot_user_prefs`, {
     method: 'POST',
     headers: sbHeaders,
@@ -176,25 +176,25 @@ const DM_MESSAGES = {
     welcome: `👋 Hi! I'm the DMVSOS support bot.
 
 I can help with:
-/pricing — How much it costs
-/states — Which states we cover
-/languages — Available languages
-/refund — Refund policy
-/human — Talk to Evgenii (founder) directly
+/pricing - How much it costs
+/states - Which states we cover
+/languages - Available languages
+/refund - Refund policy
+/human - Talk to Evgenii (founder) directly
 
-Or just type your question — I'll forward it.`,
-    pricing: `💰 <b>Flat-rate one-time payments — no subscriptions</b>
+Or just type your question - I'll forward it.`,
+    pricing: `💰 <b>Flat-rate one-time payments - no subscriptions</b>
 
-🏍️ Moto Pass — $19.99 / 30 days
-🚗 Auto Pass — $29.99 / 30 days
-🚛 CDL Pro — $49.99 / 30 days + Pass Guarantee
+🏍️ Moto Pass - $19.99 / 30 days
+🚗 Auto Pass - $29.99 / 30 days
+🚛 CDL Pro - $49.99 / 30 days + Pass Guarantee
 
 🔄 Need more time? Extend any pass for $9.99 / +30 days
 
 24h full refund. No questions asked.`,
     states: `🗽 We cover <b>all 50 US states + DC</b>.
 
-Just pick your state on dmvsos.com — every state has its own question bank built from the official driver's handbook.`,
+Just pick your state on dmvsos.com - every state has its own question bank built from the official driver's handbook.`,
     languages: `🌍 We support 5 languages:
 🇺🇸 English  🇷🇺 Русский  🇪🇸 Español  🇨🇳 中文  🇺🇦 Українська`,
     refund: `💸 <b>Refund policy</b>
@@ -208,8 +208,8 @@ CDL Pro Pass Guarantee: refund or 90d extension if you fail the actual DMV test 
     pickState: `🗽 Which state? Pick or open the site for all 50:`,
   },
   ru: {
-    welcome: `👋 Привет! Я бот поддержки DMVSOS.\n\n/pricing /states /languages /refund /human /lang\n\nИли просто напиши вопрос — передам.`,
-    pricing: `💰 <b>Одноразовая оплата — без подписок</b>\n\n🏍️ Moto Pass — $19.99 / 30 дней\n🚗 Auto Pass — $29.99 / 30 дней\n🚛 CDL Pro — $49.99 / 30 дней + Pass Guarantee\n\n🔄 Продление $9.99 / +30 дней\n24h полный refund.`,
+    welcome: `👋 Привет! Я бот поддержки DMVSOS.\n\n/pricing /states /languages /refund /human /lang\n\nИли просто напиши вопрос - передам.`,
+    pricing: `💰 <b>Одноразовая оплата - без подписок</b>\n\n🏍️ Moto Pass - $19.99 / 30 дней\n🚗 Auto Pass - $29.99 / 30 дней\n🚛 CDL Pro - $49.99 / 30 дней + Pass Guarantee\n\n🔄 Продление $9.99 / +30 дней\n24h полный refund.`,
     states: `🗽 Покрываем <b>все 50 штатов + DC</b>. Выбери штат на dmvsos.com.`,
     languages: `🌍 5 языков: 🇺🇸 EN · 🇷🇺 RU · 🇪🇸 ES · 🇨🇳 ZH · 🇺🇦 UA`,
     refund: `💸 24h полный refund без вопросов. CDL Pro Pass Guarantee: refund или продление 90 дней при провале с 85%+ score.`,
@@ -276,12 +276,12 @@ async function handleMyChatMember(update) {
       username: chat.username || null,
       type: chat.type,
       enabled: true,
-      mode: 'silent', // default — bot doesn't post in group, only forwards to admin DM
+      mode: 'silent', // default - bot doesn't post in group, only forwards to admin DM
       added_by: cm.from?.id || null,
       removed_at: null,
     });
 
-    // No public intro in silent mode — bot stays invisible.
+    // No public intro in silent mode - bot stays invisible.
     // Admin alert only:
     if (ADMIN_CHAT_ID) {
       await sendMessage(ADMIN_CHAT_ID,
@@ -321,7 +321,7 @@ async function handleGroupMessage(msg, lang) {
       await sendMessage(chatId, `🔔 Re-enabled.`);
     } else if (textRaw.startsWith('/silent')) {
       await sbUpdateGroup(chatId, { mode: 'silent', enabled: true });
-      await sendMessage(chatId, `🤫 Switched to silent mode. I won't post here — just forward DMV questions to my owner privately.`);
+      await sendMessage(chatId, `🤫 Switched to silent mode. I won't post here - just forward DMV questions to my owner privately.`);
     } else if (textRaw.startsWith('/autoreply')) {
       await sbUpdateGroup(chatId, { mode: 'autoreply', enabled: true });
       await sendMessage(chatId, `📣 Switched to auto-reply mode. Max 1 reply per hour.`);
@@ -400,7 +400,7 @@ async function handleCallback(cb) {
 
   if (!chatId || !messageId) return;
 
-  // lang:<code> — user picked a language. Save and show main menu.
+  // lang:<code> - user picked a language. Save and show main menu.
   if (data.startsWith('lang:')) {
     const newLang = data.slice(5);
     if (!['en', 'ru', 'ua', 'es', 'zh'].includes(newLang)) return;
@@ -448,7 +448,7 @@ async function handleCallback(cb) {
     return;
   }
 
-  // action:<service> — user tapped a service button. Set pending_action, prompt for input.
+  // action:<service> - user tapped a service button. Set pending_action, prompt for input.
   if (data.startsWith('action:')) {
     const action = data.slice(7);
     if (!ACTION_ROUTING[action]) return;
@@ -489,7 +489,7 @@ async function handleDmMessage(msg, autoLang) {
   const savedLang = await sbGetUserLang(chatId);
   const lang = savedLang || autoLang || 'en';
 
-  // /start or /lang — always show language picker. After /start was completed
+  // /start or /lang - always show language picker. After /start was completed
   // before, the picker still appears (user can change at any time).
   if (text === '/start' || text === '/lang' || text === '/language') {
     await sendMessage(chatId, LANG_PICKER_TEXT, { reply_markup: languagePickerKeyboard() });
@@ -524,7 +524,7 @@ async function handleDmMessage(msg, autoLang) {
     return;
   }
 
-  // Pending action takes top priority — user tapped Notary/Translations/Contact/Bugs
+  // Pending action takes top priority - user tapped Notary/Translations/Contact/Bugs
   // and their next free-form message is the actual request.
   const pendingAction = await sbGetPendingAction(chatId);
   if (pendingAction && ACTION_ROUTING[pendingAction]) {
@@ -536,7 +536,7 @@ async function handleDmMessage(msg, autoLang) {
     if (recipient) {
       await sendMessage(recipient,
         `🔖 <b>[${route.tag}]</b> from <b>${userName}</b> (chat <code>${chatId}</code>, lang ${lang}):\n\n${escapeHtml(textRaw)}`);
-      // If assistant was the intended target but missing — also CC admin so nothing lost
+      // If assistant was the intended target but missing - also CC admin so nothing lost
       if (route.to === 'assistant' && !target && ASSISTANT_CHAT_ID !== ADMIN_CHAT_ID) {
         // already sent above to admin
       }
@@ -563,7 +563,7 @@ async function handleDmMessage(msg, autoLang) {
     return;
   }
 
-  // Free-form: try keyword detection first — if it's a DMV question,
+  // Free-form: try keyword detection first - if it's a DMV question,
   // answer with a smart state-aware link directly (better than just "I'll forward").
   const kw = matchTrigger(textRaw);
   if (kw) {
@@ -572,7 +572,7 @@ async function handleDmMessage(msg, autoLang) {
     const reply = composeReply(lang, stateSlug, userName);
     await sendMessage(chatId, reply);
 
-    // Notify admin (info only — already auto-handled)
+    // Notify admin (info only - already auto-handled)
     if (ADMIN_CHAT_ID) {
       const meta = [`lang ${lang}`];
       if (stateSlug) meta.push(`state ${stateSlug}`);

@@ -1,0 +1,240 @@
+{
+  "done": {
+    "texas|tx_cdl_ab_203": {
+      "ts": 1778807553240,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_202": {
+      "ts": 1778807553610,
+      "quality_score": 4,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_042": {
+      "ts": 1778807554307,
+      "quality_score": 4,
+      "decision": "fix_distractors"
+    },
+    "texas|tx_cdl_ab_161": {
+      "ts": 1778807556434,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_204": {
+      "ts": 1778807556594,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_001": {
+      "ts": 1778807557629,
+      "quality_score": 4,
+      "decision": "fix_distractors"
+    },
+    "texas|tx_cdl_ab_031": {
+      "ts": 1778807559330,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_022": {
+      "ts": 1778807559945,
+      "quality_score": 2,
+      "decision": "rewrite"
+    },
+    "texas|tx_cdl_ab_030": {
+      "ts": 1778807560873,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_091": {
+      "ts": 1778807562382,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_066": {
+      "ts": 1778807563807,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_037": {
+      "ts": 1778807564352,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_014": {
+      "ts": 1778807567098,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_195": {
+      "ts": 1778807567326,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_055": {
+      "ts": 1778807568710,
+      "quality_score": 2,
+      "decision": "rewrite"
+    },
+    "texas|tx_cdl_ab_103": {
+      "ts": 1778807570116,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_059": {
+      "ts": 1778807570552,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_172": {
+      "ts": 1778807571534,
+      "quality_score": 4,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_008": {
+      "ts": 1778807573933,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_057": {
+      "ts": 1778807574586,
+      "quality_score": 2,
+      "decision": "rewrite"
+    },
+    "texas|tx_cdl_ab_188": {
+      "ts": 1778807574969,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_191": {
+      "ts": 1778807578920,
+      "quality_score": 3,
+      "decision": "fix_distractors"
+    },
+    "texas|tx_cdl_ab_058": {
+      "ts": 1778807579087,
+      "quality_score": 2,
+      "decision": "rewrite"
+    },
+    "texas|tx_cdl_ab_027": {
+      "ts": 1778807582013,
+      "quality_score": 4,
+      "decision": "fix_distractors"
+    },
+    "texas|tx_cdl_ab_034": {
+      "ts": 1778807582015,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_006": {
+      "ts": 1778807582716,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_184": {
+      "ts": 1778807584955,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_090": {
+      "ts": 1778807585202,
+      "quality_score": 4,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_080": {
+      "ts": 1778807586083,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_099": {
+      "ts": 1778807587877,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_062": {
+      "ts": 1778807588908,
+      "quality_score": 4,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_200": {
+      "ts": 1778807589631,
+      "quality_score": 2,
+      "decision": "rewrite"
+    },
+    "texas|tx_cdl_ab_029": {
+      "ts": 1778807591180,
+      "quality_score": 3,
+      "decision": "rewrite"
+    },
+    "texas|tx_cdl_ab_002": {
+      "ts": 1778807592513,
+      "quality_score": 3,
+      "decision": "rewrite"
+    },
+    "texas|tx_cdl_ab_201": {
+      "ts": 1778807593416,
+      "quality_score": 4,
+      "decision": "fix_distractors"
+    },
+    "texas|tx_cdl_ab_180": {
+      "ts": 1778807595280,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_021": {
+      "ts": 1778807595982,
+      "quality_score": 4,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_003": {
+      "ts": 1778807597354,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_019": {
+      "ts": 1778807598859,
+      "quality_score": 4,
+      "decision": "rewrite"
+    },
+    "texas|tx_cdl_ab_206": {
+      "ts": 1778807599328,
+      "quality_score": 2,
+      "decision": "rewrite"
+    },
+    "texas|tx_cdl_ab_010": {
+      "ts": 1778807600408,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_018": {
+      "ts": 1778807602727,
+      "quality_score": 5,
+      "decision": "keep"
+    },
+    "texas|tx_cdl_ab_024": {
+      "ts": 1778807603096,
+      "quality_score": 4,
+      "decision": "rewrite"
+    },
+    "texas|tx_cdl_ab_205": {
+      "ts": 1778807603765,
+      "quality_score": 4,
+      "decision": "keep"
+    }
+  },
+  "stats": {
+    "verified": 44,
+    "cost": 0.14241199999999998,
+    "score_dist": {
+      "1": 0,
+      "2": 6,
+      "3": 3,
+      "4": 12,
+      "5": 23
+    },
+    "decisions": {
+      "keep": 29,
+      "fix_distractors": 5,
+      "rewrite": 10
+    }
+  }
+}
