@@ -45,17 +45,22 @@ function fix(s) {
   return s.replace(/ — /g, ' - ').replace(/—/g, '-');
 }
 
-async function fetchPage(from, lang) {
+// Keyset pagination (id > lastId) — uses the PK index, no timeout on deep pages.
+async function fetchPage(lastId, lang, pageSize = 500) {
   const params = new URLSearchParams({
     select: ['id', ...COLS].join(','),
-    order: 'id',
+    order: 'id.asc',
+    limit: String(pageSize),
   });
+  if (lastId) params.set('id', `gt.${lastId}`);
   if (lang) params.set('language', `eq.${lang}`);
-  const res = await fetch(`${SUPA_URL}/rest/v1/questions?${params}`, {
-    headers: { ...H, Range: `${from}-${from + 999}` },
-  });
-  if (!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
-  return res.json();
+  // Retry once on transient timeout
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const res = await fetch(`${SUPA_URL}/rest/v1/questions?${params}`, { headers: H });
+    if (res.ok) return res.json();
+    if (res.status === 500 && attempt === 0) { await new Promise(r => setTimeout(r, 1000)); continue; }
+    throw new Error(`${res.status}: ${await res.text()}`);
+  }
 }
 
 function hasEmDash(row) {
@@ -76,15 +81,17 @@ async function patch(id, patch) {
   if (LANG) console.log(`Lang filter: ${LANG}`);
 
   const rows = [];
-  let from = 0;
+  let lastId = '';
   let scanned = 0;
+  const PAGE = 500;
   while (true) {
-    const batch = await fetchPage(from, LANG);
+    const batch = await fetchPage(lastId, LANG, PAGE);
+    if (batch.length === 0) break;
     scanned += batch.length;
     for (const r of batch) if (hasEmDash(r)) rows.push(r);
+    lastId = batch[batch.length - 1].id;
     process.stderr.write(`  scanned ${scanned}, with em-dashes ${rows.length}\r`);
-    if (batch.length < 1000) break;
-    from += 1000;
+    if (batch.length < PAGE) break;
   }
   console.log(`\nScanned ${scanned} rows, found ${rows.length} containing em-dashes`);
 
