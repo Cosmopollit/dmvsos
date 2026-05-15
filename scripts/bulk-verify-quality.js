@@ -106,11 +106,26 @@ async function verifyCluster(en) {
 
 async function runPool(items, fn, concurrency) {
   let idx = 0;
+  // Retry transient client-side network failures (undici keep-alive socket dies,
+  // ECONNRESET, etc.). The dev server processes requests fine; the loss is on
+  // the way over the wire from Node fetch.
+  const TRANSIENT = /fetch failed|ECONNRESET|ECONNREFUSED|ETIMEDOUT|socket hang up|other side closed|UND_ERR/i;
   async function worker() {
     while (idx < items.length) {
       const i = idx++;
-      try { await fn(items[i], i); }
-      catch (e) { console.error(`  ERR ${items[i].cluster_code}: ${e.message.slice(0, 200)}`); }
+      let lastErr = null;
+      for (let attempt = 1; attempt <= 4; attempt++) {
+        try { await fn(items[i], i); lastErr = null; break; }
+        catch (e) {
+          lastErr = e;
+          if (attempt < 4 && TRANSIENT.test(e.message)) {
+            await new Promise(r => setTimeout(r, 1000 * attempt));
+            continue;
+          }
+          break;
+        }
+      }
+      if (lastErr) console.error(`  ERR ${items[i].cluster_code}: ${lastErr.message.slice(0, 200)}`);
     }
   }
   await Promise.all(Array.from({ length: Math.min(concurrency, items.length) }, worker));
