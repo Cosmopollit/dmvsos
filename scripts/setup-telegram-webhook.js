@@ -62,14 +62,11 @@ const cmds = await fetch(`${API}/setMyCommands`, {
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
     commands: [
-      { command: 'start',     description: 'Меню / Menu' },
-      { command: 'menu',      description: 'Главное меню / Main menu' },
-      { command: 'pricing',   description: 'Цены / Pricing' },
-      { command: 'states',    description: 'Штаты / States' },
-      { command: 'languages', description: 'Языки / Languages' },
-      { command: 'refund',    description: 'Возврат / Refund' },
-      { command: 'human',     description: 'Связаться / Contact founder' },
-      { command: 'lang',      description: 'Сменить язык / Change language' },
+      { command: 'start',   description: 'Старт / Start' },
+      { command: 'menu',    description: 'Главное меню / Main menu' },
+      { command: 'pricing', description: 'Цены / Pricing' },
+      { command: 'lang',    description: 'Сменить язык / Change language' },
+      { command: 'help',    description: 'Помощь / Help' },
     ],
   }),
 }).then(r => r.json());

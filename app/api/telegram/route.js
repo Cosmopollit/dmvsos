@@ -14,7 +14,18 @@ import {
   composeReply, composeForward, isThrottled,
   mainMenuKeyboard, backToMenuKeyboard, statePickerKeyboard, categoryKeyboard,
   languagePickerKeyboard, LANG_PICKER_TEXT,
+  ACTION_PROMPTS, ACTION_ACKS,
 } from '@/lib/telegram-helper.js';
+
+// Where each service action forwards to. ASSISTANT_CHAT_ID set in env vars.
+const ACTION_ROUTING = {
+  partnership:  { to: 'admin',     tag: 'PARTNERSHIP' },
+  notary:       { to: 'admin',     tag: 'NOTARY' },
+  translations: { to: 'assistant', tag: 'TRANSLATIONS' },
+  contact:      { to: 'admin',     tag: 'CONTACT' },
+  bugs:         { to: 'admin',     tag: 'BUG' },
+};
+const PENDING_TTL_MS = 30 * 60 * 1000; // 30 minutes
 
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID;
@@ -70,6 +81,48 @@ async function sbSetUserLang(chatId, lang) {
     method: 'POST',
     headers: { ...sbHeaders, Prefer: 'resolution=merge-duplicates' },
     body: JSON.stringify({ chat_id: chatId, lang, updated_at: new Date().toISOString() }),
+  }).catch(() => {});
+}
+
+async function sbGetPendingAction(chatId) {
+  try {
+    const r = await fetch(`${SUPA_URL}/rest/v1/bot_user_prefs?chat_id=eq.${chatId}&select=pending_action,pending_set_at`, { headers: sbHeaders });
+    if (!r.ok) return null;
+    const rows = await r.json();
+    const row = rows[0];
+    if (!row || !row.pending_action) return null;
+    if (row.pending_set_at && Date.now() - new Date(row.pending_set_at).getTime() > PENDING_TTL_MS) return null;
+    return row.pending_action;
+  } catch { return null; }
+}
+
+async function sbSetPendingAction(chatId, action) {
+  // PATCH first (existing row — preserve lang). Insert with default if row is missing.
+  const patchRes = await fetch(`${SUPA_URL}/rest/v1/bot_user_prefs?chat_id=eq.${chatId}`, {
+    method: 'PATCH',
+    headers: { ...sbHeaders, Prefer: 'return=representation' },
+    body: JSON.stringify({ pending_action: action, pending_set_at: new Date().toISOString() }),
+  }).catch(() => null);
+  if (patchRes?.ok) {
+    const rows = await patchRes.json().catch(() => []);
+    if (rows.length > 0) return;
+  }
+  // No row existed — insert with EN default
+  await fetch(`${SUPA_URL}/rest/v1/bot_user_prefs`, {
+    method: 'POST',
+    headers: sbHeaders,
+    body: JSON.stringify({
+      chat_id: chatId, lang: 'en',
+      pending_action: action, pending_set_at: new Date().toISOString(),
+    }),
+  }).catch(() => {});
+}
+
+async function sbClearPendingAction(chatId) {
+  await fetch(`${SUPA_URL}/rest/v1/bot_user_prefs?chat_id=eq.${chatId}`, {
+    method: 'PATCH',
+    headers: sbHeaders,
+    body: JSON.stringify({ pending_action: null, pending_set_at: null }),
   }).catch(() => {});
 }
 
@@ -364,6 +417,11 @@ async function handleCallback(cb) {
   // Resolve language from saved pref; fall back to TG auto-detect
   const lang = (await sbGetUserLang(chatId)) || pickLang(cb.from?.language_code) || 'en';
 
+  // Any non-action callback navigation clears stale pending_action.
+  if (!data.startsWith('action:')) {
+    await sbClearPendingAction(chatId);
+  }
+
   // menu:start | menu:pricing | menu:states | menu:languages | menu:refund | menu:human
   if (data === 'menu:start') {
     await tg('editMessageText', {
@@ -387,6 +445,21 @@ async function handleCallback(cb) {
       chat_id: chatId, message_id: messageId,
       text: dm(lang, key), parse_mode: 'HTML',
       reply_markup: backToMenuKeyboard(lang), disable_web_page_preview: true,
+    });
+    return;
+  }
+
+  // action:<service> — user tapped a service button. Set pending_action, prompt for input.
+  if (data.startsWith('action:')) {
+    const action = data.slice(7);
+    if (!ACTION_ROUTING[action]) return;
+    await sbSetPendingAction(chatId, action);
+    const prompt = (ACTION_PROMPTS[lang] || ACTION_PROMPTS.en)[action];
+    await tg('editMessageText', {
+      chat_id: chatId, message_id: messageId,
+      text: prompt, parse_mode: 'HTML',
+      reply_markup: backToMenuKeyboard(lang),
+      disable_web_page_preview: true,
     });
     return;
   }
@@ -449,6 +522,28 @@ async function handleDmMessage(msg, autoLang) {
   }
   if (text.startsWith('/')) {
     await sendMessage(chatId, dm(lang, 'unknown'), { reply_markup: mainMenuKeyboard(lang) });
+    return;
+  }
+
+  // Pending action takes top priority — user tapped Notary/Translations/Contact/Bugs
+  // and their next free-form message is the actual request.
+  const pendingAction = await sbGetPendingAction(chatId);
+  if (pendingAction && ACTION_ROUTING[pendingAction]) {
+    const route = ACTION_ROUTING[pendingAction];
+    const target = route.to === 'assistant' ? ASSISTANT_CHAT_ID : ADMIN_CHAT_ID;
+    const fallback = ADMIN_CHAT_ID; // if assistant chat_id missing, route to admin
+
+    const recipient = target || fallback;
+    if (recipient) {
+      await sendMessage(recipient,
+        `🔖 <b>[${route.tag}]</b> from <b>${userName}</b> (chat <code>${chatId}</code>, lang ${lang}):\n\n${escapeHtml(textRaw)}`);
+      // If assistant was the intended target but missing — also CC admin so nothing lost
+      if (route.to === 'assistant' && !target && ASSISTANT_CHAT_ID !== ADMIN_CHAT_ID) {
+        // already sent above to admin
+      }
+    }
+    await sendMessage(chatId, (ACTION_ACKS[lang] || ACTION_ACKS.en));
+    await sbClearPendingAction(chatId);
     return;
   }
 
