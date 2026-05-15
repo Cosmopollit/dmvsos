@@ -11,7 +11,7 @@ import { flags } from '@/lib/flags';
 const cdlSubs = [
   { id: 'general_knowledge', icon: '📋', titleKey: 'cdlGeneral', descKey: 'cdlGeneralDesc', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)' },
   { id: 'air_brakes',        icon: '💨', titleKey: 'cdlAirBrakes', descKey: 'cdlAirBrakesDesc', gradient: 'linear-gradient(135deg, #EEF2FF, #E0E7FF)' },
-  { id: 'combination',       icon: '🔗', titleKey: 'cdlCombination', descKey: 'cdlCombinationDesc', gradient: 'linear-gradient(135deg, #F5F3FF, #EDE9FE)' },
+  { id: 'combination_vehicles', icon: '🔗', titleKey: 'cdlCombination', descKey: 'cdlCombinationDesc', gradient: 'linear-gradient(135deg, #F5F3FF, #EDE9FE)' },
 ];
 
 const langs = [
