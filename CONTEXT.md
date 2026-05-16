@@ -1,7 +1,7 @@
 # DMVSOS - Project Context
 
 **Domain:** dmvsos.com
-**Purpose:** Multilingual DMV practice test platform for immigrants preparing for US driving tests.
+**Purpose:** Multilingual DMV practice test platform for US driving test preparation.
 
 ## Tech Stack
 

@@ -159,7 +159,7 @@ async function generateTopic(topicNum, topic, manualText) {
   const chunks = findTopChunks(manualText, topic, 4);
   const context = chunks.join('\n\n---\n\n').substring(0, 5000);
 
-  const prompt = `You are writing Illinois DMV knowledge test questions for immigrant drivers preparing for their Illinois driver's license exam.
+  const prompt = `You are writing Illinois DMV knowledge test questions for new drivers preparing for their Illinois driver's license exam.
 
 Topic: ${topic}
 

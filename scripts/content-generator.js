@@ -4,7 +4,7 @@
 //
 // Strategy:
 //   • Reuse our 149k-question DB as a content moat — every TikTok = 1 question.
-//   • Hook framework: "Most immigrants fail this DMV question. Can you?"
+//   • Hook framework: "Most drivers get this DMV question wrong. Can you?"
 //   • Tease answer → reveal with explanation → CTA to dmvsos.com/[state].
 //
 // Usage:
@@ -45,7 +45,7 @@ const STATE_NAMES = {
 const HOOKS_EN = [
   "Most people fail this DMV question. Can you answer it in 5 seconds?",
   "If you can't answer this, you'll fail your DMV test.",
-  "This is the #1 question immigrants get wrong on the {state} DMV test.",
+  "This is the #1 question new drivers get wrong on the {state} DMV test.",
   "POV: It's test day and the proctor asks you this. What do you say?",
   "Bet you didn't know this {state} road rule.",
   "9 out of 10 new drivers fail this question. Try it.",
@@ -111,7 +111,7 @@ function buildScript(q) {
       reveal: `Answer: ${answerLetter(correctIdx)} — ${correctOpt}`,
       why: q.explanation || null,
       cta,
-      hashtags: ['#dmvtest', `#${q.state.replace(/-/g, '')}dmv`, '#drivingtest', '#newdriver', '#immigrant', '#usadriving'],
+      hashtags: ['#dmvtest', `#${q.state.replace(/-/g, '')}dmv`, '#drivingtest', '#newdriver', '#driverslicense', '#usadriving'],
       caption: `${hook}\n\n${q.question_text}\n\nA) ${strip(q.option_a)}\nB) ${strip(q.option_b)}\nC) ${strip(q.option_c)}\nD) ${strip(q.option_d)}\n\nComment your guess 👇 Answer in next post.\n\n${cta}`,
     },
     reddit: {

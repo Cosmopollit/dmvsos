@@ -110,7 +110,7 @@ Evaluate two things and call submit_verification:
    - rewrite — quality ≤3 OR correctness=wrong/ambiguous (whole question needs work)
    - delete — correctness = invalid (broken beyond repair)
 
-Be strict but fair. This is for a real test prep platform serving immigrants who need to pass the actual DMV exam.`;
+Be strict but fair. This is for a real test prep platform serving people preparing for the actual DMV exam.`;
 }
 
 // ─── Sonnet caller ─────────────────────────────────────────────────────────
