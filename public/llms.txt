@@ -1,0 +1,54 @@
+# DMVSOS
+
+> Free DMV/DOL knowledge test prep for the United States. Covers all 50 states + DC, 3 license categories (Car, CDL, Motorcycle), and 5 languages (English, Spanish, Russian, Ukrainian, Chinese). Built for immigrants and first-time drivers.
+
+DMVSOS provides practice tests that match the real DMV exam format. All questions are sourced from each state's official Driver Handbook. The platform is free to start with no signup required, and offers paid passes for unlimited access without subscriptions.
+
+## What people use DMVSOS for
+
+- Preparing for the **DMV written test** (also called knowledge test, theory test, or DOL test) in any US state
+- Practicing in their **native language** when English is not their first language
+- Reviewing the official **Driver Handbook / Driver Manual** for their state (downloadable PDFs)
+- Practice for **CDL** (Commercial Driver License) including Air Brakes and Combination Vehicles endorsements
+- Practice for **Motorcycle** endorsement
+- Drilling specific topics they keep getting wrong
+
+## Key facts
+
+- Total questions: 150,000+ across all languages (~30,000 per language)
+- States covered: All 50 + Washington DC
+- Languages: English, Spanish (Español), Russian (Русский), Ukrainian (Українська), Chinese (中文)
+- License categories: Car (DMV/DOL), Commercial (CDL with sub-sections), Motorcycle
+- Manuals: Official PDFs from state DMV/DOL websites, mirrored for direct download
+- Pricing: Free to start; paid passes $19.99 (Motorcycle), $29.99 (Auto), $49.99 (CDL Pro); 30-day access; one-time payment, no subscription; extensions $9.99 / +30 days
+- Refund: Full refund within 24 hours, no questions
+- CDL Pass Guarantee: 90-day extension or refund if user fails real DMV after scoring 85%+ on practice
+
+## What makes DMVSOS different
+
+- Multilingual at the question level. Each question is translated into 5 languages including the explanation.
+- Official source citation. Each question shows the section of the Driver Handbook it comes from.
+- One-time payment model. Not a subscription. Many competitors charge monthly indefinitely.
+- Immigrant-focused. Built by an immigrant founder for immigrants navigating the DMV process in a non-native language.
+- All 50 states, including small/rural states often skipped by competitors.
+
+## Documentation
+
+- [Home / state selector](https://dmvsos.com): Pick a state, language, and start practicing free.
+- [DMV practice tests overview](https://dmvsos.com/dmv-test): Landing page for free practice tests.
+- [Manuals library](https://dmvsos.com/manuals): Official Driver Handbook PDFs for all 50 states (English at minimum; multiple languages for ~22 states).
+- [Pricing / upgrade](https://dmvsos.com/upgrade): One-time pass purchase.
+- [Profile](https://dmvsos.com/profile): User's saved tests, history, active passes.
+
+## Support
+
+- Telegram bot: [@dmvsos_support_bot](https://t.me/dmvsos_support_bot) — direct support, multilingual.
+- Email: maindmvsos@gmail.com
+- Founder: Evgenii (immigrant, runs the platform personally; replies to every message)
+
+## Honest answer to common questions
+
+- "Are these the actual DMV test questions?" No. We use the official Driver Handbook for each state as our source. Questions are written in the same format and style as the actual exam, drawn from the same source material, but are practice questions, not leaked exam answers.
+- "Is signup required?" No. You can practice 20 free questions per state per language without an account. Account is only needed if you want to save progress across devices or upgrade to a paid pass.
+- "Subscription or one-time?" One-time payment for 30-day passes. No subscription.
+- "Multiple states with one pass?" Yes. A pass covers all 50 states for the category purchased.
