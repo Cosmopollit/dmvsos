@@ -65,6 +65,8 @@ function TestContent() {
   const [showLockModal, setShowLockModal] = useState(false);
   const [lockAnimKey, setLockAnimKey] = useState({});
   const [showManualQuote, setShowManualQuote] = useState(false);
+  // Blocks rapid double-clicks while /api/test/check is in flight
+  const [submittingAnswer, setSubmittingAnswer] = useState(false);
 
   // Inline bug report
   const [showReport, setShowReport] = useState(false);
@@ -185,17 +187,19 @@ function TestContent() {
           return;
         }
         const strip = s => (s || '').replace(/^[A-DА-Га-гa-d]\.\s*/, '').trim();
+        // Server no longer returns correct_answer/explanation/manual_* — those
+        // are revealed per question via /api/test/check on user submit.
         const mapped = questions.map(row => {
           const answers = [row.option_a, row.option_b, row.option_c, row.option_d].filter(Boolean).map(strip);
           return {
             id: row.id,
             question: row.question_text || '',
             answers,
-            correctAnswerIndex: row.correct_answer ?? 0,
+            correctAnswerIndex: null,    // populated by submitAnswer() after /check
             imageUrl: row.image_url || null,
-            explanation: row.explanation || null,
-            manualSection: row.manual_section || null,
-            manualReference: row.manual_reference || null,
+            explanation: null,           // populated by /check
+            manualSection: null,         // populated by /check
+            manualReference: null,       // populated by /check
           };
         }).filter(row => row.answers.length >= 2);
         // Fisher-Yates shuffle
@@ -589,13 +593,52 @@ function TestContent() {
   const correctCount = score;
   const wrongCount = answered - correctCount;
 
-  function handleSelect(index) {
-    if (showAnswer) return;
+  async function handleSelect(index) {
+    if (showAnswer || submittingAnswer) return;
     setSelected(index);
+
+    // If question already has reveal data (retry mode), score locally.
+    // Otherwise call /api/test/check to verify with the server.
+    const revealed = q.correctAnswerIndex != null;
+    let correct;
+    if (revealed) {
+      correct = index === q.correctAnswerIndex;
+    } else {
+      setSubmittingAnswer(true);
+      try {
+        const res = await fetch('/api/test/check', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question_id: q.id, choice: index }),
+        });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error || 'check failed');
+        correct = !!data.correct;
+        setQuestions(prev => prev.map((qq, i) =>
+          i === current
+            ? {
+                ...qq,
+                correctAnswerIndex: data.correct_answer ?? 0,
+                explanation: data.explanation || null,
+                manualSection: data.manual_section || null,
+                manualReference: data.manual_reference || null,
+              }
+            : qq
+        ));
+      } catch {
+        // Network/rate-limit fallback: accept selection, mark as incorrect.
+        // -1 means no answer key is shown highlighted (no false-positive).
+        correct = false;
+        setQuestions(prev => prev.map((qq, i) =>
+          i === current ? { ...qq, correctAnswerIndex: -1 } : qq
+        ));
+      } finally {
+        setSubmittingAnswer(false);
+      }
+    }
+
     setShowAnswer(true);
-    const correct = index === q.correctAnswerIndex;
     if (correct) setScore(s => s + 1);
-    // Track answers both in state and ref (ref is synchronous, avoids race condition)
     const updatedAnswers = [...userAnswersRef.current, index];
     userAnswersRef.current = updatedAnswers;
     setUserAnswers(updatedAnswers);
@@ -710,11 +753,16 @@ function TestContent() {
                   else style = 'border border-[#E2E8F0] text-[#94A3B8] bg-white opacity-60';
                 }
               }
+              const isPending = submittingAnswer && i === selected;
               return (
                 <button key={i} type="button" onClick={() => handleSelect(i)}
-                  className={`w-full text-left px-4 py-3.5 rounded-xl text-sm transition-all ${style} ${!showAnswer ? 'hover:border-[#2563EB] hover:bg-[#EFF6FF] hover:text-[#2563EB]' : ''}`}>
+                  disabled={submittingAnswer}
+                  className={`w-full text-left px-4 py-3.5 rounded-xl text-sm transition-all ${style} ${!showAnswer && !submittingAnswer ? 'hover:border-[#2563EB] hover:bg-[#EFF6FF] hover:text-[#2563EB]' : ''} ${submittingAnswer ? 'cursor-wait opacity-90' : ''}`}>
                   <span className="font-semibold mr-3 text-[#0B1C3D]">{['A', 'B', 'C', 'D'][i]}.</span>
                   {opt.replace(/^[A-DА-Га-гa-d]\.\s*/, '')}
+                  {isPending && (
+                    <span className="inline-block ml-2 w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin align-middle" />
+                  )}
                 </button>
               );
             })}

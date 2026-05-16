@@ -87,8 +87,11 @@ export async function GET(req) {
     }
 
     // Fetch from Supabase with service role (bypasses RLS).
+    // NOTE: deliberately do NOT select correct_answer / explanation / manual_section / manual_reference.
+    // Those are revealed per-question only via /api/test/check after the user picks an answer.
+    // Protects against scrapers harvesting answer+explanation in one bulk fetch.
     const params = new URLSearchParams({
-      select: 'id,question_text,option_a,option_b,option_c,option_d,correct_answer,explanation,image_url,manual_section,manual_reference',
+      select: 'id,question_text,option_a,option_b,option_c,option_d,image_url',
       state: 'eq.' + state,
       category: 'eq.' + category,
       language: 'eq.' + language,
