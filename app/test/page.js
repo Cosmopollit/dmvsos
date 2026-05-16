@@ -55,6 +55,7 @@ function TestContent() {
   const [showAnswer, setShowAnswer] = useState(false);
   const [score, setScore] = useState(0);
   const [loadingQuestions, setLoadingQuestions] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const [showUpgradeBanner, setShowUpgradeBanner] = useState(false);
   const [motivationalMessage, setMotivationalMessage] = useState(null);
   const [elapsed, setElapsed] = useState(0);
@@ -170,6 +171,7 @@ function TestContent() {
       return;
     }
     setLoadingQuestions(true);
+    setLoadError('');
     const categoryMap = { dmv: 'car', cdl: 'cdl', moto: 'motorcycle' };
     const mappedCategory = categoryMap[category] || category;
     // Server-side fetch — anon Supabase key no longer dumps the question bank.
@@ -179,9 +181,23 @@ function TestContent() {
     });
     if (subcategory) qsParams.set('subcategory', subcategory);
     fetch('/api/test/questions?' + qsParams, { cache: 'no-store' })
-      .then(r => r.json())
-      .then(({ ok, questions, error }) => {
-        if (!ok || !questions?.length) {
+      .then(async r => {
+        const data = await r.json();
+        return { status: r.status, ...data };
+      })
+      .then(({ ok, status, questions, error, resetAt }) => {
+        if (!ok) {
+          if (error === 'rate_limited') {
+            const mins = resetAt ? Math.ceil((resetAt - Date.now()) / 60000) : 10;
+            setLoadError(`Too many requests. Try again in ~${mins} min.`);
+          } else {
+            setLoadError(error || 'Failed to load questions.');
+          }
+          setAllQuestions([]);
+          setLoadingQuestions(false);
+          return;
+        }
+        if (!questions?.length) {
           setAllQuestions([]);
           setLoadingQuestions(false);
           return;
@@ -556,15 +572,21 @@ function TestContent() {
   }
 
   if (!questions.length) {
-    const canFallbackToEnglish = lang !== 'en';
+    const isRateLimited = !!loadError && /rate|too many/i.test(loadError);
+    const canFallbackToEnglish = lang !== 'en' && !isRateLimited;
     const testUrl = `/test?state=${state}&category=${category}${subcategory ? `&subcategory=${subcategory}` : ''}&lang=en`;
     return (
       <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
         <div className="text-center max-w-sm">
-          <div className="text-5xl mb-4">📭</div>
+          <div className="text-5xl mb-4">{isRateLimited ? '⏳' : '📭'}</div>
           <h2 className="text-lg font-bold text-[#0B1C3D] mb-2">
-            {canFallbackToEnglish ? (tex.notYetInLanguage || tex.noQuestionsFound) : tex.noQuestionsFound}
+            {isRateLimited
+              ? (tex.tooManyRequests || 'Too many requests')
+              : canFallbackToEnglish ? (tex.notYetInLanguage || tex.noQuestionsFound) : tex.noQuestionsFound}
           </h2>
+          {isRateLimited && (
+            <p className="text-sm text-[#64748B] mb-4">{loadError}</p>
+          )}
           {canFallbackToEnglish && (
             <p className="text-sm text-[#64748B] mb-4">{tex.tryEnglishWhilePrepping || 'Try the English version in the meantime.'}</p>
           )}

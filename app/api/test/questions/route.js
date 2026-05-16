@@ -32,22 +32,27 @@ const DEFAULT_LIMIT = 80;
 
 // In-memory rate limiter. Per-instance state on Vercel; resets on cold start
 // but catches hot scrapers from a single IP within a session.
+//
+// Counts REQUESTS not questions. One /questions call = 1 bucket increment
+// regardless of how many questions it returns. A real user browsing a few
+// states + taking a marathon test = ~5-10 requests. A scraper trying to
+// hit every state x category x language combo = 750+ requests, blocked.
 const buckets = new Map(); // key=ip -> { count, resetAt }
 const WINDOW_MS = 10 * 60 * 1000;
-const MAX_PER_WINDOW = 200; // ~10 full real tests worth
+const MAX_REQUESTS_PER_WINDOW = 60; // generous for users, blocks bulk scrape
 
-function rateLimit(ip, n) {
+function rateLimit(ip) {
   const now = Date.now();
   const b = buckets.get(ip);
   if (!b || b.resetAt < now) {
-    buckets.set(ip, { count: n, resetAt: now + WINDOW_MS });
-    return { ok: true, remaining: MAX_PER_WINDOW - n, resetAt: now + WINDOW_MS };
+    buckets.set(ip, { count: 1, resetAt: now + WINDOW_MS });
+    return { ok: true, remaining: MAX_REQUESTS_PER_WINDOW - 1, resetAt: now + WINDOW_MS };
   }
-  if (b.count + n > MAX_PER_WINDOW) {
+  if (b.count + 1 > MAX_REQUESTS_PER_WINDOW) {
     return { ok: false, remaining: 0, resetAt: b.resetAt };
   }
-  b.count += n;
-  return { ok: true, remaining: MAX_PER_WINDOW - b.count, resetAt: b.resetAt };
+  b.count++;
+  return { ok: true, remaining: MAX_REQUESTS_PER_WINDOW - b.count, resetAt: b.resetAt };
 }
 
 function clientIp(req) {
@@ -76,9 +81,9 @@ export async function GET(req) {
     if (!Number.isFinite(limit) || limit < 1) limit = DEFAULT_LIMIT;
     if (limit > MAX_LIMIT) limit = MAX_LIMIT;
 
-    // Rate limit per IP
+    // Rate limit per IP (counts requests not questions)
     const ip = clientIp(req);
-    const rl = rateLimit(ip, limit);
+    const rl = rateLimit(ip);
     if (!rl.ok) {
       return Response.json(
         { ok: false, error: 'rate_limited', resetAt: rl.resetAt },
