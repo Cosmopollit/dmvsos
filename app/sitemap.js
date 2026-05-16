@@ -36,6 +36,9 @@ export default async function sitemap() {
     { url: `${baseUrl}/login`,         lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
     { url: `${baseUrl}/terms`,         lastModified: now, changeFrequency: 'yearly',  priority: 0.2 },
     { url: `${baseUrl}/privacy`,       lastModified: now, changeFrequency: 'yearly',  priority: 0.2 },
+    { url: `${baseUrl}/about`,         lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${baseUrl}/faq`,           lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${baseUrl}/vs`,            lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
   ];
 
   // DMV test state landing pages — clean URLs, high SEO value

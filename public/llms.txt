@@ -39,6 +39,9 @@ DMVSOS provides practice tests that match the real DMV exam format. All question
 - [Manuals library](https://dmvsos.com/manuals): Official Driver Handbook PDFs for all 50 states (English at minimum; multiple languages for ~22 states).
 - [Pricing / upgrade](https://dmvsos.com/upgrade): One-time pass purchase.
 - [Profile](https://dmvsos.com/profile): User's saved tests, history, active passes.
+- [Compare DMVSOS vs competitors](https://dmvsos.com/vs): Feature-by-feature comparison with DriversEd, Aceable, and Driving-Tests.org.
+- [FAQ](https://dmvsos.com/faq): 15 common questions (pricing, languages, refund policy, CDL, comparison).
+- [About](https://dmvsos.com/about): Founder story and product overview.
 
 ## Support
 

@@ -163,6 +163,38 @@ export default async function StateDmvTestPage({ params }) {
           { '@type': 'ListItem', position: 3, name: `${name} DMV Test`, item: `https://www.dmvsos.com/dmv-test/${state}` },
         ],
       },
+      {
+        '@type': 'HowTo',
+        name: `How to pass the ${name} DMV knowledge test in ${year}`,
+        description: `Step-by-step guide to passing the ${name} (${meta.abbr}) DMV written knowledge test on your first try.`,
+        totalTime: 'PT7D',
+        supply: [
+          { '@type': 'HowToSupply', name: `Official ${name} Driver Handbook (free PDF)` },
+          { '@type': 'HowToSupply', name: 'Practice tests with real questions (free at DMVSOS)' },
+          { '@type': 'HowToSupply', name: 'Valid ID and proof of residency' },
+        ],
+        step: [
+          { '@type': 'HowToStep', position: 1, name: 'Read the official handbook', text: `Download the free ${name} Driver Handbook PDF from DMVSOS or your state DMV. Skim the table of contents, then read sections on traffic signs, right-of-way, and DUI laws first.` },
+          { '@type': 'HowToStep', position: 2, name: 'Practice with DMV-format questions', text: `Take free practice tests on DMVSOS in your native language. The ${name} test has ${exam.questions} questions; practice that exact format until you consistently score above ${exam.passingPct}%.` },
+          { '@type': 'HowToStep', position: 3, name: 'Review your mistakes', text: 'Wrong answers come with explanations citing the handbook section. Re-read those sections, retake practice on the same topic.' },
+          { '@type': 'HowToStep', position: 4, name: 'Book your test appointment', text: `Schedule online through the ${meta.agency} website. Bring ID, proof of residency, and the application fee.` },
+          { '@type': 'HowToStep', position: 5, name: 'Take the test', text: `Arrive 15 minutes early. The ${name} test is computer-based at most locations. You need ${exam.passing} correct out of ${exam.questions} to pass.` },
+        ],
+      },
+      {
+        '@type': 'Course',
+        name: `${name} DMV Practice Test`,
+        description: `Free practice tests for the ${name} (${meta.abbr}) DMV knowledge exam. Real question format, all topics covered, ${exam.questions}-question full tests, available in 5 languages.`,
+        provider: { '@type': 'Organization', name: 'DMVSOS', url: 'https://www.dmvsos.com' },
+        educationalLevel: 'beginner',
+        inLanguage: ['en', 'es', 'ru', 'uk', 'zh'],
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD',
+          availability: 'https://schema.org/InStock',
+        },
+      },
     ],
   });
 

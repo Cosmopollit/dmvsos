@@ -9,8 +9,28 @@ export default function AboutPage() {
   const lang = typeof window !== 'undefined' ? getSavedLang() : 'en';
   const tex = t[lang] || t.en;
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'AboutPage',
+        name: 'About DMVSOS',
+        url: 'https://www.dmvsos.com/about',
+        description: 'Founder story and product overview for DMVSOS — free DMV practice tests for all 50 US states in 5 languages.',
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home',  item: 'https://www.dmvsos.com' },
+          { '@type': 'ListItem', position: 2, name: 'About', item: 'https://www.dmvsos.com/about' },
+        ],
+      },
+    ],
+  };
+
   return (
     <main className="min-h-screen bg-[#F8FAFC] py-10 px-4">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-2xl mx-auto">
         {/* Logo + nav */}
         <Link href="/" className="inline-flex items-center gap-2 mb-8 hover:opacity-90 transition">

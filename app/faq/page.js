@@ -72,15 +72,30 @@ export default function FaqPage() {
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: QA.map(item => ({
-      '@type': 'Question',
-      name: item.q,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: item.a,
+    '@graph': [
+      {
+        '@type': 'FAQPage',
+        mainEntity: QA.map(item => ({
+          '@type': 'Question',
+          name: item.q,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.a,
+          },
+        })),
+        speakable: {
+          '@type': 'SpeakableSpecification',
+          cssSelector: ['h1', 'h2'],
+        },
       },
-    })),
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.dmvsos.com' },
+          { '@type': 'ListItem', position: 2, name: 'FAQ',  item: 'https://www.dmvsos.com/faq' },
+        ],
+      },
+    ],
   };
 
   return (
