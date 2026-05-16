@@ -20,23 +20,17 @@ export default function AboutPage() {
 
         <article className="bg-white rounded-2xl p-8 sm:p-10 shadow-sm border border-[#E2E8F0]">
           <h1 className="text-3xl font-bold text-[#0B1C3D] mb-2">About DMVSOS</h1>
-          <p className="text-[#64748B] text-sm mb-8">Built by an immigrant. Run by one person.</p>
+          <p className="text-[#64748B] text-sm mb-8">Run by one person. Built around state-official content.</p>
 
           <section className="space-y-5 text-[#1E293B] leading-relaxed">
             <p>
-              Hi, I&apos;m <strong>Evgenii</strong>. I moved to the US and went through the DMV
-              process myself. Picking a state-specific question bank that&apos;s actually current,
-              finding a translation that doesn&apos;t mangle the answers, downloading the right
-              version of the Driver Handbook in a language I could read fast — none of it was
-              easy.
-            </p>
-            <p>
-              Most DMV prep sites are stuck on three things: English-only, generic questions
+              Hi, I&apos;m <strong>Evgenii</strong>. I built DMVSOS because the existing DMV
+              prep options are stuck on three things: English-only content, generic questions
               that don&apos;t match the state you&apos;re actually testing in, and monthly
-              subscriptions that bill you forever even after you got your license.
+              subscriptions that bill you forever after you got your license.
             </p>
             <p>
-              <strong>DMVSOS</strong> is my attempt to fix all three.
+              <strong>DMVSOS</strong> fixes all three.
             </p>
 
             <h2 className="text-xl font-bold text-[#0B1C3D] pt-4">What we do</h2>

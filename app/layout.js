@@ -85,7 +85,7 @@ const jsonLd = {
       name: 'DMVSOS',
       url: 'https://www.dmvsos.com',
       logo: 'https://www.dmvsos.com/logo.png',
-      description: 'DMV/DOL knowledge test preparation platform for US immigrants. Free practice tests, 50 states, 5 languages.',
+      description: 'DMV/DOL knowledge test preparation platform. Free practice tests, 50 states, 5 languages, official Driver Handbook sourced.',
       foundingDate: '2025',
       knowsLanguage: ['en', 'es', 'ru', 'uk', 'zh'],
       areaServed: {

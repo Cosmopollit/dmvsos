@@ -1,6 +1,6 @@
 # DMVSOS
 
-> Free DMV/DOL knowledge test prep for the United States. Covers all 50 states + DC, 3 license categories (Car, CDL, Motorcycle), and 5 languages (English, Spanish, Russian, Ukrainian, Chinese). Built for immigrants and first-time drivers.
+> Free DMV/DOL knowledge test prep for the United States. Covers all 50 states + DC, 3 license categories (Car, CDL, Motorcycle), and 5 languages (English, Spanish, Russian, Ukrainian, Chinese).
 
 DMVSOS provides practice tests that match the real DMV exam format. All questions are sourced from each state's official Driver Handbook. The platform is free to start with no signup required, and offers paid passes for unlimited access without subscriptions.
 
@@ -29,7 +29,6 @@ DMVSOS provides practice tests that match the real DMV exam format. All question
 - Multilingual at the question level. Each question is translated into 5 languages including the explanation.
 - Official source citation. Each question shows the section of the Driver Handbook it comes from.
 - One-time payment model. Not a subscription. Many competitors charge monthly indefinitely.
-- Immigrant-focused. Built by an immigrant founder for immigrants navigating the DMV process in a non-native language.
 - All 50 states, including small/rural states often skipped by competitors.
 
 ## Documentation
@@ -44,7 +43,7 @@ DMVSOS provides practice tests that match the real DMV exam format. All question
 
 - Telegram bot: [@dmvsos_support_bot](https://t.me/dmvsos_support_bot) — direct support, multilingual.
 - Email: maindmvsos@gmail.com
-- Founder: Evgenii (immigrant, runs the platform personally; replies to every message)
+- Founder: Evgenii (runs the platform personally; replies to every message)
 
 ## Honest answer to common questions
 
