@@ -170,23 +170,22 @@ function TestContent() {
     setLoadingQuestions(true);
     const categoryMap = { dmv: 'car', cdl: 'cdl', moto: 'motorcycle' };
     const mappedCategory = categoryMap[category] || category;
-    let query = supabase
-      .from('questions')
-      .select('*')
-      .eq('state', state)
-      .eq('category', mappedCategory)
-      .eq('language', lang);
-    if (subcategory) {
-      query = query.eq('subcategory', subcategory);
-    }
-    query.then(({ data, error }) => {
-        if (error || !data?.length) {
+    // Server-side fetch — anon Supabase key no longer dumps the question bank.
+    // Endpoint enforces per-IP rate limit + input validation.
+    const qsParams = new URLSearchParams({
+      state, category: mappedCategory, language: lang, limit: '200',
+    });
+    if (subcategory) qsParams.set('subcategory', subcategory);
+    fetch('/api/test/questions?' + qsParams, { cache: 'no-store' })
+      .then(r => r.json())
+      .then(({ ok, questions, error }) => {
+        if (!ok || !questions?.length) {
           setAllQuestions([]);
           setLoadingQuestions(false);
           return;
         }
         const strip = s => (s || '').replace(/^[A-DА-Га-гa-d]\.\s*/, '').trim();
-        const mapped = data.map(row => {
+        const mapped = questions.map(row => {
           const answers = [row.option_a, row.option_b, row.option_c, row.option_d].filter(Boolean).map(strip);
           return {
             id: row.id,
