@@ -78,17 +78,16 @@ export default function AdminPage() {
     setLoadError('');
     const stateSlug = stateToSlug(stateLabel);
     try {
-      let query = supabase
-        .from('questions')
-        .select('*')
-        .eq('state', stateSlug)
-        .eq('category', category)
-        .eq('language', lang);
-      if (category === 'cdl' && subcategory) {
-        query = query.eq('subcategory', subcategory);
-      }
-      const { data, error } = await query.order('id', { ascending: true });
-      if (error) throw new Error(error.message);
+      const body = { state: stateSlug, category, language: lang };
+      if (category === 'cdl' && subcategory) body.subcategory = subcategory;
+      const res = await fetch('/api/admin/questions/list', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Admin-Password': password },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) throw new Error(res.status === 401 ? 'unauthorized' : ('http ' + res.status));
+      const json = await res.json();
+      const data = json.data;
       const mapped = (data || []).map((row) => ({
         id: row.id,
         question: row.question_text,
@@ -137,14 +136,19 @@ export default function AdminPage() {
     // If question has cluster_code, load all language variants
     if (q.cluster_code) {
       try {
-        const { data, error } = await supabase
-          .from('questions')
-          .select('id, language')
-          .eq('cluster_code', q.cluster_code)
-          .eq('state', q.state)
-          .eq('category', q.category);
-        if (error) throw new Error(error.message);
-        const rows = data || [];
+        const res = await fetch('/api/admin/questions/cluster', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Admin-Password': password },
+          body: JSON.stringify({
+            cluster_code: q.cluster_code,
+            state: q.state,
+            category: q.category,
+            columns: 'id,language',
+          }),
+        });
+        if (!res.ok) throw new Error(res.status === 401 ? 'unauthorized' : ('http ' + res.status));
+        const json = await res.json();
+        const rows = json.data || [];
         const langs = {};
         for (const r of rows) langs[r.language] = true;
         setDeleteModal({ index: i, question: q, clusterRows: rows });
@@ -203,13 +207,18 @@ export default function AdminPage() {
     setEditAllIndex(i);
     setEditAllActiveLang('en');
     try {
-      const { data, error } = await supabase
-        .from('questions')
-        .select('*')
-        .eq('cluster_code', q.cluster_code)
-        .eq('state', q.state)
-        .eq('category', q.category);
-      if (error) throw new Error(error.message);
+      const res = await fetch('/api/admin/questions/cluster', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Admin-Password': password },
+        body: JSON.stringify({
+          cluster_code: q.cluster_code,
+          state: q.state,
+          category: q.category,
+        }),
+      });
+      if (!res.ok) throw new Error(res.status === 401 ? 'unauthorized' : ('http ' + res.status));
+      const json = await res.json();
+      const data = json.data;
       const byLang = {};
       for (const row of (data || [])) {
         byLang[row.language] = {

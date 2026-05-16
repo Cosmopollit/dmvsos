@@ -1,5 +1,3 @@
--- ⚠️  DO NOT APPLY YET — pending admin/page.js refactor (Phase 2 below).
---
 -- Enable Row-Level Security on questions table so anon role cannot
 -- dump the question bank via the public Supabase REST API.
 --
@@ -8,18 +6,16 @@
 --   - authenticated user                    -> blocked from SELECT
 --   - service_role (server-side)            -> bypasses RLS as usual
 --
--- Phase 1 (DONE): web app's test page now uses /api/test/questions which
--- fetches with service_role. Anon key in client no longer needed for reads.
+-- Pre-requisites (all DONE in code before applying):
+--   - app/test/page.js reads via /api/test/questions (service_role).
+--   - app/admin/page.js reads via /api/admin/questions/list and
+--     /api/admin/questions/cluster (password-gated, service_role).
+--   - No remaining client-side supabase.from('questions') calls.
 --
--- Phase 2 (PENDING before applying this migration):
--- app/admin/page.js still uses supabase.from('questions').select() with the
--- anon key. Need to refactor to call password-gated /api/admin/list-questions
--- server endpoint. Until then, applying this migration will break admin.
---
--- When admin refactor is done: run `alter table questions enable row level security`
--- in Supabase SQL Editor. No SELECT policies needed; default-deny is the goal.
+-- No SELECT policies are created intentionally — default-deny is the goal.
+-- Service role bypasses RLS automatically.
 
--- alter table questions enable row level security;
+alter table questions enable row level security;
 
 -- Explicit no-op policies just so the table remains documented.
 -- (With RLS on and no permissive SELECT policy, anon/auth get 0 rows.)
