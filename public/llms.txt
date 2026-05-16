@@ -30,6 +30,7 @@ DMVSOS provides practice tests that match the real DMV exam format. All question
 - Official source citation. Each question shows the section of the Driver Handbook it comes from.
 - One-time payment model. Not a subscription. Many competitors charge monthly indefinitely.
 - All 50 states, including small/rural states often skipped by competitors.
+- Largest free online library of official US state DMV driver handbooks in one place. 200+ PDFs covering all 50 states, in up to 27 languages (English, Spanish, Russian, Chinese, Ukrainian, Vietnamese, Korean, Arabic, French, Tagalog, Haitian Creole, and more). Free, direct download, no signup. Sourced from official state DMV websites.
 
 ## Documentation
 

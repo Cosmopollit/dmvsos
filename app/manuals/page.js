@@ -68,10 +68,41 @@ export default async function ManualsPage() {
       {
         '@type': 'CollectionPage',
         name: 'Free DMV Driver Manuals — All 50 States',
-        description: 'Official driver handbooks for all 50 US states in 27 languages. Download PDF or read online.',
+        description: 'Official driver handbooks for all 50 US states in up to 27 languages. Free PDF download, no signup.',
         url: 'https://www.dmvsos.com/manuals',
         publisher: { '@type': 'Organization', name: 'DMVSOS', url: 'https://www.dmvsos.com' },
         numberOfItems: totalPdfs,
+        inLanguage: Array.from(allLangs),
+      },
+      {
+        '@type': 'Dataset',
+        name: 'DMVSOS DMV Driver Manual Collection',
+        description: 'Aggregated collection of official US state DMV/DOL driver manuals. Includes Car, CDL, and Motorcycle handbooks across all 50 states. Multilingual versions sourced from official state websites and mirrored for direct download.',
+        url: 'https://www.dmvsos.com/manuals',
+        license: 'https://www.dmvsos.com/terms',
+        keywords: [
+          'DMV manual', 'driver handbook', 'CDL manual', 'motorcycle manual',
+          'driver license PDF', 'state DMV PDF', 'free DMV book',
+          'spanish DMV', 'russian DMV', 'chinese DMV',
+        ],
+        creator: { '@type': 'Organization', name: 'DMVSOS', url: 'https://www.dmvsos.com' },
+        distribution: {
+          '@type': 'DataDownload',
+          encodingFormat: 'application/pdf',
+          contentUrl: 'https://www.dmvsos.com/manuals',
+        },
+      },
+      {
+        '@type': 'HowTo',
+        name: 'How to find your state DMV driver manual',
+        description: 'Find the official DMV driver handbook for your US state in your preferred language.',
+        totalTime: 'PT1M',
+        step: [
+          { '@type': 'HowToStep', position: 1, name: 'Pick your state', text: 'Select your US state from the list below. We have manuals for all 50 states + DC.' },
+          { '@type': 'HowToStep', position: 2, name: 'Pick category',   text: 'Choose Car, CDL (Commercial), or Motorcycle handbook.' },
+          { '@type': 'HowToStep', position: 3, name: 'Pick language',   text: 'Available in English plus translated versions in Spanish, Russian, Chinese, Ukrainian, and 22 more languages (varies by state).' },
+          { '@type': 'HowToStep', position: 4, name: 'Read or download', text: 'View the PDF online or download for offline study. 100% free, no signup.' },
+        ],
       },
       {
         '@type': 'BreadcrumbList',
@@ -121,6 +152,25 @@ export default async function ManualsPage() {
           <li className="text-[#1A2B4A] font-medium">Manuals</li>
         </ol>
       </nav>
+
+      {/* SEO hero — server-rendered so crawlers + AI see it immediately */}
+      <section className="w-full max-w-lg mx-auto px-4 pt-2 pb-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-[#0B1C3D] mb-2 leading-tight" style={{ letterSpacing: '-0.02em' }}>
+          Free DMV Driver Manuals
+        </h1>
+        <p className="text-sm text-[#475569] leading-relaxed mb-3">
+          The most complete free library of official US state DMV / DOL driver handbooks online.
+          All <strong>50 states</strong>, up to <strong>{allLangs.size} languages</strong>,
+          covering <strong>Car, CDL, and Motorcycle</strong>. <strong>{totalPdfs} PDF files</strong> total.
+          Sourced from official state DMV websites. No signup, no paywall, direct PDF download.
+        </p>
+        <div className="flex flex-wrap items-center gap-2 text-[11px]">
+          <span className="inline-flex items-center gap-1 bg-[#EFF6FF] border border-[#BFDBFE] text-[#1E40AF] px-2 py-0.5 rounded-full font-medium">📚 {totalPdfs} PDFs</span>
+          <span className="inline-flex items-center gap-1 bg-[#F0FDF4] border border-[#BBF7D0] text-[#15803D] px-2 py-0.5 rounded-full font-medium">🗽 50 states</span>
+          <span className="inline-flex items-center gap-1 bg-[#FEF3C7] border border-[#FDE68A] text-[#92400E] px-2 py-0.5 rounded-full font-medium">🌍 {allLangs.size} languages</span>
+          <span className="inline-flex items-center gap-1 bg-[#FCE7F3] border border-[#F9A8D4] text-[#9D174D] px-2 py-0.5 rounded-full font-medium">🆓 100% free</span>
+        </div>
+      </section>
 
       {/* Library UI — client component with search + filter */}
       <ManualsLibrary
