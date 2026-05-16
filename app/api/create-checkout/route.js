@@ -123,9 +123,13 @@ export async function POST(req) {
         : ONETIME_TO_PASS_TYPE[planType];
     }
 
+    // No payment_method_types restriction — Stripe Checkout auto-shows every
+    // method enabled in the Stripe Dashboard (Apple Pay, Google Pay, Link,
+    // Cash App Pay, Klarna, etc.) based on customer locale + device.
+    // 60% of our visitors are mobile; 48% on iOS. Apple Pay is critical for
+    // checkout conversion on iPhone (two taps vs typing a card number).
     const sessionParams = {
       mode: isSubscription ? 'subscription' : 'payment',
-      payment_method_types: ['card'],
       line_items: [{ price: PLAN_PRICE_IDS[planType], quantity: 1 }],
       success_url: `${SITE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${SITE_URL}/upgrade`,
