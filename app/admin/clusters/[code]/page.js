@@ -128,6 +128,7 @@ export default function ClusterDetailPage() {
         if ((cur.image_url ?? null) !== (orig.image_url ?? null)) changes.push('EN · image_url');
         if ((cur.manual_reference ?? null) !== (orig.manual_reference ?? null)) changes.push('EN · manual_reference');
         if ((cur.manual_section ?? null) !== (orig.manual_section ?? null)) changes.push('EN · manual_section');
+        if ((cur.admin_note ?? null) !== (orig.admin_note ?? null)) changes.push('EN · admin_note');
       }
     }
     // Correct answer change (shared)
@@ -166,6 +167,7 @@ export default function ClusterDetailPage() {
         payload.image_url = row.image_url || null;
         payload.manual_reference = row.manual_reference || null;
         payload.manual_section   = row.manual_section || null;
+        payload.admin_note       = row.admin_note || null;
       }
 
       const res = await fetch('/api/admin/cluster-detail', {
@@ -213,16 +215,20 @@ export default function ClusterDetailPage() {
       for (const lang of LANGS) {
         const r = byLang?.[lang];
         if (!r?.id) continue;
-        rows.push({
-          id: r.id,
-          row: {
-            question_text: r.question_text,
-            option_a: r.option_a, option_b: r.option_b,
-            option_c: r.option_c, option_d: r.option_d,
-            explanation: r.explanation || null,
-            language: lang,
-          },
-        });
+        const rowPayload = {
+          question_text: r.question_text,
+          option_a: r.option_a, option_b: r.option_b,
+          option_c: r.option_c, option_d: r.option_d,
+          explanation: r.explanation || null,
+          language: lang,
+        };
+        // admin_note + manual_* live on EN only
+        if (lang === 'en') {
+          rowPayload.admin_note = r.admin_note || null;
+          rowPayload.manual_reference = r.manual_reference || null;
+          rowPayload.manual_section = r.manual_section || null;
+        }
+        rows.push({ id: r.id, row: rowPayload });
       }
       const res = await fetch('/api/admin/cluster-detail', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -577,6 +583,31 @@ export default function ClusterDetailPage() {
                   )}
                 </div>
               )}
+              <div style={{ marginTop: 12 }}>
+                <label style={labelStyle}>
+                  Admin note <span style={{ textTransform: 'none', fontWeight: 400, color: '#94A3B8' }}>(cluster-level, EN only)</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const today = new Date().toISOString().slice(0, 10);
+                      const prefix = `[${today}] `;
+                      const cur = byLang.en?.admin_note || '';
+                      updateField('en', 'admin_note', cur ? `${prefix}\n${cur}` : prefix);
+                    }}
+                    style={{ marginLeft: 8, padding: '2px 8px', fontSize: 11, background: '#fff', color: '#2563EB', border: '1px solid #2563EB', borderRadius: 4, fontWeight: 600, cursor: 'pointer' }}
+                    title="Prepend today's date"
+                  >
+                    + date
+                  </button>
+                </label>
+                <textarea
+                  value={byLang.en?.admin_note || ''}
+                  onChange={(e) => updateField('en', 'admin_note', e.target.value)}
+                  placeholder="What you changed and why (e.g. '[2026-05-15] rewrote per WA CDL manual rev 2025-04')"
+                  rows={2}
+                  style={{ ...inputStyle, marginTop: 4, resize: 'vertical', fontSize: 12, fontFamily: 'inherit' }}
+                />
+              </div>
             </div>
 
             {/* Per-language editors — grid */}

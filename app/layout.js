@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getHreflangAlternates } from "@/lib/hreflang";
 import PersonalGreeting from "./components/PersonalGreeting";
+import NastyaGreeting from "./NastyaGreeting";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -175,6 +176,7 @@ export default async function RootLayout({ children }) {
         <AuthProvider>
           {children}
           <PersonalGreeting />
+          <NastyaGreeting />
         </AuthProvider>
         <Analytics />
         <SpeedInsights />

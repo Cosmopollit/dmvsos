@@ -7,7 +7,7 @@ const supabase = createClient(
 );
 
 const LANGS = ['en', 'ru', 'es', 'zh', 'ua'];
-const FIELDS = 'id,language,cluster_code,state,category,subcategory,question_text,option_a,option_b,option_c,option_d,correct_answer,explanation,image_url,manual_reference,manual_section,quality_score,quality_issues,quality_verified_at,translation_stale_at';
+const FIELDS = 'id,language,cluster_code,state,category,subcategory,question_text,option_a,option_b,option_c,option_d,correct_answer,explanation,image_url,manual_reference,manual_section,admin_note,quality_score,quality_issues,quality_verified_at,translation_stale_at';
 
 // ─── GET (via POST for auth body) ──────────────────────────────────────────
 //   { password, action:'get', cluster_code, state, category, subcategory? }

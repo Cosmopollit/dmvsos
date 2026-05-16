@@ -13,11 +13,8 @@ const GREETINGS = {
     body: 'Pro-доступ активирован на 7 дней — все тесты, все режимы, без ограничений. Удачи на экзамене!',
     cta: 'Поехали',
   },
-  'anastasiyarubkevich@gmail.com': {
-    title: 'С возвращением, Анастасия!',
-    body: 'Pro-доступ активирован на 7 дней — все тесты, все режимы, без ограничений. Удачи на экзамене!',
-    cta: 'Поехали',
-  },
+  // anastasiyarubkevich@gmail.com — handled separately by <NastyaGreeting>
+  // (fullscreen heart overlay instead of the generic modal).
 };
 
 export async function GET(req) {

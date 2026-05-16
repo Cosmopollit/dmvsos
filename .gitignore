@@ -115,3 +115,8 @@ backups/
 # translation quality audit outputs (regenerated)
 translation-quality-audit.json
 translation-quality-audit.csv
+.bulk-rewrite-cdl.json
+.bulk-retranslate-stale.json
+.cdl-deletes-rollback.json
+translation-quality-audit-*.json
+translation-quality-audit-*.csv
