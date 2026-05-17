@@ -16,7 +16,12 @@
         },
         {
           "question": "2. On a one-way street, what color is the broken lane marker?",
-          "answers": ["Red", "White", "Yellow", "Blue"],
+          "answers": [
+            "Red",
+            "White",
+            "Yellow",
+            "Blue"
+          ],
           "correctAnswerIndex": 1,
           "imageUrl": null
         },
@@ -87,7 +92,7 @@
           "imageUrl": null
         },
         {
-          "question": "3. Describe the \u201cYield\u201d sign.",
+          "question": "3. Describe the “Yield” sign.",
           "answers": [
             "Red octagon with the word STOP",
             "Yellow diamond with the word YIELD",
@@ -120,7 +125,7 @@
           "imageUrl": null
         },
         {
-          "question": "4. What does a \u201cNarrow Bridge\u201d sign look like, and how should the driver react when he sees one?",
+          "question": "4. What does a “Narrow Bridge” sign look like, and how should the driver react when he sees one?",
           "answers": [
             "Yellow diamond sign, the driver should slow down and prepare for oncoming traffic",
             "Red octagon sign, the driver should stop completely",
@@ -142,7 +147,7 @@
           "imageUrl": null
         },
         {
-          "question": "5. What is the shape of a \u201cKeep Right\u201d sign, and how should the driver react when he sees one?",
+          "question": "5. What is the shape of a “Keep Right” sign, and how should the driver react when he sees one?",
           "answers": [
             "A yellow diamond sign, the driver should move to the right lane.",
             "A red octagon sign, the driver should stop immediately.",
@@ -154,7 +159,12 @@
         },
         {
           "question": "2. On a one-way street, what color is the broken lane marker?",
-          "answers": ["Red", "Yellow", "White", "Blue"],
+          "answers": [
+            "Red",
+            "Yellow",
+            "White",
+            "Blue"
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -203,7 +213,7 @@
           "imageUrl": null
         },
         {
-          "question": "3. What does a \u201cYield\u201d sign look like?",
+          "question": "3. What does a “Yield” sign look like?",
           "answers": [
             "A red octagon",
             "A yellow diamond",
@@ -214,7 +224,7 @@
           "imageUrl": null
         },
         {
-          "question": "4. What does a \u201cNarrow Bridge\u201d sign look like, and how should the driver react when he sees one?",
+          "question": "4. What does a “Narrow Bridge” sign look like, and how should the driver react when he sees one?",
           "answers": [
             "A yellow diamond sign with two arrows pointing towards each other, the driver should slow down and prepare for a narrow passage.",
             "A red octagon sign, the driver should stop immediately.",
@@ -225,7 +235,7 @@
           "imageUrl": null
         },
         {
-          "question": "5. What does a \u201cNarrow Bridge\u201d sign look like, and how should the driver react when he sees one?",
+          "question": "5. What does a “Narrow Bridge” sign look like, and how should the driver react when he sees one?",
           "answers": [
             "A. It is a yellow diamond sign with a bridge symbol, the driver should slow down and be prepared to yield.",
             "B. It is a red octagon sign with a bridge symbol, the driver should stop immediately.",
@@ -238,10 +248,10 @@
         {
           "question": "5. To what agency and within what time period must a change of address be reported for driver licensing purposes?",
           "answers": [
-            "A. To the DMV within 30 days.",
-            "B. To the DMV within 60 days.",
-            "C. To the local police station within 30 days.",
-            "D. To the local police station within 60 days."
+            "A. To the Texas Department of Public Safety (DPS) within 30 days.",
+            "B. To the Texas Department of Public Safety (DPS) within 10 days.",
+            "C. To the police within 30 days.",
+            "D. To the police within 10 days."
           ],
           "correctAnswerIndex": 0,
           "imageUrl": null
@@ -314,7 +324,12 @@
         },
         {
           "question": "2. Within how many feet of a crosswalk may you park, when parking near a corner?",
-          "answers": ["20 feet", "30 feet", "40 feet", "50 feet"],
+          "answers": [
+            "20 feet",
+            "30 feet",
+            "40 feet",
+            "50 feet"
+          ],
           "correctAnswerIndex": 1,
           "imageUrl": null
         },
@@ -364,7 +379,12 @@
         },
         {
           "question": "3. On a one-way street, what color is the broken lane marker?",
-          "answers": ["A. Red", "B. Yellow", "C. White", "D. Blue"],
+          "answers": [
+            "A. Red",
+            "B. Yellow",
+            "C. White",
+            "D. Blue"
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -402,7 +422,7 @@
           "imageUrl": null
         },
         {
-          "question": "4. Describe the \u201cYield\u201d sign.",
+          "question": "4. Describe the “Yield” sign.",
           "answers": [
             "A. It is a red octagon with the word 'STOP'.",
             "B. It is a yellow diamond with the word 'YIELD'.",
@@ -431,7 +451,7 @@
       "name": "Texas Car Practice Test #2",
       "questions": [
         {
-          "question": "5. What does a \u201cNarrow Bridge\u201d sign look like, and how should the driver react when he sees one?",
+          "question": "5. What does a “Narrow Bridge” sign look like, and how should the driver react when he sees one?",
           "answers": [
             "Yellow diamond sign, the driver should slow down",
             "Red octagon sign, the driver should stop",
@@ -442,7 +462,7 @@
           "imageUrl": null
         },
         {
-          "question": "4. Describe the \u201cYield\u201d sign.",
+          "question": "4. Describe the “Yield” sign.",
           "answers": [
             "Red octagon",
             "Red triangle",
@@ -509,7 +529,12 @@
         },
         {
           "question": "3. On a one-way street, what color is the broken lane marker?",
-          "answers": ["Red", "Yellow", "White", "Blue"],
+          "answers": [
+            "Red",
+            "Yellow",
+            "White",
+            "Blue"
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -537,7 +562,12 @@
         },
         {
           "question": "2. On a one-way street, what color is the broken lane marker?",
-          "answers": ["A. Red", "B. Yellow", "C. White", "D. Blue"],
+          "answers": [
+            "A. Red",
+            "B. Yellow",
+            "C. White",
+            "D. Blue"
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -565,7 +595,12 @@
         },
         {
           "question": "3. On a one-way street, what color is the broken lane marker?",
-          "answers": ["Red", "Yellow", "White", "Blue"],
+          "answers": [
+            "Red",
+            "Yellow",
+            "White",
+            "Blue"
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -627,17 +662,22 @@
         {
           "question": "5. To what agency and within what time period must a change of address be reported for driver licensing purposes?",
           "answers": [
-            "A. To the DMV within 30 days.",
-            "B. To the DMV within 60 days.",
-            "C. To the local police department within 30 days.",
-            "D. To the local police department within 60 days."
+            "A. To the Texas Department of Public Safety (DPS) within 30 days.",
+            "B. To the Texas Department of Public Safety (DPS) within 10 days.",
+            "C. To the police within 30 days.",
+            "D. To the police within 10 days."
           ],
           "correctAnswerIndex": 0,
           "imageUrl": null
         },
         {
           "question": "2. Within how many feet of a crosswalk may you park, when parking near a corner?",
-          "answers": ["10 feet", "20 feet", "30 feet", "40 feet"],
+          "answers": [
+            "10 feet",
+            "20 feet",
+            "30 feet",
+            "40 feet"
+          ],
           "correctAnswerIndex": 1,
           "imageUrl": null
         },
@@ -709,7 +749,12 @@
         },
         {
           "question": "4. At what time of the day should your headlights be turned on?",
-          "answers": ["At noon.", "At dusk.", "At dawn.", "Both B and C."],
+          "answers": [
+            "At noon.",
+            "At dusk.",
+            "At dawn.",
+            "Both B and C."
+          ],
           "correctAnswerIndex": 3,
           "imageUrl": null
         },
@@ -854,7 +899,12 @@
       "questions": [
         {
           "question": "2. Within how many feet of a crosswalk may you park, when parking near a corner?",
-          "answers": ["10 feet", "20 feet", "30 feet", "40 feet"],
+          "answers": [
+            "10 feet",
+            "20 feet",
+            "30 feet",
+            "40 feet"
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -904,7 +954,12 @@
         },
         {
           "question": "2. On a one-way street, what color is the broken lane marker?",
-          "answers": ["Red", "Yellow", "White", "Blue"],
+          "answers": [
+            "Red",
+            "Yellow",
+            "White",
+            "Blue"
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -942,7 +997,7 @@
           "imageUrl": null
         },
         {
-          "question": "5. What is the shape of a \u201cKeep Right\u201d sign, and how should the driver react when he sees one?",
+          "question": "5. What is the shape of a “Keep Right” sign, and how should the driver react when he sees one?",
           "answers": [
             "It's a rectangular sign. The driver should keep to the right of the sign.",
             "It's a round sign. The driver should keep to the left of the sign.",
@@ -953,7 +1008,7 @@
           "imageUrl": null
         },
         {
-          "question": "4. Describe the \u201cYield\u201d sign.",
+          "question": "4. Describe the “Yield” sign.",
           "answers": [
             "A square red sign with white letters.",
             "A circular sign with a red border and white background.",
@@ -975,7 +1030,7 @@
           "imageUrl": null
         },
         {
-          "question": "5. What does a \u201cNarrow Bridge\u201d sign look like, and how should the driver react when he sees one?",
+          "question": "5. What does a “Narrow Bridge” sign look like, and how should the driver react when he sees one?",
           "answers": [
             "It's a yellow diamond-shaped sign with a black symbol, the driver should slow down and be prepared to yield.",
             "It's a red octagonal sign with white letters, the driver should stop immediately.",
@@ -1010,16 +1065,16 @@
         {
           "question": "5. To what agency and within what time period must a change of address be reported for driver licensing purposes?",
           "answers": [
-            "A. To the DMV within 30 days.",
-            "B. To the DMV within 60 days.",
-            "C. To the local police station within 30 days.",
-            "D. To the local police station within 60 days."
+            "A. To the Texas Department of Public Safety (DPS) within 30 days.",
+            "B. To the Texas Department of Public Safety (DPS) within 10 days.",
+            "C. To the police within 30 days.",
+            "D. To the police within 10 days."
           ],
           "correctAnswerIndex": 0,
           "imageUrl": null
         },
         {
-          "question": "4. What does a \u201cNarrow Bridge\u201d sign look like, and how should the driver react when he sees one?",
+          "question": "4. What does a “Narrow Bridge” sign look like, and how should the driver react when he sees one?",
           "answers": [
             "It's a yellow diamond sign with two parallel lines narrowing. The driver should slow down and be prepared for oncoming traffic.",
             "It's a red octagon sign. The driver should stop.",
@@ -1196,7 +1251,12 @@
         },
         {
           "question": "2. On a one-way street, what color is the broken lane marker?",
-          "answers": ["Red", "Yellow", "White", "Blue"],
+          "answers": [
+            "Red",
+            "Yellow",
+            "White",
+            "Blue"
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -1257,12 +1317,17 @@
         },
         {
           "question": "3. On a one-way street, what color is the broken lane marker?",
-          "answers": ["Red", "Yellow", "White", "Blue"],
+          "answers": [
+            "Red",
+            "Yellow",
+            "White",
+            "Blue"
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
         {
-          "question": "3. Describe the \u201cYield\u201d sign.",
+          "question": "3. Describe the “Yield” sign.",
           "answers": [
             "A red octagon with 'STOP' written on it.",
             "A yellow diamond with 'YIELD' written on it.",
@@ -1280,7 +1345,7 @@
       "name": "Texas Car Practice Test #4",
       "questions": [
         {
-          "question": "14. What does a \u201cNarrow Bridge\u201d sign look like, and how should the driver react when he sees one?",
+          "question": "14. What does a “Narrow Bridge” sign look like, and how should the driver react when he sees one?",
           "answers": [
             "A. Yellow diamond with two cars and the driver should slow down.",
             "B. White rectangle with 'NARROW BRIDGE' and the driver should speed up.",
@@ -1369,7 +1434,12 @@
         },
         {
           "question": "3. On a one-way street, what color is the broken lane marker?",
-          "answers": ["Red", "White", "Yellow", "Blue"],
+          "answers": [
+            "Red",
+            "White",
+            "Yellow",
+            "Blue"
+          ],
           "correctAnswerIndex": 1,
           "imageUrl": null
         },
@@ -1429,7 +1499,7 @@
           "imageUrl": null
         },
         {
-          "question": "10. What does a \u201cNarrow Bridge\u201d sign look like, and how should the driver react when he sees one?",
+          "question": "10. What does a “Narrow Bridge” sign look like, and how should the driver react when he sees one?",
           "answers": [
             "It's a yellow diamond sign, the driver should slow down and be cautious",
             "It's a red octagon sign, the driver should stop",
@@ -1496,7 +1566,12 @@
         },
         {
           "question": "3. On a one-way street, what color is the broken lane marker?",
-          "answers": ["Red", "Yellow", "White", "Blue"],
+          "answers": [
+            "Red",
+            "Yellow",
+            "White",
+            "Blue"
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -1513,7 +1588,12 @@
         },
         {
           "question": "12. You should never drive on the left half of the roadway when you are within how many feet from an intersection, bridge, or railroad crossing?",
-          "answers": ["100 feet", "200 feet", "300 feet", "400 feet"],
+          "answers": [
+            "100 feet",
+            "200 feet",
+            "300 feet",
+            "400 feet"
+          ],
           "correctAnswerIndex": 1,
           "imageUrl": null
         },
@@ -1585,7 +1665,12 @@
         },
         {
           "question": "8. On a one-way street, what color is the broken lane marker?",
-          "answers": ["Red", "White", "Yellow", "Blue"],
+          "answers": [
+            "Red",
+            "White",
+            "Yellow",
+            "Blue"
+          ],
           "correctAnswerIndex": 1,
           "imageUrl": null
         },
@@ -1691,10 +1776,10 @@
         {
           "question": "9. To what agency and within what time period must a change of address be reported for driver licensing purposes?",
           "answers": [
-            "A. To the DMV within 10 days.",
-            "B. To the DMV within 30 days.",
-            "C. To the police within 10 days.",
-            "D. To the police within 30 days."
+            "A. To the Texas Department of Public Safety (DPS) within 30 days.",
+            "B. To the Texas Department of Public Safety (DPS) within 10 days.",
+            "C. To the police within 30 days.",
+            "D. To the police within 10 days."
           ],
           "correctAnswerIndex": 0,
           "imageUrl": null
@@ -1734,7 +1819,12 @@
         },
         {
           "question": "7. About how many feet will the average driver going 50 mph travel from the moment he sees danger until he hits the brakes?",
-          "answers": ["50 feet", "100 feet", "150 feet", "200 feet"],
+          "answers": [
+            "50 feet",
+            "100 feet",
+            "150 feet",
+            "200 feet"
+          ],
           "correctAnswerIndex": 3,
           "imageUrl": null
         },
@@ -1784,7 +1874,12 @@
         },
         {
           "question": "12. On a one-way street, what color is the broken lane marker?",
-          "answers": ["A. Red", "B. Yellow", "C. White", "D. Blue"],
+          "answers": [
+            "A. Red",
+            "B. Yellow",
+            "C. White",
+            "D. Blue"
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -1966,7 +2061,12 @@
         },
         {
           "question": "8. Within how many feet of a crosswalk may you park, when parking near a corner?",
-          "answers": ["5 feet", "10 feet", "20 feet", "30 feet"],
+          "answers": [
+            "5 feet",
+            "10 feet",
+            "20 feet",
+            "30 feet"
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -2005,7 +2105,12 @@
         },
         {
           "question": "8. On a one-way street, what color is the broken lane marker?",
-          "answers": ["Red", "Yellow", "White", "Blue"],
+          "answers": [
+            "Red",
+            "Yellow",
+            "White",
+            "Blue"
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -2021,7 +2126,7 @@
           "imageUrl": null
         },
         {
-          "question": "9. Describe the \u201cYield\u201d sign.",
+          "question": "9. Describe the “Yield” sign.",
           "answers": [
             "It's a red octagon with the word 'STOP'",
             "It's a yellow diamond with the word 'YIELD'",
@@ -2179,7 +2284,7 @@
           "answers": [
             "Speed up and escape",
             "Stop and ask for their ID",
-            "Call 9-1-1 and verify the officer\u2019s identity",
+            "Call 9-1-1 and verify the officer’s identity",
             "Ignore them"
           ],
           "correctAnswerIndex": 2,
@@ -2242,7 +2347,12 @@
         },
         {
           "question": "9. What is the state speed limit for automobiles in urban districts?",
-          "answers": ["25 mph", "30 mph", "35 mph", "40 mph"],
+          "answers": [
+            "25 mph",
+            "30 mph",
+            "35 mph",
+            "40 mph"
+          ],
           "correctAnswerIndex": 1,
           "imageUrl": null
         },
@@ -2326,10 +2436,10 @@
         {
           "question": "5. To what agency and within what time period must a change of address be reported for driver licensing purposes?",
           "answers": [
-            "A. To the DMV within 30 days.",
-            "B. To the DMV within 60 days.",
-            "C. To the local police station within 30 days.",
-            "D. To the local police station within 60 days."
+            "A. To the Texas Department of Public Safety (DPS) within 30 days.",
+            "B. To the Texas Department of Public Safety (DPS) within 10 days.",
+            "C. To the police within 30 days.",
+            "D. To the police within 10 days."
           ],
           "correctAnswerIndex": 0,
           "imageUrl": null
@@ -2379,7 +2489,7 @@
           "imageUrl": null
         },
         {
-          "question": "13. Describe the \u201cYield\u201d sign.",
+          "question": "13. Describe the “Yield” sign.",
           "answers": [
             "A. Red octagon with 'STOP' written in white.",
             "B. Yellow diamond with 'YIELD' written in black.",
@@ -2391,7 +2501,12 @@
         },
         {
           "question": "3. On a one-way street, what color is the broken lane marker?",
-          "answers": ["Red", "White", "Yellow", "Blue"],
+          "answers": [
+            "Red",
+            "White",
+            "Yellow",
+            "Blue"
+          ],
           "correctAnswerIndex": 1,
           "imageUrl": null
         },
@@ -2714,7 +2829,12 @@
         },
         {
           "question": "5. What percentage of questions must a person answer correctly on the knowledge tests prior to taking the skills test?",
-          "answers": ["A. 50%", "B. 60%", "C. 70%", "D. 80%"],
+          "answers": [
+            "A. 50%",
+            "B. 60%",
+            "C. 70%",
+            "D. 80%"
+          ],
           "correctAnswerIndex": 3,
           "imageUrl": null
         },
@@ -3962,7 +4082,12 @@
         },
         {
           "question": "2. What is the minimum score required to pass the knowledge tests for CDL?",
-          "answers": ["50%", "60%", "70%", "80%"],
+          "answers": [
+            "50%",
+            "60%",
+            "70%",
+            "80%"
+          ],
           "correctAnswerIndex": 3,
           "imageUrl": null
         },
@@ -4661,7 +4786,12 @@
         },
         {
           "question": "9. What percentage of the questions must a person answer correctly on the knowledge tests before taking the skills test?",
-          "answers": ["A. 60%", "B. 70%", "C. 80%", "D. 90%"],
+          "answers": [
+            "A. 60%",
+            "B. 70%",
+            "C. 80%",
+            "D. 90%"
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -4689,7 +4819,12 @@
         },
         {
           "question": "8. What can get stuck on raised crossings?",
-          "answers": ["Trailers.", "Motorcycles.", "Bicycles.", "Cars."],
+          "answers": [
+            "Trailers.",
+            "Motorcycles.",
+            "Bicycles.",
+            "Cars."
+          ],
           "correctAnswerIndex": 0,
           "imageUrl": null
         },
@@ -4925,7 +5060,7 @@
           "imageUrl": null
         },
         {
-          "question": "1. According to the Commercial Driver\u2019s License Manual, what should you remind passengers about?",
+          "question": "1. According to the Commercial Driver’s License Manual, what should you remind passengers about?",
           "answers": [
             "A. To keep arms and heads inside the bus",
             "B. To keep their seatbelts on",
@@ -5190,7 +5325,12 @@
         },
         {
           "question": "14. What can get stuck on raised crossings?",
-          "answers": ["Trailers.", "Motorcycles.", "Bicycles.", "Cars."],
+          "answers": [
+            "Trailers.",
+            "Motorcycles.",
+            "Bicycles.",
+            "Cars."
+          ],
           "correctAnswerIndex": 0,
           "imageUrl": null
         }
@@ -5282,7 +5422,12 @@
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -5400,7 +5545,7 @@
           "question": "5. When making a left turn at an intersection with a left turn signal arrow, you should:",
           "answers": [
             "Tighten the formation to allow as many riders through the intersection as possible.",
-            "Make the turn single file \u2013 do not ride side-by-side.",
+            "Make the turn single file – do not ride side-by-side.",
             "Speed up to get through the intersection as quickly as possible.",
             "Ignore the signal and proceed straight."
           ],
@@ -5410,10 +5555,10 @@
         {
           "question": "3. What is the most important skill when driving a motorcycle?",
           "answers": [
-            "Control \u2013 Your ability to make your motorcycle do what you want it to do.",
-            "Observation \u2013 Your ability to see what other traffic is doing and other things which may create problems in traffic.",
-            "Speed \u2013 Your ability to go fast.",
-            "Agility \u2013 Your ability to perform tricks on your motorcycle."
+            "Control – Your ability to make your motorcycle do what you want it to do.",
+            "Observation – Your ability to see what other traffic is doing and other things which may create problems in traffic.",
+            "Speed – Your ability to go fast.",
+            "Agility – Your ability to perform tricks on your motorcycle."
           ],
           "correctAnswerIndex": 0,
           "imageUrl": null
@@ -5442,13 +5587,23 @@
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -5542,7 +5697,12 @@
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -5559,7 +5719,12 @@
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -5576,7 +5741,12 @@
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -5593,7 +5763,12 @@
         },
         {
           "question": "3. How much of the potential stopping power does the front brake supply?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -5727,7 +5902,12 @@
         },
         {
           "question": "3. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -5744,7 +5924,12 @@
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -5761,7 +5946,12 @@
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -5778,7 +5968,12 @@
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -5850,7 +6045,12 @@
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -5946,7 +6146,7 @@
           "question": "3. Intersections present the highest risk for motorcyclists in a group. When making a left turn at an intersection with a left turn signal arrow, you should:",
           "answers": [
             "Tighten the formation to allow as many riders through the intersection as possible.",
-            "Make the turn single file \u2013 do not ride side-by-side.",
+            "Make the turn single file – do not ride side-by-side.",
             "Both A and B are correct.",
             "None of the above."
           ],
@@ -5955,7 +6155,12 @@
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -6067,13 +6272,23 @@
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
         {
           "question": "2. The FRONT brake of a motorcycle supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -6145,13 +6360,23 @@
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -6311,7 +6536,12 @@
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -6319,7 +6549,7 @@
           "question": "4. When making a left turn at an intersection with a left turn signal arrow, you should:",
           "answers": [
             "Tighten the formation to allow as many riders through the intersection as possible.",
-            "Make the turn single file \u2013 do not ride side-by-side.",
+            "Make the turn single file – do not ride side-by-side.",
             "Speed up to get through the intersection before the light turns red.",
             "Slow down and proceed through the intersection without caution."
           ],
@@ -6361,7 +6591,12 @@
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -6412,8 +6647,8 @@
         {
           "question": "3. Which of the following skills is NOT tested in the motorcycle license test?",
           "answers": [
-            "Control \u2013 Your ability to make your motorcycle do what you want it to do.",
-            "Observation \u2013 Your ability to see what other traffic is doing and other things which may create problems in traffic.",
+            "Control – Your ability to make your motorcycle do what you want it to do.",
+            "Observation – Your ability to see what other traffic is doing and other things which may create problems in traffic.",
             "Ability to carry passengers and cargo.",
             "Ability to ride side-by-side with other motorcycles."
           ],
@@ -6506,7 +6741,12 @@
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -6556,7 +6796,12 @@
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -6617,13 +6862,23 @@
         },
         {
           "question": "8. What should you consider when carrying passengers and cargo?",
-          "answers": ["The weight", "The color", "The size", "The price"],
+          "answers": [
+            "The weight",
+            "The color",
+            "The size",
+            "The price"
+          ],
           "correctAnswerIndex": 0,
           "imageUrl": null
         },
         {
           "question": "11. What is the maximum piston displacement a minor under 16 years-of-age can ride?",
-          "answers": ["A. 100cc", "B. 150cc", "C. 200cc", "D. 250cc"],
+          "answers": [
+            "A. 100cc",
+            "B. 150cc",
+            "C. 200cc",
+            "D. 250cc"
+          ],
           "correctAnswerIndex": 3,
           "imageUrl": null
         },
@@ -6728,7 +6983,12 @@
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -6778,19 +7038,34 @@
         },
         {
           "question": "3. What is one of the basic skills tested in the motorcycle license test?",
-          "answers": ["Control", "Speed", "Agility", "Strength"],
+          "answers": [
+            "Control",
+            "Speed",
+            "Agility",
+            "Strength"
+          ],
           "correctAnswerIndex": 0,
           "imageUrl": null
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
         {
           "question": "5. What is the restriction code for a motorcycle license with a 250cc restriction?",
-          "answers": ["A. A", "B. B", "C. C", "D. I"],
+          "answers": [
+            "A. A",
+            "B. B",
+            "C. C",
+            "D. I"
+          ],
           "correctAnswerIndex": 3,
           "imageUrl": null
         },
@@ -6851,7 +7126,12 @@
         },
         {
           "question": "4. What is another basic skill tested in the motorcycle license test?",
-          "answers": ["Observation", "Memory", "Reaction time", "Endurance"],
+          "answers": [
+            "Observation",
+            "Memory",
+            "Reaction time",
+            "Endurance"
+          ],
           "correctAnswerIndex": 0,
           "imageUrl": null
         },
@@ -6912,7 +7192,12 @@
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -6973,7 +7258,12 @@
         },
         {
           "question": "13. How much of the potential stopping power does the FRONT brake supply?",
-          "answers": ["About 25%", "About 50%", "About 70%", "About 90%"],
+          "answers": [
+            "About 25%",
+            "About 50%",
+            "About 70%",
+            "About 90%"
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -7012,7 +7302,12 @@
         },
         {
           "question": "12. What is the minimum age to apply for a motorcycle license in Texas?",
-          "answers": ["A. 15", "B. 16", "C. 17", "D. 18"],
+          "answers": [
+            "A. 15",
+            "B. 16",
+            "C. 17",
+            "D. 18"
+          ],
           "correctAnswerIndex": 0,
           "imageUrl": null
         },
@@ -7260,7 +7555,12 @@
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
@@ -7288,7 +7588,12 @@
         },
         {
           "question": "2. The FRONT brake supplies how much of the potential stopping power?",
-          "answers": ["About 25%.", "About 50%.", "About 70%.", "About 90%."],
+          "answers": [
+            "About 25%.",
+            "About 50%.",
+            "About 70%.",
+            "About 90%."
+          ],
           "correctAnswerIndex": 2,
           "imageUrl": null
         },
