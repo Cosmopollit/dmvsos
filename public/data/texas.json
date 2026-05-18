@@ -249,9 +249,9 @@
           "question": "5. To what agency and within what time period must a change of address be reported for driver licensing purposes?",
           "answers": [
             "A. To the Texas Department of Public Safety (DPS) within 30 days.",
-            "B. To the Texas Department of Public Safety (DPS) within 10 days.",
-            "C. To the police within 30 days.",
-            "D. To the police within 10 days."
+            "B. To the DMV within 10 days.",
+            "C. To the DMV within 30 days.",
+            "D. To the local police within 60 days."
           ],
           "correctAnswerIndex": 0,
           "imageUrl": null
@@ -663,9 +663,9 @@
           "question": "5. To what agency and within what time period must a change of address be reported for driver licensing purposes?",
           "answers": [
             "A. To the Texas Department of Public Safety (DPS) within 30 days.",
-            "B. To the Texas Department of Public Safety (DPS) within 10 days.",
-            "C. To the police within 30 days.",
-            "D. To the police within 10 days."
+            "B. To the DMV within 10 days.",
+            "C. To the DMV within 30 days.",
+            "D. To the local police within 60 days."
           ],
           "correctAnswerIndex": 0,
           "imageUrl": null
@@ -1066,9 +1066,9 @@
           "question": "5. To what agency and within what time period must a change of address be reported for driver licensing purposes?",
           "answers": [
             "A. To the Texas Department of Public Safety (DPS) within 30 days.",
-            "B. To the Texas Department of Public Safety (DPS) within 10 days.",
-            "C. To the police within 30 days.",
-            "D. To the police within 10 days."
+            "B. To the DMV within 10 days.",
+            "C. To the DMV within 30 days.",
+            "D. To the local police within 60 days."
           ],
           "correctAnswerIndex": 0,
           "imageUrl": null
@@ -1777,9 +1777,9 @@
           "question": "9. To what agency and within what time period must a change of address be reported for driver licensing purposes?",
           "answers": [
             "A. To the Texas Department of Public Safety (DPS) within 30 days.",
-            "B. To the Texas Department of Public Safety (DPS) within 10 days.",
-            "C. To the police within 30 days.",
-            "D. To the police within 10 days."
+            "B. To the DMV within 10 days.",
+            "C. To the DMV within 30 days.",
+            "D. To the local police within 60 days."
           ],
           "correctAnswerIndex": 0,
           "imageUrl": null
@@ -2437,9 +2437,9 @@
           "question": "5. To what agency and within what time period must a change of address be reported for driver licensing purposes?",
           "answers": [
             "A. To the Texas Department of Public Safety (DPS) within 30 days.",
-            "B. To the Texas Department of Public Safety (DPS) within 10 days.",
-            "C. To the police within 30 days.",
-            "D. To the police within 10 days."
+            "B. To the DMV within 10 days.",
+            "C. To the DMV within 30 days.",
+            "D. To the local police within 60 days."
           ],
           "correctAnswerIndex": 0,
           "imageUrl": null

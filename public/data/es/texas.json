@@ -249,9 +249,9 @@
           "question": "5. ¿A qué agencia y en qué período de tiempo se debe informar un cambio de dirección para fines de licencia de conducir?",
           "answers": [
             "A. Al Departamento de Seguridad Pública de Texas (DPS) dentro de 30 días.",
-            "B. Al Departamento de Seguridad Pública de Texas (DPS) dentro de 10 días.",
-            "C. A la policía local dentro de 30 días.",
-            "D. A la policía local dentro de 10 días."
+            "B. Al DMV dentro de 10 días.",
+            "C. Al DMV dentro de 30 días.",
+            "D. A la policía local dentro de 60 días."
           ],
           "correctAnswerIndex": 0,
           "imageUrl": null
@@ -663,9 +663,9 @@
           "question": "5. ¿A qué agencia y en qué período de tiempo se debe informar un cambio de dirección para fines de licencia de conducir?",
           "answers": [
             "A. Al Departamento de Seguridad Pública de Texas (DPS) dentro de 30 días.",
-            "B. Al Departamento de Seguridad Pública de Texas (DPS) dentro de 10 días.",
-            "C. A la policía local dentro de 30 días.",
-            "D. A la policía local dentro de 10 días."
+            "B. Al DMV dentro de 10 días.",
+            "C. Al DMV dentro de 30 días.",
+            "D. A la policía local dentro de 60 días."
           ],
           "correctAnswerIndex": 0,
           "imageUrl": null
@@ -1066,9 +1066,9 @@
           "question": "5. ¿A qué agencia y en qué plazo debe notificarse un cambio de dirección para fines de licencia de conducir?",
           "answers": [
             "A. Al Departamento de Seguridad Pública de Texas (DPS) dentro de 30 días.",
-            "B. Al Departamento de Seguridad Pública de Texas (DPS) dentro de 10 días.",
-            "C. A la policía local dentro de 30 días.",
-            "D. A la policía local dentro de 10 días."
+            "B. Al DMV dentro de 10 días.",
+            "C. Al DMV dentro de 30 días.",
+            "D. A la policía local dentro de 60 días."
           ],
           "correctAnswerIndex": 0,
           "imageUrl": null
@@ -1777,9 +1777,9 @@
           "question": "9. ¿A qué agencia y en qué período de tiempo debe informarse un cambio de dirección para fines de licencia de conducir?",
           "answers": [
             "A. Al Departamento de Seguridad Pública de Texas (DPS) dentro de 30 días.",
-            "B. Al Departamento de Seguridad Pública de Texas (DPS) dentro de 10 días.",
-            "C. A la policía local dentro de 30 días.",
-            "D. A la policía local dentro de 10 días."
+            "B. Al DMV dentro de 10 días.",
+            "C. Al DMV dentro de 30 días.",
+            "D. A la policía local dentro de 60 días."
           ],
           "correctAnswerIndex": 0,
           "imageUrl": null
@@ -2437,9 +2437,9 @@
           "question": "5. ¿A qué agencia y en qué plazo se debe informar un cambio de dirección para obtener la licencia de conducir?",
           "answers": [
             "A. Al Departamento de Seguridad Pública de Texas (DPS) dentro de 30 días.",
-            "B. Al Departamento de Seguridad Pública de Texas (DPS) dentro de 10 días.",
-            "C. A la policía local dentro de 30 días.",
-            "D. A la policía local dentro de 10 días."
+            "B. Al DMV dentro de 10 días.",
+            "C. Al DMV dentro de 30 días.",
+            "D. A la policía local dentro de 60 días."
           ],
           "correctAnswerIndex": 0,
           "imageUrl": null
