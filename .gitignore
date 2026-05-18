@@ -118,5 +118,7 @@ translation-quality-audit.csv
 .bulk-rewrite-cdl.json
 .bulk-retranslate-stale.json
 .cdl-deletes-rollback.json
+.dedupe-rollback-*.json
+.bulk-retranslate-stale.json.bak
 translation-quality-audit-*.json
 translation-quality-audit-*.csv
