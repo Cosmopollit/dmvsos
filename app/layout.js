@@ -30,7 +30,7 @@ export const viewport = {
 };
 
 export const metadata = {
-  metadataBase: new URL('https://www.dmvsos.com'),
+  metadataBase: new URL('https://dmvsos.com'),
   title: 'Free DMV Practice Test | 50 States | 5 Languages | DMVSOS',
   description: 'Free DMV practice tests for all 50 states in 5 languages: English, Spanish, Russian, Ukrainian, Chinese. Sourced from official state Driver Handbooks.',
   keywords: 'DMV practice test, free DMV test 2026, DMV test in Spanish, DMV test in Russian, DMV test in Chinese, DMV test in Ukrainian, driving test, CDL practice test, motorcycle permit test',
@@ -42,7 +42,7 @@ export const metadata = {
   openGraph: {
     title: 'Free DMV Practice Test | 50 States | 5 Languages | DMVSOS',
     description: 'Free DMV practice tests for all 50 states in 5 languages: English, Spanish, Russian, Ukrainian, Chinese. Sourced from official state Driver Handbooks.',
-    url: 'https://www.dmvsos.com',
+    url: 'https://dmvsos.com',
     siteName: 'DMVSOS',
     type: 'website',
     images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'DMVSOS, free DMV practice tests in 5 languages' }],
@@ -61,26 +61,26 @@ const jsonLd = {
   '@graph': [
     {
       '@type': 'WebSite',
-      '@id': 'https://www.dmvsos.com/#website',
+      '@id': 'https://dmvsos.com/#website',
       name: 'DMVSOS',
-      url: 'https://www.dmvsos.com',
+      url: 'https://dmvsos.com',
       description: 'Free DMV practice tests for all 50 US states in 5 languages. Built from official Driver Handbooks. No subscription.',
       inLanguage: ['en', 'es', 'ru', 'uk', 'zh'],
       potentialAction: {
         '@type': 'SearchAction',
         target: {
           '@type': 'EntryPoint',
-          urlTemplate: 'https://www.dmvsos.com/?state={state_name}',
+          urlTemplate: 'https://dmvsos.com/?state={state_name}',
         },
         'query-input': 'required name=state_name',
       },
     },
     {
       '@type': 'Organization',
-      '@id': 'https://www.dmvsos.com/#organization',
+      '@id': 'https://dmvsos.com/#organization',
       name: 'DMVSOS',
-      url: 'https://www.dmvsos.com',
-      logo: 'https://www.dmvsos.com/logo.png',
+      url: 'https://dmvsos.com',
+      logo: 'https://dmvsos.com/logo.png',
       description: 'DMV/DOL knowledge test preparation platform. Free practice tests, 50 states, 5 languages, official Driver Handbook sourced.',
       foundingDate: '2025',
       knowsLanguage: ['en', 'es', 'ru', 'uk', 'zh'],
@@ -97,9 +97,9 @@ const jsonLd = {
     },
     {
       '@type': 'WebApplication',
-      '@id': 'https://www.dmvsos.com/#app',
+      '@id': 'https://dmvsos.com/#app',
       name: 'DMVSOS',
-      url: 'https://www.dmvsos.com',
+      url: 'https://dmvsos.com',
       applicationCategory: 'EducationalApplication',
       operatingSystem: 'Any (web)',
       browserRequirements: 'Modern web browser',
@@ -146,9 +146,9 @@ const jsonLd = {
     },
     {
       '@type': 'EducationalOrganization',
-      '@id': 'https://www.dmvsos.com/#school',
+      '@id': 'https://dmvsos.com/#school',
       name: 'DMVSOS',
-      url: 'https://www.dmvsos.com',
+      url: 'https://dmvsos.com',
       description: 'Online DMV test prep platform. Practice the actual DMV knowledge test format in your native language.',
     },
   ],

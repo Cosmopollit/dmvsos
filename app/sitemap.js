@@ -24,7 +24,7 @@ async function fetchManualIndex() {
 }
 
 export default async function sitemap() {
-  const baseUrl = 'https://www.dmvsos.com';
+  const baseUrl = 'https://dmvsos.com';
   const now = new Date().toISOString();
   const index = await fetchManualIndex();
 

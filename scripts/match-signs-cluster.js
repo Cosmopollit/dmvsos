@@ -30,7 +30,7 @@ const CONCURRENCY = parseInt(process.argv.find(a => a.startsWith('--concurrency=
 const PARALLEL_STATES = parseInt(process.argv.find(a => a.startsWith('--parallel='))?.split('=')[1] || '1', 10);
 
 const SIGNS_DIR    = path.join(__dirname, '..', 'public', 'signs');
-const SITE_URL     = 'https://www.dmvsos.com';
+const SITE_URL     = 'https://dmvsos.com';
 const HAIKU_MODEL  = 'claude-haiku-4-5-20251001';
 
 if (!SERVICE_KEY)   { console.error('Set SUPABASE_SERVICE_ROLE_KEY'); process.exit(1); }

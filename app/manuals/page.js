@@ -16,7 +16,7 @@ export const metadata = {
   openGraph: {
     title: 'Free DMV Driver Manuals | All 50 States',
     description: 'Official DMV driver handbooks for all 50 US states. Download free PDF in 27 languages including Spanish, Russian, Chinese, and more.',
-    url: 'https://www.dmvsos.com/manuals',
+    url: 'https://dmvsos.com/manuals',
     siteName: 'DMVSOS',
     type: 'website',
     images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Free DMV Driver Manuals | All 50 States' }],
@@ -69,8 +69,8 @@ export default async function ManualsPage() {
         '@type': 'CollectionPage',
         name: 'Free DMV Driver Manuals | All 50 States',
         description: 'Official driver handbooks for all 50 US states in up to 27 languages. Free PDF download, no signup.',
-        url: 'https://www.dmvsos.com/manuals',
-        publisher: { '@type': 'Organization', name: 'DMVSOS', url: 'https://www.dmvsos.com' },
+        url: 'https://dmvsos.com/manuals',
+        publisher: { '@type': 'Organization', name: 'DMVSOS', url: 'https://dmvsos.com' },
         numberOfItems: totalPdfs,
         inLanguage: Array.from(allLangs),
       },
@@ -78,18 +78,18 @@ export default async function ManualsPage() {
         '@type': 'Dataset',
         name: 'DMVSOS DMV Driver Manual Collection',
         description: 'Aggregated collection of official US state DMV/DOL driver manuals. Includes Car, CDL, and Motorcycle handbooks across all 50 states. Multilingual versions sourced from official state websites and mirrored for direct download.',
-        url: 'https://www.dmvsos.com/manuals',
-        license: 'https://www.dmvsos.com/terms',
+        url: 'https://dmvsos.com/manuals',
+        license: 'https://dmvsos.com/terms',
         keywords: [
           'DMV manual', 'driver handbook', 'CDL manual', 'motorcycle manual',
           'driver license PDF', 'state DMV PDF', 'free DMV book',
           'spanish DMV', 'russian DMV', 'chinese DMV',
         ],
-        creator: { '@type': 'Organization', name: 'DMVSOS', url: 'https://www.dmvsos.com' },
+        creator: { '@type': 'Organization', name: 'DMVSOS', url: 'https://dmvsos.com' },
         distribution: {
           '@type': 'DataDownload',
           encodingFormat: 'application/pdf',
-          contentUrl: 'https://www.dmvsos.com/manuals',
+          contentUrl: 'https://dmvsos.com/manuals',
         },
       },
       {
@@ -107,8 +107,8 @@ export default async function ManualsPage() {
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home',    item: 'https://www.dmvsos.com' },
-          { '@type': 'ListItem', position: 2, name: 'Manuals', item: 'https://www.dmvsos.com/manuals' },
+          { '@type': 'ListItem', position: 1, name: 'Home',    item: 'https://dmvsos.com' },
+          { '@type': 'ListItem', position: 2, name: 'Manuals', item: 'https://dmvsos.com/manuals' },
         ],
       },
     ],

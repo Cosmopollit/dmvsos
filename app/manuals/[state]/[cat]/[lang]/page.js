@@ -119,7 +119,7 @@ export async function generateMetadata({ params }) {
   const description = `Download the official ${name} ${catInfo.label} in ${langEN} (${year}) | free PDF. ${native?.study || 'Study for your DMV test'} with the official handbook ${native?.in || ''}.`;
 
   // Build hreflang alternates from sibling lang pages that exist for this (state, cat).
-  const SITE = 'https://www.dmvsos.com';
+  const SITE = 'https://dmvsos.com';
   const canonical = `${SITE}/manuals/${state}/${cat}/${lang}`;
   const index = await fetchManualIndex();
   const availableLangs = Object.keys(index?.[state]?.[cat] || {});
@@ -181,11 +181,11 @@ export default async function StateManualLangPage({ params }) {
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home',              item: 'https://www.dmvsos.com' },
-          { '@type': 'ListItem', position: 2, name: 'Manuals',           item: 'https://www.dmvsos.com/manuals' },
-          { '@type': 'ListItem', position: 3, name,                      item: `https://www.dmvsos.com/manuals/${state}` },
-          { '@type': 'ListItem', position: 4, name: catInfo.label,       item: `https://www.dmvsos.com/manuals/${state}/${cat}` },
-          { '@type': 'ListItem', position: 5, name: langEN,              item: `https://www.dmvsos.com/manuals/${state}/${cat}/${lang}` },
+          { '@type': 'ListItem', position: 1, name: 'Home',              item: 'https://dmvsos.com' },
+          { '@type': 'ListItem', position: 2, name: 'Manuals',           item: 'https://dmvsos.com/manuals' },
+          { '@type': 'ListItem', position: 3, name,                      item: `https://dmvsos.com/manuals/${state}` },
+          { '@type': 'ListItem', position: 4, name: catInfo.label,       item: `https://dmvsos.com/manuals/${state}/${cat}` },
+          { '@type': 'ListItem', position: 5, name: langEN,              item: `https://dmvsos.com/manuals/${state}/${cat}/${lang}` },
         ],
       },
       {
@@ -194,8 +194,8 @@ export default async function StateManualLangPage({ params }) {
         description: `Official ${name} ${catInfo.label} in ${langEN}. Free PDF published by ${meta.agency}.`,
         inLanguage: lang,
         author: { '@type': 'Organization', name: meta.agency },
-        publisher: { '@type': 'Organization', name: 'DMVSOS', url: 'https://www.dmvsos.com' },
-        url: `https://www.dmvsos.com/manuals/${state}/${cat}/${lang}`,
+        publisher: { '@type': 'Organization', name: 'DMVSOS', url: 'https://dmvsos.com' },
+        url: `https://dmvsos.com/manuals/${state}/${cat}/${lang}`,
       },
     ],
   });

@@ -91,8 +91,8 @@ export default function FaqPage() {
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.dmvsos.com' },
-          { '@type': 'ListItem', position: 2, name: 'FAQ',  item: 'https://www.dmvsos.com/faq' },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://dmvsos.com' },
+          { '@type': 'ListItem', position: 2, name: 'FAQ',  item: 'https://dmvsos.com/faq' },
         ],
       },
     ],

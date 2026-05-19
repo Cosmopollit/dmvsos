@@ -108,7 +108,7 @@ const jsonLd = {
   name: 'DMVSOS vs DriversEd, Aceable, Driving-Tests.org | Comparison',
   description: 'Feature-by-feature comparison of leading DMV practice test platforms.',
   url: 'https://dmvsos.com/vs',
-  publisher: { '@type': 'Organization', name: 'DMVSOS', url: 'https://www.dmvsos.com' },
+  publisher: { '@type': 'Organization', name: 'DMVSOS', url: 'https://dmvsos.com' },
   mainEntity: {
     '@type': 'Table',
     about: 'DMV practice test platform comparison',

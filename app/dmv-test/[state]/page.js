@@ -85,7 +85,7 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title: `${name} DMV Practice Test ${year}  ·  Free`,
       description: `Free ${name} DMV practice test. Real ${meta.abbr} knowledge test questions in English, Spanish, Russian, Chinese and Ukrainian.`,
-      url: `https://www.dmvsos.com/dmv-test/${state}`,
+      url: `https://dmvsos.com/dmv-test/${state}`,
       siteName: 'DMVSOS',
       type: 'website',
       images: [{ url: '/og-image.png', width: 1200, height: 630, alt: `${name} DMV Practice Test` }],
@@ -158,9 +158,9 @@ export default async function StateDmvTestPage({ params }) {
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home',             item: 'https://www.dmvsos.com' },
-          { '@type': 'ListItem', position: 2, name: 'DMV Tests',        item: 'https://www.dmvsos.com/dmv-test' },
-          { '@type': 'ListItem', position: 3, name: `${name} DMV Test`, item: `https://www.dmvsos.com/dmv-test/${state}` },
+          { '@type': 'ListItem', position: 1, name: 'Home',             item: 'https://dmvsos.com' },
+          { '@type': 'ListItem', position: 2, name: 'DMV Tests',        item: 'https://dmvsos.com/dmv-test' },
+          { '@type': 'ListItem', position: 3, name: `${name} DMV Test`, item: `https://dmvsos.com/dmv-test/${state}` },
         ],
       },
       {
@@ -185,7 +185,7 @@ export default async function StateDmvTestPage({ params }) {
         '@type': 'Course',
         name: `${name} DMV Practice Test`,
         description: `Free practice tests for the ${name} (${meta.abbr}) DMV knowledge exam. Real question format, all topics covered, ${exam.questions}-question full tests, available in 5 languages.`,
-        provider: { '@type': 'Organization', name: 'DMVSOS', url: 'https://www.dmvsos.com' },
+        provider: { '@type': 'Organization', name: 'DMVSOS', url: 'https://dmvsos.com' },
         educationalLevel: 'beginner',
         inLanguage: ['en', 'es', 'ru', 'uk', 'zh'],
         offers: {
