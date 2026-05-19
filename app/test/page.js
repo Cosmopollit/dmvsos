@@ -27,7 +27,18 @@ function TestContent() {
   const [lang, setLangState] = useState(params.get('lang') || getSavedLang());
   const [showLangMenu, setShowLangMenu] = useState(false);
   const currentLang = langs.find(l => l.code === lang) || langs[0];
-  function switchLang(code) { setLangState(code); saveLang(code); setShowLangMenu(false); }
+  // Set when user switches lang mid-test; the post-refetch effect uses this
+  // to replace the active questions slice with translations in the new lang
+  // and reset progress (questions don't carry cluster_code client-side, so
+  // 1:1 preservation isn't possible without a backend round-trip).
+  const pendingLangSwitchRef = useRef(false);
+  function switchLang(code) {
+    if (code === lang) { setShowLangMenu(false); return; }
+    pendingLangSwitchRef.current = true;
+    setLangState(code);
+    saveLang(code);
+    setShowLangMenu(false);
+  }
   const isRetry = params.get('retry') === 'true';
   const tex = t[lang] || t.en;
 
@@ -231,6 +242,27 @@ function TestContent() {
         setLoadingQuestions(false);
       });
   }, [state, category, lang, isRetry, subcategory]);
+
+  // After a mid-test language switch, replace the active questions slice with
+  // the freshly-refetched translations and reset progress. Restart (not
+  // resume) because we don't have cluster_codes client-side to do a 1:1 swap.
+  useEffect(() => {
+    if (!pendingLangSwitchRef.current) return;
+    if (allQuestions.length === 0) return;
+    if (testMode == null) { pendingLangSwitchRef.current = false; return; }
+    const len = questions.length || allQuestions.length;
+    setQuestions(allQuestions.slice(0, Math.min(len, allQuestions.length)));
+    setCurrent(0);
+    setScore(0);
+    setUserAnswers([]);
+    userAnswersRef.current = [];
+    setSelected(null);
+    setShowAnswer(false);
+    setShowManualQuote(false);
+    setShowReport(false); setReportReason(""); setReportComment(""); setReportSent(false);
+    setElapsed(0);
+    pendingLangSwitchRef.current = false;
+  }, [allQuestions, testMode]);
 
   function startWithMode(mode) {
     const realLimits = { dmv: 40, car: 40, cdl: 50, moto: 30, motorcycle: 30 };
@@ -726,7 +758,22 @@ function TestContent() {
             <Image src="/logo.png" alt="DMVSOS" width={24} height={24} className="rounded-md" />
             <span className="text-sm font-bold text-[#0B1C3D]">DMVSOS</span>
           </Link>
-          <div className="w-12" />
+          <div className="relative">
+            <button type="button" onClick={() => setShowLangMenu(v => !v)} onBlur={() => setTimeout(() => setShowLangMenu(false), 150)}
+              className="flex items-center gap-1 text-[11px] font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-2 py-1 hover:border-[#2563EB] transition-colors">
+              <span>{currentLang.flag}</span><span>{currentLang.label}</span><span className="text-[#94A3B8] text-[9px] ml-0.5">▾</span>
+            </button>
+            {showLangMenu && (
+              <div className="absolute right-0 top-full mt-1 bg-white border border-[#E2E8F0] rounded-xl shadow-lg z-50 py-1 min-w-[90px]">
+                {langs.map(l => (
+                  <button key={l.code} type="button" onMouseDown={() => switchLang(l.code)}
+                    className={`w-full text-left px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 hover:bg-[#F8FAFC] transition-colors ${lang === l.code ? 'text-[#2563EB]' : 'text-[#64748B]'}`}>
+                    <span>{l.flag}</span> <span>{l.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="flex items-center justify-between mb-5">
