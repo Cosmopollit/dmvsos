@@ -103,19 +103,17 @@ async function insertPurchase({ userId, email, passType, kind, amountCents, newE
 }
 
 async function syncProfile(email, passType, expiresAt) {
-  const res = await fetch(`${SUPA_URL}/rest/v1/profiles?email=eq.${encodeURIComponent(email)}`, {
-    method: 'PATCH',
-    headers: H,
-    body: JSON.stringify({ is_pro: true, plan_type: passType, plan_expires_at: expiresAt }),
+  // UPSERT via Prefer: resolution=merge-duplicates (email has unique constraint).
+  // The old PATCH-then-fallback-POST pattern was buggy: PostgREST returns 200
+  // for PATCH even when 0 rows match, so the fallback INSERT never fired.
+  const res = await fetch(`${SUPA_URL}/rest/v1/profiles`, {
+    method: 'POST',
+    headers: { ...H, Prefer: 'resolution=merge-duplicates,return=representation' },
+    body: JSON.stringify({ email, is_pro: true, plan_type: passType, plan_expires_at: expiresAt }),
   });
-  if (!res.ok) {
-    // Profile might not exist — insert
-    await fetch(`${SUPA_URL}/rest/v1/profiles`, {
-      method: 'POST',
-      headers: H,
-      body: JSON.stringify({ email, is_pro: true, plan_type: passType, plan_expires_at: expiresAt }),
-    }).catch(() => {});
-  }
+  if (!res.ok) throw new Error(`profile upsert: ${res.status} ${await res.text()}`);
+  const rows = await res.json();
+  console.log(`Profile upserted: ${rows[0]?.email || email} (is_pro=true, plan_type=${passType})`);
 }
 
 async function sendMagicLink(email) {
