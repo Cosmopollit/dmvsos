@@ -120,6 +120,9 @@ translation-quality-audit.csv
 .cdl-deletes-rollback.json
 .dedupe-rollback-*.json
 .cluster-status-cdl-*.json
+.cdl-verify-recovery.json
+.state-cdl-rules-progress.json
+.state-cdl-rules-extracted.json
 .bulk-retranslate-stale.json.bak
 translation-quality-audit-*.json
 translation-quality-audit-*.csv
