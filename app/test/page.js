@@ -29,20 +29,13 @@ function TestContent() {
   const currentLang = langs.find(l => l.code === lang) || langs[0];
   function switchLang(code) { setLangState(code); saveLang(code); setShowLangMenu(false); }
 
-  // Per-question reference view in an alternate language. Two flows:
-  //   1. Test is in non-EN, alt is EN (see canonical original)
-  //   2. Test is in EN (DMV format), alt is the user's saved native lang
-  //      (so they can verify they understand a tricky question)
-  // Cached by [clusterCode][altLang] so toggling direction is free after fetch.
-  const [altViewCache, setAltViewCache] = useState({}); // { [clusterCode]: { [altLang]: {question, answers, notFound?} } }
+  // Per-question English reference view — lets non-English learners study in
+  // their language and tap to see the canonical EN original on any question.
+  // Only useful when the test lang is non-EN (an EN test doesn't need a
+  // translation toggle). Cached by [clusterCode] so toggling is free.
+  const [altViewCache, setAltViewCache] = useState({}); // { [clusterCode]: {question, answers, notFound?} }
   const [showAltView, setShowAltView] = useState(false);
   const [fetchingAltView, setFetchingAltView] = useState(false);
-  // Determine which language to show as reference:
-  //   - If primary test lang is EN: alt is user's saved lang (or 'ru' as fallback for immigrants)
-  //   - Otherwise: alt is 'en' (canonical)
-  const savedLang = (typeof window !== 'undefined') ? getSavedLang() : 'ru';
-  const altLang = lang === 'en' ? (savedLang !== 'en' ? savedLang : 'ru') : 'en';
-  const altLangMeta = langs.find(l => l.code === altLang) || langs[0];
   const isRetry = params.get('retry') === 'true';
   const tex = t[lang] || t.en;
 
@@ -251,37 +244,29 @@ function TestContent() {
   // Close the alt view when moving between questions
   useEffect(() => { setShowAltView(false); }, [current]);
 
-  async function fetchAltView(clusterCode, targetLang) {
-    if (!clusterCode || !targetLang) return;
-    if (altViewCache[clusterCode]?.[targetLang]) return;
+  async function fetchAltView(clusterCode) {
+    if (!clusterCode || altViewCache[clusterCode]) return;
     setFetchingAltView(true);
     try {
       const categoryMap = { dmv: 'car', cdl: 'cdl', moto: 'motorcycle' };
       const mappedCategory = categoryMap[category] || category;
       const qs = new URLSearchParams({
-        state, category: mappedCategory, language: targetLang,
+        state, category: mappedCategory, language: 'en',
         cluster_codes: clusterCode, limit: '1',
       });
       if (subcategory) qs.set('subcategory', subcategory);
       const r = await fetch('/api/test/questions?' + qs, { cache: 'no-store' });
       const data = await r.json();
       const strip = s => (s || '').replace(/^[A-DА-Га-гa-d]\.\s*/, '').trim();
-      const setForLang = (val) => setAltViewCache(prev => ({
-        ...prev,
-        [clusterCode]: { ...(prev[clusterCode] || {}), [targetLang]: val },
-      }));
       if (data.ok && data.questions?.length) {
         const row = data.questions[0];
         const answers = [row.option_a, row.option_b, row.option_c, row.option_d].filter(Boolean).map(strip);
-        setForLang({ question: row.question_text || '', answers });
+        setAltViewCache(prev => ({ ...prev, [clusterCode]: { question: row.question_text || '', answers } }));
       } else {
-        setForLang({ question: '', answers: [], notFound: true });
+        setAltViewCache(prev => ({ ...prev, [clusterCode]: { question: '', answers: [], notFound: true } }));
       }
     } catch (_) {
-      setAltViewCache(prev => ({
-        ...prev,
-        [clusterCode]: { ...(prev[clusterCode] || {}), [targetLang]: { question: '', answers: [], notFound: true } },
-      }));
+      setAltViewCache(prev => ({ ...prev, [clusterCode]: { question: '', answers: [], notFound: true } }));
     } finally {
       setFetchingAltView(false);
     }
@@ -816,32 +801,35 @@ function TestContent() {
             {(q.question || '').replace(/^\d+\.\s*/, '')}
           </p>
 
-          {altLang !== lang && q.clusterCode && (
+          {lang !== 'en' && q.clusterCode && (
             <div className="mb-5">
               <button
                 type="button"
                 onClick={async () => {
+                  if (!hasFullAccess) { setShowLockModal(true); return; }
                   const next = !showAltView;
                   setShowAltView(next);
-                  if (next) await fetchAltView(q.clusterCode, altLang);
+                  if (next) await fetchAltView(q.clusterCode);
                 }}
-                className="text-xs font-semibold text-[#2563EB] hover:underline inline-flex items-center gap-1.5"
+                className={`text-xs font-semibold inline-flex items-center gap-1.5 ${hasFullAccess ? 'text-[#2563EB] hover:underline' : 'text-[#64748B] hover:text-[#2563EB]'}`}
               >
-                <span>{altLangMeta.flag}</span>
-                <span>{showAltView ? `Hide ${altLangMeta.label}` : `View in ${altLangMeta.label}`}</span>
+                {!hasFullAccess && <span className="text-[10px]">🔒</span>}
+                <span>🇬🇧</span>
+                <span>{showAltView ? (tex.hideEnglish || 'Hide English') : (tex.viewEnglish || 'View in English')}</span>
+                {!hasFullAccess && <span className="text-[9px] font-bold text-[#F59E0B] uppercase tracking-wide ml-1">Pro</span>}
                 {fetchingAltView && <span className="inline-block w-3 h-3 border-2 border-[#2563EB] border-t-transparent rounded-full animate-spin ml-1" />}
               </button>
-              {showAltView && altViewCache[q.clusterCode]?.[altLang] && (
+              {hasFullAccess && showAltView && altViewCache[q.clusterCode] && (
                 <div className="mt-2 p-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl">
-                  {altViewCache[q.clusterCode][altLang].notFound ? (
-                    <p className="text-xs text-[#94A3B8] italic">No {altLangMeta.label} version available.</p>
+                  {altViewCache[q.clusterCode].notFound ? (
+                    <p className="text-xs text-[#94A3B8] italic">No English version available.</p>
                   ) : (
                     <>
                       <p className="text-[14px] font-semibold text-[#0B1C3D] leading-relaxed mb-2">
-                        {(altViewCache[q.clusterCode][altLang].question || '').replace(/^\d+\.\s*/, '')}
+                        {(altViewCache[q.clusterCode].question || '').replace(/^\d+\.\s*/, '')}
                       </p>
                       <div className="flex flex-col gap-1">
-                        {altViewCache[q.clusterCode][altLang].answers.map((a, i) => (
+                        {altViewCache[q.clusterCode].answers.map((a, i) => (
                           <div key={i} className="text-[13px] text-[#475569] leading-snug">
                             <span className="font-semibold mr-1.5 text-[#0B1C3D]">{['A','B','C','D'][i]}.</span>{a}
                           </div>
@@ -1199,6 +1187,36 @@ function TestContent() {
                 {tex.home || 'Leave'}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Lock modal · also rendered here so the locked "View in English"
+          button on the active test screen has somewhere to show its prompt
+          (the mode-selection branch above renders the original copy). */}
+      {showLockModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-50 p-4"
+          onClick={() => setShowLockModal(false)}>
+          <div className="bg-white rounded-3xl p-7 w-full max-w-sm shadow-2xl text-center"
+            onClick={e => e.stopPropagation()}>
+            <div className="text-5xl mb-3">🌐</div>
+            <h3 className="text-xl font-bold text-[#0B1C3D] mb-2">
+              {tex.unlockTitle || 'Unlock Full Access'}
+            </h3>
+            <p className="text-sm text-[#64748B] mb-6">
+              {tex.unlockDesc || 'Get all test modes, unlimited practice, and real exam simulation.'}
+            </p>
+            <button
+              type="button"
+              onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
+              className="w-full py-3.5 rounded-2xl font-bold text-white text-base mb-3 btn-pulse"
+              style={{ background: 'linear-gradient(135deg, #2563EB, #1D4ED8)' }}>
+              {tex.unlockCta || `Unlock from ${plan.price} →`}
+            </button>
+            <button type="button" onClick={() => setShowLockModal(false)}
+              className="text-sm text-[#94A3B8] hover:text-[#64748B]">
+              {tex.back}
+            </button>
           </div>
         </div>
       )}
