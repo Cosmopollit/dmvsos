@@ -41,11 +41,28 @@ function LoginContent() {
   const [emailLoading, setEmailLoading] = useState(false);
   const [emailError, setEmailError] = useState('');
 
+  // After login we want users to land somewhere they can actually do
+  // something. The home page is a state-selector that the user has
+  // already passed once to reach /login, so dumping them back there is
+  // a dead end. Default destination is /test (which itself defaults to
+  // washington/car/en if no params present); callers can override via
+  // ?next=/some/path on the login URL so a user who clicked "Sign in"
+  // from a specific /test page returns to that exact page.
+  //
+  // Server-side /auth/callback already validates `next` (must start
+  // with '/', not '//') and performs the redirect after exchanging the
+  // OAuth code for a session.
+  function authRedirectTo() {
+    const next = searchParams.get('next');
+    const safeNext = next && next.startsWith('/') && !next.startsWith('//') ? next : '/test';
+    return window.location.origin + '/auth/callback?next=' + encodeURIComponent(safeNext);
+  }
+
   async function handleGoogleSignIn() {
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: window.location.origin,
+        redirectTo: authRedirectTo(),
         skipBrowserRedirect: false,
       },
     });
@@ -55,7 +72,7 @@ function LoginContent() {
     await supabase.auth.signInWithOAuth({
       provider: 'apple',
       options: {
-        redirectTo: window.location.origin,
+        redirectTo: authRedirectTo(),
         skipBrowserRedirect: false,
       },
     });
@@ -65,7 +82,7 @@ function LoginContent() {
     await supabase.auth.signInWithOAuth({
       provider: 'facebook',
       options: {
-        redirectTo: window.location.origin,
+        redirectTo: authRedirectTo(),
         skipBrowserRedirect: false,
       },
     });
@@ -77,10 +94,17 @@ function LoginContent() {
     setEmailError('');
     try {
       const { error } = isSignUp
-        ? await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin } })
+        ? await supabase.auth.signUp({ email, password, options: { emailRedirectTo: authRedirectTo() } })
         : await supabase.auth.signInWithPassword({ email, password });
       if (error) { setEmailError(error.message); }
-      else { router.push('/'); }
+      else {
+        // Pull the same destination logic OAuth uses, so a user who
+        // arrived with ?next=/test/foo lands back on /test/foo rather
+        // than the home page (which is a dead end after login).
+        const next = searchParams.get('next');
+        const safeNext = next && next.startsWith('/') && !next.startsWith('//') ? next : '/test';
+        router.push(safeNext);
+      }
     } catch { setEmailError(tex.somethingWentWrong || 'Something went wrong'); }
     finally { setEmailLoading(false); }
   }
