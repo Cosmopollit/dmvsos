@@ -814,8 +814,8 @@ function TestContent() {
                 className={`text-xs font-semibold inline-flex items-center gap-1.5 ${hasFullAccess ? 'text-[#2563EB] hover:underline' : 'text-[#64748B] hover:text-[#2563EB]'}`}
               >
                 {!hasFullAccess && <span className="text-[10px]">🔒</span>}
-                <span>🇬🇧</span>
-                <span>{showAltView ? (tex.hideEnglish || 'Hide English') : (tex.viewEnglish || 'View in English')}</span>
+                <span>🇺🇸</span>
+                <span>{showAltView ? (tex.hideOriginal || 'Hide original') : (tex.viewOriginal || 'View original question')}</span>
                 {!hasFullAccess && <span className="text-[9px] font-bold text-[#F59E0B] uppercase tracking-wide ml-1">Pro</span>}
                 {fetchingAltView && <span className="inline-block w-3 h-3 border-2 border-[#2563EB] border-t-transparent rounded-full animate-spin ml-1" />}
               </button>
