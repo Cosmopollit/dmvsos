@@ -16,7 +16,7 @@ export default function AboutPage() {
         '@type': 'AboutPage',
         name: 'About DMVSOS',
         url: 'https://www.dmvsos.com/about',
-        description: 'Founder story and product overview for DMVSOS — free DMV practice tests for all 50 US states in 5 languages.',
+        description: 'Founder story and product overview for DMVSOS | free DMV practice tests for all 50 US states in 5 languages.',
       },
       {
         '@type': 'BreadcrumbList',

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 export const metadata = {
-  title: 'DMVSOS vs DriversEd, Aceable, Driving-Tests — 2026 Comparison',
+  title: 'DMVSOS vs DriversEd, Aceable, Driving-Tests | 2026 Comparison',
   description:
     'Honest comparison of DMV practice test platforms. Pricing, languages, states covered, free tier, refund policy. DMVSOS vs DriversEd vs Aceable vs Driving-Tests.org.',
   alternates: { canonical: 'https://dmvsos.com/vs' },
@@ -32,7 +32,7 @@ const COMPARISON = [
   },
   {
     feature: 'Subscription auto-renew',
-    dmvsos: 'No — never',
+    dmvsos: 'No | never',
     driversed: 'Yes',
     aceable: 'No',
     drivingtests: 'N/A',
@@ -60,7 +60,7 @@ const COMPARISON = [
   },
   {
     feature: 'CDL practice',
-    dmvsos: 'Yes — General Knowledge, Air Brakes, Combination',
+    dmvsos: 'Yes | General Knowledge, Air Brakes, Combination',
     driversed: 'Yes',
     aceable: 'No',
     drivingtests: 'Yes',
@@ -81,7 +81,7 @@ const COMPARISON = [
   },
   {
     feature: 'Question source citation',
-    dmvsos: 'Yes — official handbook section under each question',
+    dmvsos: 'Yes | official handbook section under each question',
     driversed: 'No',
     aceable: 'No',
     drivingtests: 'No',
@@ -105,7 +105,7 @@ const COMPARISON = [
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
-  name: 'DMVSOS vs DriversEd, Aceable, Driving-Tests.org — Comparison',
+  name: 'DMVSOS vs DriversEd, Aceable, Driving-Tests.org | Comparison',
   description: 'Feature-by-feature comparison of leading DMV practice test platforms.',
   url: 'https://dmvsos.com/vs',
   publisher: { '@type': 'Organization', name: 'DMVSOS', url: 'https://www.dmvsos.com' },
@@ -132,7 +132,7 @@ export default function VsPage() {
           </h1>
           <p className="text-[#64748B] text-sm">
             Honest feature comparison of the four most popular DMV practice test platforms in 2026.
-            We left some boxes blank for competitors when we genuinely don&apos;t know — and called out where they win.
+            We left some boxes blank for competitors when we genuinely don&apos;t know | and called out where they win.
           </p>
         </header>
 
@@ -176,7 +176,7 @@ export default function VsPage() {
             </li>
             <li>
               <strong>Aceable</strong> if you need a state-approved teen driver ed course
-              (different product — they&apos;re mainly drivers ed, not just DMV prep).
+              (different product | they&apos;re mainly drivers ed, not just DMV prep).
             </li>
             <li>
               <strong>DriversEd.com</strong> if you want a polished subscription with call-center support
@@ -205,7 +205,7 @@ export default function VsPage() {
         </section>
 
         <p className="mt-8 text-xs text-[#94A3B8] text-center leading-relaxed">
-          Comparison data current as of 2026. Pricing and features change — verify on each provider&apos;s site before purchasing.
+          Comparison data current as of 2026. Pricing and features change | verify on each provider&apos;s site before purchasing.
           We claim no affiliation with DriversEd.com, Aceable, or Driving-Tests.org.
         </p>
       </div>

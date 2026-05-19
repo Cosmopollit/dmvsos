@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Payment Successful — DMVSOS',
+  title: 'Payment Successful | DMVSOS',
   description: 'Payment successful! You now have full access to all DMVSOS tests.',
 };
 

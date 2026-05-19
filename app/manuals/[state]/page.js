@@ -43,11 +43,11 @@ export async function generateMetadata({ params }) {
   const year = new Date().getFullYear();
 
   return {
-    title: `${name} DMV Driver Manual ${year} — Free PDF | DMVSOS`,
+    title: `${name} DMV Driver Manual ${year} | Free PDF | DMVSOS`,
     description: `Read the official ${name} driver's handbook online or download the free PDF. Study for your ${meta.abbr} DMV written test with real questions.`,
     alternates: getHreflangAlternates(`/manuals/${state}`),
     openGraph: {
-      title: `${name} DMV Driver Manual ${year} — Free PDF`,
+      title: `${name} DMV Driver Manual ${year} | Free PDF`,
       description: `Official ${name} driver's handbook. Download PDF or read online. Available in multiple languages.`,
       url: `https://www.dmvsos.com/manuals/${state}`,
       siteName: 'DMVSOS',
@@ -206,7 +206,7 @@ export default async function StateManualPage({ params }) {
           </div>
         )}
 
-        {/* PDF Downloads — grouped by category */}
+        {/* PDF Downloads | grouped by category */}
         {pdfCats.length > 0 && (
           <div className="bg-white rounded-2xl border border-[#E2E8F0] p-5 mb-5 shadow-sm">
             <h2 className="text-base font-bold text-[#0B1C3D] mb-4">
@@ -319,7 +319,7 @@ export default async function StateManualPage({ params }) {
 
       <footer className="border-t border-[#E2E8F0] py-8 text-center text-xs text-[#94A3B8]">
         <div className="max-w-lg mx-auto px-4">
-          DMVSOS.com — Free DMV Practice Tests &amp; Driver Manuals for All 50 States
+          DMVSOS.com | Free DMV Practice Tests &amp; Driver Manuals for All 50 States
         </div>
       </footer>
     </div>

@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Privacy Policy — DMVSOS',
+  title: 'Privacy Policy | DMVSOS',
   description: 'Privacy Policy for DMVSOS DMV practice test platform.',
 };
 

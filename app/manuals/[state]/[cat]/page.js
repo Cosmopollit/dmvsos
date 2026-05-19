@@ -24,7 +24,7 @@ const CAT_META = {
     faqQuestions: (name, abbr) => [
       {
         q: `How many questions are on the ${name} DMV written test?`,
-        a: `The ${name} (${abbr}) DMV written knowledge test typically consists of 20–50 multiple-choice questions. The exact number varies — check the official ${STATE_META[name]?.agency || `${name} DMV`} website for the current format.`,
+        a: `The ${name} (${abbr}) DMV written knowledge test typically consists of 20–50 multiple-choice questions. The exact number varies | check the official ${STATE_META[name]?.agency || `${name} DMV`} website for the current format.`,
       },
       {
         q: `What topics are covered in the ${name} driver's handbook?`,
@@ -32,7 +32,7 @@ const CAT_META = {
       },
       {
         q: `Is the ${name} driver's handbook available in Spanish?`,
-        a: `Many states provide their driver's handbook in multiple languages. Download links for all available languages — including Spanish, Russian, Chinese, and more — are listed above on this page.`,
+        a: `Many states provide their driver's handbook in multiple languages. Download links for all available languages | including Spanish, Russian, Chinese, and more | are listed above on this page.`,
       },
       {
         q: `How do I pass the ${name} DMV written test?`,
@@ -50,7 +50,7 @@ const CAT_META = {
     faqQuestions: (name, abbr) => [
       {
         q: `What is covered in the ${name} CDL manual?`,
-        a: `The ${name} CDL manual covers general knowledge (traffic laws, safe driving), vehicle inspection, basic vehicle control, shifting/backing, pre-trip inspections, hazardous materials, passenger transport, air brakes, and combination vehicles — following FMCSA federal guidelines.`,
+        a: `The ${name} CDL manual covers general knowledge (traffic laws, safe driving), vehicle inspection, basic vehicle control, shifting/backing, pre-trip inspections, hazardous materials, passenger transport, air brakes, and combination vehicles | following FMCSA federal guidelines.`,
       },
       {
         q: `How many questions are on the ${name} CDL general knowledge test?`,
@@ -182,15 +182,15 @@ export async function generateMetadata({ params }) {
   const year = new Date().getFullYear();
   const catInfo = CAT_META[cat];
 
-  const title = `${name} ${catInfo.label} ${year} — Free PDF | DMVSOS`;
-  const description = `Download the official ${name} ${catInfo.labelFull} (${year}) as a free PDF or read online. Study for the ${meta.abbr} ${catInfo.testLabel} — available in multiple languages.`;
+  const title = `${name} ${catInfo.label} ${year} | Free PDF | DMVSOS`;
+  const description = `Download the official ${name} ${catInfo.labelFull} (${year}) as a free PDF or read online. Study for the ${meta.abbr} ${catInfo.testLabel} | available in multiple languages.`;
 
   return {
     title,
     description,
     alternates: getHreflangAlternates(`/manuals/${state}/${cat}`),
     openGraph: {
-      title: `${name} ${catInfo.label} ${year} — Free PDF`,
+      title: `${name} ${catInfo.label} ${year} | Free PDF`,
       description,
       url: `https://www.dmvsos.com/manuals/${state}/${cat}`,
       siteName: 'DMVSOS',
@@ -233,7 +233,7 @@ export default async function StateManualCategoryPage({ params }) {
   // Online manual content (currently only car is parsed from text)
   const manual = cat === 'car' ? parseManual(state, 'car') : parseManual(state, cat);
 
-  // If no PDFs and no manual content — redirect to state page rather than show empty page
+  // If no PDFs and no manual content | redirect to state page rather than show empty page
   // (still render page, just with limited content for SEO)
 
   // Other categories for this state
@@ -356,7 +356,7 @@ export default async function StateManualCategoryPage({ params }) {
             <h2 className="text-base font-bold text-[#0B1C3D] mb-1">
               📥 Download {name} {catInfo.label} PDF
             </h2>
-            <p className="text-xs text-[#94A3B8] mb-4">Free official PDF — select your language</p>
+            <p className="text-xs text-[#94A3B8] mb-4">Free official PDF | select your language</p>
             <div className="flex flex-wrap gap-2">
               {pdfs.map(({ langCode, url }) => (
                 <a
@@ -400,7 +400,7 @@ export default async function StateManualCategoryPage({ params }) {
             {name} {catInfo.testLabel} Practice
           </h2>
           <p className="text-sm text-[#94A3B8] mb-4">
-            Real questions based on the official {name} {catInfo.label}. Free — no signup needed.
+            Real questions based on the official {name} {catInfo.label}. Free | no signup needed.
           </p>
           <Link
             href={`/test?state=${state}&category=${catInfo.testCat}&lang=${lang}`}
@@ -460,7 +460,7 @@ export default async function StateManualCategoryPage({ params }) {
           </div>
         </div>
 
-        {/* Nearby states — same category */}
+        {/* Nearby states | same category */}
         <div className="mb-8">
           <h2 className="text-sm font-bold text-[#0B1C3D] mb-3">
             {catInfo.icon} {catInfo.label} in Nearby States
@@ -489,7 +489,7 @@ export default async function StateManualCategoryPage({ params }) {
 
       <footer className="border-t border-[#E2E8F0] py-8 text-center text-xs text-[#94A3B8]">
         <div className="max-w-lg mx-auto px-4">
-          DMVSOS.com — Free DMV Practice Tests &amp; Driver Manuals for All 50 States
+          DMVSOS.com | Free DMV Practice Tests &amp; Driver Manuals for All 50 States
         </div>
       </footer>
     </div>

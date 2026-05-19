@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'My Profile — DMVSOS',
+  title: 'My Profile | DMVSOS',
   description: 'View your test history and account details.',
 };
 

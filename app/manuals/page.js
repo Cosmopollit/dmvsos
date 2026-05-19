@@ -10,16 +10,16 @@ const SUPABASE_URL = 'https://yaogndpgnewqffbjrsgz.supabase.co';
 const INDEX_URL = `${SUPABASE_URL}/storage/v1/object/public/manuals/manuals-index.json`;
 
 export const metadata = {
-  title: 'Free DMV Driver Manuals — All 50 States | DMVSOS',
+  title: 'Free DMV Driver Manuals | All 50 States | DMVSOS',
   description: 'The largest free driver manual library online. Official DMV handbooks for all 50 US states in 27 languages. Download PDF or read online.',
   alternates: getHreflangAlternates('/manuals'),
   openGraph: {
-    title: 'Free DMV Driver Manuals — All 50 States',
+    title: 'Free DMV Driver Manuals | All 50 States',
     description: 'Official DMV driver handbooks for all 50 US states. Download free PDF in 27 languages including Spanish, Russian, Chinese, and more.',
     url: 'https://www.dmvsos.com/manuals',
     siteName: 'DMVSOS',
     type: 'website',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Free DMV Driver Manuals — All 50 States' }],
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Free DMV Driver Manuals | All 50 States' }],
   },
 };
 
@@ -67,7 +67,7 @@ export default async function ManualsPage() {
     '@graph': [
       {
         '@type': 'CollectionPage',
-        name: 'Free DMV Driver Manuals — All 50 States',
+        name: 'Free DMV Driver Manuals | All 50 States',
         description: 'Official driver handbooks for all 50 US states in up to 27 languages. Free PDF download, no signup.',
         url: 'https://www.dmvsos.com/manuals',
         publisher: { '@type': 'Organization', name: 'DMVSOS', url: 'https://www.dmvsos.com' },
@@ -153,7 +153,7 @@ export default async function ManualsPage() {
         </ol>
       </nav>
 
-      {/* SEO hero — server-rendered so crawlers + AI see it immediately */}
+      {/* SEO hero | server-rendered so crawlers + AI see it immediately */}
       <section className="w-full max-w-lg mx-auto px-4 pt-2 pb-4">
         <h1 className="text-2xl sm:text-3xl font-bold text-[#0B1C3D] mb-2 leading-tight" style={{ letterSpacing: '-0.02em' }}>
           Free DMV Driver Manuals
@@ -172,7 +172,7 @@ export default async function ManualsPage() {
         </div>
       </section>
 
-      {/* Library UI — client component with search + filter */}
+      {/* Library UI | client component with search + filter */}
       <ManualsLibrary
         statesData={statesData}
         totalPdfs={totalPdfs}

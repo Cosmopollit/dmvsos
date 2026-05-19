@@ -31,31 +31,26 @@ export const viewport = {
 
 export const metadata = {
   metadataBase: new URL('https://www.dmvsos.com'),
-  title: 'DMVSOS — Pass Your DMV Test First Try',
-  description: 'Free DMV practice tests for all 50 states in 5 languages. No signup required.',
-  keywords: 'DMV practice test, driving test, DMV test 2026, free DMV test',
-  icons: {
-    icon: [
-      { url: '/favicon.ico', sizes: '16x16 32x32', type: 'image/x-icon' },
-      { url: '/logo.png', sizes: '192x192', type: 'image/png' },
-    ],
-    apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-    ],
-    shortcut: '/favicon.ico',
-  },
+  title: 'Free DMV Practice Test | 50 States | 5 Languages | DMVSOS',
+  description: 'Free DMV practice tests for all 50 states in 5 languages: English, Spanish, Russian, Ukrainian, Chinese. Sourced from official state Driver Handbooks.',
+  keywords: 'DMV practice test, free DMV test 2026, DMV test in Spanish, DMV test in Russian, DMV test in Chinese, DMV test in Ukrainian, driving test, CDL practice test, motorcycle permit test',
+  // Favicons handled by Next.js App Router conventions:
+  //   app/favicon.ico   (16/32, browser tab)
+  //   app/icon.png      (192x192 from logo.png, what Google search results use)
+  //   app/apple-icon.png (180x180)
+  // No explicit icons block - the file convention auto-injects correct <link rel> tags.
   openGraph: {
-    title: 'DMVSOS — Pass Your DMV Test First Try',
-    description: 'Free DMV practice tests for all 50 states in 5 languages. No signup required.',
+    title: 'Free DMV Practice Test | 50 States | 5 Languages | DMVSOS',
+    description: 'Free DMV practice tests for all 50 states in 5 languages: English, Spanish, Russian, Ukrainian, Chinese. Sourced from official state Driver Handbooks.',
     url: 'https://www.dmvsos.com',
     siteName: 'DMVSOS',
     type: 'website',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'DMVSOS — Free DMV Practice Tests' }],
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'DMVSOS, free DMV practice tests in 5 languages' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'DMVSOS — Pass Your DMV Test First Try',
-    description: 'Free DMV practice tests for all 50 states in 5 languages. No signup required.',
+    title: 'Free DMV Practice Test | 50 States | 5 Languages | DMVSOS',
+    description: 'Free DMV practice tests for all 50 states in 5 languages: English, Spanish, Russian, Ukrainian, Chinese. Sourced from official state Driver Handbooks.',
     images: ['/og-image.png'],
   },
   alternates: getHreflangAlternates('/'),
