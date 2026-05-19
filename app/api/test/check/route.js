@@ -1,16 +1,26 @@
 // Server-side answer check. Reveals correct_answer + explanation + manual_*
 // only for ONE question the user is actively answering.
 //
-// Scraper bypass cost: to harvest answers they must send /check for each
-// possible choice (typically 4) per question. At ~150k questions, that's
-// 600k+ requests, each rate-limited per IP. Each request is logged.
+// Phase 2: accepts opaque `q_token` (AES-GCM blob) instead of raw UUID.
+// The token is minted by /api/test/questions and contains the real DB
+// UUID + a 4-hour expiry. We decrypt server-side to recover the UUID,
+// then look up the question. Scrapers can't forge tokens (need server
+// secret) and can't replay beyond expiry.
+//
+// Scraper bypass cost: to harvest answers they must (a) get a fresh
+// token by calling /api/test/questions (rate-limited 60/10min per IP)
+// and (b) send /check within 4h for each possible choice (typically 4)
+// per question. At ~150k questions, that's 600k+ requests, each rate-
+// limited per IP. Each request is logged.
 //
 // Request:
 //   POST /api/test/check
-//   Body: { question_id: 'uuid', choice: 0..3 }
+//   Body: { q_token: 'q_...', choice: 0..3 }
 // Response (success):
 //   { ok: true, correct: boolean, correct_answer: 0..3, explanation: string,
 //     manual_section: string, manual_reference: string }
+
+import { verifyQuestionToken } from '@/lib/questionToken';
 
 const SUPA_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPA_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -43,20 +53,29 @@ function clientIp(req) {
   );
 }
 
-const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
 export async function POST(req) {
   try {
     const body = await req.json().catch(() => null);
     if (!body) return Response.json({ ok: false, error: 'bad_body' }, { status: 400 });
 
-    const { question_id, choice } = body;
-    if (typeof question_id !== 'string' || !UUID_RE.test(question_id)) {
-      return Response.json({ ok: false, error: 'bad_question_id' }, { status: 400 });
+    const { q_token, choice } = body;
+    if (typeof q_token !== 'string') {
+      return Response.json({ ok: false, error: 'bad_token' }, { status: 400 });
     }
     if (!Number.isInteger(choice) || choice < 0 || choice > 3) {
       return Response.json({ ok: false, error: 'bad_choice' }, { status: 400 });
     }
+
+    // Verify and decrypt the opaque token. Rejects:
+    //   bad_format   — not a q_ prefixed base64url string
+    //   bad_length   — wrong byte count
+    //   auth_failed  — tampered or signed with wrong secret
+    //   expired      — older than 4 hours
+    const tokenResult = verifyQuestionToken(q_token);
+    if (!tokenResult.ok) {
+      return Response.json({ ok: false, error: 'token_' + tokenResult.error }, { status: 400 });
+    }
+    const question_id = tokenResult.questionId;
 
     // Rate limit
     const ip = clientIp(req);

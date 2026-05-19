@@ -84,7 +84,7 @@ function TestContent() {
   const [reportSubmitting, setReportSubmitting] = useState(false);
   const [reportSent, setReportSent] = useState(false);
 
-  async function submitReport(questionId) {
+  async function submitReport(qToken) {
     if (!reportReason || reportSubmitting) return;
     setReportSubmitting(true);
     try {
@@ -95,7 +95,7 @@ function TestContent() {
         method: 'POST',
         headers,
         body: JSON.stringify({
-          question_id: questionId,
+          q_token: qToken,
           language: lang,
           reason: reportReason,
           comment: reportComment || null,
@@ -216,7 +216,11 @@ function TestContent() {
         const mapped = questions.map(row => {
           const answers = [row.option_a, row.option_b, row.option_c, row.option_d].filter(Boolean).map(strip);
           return {
-            id: row.id,
+            // q_token is an opaque, 4-hour-TTL AES-GCM encrypted blob
+            // wrapping the real DB UUID. Server-side only knows how to
+            // decrypt it. We pass it back to /api/test/check and
+            // /api/question-report instead of any real ID.
+            q_token: row.q_token,
             clusterCode: row.cluster_code || null,
             question: row.question_text || '',
             answers,
@@ -671,7 +675,7 @@ function TestContent() {
         const res = await fetch('/api/test/check', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ question_id: q.id, choice: index }),
+          body: JSON.stringify({ q_token: q.q_token, choice: index }),
         });
         const data = await res.json();
         if (!data.ok) throw new Error(data.error || 'check failed');
@@ -904,7 +908,7 @@ function TestContent() {
             )}
 
             {/* Bug report — tiny link under explanation */}
-            {q.id && !reportSent && !showReport && (
+            {q.q_token && !reportSent && !showReport && (
               <div className="mt-3 text-right">
                 <button
                   type="button"
@@ -962,7 +966,7 @@ function TestContent() {
                   <button
                     type="button"
                     disabled={!reportReason || reportSubmitting}
-                    onClick={() => submitReport(q.id)}
+                    onClick={() => submitReport(q.q_token)}
                     className={`flex-1 text-xs py-1.5 rounded-lg font-semibold transition ${
                       reportReason && !reportSubmitting
                         ? 'bg-[#DC2626] text-white hover:bg-[#B91C1C]'

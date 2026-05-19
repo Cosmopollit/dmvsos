@@ -1,8 +1,14 @@
 // Inline question report from /test page.
-// Body: { question_id, language, reason, comment?, user_email? }
+// Body: { q_token, language, reason, comment?, user_email? }
 // Returns: { ok: true } or { ok: false, error }
 //
+// Phase 2: accepts opaque q_token instead of raw UUID. Decrypts
+// server-side via lib/questionToken. Same scraping protection as
+// /api/test/check.
+//
 // Pings Telegram admin on each new report so we can fix fast.
+
+import { verifyQuestionToken } from '@/lib/questionToken';
 
 const SUPA_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPA_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -29,13 +35,25 @@ async function notifyAdmin(text) {
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { question_id, language, reason, comment, user_email } = body || {};
+    const { q_token, language, reason, comment, user_email } = body || {};
 
-    if (!question_id || typeof question_id !== 'string') {
-      return Response.json({ ok: false, error: 'question_id required' }, { status: 400 });
+    if (!q_token || typeof q_token !== 'string') {
+      return Response.json({ ok: false, error: 'q_token required' }, { status: 400 });
     }
     if (!VALID_REASONS.includes(reason)) {
       return Response.json({ ok: false, error: 'invalid reason' }, { status: 400 });
+    }
+
+    // Decrypt token to recover real question UUID for the DB write.
+    // We accept expired tokens here — a user might report a question
+    // after the test ended; the question still exists in DB.
+    const tokenResult = verifyQuestionToken(q_token);
+    if (!tokenResult.ok && tokenResult.error !== 'expired') {
+      return Response.json({ ok: false, error: 'bad_token' }, { status: 400 });
+    }
+    const question_id = tokenResult.questionId;
+    if (!question_id) {
+      return Response.json({ ok: false, error: 'bad_token' }, { status: 400 });
     }
 
     // Try to extract user_id from Authorization Bearer (if logged in)

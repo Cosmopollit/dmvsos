@@ -1,15 +1,22 @@
-// Server-side question fetcher with rate limiting.
+// Server-side question fetcher with rate limiting + opaque tokens.
+//
+// Phase 2 of the anti-scraping stack. Real UUIDs never leave the
+// server — each question is tagged with a one-shot `q_token` that's
+// an AES-GCM encrypted blob containing the real ID + 4-hour expiry.
+// See lib/questionToken.js for token format.
 //
 // Replaces the previous client-side `supabase.from('questions').select(...)`
 // pattern so anon API key can no longer be used to dump the question bank.
 //
-// Rate limit: 200 questions per IP per 10 minutes (default).
-// Generous for legitimate users (max real test = 80 questions); painful
-// for scrapers trying to pull all 150k. Combine with RLS that denies
-// anon SELECT on the questions table for stronger defense.
+// Rate limit: 60 requests per IP per 10 minutes (default).
+// Generous for legitimate users; painful for scrapers trying to pull all
+// 150k. Combine with RLS that denies anon SELECT on the questions table
+// for stronger defense.
 //
 // Request: GET /api/test/questions?state=X&category=Y&language=Z&limit=80
 // Response: { ok: true, questions: [...] }   or   { ok: false, error: 'rate_limited' }
+
+import { mintQuestionToken } from '@/lib/questionToken';
 
 const SUPA_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPA_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -123,7 +130,17 @@ export async function GET(req) {
       const text = await r.text();
       return Response.json({ ok: false, error: 'db', detail: text.slice(0, 200) }, { status: 500 });
     }
-    const questions = await r.json();
+    const rawQuestions = await r.json();
+
+    // Strip real UUIDs and mint opaque tokens. The token decrypts only
+    // server-side via lib/questionToken; the client never sees real IDs.
+    // This makes the question DB non-enumerable: scrapers can't iterate
+    // ids, can't replay tokens beyond 4 hours, can't forge tokens
+    // without QUESTION_TOKEN_SECRET.
+    const questions = rawQuestions.map(({ id, ...rest }) => ({
+      ...rest,
+      q_token: mintQuestionToken(id),
+    }));
 
     return Response.json(
       { ok: true, questions },
