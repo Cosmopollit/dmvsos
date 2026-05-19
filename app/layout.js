@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "@/lib/AuthContext";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { getHreflangAlternates } from "@/lib/hreflang";
 import PersonalGreeting from "./components/PersonalGreeting";
 import NastyaGreeting from "./NastyaGreeting";
@@ -175,6 +176,17 @@ export default async function RootLayout({ children }) {
         </AuthProvider>
         <Analytics />
         <SpeedInsights />
+        {/*
+          GA4. @next/third-parties/google injects gtag.js with
+          strategy="afterInteractive" so it doesn't block LCP.
+          Gated on production so dev sessions don't pollute the property.
+          Preview deployments on Vercel also have NODE_ENV=production —
+          if you want to exclude previews, switch to checking
+          process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'.
+        */}
+        {process.env.NODE_ENV === 'production' && (
+          <GoogleAnalytics gaId="G-JGE08M8VEW" />
+        )}
       </body>
     </html>
   );
