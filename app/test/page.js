@@ -27,18 +27,22 @@ function TestContent() {
   const [lang, setLangState] = useState(params.get('lang') || getSavedLang());
   const [showLangMenu, setShowLangMenu] = useState(false);
   const currentLang = langs.find(l => l.code === lang) || langs[0];
-  // Set when user switches lang mid-test; the post-refetch effect uses this
-  // to replace the active questions slice with translations in the new lang
-  // and reset progress (questions don't carry cluster_code client-side, so
-  // 1:1 preservation isn't possible without a backend round-trip).
-  const pendingLangSwitchRef = useRef(false);
-  function switchLang(code) {
-    if (code === lang) { setShowLangMenu(false); return; }
-    pendingLangSwitchRef.current = true;
-    setLangState(code);
-    saveLang(code);
-    setShowLangMenu(false);
-  }
+  function switchLang(code) { setLangState(code); saveLang(code); setShowLangMenu(false); }
+
+  // Per-question reference view in an alternate language. Two flows:
+  //   1. Test is in non-EN, alt is EN (see canonical original)
+  //   2. Test is in EN (DMV format), alt is the user's saved native lang
+  //      (so they can verify they understand a tricky question)
+  // Cached by [clusterCode][altLang] so toggling direction is free after fetch.
+  const [altViewCache, setAltViewCache] = useState({}); // { [clusterCode]: { [altLang]: {question, answers, notFound?} } }
+  const [showAltView, setShowAltView] = useState(false);
+  const [fetchingAltView, setFetchingAltView] = useState(false);
+  // Determine which language to show as reference:
+  //   - If primary test lang is EN: alt is user's saved lang (or 'ru' as fallback for immigrants)
+  //   - Otherwise: alt is 'en' (canonical)
+  const savedLang = (typeof window !== 'undefined') ? getSavedLang() : 'ru';
+  const altLang = lang === 'en' ? (savedLang !== 'en' ? savedLang : 'ru') : 'en';
+  const altLangMeta = langs.find(l => l.code === altLang) || langs[0];
   const isRetry = params.get('retry') === 'true';
   const tex = t[lang] || t.en;
 
@@ -220,6 +224,7 @@ function TestContent() {
           const answers = [row.option_a, row.option_b, row.option_c, row.option_d].filter(Boolean).map(strip);
           return {
             id: row.id,
+            clusterCode: row.cluster_code || null,
             question: row.question_text || '',
             answers,
             correctAnswerIndex: null,    // populated by submitAnswer() after /check
@@ -243,26 +248,44 @@ function TestContent() {
       });
   }, [state, category, lang, isRetry, subcategory]);
 
-  // After a mid-test language switch, replace the active questions slice with
-  // the freshly-refetched translations and reset progress. Restart (not
-  // resume) because we don't have cluster_codes client-side to do a 1:1 swap.
-  useEffect(() => {
-    if (!pendingLangSwitchRef.current) return;
-    if (allQuestions.length === 0) return;
-    if (testMode == null) { pendingLangSwitchRef.current = false; return; }
-    const len = questions.length || allQuestions.length;
-    setQuestions(allQuestions.slice(0, Math.min(len, allQuestions.length)));
-    setCurrent(0);
-    setScore(0);
-    setUserAnswers([]);
-    userAnswersRef.current = [];
-    setSelected(null);
-    setShowAnswer(false);
-    setShowManualQuote(false);
-    setShowReport(false); setReportReason(""); setReportComment(""); setReportSent(false);
-    setElapsed(0);
-    pendingLangSwitchRef.current = false;
-  }, [allQuestions, testMode]);
+  // Close the alt view when moving between questions
+  useEffect(() => { setShowAltView(false); }, [current]);
+
+  async function fetchAltView(clusterCode, targetLang) {
+    if (!clusterCode || !targetLang) return;
+    if (altViewCache[clusterCode]?.[targetLang]) return;
+    setFetchingAltView(true);
+    try {
+      const categoryMap = { dmv: 'car', cdl: 'cdl', moto: 'motorcycle' };
+      const mappedCategory = categoryMap[category] || category;
+      const qs = new URLSearchParams({
+        state, category: mappedCategory, language: targetLang,
+        cluster_codes: clusterCode, limit: '1',
+      });
+      if (subcategory) qs.set('subcategory', subcategory);
+      const r = await fetch('/api/test/questions?' + qs, { cache: 'no-store' });
+      const data = await r.json();
+      const strip = s => (s || '').replace(/^[A-DА-Га-гa-d]\.\s*/, '').trim();
+      const setForLang = (val) => setAltViewCache(prev => ({
+        ...prev,
+        [clusterCode]: { ...(prev[clusterCode] || {}), [targetLang]: val },
+      }));
+      if (data.ok && data.questions?.length) {
+        const row = data.questions[0];
+        const answers = [row.option_a, row.option_b, row.option_c, row.option_d].filter(Boolean).map(strip);
+        setForLang({ question: row.question_text || '', answers });
+      } else {
+        setForLang({ question: '', answers: [], notFound: true });
+      }
+    } catch (_) {
+      setAltViewCache(prev => ({
+        ...prev,
+        [clusterCode]: { ...(prev[clusterCode] || {}), [targetLang]: { question: '', answers: [], notFound: true } },
+      }));
+    } finally {
+      setFetchingAltView(false);
+    }
+  }
 
   function startWithMode(mode) {
     const realLimits = { dmv: 40, car: 40, cdl: 50, moto: 30, motorcycle: 30 };
@@ -758,22 +781,7 @@ function TestContent() {
             <Image src="/logo.png" alt="DMVSOS" width={24} height={24} className="rounded-md" />
             <span className="text-sm font-bold text-[#0B1C3D]">DMVSOS</span>
           </Link>
-          <div className="relative">
-            <button type="button" onClick={() => setShowLangMenu(v => !v)} onBlur={() => setTimeout(() => setShowLangMenu(false), 150)}
-              className="flex items-center gap-1 text-[11px] font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-2 py-1 hover:border-[#2563EB] transition-colors">
-              <span>{currentLang.flag}</span><span>{currentLang.label}</span><span className="text-[#94A3B8] text-[9px] ml-0.5">▾</span>
-            </button>
-            {showLangMenu && (
-              <div className="absolute right-0 top-full mt-1 bg-white border border-[#E2E8F0] rounded-xl shadow-lg z-50 py-1 min-w-[90px]">
-                {langs.map(l => (
-                  <button key={l.code} type="button" onMouseDown={() => switchLang(l.code)}
-                    className={`w-full text-left px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 hover:bg-[#F8FAFC] transition-colors ${lang === l.code ? 'text-[#2563EB]' : 'text-[#64748B]'}`}>
-                    <span>{l.flag}</span> <span>{l.label}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+          <div className="w-12" />
         </div>
 
         <div className="flex items-center justify-between mb-5">
@@ -804,9 +812,47 @@ function TestContent() {
             </div>
           )}
 
-          <p className="text-[17px] font-bold text-[#1E293B] leading-relaxed mb-6">
+          <p className="text-[17px] font-bold text-[#1E293B] leading-relaxed mb-3">
             {(q.question || '').replace(/^\d+\.\s*/, '')}
           </p>
+
+          {altLang !== lang && q.clusterCode && (
+            <div className="mb-5">
+              <button
+                type="button"
+                onClick={async () => {
+                  const next = !showAltView;
+                  setShowAltView(next);
+                  if (next) await fetchAltView(q.clusterCode, altLang);
+                }}
+                className="text-xs font-semibold text-[#2563EB] hover:underline inline-flex items-center gap-1.5"
+              >
+                <span>{altLangMeta.flag}</span>
+                <span>{showAltView ? `Hide ${altLangMeta.label}` : `View in ${altLangMeta.label}`}</span>
+                {fetchingAltView && <span className="inline-block w-3 h-3 border-2 border-[#2563EB] border-t-transparent rounded-full animate-spin ml-1" />}
+              </button>
+              {showAltView && altViewCache[q.clusterCode]?.[altLang] && (
+                <div className="mt-2 p-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl">
+                  {altViewCache[q.clusterCode][altLang].notFound ? (
+                    <p className="text-xs text-[#94A3B8] italic">No {altLangMeta.label} version available.</p>
+                  ) : (
+                    <>
+                      <p className="text-[14px] font-semibold text-[#0B1C3D] leading-relaxed mb-2">
+                        {(altViewCache[q.clusterCode][altLang].question || '').replace(/^\d+\.\s*/, '')}
+                      </p>
+                      <div className="flex flex-col gap-1">
+                        {altViewCache[q.clusterCode][altLang].answers.map((a, i) => (
+                          <div key={i} className="text-[13px] text-[#475569] leading-snug">
+                            <span className="font-semibold mr-1.5 text-[#0B1C3D]">{['A','B','C','D'][i]}.</span>{a}
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="flex flex-col gap-2.5">
             {q.answers.map((opt, i) => {

@@ -96,13 +96,25 @@ export async function GET(req) {
     // Those are revealed per-question only via /api/test/check after the user picks an answer.
     // Protects against scrapers harvesting answer+explanation in one bulk fetch.
     const params = new URLSearchParams({
-      select: 'id,question_text,option_a,option_b,option_c,option_d,image_url',
+      select: 'id,cluster_code,question_text,option_a,option_b,option_c,option_d,image_url',
       state: 'eq.' + state,
       category: 'eq.' + category,
       language: 'eq.' + language,
       limit: String(limit),
     });
     if (subcategory) params.set('subcategory', 'eq.' + subcategory);
+
+    // Optional cluster_codes filter — used by client when switching language
+    // mid-test to fetch in-place translations for the currently active question
+    // set. Sanitized: only alphanumeric + underscore allowed in codes; max 100.
+    const clusterCsv = url.searchParams.get('cluster_codes');
+    if (clusterCsv) {
+      const codes = clusterCsv.split(',').slice(0, 100).filter(c => /^[a-z0-9_]{1,40}$/i.test(c));
+      if (codes.length > 0) {
+        const quoted = codes.map(c => `"${c}"`).join(',');
+        params.set('cluster_code', `in.(${quoted})`);
+      }
+    }
 
     const r = await fetch(`${SUPA_URL}/rest/v1/questions?${params}`, {
       headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY },
