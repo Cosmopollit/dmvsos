@@ -33,7 +33,11 @@ const VALID_STATES = new Set([
 ]);
 const VALID_CATEGORIES = new Set(['car', 'cdl', 'motorcycle']);
 const VALID_LANGUAGES = new Set(['en', 'ru', 'ua', 'es', 'zh']);
-const VALID_SUBCATEGORIES = new Set(['general_knowledge', 'air_brakes', 'combination']);
+// DB stores the third one as 'combination_vehicles' (78 rows per language for
+// WA CDL). The shorter form 'combination' here used to make this route reject
+// the URL the frontend actually sends, falling back to the "questions in this
+// language coming soon" empty state even when 78 translated questions existed.
+const VALID_SUBCATEGORIES = new Set(['general_knowledge', 'air_brakes', 'combination_vehicles']);
 const MAX_LIMIT = 200;
 const DEFAULT_LIMIT = 80;
 
