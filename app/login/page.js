@@ -8,6 +8,24 @@ import { t } from '@/lib/translations';
 import { getSavedLang } from '@/lib/lang';
 import SupportFooter from '@/app/components/SupportFooter';
 
+// OAuth provider availability. Toggle each flag to true ONLY after the
+// matching provider is fully configured in Supabase Dashboard →
+// Authentication → Providers, with the correct callback URL whitelisted.
+//
+// Until configured, the button is hidden so users don't click into a
+// dead-end OAuth flow. Google is currently the only working third-party
+// provider (71% of historical signups come through it).
+//
+// Apple setup:    requires an Apple Developer account ($99/yr), a
+//                 Services ID, a Key ID, and a signed JWT secret. See
+//                 https://supabase.com/docs/guides/auth/social-login/auth-apple
+// Facebook setup: requires a Facebook App at developers.facebook.com,
+//                 App ID + App Secret pasted into Supabase, plus the
+//                 callback URL added to the App's Valid OAuth Redirect
+//                 URIs list. Privacy Policy URL must point to /privacy.
+const ENABLE_APPLE_OAUTH = false;
+const ENABLE_FACEBOOK_OAUTH = false;
+
 const GoogleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" className="shrink-0">
     <path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/>
@@ -128,22 +146,26 @@ function LoginContent() {
           <GoogleIcon />
           {tex.continueGoogle}
         </button>
-        <button
-          type="button"
-          onClick={handleAppleSignIn}
-          className="w-full bg-black text-white py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#1a1a1a] transition-all"
-        >
-          <AppleIcon />
-          {tex.continueApple}
-        </button>
-        <button
-          type="button"
-          onClick={handleFacebookSignIn}
-          className="w-full bg-[#1877F2] text-white py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#166FE5] transition-all"
-        >
-          <FacebookIcon />
-          {tex.continueFacebook}
-        </button>
+        {ENABLE_APPLE_OAUTH && (
+          <button
+            type="button"
+            onClick={handleAppleSignIn}
+            className="w-full bg-black text-white py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#1a1a1a] transition-all"
+          >
+            <AppleIcon />
+            {tex.continueApple}
+          </button>
+        )}
+        {ENABLE_FACEBOOK_OAUTH && (
+          <button
+            type="button"
+            onClick={handleFacebookSignIn}
+            className="w-full bg-[#1877F2] text-white py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#166FE5] transition-all"
+          >
+            <FacebookIcon />
+            {tex.continueFacebook}
+          </button>
+        )}
 
         {/* Divider */}
         <div className="flex items-center gap-3 my-4">

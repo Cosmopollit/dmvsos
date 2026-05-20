@@ -118,7 +118,7 @@ export default function Home() {
         name: 'What is the Pass Guarantee?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: `CDL Pro (${PASS_META.cdl.price}, 30-day access) includes a 100% money-back guarantee if you fail your CDL test, plus direct support via Telegram and WhatsApp in your language.`,
+          text: `CDL Pro (${PASS_META.cdl.price}, 30-day access) includes a 100% money-back guarantee if you fail your CDL test, plus direct support via Telegram in your language.`,
         },
       },
     ],
