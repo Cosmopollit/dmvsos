@@ -126,3 +126,4 @@ translation-quality-audit.csv
 .bulk-retranslate-stale.json.bak
 translation-quality-audit-*.json
 translation-quality-audit-*.csv
+.bulk-verify-quality-*.json.lostbk

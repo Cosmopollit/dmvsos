@@ -55,10 +55,14 @@ const PROGRESS_FILE = path.join(__dirname, '..', `.bulk-verify-quality-${scope |
 // ─── Supabase helpers ──────────────────────────────────────────────────────
 
 async function sbAll(query, fields, pageSize = 1000) {
+  // ORDER BY id is required — without it Postgres returns rows in
+  // non-deterministic order across pages, producing duplicates on some pages
+  // and silently dropping others. Symptom: total count looks right but a
+  // subset of rows is missing from the snapshot.
   const all = [];
   let offset = 0;
   for (;;) {
-    const url = `${SUPABASE_URL}/rest/v1/questions?select=${fields}&${query}&limit=${pageSize}&offset=${offset}`;
+    const url = `${SUPABASE_URL}/rest/v1/questions?select=${fields}&${query}&order=id.asc&limit=${pageSize}&offset=${offset}`;
     const r = await fetch(url, { headers: { apikey: SERVICE_KEY, Authorization: 'Bearer ' + SERVICE_KEY } });
     if (!r.ok) throw new Error(`${r.status}: ${(await r.text()).slice(0, 200)}`);
     const rows = await r.json();
@@ -85,6 +89,8 @@ function saveProgress(p) { fs.writeFileSync(PROGRESS_FILE, JSON.stringify(p, nul
 
 // ─── Verify call ───────────────────────────────────────────────────────────
 
+const DECISION_ENUM = ['keep', 'fix_distractors', 'rewrite', 'delete'];
+
 async function verifyCluster(en) {
   const res = await fetch(`${SERVER}/api/admin/verify-quality`, {
     method: 'POST',
@@ -99,6 +105,15 @@ async function verifyCluster(en) {
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+  // Defense-in-depth: server normalizes too, but reject any leaked garbage
+  // so we never persist invalid decisions to .bulk-verify-quality-*.json.
+  const v = data.verdict;
+  if (!v || !DECISION_ENUM.includes(v.decision)) {
+    throw new Error(`malformed verdict: decision=${JSON.stringify(v?.decision)}`);
+  }
+  if (!Number.isInteger(v.quality_score) || v.quality_score < 1 || v.quality_score > 5) {
+    throw new Error(`malformed verdict: quality_score=${JSON.stringify(v?.quality_score)}`);
+  }
   return data;
 }
 

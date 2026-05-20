@@ -113,6 +113,39 @@ Evaluate two things and call submit_verification:
 Be strict but fair. This is for a real test prep platform serving people preparing for the actual DMV exam.`;
 }
 
+// ─── Verdict normalizer ───────────────────────────────────────────────────
+// Anthropic's tool-use occasionally leaks raw XML tags into string values
+// (e.g. `keep</decision>\n<parameter name="reasoning">...`) or omits a
+// required enum field. Strip tag-bleed, then validate enums — throw if we
+// can't recover, so callClaude's retry loop gets another shot.
+
+const DECISION_ENUM = ['keep', 'fix_distractors', 'rewrite', 'delete'];
+const CORRECTNESS_ENUM = ['correct', 'wrong', 'ambiguous', 'invalid'];
+
+function stripTagBleed(s) {
+  if (typeof s !== 'string') return s;
+  const lt = s.indexOf('<');
+  return (lt >= 0 ? s.slice(0, lt) : s).trim();
+}
+
+function normalizeVerdict(v) {
+  if (!v || typeof v !== 'object') throw new Error('verdict not an object');
+  v.decision = stripTagBleed(v.decision);
+  v.correctness_verdict = stripTagBleed(v.correctness_verdict);
+  if (!Array.isArray(v.quality_issues)) v.quality_issues = [];
+  if (!Array.isArray(v.absurd_distractors)) v.absurd_distractors = [];
+  if (!DECISION_ENUM.includes(v.decision)) {
+    throw new Error(`malformed verdict: decision=${JSON.stringify(v.decision)}`);
+  }
+  if (!CORRECTNESS_ENUM.includes(v.correctness_verdict)) {
+    throw new Error(`malformed verdict: correctness_verdict=${JSON.stringify(v.correctness_verdict)}`);
+  }
+  if (!Number.isInteger(v.quality_score) || v.quality_score < 1 || v.quality_score > 5) {
+    throw new Error(`malformed verdict: quality_score=${JSON.stringify(v.quality_score)}`);
+  }
+  return v;
+}
+
 // ─── Sonnet caller ─────────────────────────────────────────────────────────
 
 async function callClaude(prompt, model = DEFAULT_MODEL, maxTokens = 2048) {
@@ -157,10 +190,11 @@ async function callClaude(prompt, model = DEFAULT_MODEL, maxTokens = 2048) {
       const data = await r.json();
       const tu = data.content?.find((b) => b.type === 'tool_use');
       if (!tu) throw new Error('No tool_use in response');
+      const verdict = normalizeVerdict(tu.input);
       const inputTok = data.usage?.input_tokens || 0;
       const outputTok = data.usage?.output_tokens || 0;
       const cost = (inputTok / 1e6) * priceIn + (outputTok / 1e6) * priceOut;
-      return { verdict: tu.input, cost, model };
+      return { verdict, cost, model };
     } catch (e) {
       lastErr = e;
       if (attempt === 4) break;

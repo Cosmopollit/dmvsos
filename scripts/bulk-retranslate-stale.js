@@ -57,7 +57,11 @@ async function fetchStaleClusters() {
   let offset = 0;
   const PAGE = 1000;
   for (;;) {
-    let url = `${SB}/rest/v1/questions?select=state,category,subcategory,cluster_code&category=eq.${CATEGORY}&language=neq.en&translation_stale_at=not.is.null&cluster_code=not.is.null&limit=${PAGE}&offset=${offset}`;
+    // ORDER BY id is required — without it, Postgres returns rows in
+    // non-deterministic order across pages, producing duplicates on some
+    // pages and silently dropping rows on others (snapshot looks the right
+    // size but a subset is missing).
+    let url = `${SB}/rest/v1/questions?select=state,category,subcategory,cluster_code&category=eq.${CATEGORY}&language=neq.en&translation_stale_at=not.is.null&cluster_code=not.is.null&order=id.asc&limit=${PAGE}&offset=${offset}`;
     if (SUBCATEGORY) url += `&subcategory=eq.${SUBCATEGORY}`;
     const r = await fetch(url, { headers: { apikey: KEY, Authorization: 'Bearer ' + KEY } });
     if (!r.ok) throw new Error(`SELECT ${r.status}: ${(await r.text()).slice(0, 200)}`);
