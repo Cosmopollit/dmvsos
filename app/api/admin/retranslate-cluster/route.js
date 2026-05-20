@@ -8,7 +8,9 @@ const supabase = createClient(
 
 // ─── config ────────────────────────────────────────────────────────────────
 
-const HAIKU_MODEL = 'claude-haiku-4-5-20251001';
+const HAIKU_MODEL  = 'claude-haiku-4-5-20251001';
+const SONNET_MODEL = 'claude-sonnet-4-6';
+const MODELS = { haiku: HAIKU_MODEL, sonnet: SONNET_MODEL };
 const ALL_LANGS = ['ru', 'es', 'zh', 'ua'];
 const LANG_NAMES = {
   ru: 'Russian',
@@ -66,7 +68,7 @@ D: ${en.option_d}
 Explanation: ${en.explanation || 'null'}`;
 }
 
-async function callAnthropic(prompt, maxTokens = 2048) {
+async function callAnthropic(prompt, modelId, maxTokens = 2048) {
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -75,7 +77,7 @@ async function callAnthropic(prompt, maxTokens = 2048) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: HAIKU_MODEL,
+      model: modelId,
       max_tokens: maxTokens,
       tools: [TOOL_SCHEMA],
       tool_choice: { type: 'tool', name: TOOL_SCHEMA.name },
@@ -89,9 +91,9 @@ async function callAnthropic(prompt, maxTokens = 2048) {
   return toolUse.input;
 }
 
-async function translateOne(en, lang) {
+async function translateOne(en, lang, modelId) {
   const prompt = buildPrompt(en, LANG_NAMES[lang]);
-  const out = await callAnthropic(prompt);
+  const out = await callAnthropic(prompt, modelId);
   if (!out?.question_text) throw new Error('Missing question_text in tool output');
   return out;
 }
@@ -157,13 +159,18 @@ export async function POST(req) {
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: 'Bad JSON' }, { status: 400 }); }
 
-  const { password, cluster_code, state, category, subcategory, langs } = body;
+  const { password, cluster_code, state, category, subcategory, langs, model } = body;
   if (!checkAdminPassword(password)) return Response.json({ error: 'Unauthorized' }, { status: 401 });
   if (!cluster_code || !state || !category) {
     return Response.json({ error: 'cluster_code, state, category required' }, { status: 400 });
   }
   if (!process.env.ANTHROPIC_API_KEY) {
     return Response.json({ error: 'ANTHROPIC_API_KEY not set on server' }, { status: 500 });
+  }
+  const modelKey = (model || 'haiku').toLowerCase();
+  const modelId  = MODELS[modelKey];
+  if (!modelId) {
+    return Response.json({ error: `Unknown model "${model}". Use one of: ${Object.keys(MODELS).join(', ')}` }, { status: 400 });
   }
 
   // Fetch EN row (source of truth)
@@ -189,7 +196,7 @@ export async function POST(req) {
   // Parallel translation
   const results = await Promise.all(targetLangs.map(async (lang) => {
     try {
-      const translated = await translateOne(en, lang);
+      const translated = await translateOne(en, lang, modelId);
       if (!passesQualityGate(translated, lang, en.question_text)) {
         return { lang, ok: false, error: 'failed_quality_gate' };
       }
@@ -205,6 +212,7 @@ export async function POST(req) {
   return Response.json({
     ok: true,
     cluster_code,
+    model: modelKey,
     success,
     total: results.length,
     results,
