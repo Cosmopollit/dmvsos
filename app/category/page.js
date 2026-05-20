@@ -52,7 +52,7 @@ function CategoryContent() {
     <main className="min-h-screen flex flex-col items-center justify-center p-6 relative" style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}>
       {/* Header */}
       <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
-        <button type="button" onClick={() => router.back()} className="text-sm text-[#94A3B8] hover:text-[#2563EB] transition font-medium">
+        <button type="button" onClick={() => router.push(`/?lang=${lang}`)} className="text-sm text-[#94A3B8] hover:text-[#2563EB] transition font-medium">
           {tex.back}
         </button>
         <Link href="/" className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition">
