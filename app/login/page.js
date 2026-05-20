@@ -24,7 +24,7 @@ import SupportFooter from '@/app/components/SupportFooter';
 //                 callback URL added to the App's Valid OAuth Redirect
 //                 URIs list. Privacy Policy URL must point to /privacy.
 const ENABLE_APPLE_OAUTH = false;
-const ENABLE_FACEBOOK_OAUTH = false;
+const ENABLE_FACEBOOK_OAUTH = true;
 
 const GoogleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" className="shrink-0">
