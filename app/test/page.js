@@ -819,7 +819,7 @@ function TestContent() {
               >
                 {!hasFullAccess && <span className="text-[10px]">🔒</span>}
                 <span>🇺🇸</span>
-                <span>{showAltView ? (tex.hideOriginal || 'Hide original') : (tex.viewOriginal || 'View original question')}</span>
+                <span>{showAltView ? (tex.hideOriginal || 'Hide DMV original') : (tex.viewOriginal || 'View DMV original question')}</span>
                 {!hasFullAccess && <span className="text-[9px] font-bold text-[#F59E0B] uppercase tracking-wide ml-1">Pro</span>}
                 {fetchingAltView && <span className="inline-block w-3 h-3 border-2 border-[#2563EB] border-t-transparent rounded-full animate-spin ml-1" />}
               </button>
