@@ -636,7 +636,7 @@ function TestContent() {
           )}
           <div className="flex flex-col gap-2">
             {canFallbackToEnglish && (
-              <button type="button" onClick={() => router.push(testUrl)}
+              <button type="button" onClick={() => { saveLang('en'); window.location.href = testUrl; }}
                 className="bg-[#2563EB] text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-[#1D4ED8] transition">
                 {tex.tryInEnglish || 'Try in English 🇺🇸'}
               </button>
