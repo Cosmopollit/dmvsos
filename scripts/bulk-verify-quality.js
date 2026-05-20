@@ -171,14 +171,12 @@ async function runPool(items, fn, concurrency) {
   console.log(`  ${en.length} EN clusters total`);
 
   // 2. Build work list — skip already verified unless --force
+  // DB state is the source of truth: progress.done can contain stale entries
+  // pointing to row ids that were replaced by cluster reconciliation, so we
+  // never gate on it alone. Skip only when the DB row actually has a score.
   const work = [];
   for (const e of en) {
-    const key = `${e.state}|${e.cluster_code}`;
-    if (progress.done[key]) continue;
-    if (!FORCE && e.quality_score != null) {
-      // Already verified in a previous run (outside progress.json)
-      continue;
-    }
+    if (!FORCE && e.quality_score != null) continue;
     work.push(e);
   }
   console.log(`\nWork to do: ${work.length} clusters`);
