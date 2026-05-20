@@ -11,6 +11,7 @@ import { STATE_OPTIONS, stateToSlug } from '@/lib/states';
 import { flags } from '@/lib/flags';
 import { PASS_META, EXTENSION } from '@/lib/plans';
 import SupportFooter from '@/app/components/SupportFooter';
+import WelcomeBanner from '@/app/components/WelcomeBanner';
 
 const codeToName = { en: 'English', ru: 'Русский', es: 'Español', zh: '中文', ua: 'Українська' };
 
@@ -129,6 +130,14 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: faqJsonLd }}
       />
+
+      {/* Welcome banner for fresh signups (variant=welcome) or post-purchase
+          users on their first session after going Pro (variant=pro). Returns
+          null silently when there is nothing to show, so no extra layout cost
+          for returning users. */}
+      <div className="fixed top-0 left-0 right-0 z-50">
+        <WelcomeBanner />
+      </div>
 
       {/* Background blobs */}
       <div className="fixed top-[-200px] right-[-200px] w-[600px] h-[600px] rounded-full pointer-events-none"

@@ -8,6 +8,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { flags } from '@/lib/flags';
+import WelcomeBanner from '@/app/components/WelcomeBanner';
 import { planForCategory } from '@/lib/plans';
 
 const langs = [
@@ -463,6 +464,12 @@ function TestContent() {
 
     return (
       <main className="min-h-screen flex flex-col items-center justify-center p-6 relative" style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}>
+        {/* Welcome banner — shows once for fresh signups, once for new Pro users.
+            Lives above the header so it doesn't collide with the back/logo row. */}
+        <div className="fixed top-0 left-0 right-0 z-50">
+          <WelcomeBanner />
+        </div>
+
         {/* Header */}
         <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
           <button type="button" onClick={() => router.push(`/category?state=${state}&lang=${lang}`)}
