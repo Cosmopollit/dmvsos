@@ -26,6 +26,17 @@ import SupportFooter from '@/app/components/SupportFooter';
 const ENABLE_APPLE_OAUTH = false;
 const ENABLE_FACEBOOK_OAUTH = true;
 
+// Per-language note shown below the Facebook button while Meta is still
+// reviewing the email-permission Advanced Access request. Once Meta
+// approves (target window ~10 days), drop this constant + its render.
+const FB_REVIEW_NOTE = {
+  en: 'Facebook login is currently in review at Meta. If it fails, please use Google or email above.',
+  ru: 'Вход через Facebook сейчас на проверке у Meta. Если не сработает, используйте Google или email выше.',
+  ua: 'Вхід через Facebook на перевірці у Meta. Якщо не спрацює, використайте Google або email вище.',
+  es: 'El inicio con Facebook está en revisión por Meta. Si falla, usa Google o el correo electrónico arriba.',
+  zh: 'Facebook 登录正在 Meta 审核中。如果失败，请使用上方的 Google 或邮箱登录。',
+};
+
 const GoogleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" className="shrink-0">
     <path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/>
@@ -157,14 +168,19 @@ function LoginContent() {
           </button>
         )}
         {ENABLE_FACEBOOK_OAUTH && (
-          <button
-            type="button"
-            onClick={handleFacebookSignIn}
-            className="w-full bg-[#1877F2] text-white py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#166FE5] transition-all"
-          >
-            <FacebookIcon />
-            {tex.continueFacebook}
-          </button>
+          <>
+            <button
+              type="button"
+              onClick={handleFacebookSignIn}
+              className="w-full bg-[#1877F2] text-white py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-2 hover:bg-[#166FE5] transition-all"
+            >
+              <FacebookIcon />
+              {tex.continueFacebook}
+            </button>
+            <p className="text-[11px] leading-snug text-[#94A3B8] mb-3 px-1">
+              {FB_REVIEW_NOTE[lang] || FB_REVIEW_NOTE.en}
+            </p>
+          </>
         )}
 
         {/* Divider */}
