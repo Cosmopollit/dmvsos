@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 import { getHreflangAlternates } from '@/lib/hreflang';
+import SiteHeader from '@/app/components/SiteHeader';
+import SupportFooter from '@/app/components/SupportFooter';
 
 export const metadata = {
   title: 'Free DMV Practice Tests  ·  All 50 States 2026 | DMVSOS',
@@ -50,18 +51,7 @@ export default function DmvTestIndexPage() {
       <div className="fixed top-[-200px] right-[-200px] w-[600px] h-[600px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(26,86,219,0.08) 0%, transparent 70%)' }} />
 
-      {/* Header */}
-      <header className="w-full max-w-lg mx-auto pt-5 pb-3 px-4">
-        <div className="flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition">
-            <Image src="/logo.png" alt="DMVSOS" width={32} height={32} className="rounded-lg" />
-            <span className="text-lg font-bold text-[#0B1C3D]" style={{ letterSpacing: '-0.02em' }}>DMVSOS</span>
-          </Link>
-          <Link href="/" className="text-sm font-medium text-[#2563EB] hover:text-[#1D4ED8] transition">
-            ← Home
-          </Link>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="max-w-lg mx-auto px-4 pb-16">
 
@@ -137,7 +127,9 @@ export default function DmvTestIndexPage() {
 
       </main>
 
-      <footer className="border-t border-[#E2E8F0] py-8 text-center text-xs text-[#94A3B8]">
+      <SupportFooter />
+
+      <footer className="border-t border-[#E2E8F0] py-6 text-center text-xs text-[#94A3B8]">
         <div className="max-w-lg mx-auto px-4">
           <p>DMVSOS.com  ·  Free DMV Practice Tests for All 50 States</p>
           <p className="mt-1">
