@@ -127,3 +127,9 @@ translation-quality-audit.csv
 translation-quality-audit-*.json
 translation-quality-audit-*.csv
 .bulk-verify-quality-*.json.lostbk
+
+# bulk-translate-fresh progress + dated rollback/preview snapshots
+.cdl-translate-fresh.json
+.cdl-cluster-unclustered-*.json
+.cdl-deletes-rollback-*.json
+.bulk-verify-quality-*.json.bak-*
