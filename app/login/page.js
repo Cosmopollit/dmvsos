@@ -70,21 +70,22 @@ function LoginContent() {
   const [emailLoading, setEmailLoading] = useState(false);
   const [emailError, setEmailError] = useState('');
 
-  // After login we want users to land somewhere they can actually do
-  // something. The home page is a state-selector that the user has
-  // already passed once to reach /login, so dumping them back there is
-  // a dead end. Default destination is /test (which itself defaults to
-  // washington/car/en if no params present); callers can override via
-  // ?next=/some/path on the login URL so a user who clicked "Sign in"
-  // from a specific /test page returns to that exact page.
+  // After login Supabase redirects here with ?code=... — we hand it
+  // straight to Supabase JS SDK on the home page, which auto-exchanges
+  // the code (`detectSessionInUrl: true` is on by default).
   //
-  // Server-side /auth/callback already validates `next` (must start
-  // with '/', not '//') and performs the redirect after exchanging the
-  // OAuth code for a session.
+  // We previously routed through a custom /auth/callback handler that
+  // pushed users to /test, but that path is not in Supabase's Redirect
+  // URL whitelist for this project and any OAuth attempt silently
+  // failed: the OAuth flow completed cosmetically (user lands on
+  // /test) but no session cookie was set. Reverted to plain
+  // window.location.origin which IS whitelisted by default.
+  //
+  // If we want to land users on /test after sign-in later, the right
+  // fix is to (a) whitelist dmvsos.com/auth/callback in Supabase
+  // Dashboard → Auth → URL Configuration, then (b) route through it.
   function authRedirectTo() {
-    const next = searchParams.get('next');
-    const safeNext = next && next.startsWith('/') && !next.startsWith('//') ? next : '/test';
-    return window.location.origin + '/auth/callback?next=' + encodeURIComponent(safeNext);
+    return window.location.origin;
   }
 
   async function handleGoogleSignIn() {
