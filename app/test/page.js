@@ -8,6 +8,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { flags } from '@/lib/flags';
+import { STATE_META } from '@/lib/manual-data';
 import { planForCategory } from '@/lib/plans';
 
 const langs = [
@@ -819,7 +820,7 @@ function TestContent() {
               >
                 {!hasFullAccess && <span className="text-[10px]">🔒</span>}
                 <span>🇺🇸</span>
-                <span>{showAltView ? (tex.hideOriginal || 'Hide DMV original') : (tex.viewOriginal || 'View DMV original question')}</span>
+                <span>{(showAltView ? (tex.hideOriginal || 'Hide {agency} original') : (tex.viewOriginal || 'View {agency} original question')).replace('{agency}', STATE_META[state]?.dmvAbbr || 'DMV')}</span>
                 {!hasFullAccess && <span className="text-[9px] font-bold text-[#F59E0B] uppercase tracking-wide ml-1">Pro</span>}
                 {fetchingAltView && <span className="inline-block w-3 h-3 border-2 border-[#2563EB] border-t-transparent rounded-full animate-spin ml-1" />}
               </button>
