@@ -816,9 +816,13 @@ function TestContent() {
                   setShowAltView(next);
                   if (next) await fetchAltView(q.clusterCode);
                 }}
-                className={`text-xs font-semibold inline-flex items-center gap-1.5 ${hasFullAccess ? 'text-[#2563EB] hover:underline' : 'text-[#64748B] hover:text-[#2563EB]'}`}
+                className={
+                  hasFullAccess
+                    ? 'text-xs font-semibold inline-flex items-center gap-1.5 text-[#2563EB] hover:underline'
+                    : 'group inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-gradient-to-r from-[#FEF3C7] to-[#FFEDD5] border border-[#FCD34D] text-[#92400E] hover:from-[#FDE68A] hover:to-[#FED7AA] hover:border-[#F59E0B] hover:-translate-y-0.5 hover:shadow-md transition-all duration-150'
+                }
               >
-                {!hasFullAccess && <span className="text-[10px]">🔒</span>}
+                {!hasFullAccess && <span className="text-[12px] leading-none">✨</span>}
                 <span>🇺🇸</span>
                 <span>{(
                   showAltView
@@ -827,7 +831,11 @@ function TestContent() {
                       ? (tex.viewOriginal || 'View {agency} original question')
                       : (tex.viewOriginalLocked || tex.viewOriginal || 'View {agency} original + more Pro features')
                 ).replace('{agency}', agencyAbbrForState(state))}</span>
-                {!hasFullAccess && <span className="text-[9px] font-bold text-[#F59E0B] uppercase tracking-wide ml-1">Pro</span>}
+                {!hasFullAccess && (
+                  <span className="text-[9px] font-extrabold uppercase tracking-wider ml-1 px-1.5 py-0.5 rounded bg-[#F59E0B] text-white shadow-sm">
+                    Pro
+                  </span>
+                )}
                 {fetchingAltView && <span className="inline-block w-3 h-3 border-2 border-[#2563EB] border-t-transparent rounded-full animate-spin ml-1" />}
               </button>
               {hasFullAccess && showAltView && altViewCache[q.clusterCode] && (
