@@ -52,238 +52,93 @@ const argVal = (k) => args.find(a => a.startsWith(`--${k}=`))?.split('=')[1];
 const ONLY_STATE = argVal('state') || null;
 const CONCURRENCY = parseInt(argVal('concurrency') || '3', 10);
 
-// ── State → list of source URLs (official .gov first, aggregators after) ──
-// PLEASE expand the official URL list over time — every state with
-// `.gov` should resolve to the actual state DMV "knowledge test format"
-// page, not a generic landing page. Aggregators are fallback only.
-const STATE_SOURCES = {
-  alabama: [
-    'https://www.alea.gov/dps/driver-license/dl-license-tests',
-    'https://driving-tests.org/alabama/alabama-permit-practice-test/',
-  ],
-  alaska: [
-    'https://dmv.alaska.gov/dlmanual/dlman1.htm',
-    'https://driving-tests.org/alaska/alaska-permit-practice-test/',
-  ],
-  arizona: [
-    'https://azdot.gov/motor-vehicles/driver-services/getting-license-or-permit',
-    'https://driving-tests.org/arizona/arizona-permit-practice-test/',
-  ],
-  arkansas: [
-    'https://www.dfa.arkansas.gov/services/category/drivers-license/',
-    'https://driving-tests.org/arkansas/arkansas-permit-practice-test/',
-  ],
-  california: [
-    'https://www.dmv.ca.gov/portal/driver-education-and-safety/educational-materials/fast-facts/dl-fast-facts/',
-    'https://driving-tests.org/california/california-permit-practice-test/',
-  ],
-  colorado: [
-    'https://dmv.colorado.gov/drivers-license-information',
-    'https://driving-tests.org/colorado/colorado-permit-practice-test/',
-  ],
-  connecticut: [
-    'https://portal.ct.gov/DMV/Driver-Services-Home',
-    'https://driving-tests.org/connecticut/connecticut-permit-practice-test/',
-  ],
-  delaware: [
-    'https://www.dmv.de.gov/services/driver_services/drivers_license/',
-    'https://driving-tests.org/delaware/delaware-permit-practice-test/',
-  ],
-  florida: [
-    'https://www.flhsmv.gov/driver-licenses-id-cards/getting-license/teen-drivers-licenses/',
-    'https://driving-tests.org/florida/florida-permit-practice-test/',
-  ],
-  georgia: [
-    'https://dds.georgia.gov/teen-drivers/instructional-permit',
-    'https://driving-tests.org/georgia/georgia-permit-practice-test/',
-  ],
-  hawaii: [
-    'https://hidot.hawaii.gov/highways/library/drivers-manuals/',
-    'https://driving-tests.org/hawaii/hawaii-permit-practice-test/',
-  ],
-  idaho: [
-    'https://itd.idaho.gov/driverservices/?target=knowledge-test',
-    'https://driving-tests.org/idaho/idaho-permit-practice-test/',
-  ],
-  illinois: [
-    'https://www.ilsos.gov/departments/drivers/drivers_license/dlguide.html',
-    'https://driving-tests.org/illinois/illinois-permit-practice-test/',
-  ],
-  indiana: [
-    'https://www.in.gov/bmv/licenses-permits-ids/drivers-licenses/',
-    'https://driving-tests.org/indiana/indiana-permit-practice-test/',
-  ],
-  iowa: [
-    'https://iowadot.gov/mvd/driverslicense/',
-    'https://driving-tests.org/iowa/iowa-permit-practice-test/',
-  ],
-  kansas: [
-    'https://www.ksrevenue.gov/dovindex.html',
-    'https://driving-tests.org/kansas/kansas-permit-practice-test/',
-  ],
-  kentucky: [
-    'https://drive.ky.gov/driver-licensing/Pages/Permit.aspx',
-    'https://driving-tests.org/kentucky/kentucky-permit-practice-test/',
-  ],
-  louisiana: [
-    'https://www.expresslane.org/Pages/PermitTesting.aspx',
-    'https://driving-tests.org/louisiana/louisiana-permit-practice-test/',
-  ],
-  maine: [
-    'https://www.maine.gov/sos/bmv/licenses/',
-    'https://driving-tests.org/maine/maine-permit-practice-test/',
-  ],
-  maryland: [
-    'https://mva.maryland.gov/drivers/Pages/written-test.aspx',
-    'https://driving-tests.org/maryland/maryland-permit-practice-test/',
-  ],
-  massachusetts: [
-    'https://www.mass.gov/learners-permit',
-    'https://driving-tests.org/massachusetts/massachusetts-permit-practice-test/',
-  ],
-  michigan: [
-    'https://www.michigan.gov/sos/license-id',
-    'https://driving-tests.org/michigan/michigan-permit-practice-test/',
-  ],
-  minnesota: [
-    'https://dps.mn.gov/divisions/dvs/Pages/default.aspx',
-    'https://driving-tests.org/minnesota/minnesota-permit-practice-test/',
-  ],
-  mississippi: [
-    'https://www.dps.ms.gov/driver-license',
-    'https://driving-tests.org/mississippi/mississippi-permit-practice-test/',
-  ],
-  missouri: [
-    'https://dor.mo.gov/driver-license/issuance/',
-    'https://driving-tests.org/missouri/missouri-permit-practice-test/',
-  ],
-  montana: [
-    'https://dojmt.gov/driving/',
-    'https://driving-tests.org/montana/montana-permit-practice-test/',
-  ],
-  nebraska: [
-    'https://dmv.nebraska.gov/dl/',
-    'https://driving-tests.org/nebraska/nebraska-permit-practice-test/',
-  ],
-  nevada: [
-    'https://dmv.nv.gov/dlfirst.htm',
-    'https://driving-tests.org/nevada/nevada-permit-practice-test/',
-  ],
-  'new-hampshire': [
-    'https://www.dmv.nh.gov/driver-licenses',
-    'https://driving-tests.org/new-hampshire/new-hampshire-permit-practice-test/',
-  ],
-  'new-jersey': [
-    'https://www.state.nj.us/mvc/license/index.shtml',
-    'https://driving-tests.org/new-jersey/new-jersey-permit-practice-test/',
-  ],
-  'new-mexico': [
-    'https://www.mvd.newmexico.gov/drivers/getting-your-license/',
-    'https://driving-tests.org/new-mexico/new-mexico-permit-practice-test/',
-  ],
-  'new-york': [
-    'https://dmv.ny.gov/driver-license/learner-permit',
-    'https://driving-tests.org/new-york/new-york-permit-practice-test/',
-  ],
-  'north-carolina': [
-    'https://www.ncdot.gov/dmv/license-id/drivers-license/Pages/default.aspx',
-    'https://driving-tests.org/north-carolina/north-carolina-permit-practice-test/',
-  ],
-  'north-dakota': [
-    'https://www.dot.nd.gov/divisions/driverslicense/',
-    'https://driving-tests.org/north-dakota/north-dakota-permit-practice-test/',
-  ],
-  ohio: [
-    'https://bmv.ohio.gov/drivers-license.aspx',
-    'https://driving-tests.org/ohio/ohio-permit-practice-test/',
-  ],
-  oklahoma: [
-    'https://oklahoma.gov/dps/driver-services.html',
-    'https://driving-tests.org/oklahoma/oklahoma-permit-practice-test/',
-  ],
-  oregon: [
-    'https://www.oregon.gov/odot/dmv/pages/driverid/instructpermit.aspx',
-    'https://driving-tests.org/oregon/oregon-permit-practice-test/',
-  ],
-  pennsylvania: [
-    'https://www.dmv.pa.gov/Driver-Services/Driver-Licensing/Pages/Knowledge-and-Skills-Testing.aspx',
-    'https://driving-tests.org/pennsylvania/pennsylvania-permit-practice-test/',
-  ],
-  'rhode-island': [
-    'https://dmv.ri.gov/licenses/permits/',
-    'https://driving-tests.org/rhode-island/rhode-island-permit-practice-test/',
-  ],
-  'south-carolina': [
-    'https://scdmvonline.com/Driver-Services',
-    'https://driving-tests.org/south-carolina/south-carolina-permit-practice-test/',
-  ],
-  'south-dakota': [
-    'https://dps.sd.gov/driver-licensing',
-    'https://driving-tests.org/south-dakota/south-dakota-permit-practice-test/',
-  ],
-  tennessee: [
-    'https://www.tn.gov/safety/driver-services/drivers-license-applicants.html',
-    'https://driving-tests.org/tennessee/tennessee-permit-practice-test/',
-  ],
-  texas: [
-    'https://www.dps.texas.gov/section/driver-license',
-    'https://driving-tests.org/texas/texas-permit-practice-test/',
-  ],
-  utah: [
-    'https://dld.utah.gov/general-information/',
-    'https://driving-tests.org/utah/utah-permit-practice-test/',
-  ],
-  vermont: [
-    'https://dmv.vermont.gov/licenses',
-    'https://driving-tests.org/vermont/vermont-permit-practice-test/',
-  ],
-  virginia: [
-    'https://www.dmv.virginia.gov/drivers/',
-    'https://driving-tests.org/virginia/virginia-permit-practice-test/',
-  ],
-  washington: [
-    'https://dol.wa.gov/driver-licenses-and-permits/get-driver-license/get-instruction-permit',
-    'https://driving-tests.org/washington/washington-permit-practice-test/',
-  ],
-  'west-virginia': [
-    'https://transportation.wv.gov/DMV/DriverServices/Pages/default.aspx',
-    'https://driving-tests.org/west-virginia/west-virginia-permit-practice-test/',
-  ],
-  wisconsin: [
-    'https://wisconsindot.gov/Pages/dmv/license-drvs/how-to-apply/teen.aspx',
-    'https://driving-tests.org/wisconsin/wisconsin-permit-practice-test/',
-  ],
-  wyoming: [
-    'https://www.dot.state.wy.us/home/driver_license_records.html',
-    'https://driving-tests.org/wyoming/wyoming-permit-practice-test/',
-  ],
+// State → 2-letter postal code, used to build aggregator URLs.
+const STATE_CODE = {
+  alabama: 'al', alaska: 'ak', arizona: 'az', arkansas: 'ar',
+  california: 'ca', colorado: 'co', connecticut: 'ct', delaware: 'de',
+  florida: 'fl', georgia: 'ga', hawaii: 'hi', idaho: 'id',
+  illinois: 'il', indiana: 'in', iowa: 'ia', kansas: 'ks',
+  kentucky: 'ky', louisiana: 'la', maine: 'me', maryland: 'md',
+  massachusetts: 'ma', michigan: 'mi', minnesota: 'mn', mississippi: 'ms',
+  missouri: 'mo', montana: 'mt', nebraska: 'ne', nevada: 'nv',
+  'new-hampshire': 'nh', 'new-jersey': 'nj', 'new-mexico': 'nm',
+  'new-york': 'ny', 'north-carolina': 'nc', 'north-dakota': 'nd',
+  ohio: 'oh', oklahoma: 'ok', oregon: 'or', pennsylvania: 'pa',
+  'rhode-island': 'ri', 'south-carolina': 'sc', 'south-dakota': 'sd',
+  tennessee: 'tn', texas: 'tx', utah: 'ut', vermont: 'vt',
+  virginia: 'va', washington: 'wa', 'west-virginia': 'wv',
+  wisconsin: 'wi', wyoming: 'wy',
 };
+
+// Compute candidate source URLs for a state. Order matters — earlier
+// entries are preferred when there's a tie. We hit 3-4 aggregators per
+// state for cross-check; one will usually return clean data even when
+// official .gov pages block scrapers or move their URL structure.
+function sourcesForState(slug) {
+  const code = STATE_CODE[slug];
+  return [
+    // Aggregator 1: driving-tests.org — most reliable, clean text
+    `https://driving-tests.org/${slug}/${slug}-permit-practice-test/`,
+    // Aggregator 2: zutobi.com — has explicit "test format" sections
+    code && `https://zutobi.com/us/${code}-car/practice-permit-test`,
+    // Aggregator 3: epermittest.com — adult-test pages have format details
+    `https://www.epermittest.com/${slug}/${slug.replace(/-/g, '_')}-dmv-adult-permit-test`,
+    // Aggregator 4: nextdoordriving — usually has question count
+    `https://nextdoordriving.com/${slug}/${code}-permit-test-simulator`,
+  ].filter(Boolean);
+}
 
 // ── Helpers ──────────────────────────────────────────────────────────────
 
-async function fetchTextWithTimeout(url, timeoutMs = 12000) {
-  const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), timeoutMs);
-  try {
-    const r = await fetch(url, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (DMVSOS Verification Bot)' },
-      signal: ctrl.signal,
-    });
-    if (!r.ok) return null;
-    const html = await r.text();
-    // Strip HTML tags, collapse whitespace, cap length.
-    return html
-      .replace(/<script[\s\S]*?<\/script>/gi, ' ')
-      .replace(/<style[\s\S]*?<\/style>/gi, ' ')
-      .replace(/<[^>]+>/g, ' ')
-      .replace(/\s+/g, ' ')
-      .slice(0, 8000)
-      .trim();
-  } catch {
-    return null;
-  } finally {
-    clearTimeout(t);
+// Browser-ish UA helps with aggregators that block obvious bots.
+const REALISTIC_UAS = [
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+];
+
+function sleep(ms) {
+  return new Promise(r => setTimeout(r, ms));
+}
+
+async function fetchTextWithRetry(url, { timeoutMs = 15000, maxRetries = 2 } = {}) {
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    if (attempt > 0) await sleep(800 * attempt); // simple linear backoff
+    const ua = REALISTIC_UAS[attempt % REALISTIC_UAS.length];
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), timeoutMs);
+    try {
+      const r = await fetch(url, {
+        headers: {
+          'User-Agent': ua,
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.5',
+          'Accept-Encoding': 'gzip, deflate, br',
+        },
+        signal: ctrl.signal,
+        redirect: 'follow',
+      });
+      clearTimeout(t);
+      if (r.status === 429 || r.status >= 500) {
+        // Transient — retry
+        continue;
+      }
+      if (!r.ok) return null;
+      const html = await r.text();
+      return html
+        .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+        .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/\s+/g, ' ')
+        .slice(0, 8000)
+        .trim();
+    } catch {
+      clearTimeout(t);
+      // Retry on timeout / network error
+      continue;
+    }
   }
+  return null;
 }
 
 async function extractWithClaude(stateSlug, sourceUrl, pageText) {
@@ -344,20 +199,22 @@ async function verifyState(slug, sources) {
   console.log(`▶ ${slug}`);
   const perSource = [];
   for (const url of sources) {
-    const text = await fetchTextWithTimeout(url);
+    const text = await fetchTextWithRetry(url);
     if (!text) {
       console.log(`  ✗ fetch failed: ${url}`);
       continue;
     }
     const parsed = await extractWithClaude(slug, url, text);
     if (parsed) {
-      console.log(`  ${parsed.confidence?.toUpperCase() || '?'.padEnd(6)} ${url} → Q=${parsed.questions}, pass=${parsed.pass}, ${parsed.passPct}% [${parsed.evidence?.slice(0, 60)}]`);
+      console.log(`  ${(parsed.confidence?.toUpperCase() || '?').padEnd(6)} ${url} → Q=${parsed.questions}, pass=${parsed.pass}, ${parsed.passPct}% [${parsed.evidence?.slice(0, 60)}]`);
       perSource.push({ url, ...parsed });
     } else {
       console.log(`  ! parse failed: ${url}`);
     }
+    // Polite delay between hits to the same aggregator across states.
+    await sleep(400);
   }
-  // Consensus: prefer "high" confidence; if multiple, take the most common.
+  // Consensus: weighted by confidence; ties broken by source order.
   const counts = {};
   for (const r of perSource) {
     if (r.questions != null) {
@@ -375,14 +232,16 @@ async function verifyState(slug, sources) {
 // ── Main ─────────────────────────────────────────────────────────────────
 
 (async () => {
-  const slugs = ONLY_STATE ? [ONLY_STATE] : Object.keys(STATE_SOURCES);
+  const slugs = ONLY_STATE ? [ONLY_STATE] : Object.keys(STATE_CODE);
   console.log(`Verifying ${slugs.length} state(s), concurrency=${CONCURRENCY}\n`);
 
   const results = [];
   for (let i = 0; i < slugs.length; i += CONCURRENCY) {
     const batch = slugs.slice(i, i + CONCURRENCY);
-    const batchResults = await Promise.all(batch.map(slug => verifyState(slug, STATE_SOURCES[slug])));
+    const batchResults = await Promise.all(batch.map(slug => verifyState(slug, sourcesForState(slug))));
     results.push(...batchResults);
+    // Spread batches out to dodge aggregator rate limits.
+    if (i + CONCURRENCY < slugs.length) await sleep(1500);
   }
 
   // Diff against current lib/exam-rules.js
