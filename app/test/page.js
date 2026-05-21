@@ -9,6 +9,7 @@ import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { flags } from '@/lib/flags';
 import { agencyAbbrForState } from '@/lib/agencies';
+import { examRulesFor } from '@/lib/exam-rules';
 import { planForCategory } from '@/lib/plans';
 
 const langs = [
@@ -278,7 +279,11 @@ function TestContent() {
   }
 
   function startWithMode(mode) {
-    const realLimits = { dmv: 40, car: 40, cdl: 50, moto: 30, motorcycle: 30 };
+    // Real-exam count comes from the state's actual DMV format
+    // (25 for WA, 30 for TX, 46 for CA, etc.) — see lib/exam-rules.js.
+    // Fallback 40 covers unknown state/category combos.
+    const realFromState = examRulesFor(state, category)?.questions;
+    const realLimits = { dmv: realFromState || 40, car: realFromState || 40, cdl: 50, moto: realFromState || 30, motorcycle: realFromState || 30 };
     const limits = { free: freeLimit, real: realLimits[category] || 40, extended: 80, marathon: Infinity };
     const limit = limits[mode] ?? 40;
     setQuestions(allQuestions.slice(0, Math.min(limit, allQuestions.length)));
@@ -414,7 +419,12 @@ function TestContent() {
   // Mode selector  ·  shown to ALL users (free and pro) before test starts
   if (!testMode && allQuestions.length) {
     const totalAvailable = allQuestions.length;
-    const realCount = Math.min(({ dmv: 40, car: 40, cdl: 50, moto: 30, motorcycle: 30 })[category] || 40, totalAvailable);
+    // Per-state real-exam count: WA has 25, TX has 30, CA has 46, etc.
+    // examRulesFor returns { questions, pass } for the (state, category)
+    // pair; falls back to the old 40/30/50 defaults if not in the table.
+    const stateRule = examRulesFor(state, category);
+    const fallbackByCategory = { dmv: 40, car: 40, cdl: 50, moto: 30, motorcycle: 30 };
+    const realCount = Math.min(stateRule?.questions || fallbackByCategory[category] || 40, totalAvailable);
     const modes = [
       ...(!hasFullAccess ? [{
         id: 'free',
