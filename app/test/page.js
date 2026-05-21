@@ -820,7 +820,13 @@ function TestContent() {
               >
                 {!hasFullAccess && <span className="text-[10px]">🔒</span>}
                 <span>🇺🇸</span>
-                <span>{(showAltView ? (tex.hideOriginal || 'Hide {agency} original') : (tex.viewOriginal || 'View {agency} original question')).replace('{agency}', agencyAbbrForState(state))}</span>
+                <span>{(
+                  showAltView
+                    ? (tex.hideOriginal || 'Hide {agency} original')
+                    : hasFullAccess
+                      ? (tex.viewOriginal || 'View {agency} original question')
+                      : (tex.viewOriginalLocked || tex.viewOriginal || 'View {agency} original + more Pro features')
+                ).replace('{agency}', agencyAbbrForState(state))}</span>
                 {!hasFullAccess && <span className="text-[9px] font-bold text-[#F59E0B] uppercase tracking-wide ml-1">Pro</span>}
                 {fetchingAltView && <span className="inline-block w-3 h-3 border-2 border-[#2563EB] border-t-transparent rounded-full animate-spin ml-1" />}
               </button>
