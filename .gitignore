@@ -133,3 +133,6 @@ translation-quality-audit-*.csv
 .cdl-cluster-unclustered-*.json
 .cdl-deletes-rollback-*.json
 .bulk-verify-quality-*.json.bak-*
+
+# State exam rules verification output (regenerated)
+.state-exam-rules-verification.json
