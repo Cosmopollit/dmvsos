@@ -38,7 +38,11 @@ const VALID_LANGUAGES = new Set(['en', 'ru', 'ua', 'es', 'zh']);
 // the URL the frontend actually sends, falling back to the "questions in this
 // language coming soon" empty state even when 78 translated questions existed.
 const VALID_SUBCATEGORIES = new Set(['general_knowledge', 'air_brakes', 'combination_vehicles']);
-const MAX_LIMIT = 200;
+// Cap covers the biggest legitimate need: CA CDL has 352 EN questions and
+// Pro users on "marathon" mode expect to actually see all of them. Was 200,
+// which silently truncated the marathon for every CDL state. Anti-scraping
+// still leans on the per-IP rate limit (60 req/10min) below.
+const MAX_LIMIT = 500;
 const DEFAULT_LIMIT = 80;
 
 // In-memory rate limiter. Per-instance state on Vercel; resets on cold start

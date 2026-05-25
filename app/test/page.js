@@ -186,8 +186,10 @@ function TestContent() {
     const mappedCategory = categoryMap[category] || category;
     // Server-side fetch — anon Supabase key no longer dumps the question bank.
     // Endpoint enforces per-IP rate limit + input validation.
+    // limit=500 covers the biggest bank (CA CDL = 352). Smaller states
+    // just return their actual count. "Marathon" mode then truly = all.
     const qsParams = new URLSearchParams({
-      state, category: mappedCategory, language: lang, limit: '200',
+      state, category: mappedCategory, language: lang, limit: '500',
     });
     if (subcategory) qsParams.set('subcategory', subcategory);
     fetch('/api/test/questions?' + qsParams, { cache: 'no-store' })
