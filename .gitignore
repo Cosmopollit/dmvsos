@@ -136,3 +136,10 @@ translation-quality-audit-*.csv
 
 # State exam rules verification output (regenerated)
 .state-exam-rules-verification.json
+
+# motorcycle pipeline: rewrite progress + dated rollback snapshots
+.bulk-rewrite-motorcycle.json
+.bulk-rewrite-motorcycle.json.bak-*
+.bulk-rewrite-cdl.json.bak-*
+.moto-deletes-rollback-*.json
+.bulk-retranslate-stale.json.bak-*
