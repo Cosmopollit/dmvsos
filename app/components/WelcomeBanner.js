@@ -45,9 +45,11 @@ export default function WelcomeBanner() {
   const tex = t[lang] || t.en;
   const isPremium = variant === 'pro';
 
-  // Display name: prefer first part of full_name, fall back to email prefix.
+  // Display name: prefer first part of full_name, fall back to email prefix
+  // (stripped of any +suffix alias and of any dot-separators).
   const fullName = user.user_metadata?.full_name || user.user_metadata?.name || '';
-  const firstName = fullName.split(' ')[0] || (user.email || '').split('@')[0] || '';
+  const emailPrefix = (user.email || '').split('@')[0].split('+')[0].replace(/[._-]+/g, ' ').trim();
+  const firstName = fullName.split(' ')[0] || emailPrefix.split(' ')[0] || '';
 
   function handleDismiss() {
     const storageKey = `dmvsos_wb_${variant}_${user.id}`;
