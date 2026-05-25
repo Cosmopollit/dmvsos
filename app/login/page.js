@@ -60,7 +60,12 @@ function LoginContent() {
   const [emailError, setEmailError] = useState('');
   const [awaitingConfirmEmail, setAwaitingConfirmEmail] = useState('');
   const [resendStatus, setResendStatus] = useState('idle'); // 'idle' | 'sending' | 'sent'
-  const [providerHint, setProviderHint] = useState(''); // 'google' | 'facebook' | 'apple' | ''
+  // True when the email exists with no password identity (OAuth-only).
+  // Set to true → render an inline hint pointing the user back to the
+  // OAuth buttons above the form. We deliberately don't store which
+  // provider — disclosing it lets phishers map "this email is on Google"
+  // and craft a targeted attack.
+  const [oauthCollision, setOauthCollision] = useState(false);
 
   // After login Supabase redirects here with ?code=... — we hand it
   // straight to Supabase JS SDK on the home page, which auto-exchanges
@@ -110,40 +115,37 @@ function LoginContent() {
     });
   }
 
-  // Returns the OAuth provider this email is already attached to, if any.
-  // Used to steer users away from creating a duplicate account (sign-up)
-  // and to explain "Invalid credentials" errors (sign-in into an
-  // OAuth-only account).
-  async function lookupExistingProvider(emailToCheck) {
+  // Returns true if this email is already registered AND has no
+  // email/password identity — i.e. it's an OAuth-only account. The
+  // caller uses this to either block sign-up (would create a useless
+  // duplicate) or to explain a sign-in failure (the user has no
+  // password to type, they need to click their OAuth button).
+  async function isOauthOnlyEmail(emailToCheck) {
     try {
       const r = await fetch('/api/auth/check-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: emailToCheck }),
       });
-      if (!r.ok) return '';
+      if (!r.ok) return false;
       const d = await r.json();
-      if (!d.exists) return '';
-      const provs = d.providers || [];
-      // If user has an email/password identity, no collision — they can sign in normally.
-      if (provs.includes('email')) return '';
-      return provs.find(p => p !== 'email') || '';
-    } catch { return ''; }
+      return Boolean(d.exists && !d.hasPassword);
+    } catch { return false; }
   }
 
   async function handleEmailAuth(e) {
     e.preventDefault();
     setEmailLoading(true);
     setEmailError('');
-    setProviderHint('');
+    setOauthCollision(false);
     try {
       if (isSignUp) {
         // Pre-check: if this email is already a Google/Facebook account,
         // signing up would silently create a second auth.users row whose
         // user_id can't see the original's pro purchases. Block here and
-        // tell the user to use the original provider.
-        const conflict = await lookupExistingProvider(email);
-        if (conflict) { setProviderHint(conflict); return; }
+        // point the user back at the OAuth buttons above.
+        const collision = await isOauthOnlyEmail(email);
+        if (collision) { setOauthCollision(true); return; }
 
         const { data, error } = await supabase.auth.signUp({
           email,
@@ -173,8 +175,8 @@ function LoginContent() {
         // "Invalid credentials" is also returned when the email exists
         // only as an OAuth account (no password set). Detect that and
         // surface a useful hint instead of a dead-end error.
-        const conflict = await lookupExistingProvider(email);
-        if (conflict) { setProviderHint(conflict); return; }
+        const collision = await isOauthOnlyEmail(email);
+        if (collision) { setOauthCollision(true); return; }
         setEmailError(error.message);
         return;
       }
@@ -297,29 +299,11 @@ function LoginContent() {
             className="w-full px-4 py-3 rounded-xl border border-[#E2E8F0] text-sm text-[#1E293B] placeholder-[#94A3B8] focus:border-[#2563EB] focus:outline-none transition"
           />
           {emailError && <p className="text-xs text-[#DC2626]">{emailError}</p>}
-          {providerHint && (
-            <div className="rounded-xl border border-[#F59E0B] bg-[#FEF3C7] p-3 space-y-2">
+          {oauthCollision && (
+            <div className="rounded-xl border border-[#F59E0B] bg-[#FEF3C7] p-3">
               <p className="text-xs text-[#B45309]">
-                {(tex.emailAlreadyUsesProvider || '')
-                  .replaceAll('{provider}', providerHint.charAt(0).toUpperCase() + providerHint.slice(1))}
+                {tex.emailUsesOtherSignInMethod}
               </p>
-              <button
-                type="button"
-                onClick={() => {
-                  if (providerHint === 'google') handleGoogleSignIn();
-                  else if (providerHint === 'facebook') handleFacebookSignIn();
-                  else if (providerHint === 'apple') handleAppleSignIn();
-                }}
-                className={`w-full py-2 rounded-lg text-sm font-medium transition ${
-                  providerHint === 'facebook' ? 'bg-[#1877F2] text-white hover:bg-[#166FE5]'
-                  : providerHint === 'apple' ? 'bg-black text-white hover:bg-[#1a1a1a]'
-                  : 'bg-white border border-[#E2E8F0] text-[#1E293B] hover:bg-[#F8FAFC]'
-                }`}
-              >
-                {providerHint === 'facebook' ? tex.signInWithFacebookCta
-                  : providerHint === 'apple' ? tex.signInWithAppleCta
-                  : tex.signInWithGoogleCta}
-              </button>
             </div>
           )}
           <button
