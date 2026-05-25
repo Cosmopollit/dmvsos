@@ -537,17 +537,23 @@ function TestContent() {
                 );
               }
 
-              // Locked card  ·  interactive lock on hover, click opens upgrade modal
+              // Locked card  ·  click goes straight to /upgrade. Bottom strip
+              // is the unlock CTA so free users see the offer + price without
+              // an extra modal click in the way.
+              const stateDisplayName = state ? state.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ') : '';
+              const unlockCtaText = (tex.unlockAllStateTests || 'Unlock all {state} tests · {price}')
+                .replace('{state}', stateDisplayName)
+                .replace('{price}', plan.price);
               return (
                 <button
                   key={m.id}
                   type="button"
                   onMouseEnter={() => setLockAnimKey(k => ({ ...k, [m.id]: (k[m.id] || 0) + 1 }))}
-                  onClick={() => setShowLockModal(true)}
-                  className="rounded-2xl pt-5 px-5 pb-8 flex items-center gap-4 text-left border-2 border-white/40 shadow-md transition-all hover:shadow-lg relative overflow-hidden cursor-pointer"
-                  style={{ background: m.gradient, opacity: 0.85 }}>
+                  onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
+                  className="rounded-2xl pt-5 px-5 pb-10 flex items-center gap-4 text-left border-2 border-white/40 shadow-md transition-all hover:shadow-lg relative overflow-hidden cursor-pointer"
+                  style={{ background: m.gradient, opacity: 0.92 }}>
                   {/* Dimming overlay */}
-                  <div className="absolute inset-0 bg-white/30 pointer-events-none rounded-2xl" />
+                  <div className="absolute inset-0 bg-white/25 pointer-events-none rounded-2xl" />
                   <span className="text-3xl relative" style={{ filter: 'grayscale(0.3)' }}>{m.icon}</span>
                   <div className="flex-1 relative">
                     <div className="font-bold text-[#1E293B]">{m.label}</div>
@@ -568,11 +574,12 @@ function TestContent() {
                       🔒
                     </span>
                   </div>
-                  {/* Guaranteed pass badge — shimmer bottom strip */}
-                  <div className="badge-shimmer absolute bottom-0 left-0 right-0 flex items-center justify-center gap-1.5 py-1.5 rounded-b-2xl">
-                    <span style={{ fontSize: 11 }}>🛡️</span>
-                    <span className="text-[10px] font-bold tracking-wider uppercase" style={{ color: '#92400E' }}>
-                      CDL Pro · 99%
+                  {/* Unlock CTA — replaces the old "CDL Pro · 99%" shimmer.
+                      Shows state name + price so the offer is concrete. */}
+                  <div className="badge-shimmer absolute bottom-0 left-0 right-0 flex items-center justify-center gap-1.5 py-2 rounded-b-2xl">
+                    <span style={{ fontSize: 12 }}>🔓</span>
+                    <span className="text-[11px] font-bold tracking-wide" style={{ color: '#92400E' }}>
+                      {unlockCtaText} →
                     </span>
                   </div>
                 </button>
