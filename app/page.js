@@ -295,24 +295,21 @@ export default function Home() {
         </p>
       </section>
 
-      {/* Free-value strip: surfaces what's already free so users see it before paywall */}
+      {/* Benefit checklist  ·  three concrete outcome-shaped lines so the user
+          immediately sees what's on offer. Replaces an older 5-pill strip
+          that mostly duplicated the subtitle. */}
       <div className="w-full max-w-md mx-auto px-4 mb-5">
-        <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-[11px] font-medium text-[#475569]">
-          <span className="inline-flex items-center gap-1">🆓 {tex.freeStripPractice}</span>
-          <span className="text-[#CBD5E1]">·</span>
-          <Link href="/manuals" className="inline-flex items-center gap-1 hover:text-[#2563EB] transition-colors">
-            📖 {tex.freeStripManuals}
-          </Link>
-          <span className="text-[#CBD5E1]">·</span>
-          <span className="inline-flex items-center gap-1">📋 {tex.freeStripFormat}</span>
-          <span className="text-[#CBD5E1]">·</span>
-          <span className="inline-flex items-center gap-1">🌍 {tex.freeStripLangs}</span>
-          <span className="text-[#CBD5E1]">·</span>
-          <a href="https://t.me/dmvsos_support_bot" target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 hover:text-[#2563EB] transition-colors">
-            💬 {tex.freeStripSupport}
-          </a>
-        </div>
+        <ul className="flex flex-col gap-1.5 text-[13px] text-[#475569] max-w-xs mx-auto">
+          {[tex.benefitFree, tex.benefitExplain, tex.benefitFormat].map((b, i) => (
+            <li key={i} className="flex items-start gap-2">
+              <svg width="16" height="16" viewBox="0 0 16 16" className="shrink-0 mt-0.5">
+                <circle cx="8" cy="8" r="8" fill="#16A34A" />
+                <path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+              </svg>
+              <span>{b}</span>
+            </li>
+          ))}
+        </ul>
       </div>
 
       {/* State selector card */}
