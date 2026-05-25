@@ -10,6 +10,7 @@ import { getSavedLang, saveLang } from '@/lib/lang';
 import { flags } from '@/lib/flags';
 import { PASS_META, EXTENSION } from '@/lib/plans';
 import SupportFooter from '@/app/components/SupportFooter';
+import AccountSettings from './AccountSettings';
 
 const langs = [
   { label: 'EN', flag: flags.us, code: 'en' },
@@ -263,6 +264,8 @@ function ProfileContent() {
             })()}
           </div>
         )}
+
+        <AccountSettings user={user} lang={lang} tex={tex} />
 
         <SupportFooter lang={lang} />
       </div>
