@@ -52,26 +52,26 @@ function loadProgress() {
 function saveProgress(p) { fs.writeFileSync(PROGRESS, JSON.stringify(p, null, 2)); }
 
 async function fetchStaleClusters() {
-  // Fetch all non-EN rows with translation_stale_at set, group by cluster_code
+  // Fetch all non-EN rows with translation_stale_at set, group by cluster_code.
+  // Keyset pagination by id (id.gt cursor) — offset pagination times out on
+  // statement_timeout when scanning ~20k+ matching rows (moto rewrites).
   const seen = new Map(); // key = state|cluster_code → row
-  let offset = 0;
   const PAGE = 1000;
+  let lastId = null;
   for (;;) {
-    // ORDER BY id is required — without it, Postgres returns rows in
-    // non-deterministic order across pages, producing duplicates on some
-    // pages and silently dropping rows on others (snapshot looks the right
-    // size but a subset is missing).
-    let url = `${SB}/rest/v1/questions?select=state,category,subcategory,cluster_code&category=eq.${CATEGORY}&language=neq.en&translation_stale_at=not.is.null&cluster_code=not.is.null&order=id.asc&limit=${PAGE}&offset=${offset}`;
-    if (SUBCATEGORY) url += `&subcategory=eq.${SUBCATEGORY}`;
+    let url = `${SB}/rest/v1/questions?select=id,state,category,subcategory,cluster_code&category=eq.${CATEGORY}&language=neq.en&translation_stale_at=not.is.null&cluster_code=not.is.null&order=id.asc&limit=${PAGE}`;
+    if (lastId !== null) url += `&id=gt.${encodeURIComponent(lastId)}`;
+    if (SUBCATEGORY)     url += `&subcategory=eq.${SUBCATEGORY}`;
     const r = await fetch(url, { headers: { apikey: KEY, Authorization: 'Bearer ' + KEY } });
     if (!r.ok) throw new Error(`SELECT ${r.status}: ${(await r.text()).slice(0, 200)}`);
     const rows = await r.json();
+    if (rows.length === 0) break;
     for (const row of rows) {
       const key = `${row.state}|${row.cluster_code}`;
       if (!seen.has(key)) seen.set(key, row);
     }
+    lastId = rows[rows.length - 1].id;
     if (rows.length < PAGE) break;
-    offset += PAGE;
   }
   return [...seen.values()];
 }

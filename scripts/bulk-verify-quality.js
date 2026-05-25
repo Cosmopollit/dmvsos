@@ -55,20 +55,22 @@ const PROGRESS_FILE = path.join(__dirname, '..', `.bulk-verify-quality-${scope |
 // ─── Supabase helpers ──────────────────────────────────────────────────────
 
 async function sbAll(query, fields, pageSize = 1000) {
-  // ORDER BY id is required — without it Postgres returns rows in
-  // non-deterministic order across pages, producing duplicates on some pages
-  // and silently dropping others. Symptom: total count looks right but a
-  // subset of rows is missing from the snapshot.
+  // Keyset pagination by id (id.gt cursor) — offset pagination times out on
+  // statement_timeout when scanning large filtered result sets.
+  // Requires `id` to be included in the select list.
+  const select = fields.includes('id') ? fields : `id,${fields}`;
   const all = [];
-  let offset = 0;
+  let lastId = null;
   for (;;) {
-    const url = `${SUPABASE_URL}/rest/v1/questions?select=${fields}&${query}&order=id.asc&limit=${pageSize}&offset=${offset}`;
+    let url = `${SUPABASE_URL}/rest/v1/questions?select=${select}&${query}&order=id.asc&limit=${pageSize}`;
+    if (lastId !== null) url += `&id=gt.${encodeURIComponent(lastId)}`;
     const r = await fetch(url, { headers: { apikey: SERVICE_KEY, Authorization: 'Bearer ' + SERVICE_KEY } });
     if (!r.ok) throw new Error(`${r.status}: ${(await r.text()).slice(0, 200)}`);
     const rows = await r.json();
+    if (rows.length === 0) break;
     all.push(...rows);
+    lastId = rows[rows.length - 1].id;
     if (rows.length < pageSize) break;
-    offset += pageSize;
   }
   return all;
 }
