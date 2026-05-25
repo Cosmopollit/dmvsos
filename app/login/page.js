@@ -273,6 +273,15 @@ function LoginContent() {
           >
             {isSignUp ? tex.hasAccount : tex.noAccount}
           </button>
+          {!isSignUp && (
+            <button
+              type="button"
+              onClick={() => router.push(`/reset-password?lang=${lang}`)}
+              className="w-full text-xs text-[#94A3B8] hover:text-[#2563EB] transition"
+            >
+              {tex.forgotPasswordLink}
+            </button>
+          )}
         </form>
 
         <button
