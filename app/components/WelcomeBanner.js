@@ -27,20 +27,31 @@ export default function WelcomeBanner() {
   const [dismissed, setDismissed] = useState(true); // start hidden, flip after we check storage
   const [variant, setVariant] = useState(null);
   const [lang, setLang] = useState('en');
+  // Gate render on `ready` so the banner stays hidden during the entire auth
+  // settle window — not just on first paint. Without it, supabase's
+  // onAuthStateChange occasionally fires a second time with a fresh user
+  // object reference, triggering the effect again and producing a 1-frame
+  // flash where dismissed briefly resolves to false before the localStorage
+  // re-check sets it back to true.
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (loading || !user) return;
+    if (loading) return;
+    if (!user) { setReady(true); return; }
 
     setLang(getSavedLang());
     const v = isPro ? 'pro' : 'welcome';
-    setVariant(v);
-
     const storageKey = `dmvsos_wb_${v}_${user.id}`;
     const wasDismissed = typeof window !== 'undefined' && localStorage.getItem(storageKey);
+    setVariant(v);
     setDismissed(!!wasDismissed);
-  }, [user, isPro, loading]);
+    setReady(true);
+    // Depend on user.id (stable) instead of user (new reference each
+    // onAuthStateChange tick). isPro change still re-runs and re-checks
+    // dismissed against the new storage key (welcome → pro).
+  }, [user?.id, isPro, loading]);
 
-  if (!user || !variant || dismissed) return null;
+  if (!ready || !user || !variant || dismissed) return null;
 
   const tex = t[lang] || t.en;
   const isPremium = variant === 'pro';
