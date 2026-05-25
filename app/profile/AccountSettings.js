@@ -25,7 +25,7 @@ export default function AccountSettings({ user, lang, tex }) {
       <h3 className="text-base font-bold text-[#0B1C3D] mb-4">{tex.accountSettingsTitle}</h3>
       <div className="space-y-2">
         <Row label={tex.changePasswordSection} active={open === 'password'} onClick={() => setOpen(open === 'password' ? null : 'password')}>
-          <ChangePasswordForm tex={tex} onDone={() => setOpen(null)} />
+          <ChangePasswordForm user={user} tex={tex} onDone={() => setOpen(null)} />
         </Row>
         <Row label={tex.changeEmailSection} active={open === 'email'} onClick={() => setOpen(open === 'email' ? null : 'email')}>
           <ChangeEmailForm user={user} tex={tex} onDone={() => setOpen(null)} />
@@ -54,12 +54,21 @@ function Row({ label, active, onClick, danger, children }) {
   );
 }
 
-function ChangePasswordForm({ tex, onDone }) {
+function ChangePasswordForm({ user, tex, onDone }) {
+  const [currentPassword, setCurrentPassword] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm]   = useState('');
   const [busy, setBusy]         = useState(false);
   const [error, setError]       = useState('');
   const [success, setSuccess]   = useState(false);
+
+  // OAuth-only accounts (e.g. signed up with Google) don't have a
+  // password yet — they're "setting one for the first time", not
+  // "changing", so we skip the current-password check for them.
+  // Detect via app_metadata.provider; if it's anything other than
+  // 'email', the account was created via OAuth.
+  const provider = user?.app_metadata?.provider || 'email';
+  const requiresCurrent = provider === 'email';
 
   async function submit(e) {
     e.preventDefault();
@@ -68,10 +77,21 @@ function ChangePasswordForm({ tex, onDone }) {
     if (password.length < 6)  { setError(tex.passwordTooShort);   return; }
     setBusy(true);
     try {
+      // Re-verify current password before allowing the change. Closes
+      // the "stolen session" hijack where an attacker with access to
+      // an active browser silently locks the owner out by setting a
+      // new password.
+      if (requiresCurrent) {
+        const { error: vErr } = await supabase.auth.signInWithPassword({
+          email: user.email,
+          password: currentPassword,
+        });
+        if (vErr) { setError(tex.currentPasswordWrong); return; }
+      }
       const { error: err } = await supabase.auth.updateUser({ password });
       if (err) { setError(err.message); return; }
       setSuccess(true);
-      setPassword(''); setConfirm('');
+      setCurrentPassword(''); setPassword(''); setConfirm('');
       setTimeout(() => { setSuccess(false); onDone(); }, 1500);
     } catch { setError(tex.somethingWentWrong || 'Something went wrong'); }
     finally { setBusy(false); }
@@ -81,6 +101,14 @@ function ChangePasswordForm({ tex, onDone }) {
 
   return (
     <form onSubmit={submit} className="space-y-2 pt-2">
+      {!requiresCurrent && (
+        <p className="text-xs text-[#64748B] pb-1">{tex.setPasswordFirstTimeHint}</p>
+      )}
+      {requiresCurrent && (
+        <input type="password" required placeholder={tex.currentPasswordPlaceholder}
+          value={currentPassword} onChange={e => setCurrentPassword(e.target.value)}
+          className="w-full px-3 py-2 rounded-lg border border-[#E2E8F0] text-sm focus:border-[#2563EB] focus:outline-none" />
+      )}
       <input type="password" required minLength={6} placeholder={tex.newPasswordPlaceholder}
         value={password} onChange={e => setPassword(e.target.value)}
         className="w-full px-3 py-2 rounded-lg border border-[#E2E8F0] text-sm focus:border-[#2563EB] focus:outline-none" />

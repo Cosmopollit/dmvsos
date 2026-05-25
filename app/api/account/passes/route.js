@@ -39,17 +39,32 @@ export async function GET(req) {
     }
     const email = userData.user.email.toLowerCase();
 
-    // Find every auth.users.id that shares this email. Usually just the
-    // caller's own, but if duplicates exist this is where we catch them.
+    // Find every auth.users.id that shares this email. The caller's own
+    // user_id is always included (they're authenticated via a valid JWT).
+    // Other matching user_ids are included ONLY if their email is
+    // confirmed — otherwise an attacker who signs up with the victim's
+    // email (creating an unconfirmed auth.users row) would, after the
+    // victim later signs in with Google, gain the ability to see passes
+    // via this endpoint if/when they ever got a session. Limiting to
+    // confirmed accounts closes that path.
     const userIds = new Set([userData.user.id]);
     for (let page = 1; page <= MAX_PAGES; page++) {
       const { data, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 200 });
       if (error) break;
       const users = data?.users || [];
       for (const u of users) {
-        if ((u.email || '').toLowerCase() === email) userIds.add(u.id);
+        if (u.id === userData.user.id) continue;
+        if ((u.email || '').toLowerCase() !== email) continue;
+        if (!u.email_confirmed_at) continue;
+        userIds.add(u.id);
       }
       if (users.length < 200) break;
+    }
+    // A genuine duplicate-account event is very rare after the collision
+    // detection on /login — surface it so we notice if Step B starts
+    // failing or someone gets through a race.
+    if (userIds.size > 1) {
+      console.warn(`[passes] cross-account union for ${email}: ${userIds.size} confirmed user_ids`);
     }
 
     // Union active_passes across all the matching user_ids.
