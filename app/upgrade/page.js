@@ -231,6 +231,41 @@ function UpgradeContent() {
         </div>
       </div>
 
+      {/* Bureaucracy help · warm reassurance block. We sell more than tests;
+          the pass also unlocks human guidance through the license process
+          (docs, scheduling, exam day, support). Reinforces brand mission of
+          helping with US bureaucracy, especially for non-native speakers. */}
+      <div className="w-full max-w-2xl mb-6 rounded-2xl p-5 sm:p-6 border border-[#F59E0B]/30"
+        style={{ background: 'linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(37,99,235,0.06) 100%)' }}>
+        <div className="flex items-start gap-3 mb-3">
+          <span className="text-2xl shrink-0">🤝</span>
+          <div>
+            <h3 className="text-base font-bold text-white leading-tight">
+              {tex.bureaucracyHelpTitle || 'Getting your license can be confusing'}
+            </h3>
+            <p className="text-sm text-[#CBD5E1] mt-1.5">
+              {tex.bureaucracyHelpIntro || 'With a pass, you get more than tests. We guide you through the whole process.'}
+            </p>
+          </div>
+        </div>
+        <ul className="flex flex-col gap-2 mt-4 ml-9">
+          {[
+            tex.bureaucracyHelpDocs || 'What documents to bring',
+            tex.bureaucracyHelpSchedule || 'Where and how to schedule your exam',
+            tex.bureaucracyHelpExpect || 'What to expect on exam day',
+            tex.bureaucracyHelpAsk || 'Got questions? Ask us anytime',
+          ].map((line, i) => (
+            <li key={i} className="flex items-start gap-2 text-sm text-[#E2E8F0]">
+              <svg width="14" height="14" viewBox="0 0 16 16" className="shrink-0 mt-1">
+                <circle cx="8" cy="8" r="8" fill="#F59E0B" />
+                <path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="#0B1C3D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+              </svg>
+              <span>{line}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       {/* Value prop */}
       <p className="text-[#94A3B8] text-sm text-center max-w-md mb-4">
         {tex.pricingValueProp || '🛡️ One failed test = $50+ fees + weeks waiting. Plans pay for themselves.'}

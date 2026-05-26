@@ -293,6 +293,7 @@ function TestContent() {
     setScore(0);
     setUserAnswers([]);
     userAnswersRef.current = [];
+    sessionSavedRef.current = false; // fresh test → allow one new session row
     setSelected(null);
     setShowAnswer(false); setShowManualQuote(false); setShowReport(false); setReportReason(""); setReportComment(""); setReportSent(false);
     setElapsed(0);
@@ -307,6 +308,11 @@ function TestContent() {
   const handlePrevRef = useRef(null);
   // Ref for synchronous answer tracking (avoids React state batching race condition)
   const userAnswersRef = useRef([]);
+  // Idempotency guard for test_sessions writes. Without this, holding Enter
+  // or rapid-clicking "next" on the final question fires handleNext multiple
+  // times before router.push completes, producing 10-15 duplicate session
+  // rows (see freiibersuarez data 2026-05-18 11:57:21 — 15 inserts in 1 sec).
+  const sessionSavedRef = useRef(false);
   useEffect(() => {
     if (!testMode || !questions.length) return;
     function onKeyDown(e) {
@@ -761,8 +767,11 @@ function TestContent() {
         'testResults',
         JSON.stringify({ questions, userAnswers: allAnswers, elapsed, state, category, lang: langParam })
       );
+      // Guard against double-fire from rapid Enter/click before router.push
+      // finishes. First call wins, subsequent calls are no-ops.
       const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
+      if (session?.user && !sessionSavedRef.current) {
+        sessionSavedRef.current = true;
         const row = { user_id: session.user.id, state, category, score: finalScore, total, lang };
         const { error: insErr } = await supabase.from('test_sessions').insert(row);
         if (insErr) {
