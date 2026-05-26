@@ -482,7 +482,10 @@ async function handleDmMessage(msg, autoLang) {
   const chatId = msg.chat.id;
   const userName = msg.from.first_name || msg.from.username || 'there';
   const userId = msg.from.id;
-  const textRaw = (msg.text || '').trim();
+  // Read both text and caption so photos/videos with captions still match
+  // keyword auto-replies and forward with the caption visible. Earlier this
+  // was `msg.text || ''` which dropped all caption-bearing media to empty.
+  const textRaw = (msg.text || msg.caption || '').trim();
   const text = textRaw.toLowerCase();
 
   // Resolve language: saved pref first, then Telegram-auto-detected, then EN.
@@ -593,11 +596,39 @@ async function handleDmMessage(msg, autoLang) {
     return;
   }
 
-  // Anything else → forward to admin + ack to user
+  // Anything else → forward to admin + ack to user.
+  // Sends a context-header sendMessage AND, if the user attached media
+  // (voice / photo / video / sticker / document / location / contact),
+  // also forwards the original so admin can actually play/view it. This
+  // replaces the old behavior where voice/photo DMs arrived as empty
+  // "From X (chat ..., lang ru):" with no body.
   if (ADMIN_CHAT_ID) {
     const isSelfMessage = String(chatId) === String(ADMIN_CHAT_ID);
-    await sendMessage(ADMIN_CHAT_ID,
-      `💬 <b>${isSelfMessage ? 'You (test)' : 'From ' + userName}</b> (chat <code>${chatId}</code>, lang ${lang}):\n\n${escapeHtml(textRaw)}`);
+    const header = `💬 <b>${isSelfMessage ? 'You (test)' : 'From ' + userName}</b> (chat <code>${chatId}</code>, lang ${lang})`;
+    const mediaLabel =
+        msg.voice       ? '🎤 voice message'
+      : msg.video_note  ? '🎥 video note'
+      : msg.video       ? '🎬 video'
+      : msg.photo       ? '🖼 photo'
+      : msg.audio       ? '🎵 audio'
+      : msg.document    ? '📎 document'
+      : msg.sticker     ? '😀 sticker'
+      : msg.animation   ? '🎞 animation'
+      : msg.location    ? '📍 location'
+      : msg.contact     ? '👤 contact'
+      : null;
+    const body = textRaw
+      ? escapeHtml(textRaw)
+      : `<i>${mediaLabel || 'no text'} — forwarded below</i>`;
+    await sendMessage(ADMIN_CHAT_ID, `${header}:\n\n${body}`);
+    if (mediaLabel) {
+      // Forward the original message so admin sees / hears the actual content.
+      await tg('forwardMessage', {
+        chat_id: ADMIN_CHAT_ID,
+        from_chat_id: chatId,
+        message_id: msg.message_id,
+      });
+    }
   }
   await sendMessage(chatId, dm(lang, 'forwardedAck'));
 }
