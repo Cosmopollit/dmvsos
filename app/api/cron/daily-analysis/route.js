@@ -179,6 +179,17 @@ export async function GET(request) {
       await tgSend(ADMIN_CHAT_ID, message);
     }
 
+    // Safety net: piggy-back on the daily cron to also run the stuck-
+    // customer recovery. Vercel Hobby tier caps crons at daily-only, so we
+    // can't schedule recovery as its own hourly job without upgrading. The
+    // endpoint stays callable manually via ?key=<CRON_SECRET> for ad-hoc
+    // re-runs when needed.
+    try {
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://dmvsos.com';
+      const key = process.env.CRON_SECRET || process.env.TELEGRAM_WEBHOOK_SECRET || '';
+      await fetch(`${siteUrl}/api/cron/checkout-recovery?key=${encodeURIComponent(key)}`).catch(() => {});
+    } catch (_) { /* never block the digest on recovery failure */ }
+
     return Response.json({
       ok: true,
       sent: !!ADMIN_CHAT_ID,
