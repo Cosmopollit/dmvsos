@@ -259,6 +259,38 @@ async function handleDmMessage(msg, autoLang) {
   const textRaw = (msg.text || msg.caption || '').trim();
   const text = textRaw.toLowerCase();
 
+  // ── Admin reply threading ──────────────────────────────────────────────
+  // When the admin replies (Telegram-native reply) to a forwarded user
+  // message in the admin chat, route that reply back to the original user
+  // through the bot. The forwarded message embeds "chat <code>123456</code>"
+  // which renders as plain "chat 123456" in reply_to_message.text — that's
+  // what we parse here. copyMessage handles text + media uniformly so admin
+  // can voice-note back too.
+  if (ADMIN_CHAT_ID && String(chatId) === String(ADMIN_CHAT_ID) && msg.reply_to_message) {
+    const quoted = msg.reply_to_message.text || msg.reply_to_message.caption || '';
+    const match = quoted.match(/chat (-?\d+)/);
+    if (match) {
+      const targetChatId = match[1];
+      // Skip self-routing — admin's own test-message forwards include their
+      // own chat_id in the header, replying to one of those would loop back.
+      if (String(targetChatId) !== String(ADMIN_CHAT_ID)) {
+        const sent = await tg('copyMessage', {
+          chat_id: targetChatId,
+          from_chat_id: chatId,
+          message_id: msg.message_id,
+        });
+        const ok = sent && sent.ok !== false && !sent.error_code;
+        await sendMessage(chatId,
+          ok
+            ? `↪️ Replied to user <code>${targetChatId}</code>`
+            : `⚠️ Couldn't deliver to <code>${targetChatId}</code> (user may have blocked the bot or never DMed it).`,
+          { reply_to_message_id: msg.message_id }
+        );
+        return;
+      }
+    }
+  }
+
   // Resolve language: saved pref first, then Telegram-auto-detected, then EN.
   const savedLang = await sbGetUserLang(chatId);
   const lang = savedLang || autoLang || 'en';
