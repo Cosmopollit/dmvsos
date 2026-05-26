@@ -1,6 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
+import { safeInternalPath } from '@/lib/safeNext'
 
 export async function GET(request) {
   const requestUrl = new URL(request.url)
@@ -25,7 +26,6 @@ export async function GET(request) {
     await supabase.auth.exchangeCodeForSession(code)
   }
 
-  let next = requestUrl.searchParams.get('next') || '/';
-  if (!next.startsWith('/') || next.startsWith('//')) next = '/';
+  const next = safeInternalPath(requestUrl.searchParams.get('next'), '/');
   return NextResponse.redirect(requestUrl.origin + next)
 }

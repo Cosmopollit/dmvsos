@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { t } from '@/lib/translations';
 import { getSavedLang } from '@/lib/lang';
+import { safeInternalPath } from '@/lib/safeNext';
 
 // Email confirmation handler.
 //
@@ -50,9 +51,8 @@ function ConfirmContent() {
 
       setStatus('success');
       // Brief delay so the user sees the success state before navigating.
-      const next = searchParams.get('next');
-      const safeNext = next && next.startsWith('/') && !next.startsWith('//') ? next : '/test';
-      setTimeout(() => { router.replace(safeNext); }, 1200);
+      const dest = safeInternalPath(searchParams.get('next'), '/test');
+      setTimeout(() => { router.replace(dest); }, 1200);
     })();
     return () => { cancelled = true; };
   }, [searchParams, router]);

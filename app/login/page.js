@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase';
 import { t } from '@/lib/translations';
 import { getSavedLang } from '@/lib/lang';
 import SupportFooter from '@/app/components/SupportFooter';
+import { safeInternalPath } from '@/lib/safeNext';
 
 // OAuth provider availability. Toggle each flag to true ONLY after the
 // matching provider is fully configured in Supabase Dashboard →
@@ -164,9 +165,7 @@ function LoginContent() {
           return;
         }
         // Confirmation disabled in dashboard — session is live immediately.
-        const next = searchParams.get('next');
-        const safeNext = next && next.startsWith('/') && !next.startsWith('//') ? next : '/test';
-        router.push(safeNext);
+        router.push(safeInternalPath(searchParams.get('next'), '/test'));
         return;
       }
       // Sign-in path
@@ -180,9 +179,7 @@ function LoginContent() {
         setEmailError(error.message);
         return;
       }
-      const next = searchParams.get('next');
-      const safeNext = next && next.startsWith('/') && !next.startsWith('//') ? next : '/test';
-      router.push(safeNext);
+      router.push(safeInternalPath(searchParams.get('next'), '/test'));
     } catch { setEmailError(tex.somethingWentWrong || 'Something went wrong'); }
     finally { setEmailLoading(false); }
   }
