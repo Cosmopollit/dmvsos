@@ -52,15 +52,16 @@ export async function POST(req) {
       body: JSON.stringify({ type: 'magiclink', email }),
     });
     if (!res.ok) {
-      return Response.json({ error: 'magic-link failed', detail: await res.text() }, { status: 500 });
+      // Return email so the success page can show "we tried email@... — resend?"
+      return Response.json({ error: 'magic-link failed', email, detail: await res.text() }, { status: 500 });
     }
     const data = await res.json();
     const loginUrl = data.action_link || data.properties?.action_link;
     if (!loginUrl) {
-      return Response.json({ error: 'no login URL returned' }, { status: 500 });
+      return Response.json({ error: 'no login URL returned', email }, { status: 500 });
     }
 
-    return Response.json({ login_url: loginUrl });
+    return Response.json({ login_url: loginUrl, email });
   } catch (err) {
     return Response.json({ error: err.message }, { status: 500 });
   }

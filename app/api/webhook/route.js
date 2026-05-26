@@ -150,7 +150,8 @@ async function handleOneTimePayment({ paymentIntentId, amountCents, metadata, ch
   }
 
   // Anonymous purchase fallback: no user_id in metadata but we have email from Stripe.
-  // Auto-create account and send magic-link so customer can log in.
+  // Auto-create account so customer can log in.
+  const wasAnonymous = !user_id;
   if (!user_id) {
     if (!email) {
       console.warn(`one-time payment missing both user_id and email | pi=${paymentIntentId}`);
@@ -163,8 +164,23 @@ async function handleOneTimePayment({ paymentIntentId, amountCents, metadata, ch
       await notifyAdmin(`🚨 <b>Anonymous purchase: failed to create user for</b> ${email}\nPI: <code>${paymentIntentId}</code>\nPlease run grant-pass-manual.js by hand.`);
       return;
     }
-    // Send magic-link so customer can log in
+  }
+
+  // Always send a magic-link to the buying email — not just for anonymous
+  // purchases. The legitimate-but-stuck case is a logged-in user starting
+  // checkout in browser A, then paying from browser B / incognito / phone
+  // that does not actually hold the session. Webhook used to skip the
+  // magic-link there because metadata had user_id, leaving the paying
+  // browser silently locked out (galyna / yrynlnqry on 2026-05-19, qq.com
+  // 461259674 on 2026-05-22 all needed manual recovery). The /success
+  // checkout-login flow also issues a magic-link, but only when the user
+  // actually lands on /success; this email is the recovery channel when
+  // the Stripe tab was closed before redirect.
+  if (email) {
     await sendMagicLink(email);
+  }
+
+  if (wasAnonymous) {
     await notifyAdmin(`💰 <b>Anonymous purchase auto-fixed:</b> ${email} → ${pass_type} ($${(amountCents / 100).toFixed(2)})\nUser created. Magic-link sent.`);
   }
 
