@@ -1,34 +1,28 @@
 // Telegram bot webhook handler for @dmvsos_support_bot.
 //
-// Two modes:
-//   1. Private chat (DM) - answers commands /start /pricing /states /languages
-//      /refund /human /lang, forwards free-form text to admin.
-//   2. Group chat - listens for DMV-related questions and auto-replies once
-//      per hour per group (throttle). Admins can toggle with /enable /disable.
+// DM-only — the bot used to also handle group messages (keyword auto-reply,
+// throttle, /enable /disable, etc.) but the bot was never actually added to
+// any group (bot_groups table has zero rows since launch), so all of that
+// code was dead weight. Pruned 2026-05-26.
 //
-// Privacy-mode must be OFF in BotFather for group message visibility.
-// See TELEGRAM_BOT.md for setup.
+// Active flows:
+//   /start /lang  — language picker (then main menu).
+//   /menu         — main menu inline keyboard.
+//   /pricing /states /languages /refund /human — info commands.
+//   Free-form text — keyword auto-reply on DMV questions; otherwise forward
+//                    to admin for manual reply. Media (voice / photo / etc.)
+//                    is also forwarded so admin can play/view it.
+//   Inline button taps — language switch, menu navigation, state picker.
 
 import {
   matchTrigger, detectState, detectCdl, detectCategory,
-  composeReply, composeForward, isThrottled,
+  composeReply,
   mainMenuKeyboard, backToMenuKeyboard, statePickerKeyboard, categoryKeyboard,
   languagePickerKeyboard, LANG_PICKER_TEXT,
-  ACTION_PROMPTS, ACTION_ACKS,
 } from '@/lib/telegram-helper.js';
-
-// Where each service action forwards to. ASSISTANT_CHAT_ID set in env vars.
-const ACTION_ROUTING = {
-  partnership: { to: 'admin',     tag: 'PARTNERSHIP' },
-  docs:        { to: 'assistant', tag: 'NOTARY/TRANSLATIONS' },
-  contact:     { to: 'admin',     tag: 'CONTACT' },
-  bugs:        { to: 'admin',     tag: 'BUG' },
-};
-const PENDING_TTL_MS = 30 * 60 * 1000; // 30 minutes
 
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID;
-const ASSISTANT_CHAT_ID = process.env.TELEGRAM_ASSISTANT_CHAT_ID; // optional second forward target
 const SECRET = process.env.TELEGRAM_WEBHOOK_SECRET || '';
 const SUPA_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPA_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -42,86 +36,18 @@ const sbHeaders = {
 };
 
 // ── Supabase helpers ─────────────────────────────────────────────────────
-async function sbGetGroup(chatId) {
-  const r = await fetch(`${SUPA_URL}/rest/v1/bot_groups?chat_id=eq.${chatId}&select=*`, { headers: sbHeaders });
+async function sbGetUserLang(chatId) {
+  const r = await fetch(`${SUPA_URL}/rest/v1/bot_user_prefs?chat_id=eq.${chatId}&select=lang`, { headers: sbHeaders });
   if (!r.ok) return null;
   const rows = await r.json();
-  return rows[0] || null;
-}
-
-async function sbUpsertGroup(row) {
-  await fetch(`${SUPA_URL}/rest/v1/bot_groups`, {
-    method: 'POST',
-    headers: { ...sbHeaders, Prefer: 'resolution=merge-duplicates' },
-    body: JSON.stringify(row),
-  });
-}
-
-async function sbUpdateGroup(chatId, patch) {
-  await fetch(`${SUPA_URL}/rest/v1/bot_groups?chat_id=eq.${chatId}`, {
-    method: 'PATCH',
-    headers: sbHeaders,
-    body: JSON.stringify(patch),
-  });
-}
-
-// User language pref (DM chat only).
-async function sbGetUserLang(chatId) {
-  try {
-    const r = await fetch(`${SUPA_URL}/rest/v1/bot_user_prefs?chat_id=eq.${chatId}&select=lang`, { headers: sbHeaders });
-    if (!r.ok) return null;
-    const rows = await r.json();
-    return rows[0]?.lang || null;
-  } catch { return null; }
+  return rows[0]?.lang || null;
 }
 
 async function sbSetUserLang(chatId, lang) {
-  await fetch(`${SUPA_URL}/rest/v1/bot_user_prefs`, {
+  await fetch(`${SUPA_URL}/rest/v1/bot_user_prefs?on_conflict=chat_id`, {
     method: 'POST',
-    headers: { ...sbHeaders, Prefer: 'resolution=merge-duplicates' },
+    headers: { ...sbHeaders, Prefer: 'resolution=merge-duplicates,return=minimal' },
     body: JSON.stringify({ chat_id: chatId, lang, updated_at: new Date().toISOString() }),
-  }).catch(() => {});
-}
-
-async function sbGetPendingAction(chatId) {
-  try {
-    const r = await fetch(`${SUPA_URL}/rest/v1/bot_user_prefs?chat_id=eq.${chatId}&select=pending_action,pending_set_at`, { headers: sbHeaders });
-    if (!r.ok) return null;
-    const rows = await r.json();
-    const row = rows[0];
-    if (!row || !row.pending_action) return null;
-    if (row.pending_set_at && Date.now() - new Date(row.pending_set_at).getTime() > PENDING_TTL_MS) return null;
-    return row.pending_action;
-  } catch { return null; }
-}
-
-async function sbSetPendingAction(chatId, action) {
-  // PATCH first (existing row - preserve lang). Insert with default if row is missing.
-  const patchRes = await fetch(`${SUPA_URL}/rest/v1/bot_user_prefs?chat_id=eq.${chatId}`, {
-    method: 'PATCH',
-    headers: { ...sbHeaders, Prefer: 'return=representation' },
-    body: JSON.stringify({ pending_action: action, pending_set_at: new Date().toISOString() }),
-  }).catch(() => null);
-  if (patchRes?.ok) {
-    const rows = await patchRes.json().catch(() => []);
-    if (rows.length > 0) return;
-  }
-  // No row existed - insert with EN default
-  await fetch(`${SUPA_URL}/rest/v1/bot_user_prefs`, {
-    method: 'POST',
-    headers: sbHeaders,
-    body: JSON.stringify({
-      chat_id: chatId, lang: 'en',
-      pending_action: action, pending_set_at: new Date().toISOString(),
-    }),
-  }).catch(() => {});
-}
-
-async function sbClearPendingAction(chatId) {
-  await fetch(`${SUPA_URL}/rest/v1/bot_user_prefs?chat_id=eq.${chatId}`, {
-    method: 'PATCH',
-    headers: sbHeaders,
-    body: JSON.stringify({ pending_action: null, pending_set_at: null }),
   }).catch(() => {});
 }
 
@@ -154,12 +80,6 @@ async function sendMessage(chatId, text, opts = {}) {
   });
 }
 
-async function isGroupAdmin(chatId, userId) {
-  const r = await tg('getChatMember', { chat_id: chatId, user_id: userId });
-  const status = r?.result?.status;
-  return status === 'creator' || status === 'administrator';
-}
-
 function pickLang(code) {
   if (!code) return 'en';
   const c = code.toLowerCase().slice(0, 2);
@@ -170,7 +90,7 @@ function pickLang(code) {
   return 'en';
 }
 
-// ── DM messages (existing behavior) ──────────────────────────────────────
+// ── DM messages ──────────────────────────────────────────────────────────
 const DM_MESSAGES = {
   en: {
     welcome: `👋 Hi! I'm the DMVSOS support bot.
@@ -260,135 +180,6 @@ function dm(lang, key) {
   return (DM_MESSAGES[lang] || DM_MESSAGES.en)[key] || DM_MESSAGES.en[key] || '';
 }
 
-// ── Group lifecycle (bot added/removed) ──────────────────────────────────
-async function handleMyChatMember(update) {
-  const cm = update.my_chat_member;
-  const chat = cm.chat;
-  const newStatus = cm.new_chat_member?.status;
-  const oldStatus = cm.old_chat_member?.status;
-
-  // Bot was added (or upgraded from kicked/left)
-  if ((newStatus === 'member' || newStatus === 'administrator') &&
-      (oldStatus === 'left' || oldStatus === 'kicked' || !oldStatus)) {
-    await sbUpsertGroup({
-      chat_id: chat.id,
-      title: chat.title || null,
-      username: chat.username || null,
-      type: chat.type,
-      enabled: true,
-      mode: 'silent', // default - bot doesn't post in group, only forwards to admin DM
-      added_by: cm.from?.id || null,
-      removed_at: null,
-    });
-
-    // No public intro in silent mode - bot stays invisible.
-    // Admin alert only:
-    if (ADMIN_CHAT_ID) {
-      await sendMessage(ADMIN_CHAT_ID,
-        `🆕 Bot added to group: <b>${chat.title}</b> (id <code>${chat.id}</code>, type ${chat.type})\nMode: <b>silent</b> (forwards questions here, doesn't post in group).\nAdmin commands in the group: /silent /autoreply /disable /enable /status`);
-    }
-  }
-
-  // Bot was removed
-  if (newStatus === 'left' || newStatus === 'kicked') {
-    await sbUpdateGroup(chat.id, { enabled: false, removed_at: new Date().toISOString() });
-    if (ADMIN_CHAT_ID) {
-      await sendMessage(ADMIN_CHAT_ID,
-        `❌ Bot removed from: <b>${chat.title || chat.id}</b> (status: ${newStatus})`);
-    }
-  }
-}
-
-// ── Group message handler ───────────────────────────────────────────────
-async function handleGroupMessage(msg, lang) {
-  const chatId = msg.chat.id;
-  const textRaw = (msg.text || '').trim();
-  if (!textRaw) return;
-
-  const userName = msg.from.first_name || msg.from.username || 'there';
-  const userId = msg.from.id;
-
-  // Admin commands first (only group admins can toggle)
-  const adminCmds = ['/disable', '/enable', '/status', '/silent', '/autoreply'];
-  if (adminCmds.some(c => textRaw.startsWith(c))) {
-    const isAdmin = await isGroupAdmin(chatId, userId);
-    if (!isAdmin) return;
-    if (textRaw.startsWith('/disable')) {
-      await sbUpdateGroup(chatId, { enabled: false });
-      await sendMessage(chatId, `🔕 Muted. Use /enable to re-enable.`);
-    } else if (textRaw.startsWith('/enable')) {
-      await sbUpdateGroup(chatId, { enabled: true });
-      await sendMessage(chatId, `🔔 Re-enabled.`);
-    } else if (textRaw.startsWith('/silent')) {
-      await sbUpdateGroup(chatId, { mode: 'silent', enabled: true });
-      await sendMessage(chatId, `🤫 Switched to silent mode. I won't post here - just forward DMV questions to my owner privately.`);
-    } else if (textRaw.startsWith('/autoreply')) {
-      await sbUpdateGroup(chatId, { mode: 'autoreply', enabled: true });
-      await sendMessage(chatId, `📣 Switched to auto-reply mode. Max 1 reply per hour.`);
-    } else {
-      const g = await sbGetGroup(chatId);
-      const enabled = g?.enabled ? '✅ enabled' : '🔕 disabled';
-      const mode = g?.mode || 'silent';
-      await sendMessage(chatId, `Status: ${enabled}\nMode: <b>${mode}</b>\nForwards/replies sent: ${g?.reply_count || 0}\nLast: ${g?.last_reply_at || 'never'}`);
-    }
-    return;
-  }
-
-  // Keyword match
-  const kw = matchTrigger(textRaw);
-  if (!kw) return;
-
-  const stateSlug = detectState(textRaw);
-  const isCdl = detectCdl(textRaw);
-  const group = await sbGetGroup(chatId);
-  const mode = group?.mode || 'silent';
-
-  const baseHit = {
-    chat_id: chatId, user_id: userId, user_name: userName,
-    message_text: textRaw.slice(0, 500),
-    matched_keyword: isCdl ? `${kw} [CDL]` : kw,
-    matched_state: stateSlug,
-  };
-
-  if (group && !group.enabled) {
-    await sbLogHit({ ...baseHit, reply_sent: false, skipped_reason: 'disabled' });
-    return;
-  }
-
-  if (group && isThrottled(group.last_reply_at, mode)) {
-    await sbLogHit({ ...baseHit, reply_sent: false, skipped_reason: 'throttled' });
-    return;
-  }
-
-  // ── Silent mode: forward to admin (+assistant), no group post
-  if (mode === 'silent') {
-    const forward = composeForward({ chat: msg.chat, msg, userName, lang, keyword: kw, stateSlug, isCdl });
-    const targets = [ADMIN_CHAT_ID, ASSISTANT_CHAT_ID].filter(Boolean);
-    for (const target of targets) {
-      await sendMessage(target, forward, { disable_web_page_preview: false });
-    }
-    await sbUpsertGroup({
-      chat_id: chatId, title: msg.chat.title || null, type: msg.chat.type,
-      enabled: true, mode: 'silent',
-      last_reply_at: new Date().toISOString(),
-      reply_count: (group?.reply_count || 0) + 1,
-    });
-    await sbLogHit({ ...baseHit, reply_sent: true, skipped_reason: null });
-    return;
-  }
-
-  // ── Autoreply mode: post link in the group
-  const reply = composeReply(lang, stateSlug, userName);
-  await sendMessage(chatId, reply, { reply_to_message_id: msg.message_id });
-  await sbUpsertGroup({
-    chat_id: chatId, title: msg.chat.title || null, type: msg.chat.type,
-    enabled: true, mode: 'autoreply',
-    last_reply_at: new Date().toISOString(),
-    reply_count: (group?.reply_count || 0) + 1,
-  });
-  await sbLogHit({ ...baseHit, reply_sent: true, skipped_reason: null });
-}
-
 // ── Callback query (inline keyboard taps) ───────────────────────────────
 async function handleCallback(cb) {
   const chatId = cb.message?.chat?.id;
@@ -416,11 +207,6 @@ async function handleCallback(cb) {
   // Resolve language from saved pref; fall back to TG auto-detect
   const lang = (await sbGetUserLang(chatId)) || pickLang(cb.from?.language_code) || 'en';
 
-  // Any non-action callback navigation clears stale pending_action.
-  if (!data.startsWith('action:')) {
-    await sbClearPendingAction(chatId);
-  }
-
   // menu:start | menu:pricing | menu:states | menu:languages | menu:refund | menu:human
   if (data === 'menu:start') {
     await tg('editMessageText', {
@@ -444,21 +230,6 @@ async function handleCallback(cb) {
       chat_id: chatId, message_id: messageId,
       text: dm(lang, key), parse_mode: 'HTML',
       reply_markup: backToMenuKeyboard(lang), disable_web_page_preview: true,
-    });
-    return;
-  }
-
-  // action:<service> - user tapped a service button. Set pending_action, prompt for input.
-  if (data.startsWith('action:')) {
-    const action = data.slice(7);
-    if (!ACTION_ROUTING[action]) return;
-    await sbSetPendingAction(chatId, action);
-    const prompt = (ACTION_PROMPTS[lang] || ACTION_PROMPTS.en)[action];
-    await tg('editMessageText', {
-      chat_id: chatId, message_id: messageId,
-      text: prompt, parse_mode: 'HTML',
-      reply_markup: backToMenuKeyboard(lang),
-      disable_web_page_preview: true,
     });
     return;
   }
@@ -524,28 +295,6 @@ async function handleDmMessage(msg, autoLang) {
   }
   if (text.startsWith('/')) {
     await sendMessage(chatId, dm(lang, 'unknown'), { reply_markup: mainMenuKeyboard(lang) });
-    return;
-  }
-
-  // Pending action takes top priority - user tapped Notary/Translations/Contact/Bugs
-  // and their next free-form message is the actual request.
-  const pendingAction = await sbGetPendingAction(chatId);
-  if (pendingAction && ACTION_ROUTING[pendingAction]) {
-    const route = ACTION_ROUTING[pendingAction];
-    const target = route.to === 'assistant' ? ASSISTANT_CHAT_ID : ADMIN_CHAT_ID;
-    const fallback = ADMIN_CHAT_ID; // if assistant chat_id missing, route to admin
-
-    const recipient = target || fallback;
-    if (recipient) {
-      await sendMessage(recipient,
-        `🔖 <b>[${route.tag}]</b> from <b>${userName}</b> (chat <code>${chatId}</code>, lang ${lang}):\n\n${escapeHtml(textRaw)}`);
-      // If assistant was the intended target but missing - also CC admin so nothing lost
-      if (route.to === 'assistant' && !target && ASSISTANT_CHAT_ID !== ADMIN_CHAT_ID) {
-        // already sent above to admin
-      }
-    }
-    await sendMessage(chatId, (ACTION_ACKS[lang] || ACTION_ACKS.en));
-    await sbClearPendingAction(chatId);
     return;
   }
 
@@ -656,12 +405,6 @@ export async function POST(request) {
   }
 
   try {
-    // Bot added/removed from a group
-    if (update.my_chat_member) {
-      await handleMyChatMember(update);
-      return new Response('OK', { status: 200 });
-    }
-
     // Inline keyboard taps
     if (update.callback_query) {
       await handleCallback(update.callback_query);
@@ -671,14 +414,14 @@ export async function POST(request) {
     const msg = update.message;
     if (!msg || !msg.from) return new Response('OK', { status: 200 });
 
-    const lang = pickLang(msg.from.language_code);
-    const chatType = msg.chat.type;
+    // Bot is DM-only. Group / supergroup / channel messages are silently
+    // ignored. We used to have a full group flow with keyword auto-reply,
+    // /enable /disable admin commands, and silent forwarding to admin DM,
+    // but bot_groups was empty in production and the code was dead weight.
+    if (msg.chat.type !== 'private') return new Response('OK', { status: 200 });
 
-    if (chatType === 'private') {
-      await handleDmMessage(msg, lang);
-    } else if (chatType === 'group' || chatType === 'supergroup') {
-      await handleGroupMessage(msg, lang);
-    }
+    const lang = pickLang(msg.from.language_code);
+    await handleDmMessage(msg, lang);
   } catch (err) {
     console.error('Telegram handler error:', err.message);
   }
