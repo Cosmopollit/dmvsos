@@ -174,17 +174,43 @@ function ChangeEmailForm({ user, tex, onDone }) {
 }
 
 function DeleteAccountForm({ user, lang, tex, router, onCancel }) {
-  const [typedEmail, setTypedEmail] = useState('');
-  const [busy, setBusy]             = useState(false);
-  const [error, setError]           = useState('');
-  const matches = typedEmail.trim().toLowerCase() === (user.email || '').toLowerCase();
+  const [typedEmail, setTypedEmail]       = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [typedConfirmWord, setTypedConfirmWord] = useState('');
+  const [busy, setBusy]                   = useState(false);
+  const [error, setError]                 = useState('');
+
+  const emailMatches = typedEmail.trim().toLowerCase() === (user.email || '').toLowerCase();
+
+  // Different second-factor depending on how the user signed up. An
+  // email/password user re-types their current password (cheap and
+  // strong). An OAuth user has no password, so we ask them to retype
+  // a literal confirmation word — a deliberate, deletion-specific
+  // gesture that an automated session-hijack tool would have to script
+  // explicitly. The same UX is universal across languages.
+  const provider = user?.app_metadata?.provider || 'email';
+  const isEmailAccount = provider === 'email';
+  const CONFIRM_WORD = 'DELETE';
+  const wordMatches = typedConfirmWord.trim() === CONFIRM_WORD;
+  const ready = emailMatches && (isEmailAccount ? currentPassword.length > 0 : wordMatches);
 
   async function submit(e) {
     e.preventDefault();
-    if (!matches) return;
+    if (!ready) return;
     setBusy(true);
     setError('');
     try {
+      // Re-verify the user before nuking the account — closes the
+      // "stolen session" path where an attacker with an open browser
+      // burns down the owner's Pro pass in two clicks.
+      if (isEmailAccount) {
+        const { error: vErr } = await supabase.auth.signInWithPassword({
+          email: user.email,
+          password: currentPassword,
+        });
+        if (vErr) { setError(tex.currentPasswordWrong); return; }
+      }
+
       const { data: { session } } = await supabase.auth.getSession();
       const token = session?.access_token;
       if (!token) { setError(tex.somethingWentWrong); return; }
@@ -211,13 +237,30 @@ function DeleteAccountForm({ user, lang, tex, router, onCancel }) {
       <input type="email" required placeholder={user.email || ''}
         value={typedEmail} onChange={e => setTypedEmail(e.target.value)}
         className="w-full px-3 py-2 rounded-lg border border-[#E2E8F0] text-sm focus:border-[#DC2626] focus:outline-none" />
+
+      {emailMatches && isEmailAccount && (
+        <input type="password" required placeholder={tex.currentPasswordPlaceholder}
+          value={currentPassword} onChange={e => setCurrentPassword(e.target.value)}
+          className="w-full px-3 py-2 rounded-lg border border-[#E2E8F0] text-sm focus:border-[#DC2626] focus:outline-none" />
+      )}
+      {emailMatches && !isEmailAccount && (
+        <>
+          <p className="text-xs text-[#64748B]">
+            {(tex.deleteAccountTypeWordPrompt || '').replace('{word}', CONFIRM_WORD)}
+          </p>
+          <input type="text" required placeholder={CONFIRM_WORD}
+            value={typedConfirmWord} onChange={e => setTypedConfirmWord(e.target.value)}
+            className="w-full px-3 py-2 rounded-lg border border-[#E2E8F0] text-sm focus:border-[#DC2626] focus:outline-none uppercase" />
+        </>
+      )}
+
       {error && <p className="text-xs text-[#DC2626]">{error}</p>}
       <div className="flex gap-2">
         <button type="button" onClick={onCancel}
           className="flex-1 bg-white border border-[#E2E8F0] text-[#1E293B] py-2 rounded-lg text-sm font-medium hover:bg-[#F8FAFC] transition">
           {tex.deleteAccountCancel || tex.back}
         </button>
-        <button type="submit" disabled={!matches || busy}
+        <button type="submit" disabled={!ready || busy}
           className="flex-1 bg-[#DC2626] text-white py-2 rounded-lg text-sm font-medium hover:bg-[#B91C1C] transition disabled:opacity-40 disabled:cursor-not-allowed">
           {busy ? '...' : tex.deleteAccountConfirmedButton}
         </button>
