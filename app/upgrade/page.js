@@ -67,7 +67,9 @@ function UpgradeContent() {
       const fetchOpts = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ planType: planId }),
+        // Pass current UI lang so the API can localize Stripe Checkout
+        // (Stripe defaults to English-via-browser when locale is not set).
+        body: JSON.stringify({ planType: planId, lang }),
       };
       if (session?.access_token) {
         fetchOpts.headers['Authorization'] = `Bearer ${session.access_token}`;

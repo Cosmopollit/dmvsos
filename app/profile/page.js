@@ -58,7 +58,7 @@ function ProfileContent() {
           'Content-Type': 'application/json',
           ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
         },
-        body: JSON.stringify({ planType: 'extension', passType }),
+        body: JSON.stringify({ planType: 'extension', passType, lang }),
       });
       const data = await res.json();
       if (data?.url) window.location.href = data.url;

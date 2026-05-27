@@ -44,6 +44,14 @@ export async function POST(req) {
     const body = await req.json().catch(() => ({}));
     const planType = body.planType || 'onetime_auto';
     const extensionTarget = body.passType; // only used for kind='extension': 'moto' | 'auto' | 'cdl'
+    // Map our 5-language codes to Stripe Checkout locale codes so the
+    // hosted checkout page renders in the user's language instead of
+    // defaulting to English based on browser headers. Stripe supports a
+    // fixed enum (https://stripe.com/docs/payments/checkout/customization/translate);
+    // we narrow to the four non-EN locales we actually translate the rest
+    // of the funnel into. Unknown / EN falls through to 'auto'.
+    const LANG_TO_STRIPE_LOCALE = { ru: 'ru', es: 'es', zh: 'zh', ua: 'uk' };
+    const checkoutLocale = LANG_TO_STRIPE_LOCALE[body.lang] || 'auto';
 
     if (!ALL_PLANS.has(planType)) {
       return Response.json({ error: 'Unknown plan type' }, { status: 400 });
@@ -135,6 +143,7 @@ export async function POST(req) {
       cancel_url: `${SITE_URL}/upgrade`,
       metadata,
       phone_number_collection: { enabled: true },
+      locale: checkoutLocale,
     };
 
     // Pass metadata to subscription object too (so renewal invoices see it)
