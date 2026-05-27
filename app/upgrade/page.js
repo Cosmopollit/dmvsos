@@ -129,23 +129,13 @@ function UpgradeContent() {
         <p className="text-[#94A3B8] text-base">{tex.upgradeSubtext}</p>
       </div>
 
-      {/* Social proof */}
-      <div className="flex gap-6 mb-6 text-center">
-        <div>
-          <div className="text-2xl font-bold text-[#F59E0B]">35K+</div>
-          <div className="text-xs text-[#94A3B8]">{tex.statQuestions || 'questions'}</div>
-        </div>
-        <div className="w-px bg-[#1E3A5F]" />
-        <div>
-          <div className="text-2xl font-bold text-[#F59E0B]">50</div>
-          <div className="text-xs text-[#94A3B8]">{tex.statStates}</div>
-        </div>
-        <div className="w-px bg-[#1E3A5F]" />
-        <div>
-          <div className="text-2xl font-bold text-[#F59E0B]">5</div>
-          <div className="text-xs text-[#94A3B8]">{tex.statLanguages}</div>
-        </div>
-      </div>
+      {/* Coverage tagline. Replaces the older 3-column "35K+ / 50 / 5"
+          stats grid. Same facts, one confident line — emphasis via bold
+          rather than ALL CAPS, per brand voice. */}
+      <p className="text-sm sm:text-[15px] text-white/90 text-center mb-6 max-w-md font-medium tracking-tight">
+        <span className="font-bold text-[#F59E0B]">{tex.statsLine?.split(' ')[0] || 'All'}</span>{' '}
+        {(tex.statsLine || 'All 35,000+ questions · 5 languages · all 50 states').split(' ').slice(1).join(' ')}
+      </p>
 
       {/* Free tier chip */}
       <div className="w-full max-w-2xl mb-5 rounded-2xl p-4 border border-white/10 bg-white/5 flex items-center gap-4">
@@ -266,10 +256,11 @@ function UpgradeContent() {
         </ul>
       </div>
 
-      {/* Value prop */}
-      <p className="text-[#94A3B8] text-sm text-center max-w-md mb-4">
-        {tex.pricingValueProp || '🛡️ One failed test = $50+ fees + weeks waiting. Plans pay for themselves.'}
-      </p>
+      {/* Removed: pricing value-prop line claimed "money back if you don't
+          pass" — that's NOT our actual policy (24h refund is universal,
+          fail-refund only exists for CDL Pro Pass Guarantee). Kept the
+          24h-refund / no-subscription wording inside the bureaucracy block
+          and the upgradeSubtext at the top — those are accurate. */}
 
       {error && (
         <p className="text-center text-xs text-red-400 font-medium mb-4">

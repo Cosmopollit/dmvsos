@@ -240,10 +240,9 @@ export default function Home() {
             className="text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-3 py-1 hover:border-[#2563EB] hover:text-[#2563EB] transition-colors">
             📖 {tex.navManuals}
           </Link>
-          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#94A3B8] bg-[#F8FAFC] border border-[#E2E8F0] rounded-full px-3 py-1 cursor-default select-none">
-            🎓 {tex.navCourses}
-            <span className="text-[9px] font-bold bg-[#E2E8F0] text-[#94A3B8] px-1.5 py-0.5 rounded-full leading-none">{tex.navSoon}</span>
-          </span>
+          {/* "Courses · soon" tab removed 2026-05-26 — promising vapor was
+              reading as a marketing tease and competing for attention with
+              the actual product. Will return when courses ship. */}
         </div>
       </header>
 
@@ -280,93 +279,154 @@ export default function Home() {
         );
       })()}
 
-      {/* Hero section */}
-      <section className="w-full max-w-md mx-auto px-4 pt-1 pb-5 text-center">
-        {/* H1 headline  ·  DM Sans, Anthropic-style */}
+      {/* Hero section — title + warm reassurance + factual trust line, all
+          inside the same visual block so the three messages read as a single
+          paragraph instead of three orphaned text elements. */}
+      <section className="w-full max-w-md mx-auto px-4 pt-1 pb-6 text-center">
         <h1 className="text-[32px] sm:text-[42px] font-semibold text-[#0B1C3D] leading-[1.13] mb-3 whitespace-pre-line"
           style={{ fontFamily: "'DM Sans', var(--font-dm-sans), sans-serif", letterSpacing: '-0.025em' }}>
           {tex.heroTitle}
         </h1>
-
-        {/* Subheadline */}
-        <p className="text-[15px] font-normal leading-relaxed"
+        <p className="text-[15px] font-normal leading-relaxed mb-3"
           style={{ color: '#64748B', letterSpacing: '-0.01em' }}>
           {tex.heroSub}
         </p>
+        {/* Trust-line is interactive: amber-tinted pill with a closed-lock
+            icon whose shackle rotates open on hover. Click navigates to the
+            /upgrade page — the line tells the user the same questions are
+            "locked" behind a Pass and invites them to unlock. */}
+        {tex.heroTrustLine && (
+          <button
+            type="button"
+            onClick={() => router.push(`/upgrade?lang=${langCode}`)}
+            className="group hero-trust-pill inline-flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 cursor-pointer"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" className="shrink-0" style={{ overflow: 'visible' }}>
+              <rect x="6" y="11" width="12" height="9" rx="2" fill="#F59E0B" />
+              <path
+                className="hero-trust-shackle"
+                d="M8 11V8a4 4 0 0 1 8 0v3"
+                stroke="#92400E"
+                strokeWidth="2"
+                fill="none"
+                strokeLinecap="round"
+              />
+            </svg>
+            <span className="text-[14px] font-semibold tracking-tight" style={{ color: '#0B1C3D', letterSpacing: '-0.01em' }}>
+              {tex.heroTrustLine}
+            </span>
+            <span className="hero-trust-arrow text-sm" style={{ color: '#94A3B8' }}>
+              →
+            </span>
+          </button>
+        )}
+        <style jsx>{`
+          .hero-trust-pill {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(37, 99, 235, 0.06) 100%);
+            border: 1px solid rgba(245, 158, 11, 0.28);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+          }
+          .hero-trust-pill:hover {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(37, 99, 235, 0.10) 100%);
+            border-color: rgba(245, 158, 11, 0.55);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px -4px rgba(245, 158, 11, 0.25);
+          }
+          .hero-trust-shackle {
+            transform-origin: 16px 11px;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          .hero-trust-pill:hover .hero-trust-shackle {
+            transform: rotate(-30deg) translateX(-1px);
+          }
+          .hero-trust-arrow {
+            opacity: 0;
+            transform: translateX(-4px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+          }
+          .hero-trust-pill:hover .hero-trust-arrow {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        `}</style>
       </section>
 
-      {/* Benefit checklist  ·  three concrete outcome-shaped lines so the user
-          immediately sees what's on offer. Replaces an older 5-pill strip
-          that mostly duplicated the subtitle. */}
-      <div className="w-full max-w-md mx-auto px-4 mb-5">
-        <ul className="flex flex-col gap-1.5 text-[13px] text-[#475569] max-w-xs mx-auto">
-          {[tex.benefitFree, tex.benefitExplain, tex.benefitFormat].map((b, i) => (
-            <li key={i} className="flex items-start gap-2">
-              <svg width="16" height="16" viewBox="0 0 16 16" className="shrink-0 mt-0.5">
-                <circle cx="8" cy="8" r="8" fill="#16A34A" />
-                <path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-              </svg>
-              <span>{b}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
       {/* State selector card */}
+      {/* One-click start: state picker + 3 category buttons in a single card.
+          Replaces the older 2-step flow (home → /category → /test). Each
+          category button shows free question count + price so the offer
+          is concrete before the user commits. CDL still routes through
+          /cdl-category since it has subcategories (general / air-brakes /
+          combination), Car and Moto skip the intermediate page entirely. */}
       <div id="state-selector" className="w-full max-w-md mx-auto px-4 mb-8">
-        <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 border border-[#E2E8F0]/40" style={{ borderTop: '4px solid #2563EB' }}>
+        <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-7 border border-[#E2E8F0]/40" style={{ borderTop: '4px solid #2563EB' }}>
 
-        <p className="text-base font-semibold text-[#0B1C3D] mb-5 text-center">{tex.selectStateLabel}</p>
+          <p className="text-base font-semibold text-[#0B1C3D] mb-3 text-center">{tex.selectStateLabel}</p>
 
-        <select
-          ref={stateSelectRef}
-          value={state}
-          onChange={e => setState(e.target.value)}
-          className="w-full py-4 px-4 rounded-xl border-2 border-gray-100 focus:border-blue-500 outline-none text-base bg-white text-gray-700 cursor-pointer appearance-none"
-          style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 16px center' }}
-        >
-          <option value="">{tex.selectState}</option>
-          {stateOptions.map(s => (
-            <option key={s.code} value={s.code}>{s.name}</option>
-          ))}
-        </select>
+          <select
+            ref={stateSelectRef}
+            value={state}
+            onChange={e => setState(e.target.value)}
+            className="w-full py-4 px-4 rounded-xl border-2 border-gray-100 focus:border-blue-500 outline-none text-base bg-white text-gray-700 cursor-pointer appearance-none"
+            style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 16px center' }}
+          >
+            <option value="">{tex.selectState}</option>
+            {stateOptions.map(s => (
+              <option key={s.code} value={s.code}>{s.name}</option>
+            ))}
+          </select>
 
-        {(() => {
-          const isAmber = user && isPro && state;
-          const stateName = state
-            ? (stateOptions.find(s => s.code === state)?.name || '').replace(/\s*\([^)]+\)$/, '')
-            : '';
-          const ctaBase = tex.ctaStart || 'Start Test';
-          const buttonLabel = state ? `${ctaBase} → ${stateName}` : `${ctaBase} →`;
-          return (
+          {/* (Trust claim 'те же вопросы' lives above the state card now —
+              removed from inside the card to avoid duplication.) */}
+          <div className="mb-4" />
+
+          {/* Category buttons — only enabled once a state is picked. With
+              geolocation auto-fill most users see this state already, so
+              this is usually a single-tap surface. */}
+          {state ? (
             <>
-              <button
-                type="button"
-                disabled={!state}
-                onClick={() => router.push(`/category?state=${state}&lang=${langCode}`)}
-                className={`w-full mt-4 py-4 rounded-xl font-semibold text-[15px] flex items-center justify-center gap-2 transition-all ${
-                  !state
-                    ? 'bg-[#E2E8F0] text-[#94A3B8] cursor-not-allowed'
-                    : `text-white cursor-pointer btn-pulse ${isAmber ? 'bg-[#F59E0B] hover:bg-[#D97706]' : 'bg-[#2563EB] hover:bg-[#1D4ED8]'}`
-                }`}
-              >
-                {buttonLabel}
-              </button>
-              {isPro && state ? (
-                <p className="text-xs text-center mt-3 text-[#B45309] font-medium">{tex.proActive}</p>
-              ) : (
-                <div className="flex flex-wrap gap-2 justify-center mt-3">
-                  <span className="inline-flex items-center gap-1 text-xs text-[#64748B] bg-[#F1F5F9] px-2.5 py-1 rounded-full">{tex.trust1}</span>
-                  <span className="inline-flex items-center gap-1 text-xs text-[#64748B] bg-[#F1F5F9] px-2.5 py-1 rounded-full">{tex.trust2}</span>
-                  <span className="inline-flex items-center gap-1 text-xs text-[#64748B] bg-[#F1F5F9] px-2.5 py-1 rounded-full">{tex.trust3}</span>
-                </div>
+              {/* Drop the "Выберите тест" sub-heading — three labelled cards
+                  below are self-explanatory and an extra heading inside the
+                  card made the surface feel cramped. */}
+              <div className="flex flex-col gap-3">
+                {[
+                  { id: 'dmv',  icon: '🚗', label: tex.catCar,  freeCount: 20, price: '$29.99', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', accent: '#2563EB' },
+                  { id: 'cdl',  icon: '🚛', label: tex.catCdl,  freeCount: 20, price: '$49.99', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)', accent: '#0EA5E9' },
+                  { id: 'moto', icon: '🏍️', label: tex.catMoto, freeCount: 5,  price: '$19.99', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)', accent: '#D97706' },
+                ].map(cat => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => {
+                      if (cat.id === 'cdl') router.push(`/cdl-category?state=${state}&lang=${langCode}`);
+                      else router.push(`/test?state=${state}&category=${cat.id}&lang=${langCode}`);
+                    }}
+                    className="rounded-2xl p-4 flex items-center gap-3 hover:shadow-md transition-all text-left border-2 border-white/60 shadow-sm hover:-translate-y-0.5"
+                    style={{ background: cat.gradient }}
+                  >
+                    <span className="text-3xl shrink-0">{cat.icon}</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold text-[#1E293B] text-[15px]">{cat.label}</div>
+                      <div className="text-[12px] text-[#64748B] mt-0.5">
+                        <span className="font-semibold text-[#16A34A]">{cat.freeCount} {tex.freeWord || 'free'}</span>
+                        <span className="text-[#CBD5E1] mx-1.5">·</span>
+                        <span>{tex.priceFrom || 'from'} <span className="font-semibold" style={{ color: cat.accent }}>{cat.price}</span></span>
+                      </div>
+                    </div>
+                    <span className="text-[#94A3B8] text-lg shrink-0">→</span>
+                  </button>
+                ))}
+              </div>
+              {isPro && (
+                <p className="text-xs text-center mt-4 text-[#B45309] font-medium">{tex.proActive}</p>
               )}
+              <p className="text-xs text-gray-400 mt-3 text-center">🟢 {liveCount} {tex.practicingNow}</p>
             </>
-          );
-        })()}
-        {state && (
-          <p className="text-xs text-gray-400 mt-2 text-center">🟢 {liveCount} {tex.practicingNow}</p>
-        )}
+          ) : (
+            <p className="text-sm text-center text-[#94A3B8] py-4 mt-2">
+              ↑ {tex.pickStateFirst || 'Choose your state to continue'}
+            </p>
+          )}
         </div>
       </div>
 
