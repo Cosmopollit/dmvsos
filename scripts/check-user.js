@@ -82,6 +82,15 @@ async function activePassesFor(userIds) {
   return res.ok ? res.json() : [];
 }
 
+async function testSessionsFor(userIds) {
+  if (userIds.length === 0) return [];
+  const res = await fetch(
+    `${SUPA_URL}/rest/v1/test_sessions?select=state,category,score,total,lang,created_at,user_id&user_id=in.(${userIds.join(',')})&order=created_at.desc&limit=25`,
+    { headers: H }
+  );
+  return res.ok ? res.json() : [];
+}
+
 async function legacyProfile(email) {
   const res = await fetch(
     `${SUPA_URL}/rest/v1/profiles?select=email,is_pro,plan_type,plan_expires_at,stripe_customer_id&email=ilike.${encodeURIComponent(email)}&limit=1`,
@@ -133,6 +142,20 @@ function fmtDate(d) {
       const live = exp > now;
       if (live) anyLivePass = true;
       console.log(`  • ${p.pass_type.padEnd(5)} expires=${fmtDate(p.expires_at)}  ${live ? 'ACTIVE ✅' : 'EXPIRED ❌'}  user_id=${p.user_id}`);
+    }
+  }
+  console.log('');
+
+  // 2b) test_sessions (his results)
+  const sessions = await testSessionsFor(ids);
+  console.log(`TEST RESULTS (${sessions.length}, latest first):`);
+  if (sessions.length === 0) {
+    console.log('  (none) — he has not completed any test that got saved.');
+  } else {
+    for (const s of sessions) {
+      const pct = s.total ? Math.round((s.score / s.total) * 100) : 0;
+      const pass = pct >= 80; // typical DMV passing bar
+      console.log(`  • ${fmtDate(s.created_at)}  ${String(s.state || '?').padEnd(14)} ${String(s.category || '?').padEnd(10)} ${s.lang || '?'}  ${s.score}/${s.total} (${pct}%) ${pass ? '✅' : '❌'}`);
     }
   }
   console.log('');
