@@ -18,6 +18,11 @@ const GREETINGS = {
     body: 'Auto Pass відкрито на 30 днів. Усі тести, усі режими, без обмежень. У тебе все вийде! Якщо будуть питання, напиши Анастасії. Удачі на іспиті!',
     cta: 'Поїхали',
   },
+  'sandusirbu1989@gmail.com': {
+    title: 'Добро пожаловать в DMVSOS!',
+    body: 'Секретный доступ активирован! Если у вас будут вопросы, напишите в Телеграм.',
+    cta: 'Поехали',
+  },
   // anastasiyarubkevich@gmail.com — handled separately by <NastyaGreeting>
   // (fullscreen heart overlay instead of the generic modal).
 };
