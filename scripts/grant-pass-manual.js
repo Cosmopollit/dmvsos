@@ -5,15 +5,17 @@
  * (e.g., user paid without being logged in).
  *
  * Creates Supabase auth.users entry if missing, inserts active_pass,
- * and optionally sends a magic-link login email.
+ * and sends a magic-link login email by default (so newly created users
+ * can actually sign in — they have no password/OAuth identity yet).
  *
  * Usage:
  *   node scripts/grant-pass-manual.js --email=foo@bar.com --pass=auto
  *   node scripts/grant-pass-manual.js --email=foo@bar.com --pass=moto --days=30
- *   node scripts/grant-pass-manual.js --email=foo@bar.com --pass=cdl --send-magic-link
+ *   node scripts/grant-pass-manual.js --email=foo@bar.com --pass=cdl --no-magic-link
  *
- * --pass:  moto | auto | cdl | extension
- * --days:  defaults to 30
+ * --pass:           moto | auto | cdl | extension
+ * --days:           defaults to 30
+ * --no-magic-link:  skip the magic-link email (default is to send)
  */
 
 'use strict';
@@ -37,10 +39,10 @@ const argVal = (k) => args.find(a => a.startsWith(`--${k}=`))?.split('=')[1];
 const EMAIL = (argVal('email') || '').toLowerCase().trim();
 const PASS = argVal('pass');
 const DAYS = parseInt(argVal('days') || '30', 10);
-const SEND_MAGIC = args.includes('--send-magic-link');
+const SEND_MAGIC = !args.includes('--no-magic-link');
 
 if (!EMAIL || !['moto', 'auto', 'cdl', 'extension'].includes(PASS)) {
-  console.error('Usage: --email=X --pass=moto|auto|cdl|extension [--days=30] [--send-magic-link]');
+  console.error('Usage: --email=X --pass=moto|auto|cdl|extension [--days=30] [--no-magic-link]');
   process.exit(1);
 }
 
@@ -163,7 +165,7 @@ async function sendMagicLink(email) {
   if (SEND_MAGIC) {
     await sendMagicLink(EMAIL);
   } else {
-    console.log(`\nSkipped magic-link email. Add --send-magic-link to send the login email.`);
+    console.log(`\nSkipped magic-link email (--no-magic-link). User has no identity yet — they must use OAuth or "Forgot password" to sign in.`);
   }
 
   console.log(`\nDone. ${EMAIL} now has ${passType} pass until ${expiresAt.slice(0, 10)}.`);
