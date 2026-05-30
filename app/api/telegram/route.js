@@ -20,12 +20,22 @@ import {
   mainMenuKeyboard, backToMenuKeyboard, statePickerKeyboard, categoryKeyboard,
   languagePickerKeyboard, LANG_PICKER_TEXT,
 } from '@/lib/telegram-helper.js';
+import { grantPass, getUserState, isValidEmail, isValidPassType } from '@/lib/grant-pass.js';
 
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID;
 const SECRET = process.env.TELEGRAM_WEBHOOK_SECRET || '';
 const SUPA_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPA_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+// Chat IDs allowed to use /grant and /check. Defaults to the admin chat
+// if TELEGRAM_GRANT_CHAT_IDS isn't set, so the feature works for one admin
+// out of the box. Add a comma-separated list to include co-admins
+// (e.g. "472198072,380411112" for evgeniy + anastasiya).
+const GRANT_ALLOWED_CHAT_IDS = new Set(
+  (process.env.TELEGRAM_GRANT_CHAT_IDS || process.env.TELEGRAM_ADMIN_CHAT_ID || '')
+    .split(',').map(s => s.trim()).filter(Boolean)
+);
 
 const API = TOKEN ? `https://api.telegram.org/bot${TOKEN}` : null;
 
@@ -248,6 +258,109 @@ async function handleCallback(cb) {
   }
 }
 
+// ── Admin grant / check command handlers ─────────────────────────────────
+function formatDaysRemaining(expiresAt) {
+  if (!expiresAt) return 'no expiry';
+  const days = (new Date(expiresAt) - Date.now()) / 86400000;
+  if (days <= 0) return 'EXPIRED';
+  if (days < 1) return `${Math.round(days * 24)}h left`;
+  return `${days.toFixed(1)}d left`;
+}
+
+async function notifyOtherAdmins(actingChatId, actorName, text) {
+  for (const id of GRANT_ALLOWED_CHAT_IDS) {
+    if (String(id) === String(actingChatId)) continue;
+    await sendMessage(id, `🔔 <b>${escapeHtml(actorName)}</b>: ${text}`).catch(() => {});
+  }
+}
+
+async function handleGrantCommand(chatId, actorName, textRaw) {
+  // Syntax: /grant <email> <moto|auto|cdl|extension> [days] [--no-link]
+  const parts = textRaw.trim().split(/\s+/).slice(1);
+  if (parts.length < 2) {
+    await sendMessage(chatId,
+      `Usage: <code>/grant &lt;email&gt; &lt;moto|auto|cdl|extension&gt; [days] [--no-link]</code>\n\n` +
+      `Examples:\n` +
+      `  <code>/grant foo@bar.com auto</code>  (30 days, default)\n` +
+      `  <code>/grant foo@bar.com auto 7</code>\n` +
+      `  <code>/grant foo@bar.com cdl 30 --no-link</code>`);
+    return;
+  }
+  const email = parts[0];
+  const passType = parts[1].toLowerCase();
+  const sendLink = !parts.includes('--no-link');
+  let days = 30;
+  for (const p of parts.slice(2)) {
+    if (p === '--no-link') continue;
+    const n = parseInt(p, 10);
+    if (Number.isFinite(n) && n > 0 && n <= 365) days = n;
+  }
+
+  if (!isValidEmail(email)) {
+    await sendMessage(chatId, `⚠️ Invalid email: <code>${escapeHtml(email)}</code>`);
+    return;
+  }
+  if (!isValidPassType(passType)) {
+    await sendMessage(chatId, `⚠️ Invalid pass type: <code>${escapeHtml(passType)}</code>. Use one of: moto, auto, cdl, extension.`);
+    return;
+  }
+
+  try {
+    const r = await grantPass({ email, passType, days, sendMagicLink: sendLink });
+    const linkLine = sendLink
+      ? (typeof r.magicLink === 'string' ? `🔗 Magic link sent` : `⚠️ Magic link FAILED: ${r.magicLink?.error || 'unknown'}`)
+      : `🔗 No link sent (--no-link)`;
+    const summary =
+      `✅ <b>${escapeHtml(r.email)}</b> — <b>${r.passType}</b>, ${r.days}d\n` +
+      `   ${r.userCreated ? 'New user' : 'Existing user'} <code>${r.userId}</code>\n` +
+      `   Until ${r.expiresAt.slice(0, 10)} (${formatDaysRemaining(r.expiresAt)})\n` +
+      `   ${linkLine}`;
+    await sendMessage(chatId, summary);
+    await notifyOtherAdmins(chatId, actorName,
+      `granted <b>${r.passType}</b> ${r.days}d to <code>${escapeHtml(r.email)}</code>`);
+  } catch (err) {
+    await sendMessage(chatId, `❌ Grant failed: ${escapeHtml(err.message)}`);
+  }
+}
+
+async function handleCheckCommand(chatId, textRaw) {
+  // Syntax: /check <email>
+  const parts = textRaw.trim().split(/\s+/).slice(1);
+  if (parts.length < 1) {
+    await sendMessage(chatId, `Usage: <code>/check &lt;email&gt;</code>`);
+    return;
+  }
+  const email = parts[0];
+  if (!isValidEmail(email)) {
+    await sendMessage(chatId, `⚠️ Invalid email: <code>${escapeHtml(email)}</code>`);
+    return;
+  }
+  try {
+    const s = await getUserState(email);
+    if (!s.exists) {
+      await sendMessage(chatId, `📭 No account for <code>${escapeHtml(email)}</code>`);
+      return;
+    }
+    const lines = [`📋 <b>${escapeHtml(s.email)}</b>`];
+    if (s.profile) {
+      lines.push(`   Profile: is_pro=<b>${s.profile.is_pro}</b>, plan=${s.profile.plan_type || '-'}, until ${(s.profile.plan_expires_at || '').slice(0, 10) || '-'}`);
+    }
+    lines.push(`   Accounts: ${s.accounts.length}`);
+    for (const a of s.accounts) {
+      const ident = a.identities.length ? a.identities.join(',') : '(none)';
+      const lastLogin = a.lastSignInAt ? a.lastSignInAt.slice(0, 16).replace('T', ' ') : 'NEVER';
+      lines.push(`   • <code>${a.userId.slice(0, 8)}</code> identities=${ident} last_signin=${lastLogin}`);
+      for (const p of a.passes) {
+        lines.push(`     - ${p.pass_type}: ${p.expires_at.slice(0, 10)} (${formatDaysRemaining(p.expires_at)})`);
+      }
+      if (a.passes.length === 0) lines.push(`     - no active passes`);
+    }
+    await sendMessage(chatId, lines.join('\n'));
+  } catch (err) {
+    await sendMessage(chatId, `❌ Check failed: ${escapeHtml(err.message)}`);
+  }
+}
+
 // ── DM message handler ──────────────────────────────────────────────────
 async function handleDmMessage(msg, autoLang) {
   const chatId = msg.chat.id;
@@ -288,6 +401,24 @@ async function handleDmMessage(msg, autoLang) {
         );
         return;
       }
+    }
+  }
+
+  // ── Admin grant / check commands ───────────────────────────────────────
+  // /grant <email> <moto|auto|cdl|extension> [days]  → run a manual pass grant
+  // /check <email>                                    → report current state
+  // Gated to GRANT_ALLOWED_CHAT_IDS (your chat + co-admin chats). Falls
+  // through if the chat isn't allowed, so unauthorized users get the normal
+  // "unknown command" reply instead of a permission error that hints at the
+  // feature's existence.
+  if (GRANT_ALLOWED_CHAT_IDS.has(String(chatId))) {
+    if (text.startsWith('/grant')) {
+      await handleGrantCommand(chatId, userName, textRaw);
+      return;
+    }
+    if (text.startsWith('/check')) {
+      await handleCheckCommand(chatId, textRaw);
+      return;
     }
   }
 
