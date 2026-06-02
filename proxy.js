@@ -157,6 +157,18 @@ function scoreBot(req) {
 }
 
 // ── Main proxy ────────────────────────────────────────────────────────────
+// Country codes flagged for aggressive scraping with zero real customer
+// presence in our DB. Block list, NOT allow list — every other country
+// (including legit US, RU/UA immigrant audiences) is untouched.
+// Reviewed 2026-06-01: Vercel Analytics shows 30% of /api/test/questions
+// traffic from SG with 0 SG users registered ever; treat as scraper.
+const HIGH_RISK_COUNTRIES = new Set(['SG'])
+
+// Paths that ship the question bank to the client. Blocking SG bots here
+// stops the data exfiltration without taking the whole site offline for
+// the (currently theoretical) legitimate SG visitor.
+const SCRAPER_TARGET_PATHS = ['/api/test/questions']
+
 export async function proxy(request) {
   const path = request.nextUrl.pathname
   const isApi = path.startsWith('/api/')
@@ -164,6 +176,24 @@ export async function proxy(request) {
   // 1. Bot scoring — runs on every matched request (page or API).
   //    Pure CPU work, no network call, so cost is negligible.
   const { score: botScore, reasons: botReasons } = scoreBot(request)
+
+  // 1a. Country-targeted soft block. Triggers only when ALL of:
+  //       - request hits a scrape-target path (question API)
+  //       - request origin country is in the high-risk list
+  //       - request also looks bot-shaped (score ≥ 5)
+  //     A real Chrome from Singapore (score < 5) gets through; a curl,
+  //     headless, or sec-fetch-stripped fetch from SG gets a 429 with a
+  //     short cool-down, identical to what the per-IP rate limiter would
+  //     send if they kept hammering.
+  const country = request.headers.get('x-vercel-ip-country') || ''
+  const isScraperTarget = SCRAPER_TARGET_PATHS.some(p => path === p || path.startsWith(p + '?'))
+  if (botScore >= 5 && HIGH_RISK_COUNTRIES.has(country) && isScraperTarget) {
+    console.warn(`[bot-block] country=${country} score=${botScore} path=${path} reasons=${botReasons.join(',')}`)
+    return new NextResponse(
+      JSON.stringify({ ok: false, error: 'rate_limited', resetAt: Date.now() + 60 * 60 * 1000 }),
+      { status: 429, headers: { 'Content-Type': 'application/json', 'Retry-After': '3600' } }
+    )
+  }
 
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set('x-bot-score', String(botScore))
