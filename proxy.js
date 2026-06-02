@@ -63,11 +63,27 @@ const BAD_BOT_UA_PATTERNS = [
 // Crawlers we explicitly allow through (SEO + social previews).
 // Score forced to 0 so they index us normally.
 const GOOD_BOT_UA_PATTERNS = [
+  // Google family — the broad "Google" matcher covers GoogleOther,
+  // Google-Extended, Google-CloudVertexBot, Storebot-Google, etc. that
+  // ship as `Mozilla/5.0 (... compatible; GoogleOther)` or
+  // `(compatible; Storebot-Google/1.0)`. The previous /Googlebot/i alone
+  // missed all of these, which sent real Google crawlers into the
+  // score>=5 bucket and started showing up as "blocked" in bot_events
+  // even though we expected them to be exempt. Effect on SEO was
+  // immediate: google.com referrals collapsed to ~15/week vs 196 from
+  // bing while Google's other crawlers got x-bot-score=5 headers and
+  // (when paths matched the SG/GCP block) 429s.
   /Googlebot/i,
+  /GoogleOther/i,
+  /Google-Extended/i,
+  /Storebot-Google/i,
+  /Google-CloudVertexBot/i,
+  /Google-Read-Aloud/i,
   /Google-InspectionTool/i,
   /AdsBot-Google/i,
   /APIs-Google/i,
   /Mediapartners-Google/i,
+  /FeedFetcher-Google/i,
   /Bingbot/i,
   /AdIdxBot/i,
   /BingPreview/i,
@@ -86,6 +102,8 @@ const GOOD_BOT_UA_PATTERNS = [
   /ChatGPT-User/i,
   /GPTBot/i,
   /ClaudeBot/i,
+  /Claude-Web/i,
+  /Anthropic-AI/i,
 ]
 
 const GENERIC_BOT_WORDS = /\b(bot|crawler|spider|fetch|scrape|harvest|monitor)\b/i
