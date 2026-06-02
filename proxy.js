@@ -160,14 +160,44 @@ function scoreBot(req) {
 // Country codes flagged for aggressive scraping with zero real customer
 // presence in our DB. Block list, NOT allow list — every other country
 // (including legit US, RU/UA immigrant audiences) is untouched.
-// Reviewed 2026-06-01: Vercel Analytics shows 30% of /api/test/questions
-// traffic from SG with 0 SG users registered ever; treat as scraper.
+// Reviewed 2026-06-02: Vercel Analytics + GA4 both show 30% of dmvsos
+// traffic from SG with 0 SG users in auth.users; treat as scraper.
 const HIGH_RISK_COUNTRIES = new Set(['SG'])
 
-// Paths that ship the question bank to the client. Blocking SG bots here
-// stops the data exfiltration without taking the whole site offline for
-// the (currently theoretical) legitimate SG visitor.
-const SCRAPER_TARGET_PATHS = ['/api/test/questions']
+// First-octet prefixes of cloud-provider IP ranges where we have observed
+// scrapers renting cheap VMs. Real users are on consumer ISPs, not GCP
+// customer IPs. Googlebot itself uses 66.249.x.x (verified Google range)
+// and is also covered by the good-bot UA allow-list, so SEO crawling is
+// unaffected. 2026-06-02: caught 4 distinct GCP VMs scraping us with a
+// spoofed Chrome/14 UA — see bot_events table.
+const HIGH_RISK_IP_PREFIXES = ['34.', '35.']
+
+function isHighRiskIp(ip) {
+  if (!ip) return false
+  for (const prefix of HIGH_RISK_IP_PREFIXES) {
+    if (ip.startsWith(prefix)) return true
+  }
+  return false
+}
+
+// Paths the scraper has been observed crawling. Block fires only when
+// origin (country or IP) AND bot score AND path ALL match — a real
+// browser hitting any of these still passes because its score is 0-2.
+//   /api/test/questions   — the question bank API
+//   /manuals/...          — state driver manuals (we saw /manuals/new-hampshire)
+//   /dmv-test/<state>     — server-rendered SEO landing pages with content
+const SCRAPER_TARGET_PATTERNS = [
+  /^\/api\/test\/questions(?:\?|$)/,
+  /^\/manuals(?:\/|$)/,
+  /^\/dmv-test\/[\w-]+(?:\/|$)/,
+]
+
+function isScraperTargetPath(path) {
+  for (const re of SCRAPER_TARGET_PATTERNS) {
+    if (re.test(path)) return true
+  }
+  return false
+}
 
 export async function proxy(request) {
   const path = request.nextUrl.pathname
@@ -177,19 +207,27 @@ export async function proxy(request) {
   //    Pure CPU work, no network call, so cost is negligible.
   const { score: botScore, reasons: botReasons } = scoreBot(request)
 
-  // 1a. Country-targeted soft block. Triggers only when ALL of:
-  //       - request hits a scrape-target path (question API)
-  //       - request origin country is in the high-risk list
+  // 1a. Targeted soft block. Triggers only when ALL of:
+  //       - request hits a scrape-target path (question API, manuals,
+  //         or SEO state landing pages)
+  //       - origin is risky (high-risk country OR cloud-VM IP range)
   //       - request also looks bot-shaped (score ≥ 5)
-  //     A real Chrome from Singapore (score < 5) gets through; a curl,
-  //     headless, or sec-fetch-stripped fetch from SG gets a 429.
+  //     A real Chrome from anywhere (score 0-2) gets through. A spoofed
+  //     curl/headless/Chrome-14 from SG or a GCP VM hits 429.
+  //     Googlebot is exempt because the good-bot UA allow-list scores it 0.
   const country = request.headers.get('x-vercel-ip-country') || ''
-  const isScraperTarget = SCRAPER_TARGET_PATHS.some(p => path === p || path.startsWith(p + '?'))
-  const isBlocked = botScore >= 5 && HIGH_RISK_COUNTRIES.has(country) && isScraperTarget
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+          || request.headers.get('x-real-ip')
+          || ''
+  const isRiskyOrigin = HIGH_RISK_COUNTRIES.has(country) || isHighRiskIp(ip)
+  const isBlocked = botScore >= 5 && isRiskyOrigin && isScraperTargetPath(path)
   if (isBlocked) {
-    console.warn(`[bot-block] country=${country} score=${botScore} path=${path} reasons=${botReasons.join(',')}`)
-    // Still log the event so we can see WHAT we're blocking; the inline
-    // logging block below also covers score >= 5 cases that pass through.
+    const blockTrigger = HIGH_RISK_COUNTRIES.has(country)
+      ? `country=${country}`
+      : `ip=${ip}`
+    console.warn(`[bot-block] ${blockTrigger} score=${botScore} path=${path} reasons=${botReasons.join(',')}`)
+    // Persist the event so the dashboard sees what we blocked. The inline
+    // logging block below covers score >= 5 cases that pass through.
     const collectorSecret = process.env.BOT_EVENT_SECRET || process.env.TELEGRAM_WEBHOOK_SECRET || ''
     if (collectorSecret) {
       const origin = request.nextUrl.origin
@@ -198,8 +236,7 @@ export async function proxy(request) {
         headers: { 'Content-Type': 'application/json', 'x-bot-event-secret': collectorSecret },
         keepalive: true,
         body: JSON.stringify({
-          ip: request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
-              || request.headers.get('x-real-ip') || null,
+          ip: ip || null,
           country,
           path,
           method: request.method,
