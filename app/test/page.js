@@ -11,6 +11,7 @@ import { flags } from '@/lib/flags';
 import { agencyAbbrForState } from '@/lib/agencies';
 import { examRulesFor } from '@/lib/exam-rules';
 import { planForCategory } from '@/lib/plans';
+import { useExperiment } from '@/lib/experiments';
 
 const langs = [
   { label: 'EN', flag: flags.us, code: 'en' },
@@ -41,7 +42,8 @@ function TestContent() {
   const isRetry = params.get('retry') === 'true';
   const tex = t[lang] || t.en;
 
-  const { isPro, hasCar, hasMoto, hasCdl, loading: authLoading } = useAuth();
+  const { isPro, hasCar, hasMoto, hasCdl, loading: authLoading, user } = useAuth();
+  useExperiment('test_visit', user?.id);
 
   // Category-aware access: each category needs its own plan
   const hasFullAccess = ['moto', 'motorcycle'].includes(category) ? hasMoto

@@ -10,6 +10,7 @@ import { getSavedLang, saveLang, hasSavedLang, detectBrowserLang, isLangBannerDi
 import { STATE_OPTIONS, stateToSlug } from '@/lib/states';
 import { flags } from '@/lib/flags';
 import { PASS_META, EXTENSION } from '@/lib/plans';
+import { useExperiment } from '@/lib/experiments';
 import SupportFooter from '@/app/components/SupportFooter';
 import WelcomeBanner from '@/app/components/WelcomeBanner';
 
@@ -17,6 +18,7 @@ const codeToName = { en: 'English', ru: 'Русский', es: 'Español', zh: '�
 
 export default function Home() {
   const { user, isPro, planType } = useAuth();
+  useExperiment('home_visit', user?.id);
   const [lang, setLang] = useState(() => codeToName[getSavedLang()] || 'English');
   const [state, setState] = useState('');
   const [liveCount] = useState(() => Math.floor(Math.random() * 30) + 30);

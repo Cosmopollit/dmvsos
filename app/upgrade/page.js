@@ -4,10 +4,12 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { flags } from '@/lib/flags';
 import { PASS_META } from '@/lib/plans';
+import { useExperiment } from '@/lib/experiments';
 import SupportFooter from '@/app/components/SupportFooter';
 
 const langs = [
@@ -21,6 +23,8 @@ const langs = [
 function UpgradeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { user } = useAuth();
+  useExperiment('upgrade_visit', user?.id);
   const [lang, setLangState] = useState(searchParams.get('lang') || getSavedLang());
   const [showLangMenu, setShowLangMenu] = useState(false);
   const currentLang = langs.find(l => l.code === lang) || langs[0];
