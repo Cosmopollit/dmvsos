@@ -25,6 +25,22 @@ import { verifyQuestionToken } from '@/lib/questionToken';
 const SUPA_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPA_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Device-ID',
+  'Access-Control-Max-Age': '86400',
+};
+
+function corsJson(body, init = {}) {
+  const headers = { ...(init.headers || {}), ...CORS_HEADERS };
+  return Response.json(body, { ...init, headers });
+}
+
+export async function OPTIONS() {
+  return new Response(null, { status: 204, headers: CORS_HEADERS });
+}
+
 // In-memory rate limiter per bucket. Reuses the same window math as
 // /questions but tracks check-calls separately to prevent abuse via
 // /check brute-force.
@@ -65,14 +81,14 @@ function clientKey(req) {
 export async function POST(req) {
   try {
     const body = await req.json().catch(() => null);
-    if (!body) return Response.json({ ok: false, error: 'bad_body' }, { status: 400 });
+    if (!body) return corsJson({ ok: false, error: 'bad_body' }, { status: 400 });
 
     const { q_token, choice } = body;
     if (typeof q_token !== 'string') {
-      return Response.json({ ok: false, error: 'bad_token' }, { status: 400 });
+      return corsJson({ ok: false, error: 'bad_token' }, { status: 400 });
     }
     if (!Number.isInteger(choice) || choice < 0 || choice > 3) {
-      return Response.json({ ok: false, error: 'bad_choice' }, { status: 400 });
+      return corsJson({ ok: false, error: 'bad_choice' }, { status: 400 });
     }
 
     // Verify and decrypt the opaque token. Rejects:
@@ -82,14 +98,14 @@ export async function POST(req) {
     //   expired      — older than 4 hours
     const tokenResult = verifyQuestionToken(q_token);
     if (!tokenResult.ok) {
-      return Response.json({ ok: false, error: 'token_' + tokenResult.error }, { status: 400 });
+      return corsJson({ ok: false, error: 'token_' + tokenResult.error }, { status: 400 });
     }
     const question_id = tokenResult.questionId;
 
     // Rate limit (per IP, or per IP+DeviceId for native clients).
     const rl = rateLimit(clientKey(req));
     if (!rl.ok) {
-      return Response.json(
+      return corsJson(
         { ok: false, error: 'rate_limited', resetAt: rl.resetAt },
         { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetAt - Date.now()) / 1000)) } }
       );
@@ -105,15 +121,15 @@ export async function POST(req) {
       headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY },
     });
     if (!r.ok) {
-      return Response.json({ ok: false, error: 'db' }, { status: 500 });
+      return corsJson({ ok: false, error: 'db' }, { status: 500 });
     }
     const rows = await r.json();
     if (rows.length === 0) {
-      return Response.json({ ok: false, error: 'not_found' }, { status: 404 });
+      return corsJson({ ok: false, error: 'not_found' }, { status: 404 });
     }
     const q = rows[0];
 
-    return Response.json(
+    return corsJson(
       {
         ok: true,
         correct: choice === q.correct_answer,
@@ -128,6 +144,6 @@ export async function POST(req) {
         } }
     );
   } catch (err) {
-    return Response.json({ ok: false, error: err.message }, { status: 500 });
+    return corsJson({ ok: false, error: err.message }, { status: 500 });
   }
 }

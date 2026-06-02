@@ -21,6 +21,27 @@ import { mintQuestionToken } from '@/lib/questionToken';
 const SUPA_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPA_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+// CORS: this endpoint is intentionally anonymous and read-only, and the
+// Expo Web build runs from a different origin (localhost during dev, the
+// store-listing domain in production). Wildcard origin is safe here
+// because there is no cookie-bound state to steal; rate-limit is the
+// only gate and lives below.
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Device-ID',
+  'Access-Control-Max-Age': '86400',
+};
+
+function corsJson(body, init = {}) {
+  const headers = { ...(init.headers || {}), ...CORS_HEADERS };
+  return Response.json(body, { ...init, headers });
+}
+
+export async function OPTIONS() {
+  return new Response(null, { status: 204, headers: CORS_HEADERS });
+}
+
 const VALID_STATES = new Set([
   'alabama','alaska','arizona','arkansas','california','colorado','connecticut',
   'delaware','florida','georgia','hawaii','idaho','illinois','indiana','iowa',
@@ -97,11 +118,11 @@ export async function GET(req) {
     const subcategory = url.searchParams.get('subcategory') || null;
     let limit = parseInt(url.searchParams.get('limit') || String(DEFAULT_LIMIT), 10);
 
-    if (!VALID_STATES.has(state)) return Response.json({ ok: false, error: 'bad_state' }, { status: 400 });
-    if (!VALID_CATEGORIES.has(category)) return Response.json({ ok: false, error: 'bad_category' }, { status: 400 });
-    if (!VALID_LANGUAGES.has(language)) return Response.json({ ok: false, error: 'bad_language' }, { status: 400 });
+    if (!VALID_STATES.has(state)) return corsJson({ ok: false, error: 'bad_state' }, { status: 400 });
+    if (!VALID_CATEGORIES.has(category)) return corsJson({ ok: false, error: 'bad_category' }, { status: 400 });
+    if (!VALID_LANGUAGES.has(language)) return corsJson({ ok: false, error: 'bad_language' }, { status: 400 });
     if (subcategory && !VALID_SUBCATEGORIES.has(subcategory)) {
-      return Response.json({ ok: false, error: 'bad_subcategory' }, { status: 400 });
+      return corsJson({ ok: false, error: 'bad_subcategory' }, { status: 400 });
     }
     if (!Number.isFinite(limit) || limit < 1) limit = DEFAULT_LIMIT;
     if (limit > MAX_LIMIT) limit = MAX_LIMIT;
@@ -109,7 +130,7 @@ export async function GET(req) {
     // Rate limit per IP (or per IP+DeviceId for native clients).
     const rl = rateLimit(clientKey(req));
     if (!rl.ok) {
-      return Response.json(
+      return corsJson(
         { ok: false, error: 'rate_limited', resetAt: rl.resetAt },
         { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetAt - Date.now()) / 1000)) } }
       );
@@ -145,7 +166,7 @@ export async function GET(req) {
     });
     if (!r.ok) {
       const text = await r.text();
-      return Response.json({ ok: false, error: 'db', detail: text.slice(0, 200) }, { status: 500 });
+      return corsJson({ ok: false, error: 'db', detail: text.slice(0, 200) }, { status: 500 });
     }
     const rawQuestions = await r.json();
 
@@ -159,7 +180,7 @@ export async function GET(req) {
       q_token: mintQuestionToken(id),
     }));
 
-    return Response.json(
+    return corsJson(
       { ok: true, questions },
       { headers: {
           'X-RateLimit-Remaining': String(rl.remaining),
@@ -168,6 +189,6 @@ export async function GET(req) {
         } }
     );
   } catch (err) {
-    return Response.json({ ok: false, error: err.message }, { status: 500 });
+    return corsJson({ ok: false, error: err.message }, { status: 500 });
   }
 }
