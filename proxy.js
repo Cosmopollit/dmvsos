@@ -182,13 +182,33 @@ export async function proxy(request) {
   //       - request origin country is in the high-risk list
   //       - request also looks bot-shaped (score ≥ 5)
   //     A real Chrome from Singapore (score < 5) gets through; a curl,
-  //     headless, or sec-fetch-stripped fetch from SG gets a 429 with a
-  //     short cool-down, identical to what the per-IP rate limiter would
-  //     send if they kept hammering.
+  //     headless, or sec-fetch-stripped fetch from SG gets a 429.
   const country = request.headers.get('x-vercel-ip-country') || ''
   const isScraperTarget = SCRAPER_TARGET_PATHS.some(p => path === p || path.startsWith(p + '?'))
-  if (botScore >= 5 && HIGH_RISK_COUNTRIES.has(country) && isScraperTarget) {
+  const isBlocked = botScore >= 5 && HIGH_RISK_COUNTRIES.has(country) && isScraperTarget
+  if (isBlocked) {
     console.warn(`[bot-block] country=${country} score=${botScore} path=${path} reasons=${botReasons.join(',')}`)
+    // Still log the event so we can see WHAT we're blocking; the inline
+    // logging block below also covers score >= 5 cases that pass through.
+    const collectorSecret = process.env.BOT_EVENT_SECRET || process.env.TELEGRAM_WEBHOOK_SECRET || ''
+    if (collectorSecret) {
+      const origin = request.nextUrl.origin
+      fetch(`${origin}/api/internal/bot-event`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-bot-event-secret': collectorSecret },
+        keepalive: true,
+        body: JSON.stringify({
+          ip: request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+              || request.headers.get('x-real-ip') || null,
+          country,
+          path,
+          method: request.method,
+          ua: request.headers.get('user-agent') || null,
+          score: botScore,
+          reasons: [...botReasons, 'blocked'],
+        }),
+      }).catch(() => {})
+    }
     return new NextResponse(
       JSON.stringify({ ok: false, error: 'rate_limited', resetAt: Date.now() + 60 * 60 * 1000 }),
       { status: 429, headers: { 'Content-Type': 'application/json', 'Retry-After': '3600' } }
