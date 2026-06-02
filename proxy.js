@@ -211,11 +211,41 @@ export async function proxy(request) {
     }
   }
 
-  // 3. Log high-score detections so we can tune thresholds without
-  //    flooding logs with normal traffic. score >= 6 = probable scraper.
-  if (botScore >= 6) {
+  // 3. Log high-score detections.
+  //    score >= 5 → log to console (Vercel function logs, ~24h retention)
+  //                 AND POST to the persistent /api/internal/bot-event
+  //                 collector so we can aggregate by country/path/UA.
+  //    score >= 6 (probable scraper) is what we'd want to actively block;
+  //    we log a wider band so the threshold can be tuned from data.
+  if (botScore >= 5) {
     const ua = (request.headers.get('user-agent') || '').slice(0, 80)
     console.warn(`[bot-detect] score=${botScore} path=${path} ua="${ua}" reasons=${botReasons.join(',')}`)
+
+    const collectorSecret = process.env.BOT_EVENT_SECRET || process.env.TELEGRAM_WEBHOOK_SECRET || ''
+    if (collectorSecret) {
+      // Fire-and-forget so the bot's own request isn't slowed down by our
+      // logging. keepalive ensures the POST survives the edge response.
+      const origin = request.nextUrl.origin
+      fetch(`${origin}/api/internal/bot-event`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-bot-event-secret': collectorSecret,
+        },
+        keepalive: true,
+        body: JSON.stringify({
+          ip: request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+              || request.headers.get('x-real-ip')
+              || null,
+          country: request.headers.get('x-vercel-ip-country') || null,
+          path,
+          method: request.method,
+          ua: request.headers.get('user-agent') || null,
+          score: botScore,
+          reasons: botReasons,
+        }),
+      }).catch(() => { /* swallow — never block request on logging */ })
+    }
   }
 
   return supabaseResponse
