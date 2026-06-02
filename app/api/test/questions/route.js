@@ -52,15 +52,20 @@ const DEFAULT_LIMIT = 80;
 // regardless of how many questions it returns. A real user browsing a few
 // states + taking a marathon test = ~5-10 requests. A scraper trying to
 // hit every state x category x language combo = 750+ requests, blocked.
-const buckets = new Map(); // key=ip -> { count, resetAt }
+//
+// Bucket key:
+//   - X-Device-ID present (native app): "ip:deviceId" so multiple mobile
+//     users behind one carrier NAT do not share a single bucket.
+//   - Otherwise (web): "ip" (unchanged web behavior).
+const buckets = new Map();
 const WINDOW_MS = 10 * 60 * 1000;
 const MAX_REQUESTS_PER_WINDOW = 60; // generous for users, blocks bulk scrape
 
-function rateLimit(ip) {
+function rateLimit(key) {
   const now = Date.now();
-  const b = buckets.get(ip);
+  const b = buckets.get(key);
   if (!b || b.resetAt < now) {
-    buckets.set(ip, { count: 1, resetAt: now + WINDOW_MS });
+    buckets.set(key, { count: 1, resetAt: now + WINDOW_MS });
     return { ok: true, remaining: MAX_REQUESTS_PER_WINDOW - 1, resetAt: now + WINDOW_MS };
   }
   if (b.count + 1 > MAX_REQUESTS_PER_WINDOW) {
@@ -70,12 +75,17 @@ function rateLimit(ip) {
   return { ok: true, remaining: MAX_REQUESTS_PER_WINDOW - b.count, resetAt: b.resetAt };
 }
 
-function clientIp(req) {
-  return (
+function clientKey(req) {
+  const ip = (
     req.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
     req.headers.get('x-real-ip') ||
     'unknown'
   );
+  const deviceId = req.headers.get('x-device-id');
+  if (deviceId && /^[A-Za-z0-9_-]{8,128}$/.test(deviceId)) {
+    return `${ip}:${deviceId}`;
+  }
+  return ip;
 }
 
 export async function GET(req) {
@@ -96,9 +106,8 @@ export async function GET(req) {
     if (!Number.isFinite(limit) || limit < 1) limit = DEFAULT_LIMIT;
     if (limit > MAX_LIMIT) limit = MAX_LIMIT;
 
-    // Rate limit per IP (counts requests not questions)
-    const ip = clientIp(req);
-    const rl = rateLimit(ip);
+    // Rate limit per IP (or per IP+DeviceId for native clients).
+    const rl = rateLimit(clientKey(req));
     if (!rl.ok) {
       return Response.json(
         { ok: false, error: 'rate_limited', resetAt: rl.resetAt },

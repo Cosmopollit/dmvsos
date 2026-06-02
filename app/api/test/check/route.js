@@ -25,17 +25,21 @@ import { verifyQuestionToken } from '@/lib/questionToken';
 const SUPA_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPA_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-// In-memory rate limiter per IP. Reuses the same window math as /questions
-// but tracks check-calls separately to prevent abuse via /check brute-force.
+// In-memory rate limiter per bucket. Reuses the same window math as
+// /questions but tracks check-calls separately to prevent abuse via
+// /check brute-force.
+//
+// Bucket key matches /questions semantics: ip+deviceId for native
+// clients, ip alone for web (see /api/test/questions for rationale).
 const checkBuckets = new Map();
 const WINDOW_MS = 10 * 60 * 1000;
 const MAX_CHECKS_PER_WINDOW = 600; // generous: 200q × 3 attempts of going back
 
-function rateLimit(ip) {
+function rateLimit(key) {
   const now = Date.now();
-  const b = checkBuckets.get(ip);
+  const b = checkBuckets.get(key);
   if (!b || b.resetAt < now) {
-    checkBuckets.set(ip, { count: 1, resetAt: now + WINDOW_MS });
+    checkBuckets.set(key, { count: 1, resetAt: now + WINDOW_MS });
     return { ok: true, remaining: MAX_CHECKS_PER_WINDOW - 1, resetAt: now + WINDOW_MS };
   }
   if (b.count + 1 > MAX_CHECKS_PER_WINDOW) {
@@ -45,12 +49,17 @@ function rateLimit(ip) {
   return { ok: true, remaining: MAX_CHECKS_PER_WINDOW - b.count, resetAt: b.resetAt };
 }
 
-function clientIp(req) {
-  return (
+function clientKey(req) {
+  const ip = (
     req.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
     req.headers.get('x-real-ip') ||
     'unknown'
   );
+  const deviceId = req.headers.get('x-device-id');
+  if (deviceId && /^[A-Za-z0-9_-]{8,128}$/.test(deviceId)) {
+    return `${ip}:${deviceId}`;
+  }
+  return ip;
 }
 
 export async function POST(req) {
@@ -77,9 +86,8 @@ export async function POST(req) {
     }
     const question_id = tokenResult.questionId;
 
-    // Rate limit
-    const ip = clientIp(req);
-    const rl = rateLimit(ip);
+    // Rate limit (per IP, or per IP+DeviceId for native clients).
+    const rl = rateLimit(clientKey(req));
     if (!rl.ok) {
       return Response.json(
         { ok: false, error: 'rate_limited', resetAt: rl.resetAt },

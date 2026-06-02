@@ -108,16 +108,38 @@ const GOOD_BOT_UA_PATTERNS = [
 
 const GENERIC_BOT_WORDS = /\b(bot|crawler|spider|fetch|scrape|harvest|monitor)\b/i
 
+// Native runtimes our own iOS and Android app boots on. We let the app
+// opt out of bot scoring by combining one of these UAs with a valid
+// X-Device-ID header. The header is cheap to forge, but a scraper that
+// mimics the app gains nothing (per-(IP, DeviceId) rate-limit still
+// applies in the API routes), while real mobile users need this
+// carve-out because okhttp (Android Expo runtime) is in the
+// BAD_BOT_UA_PATTERNS list above.
+const MOBILE_RUNTIME_UA_PATTERNS = [
+  /Expo/i,
+  /ExpoClient/i,
+  /CFNetwork/i,    // iOS native networking stack
+  /Darwin\/\d/i,   // iOS userland
+  /okhttp/i,       // Android (also in bad-UA list; combo with device-id is the legit signal)
+]
+const DEVICE_ID_RE = /^[A-Za-z0-9_-]{8,128}$/
+
 function scoreBot(req) {
   const ua = req.headers.get('user-agent') || ''
   const acceptLang = req.headers.get('accept-language')
   const acceptEncoding = req.headers.get('accept-encoding')
   const secChUa = req.headers.get('sec-ch-ua')
   const secFetchSite = req.headers.get('sec-fetch-site')
+  const deviceId = req.headers.get('x-device-id')
 
   // Allow-list good bots before any scoring.
   if (GOOD_BOT_UA_PATTERNS.some(p => p.test(ua))) {
     return { score: 0, reasons: ['good-bot'] }
+  }
+
+  // Native-app carve-out: valid X-Device-ID + recognised mobile runtime UA.
+  if (deviceId && DEVICE_ID_RE.test(deviceId) && MOBILE_RUNTIME_UA_PATTERNS.some(p => p.test(ua))) {
+    return { score: 0, reasons: ['mobile-app'] }
   }
 
   let score = 0
