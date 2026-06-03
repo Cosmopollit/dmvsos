@@ -8,7 +8,9 @@
 // Replaces the previous client-side `supabase.from('questions').select(...)`
 // pattern so anon API key can no longer be used to dump the question bank.
 //
-// Rate limit: 60 requests per IP per 10 minutes (default).
+// Rate limit:
+//   - anon:   60 req per IP per 10 min   (default)
+//   - authed: 200 req per user per 10 min (signed-in users get headroom)
 // Generous for legitimate users; painful for scrapers trying to pull all
 // 150k. Combine with RLS that denies anon SELECT on the questions table
 // for stronger defense.
@@ -71,29 +73,58 @@ const DEFAULT_LIMIT = 80;
 //
 // Counts REQUESTS not questions. One /questions call = 1 bucket increment
 // regardless of how many questions it returns. A real user browsing a few
-// states + taking a marathon test = ~5-10 requests. A scraper trying to
-// hit every state x category x language combo = 750+ requests, blocked.
+// states + taking a marathon test = ~5-10 requests.
+//
+// Tier-based limits (the rationale for the spread):
+//   - anon  60/10min  blocks bulk scrape from a single IP
+//   - authed 200/10min  signed-in users get headroom — they bothered to
+//     register and they almost never trip the limit during normal use
+//     (typical 5-15 requests per session). A scraper would need to mint
+//     a fresh signed-in user per N requests, which costs OAuth round
+//     trips and creates a public auth.users trail we can audit.
 //
 // Bucket key:
-//   - X-Device-ID present (native app): "ip:deviceId" so multiple mobile
-//     users behind one carrier NAT do not share a single bucket.
-//   - Otherwise (web): "ip" (unchanged web behavior).
+//   - authed: "user:<uuid>" — one bucket per signed-in user, immune to
+//     NAT sharing across mobile carriers / school networks.
+//   - X-Device-ID present (native, anon): "ip:deviceId".
+//   - Otherwise (web, anon): "ip".
 const buckets = new Map();
 const WINDOW_MS = 10 * 60 * 1000;
-const MAX_REQUESTS_PER_WINDOW = 60; // generous for users, blocks bulk scrape
+const LIMIT_ANON   = 60;
+const LIMIT_AUTHED = 200;
 
-function rateLimit(key) {
+function rateLimit(key, max) {
   const now = Date.now();
   const b = buckets.get(key);
   if (!b || b.resetAt < now) {
     buckets.set(key, { count: 1, resetAt: now + WINDOW_MS });
-    return { ok: true, remaining: MAX_REQUESTS_PER_WINDOW - 1, resetAt: now + WINDOW_MS };
+    return { ok: true, remaining: max - 1, resetAt: now + WINDOW_MS };
   }
-  if (b.count + 1 > MAX_REQUESTS_PER_WINDOW) {
+  if (b.count + 1 > max) {
     return { ok: false, remaining: 0, resetAt: b.resetAt };
   }
   b.count++;
-  return { ok: true, remaining: MAX_REQUESTS_PER_WINDOW - b.count, resetAt: b.resetAt };
+  return { ok: true, remaining: max - b.count, resetAt: b.resetAt };
+}
+
+// Resolve the caller's auth tier by validating the Bearer JWT against
+// Supabase. One extra REST hop (~50ms) only on authed requests. Anonymous
+// hits stay on the existing IP-only fast path.
+async function resolveAuthTier(req) {
+  const auth = req.headers.get('authorization') || '';
+  if (!auth.startsWith('Bearer ')) return { tier: 'anon', userId: null };
+  const token = auth.slice(7);
+  try {
+    const r = await fetch(`${SUPA_URL}/auth/v1/user`, {
+      headers: { Authorization: `Bearer ${token}`, apikey: SUPA_KEY },
+    });
+    if (!r.ok) return { tier: 'anon', userId: null };
+    const data = await r.json();
+    if (!data?.id) return { tier: 'anon', userId: null };
+    return { tier: 'authed', userId: data.id };
+  } catch {
+    return { tier: 'anon', userId: null };
+  }
 }
 
 function clientKey(req) {
@@ -127,8 +158,15 @@ export async function GET(req) {
     if (!Number.isFinite(limit) || limit < 1) limit = DEFAULT_LIMIT;
     if (limit > MAX_LIMIT) limit = MAX_LIMIT;
 
-    // Rate limit per IP (or per IP+DeviceId for native clients).
-    const rl = rateLimit(clientKey(req));
+    // Tier-aware rate limit. Authed users get their own user-keyed bucket
+    // (immune to NAT sharing) and a higher cap; anon stays on the IP / IP+
+    // DeviceID bucket and the conservative cap that's been blocking bulk
+    // scrape. Authed verification adds ~50ms via /auth/v1/user but only on
+    // signed-in requests, which are the minority.
+    const { tier, userId } = await resolveAuthTier(req);
+    const max = tier === 'authed' ? LIMIT_AUTHED : LIMIT_ANON;
+    const bucketKey = tier === 'authed' ? `user:${userId}` : clientKey(req);
+    const rl = rateLimit(bucketKey, max);
     if (!rl.ok) {
       return corsJson(
         { ok: false, error: 'rate_limited', resetAt: rl.resetAt },
