@@ -85,7 +85,7 @@ export default function FaqPage() {
         })),
         speakable: {
           '@type': 'SpeakableSpecification',
-          cssSelector: ['h1', 'h2'],
+          cssSelector: ['h1', '.faq-question', '.faq-answer'],
         },
       },
       {
@@ -128,14 +128,14 @@ export default function FaqPage() {
                   onClick={() => setOpenIdx(isOpen ? -1 : i)}
                   className="w-full text-left px-5 sm:px-6 py-4 flex items-center justify-between gap-3 hover:bg-[#F8FAFC] transition-colors"
                 >
-                  <span className="text-sm sm:text-base font-semibold text-[#0B1C3D]">
+                  <span className="faq-question text-sm sm:text-base font-semibold text-[#0B1C3D]">
                     {item.q}
                   </span>
                   <span className="text-[#94A3B8] text-sm shrink-0">{isOpen ? '−' : '+'}</span>
                 </button>
                 {isOpen && (
                   <div className="px-5 sm:px-6 pb-4 -mt-1">
-                    <p className="text-sm text-[#475569] leading-relaxed">{item.a}</p>
+                    <p className="faq-answer text-sm text-[#475569] leading-relaxed">{item.a}</p>
                   </div>
                 )}
               </div>
