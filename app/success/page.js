@@ -23,6 +23,12 @@ function SuccessContent() {
 
   useEffect(() => {
     if (!sessionId) return;
+    // Signal AuthContext that a payment just happened, so it polls through
+    // the webhook-processing window once the user lands logged-in (instead
+    // of caching "free" if the webhook is still writing the pass). Set on
+    // the dmvsos.com origin; it survives the magic-link round trip through
+    // supabase.co and back. Consumed + cleared by AuthContext.
+    try { sessionStorage.setItem('dmvsos_just_paid', '1'); } catch { /* private mode */ }
     let cancelled = false;
     (async () => {
       try {
