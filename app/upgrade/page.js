@@ -1,5 +1,5 @@
 'use client';
-import { useState, Suspense } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -34,6 +34,10 @@ function UpgradeContent() {
 
   const [loadingPlan, setLoadingPlan] = useState(null);
   const [error, setError] = useState(false);
+  // Guard against the auto-resume effect firing more than once on the same
+  // mount. Without this, if React StrictMode double-invokes effects in dev,
+  // we'd issue two checkout-session-create calls in a row.
+  const autoCheckoutFiredRef = useRef(false);
 
   // Prices, IDs, icons, badges — single source of truth: lib/plans.js.
   // Translations and CTA labels still come from tex (lib/translations.js).
@@ -64,6 +68,25 @@ function UpgradeContent() {
   ];
 
   async function handleCheckout(planId) {
+    // Login-before-purchase gate. The pricing page itself stays public so
+    // Google/Bing/AI crawlers and curious visitors can read prices and plan
+    // features, but the actual "Buy" action requires a verified email. This
+    // prevents the entire class of checkout-email-typo failures that put
+    // user purchases on phantom auth.users tied to misspelled emails (Galina
+    // case 2026-06-06: paid as galina.sarana.by@gmail.com — a typo of her
+    // real galina.sarana@gmail.com — and lost access until manual recovery).
+    // After login the user lands back on /upgrade with their selected plan
+    // pre-highlighted and Stripe receives the verified email from session.
+    if (!user) {
+      // After login, return to /upgrade with the plan still selected and
+      // intent=checkout flagged so the auto-resume effect below fires Stripe
+      // checkout without the user having to click Buy twice. The intent flag
+      // lives INSIDE the `next` value (not as a sibling) so /login forwards
+      // it intact when it does router.push(safeInternalPath(next)).
+      const next = `/upgrade?plan=${planId}&lang=${lang}&intent=checkout`;
+      router.push(`/login?next=${encodeURIComponent(next)}&lang=${lang}`);
+      return;
+    }
     setLoadingPlan(planId);
     setError(false);
     try {
@@ -93,6 +116,24 @@ function UpgradeContent() {
       setLoadingPlan(null);
     }
   }
+
+  // Auto-resume checkout after login redirect. When an anonymous user clicks
+  // "Buy", they're sent to /login with ?next=/upgrade?plan=X&intent=checkout.
+  // After login they're routed back here. Detect that case (signed-in + the
+  // intent flag + a preselected plan) and fire the Stripe checkout
+  // automatically so the user doesn't have to click "Buy" a second time —
+  // the typical UX expectation after a forced authentication step.
+  // Skipped for OAuth (Google) since that flow drops `next` along the way;
+  // those users have to tap Buy again. Acceptable tradeoff for now.
+  useEffect(() => {
+    if (autoCheckoutFiredRef.current) return;
+    if (!user) return;
+    if (searchParams.get('intent') !== 'checkout') return;
+    if (!preselect) return;
+    autoCheckoutFiredRef.current = true;
+    handleCheckout(preselect);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, preselect]);
 
   return (
     <main className="min-h-screen bg-[#0B1C3D] flex flex-col items-center justify-center p-6 relative">

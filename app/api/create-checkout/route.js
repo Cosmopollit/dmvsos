@@ -63,33 +63,46 @@ export async function POST(req) {
       return Response.json({ error: 'extension requires passType (moto|auto|cdl)' }, { status: 400 });
     }
 
-    // ── Identify the user ────────────────────────────────────────────────
+    // ── Identify the user (REQUIRED) ─────────────────────────────────────
+    // As of 2026-06-06 anonymous checkout is no longer accepted. Allowing it
+    // produced a class of "I paid but no access" failures rooted in the
+    // anonymous email entry on Stripe Checkout — Stripe accepted any string
+    // containing @ as a valid email, including typos like .by added to the
+    // user's real address (Galina case). The phantom auth.users created from
+    // such typos couldn't be reached by the real owner without manual DB
+    // recovery. Forcing a verified session before checkout makes the buyer's
+    // email always come from a confirmed auth.users row, not a hand-typed
+    // field on a hosted Stripe page.
     const authHeader = req.headers.get('authorization');
-    let userId = null;
-    let customerEmail = null;
+    if (!authHeader?.startsWith('Bearer ')) {
+      return Response.json(
+        { error: 'login_required', message: 'Sign in before purchasing' },
+        { status: 401 }
+      );
+    }
+    const token = authHeader.slice(7);
+    const { data: { user }, error: userErr } = await supabase.auth.getUser(token);
+    if (userErr || !user?.id || !user?.email) {
+      return Response.json(
+        { error: 'invalid_session', message: 'Sign in again before purchasing' },
+        { status: 401 }
+      );
+    }
+    const userId = user.id;
+    const customerEmail = user.email;
+
+    // Look up existing Stripe customer to avoid creating duplicates.
+    // Failure here just means we'll create a fresh Stripe customer; not fatal.
     let stripeCustomerId = null;
-
-    if (authHeader?.startsWith('Bearer ')) {
-      const token = authHeader.slice(7);
-      const { data: { user } } = await supabase.auth.getUser(token);
-      userId = user?.id || null;
-      customerEmail = user?.email || null;
-
-      if (customerEmail) {
-        // Wrap in try/catch — @supabase/postgrest-js builder isn't a Promise,
-        // so chaining .catch on the query was throwing TypeError. Failure here
-        // just means we'll create a fresh Stripe customer; not fatal.
-        try {
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('stripe_customer_id')
-            .ilike('email', customerEmail)
-            .maybeSingle();
-          stripeCustomerId = profile?.stripe_customer_id || null;
-        } catch {
-          stripeCustomerId = null;
-        }
-      }
+    try {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('stripe_customer_id')
+        .ilike('email', customerEmail)
+        .maybeSingle();
+      stripeCustomerId = profile?.stripe_customer_id || null;
+    } catch {
+      stripeCustomerId = null;
     }
 
     // ── Duplicate-buy guard for one-time 'new' purchases ────────────────
