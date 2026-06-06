@@ -27,7 +27,7 @@ const CAT_TABS_KEYS = [
   { id: 'cdl',        labelKey: 'catCdl' },
   { id: 'motorcycle', labelKey: 'catMoto' },
 ];
-// Order categories show in on a card. Icons only (no text) — compact, and
+// Order categories show in on a card. Icons only (no text): compact, and
 // avoids the old per-card label translation (the previous code looked up
 // `catMotorcycle`, which doesn't exist, so it rendered the English word
 // "motorcycle" among localized labels).
@@ -73,7 +73,7 @@ export default function ManualsLibrary({ statesData, serverLang }) {
         </div>
       </div>
 
-      {/* Results count — quiet */}
+      {/* Results count (quiet) */}
       <p className="text-xs text-[#94A3B8] mb-3 px-0.5">
         {filtered.length === statesData.length
           ? `${filtered.length} ${tex.manualsTitle || 'states'}`
@@ -144,7 +144,7 @@ export default function ManualsLibrary({ statesData, serverLang }) {
         </div>
       )}
 
-      {/* Bottom CTA — warm, personal */}
+      {/* Bottom CTA: warm, personal */}
       <div className="bg-[#0B1C3D] rounded-2xl p-6 text-center mb-10">
         <p className="text-white font-bold text-base mb-1.5">{tex.manualsReady || 'Ready to practice?'}</p>
         <p className="text-[#AAB7CC] text-sm mb-5 leading-relaxed max-w-xs mx-auto">{tex.manualsReadySub || 'After studying, take a free practice test.'}</p>

@@ -154,7 +154,7 @@ export default async function ManualsPage() {
         </ol>
       </nav>
 
-      {/* SEO keyword block — always English, always in the DOM for crawlers
+      {/* SEO keyword block: always English, always in the DOM for crawlers
           and AI, visually hidden so the actual user sees only the clean,
           localized warm hero below. */}
       <p className="sr-only">
@@ -165,7 +165,7 @@ export default async function ManualsPage() {
         direct PDF download, read online or download free.
       </p>
 
-      {/* Warm, localized hero — single visible h1 */}
+      {/* Warm, localized hero: single visible h1 */}
       <section className="w-full max-w-xl mx-auto px-4 pt-3 pb-6 text-center">
         <h1
           className="text-[26px] sm:text-3xl font-bold text-[#0B1C3D] mb-3 leading-tight whitespace-pre-line"
@@ -192,7 +192,7 @@ export default async function ManualsPage() {
       {/* Footer */}
       <footer className="w-full max-w-lg mx-auto px-4 pb-8">
         <p className="text-xs text-[#94A3B8] text-center leading-relaxed">
-          DMVSOS.com &mdash; Free DMV Practice Tests &amp; Driver Manuals for All 50 States
+          DMVSOS.com · Free DMV Practice Tests &amp; Driver Manuals for All 50 States
         </p>
       </footer>
     </main>
