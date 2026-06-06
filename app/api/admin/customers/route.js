@@ -8,6 +8,7 @@
 //           user_id) + profiles (by email) + the auth.users row.
 
 import { createClient } from '@supabase/supabase-js';
+import { randomBytes } from 'crypto';
 import { checkAdminPassword } from '@/lib/adminAuth';
 
 const SUPA_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -19,11 +20,37 @@ const supabaseAdmin = createClient(SUPA_URL, SUPA_KEY, {
 });
 
 const MAX_PAGES = 30;
+const VALID_PASS_TYPES = new Set(['auto', 'moto', 'cdl']);
+const DAY_MS = 86400000;
 
 function daysLeft(expiresAt) {
   if (!expiresAt) return 0;
   const ms = new Date(expiresAt).getTime() - Date.now();
-  return ms > 0 ? Math.ceil(ms / 86400000) : 0;
+  return ms > 0 ? Math.ceil(ms / DAY_MS) : 0;
+}
+
+// Readable backup password (no ambiguous chars), capitalized so it passes
+// any "needs a letter" rule. The customer mostly logs in via the emailed
+// magic link; this is the fallback they can type on any device.
+function genPassword() {
+  const alphabet = 'abcdefghjkmnpqrstuvwxyz23456789';
+  const bytes = randomBytes(10);
+  let out = '';
+  for (let i = 0; i < 10; i++) out += alphabet[bytes[i] % alphabet.length];
+  return out.charAt(0).toUpperCase() + out.slice(1);
+}
+
+async function findUserByEmail(lowerEmail) {
+  for (let page = 1; page <= MAX_PAGES; page++) {
+    const r = await fetch(`${SUPA_URL}/auth/v1/admin/users?page=${page}&per_page=200`, { headers: REST_H });
+    if (!r.ok) break;
+    const d = await r.json();
+    const users = d.users || [];
+    const hit = users.find(u => (u.email || '').toLowerCase() === lowerEmail);
+    if (hit) return hit;
+    if (users.length < 200) break;
+  }
+  return null;
 }
 
 export async function GET(req) {
@@ -105,6 +132,111 @@ export async function GET(req) {
     });
 
     return Response.json({ ok: true, count: rows.length, customers: rows });
+  } catch (err) {
+    return Response.json({ ok: false, error: err.message }, { status: 500 });
+  }
+}
+
+// Manually add / grant a customer (they paid directly, off-Stripe).
+// Creates or reuses the auth user, sets a backup password, grants the pass,
+// syncs the profile, and emails them a one-click magic link to log in.
+export async function POST(req) {
+  if (!checkAdminPassword(req.headers.get('x-admin-password'))) {
+    return new Response('Unauthorized', { status: 401 });
+  }
+  try {
+    const body = await req.json().catch(() => ({}));
+    const email = String(body.email || '').trim().toLowerCase();
+    const passType = String(body.pass_type || '').trim();
+    let days = parseInt(body.days, 10);
+    if (!email || !email.includes('@')) {
+      return Response.json({ ok: false, error: 'Valid email required' }, { status: 400 });
+    }
+    if (!VALID_PASS_TYPES.has(passType)) {
+      return Response.json({ ok: false, error: 'pass_type must be auto, moto, or cdl' }, { status: 400 });
+    }
+    if (!Number.isFinite(days) || days < 1) days = 30;
+
+    // 1. Find or create the auth user.
+    let user = await findUserByEmail(email);
+    let alreadyExisted = !!user;
+    const password = genPassword();
+
+    if (!user) {
+      const cr = await fetch(`${SUPA_URL}/auth/v1/admin/users`, {
+        method: 'POST',
+        headers: REST_H,
+        body: JSON.stringify({
+          email,
+          password,
+          email_confirm: true,
+          user_metadata: { source: 'admin_manual_grant', created_at: new Date().toISOString() },
+        }),
+      });
+      if (!cr.ok) {
+        return Response.json({ ok: false, error: 'create user failed: ' + (await cr.text()).slice(0, 200) }, { status: 500 });
+      }
+      user = await cr.json();
+    } else {
+      // Reset password so the admin always has a fresh credential to share.
+      await fetch(`${SUPA_URL}/auth/v1/admin/users/${user.id}`, {
+        method: 'PUT',
+        headers: REST_H,
+        body: JSON.stringify({ password, email_confirm: true }),
+      }).catch(() => {});
+    }
+
+    const userId = user.id;
+    const expiresAt = new Date(Date.now() + days * DAY_MS).toISOString();
+
+    // 2. Grant / extend the pass (upsert by user_id + pass_type).
+    await fetch(`${SUPA_URL}/rest/v1/active_passes?on_conflict=user_id,pass_type`, {
+      method: 'POST',
+      headers: { ...REST_H, Prefer: 'resolution=merge-duplicates' },
+      body: JSON.stringify({ user_id: userId, pass_type: passType, expires_at: expiresAt }),
+    });
+
+    // 3. Keep the legacy profile in sync (id = auth.users.id).
+    const planExpRes = await fetch(`${SUPA_URL}/rest/v1/active_passes?user_id=eq.${userId}&select=expires_at&order=expires_at.desc&limit=1`, { headers: REST_H });
+    const planRows = planExpRes.ok ? await planExpRes.json() : [];
+    const maxExp = planRows[0]?.expires_at || expiresAt;
+    const upd = await fetch(`${SUPA_URL}/rest/v1/profiles?email=ilike.${encodeURIComponent(email)}`, {
+      method: 'PATCH',
+      headers: { ...REST_H, Prefer: 'return=representation' },
+      body: JSON.stringify({ is_pro: true, plan_type: passType, plan_expires_at: maxExp }),
+    });
+    const updated = upd.ok ? await upd.json() : [];
+    if (!updated.length) {
+      await fetch(`${SUPA_URL}/rest/v1/profiles`, {
+        method: 'POST',
+        headers: REST_H,
+        body: JSON.stringify({ id: userId, email, is_pro: true, plan_type: passType, plan_expires_at: maxExp }),
+      }).catch(() => {});
+    }
+
+    // 4. Email the customer a one-click login link (sent via the configured
+    //    SMTP / Resend). This is what "arrives" to them; the password above
+    //    is the backup the admin can also hand over.
+    let emailed = false;
+    try {
+      const ml = await fetch(`${SUPA_URL}/auth/v1/magiclink`, {
+        method: 'POST',
+        headers: REST_H,
+        body: JSON.stringify({ email, options: { redirectTo: 'https://dmvsos.com/' } }),
+      });
+      emailed = ml.ok;
+    } catch { emailed = false; }
+
+    return Response.json({
+      ok: true,
+      email,
+      password,
+      pass_type: passType,
+      days,
+      expires_at: expiresAt,
+      alreadyExisted,
+      emailed,
+    });
   } catch (err) {
     return Response.json({ ok: false, error: err.message }, { status: 500 });
   }

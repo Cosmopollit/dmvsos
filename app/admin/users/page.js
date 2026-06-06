@@ -29,6 +29,45 @@ export default function AdminUsersPage() {
   const [deleteConfirm, setDeleteConfirm] = useState('');
   const [deleting, setDeleting] = useState(false);
 
+  // Add-customer modal
+  const [showAdd, setShowAdd] = useState(false);
+  const [addEmail, setAddEmail] = useState('');
+  const [addPass, setAddPass] = useState('auto');
+  const [addDays, setAddDays] = useState(30);
+  const [adding, setAdding] = useState(false);
+  const [addResult, setAddResult] = useState(null);
+  const [addError, setAddError] = useState('');
+
+  async function submitAdd() {
+    setAdding(true);
+    setAddError('');
+    setAddResult(null);
+    try {
+      const res = await fetch('/api/admin/customers', {
+        method: 'POST',
+        headers: { 'X-Admin-Password': password, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: addEmail.trim(), pass_type: addPass, days: Number(addDays) || 30 }),
+      });
+      const data = await res.json();
+      if (!data.ok) { setAddError(data.error || 'Failed'); return; }
+      setAddResult(data);
+      load(password); // refresh list so the new customer shows
+    } catch (e) {
+      setAddError(e.message);
+    } finally {
+      setAdding(false);
+    }
+  }
+
+  function closeAdd() {
+    setShowAdd(false);
+    setAddEmail('');
+    setAddPass('auto');
+    setAddDays(30);
+    setAddResult(null);
+    setAddError('');
+  }
+
   async function load(pw) {
     setLoading(true);
     setError('');
@@ -118,10 +157,16 @@ export default function AdminUsersPage() {
             <h1 className="text-xl font-bold text-[#0B1C3D]">Customers</h1>
             <p className="text-sm text-[#64748B]">{customers.length} total · {activeCount} with active access</p>
           </div>
-          <button type="button" onClick={() => load(password)} disabled={loading}
-            className="text-sm text-[#2563EB] font-medium hover:underline disabled:opacity-60">
-            {loading ? '...' : 'Refresh'}
-          </button>
+          <div className="flex items-center gap-3">
+            <button type="button" onClick={() => load(password)} disabled={loading}
+              className="text-sm text-[#2563EB] font-medium hover:underline disabled:opacity-60">
+              {loading ? '...' : 'Refresh'}
+            </button>
+            <button type="button" onClick={() => setShowAdd(true)}
+              className="text-sm bg-[#2563EB] text-white font-semibold rounded-xl px-3.5 py-2 hover:bg-[#1D4ED8] transition">
+              + Add customer
+            </button>
+          </div>
         </div>
 
         {/* Search + filter */}
@@ -194,6 +239,79 @@ export default function AdminUsersPage() {
           )}
         </div>
       </div>
+
+      {/* Add customer modal */}
+      {showAdd && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-6 z-50">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm">
+            {!addResult ? (
+              <>
+                <h2 className="text-lg font-bold text-[#0B1C3D] mb-1">Add customer</h2>
+                <p className="text-sm text-[#64748B] mb-4">For people who paid you directly. Grants access and emails them a login link.</p>
+                <label className="block text-xs font-semibold text-[#64748B] mb-1">Email</label>
+                <input
+                  type="email"
+                  value={addEmail}
+                  onChange={e => setAddEmail(e.target.value)}
+                  placeholder="customer@email.com"
+                  className="w-full px-4 py-2.5 rounded-xl border border-[#E2E8F0] text-sm focus:border-[#2563EB] focus:outline-none mb-3"
+                />
+                <label className="block text-xs font-semibold text-[#64748B] mb-1">Pass</label>
+                <select
+                  value={addPass}
+                  onChange={e => setAddPass(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl border border-[#E2E8F0] text-sm focus:border-[#2563EB] focus:outline-none mb-3 bg-white"
+                >
+                  <option value="auto">Auto (Car)</option>
+                  <option value="moto">Motorcycle</option>
+                  <option value="cdl">CDL</option>
+                </select>
+                <label className="block text-xs font-semibold text-[#64748B] mb-1">Days of access</label>
+                <input
+                  type="number"
+                  min={1}
+                  value={addDays}
+                  onChange={e => setAddDays(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl border border-[#E2E8F0] text-sm focus:border-[#2563EB] focus:outline-none mb-4"
+                />
+                {addError && <p className="text-xs text-[#DC2626] mb-3">{addError}</p>}
+                <div className="flex gap-2">
+                  <button type="button" onClick={closeAdd}
+                    className="flex-1 py-2.5 rounded-xl border border-[#E2E8F0] text-sm font-semibold text-[#0B1C3D] hover:bg-[#F8FAFC] transition">
+                    Cancel
+                  </button>
+                  <button type="button" onClick={submitAdd}
+                    disabled={adding || !addEmail.includes('@')}
+                    className="flex-1 py-2.5 rounded-xl bg-[#2563EB] text-white text-sm font-semibold hover:bg-[#1D4ED8] transition disabled:opacity-40">
+                    {adding ? '...' : 'Add & grant'}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#DCFCE7] flex items-center justify-center text-2xl">✓</div>
+                <h2 className="text-lg font-bold text-[#0B1C3D] mb-2 text-center">
+                  {addResult.alreadyExisted ? 'Access granted' : 'Customer added'}
+                </h2>
+                <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3 text-sm text-[#0B1C3D] space-y-1 mb-3">
+                  <div><span className="text-[#94A3B8]">Email:</span> <span className="break-all font-medium">{addResult.email}</span></div>
+                  <div><span className="text-[#94A3B8]">Pass:</span> <span className="font-medium">{addResult.pass_type} · {addResult.days} days</span></div>
+                  <div><span className="text-[#94A3B8]">Password:</span> <span className="font-mono font-bold">{addResult.password}</span></div>
+                </div>
+                <p className="text-xs text-[#64748B] mb-4">
+                  {addResult.emailed
+                    ? 'A one-click login link was emailed to them. They can also sign in at dmvsos.com/login with the email + password above.'
+                    : 'Login link email could not be sent — give them the email + password above to sign in at dmvsos.com/login.'}
+                </p>
+                <button type="button" onClick={closeAdd}
+                  className="w-full py-2.5 rounded-xl bg-[#2563EB] text-white text-sm font-semibold hover:bg-[#1D4ED8] transition">
+                  Done
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Delete confirm modal */}
       {deleteTarget && (
