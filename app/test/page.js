@@ -68,6 +68,18 @@ function TestContent() {
   const [score, setScore] = useState(0);
   const [loadingQuestions, setLoadingQuestions] = useState(true);
   const [loadError, setLoadError] = useState('');
+  // True when the questions fetch failed at the network layer (offline /
+  // dropped / non-JSON 500), as opposed to a legit "no questions in this
+  // language yet" empty result. Drives a retry screen instead of the
+  // misleading "coming soon / try English" empty state.
+  const [networkError, setNetworkError] = useState(false);
+  // Bumped by the retry button to re-run the load effect without changing
+  // state/category/lang.
+  const [reloadKey, setReloadKey] = useState(0);
+  // True when /api/test/check failed at the network layer for the current
+  // question. Lets the user tap again instead of silently scoring a correct
+  // answer as wrong.
+  const [checkError, setCheckError] = useState(false);
   const [showUpgradeBanner, setShowUpgradeBanner] = useState(false);
   const [motivationalMessage, setMotivationalMessage] = useState(null);
   const [elapsed, setElapsed] = useState(0);
@@ -184,6 +196,7 @@ function TestContent() {
     }
     setLoadingQuestions(true);
     setLoadError('');
+    setNetworkError(false);
     const categoryMap = { dmv: 'car', cdl: 'cdl', moto: 'motorcycle' };
     const mappedCategory = categoryMap[category] || category;
     // Server-side fetch — anon Supabase key no longer dumps the question bank.
@@ -246,13 +259,19 @@ function TestContent() {
         setLoadingQuestions(false);
       })
       .catch(() => {
+        // Network / parse failure (offline, dropped request, non-JSON 500).
+        // Distinct from an ok-but-empty response: flag it so the UI offers a
+        // retry instead of the "no questions / try English" empty state,
+        // which would mislead the user and (for non-EN) loop them into an
+        // English fetch that also fails offline.
+        setNetworkError(true);
         setAllQuestions([]);
         setLoadingQuestions(false);
       });
-  }, [state, category, lang, isRetry, subcategory]);
+  }, [state, category, lang, isRetry, subcategory, reloadKey]);
 
   // Close the alt view when moving between questions
-  useEffect(() => { setShowAltView(false); }, [current]);
+  useEffect(() => { setShowAltView(false); setCheckError(false); }, [current]);
 
   async function fetchAltView(clusterCode) {
     if (!clusterCode || altViewCache[clusterCode]) return;
@@ -644,6 +663,29 @@ function TestContent() {
   }
 
   if (!questions.length) {
+    // Network failure takes precedence: don't pretend the language has no
+    // content (the "try English" path would also fail offline and loop).
+    if (networkError) {
+      return (
+        <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
+          <div className="text-center max-w-sm">
+            <div className="text-5xl mb-4">📡</div>
+            <h2 className="text-lg font-bold text-[#0B1C3D] mb-2">{tex.connectionProblem}</h2>
+            <p className="text-sm text-[#64748B] mb-4">{tex.connectionProblemBody}</p>
+            <div className="flex flex-col gap-2">
+              <button type="button" onClick={() => setReloadKey(k => k + 1)}
+                className="bg-[#2563EB] text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-[#1D4ED8] transition">
+                {tex.tryAgain}
+              </button>
+              <button type="button" onClick={() => router.push(`/category?state=${state}&lang=${lang}`)}
+                className="bg-white text-[#0B1C3D] border border-[#E2E8F0] px-6 py-3 rounded-xl font-semibold text-sm hover:bg-[#F1F5F9] transition">
+                {tex.back}
+              </button>
+            </div>
+          </div>
+        </main>
+      );
+    }
     const isRateLimited = !!loadError && /rate|too many/i.test(loadError);
     const canFallbackToEnglish = lang !== 'en' && !isRateLimited;
     const testUrl = `/test?state=${state}&category=${category}${subcategory ? `&subcategory=${subcategory}` : ''}&lang=en`;
@@ -689,6 +731,7 @@ function TestContent() {
 
   async function handleSelect(index) {
     if (showAnswer || submittingAnswer) return;
+    setCheckError(false);
     setSelected(index);
 
     // If question already has reveal data (retry mode), score locally.
@@ -699,6 +742,7 @@ function TestContent() {
       correct = index === q.correctAnswerIndex;
     } else {
       setSubmittingAnswer(true);
+      let networkFailed = false;
       try {
         const res = await fetch('/api/test/check', {
           method: 'POST',
@@ -706,28 +750,41 @@ function TestContent() {
           body: JSON.stringify({ q_token: q.q_token, choice: index }),
         });
         const data = await res.json();
-        if (!data.ok) throw new Error(data.error || 'check failed');
-        correct = !!data.correct;
-        setQuestions(prev => prev.map((qq, i) =>
-          i === current
-            ? {
-                ...qq,
-                correctAnswerIndex: data.correct_answer ?? 0,
-                explanation: data.explanation || null,
-                manualSection: data.manual_section || null,
-                manualReference: data.manual_reference || null,
-              }
-            : qq
-        ));
+        if (!data.ok) {
+          // Server rejected the token (expired after 4h, or rate limited).
+          // Rare and NOT fixable by re-tapping, so accept the selection and
+          // mark it unverified (-1, no answer key highlighted) so the test
+          // can still be finished.
+          correct = false;
+          setQuestions(prev => prev.map((qq, i) =>
+            i === current ? { ...qq, correctAnswerIndex: -1 } : qq
+          ));
+        } else {
+          correct = !!data.correct;
+          setQuestions(prev => prev.map((qq, i) =>
+            i === current
+              ? {
+                  ...qq,
+                  correctAnswerIndex: data.correct_answer ?? 0,
+                  explanation: data.explanation || null,
+                  manualSection: data.manual_section || null,
+                  manualReference: data.manual_reference || null,
+                }
+              : qq
+          ));
+        }
       } catch {
-        // Network/rate-limit fallback: accept selection, mark as incorrect.
-        // -1 means no answer key is shown highlighted (no false-positive).
-        correct = false;
-        setQuestions(prev => prev.map((qq, i) =>
-          i === current ? { ...qq, correctAnswerIndex: -1 } : qq
-        ));
+        // Network blip (offline / dropped request). Retryable: do NOT score,
+        // advance, or record an answer — that would silently mark a correct
+        // answer wrong. Surface an inline message and let the user tap again.
+        networkFailed = true;
       } finally {
         setSubmittingAnswer(false);
+      }
+      if (networkFailed) {
+        setSelected(null);
+        setCheckError(true);
+        return;
       }
     }
 
@@ -919,6 +976,9 @@ function TestContent() {
               );
             })}
           </div>
+          {checkError && (
+            <p className="text-sm text-[#DC2626] mt-3 text-center">{tex.checkConnectionRetry}</p>
+          )}
         </div>
 
         {showAnswer && q.answers[q.correctAnswerIndex] && !hideExplanations && (
