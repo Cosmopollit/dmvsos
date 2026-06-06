@@ -6,6 +6,7 @@ import { getStatesWithManuals } from '@/lib/manual-parser';
 import { getHreflangAlternates } from '@/lib/hreflang';
 import { t } from '@/lib/translations';
 import ManualsLibrary from './ManualsLibrary';
+import ManualsLangSwitcher from './ManualsLangSwitcher';
 
 const SUPABASE_URL = 'https://yaogndpgnewqffbjrsgz.supabase.co';
 const INDEX_URL = `${SUPABASE_URL}/storage/v1/object/public/manuals/manuals-index.json`;
@@ -137,11 +138,9 @@ export default async function ManualsPage() {
           </Link>
           <div className="flex items-center gap-3">
             <Link href="/dmv-test" className="text-xs font-medium text-[#64748B] hover:text-[#2563EB] transition">
-              Practice Tests
+              {tex.manualsPracticeTests || 'Practice Tests'}
             </Link>
-            <Link href="/" className="text-xs font-semibold text-[#2563EB] hover:text-[#1D4ED8] transition">
-              Free Test →
-            </Link>
+            <ManualsLangSwitcher currentLang={serverLang} />
           </div>
         </div>
       </header>
