@@ -72,11 +72,19 @@ async function sbDelete(table, filter) {
 
 // ─── Legacy profiles helpers (kept for subscription customers) ───────────────
 
-async function profilesUpdateByEmail(rawEmail, updates) {
+// Upsert a profile keyed by email. When we have to INSERT a fresh row we now
+// stamp it with the caller's auth.users.id so profiles.id === auth.users.id.
+// Previously the INSERT omitted id and Postgres generated a random uuid,
+// leaving profiles.id permanently out of sync with auth.users.id. It was
+// harmless only because /api/account/passes matches by email, but any future
+// join or RLS policy on profiles.id = auth.uid() would silently break. New
+// rows are now correct; existing mismatched rows are repaired by the
+// migration in migrations/017_fix_profile_id.sql.
+async function profilesUpdateByEmail(rawEmail, updates, userId = null) {
   const email = rawEmail.toLowerCase();
   const updated = await sbUpdate('profiles', `email=ilike.${encodeURIComponent(email)}`, updates);
   if (updated.length === 0) {
-    await sbInsert('profiles', { email, ...updates });
+    await sbInsert('profiles', { ...(userId ? { id: userId } : {}), email, ...updates });
   }
   return updated;
 }
@@ -91,15 +99,35 @@ const DAYS_30_MS = 30 * 24 * 60 * 60 * 1000;
 
 // Process a one-time payment (new pass or extension).
 // Idempotent via the UNIQUE constraint on purchases.stripe_payment_intent.
+// Max pages to walk when searching for an existing user. 20 pages × 200 =
+// 4000 users. The previous single ?per_page=1000 fetch only saw the first
+// page; once the project crossed 1000 users the find() would silently miss
+// an existing account and create a DUPLICATE auth.users for the same email,
+// splitting that person's passes across two ids. Pagination removes that
+// time bomb. (After the login-before-checkout gate this path is a rare
+// safety net — metadata.user_id is normally present — but it must still be
+// correct when it does run.)
+const MAX_USER_PAGES = 20;
+
+async function findUserIdByEmail(lowerEmail) {
+  for (let page = 1; page <= MAX_USER_PAGES; page++) {
+    const list = await fetch(
+      `${SUPABASE_URL}/auth/v1/admin/users?page=${page}&per_page=200`,
+      { headers: sbHeaders }
+    ).then(r => r.json()).catch(() => ({ users: [] }));
+    const users = list.users || [];
+    const found = users.find(u => (u.email || '').toLowerCase() === lowerEmail);
+    if (found) return found.id;
+    if (users.length < 200) break;
+  }
+  return null;
+}
+
 async function getOrCreateUserByEmail(email) {
   if (!email) return null;
   const lower = email.toLowerCase();
-  // List existing users (Supabase admin API)
-  const list = await fetch(`${SUPABASE_URL}/auth/v1/admin/users?per_page=1000`, {
-    headers: sbHeaders,
-  }).then(r => r.json()).catch(() => ({ users: [] }));
-  const found = (list.users || []).find(u => (u.email || '').toLowerCase() === lower);
-  if (found) return found.id;
+  const existingId = await findUserIdByEmail(lower);
+  if (existingId) return existingId;
   // Create new
   const created = await fetch(`${SUPABASE_URL}/auth/v1/admin/users`, {
     method: 'POST',
@@ -260,7 +288,7 @@ async function handleOneTimePayment({ paymentIntentId, amountCents, metadata, ch
       is_pro: true,
       plan_type: pass_type, // most-recent pass type
       plan_expires_at: maxExpires,
-    }).catch(e => console.warn(`profile sync failed: ${e.message}`));
+    }, user_id).catch(e => console.warn(`profile sync failed: ${e.message}`));
   }
 
   console.log(`one-time payment applied | user=${emailTag(email)} | type=${pass_type} | kind=${kind} | expires=${newExpiresAt.toISOString()}`);
@@ -327,7 +355,7 @@ async function handleOneTimeRefund(charge) {
     await profilesUpdateByEmail(purchase.email, top
       ? { is_pro: true, plan_type: top.pass_type, plan_expires_at: top.expires_at }
       : { is_pro: false, plan_type: null, plan_expires_at: null }
-    ).catch(e => console.warn(`profile sync (refund) failed: ${e.message}`));
+    , purchase.user_id).catch(e => console.warn(`profile sync (refund) failed: ${e.message}`));
   }
 }
 
@@ -375,7 +403,7 @@ export async function POST(request) {
           const patch = {};
           if (customerId) patch.stripe_customer_id = customerId;
           if (phone) patch.phone = phone;
-          await profilesUpdateByEmail(email, patch)
+          await profilesUpdateByEmail(email, patch, meta.user_id || null)
             .catch(e => console.warn(`customer_id sync failed: ${e.message}`));
         }
         return new Response('OK', { status: 200 });

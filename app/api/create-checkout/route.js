@@ -159,6 +159,17 @@ export async function POST(req) {
       locale: checkoutLocale,
     };
 
+    // Force Stripe to create a Customer object even for one-time payments.
+    // Without this, payment-mode sessions leave session.customer null, so the
+    // webhook never gets a stripe_customer_id to store on the profile (every
+    // profile had stripe_customer_id = null). That meant the re-attach branch
+    // below could never fire and a repeat buyer got a brand-new Stripe
+    // customer each time, scattering their purchase history. Subscriptions
+    // always create a customer, so only set this for one-time.
+    if (isOneTime) {
+      sessionParams.customer_creation = 'always';
+    }
+
     // Pass metadata to subscription object too (so renewal invoices see it)
     if (isSubscription) {
       sessionParams.subscription_data = { metadata };

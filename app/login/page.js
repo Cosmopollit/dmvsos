@@ -86,7 +86,25 @@ function LoginContent() {
     return window.location.origin;
   }
 
+  // OAuth (Google/Apple/Facebook) always redirects back to the bare origin
+  // because that's the only URL whitelisted in Supabase → Auth → URL
+  // Configuration. That drops our ?next param, so an anonymous user who
+  // clicked "Buy" → /login → "Sign in with Google" used to land on the
+  // home page instead of back on /upgrade, with the checkout intent lost
+  // (71% of signups are Google, so this was the majority path). Fix: stash
+  // the intended destination in sessionStorage right before the OAuth
+  // redirect; AuthContext consumes it once the session lands. sessionStorage
+  // (not localStorage) so it can't go stale across browser sessions, and it
+  // survives the same-tab OAuth round trip.
+  function stashPostLoginNext() {
+    const next = searchParams.get('next');
+    if (next) {
+      try { sessionStorage.setItem('postLoginRedirect', next); } catch { /* private mode */ }
+    }
+  }
+
   async function handleGoogleSignIn() {
+    stashPostLoginNext();
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -97,6 +115,7 @@ function LoginContent() {
   }
 
   async function handleAppleSignIn() {
+    stashPostLoginNext();
     await supabase.auth.signInWithOAuth({
       provider: 'apple',
       options: {
@@ -107,6 +126,7 @@ function LoginContent() {
   }
 
   async function handleFacebookSignIn() {
+    stashPostLoginNext();
     await supabase.auth.signInWithOAuth({
       provider: 'facebook',
       options: {
