@@ -322,7 +322,7 @@ function ResultContent() {
           href={`/manuals/${state}`}
           className="block w-full text-center text-sm text-[#2563EB] hover:underline font-medium py-2"
         >
-          {tex.studyManual} →
+          {tex.studyManual}
         </a>
 
         <SupportFooter lang={lang} />

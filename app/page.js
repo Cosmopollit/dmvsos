@@ -266,7 +266,7 @@ export default function Home() {
                 }}
                 className="flex-1 text-left text-sm font-medium text-[#2563EB] hover:text-[#1D4ED8] transition"
               >
-                {suggestedTex.openInLanguage || `Open in ${suggested.name} →`}
+                {suggestedTex.openInLanguage || `Open in ${suggested.name}`}
               </button>
               <button
                 type="button"
@@ -318,7 +318,6 @@ export default function Home() {
               {tex.heroTrustLine}
             </span>
             <span className="hero-trust-arrow text-sm" style={{ color: '#94A3B8' }}>
-              →
             </span>
           </button>
         )}
@@ -415,7 +414,7 @@ export default function Home() {
                         <span>{tex.priceFrom || 'from'} <span className="font-semibold" style={{ color: cat.accent }}>{cat.price}</span></span>
                       </div>
                     </div>
-                    <span className="text-[#94A3B8] text-lg shrink-0">→</span>
+                    <span className="text-[#94A3B8] text-lg shrink-0"></span>
                   </button>
                 ))}
               </div>
@@ -450,7 +449,7 @@ export default function Home() {
               {tex.manualsSectionDesc}
             </div>
           </div>
-          <div className="text-blue-400 shrink-0 group-hover:text-blue-600 font-bold">→</div>
+          <div className="text-blue-400 shrink-0 group-hover:text-blue-600 font-bold"></div>
         </Link>
       </div>
 
@@ -568,7 +567,7 @@ export default function Home() {
           <button type="button"
             onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
             className="text-[#2563EB] hover:underline font-medium">
-            {tex.pricingStartFree || 'Or start free  ·  20 questions, no signup needed →'}
+            {tex.pricingStartFree || 'Or start free  ·  20 questions, no signup needed'}
           </button>
         </p>
       </section>
@@ -620,7 +619,7 @@ export default function Home() {
           onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
           className="w-full py-4 rounded-2xl font-semibold text-base bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition-all shadow-sm"
         >
-          {tex.finalCtaText || 'Ready? Choose your state and start practicing →'}
+          {tex.finalCtaText || 'Ready? Choose your state and start practicing'}
         </button>
       </section>
 

@@ -193,7 +193,7 @@ export default function VsPage() {
           </p>
           <div className="flex flex-wrap gap-3">
             <Link href="/" className="inline-flex items-center gap-2 bg-[#2563EB] text-white px-5 py-3 rounded-xl font-semibold text-sm hover:bg-[#1D4ED8] transition">
-              Start free practice test →
+              Start free practice test
             </Link>
             <Link href="/manuals" className="inline-flex items-center gap-2 bg-white border border-[#E2E8F0] text-[#1E293B] px-5 py-3 rounded-xl font-semibold text-sm hover:border-[#2563EB] hover:text-[#2563EB] transition">
               Browse manuals

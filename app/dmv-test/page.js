@@ -101,7 +101,7 @@ export default function DmvTestIndexPage() {
                       {STATE_META[state].abbr} · Free test
                     </div>
                   </div>
-                  <span className="text-xs text-[#2563EB] opacity-0 group-hover:opacity-100 transition-opacity shrink-0">→</span>
+                  <span className="text-xs text-[#2563EB] opacity-0 group-hover:opacity-100 transition-opacity shrink-0"></span>
                 </div>
               </Link>
             ))}
@@ -121,7 +121,7 @@ export default function DmvTestIndexPage() {
             href="/"
             className="inline-flex items-center gap-2 px-6 py-3 bg-[#2563EB] text-white rounded-xl font-semibold hover:bg-[#1D4ED8] transition-colors text-sm"
           >
-            Start Practicing →
+            Start Practicing
           </Link>
         </div>
 

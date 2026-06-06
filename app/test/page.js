@@ -606,7 +606,7 @@ function TestContent() {
                   <div className="badge-shimmer absolute bottom-0 left-0 right-0 flex items-center justify-center gap-1.5 py-2 rounded-b-2xl">
                     <span style={{ fontSize: 12 }}>🔓</span>
                     <span className="text-[11px] font-bold tracking-wide" style={{ color: '#92400E' }}>
-                      {unlockCtaText} →
+                      {unlockCtaText}
                     </span>
                   </div>
                 </button>
@@ -649,7 +649,7 @@ function TestContent() {
                 onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
                 className="w-full py-3.5 rounded-2xl font-bold text-white text-base mb-3 btn-pulse"
                 style={{ background: 'linear-gradient(135deg, #2563EB, #1D4ED8)' }}>
-                {tex.unlockCta || `Unlock from ${plan.price} →`}
+                {tex.unlockCta || `Unlock from ${plan.price}`}
               </button>
               <button type="button" onClick={() => setShowLockModal(false)}
                 className="text-sm text-[#94A3B8] hover:text-[#64748B]">
@@ -1320,7 +1320,7 @@ function TestContent() {
               onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
               className="w-full py-3.5 rounded-2xl font-bold text-white text-base mb-3 btn-pulse"
               style={{ background: 'linear-gradient(135deg, #2563EB, #1D4ED8)' }}>
-              {tex.unlockCta || `Unlock from ${plan.price} →`}
+              {tex.unlockCta || `Unlock from ${plan.price}`}
             </button>
             <button type="button" onClick={() => setShowLockModal(false)}
               className="text-sm text-[#94A3B8] hover:text-[#64748B]">

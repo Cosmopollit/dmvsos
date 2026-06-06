@@ -118,7 +118,7 @@ function CategoryContent() {
                 <span className="font-bold text-[#1E293B] text-lg">{tex[cat.titleKey]}</span>
                 <div className="text-sm text-[#64748B] mt-0.5">{tex[cat.descKey]}</div>
               </div>
-              <div className="text-[#94A3B8] text-lg shrink-0">→</div>
+              <div className="text-[#94A3B8] text-lg shrink-0"></div>
             </button>
           </div>
         ))}
@@ -128,7 +128,7 @@ function CategoryContent() {
       {state && (
         <div className="w-full max-w-md mt-6 text-center">
           <a href={`/manuals/${state}`} className="text-sm text-[#2563EB] hover:underline font-medium">
-            {tex.readManual} →
+            {tex.readManual}
           </a>
         </div>
       )}

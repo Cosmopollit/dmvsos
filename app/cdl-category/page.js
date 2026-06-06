@@ -109,7 +109,7 @@ function CdlCategoryContent() {
               <span className="font-bold text-[#1E293B] text-lg">{tex[sub.titleKey] || sub.id.replace(/_/g, ' ')}</span>
               <div className="text-sm text-[#64748B] mt-0.5">{tex[sub.descKey] || ''}</div>
             </div>
-            <div className="text-[#94A3B8] text-lg shrink-0">→</div>
+            <div className="text-[#94A3B8] text-lg shrink-0"></div>
           </button>
         ))}
       </div>
@@ -118,7 +118,7 @@ function CdlCategoryContent() {
       {state && (
         <div className="w-full max-w-md mt-6 text-center">
           <a href={`/manuals/${state}/cdl`} className="text-sm text-[#2563EB] hover:underline font-medium">
-            {tex.readManual || 'Read the official CDL manual'} →
+            {tex.readManual || 'Read the official CDL manual'}
           </a>
         </div>
       )}

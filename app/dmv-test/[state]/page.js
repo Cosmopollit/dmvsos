@@ -295,7 +295,7 @@ export default async function StateDmvTestPage({ params }) {
                 className="flex items-center justify-between px-5 py-3 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-xl font-semibold text-sm transition-colors"
               >
                 <span>{emoji} {label}</span>
-                <span className="opacity-70 text-xs">Start Free →</span>
+                <span className="opacity-70 text-xs">Start Free</span>
               </Link>
             ))}
           </div>
@@ -350,7 +350,7 @@ export default async function StateDmvTestPage({ params }) {
                   <div className="font-semibold text-sm text-[#0B1C3D]">{title}</div>
                   <div className="text-xs text-[#64748B] mt-0.5 leading-relaxed">{desc}</div>
                 </div>
-                <span className="text-xs font-semibold text-[#2563EB] shrink-0">Start →</span>
+                <span className="text-xs font-semibold text-[#2563EB] shrink-0">Start</span>
               </Link>
             ))}
           </div>
@@ -384,7 +384,7 @@ export default async function StateDmvTestPage({ params }) {
             href={`/manuals/${state}`}
             className="shrink-0 px-4 py-2 bg-[#EFF6FF] text-[#2563EB] rounded-xl text-sm font-semibold hover:bg-[#DBEAFE] transition-colors"
           >
-            View Manual →
+            View Manual
           </Link>
         </div>
 
@@ -425,7 +425,7 @@ export default async function StateDmvTestPage({ params }) {
               href="/dmv-test"
               className="p-3 rounded-xl border border-[#2563EB] bg-[#EFF6FF] text-sm font-semibold text-[#2563EB] text-center col-span-2 hover:bg-[#DBEAFE] transition-colors"
             >
-              View all 50 states →
+              View all 50 states
             </Link>
           </div>
         </section>

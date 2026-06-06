@@ -143,7 +143,7 @@ export default function WelcomeBanner() {
             href="/test"
             className="hidden sm:inline-flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all hover:scale-[1.03]"
             style={{ background: '#F59E0B', color: '#0B1C3D' }}>
-            {proCta} →
+            {proCta}
           </Link>
 
           <button
@@ -193,7 +193,7 @@ export default function WelcomeBanner() {
           href="/test"
           className="hidden sm:inline-flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all hover:scale-[1.03]"
           style={{ background: '#2563EB', color: 'white' }}>
-          {welcomeCta} →
+          {welcomeCta}
         </Link>
 
         <button
