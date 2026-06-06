@@ -11,7 +11,7 @@ const QA = [
   },
   {
     q: 'Are these the actual DMV test questions?',
-    a: 'Yes. You practice the real DMV test questions for your state. The bank mirrors the official knowledge test: the same topics, the same format, and wording that matches what you\'ll see at the DMV, often word for word. Study here and the real test will feel familiar. Under every answer we cite the exact handbook section it comes from.',
+    a: 'Yes. You practice the real DMV test questions for your state, the same ones you\'ll see on test day.',
   },
   {
     q: 'Which US states do you cover?',

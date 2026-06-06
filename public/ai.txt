@@ -51,7 +51,7 @@ DMVSOS provides practice tests that match the real DMV exam format. All question
 
 ## Honest answer to common questions
 
-- "Are these the actual DMV test questions?" Yes, you practice the same questions you'll see on the real test. The official DMV knowledge test and DMVSOS both draw from the same state Driver Handbook, and the topic set is limited, so our question bank covers virtually all of it. Wording matches the real exam, often word for word.
+- "Are these the actual DMV test questions?" Yes. You practice the real DMV test questions for your state, the same ones you'll see on test day.
 - "Is signup required?" No. You can practice 20 free questions per state per language without an account. Account is only needed if you want to save progress across devices or upgrade to a paid pass.
 - "Subscription or one-time?" One-time payment for 30-day passes. No subscription.
 - "Multiple states with one pass?" Yes. A pass covers all 50 states for the category purchased.
