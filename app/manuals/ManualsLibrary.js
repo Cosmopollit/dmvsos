@@ -58,14 +58,13 @@ export default function ManualsLibrary({ statesData, serverLang }) {
               >
                 <span className="text-3xl shrink-0">{cat.icon}</span>
                 <span className="flex-1 font-bold text-[#1E293B] text-[15px]">{tex[cat.labelKey] || cat.id}</span>
-                <span className="text-[#94A3B8] text-lg shrink-0">→</span>
               </button>
             ))}
           </div>
         </div>
       ) : (
         <p className="text-sm text-center text-[#94A3B8] py-5 mt-1">
-          ↑ {tex.pickStateFirst || 'Choose your state to continue'}
+          {tex.pickStateFirst || 'Choose your state to continue'}
         </p>
       )}
 
@@ -77,7 +76,7 @@ export default function ManualsLibrary({ statesData, serverLang }) {
           href="/"
           className="inline-flex items-center gap-2 px-6 py-3 bg-[#2563EB] text-white rounded-xl font-semibold hover:bg-[#1D4ED8] active:scale-[0.98] transition-all text-sm"
         >
-          {tex.manualsReadyCta || 'Take a free practice test →'}
+          {tex.manualsReadyCta || 'Take a free practice test'}
         </Link>
       </div>
 
