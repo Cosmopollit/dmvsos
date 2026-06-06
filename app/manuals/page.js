@@ -4,6 +4,7 @@ import { cookies } from 'next/headers';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 import { getStatesWithManuals } from '@/lib/manual-parser';
 import { getHreflangAlternates } from '@/lib/hreflang';
+import { t } from '@/lib/translations';
 import ManualsLibrary from './ManualsLibrary';
 
 const SUPABASE_URL = 'https://yaogndpgnewqffbjrsgz.supabase.co';
@@ -36,6 +37,7 @@ async function fetchManualIndex() {
 export default async function ManualsPage() {
   const cookieStore = await cookies();
   const serverLang = cookieStore.get('dmvsos_lang')?.value || 'en';
+  const tex = t[serverLang] || t.en;
 
   const index = await fetchManualIndex();
   const statesWithManuals = getStatesWithManuals();
@@ -145,7 +147,7 @@ export default async function ManualsPage() {
       </header>
 
       {/* Breadcrumb */}
-      <nav className="w-full max-w-lg mx-auto px-4 mb-1" aria-label="Breadcrumb">
+      <nav className="w-full max-w-xl mx-auto px-4 mb-1" aria-label="Breadcrumb">
         <ol className="flex items-center gap-1.5 text-xs text-[#94A3B8] flex-wrap">
           <li><Link href="/" className="hover:text-[#2563EB]">Home</Link></li>
           <li>/</li>
@@ -153,30 +155,38 @@ export default async function ManualsPage() {
         </ol>
       </nav>
 
-      {/* SEO hero | server-rendered so crawlers + AI see it immediately */}
-      <section className="w-full max-w-lg mx-auto px-4 pt-2 pb-4">
-        <h1 className="text-2xl sm:text-3xl font-bold text-[#0B1C3D] mb-2 leading-tight" style={{ letterSpacing: '-0.02em' }}>
-          Free DMV Driver Manuals
+      {/* SEO keyword block — always English, always in the DOM for crawlers
+          and AI, visually hidden so the actual user sees only the clean,
+          localized warm hero below. */}
+      <p className="sr-only">
+        Free DMV driver manuals: the most complete free library of official US state
+        DMV / DOL driver handbooks online. All 50 states plus Washington DC, up to
+        {' '}{allLangs.size} languages, covering Car, CDL, and Motorcycle. {totalPdfs} PDF
+        files total, sourced from official state DMV websites. No signup, no paywall,
+        direct PDF download, read online or download free.
+      </p>
+
+      {/* Warm, localized hero — single visible h1 */}
+      <section className="w-full max-w-xl mx-auto px-4 pt-3 pb-6 text-center">
+        <h1
+          className="text-[26px] sm:text-3xl font-bold text-[#0B1C3D] mb-3 leading-tight whitespace-pre-line"
+          style={{ letterSpacing: '-0.02em' }}
+        >
+          {tex.manualsHeroTitle || 'Free DMV Driver Manuals'}
         </h1>
-        <p className="text-sm text-[#475569] leading-relaxed mb-3">
-          The most complete free library of official US state DMV / DOL driver handbooks online.
-          All <strong>50 states</strong>, up to <strong>{allLangs.size} languages</strong>,
-          covering <strong>Car, CDL, and Motorcycle</strong>. <strong>{totalPdfs} PDF files</strong> total.
-          Sourced from official state DMV websites. No signup, no paywall, direct PDF download.
+        <p className="text-[15px] text-[#475569] leading-relaxed max-w-md mx-auto mb-4">
+          {tex.manualsWarmSub}
         </p>
-        <div className="flex flex-wrap items-center gap-2 text-[11px]">
-          <span className="inline-flex items-center gap-1 bg-[#EFF6FF] border border-[#BFDBFE] text-[#1E40AF] px-2 py-0.5 rounded-full font-medium">📚 {totalPdfs} PDFs</span>
-          <span className="inline-flex items-center gap-1 bg-[#F0FDF4] border border-[#BBF7D0] text-[#15803D] px-2 py-0.5 rounded-full font-medium">🗽 50 states</span>
-          <span className="inline-flex items-center gap-1 bg-[#FEF3C7] border border-[#FDE68A] text-[#92400E] px-2 py-0.5 rounded-full font-medium">🌍 {allLangs.size} languages</span>
-          <span className="inline-flex items-center gap-1 bg-[#FCE7F3] border border-[#F9A8D4] text-[#9D174D] px-2 py-0.5 rounded-full font-medium">🆓 100% free</span>
-        </div>
+        <p className="text-xs text-[#94A3B8] font-medium">
+          {(tex.manualsWarmStats || '{pdfs} manuals · 50 states · {langs} languages · always free')
+            .replace('{pdfs}', String(totalPdfs))
+            .replace('{langs}', String(allLangs.size))}
+        </p>
       </section>
 
       {/* Library UI | client component with search + filter */}
       <ManualsLibrary
         statesData={statesData}
-        totalPdfs={totalPdfs}
-        langCount={allLangs.size}
         serverLang={serverLang}
       />
 
