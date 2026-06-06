@@ -4,9 +4,7 @@ import { notFound } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { t } from '@/lib/translations';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META, LANG_NAMES } from '@/lib/manual-data';
-import { parseManual } from '@/lib/manual-parser';
 import { getHreflangAlternates } from '@/lib/hreflang';
-import ManualContent from '../ManualContent';
 
 const SUPABASE_URL = 'https://yaogndpgnewqffbjrsgz.supabase.co';
 const INDEX_URL = `${SUPABASE_URL}/storage/v1/object/public/manuals/manuals-index.json`;
@@ -230,12 +228,6 @@ export default async function StateManualCategoryPage({ params }) {
     ? Object.entries(catLangs).map(([langCode, url]) => ({ langCode, url }))
     : [];
 
-  // Online manual content (currently only car is parsed from text)
-  const manual = cat === 'car' ? parseManual(state, 'car') : parseManual(state, cat);
-
-  // If no PDFs and no manual content | redirect to state page rather than show empty page
-  // (still render page, just with limited content for SEO)
-
   // Other categories for this state
   const otherCats = VALID_CATS.filter(c => c !== cat);
 
@@ -335,8 +327,8 @@ export default async function StateManualCategoryPage({ params }) {
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-3">
             <span className="text-2xl">{catInfo.icon}</span>
-            <span className="text-xs font-bold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] rounded-full px-3 py-1 uppercase tracking-widest">
-              Official {year} Handbook
+            <span className="text-xs font-semibold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] rounded-full px-3 py-1">
+              Official {year} handbook
             </span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-black text-[#0B1C3D] mb-2 leading-tight" style={{ letterSpacing: '-0.02em' }}>
@@ -354,21 +346,28 @@ export default async function StateManualCategoryPage({ params }) {
         {pdfs.length > 0 ? (
           <div className="bg-white rounded-2xl border border-[#E2E8F0] p-5 mb-5 shadow-sm">
             <h2 className="text-base font-bold text-[#0B1C3D] mb-1">
-              📥 Download {name} {catInfo.label} PDF
+              Download the {name} {catInfo.label}
             </h2>
-            <p className="text-xs text-[#94A3B8] mb-4">Free official PDF | select your language</p>
-            <div className="flex flex-wrap gap-2">
+            <p className="text-xs text-[#94A3B8] mb-4">Free official PDF. Pick your language.</p>
+            <div className="flex flex-col gap-2">
               {pdfs.map(({ langCode, url }) => (
                 <a
                   key={langCode}
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] hover:border-[#2563EB] hover:bg-[#EFF6FF] hover:text-[#2563EB] transition-all text-xs font-medium text-[#475569]"
+                  className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-[#E2E8F0] bg-white hover:border-[#2563EB] hover:bg-[#EFF6FF] transition-all"
                 >
-                  <span className="text-base leading-none">{LANG_FLAGS[langCode] || '📄'}</span>
-                  <span>{LANG_LABELS[langCode] || langCode.toUpperCase()}</span>
-                  <span className="text-[#94A3B8]">↓</span>
+                  <span className="flex items-center gap-2.5 text-sm font-medium text-[#1A2B4A]">
+                    <span className="text-lg leading-none">{LANG_FLAGS[langCode] || '📄'}</span>
+                    {LANG_LABELS[langCode] || langCode.toUpperCase()}
+                  </span>
+                  <span className="flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] shrink-0">
+                    PDF
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M12 3v12" /><path d="m7 11 5 5 5-5" /><path d="M5 21h14" />
+                    </svg>
+                  </span>
                 </a>
               ))}
             </div>
@@ -393,7 +392,7 @@ export default async function StateManualCategoryPage({ params }) {
 
         {/* Practice Test CTA */}
         <div className="bg-[#0B1C3D] rounded-2xl p-6 mb-5 text-center shadow-lg border border-[#1e3a5f]">
-          <p className="text-xs font-semibold text-[#60A5FA] uppercase tracking-widest mb-2">
+          <p className="text-sm font-semibold text-[#60A5FA] mb-2">
             Ready to test your knowledge?
           </p>
           <h2 className="text-base font-bold text-white mb-1">
@@ -409,16 +408,6 @@ export default async function StateManualCategoryPage({ params }) {
             Take Free {catInfo.testLabel} →
           </Link>
         </div>
-
-        {/* Online manual content (car only for now) */}
-        {manual && (
-          <div className="mb-6">
-            <h2 className="text-lg font-bold text-[#0B1C3D] mb-4">
-              📖 Read {name} {catInfo.label} Online
-            </h2>
-            <ManualContent sections={manual.sections} lang={lang} />
-          </div>
-        )}
 
         {/* FAQ */}
         <div className="mb-8">

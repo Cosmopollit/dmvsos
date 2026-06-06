@@ -254,8 +254,8 @@ export default async function StateManualLangPage({ params }) {
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-3 flex-wrap">
             <span className="text-2xl">{flag}</span>
-            <span className="text-xs font-bold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] rounded-full px-3 py-1 uppercase tracking-widest">
-              Official {year} | {nativeLabel}
+            <span className="text-xs font-semibold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] rounded-full px-3 py-1">
+              Official {year} · {nativeLabel}
             </span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-black text-[#0B1C3D] mb-2 leading-tight" style={{ letterSpacing: '-0.02em' }}>
@@ -311,7 +311,7 @@ export default async function StateManualLangPage({ params }) {
 
         {/* Practice test CTA */}
         <div className="bg-[#0B1C3D] rounded-2xl p-6 mb-5 text-center shadow-lg border border-[#1e3a5f]">
-          <p className="text-xs font-semibold text-[#60A5FA] uppercase tracking-widest mb-2">
+          <p className="text-sm font-semibold text-[#60A5FA] mb-2">
             {native.study}
           </p>
           <h2 className="text-base font-bold text-white mb-1">

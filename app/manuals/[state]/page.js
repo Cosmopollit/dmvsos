@@ -4,9 +4,7 @@ import { notFound } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { t } from '@/lib/translations';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
-import { parseManual } from '@/lib/manual-parser';
 import { getHreflangAlternates } from '@/lib/hreflang';
-import ManualContent from './ManualContent';
 import ManualLangSwitch from './ManualLangSwitch';
 
 const SUPABASE_URL = 'https://yaogndpgnewqffbjrsgz.supabase.co';
@@ -78,7 +76,6 @@ export default async function StateManualPage({ params }) {
   const lang = cookieStore.get('dmvsos_lang')?.value || 'en';
   const tex = t[lang] || t.en;
 
-  const manual = parseManual(state, 'car');
   const index = await fetchManualIndex();
   const stateIndex = index?.[state];
 
@@ -215,21 +212,28 @@ export default async function StateManualPage({ params }) {
             <div className="space-y-4">
               {pdfCats.map(cat => (
                 <div key={cat}>
-                  <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wide mb-2">
+                  <p className="text-sm font-semibold text-[#0B1C3D] mb-2">
                     {CAT_ICONS[cat]} {tex[CAT_LABELS_KEY[cat]] || cat}
                   </p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-col gap-2">
                     {pdfByCategory[cat].map(({ langCode, url }) => (
                       <a
                         key={langCode}
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] hover:border-[#2563EB] hover:bg-[#EFF6FF] hover:text-[#2563EB] transition-all text-xs font-medium text-[#475569]"
+                        className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-[#E2E8F0] bg-white hover:border-[#2563EB] hover:bg-[#EFF6FF] transition-all"
                       >
-                        <span>{LANG_FLAGS[langCode] || '📄'}</span>
-                        <span>{LANG_LABELS[langCode] || langCode.toUpperCase()}</span>
-                        <span className="text-[#94A3B8]">↓</span>
+                        <span className="flex items-center gap-2.5 text-sm font-medium text-[#1A2B4A]">
+                          <span className="text-lg leading-none">{LANG_FLAGS[langCode] || '📄'}</span>
+                          {LANG_LABELS[langCode] || langCode.toUpperCase()}
+                        </span>
+                        <span className="flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] shrink-0">
+                          PDF
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <path d="M12 3v12" /><path d="m7 11 5 5 5-5" /><path d="M5 21h14" />
+                          </svg>
+                        </span>
                       </a>
                     ))}
                   </div>
@@ -259,20 +263,6 @@ export default async function StateManualPage({ params }) {
             {tex.manualsTakeTest.replace('{state}', name)}
           </Link>
         </div>
-
-        {/* Online manual content */}
-        {manual ? (
-          <div className="mb-6">
-            <h2 className="text-lg font-bold text-[#0B1C3D] mb-4">
-              {tex.manualsReadOnline.replace('{state}', name)}
-            </h2>
-            <ManualContent sections={manual.sections} lang={lang} />
-          </div>
-        ) : (
-          <div className="bg-white rounded-2xl border border-[#E2E8F0] p-8 mb-6 text-center shadow-sm">
-            <p className="text-sm text-[#94A3B8]">{tex.manualsOnlinePrep}</p>
-          </div>
-        )}
 
         {/* Done reading? CTA */}
         <div className="bg-[#EFF6FF] border border-[#BFDBFE] rounded-2xl p-6 text-center mb-8">
