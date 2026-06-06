@@ -1,5 +1,5 @@
 'use client';
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,6 +8,7 @@ import { t } from '@/lib/translations';
 import { getSavedLang } from '@/lib/lang';
 import SupportFooter from '@/app/components/SupportFooter';
 import { safeInternalPath } from '@/lib/safeNext';
+import { normalizeEmail, suggestEmailFix, isInAppBrowser } from '@/lib/emailHints';
 
 // OAuth provider availability. Toggle each flag to true ONLY after the
 // matching provider is fully configured in Supabase Dashboard →
@@ -57,6 +58,13 @@ function LoginContent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
+  // Detected after mount (navigator is client-only) to avoid hydration
+  // mismatch. When true we hide the OAuth buttons (Google refuses to run in
+  // social-app webviews) and surface the email form + a warning instead.
+  const [inApp, setInApp] = useState(false);
+  // A corrected email when the typed domain looks like a typo (gamil.com →
+  // gmail.com). Shown as a one-tap fix below the email field.
+  const emailSuggestion = suggestEmailFix(email);
   const [emailLoading, setEmailLoading] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [awaitingConfirmEmail, setAwaitingConfirmEmail] = useState('');
@@ -67,6 +75,8 @@ function LoginContent() {
   // provider — disclosing it lets phishers map "this email is on Google"
   // and craft a targeted attack.
   const [oauthCollision, setOauthCollision] = useState(false);
+
+  useEffect(() => { setInApp(isInAppBrowser()); }, []);
 
   // After login Supabase redirects here with ?code=... — we hand it
   // straight to Supabase JS SDK on the home page, which auto-exchanges
@@ -159,17 +169,22 @@ function LoginContent() {
     setEmailLoading(true);
     setEmailError('');
     setOauthCollision(false);
+    // Normalize before anything touches Supabase. Without this, caps or a
+    // trailing space (common from mobile auto-capitalization) creates or
+    // targets a different identity than the lowercased form the rest of the
+    // system uses, so a user could "sign up twice" with the same inbox.
+    const emailNorm = normalizeEmail(email);
     try {
       if (isSignUp) {
         // Pre-check: if this email is already a Google/Facebook account,
         // signing up would silently create a second auth.users row whose
         // user_id can't see the original's pro purchases. Block here and
         // point the user back at the OAuth buttons above.
-        const collision = await isOauthOnlyEmail(email);
+        const collision = await isOauthOnlyEmail(emailNorm);
         if (collision) { setOauthCollision(true); return; }
 
         const { data, error } = await supabase.auth.signUp({
-          email,
+          email: emailNorm,
           password,
           options: { emailRedirectTo: authRedirectTo() },
         });
@@ -180,7 +195,7 @@ function LoginContent() {
         // instead of redirecting into /test, where they'd see the free
         // tier and assume their paid pass (if any) was lost.
         if (!data?.session) {
-          setAwaitingConfirmEmail(email);
+          setAwaitingConfirmEmail(emailNorm);
           setResendStatus('idle');
           return;
         }
@@ -189,12 +204,12 @@ function LoginContent() {
         return;
       }
       // Sign-in path
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const { error } = await supabase.auth.signInWithPassword({ email: emailNorm, password });
       if (error) {
         // "Invalid credentials" is also returned when the email exists
         // only as an OAuth account (no password set). Detect that and
         // surface a useful hint instead of a dead-end error.
-        const collision = await isOauthOnlyEmail(email);
+        const collision = await isOauthOnlyEmail(emailNorm);
         if (collision) { setOauthCollision(true); return; }
         setEmailError(error.message);
         return;
@@ -260,41 +275,55 @@ function LoginContent() {
         ) : (<>
         <h1 className="text-lg font-bold text-[#1E293B] text-center mb-2">{tex.signInTitle}</h1>
         <p className="text-sm text-[#94A3B8] text-center mb-6">{tex.signInSubtitle || 'Save your progress and access all tests'}</p>
-        <button
-          onClick={handleGoogleSignIn}
-          type="button"
-          className="w-full bg-white text-[#1E293B] border border-[#E2E8F0] py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#F8FAFC] hover:border-[#2563EB] transition-all"
-        >
-          <GoogleIcon />
-          {tex.continueGoogle}
-        </button>
-        {ENABLE_APPLE_OAUTH && (
-          <button
-            type="button"
-            onClick={handleAppleSignIn}
-            className="w-full bg-black text-white py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#1a1a1a] transition-all"
-          >
-            <AppleIcon />
-            {tex.continueApple}
-          </button>
-        )}
-        {ENABLE_FACEBOOK_OAUTH && (
-          <button
-            type="button"
-            onClick={handleFacebookSignIn}
-            className="w-full bg-[#1877F2] text-white py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#166FE5] transition-all"
-          >
-            <FacebookIcon />
-            {tex.continueFacebook}
-          </button>
+
+        {/* In-app browser (FB / IG / TikTok webview): Google OAuth is blocked
+            by Google itself there, so hide the OAuth buttons and steer the
+            user to email sign-in with a clear explanation. */}
+        {inApp && (
+          <div className="rounded-xl border border-[#F59E0B] bg-[#FEF3C7] p-3 mb-4">
+            <p className="text-xs text-[#B45309] leading-relaxed">{tex.inAppBrowserWarning}</p>
+          </div>
         )}
 
-        {/* Divider */}
-        <div className="flex items-center gap-3 my-4">
-          <div className="flex-1 h-px bg-[#E2E8F0]" />
-          <span className="text-xs text-[#94A3B8]">{tex.orContinueWith}</span>
-          <div className="flex-1 h-px bg-[#E2E8F0]" />
-        </div>
+        {!inApp && (
+          <>
+            <button
+              onClick={handleGoogleSignIn}
+              type="button"
+              className="w-full bg-white text-[#1E293B] border border-[#E2E8F0] py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#F8FAFC] hover:border-[#2563EB] transition-all"
+            >
+              <GoogleIcon />
+              {tex.continueGoogle}
+            </button>
+            {ENABLE_APPLE_OAUTH && (
+              <button
+                type="button"
+                onClick={handleAppleSignIn}
+                className="w-full bg-black text-white py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#1a1a1a] transition-all"
+              >
+                <AppleIcon />
+                {tex.continueApple}
+              </button>
+            )}
+            {ENABLE_FACEBOOK_OAUTH && (
+              <button
+                type="button"
+                onClick={handleFacebookSignIn}
+                className="w-full bg-[#1877F2] text-white py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#166FE5] transition-all"
+              >
+                <FacebookIcon />
+                {tex.continueFacebook}
+              </button>
+            )}
+
+            {/* Divider */}
+            <div className="flex items-center gap-3 my-4">
+              <div className="flex-1 h-px bg-[#E2E8F0]" />
+              <span className="text-xs text-[#94A3B8]">{tex.orContinueWith}</span>
+              <div className="flex-1 h-px bg-[#E2E8F0]" />
+            </div>
+          </>
+        )}
 
         {/* Email form */}
         <form onSubmit={handleEmailAuth} className="space-y-3">
@@ -306,6 +335,21 @@ function LoginContent() {
             required
             className="w-full px-4 py-3 rounded-xl border border-[#E2E8F0] text-sm text-[#1E293B] placeholder-[#94A3B8] focus:border-[#2563EB] focus:outline-none transition"
           />
+          {/* Domain-typo suggestion (gamil.com → gmail.com). One tap fixes
+              the email. Catches the silent-bounce signup failure. */}
+          {emailSuggestion && (
+            <p className="text-xs text-[#64748B] -mt-1">
+              {tex.didYouMean}{' '}
+              <button
+                type="button"
+                onClick={() => setEmail(emailSuggestion)}
+                className="font-semibold text-[#2563EB] underline underline-offset-2"
+              >
+                {emailSuggestion}
+              </button>
+              ?
+            </p>
+          )}
           <input
             type="password"
             value={password}
@@ -347,6 +391,22 @@ function LoginContent() {
             </button>
           )}
         </form>
+
+        {/* Recovery path for users who paid but can't find / get into their
+            account (forgot which email, typo'd it at an old anonymous
+            checkout, etc.). We can't reveal which emails exist for privacy,
+            so the honest answer is a direct line to support. */}
+        <div className="mt-5 pt-4 border-t border-[#F1F5F9] text-center">
+          <p className="text-xs text-[#94A3B8] leading-relaxed mb-2">{tex.paidCantFindAccount}</p>
+          <a
+            href="https://t.me/dmvsos_support_bot"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] hover:underline"
+          >
+            @dmvsos_support_bot
+          </a>
+        </div>
 
         <button
           type="button"

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { t } from '@/lib/translations';
 import { getSavedLang } from '@/lib/lang';
+import { normalizeEmail, suggestEmailFix } from '@/lib/emailHints';
 
 // Step 1 of password reset: user enters their email, we ask Supabase
 // to send a reset-link email. The link points to /auth/reset (Step 2)
@@ -26,17 +27,21 @@ function ResetRequestContent() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [sentTo, setSentTo] = useState('');
+  const emailSuggestion = suggestEmailFix(email);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
     setError('');
+    // Same normalization as /login so the reset email targets the exact
+    // identity the user signed up under (caps / trailing space safe).
+    const emailNorm = normalizeEmail(email);
     try {
-      const { error: err } = await supabase.auth.resetPasswordForEmail(email, {
+      const { error: err } = await supabase.auth.resetPasswordForEmail(emailNorm, {
         redirectTo: `${window.location.origin}/auth/reset`,
       });
       if (err) { setError(err.message); return; }
-      setSentTo(email);
+      setSentTo(emailNorm);
     } catch { setError(tex.somethingWentWrong || 'Something went wrong'); }
     finally { setLoading(false); }
   }
@@ -76,6 +81,19 @@ function ResetRequestContent() {
                 required
                 className="w-full px-4 py-3 rounded-xl border border-[#E2E8F0] text-sm text-[#1E293B] placeholder-[#94A3B8] focus:border-[#2563EB] focus:outline-none transition"
               />
+              {emailSuggestion && (
+                <p className="text-xs text-[#64748B] -mt-1">
+                  {tex.didYouMean}{' '}
+                  <button
+                    type="button"
+                    onClick={() => setEmail(emailSuggestion)}
+                    className="font-semibold text-[#2563EB] underline underline-offset-2"
+                  >
+                    {emailSuggestion}
+                  </button>
+                  ?
+                </p>
+              )}
               {error && <p className="text-xs text-[#DC2626]">{error}</p>}
               <button
                 type="submit"
