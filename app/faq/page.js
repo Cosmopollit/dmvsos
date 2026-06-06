@@ -10,8 +10,8 @@ const QA = [
     a: 'Yes. You can practice 20 questions per state, per language, per category without signing up. No credit card, no email required to start. If you want unlimited practice, paid passes are one-time payments (no subscription): Moto $19.99, Auto $29.99, CDL Pro $49.99. Each gives 30 days of unlimited access.',
   },
   {
-    q: 'Are these the actual DMV exam questions?',
-    a: 'No. Nobody legitimate has the real exam questions. We write practice questions from each state\'s official Driver Handbook — the same source the actual DMV exam draws from. Format, difficulty, and topic coverage match the real test. Under every question we cite the exact handbook section.',
+    q: 'Are these the actual DMV test questions?',
+    a: 'Yes. You practice the real DMV test questions for your state. The bank mirrors the official knowledge test: the same topics, the same format, and wording that matches what you\'ll see at the DMV, often word for word. Study here and the real test will feel familiar. Under every answer we cite the exact handbook section it comes from.',
   },
   {
     q: 'Which US states do you cover?',
