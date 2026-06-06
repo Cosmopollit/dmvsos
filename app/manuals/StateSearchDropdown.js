@@ -65,7 +65,7 @@ function getLocalName(slug, lang) {
   return STATE_I18N[slug]?.[lang] || STATE_DISPLAY[slug];
 }
 
-export default function StateSearchDropdown({ lang = 'en', placeholder }) {
+export default function StateSearchDropdown({ lang = 'en', placeholder, onSelect }) {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
   const [highlighted, setHighlighted] = useState(0);
@@ -114,7 +114,11 @@ export default function StateSearchDropdown({ lang = 'en', placeholder }) {
   const select = (slug) => {
     setQuery('');
     setOpen(false);
-    router.push(`/manuals/${slug}`);
+    // When the parent passes onSelect, it drives the flow (e.g. show
+    // category buttons for the picked state). Otherwise navigate straight
+    // to the state page (default standalone behavior).
+    if (onSelect) onSelect(slug);
+    else router.push(`/manuals/${slug}`);
   };
 
   const handleKeyDown = (e) => {

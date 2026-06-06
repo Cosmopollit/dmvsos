@@ -1,93 +1,76 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { t } from '@/lib/translations';
 import StateSearchDropdown from './StateSearchDropdown';
 
-const CAT_TABS_KEYS = [
-  { id: 'all',        labelKey: 'manualsAllManuals' },
-  { id: 'car',        labelKey: 'catCar' },
-  { id: 'cdl',        labelKey: 'catCdl' },
-  { id: 'motorcycle', labelKey: 'catMoto' },
+// Category cards shown once a state is picked — same flow as the home page:
+// choose state, choose category, go. Each routes to the manual page for that
+// state + category.
+const CATS = [
+  { id: 'car',        icon: '🚗', labelKey: 'catCar',  gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', accent: '#2563EB' },
+  { id: 'cdl',        icon: '🚛', labelKey: 'catCdl',  gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)', accent: '#0EA5E9' },
+  { id: 'motorcycle', icon: '🏍️', labelKey: 'catMoto', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)', accent: '#D97706' },
 ];
-const CAT_ICONS = { car: '🚗', cdl: '🚛', motorcycle: '🏍️' };
 
 export default function ManualsLibrary({ statesData, serverLang }) {
-  const [activeCategory, setActiveCategory] = useState('all');
-
+  const router = useRouter();
   const tex = t[serverLang] || t.en;
+  const [selected, setSelected] = useState(null); // { slug, name }
 
-  const filtered = useMemo(() => {
-    if (activeCategory === 'all') return statesData;
-    return statesData.filter(s => s.categories.includes(activeCategory));
-  }, [statesData, activeCategory]);
+  const stateName = selected
+    ? (statesData.find(s => s.slug === selected)?.name || selected)
+    : null;
 
   return (
-    <div className="w-full max-w-xl mx-auto px-4">
+    <div className="w-full max-w-md mx-auto px-4">
 
-      {/* Search + category control */}
-      <div className="flex flex-col gap-2.5 mb-5">
-        <StateSearchDropdown
-          lang={serverLang}
-          placeholder={tex.manualsSelectPlaceholder || 'Search state...'}
-        />
+      {/* Step 1: pick a state */}
+      <StateSearchDropdown
+        lang={serverLang}
+        placeholder={tex.manualsSelectPlaceholder || 'Choose a state...'}
+        onSelect={(slug) => setSelected(slug)}
+      />
 
-        {/* Category segmented control (iOS-style) */}
-        <div className="flex bg-[#EFF1F5] rounded-2xl p-1 gap-1">
-          {CAT_TABS_KEYS.map(({ id, labelKey }) => (
+      {/* Step 2: pick a category (appears once a state is chosen) */}
+      {selected ? (
+        <div className="mt-5">
+          <div className="flex items-center justify-between mb-3 px-0.5">
+            <p className="text-sm font-semibold text-[#0B1C3D]">{stateName}</p>
             <button
-              key={id}
               type="button"
-              onClick={() => setActiveCategory(id)}
-              className={`flex-1 py-2 rounded-xl text-[13px] font-semibold transition-all ${
-                activeCategory === id
-                  ? 'bg-white text-[#0B1C3D] shadow-sm'
-                  : 'text-[#64748B] hover:text-[#0B1C3D]'
-              }`}
+              onClick={() => setSelected(null)}
+              className="text-xs font-medium text-[#94A3B8] hover:text-[#2563EB] transition"
             >
-              {id !== 'all' && `${CAT_ICONS[id]} `}{tex[labelKey] || id}
+              {tex.changeState || 'Change'}
             </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Results count (quiet) */}
-      <p className="text-xs text-[#94A3B8] mb-3 px-0.5">
-        {filtered.length === statesData.length
-          ? `${filtered.length} ${tex.manualsTitle || 'states'}`
-          : `${filtered.length} / ${statesData.length} ${tex.manualsTitle || 'states'}`}
-      </p>
-
-      {/* State grid — just pick a state. Categories/languages/PDFs live on
-          the state page; the cards stay clean and scannable. */}
-      {filtered.length === 0 ? (
-        <div className="text-center py-12">
-          <div className="text-4xl mb-3">🔍</div>
-          <p className="text-[#64748B] font-medium">{tex.noQuestionsFound || 'No states found'}</p>
+          </div>
+          <div className="flex flex-col gap-3">
+            {CATS.map(cat => (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => router.push(`/manuals/${selected}/${cat.id}`)}
+                className="w-full rounded-2xl p-4 flex items-center gap-4 text-left border-2 border-white/60 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
+                style={{ background: cat.gradient }}
+              >
+                <span className="text-3xl shrink-0">{cat.icon}</span>
+                <span className="flex-1 font-bold text-[#1E293B] text-[15px]">{tex[cat.labelKey] || cat.id}</span>
+                <span className="text-[#94A3B8] text-lg shrink-0">→</span>
+              </button>
+            ))}
+          </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-10">
-          {filtered.map(({ slug, name, abbr }) => (
-            <Link
-              key={slug}
-              href={`/manuals/${slug}`}
-              className="group bg-white rounded-xl border border-[#EAEDF1] px-4 py-3.5 flex items-center justify-between gap-2 hover:border-[#2563EB] hover:shadow-[0_4px_16px_rgba(37,99,235,0.08)] active:scale-[0.99] transition-all"
-            >
-              <span className="flex items-baseline gap-2 min-w-0">
-                <span className="font-semibold text-[15px] text-[#0B1C3D] group-hover:text-[#2563EB] transition-colors truncate">
-                  {name}
-                </span>
-                <span className="text-[11px] font-medium text-[#94A3B8]">{abbr}</span>
-              </span>
-              <span className="text-[#CBD5E1] group-hover:text-[#2563EB] transition-colors text-lg leading-none shrink-0">›</span>
-            </Link>
-          ))}
-        </div>
+        <p className="text-sm text-center text-[#94A3B8] py-5 mt-1">
+          ↑ {tex.pickStateFirst || 'Choose your state to continue'}
+        </p>
       )}
 
-      {/* Bottom CTA: warm, personal */}
-      <div className="bg-[#0B1C3D] rounded-2xl p-6 text-center mb-10">
+      {/* Bottom CTA — warm, personal */}
+      <div className="bg-[#0B1C3D] rounded-2xl p-6 text-center mt-8 mb-10">
         <p className="text-white font-bold text-base mb-1.5">{tex.manualsReady || 'Ready to practice?'}</p>
         <p className="text-[#AAB7CC] text-sm mb-5 leading-relaxed max-w-xs mx-auto">{tex.manualsReadySub || 'After studying, take a free practice test.'}</p>
         <Link
@@ -97,6 +80,20 @@ export default function ManualsLibrary({ statesData, serverLang }) {
           {tex.manualsReadyCta || 'Take a free practice test →'}
         </Link>
       </div>
+
+      {/* SEO: crawler-discoverable links to every state manual page. Hidden
+          from the visual UI (the dropdown is the human path) but kept in the
+          DOM so search engines and AI crawl all 50 state pages. sitemap.xml
+          also lists them; this preserves internal linking too. */}
+      <nav className="sr-only" aria-label="All state driver manuals">
+        <ul>
+          {statesData.map(s => (
+            <li key={s.slug}>
+              <Link href={`/manuals/${s.slug}`}>{s.name} driver manual</Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
     </div>
   );
