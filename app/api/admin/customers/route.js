@@ -122,6 +122,15 @@ export async function GET(req) {
         lastSession: last
           ? { state: last.state, category: last.category, score: last.score, total: last.total, created_at: last.created_at }
           : null,
+        // Full recent test history (newest first) for the expandable view.
+        sessions: userSessions.slice(0, 40).map(s => ({
+          state: s.state,
+          category: s.category,
+          score: s.score,
+          total: s.total,
+          lang: s.lang,
+          created_at: s.created_at,
+        })),
       };
     });
 

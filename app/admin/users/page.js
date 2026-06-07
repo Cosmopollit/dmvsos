@@ -28,6 +28,7 @@ export default function AdminUsersPage() {
   const [deleteTarget, setDeleteTarget] = useState(null); // customer row
   const [deleteConfirm, setDeleteConfirm] = useState('');
   const [deleting, setDeleting] = useState(false);
+  const [expandedId, setExpandedId] = useState(null); // customer whose test history is open
 
   // Add-customer modal
   const [showAdd, setShowAdd] = useState(false);
@@ -211,12 +212,17 @@ export default function AdminUsersPage() {
                       )}
                       {c.stripeCustomer && <span className="text-[10px] text-[#64748B]">💳</span>}
                     </div>
-                    <div className="text-xs text-[#64748B] mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5">
+                    <div className="text-xs text-[#64748B] mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 items-center">
                       <span>Joined {fmtDate(c.created_at)}</span>
                       <span>Login {c.providers.join('/') || 'email'}</span>
-                      <span>{c.sessionCount} tests</span>
-                      {c.lastSession && (
-                        <span>Last: {c.lastSession.state} {CAT_LABEL[c.lastSession.category] || c.lastSession.category} ({c.lastSession.score}/{c.lastSession.total})</span>
+                      {c.sessionCount > 0 ? (
+                        <button type="button"
+                          onClick={() => setExpandedId(expandedId === c.id ? null : c.id)}
+                          className="font-semibold text-[#2563EB] hover:underline">
+                          {c.sessionCount} tests {expandedId === c.id ? '▲' : '▼'}
+                        </button>
+                      ) : (
+                        <span>0 tests</span>
                       )}
                     </div>
                     {/* All passes detail if more than the one active */}
@@ -231,6 +237,32 @@ export default function AdminUsersPage() {
                     Delete
                   </button>
                 </div>
+
+                {/* Expandable test history */}
+                {expandedId === c.id && (c.sessions?.length > 0) && (
+                  <div className="mt-3 pt-3 border-t border-[#F1F5F9]">
+                    <div className="flex flex-col gap-1.5">
+                      {c.sessions.map((s, i) => {
+                        const pct = s.total > 0 ? Math.round((s.score / s.total) * 100) : 0;
+                        const passed = pct >= 80;
+                        return (
+                          <div key={i} className="flex items-center justify-between text-xs gap-2">
+                            <span className="text-[#475569] capitalize truncate">
+                              {s.state} · {CAT_LABEL[s.category] || s.category}
+                              <span className="text-[#94A3B8]"> · {fmtDate(s.created_at)}</span>
+                            </span>
+                            <span className={`font-semibold shrink-0 ${passed ? 'text-[#16A34A]' : 'text-[#DC2626]'}`}>
+                              {s.score}/{s.total} ({pct}%)
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <p className="text-[10px] text-[#94A3B8] mt-2">
+                      Per-question mistakes aren&apos;t recorded yet — only scores. Ask to enable mistake tracking.
+                    </p>
+                  </div>
+                )}
               </div>
             );
           })}
