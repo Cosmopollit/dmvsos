@@ -104,12 +104,15 @@ async function sbDelete(table, filter) {
   }
 }
 
-async function profilesUpdateByEmail(rawEmail, updates) {
+async function profilesUpdateByEmail(rawEmail, updates, userId = null) {
   if (!rawEmail) return [];
   const email = rawEmail.toLowerCase();
   const updated = await sbUpdate('profiles', `email=ilike.${encodeURIComponent(email)}`, updates);
   if (updated.length === 0) {
-    await sbInsert('profiles', { email, ...updates });
+    // Stamp id = auth.users.id so profiles.id stays in sync (same fix as the
+    // Stripe webhook; a bare insert would get a random uuid and recreate the
+    // profile.id != auth.users.id drift we cleaned up in migration 017).
+    await sbInsert('profiles', { ...(userId ? { id: userId } : {}), email, ...updates });
   }
   return updated;
 }
@@ -249,7 +252,7 @@ async function handleRcPurchase(ev) {
       is_pro: true,
       plan_type: pass_type,
       plan_expires_at: maxExpires,
-    }).catch((e) => console.warn(`RC profile sync failed: ${e.message}`));
+    }, user_id).catch((e) => console.warn(`RC profile sync failed: ${e.message}`));
   }
 
   console.log(`RC purchase applied | user=${emailTag(email)} | type=${pass_type} | kind=${kind} | tx=${ev.transaction_id} | expires=${newExpiresAt.toISOString()}`);
@@ -315,6 +318,7 @@ async function handleRcRefund(ev) {
       top
         ? { is_pro: true, plan_type: top.pass_type, plan_expires_at: top.expires_at }
         : { is_pro: false, plan_type: null, plan_expires_at: null },
+      purchase.user_id,
     ).catch((e) => console.warn(`RC profile sync (refund) failed: ${e.message}`));
   }
 }
