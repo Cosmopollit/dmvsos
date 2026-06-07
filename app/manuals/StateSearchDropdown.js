@@ -73,7 +73,18 @@ export default function StateSearchDropdown({ lang = 'en', placeholder, onSelect
   const containerRef = useRef(null);
   const inputRef = useRef(null);
   const listRef = useRef(null);
+  // Timestamp of the last time the dropdown opened. Used to ignore a
+  // selection that fires within a few hundred ms of opening — on mobile the
+  // tap that opens the field can land on a freshly-rendered list item (the
+  // list pops up right under the finger), accidentally picking the 1st/2nd
+  // state (e.g. Alaska). A deliberate pick always comes well after opening.
+  const openedAtRef = useRef(0);
   const router = useRouter();
+
+  function openDropdown() {
+    setOpen(true);
+    openedAtRef.current = Date.now();
+  }
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -112,6 +123,9 @@ export default function StateSearchDropdown({ lang = 'en', placeholder, onSelect
   }, [highlighted, open]);
 
   const select = (slug) => {
+    // Ignore a "selection" that happens right as the dropdown opens — that's
+    // the opening tap bleeding onto a list item, not a deliberate choice.
+    if (Date.now() - openedAtRef.current < 250) return;
     setQuery('');
     setOpen(false);
     // When the parent passes onSelect, it drives the flow (e.g. show
@@ -123,7 +137,7 @@ export default function StateSearchDropdown({ lang = 'en', placeholder, onSelect
 
   const handleKeyDown = (e) => {
     if (!open) {
-      if (e.key === 'ArrowDown' || e.key === 'Enter') { setOpen(true); e.preventDefault(); }
+      if (e.key === 'ArrowDown' || e.key === 'Enter') { openDropdown(); e.preventDefault(); }
       return;
     }
     if (e.key === 'Escape') { setOpen(false); inputRef.current?.blur(); return; }
@@ -143,9 +157,9 @@ export default function StateSearchDropdown({ lang = 'en', placeholder, onSelect
           ref={inputRef}
           type="text"
           value={query}
-          onChange={e => { setQuery(e.target.value); setOpen(true); }}
-          onFocus={() => setOpen(true)}
-          onClick={() => setOpen(true)}
+          onChange={e => { setQuery(e.target.value); openDropdown(); }}
+          onFocus={openDropdown}
+          onClick={openDropdown}
           onKeyDown={handleKeyDown}
           placeholder={placeholder || 'Search state...'}
           className="flex-1 bg-transparent text-sm text-[#0B1C3D] placeholder-[#94A3B8] outline-none"

@@ -52,7 +52,16 @@ export default function ManualsLibrary({ statesData, serverLang }) {
               <button
                 key={cat.id}
                 type="button"
-                onClick={() => router.push(`/manuals/${selected}/${cat.id}`)}
+                onClick={() => {
+                  // Only navigate with a real, deliberately-chosen state.
+                  // If selection is somehow invalid, return to the prompt
+                  // instead of jumping to a default/wrong state.
+                  if (!selected || !statesData.some(s => s.slug === selected)) {
+                    setSelected(null);
+                    return;
+                  }
+                  router.push(`/manuals/${selected}/${cat.id}`);
+                }}
                 className="w-full rounded-2xl p-4 flex items-center gap-4 text-left border-2 border-white/60 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
                 style={{ background: cat.gradient }}
               >
