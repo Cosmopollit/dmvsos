@@ -27,22 +27,16 @@ export default function ManualsLibrary({ statesData, serverLang }) {
   return (
     <div className="w-full max-w-md mx-auto px-4">
 
-      {/* Step 1: pick a state */}
-      <StateSearchDropdown
-        lang={serverLang}
-        placeholder={tex.manualsSelectPlaceholder || 'Choose a state...'}
-        onSelect={(slug) => setSelected(slug)}
-      />
-
-      {/* Step 2: pick a category (appears once a state is chosen) */}
       {selected ? (
-        <div className="mt-5">
+        /* State chosen: show it (with a Change link) + category cards. The
+           search box is hidden — the chosen state + Change covers it. */
+        <div>
           <div className="flex items-center justify-between mb-3 px-0.5">
-            <p className="text-sm font-semibold text-[#0B1C3D]">{stateName}</p>
+            <p className="text-base font-semibold text-[#0B1C3D]">{stateName}</p>
             <button
               type="button"
               onClick={() => setSelected(null)}
-              className="text-xs font-medium text-[#94A3B8] hover:text-[#2563EB] transition"
+              className="text-xs font-medium text-[#2563EB] hover:underline transition"
             >
               {tex.changeState || 'Change'}
             </button>
@@ -72,9 +66,12 @@ export default function ManualsLibrary({ statesData, serverLang }) {
           </div>
         </div>
       ) : (
-        <p className="text-sm text-center text-[#94A3B8] py-5 mt-1">
-          {tex.pickStateFirst || 'Choose your state to continue'}
-        </p>
+        /* No state yet: just the search box. Its placeholder is the prompt. */
+        <StateSearchDropdown
+          lang={serverLang}
+          placeholder={tex.manualsSelectPlaceholder || 'Choose a state...'}
+          onSelect={(slug) => setSelected(slug)}
+        />
       )}
 
       {/* Bottom CTA — warm, personal */}
