@@ -91,10 +91,21 @@ export async function GET(request) {
       return Response.json({ ok: true, checked: 0, recovered: 0, message: 'no purchases in window' });
     }
 
-    // Pull all auth users once so we don't N+1 the admin API.
-    const usersRes = await fetch(`${SUPA_URL}/auth/v1/admin/users?per_page=1000`, { headers: sbHeaders });
-    const usersList = (await usersRes.json()).users || [];
-    const byId = new Map(usersList.map(u => [u.id, u]));
+    // Pull all auth users once so we don't N+1 the admin API. Paginate so a
+    // user past page 1 (project crossed 1000 users) still gets looked up;
+    // otherwise their purchase would be silently treated as "not stuck"
+    // because byId.get(user_id) returns undefined and we skip the row.
+    const MAX_USER_PAGES = 20;
+    const byId = new Map();
+    for (let page = 1; page <= MAX_USER_PAGES; page++) {
+      const usersRes = await fetch(
+        `${SUPA_URL}/auth/v1/admin/users?page=${page}&per_page=200`,
+        { headers: sbHeaders }
+      );
+      const list = (await usersRes.json()).users || [];
+      for (const u of list) byId.set(u.id, u);
+      if (list.length < 200) break;
+    }
 
     const stuck = [];
     for (const p of purchases) {

@@ -25,7 +25,7 @@ import { normalizeEmail, suggestEmailFix, isInAppBrowser } from '@/lib/emailHint
 //                 App ID + App Secret pasted into Supabase, plus the
 //                 callback URL added to the App's Valid OAuth Redirect
 //                 URIs list. Privacy Policy URL must point to /privacy.
-const ENABLE_APPLE_OAUTH = false;
+const ENABLE_APPLE_OAUTH = true;
 const ENABLE_FACEBOOK_OAUTH = true;
 
 const GoogleIcon = () => (

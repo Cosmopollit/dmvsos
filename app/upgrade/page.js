@@ -119,12 +119,11 @@ function UpgradeContent() {
 
   // Auto-resume checkout after login redirect. When an anonymous user clicks
   // "Buy", they're sent to /login with ?next=/upgrade?plan=X&intent=checkout.
-  // After login they're routed back here. Detect that case (signed-in + the
-  // intent flag + a preselected plan) and fire the Stripe checkout
-  // automatically so the user doesn't have to click "Buy" a second time —
-  // the typical UX expectation after a forced authentication step.
-  // Skipped for OAuth (Google) since that flow drops `next` along the way;
-  // those users have to tap Buy again. Acceptable tradeoff for now.
+  // After login they're routed back here (password sign-in via router.push;
+  // OAuth via the sessionStorage `postLoginRedirect` round-trip handled in
+  // AuthContext). Detect that case (signed-in + the intent flag + a
+  // preselected plan) and fire the Stripe checkout automatically so the
+  // user doesn't have to click "Buy" a second time.
   useEffect(() => {
     if (autoCheckoutFiredRef.current) return;
     if (!user) return;
