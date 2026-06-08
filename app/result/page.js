@@ -9,6 +9,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { flags } from '@/lib/flags';
 import { planForCategory } from '@/lib/plans';
+import { examRulesFor } from '@/lib/exam-rules';
 import { isInAppBrowser } from '@/lib/emailHints';
 import SupportFooter from '@/app/components/SupportFooter';
 
@@ -26,7 +27,6 @@ function ResultContent() {
   const score = parseInt(params.get('score') || 0, 10);
   const total = Math.max(1, parseInt(params.get('total') || 3, 10));
   const percent = Math.round((score / total) * 100);
-  const passed = total > 0 && score / total >= 0.7;
 
   const { user, isPro } = useAuth();
 
@@ -37,6 +37,7 @@ function ResultContent() {
   // OAuth buttons here break inside FB/IG/TikTok webviews (Google blocks
   // OAuth in webviews). Detected after mount to avoid hydration mismatch.
   const [inApp, setInApp] = useState(false);
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- one-shot client-only UA sniff after mount
   useEffect(() => { setInApp(isInAppBrowser()); }, []);
   // sessionStorage is client-only; must sync after hydration
   /* eslint-disable react-hooks/set-state-in-effect */
@@ -55,6 +56,9 @@ function ResultContent() {
   const elapsed = testResults?.elapsed ?? 0;
   const state = testResults?.state ?? 'washington';
   const category = testResults?.category ?? 'car';
+  const passRule = examRulesFor(state, category);
+  const passMark = passRule ? passRule.pass / passRule.questions : 0.8;
+  const passed = total > 0 && score / total >= passMark;
   const lang = langOverride ?? testResults?.lang ?? getSavedLang();
   const currentLang = langs.find(l => l.code === lang) || langs[0];
   function switchLang(code) { setLangOverride(code); saveLang(code); setShowLangMenu(false); }

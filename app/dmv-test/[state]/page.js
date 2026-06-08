@@ -3,61 +3,17 @@ import { notFound } from 'next/navigation';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 import { getHreflangAlternates } from '@/lib/hreflang';
 import { MIN_PRICE } from '@/lib/plans';
+import { examRulesFor, passPercentFor } from '@/lib/exam-rules';
 import SiteHeader from '@/app/components/SiteHeader';
 import SupportFooter from '@/app/components/SupportFooter';
 
-const STATE_EXAM_DATA = {
-  alabama:          { questions: 40, passing: 32, passingPct: 80 },
-  alaska:           { questions: 20, passing: 16, passingPct: 80 },
-  arizona:          { questions: 30, passing: 24, passingPct: 80 },
-  arkansas:         { questions: 25, passing: 20, passingPct: 80 },
-  california:       { questions: 46, passing: 38, passingPct: 83 },
-  colorado:         { questions: 25, passing: 20, passingPct: 80 },
-  connecticut:      { questions: 25, passing: 20, passingPct: 80 },
-  delaware:         { questions: 30, passing: 24, passingPct: 80 },
-  florida:          { questions: 50, passing: 40, passingPct: 80 },
-  georgia:          { questions: 40, passing: 30, passingPct: 75 },
-  hawaii:           { questions: 30, passing: 24, passingPct: 80 },
-  idaho:            { questions: 40, passing: 34, passingPct: 85 },
-  illinois:         { questions: 35, passing: 28, passingPct: 80 },
-  indiana:          { questions: 50, passing: 42, passingPct: 84 },
-  iowa:             { questions: 35, passing: 28, passingPct: 80 },
-  kansas:           { questions: 25, passing: 20, passingPct: 80 },
-  kentucky:         { questions: 40, passing: 32, passingPct: 80 },
-  louisiana:        { questions: 40, passing: 32, passingPct: 80 },
-  maine:            { questions: 29, passing: 24, passingPct: 82 },
-  maryland:         { questions: 25, passing: 22, passingPct: 88 },
-  massachusetts:    { questions: 25, passing: 18, passingPct: 72 },
-  michigan:         { questions: 50, passing: 40, passingPct: 80 },
-  minnesota:        { questions: 40, passing: 32, passingPct: 80 },
-  mississippi:      { questions: 30, passing: 24, passingPct: 80 },
-  missouri:         { questions: 25, passing: 20, passingPct: 80 },
-  montana:          { questions: 33, passing: 27, passingPct: 82 },
-  nebraska:         { questions: 25, passing: 20, passingPct: 80 },
-  nevada:           { questions: 50, passing: 40, passingPct: 80 },
-  'new-hampshire':  { questions: 40, passing: 32, passingPct: 80 },
-  'new-jersey':     { questions: 50, passing: 40, passingPct: 80 },
-  'new-mexico':     { questions: 25, passing: 18, passingPct: 72 },
-  'new-york':       { questions: 20, passing: 14, passingPct: 70 },
-  'north-carolina': { questions: 25, passing: 20, passingPct: 80 },
-  'north-dakota':   { questions: 25, passing: 20, passingPct: 80 },
-  ohio:             { questions: 40, passing: 30, passingPct: 75 },
-  oklahoma:         { questions: 50, passing: 40, passingPct: 80 },
-  oregon:           { questions: 35, passing: 28, passingPct: 80 },
-  pennsylvania:     { questions: 18, passing: 15, passingPct: 83 },
-  'rhode-island':   { questions: 25, passing: 20, passingPct: 80 },
-  'south-carolina': { questions: 30, passing: 24, passingPct: 80 },
-  'south-dakota':   { questions: 25, passing: 20, passingPct: 80 },
-  tennessee:        { questions: 30, passing: 24, passingPct: 80 },
-  texas:            { questions: 30, passing: 21, passingPct: 70 },
-  utah:             { questions: 50, passing: 40, passingPct: 80 },
-  vermont:          { questions: 20, passing: 16, passingPct: 80 },
-  virginia:         { questions: 35, passing: 30, passingPct: 86 },
-  washington:       { questions: 40, passing: 32, passingPct: 80 },
-  'west-virginia':  { questions: 25, passing: 19, passingPct: 76 },
-  wisconsin:        { questions: 50, passing: 40, passingPct: 80 },
-  wyoming:          { questions: 25, passing: 20, passingPct: 80 },
-};
+// Exam facts come from the single source of truth (lib/exam-rules.js),
+// not a local table, so counts + pass scores never drift or go stale.
+function examFor(state) {
+  const rule = examRulesFor(state, 'car');
+  if (!rule) return { questions: 40, passing: 32, passingPct: 80 };
+  return { questions: rule.questions, passing: rule.pass, passingPct: passPercentFor(state, 'car') };
+}
 
 const LANG_OPTIONS = [
   { code: 'en', label: 'English',    emoji: '🇺🇸' },
@@ -76,7 +32,7 @@ export async function generateMetadata({ params }) {
   const name = STATE_DISPLAY[state];
   if (!name) return {};
   const meta = STATE_META[state];
-  const exam = STATE_EXAM_DATA[state] || { questions: 40 };
+  const exam = examFor(state);
   const year = new Date().getFullYear();
 
   return {
@@ -105,7 +61,7 @@ export default async function StateDmvTestPage({ params }) {
   if (!name) notFound();
 
   const meta = STATE_META[state];
-  const exam = STATE_EXAM_DATA[state] || { questions: 40, passing: 32, passingPct: 80 };
+  const exam = examFor(state);
   const year = new Date().getFullYear();
 
   const jsonLd = JSON.stringify({

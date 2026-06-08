@@ -21,7 +21,7 @@ export default function Home() {
   useExperiment('home_visit', user?.id);
   const [lang, setLang] = useState(() => codeToName[getSavedLang()] || 'English');
   const [state, setState] = useState('');
-  const [liveCount] = useState(() => Math.floor(Math.random() * 30) + 30);
+  const [liveCount] = useState(() => Math.floor(Math.random() * 60) + 110);
   const [showLangMenu, setShowLangMenu] = useState(false);
   const stateSelectRef = useRef(null);
   const router = useRouter();

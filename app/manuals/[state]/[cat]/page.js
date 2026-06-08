@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { t } from '@/lib/translations';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META, LANG_NAMES } from '@/lib/manual-data';
 import { getHreflangAlternates } from '@/lib/hreflang';
+import { examRulesFor } from '@/lib/exam-rules';
 
 const SUPABASE_URL = 'https://yaogndpgnewqffbjrsgz.supabase.co';
 const INDEX_URL = `${SUPABASE_URL}/storage/v1/object/public/manuals/manuals-index.json`;
@@ -19,10 +20,12 @@ const CAT_META = {
     testLabel: 'DMV Written Test',
     testCat: 'dmv',
     descSuffix: 'car license written knowledge test',
-    faqQuestions: (name, abbr) => [
+    faqQuestions: (name, abbr, rules) => [
       {
         q: `How many questions are on the ${name} DMV written test?`,
-        a: `The ${name} (${abbr}) DMV written knowledge test typically consists of 20–50 multiple-choice questions. The exact number varies | check the official ${STATE_META[name]?.agency || `${name} DMV`} website for the current format.`,
+        a: rules
+          ? `The ${name} (${abbr}) car knowledge test has ${rules.questions} questions, and you need ${rules.pass} correct (${Math.round((rules.pass / rules.questions) * 100)}%) to pass. You can practice every one of them free at DMVSOS before test day.`
+          : `Most state car knowledge tests have 25 to 50 questions with an 80% pass mark. Practice free at DMVSOS so you walk in ready.`,
       },
       {
         q: `What topics are covered in the ${name} driver's handbook?`,
@@ -30,7 +33,7 @@ const CAT_META = {
       },
       {
         q: `Is the ${name} driver's handbook available in Spanish?`,
-        a: `Many states provide their driver's handbook in multiple languages. Download links for all available languages | including Spanish, Russian, Chinese, and more | are listed above on this page.`,
+        a: `Many states publish their driver's handbook in several languages. Every available language for ${name}, including Spanish, Russian, Chinese, and more, is listed above on this page for direct download.`,
       },
       {
         q: `How do I pass the ${name} DMV written test?`,
@@ -45,14 +48,16 @@ const CAT_META = {
     testLabel: 'CDL Knowledge Test',
     testCat: 'cdl',
     descSuffix: 'commercial driver license (CDL) knowledge test',
-    faqQuestions: (name, abbr) => [
+    faqQuestions: (name, abbr, rules) => [
       {
         q: `What is covered in the ${name} CDL manual?`,
-        a: `The ${name} CDL manual covers general knowledge (traffic laws, safe driving), vehicle inspection, basic vehicle control, shifting/backing, pre-trip inspections, hazardous materials, passenger transport, air brakes, and combination vehicles | following FMCSA federal guidelines.`,
+        a: `The ${name} CDL manual covers general knowledge (traffic laws, safe driving), vehicle inspection, basic vehicle control, shifting/backing, pre-trip inspections, hazardous materials, passenger transport, air brakes, and combination vehicles, all following FMCSA federal guidelines.`,
       },
       {
         q: `How many questions are on the ${name} CDL general knowledge test?`,
-        a: `The CDL general knowledge test in ${name} (${abbr}) typically has 50 questions. You must score at least 80% to pass. Endorsement tests (HazMat, Tanker, Passenger, etc.) are separate and have 20–30 questions each.`,
+        a: rules
+          ? `The CDL general knowledge test in ${name} (${abbr}) has ${rules.questions} questions, and you need ${rules.pass} correct (${Math.round((rules.pass / rules.questions) * 100)}%) to pass. Endorsement tests (HazMat, Tanker, Passenger, and others) are separate, with 20 to 30 questions each.`
+          : `The CDL general knowledge test has 50 questions, and you need 40 correct (80%) to pass. Endorsement tests are separate, with 20 to 30 questions each.`,
       },
       {
         q: `Do I need a CDL to drive a commercial vehicle in ${name}?`,
@@ -71,7 +76,7 @@ const CAT_META = {
     testLabel: 'Motorcycle Knowledge Test',
     testCat: 'moto',
     descSuffix: 'motorcycle license written knowledge test',
-    faqQuestions: (name, abbr) => [
+    faqQuestions: (name, abbr, rules) => [
       {
         q: `What is covered in the ${name} motorcycle handbook?`,
         a: `The ${name} motorcycle handbook covers motorcycle controls and equipment, riding techniques, defensive riding strategies, intersections and turning, carrying passengers and cargo, special riding conditions (rain, night, highways), and ${name}-specific traffic laws for motorcyclists.`,
@@ -82,7 +87,9 @@ const CAT_META = {
       },
       {
         q: `How many questions are on the ${name} motorcycle written test?`,
-        a: `The ${name} (${abbr}) motorcycle knowledge test typically has 25–30 multiple-choice questions covering motorcycle laws and safe riding practices. A passing score is usually 80% or higher.`,
+        a: rules
+          ? `The ${name} (${abbr}) motorcycle knowledge test has ${rules.questions} questions, and you need ${rules.pass} correct (${Math.round((rules.pass / rules.questions) * 100)}%) to pass. Practice free at DMVSOS to be ready for every one.`
+          : `Most state motorcycle knowledge tests have around 25 questions with an 80% pass mark. Practice free at DMVSOS to be ready.`,
       },
       {
         q: `Can I take a motorcycle safety course instead of the written test in ${name}?`,
@@ -181,7 +188,7 @@ export async function generateMetadata({ params }) {
   const catInfo = CAT_META[cat];
 
   const title = `${name} ${catInfo.label} ${year} | Free PDF | DMVSOS`;
-  const description = `Download the official ${name} ${catInfo.labelFull} (${year}) as a free PDF or read online. Study for the ${meta.abbr} ${catInfo.testLabel} | available in multiple languages.`;
+  const description = `Download the official ${name} ${catInfo.labelFull} (${year}) as a free PDF or read online. Study for the ${meta.abbr} ${catInfo.testLabel}, available in multiple languages.`;
 
   return {
     title,
@@ -235,7 +242,7 @@ export default async function StateManualCategoryPage({ params }) {
   const neighbors = STATE_NEIGHBORS[state] || STATE_SLUGS.filter(s => s !== state).slice(0, 4);
 
   // FAQ for structured data
-  const faqs = catInfo.faqQuestions(name, meta.abbr);
+  const faqs = catInfo.faqQuestions(name, meta.abbr, examRulesFor(state, cat));
 
   const jsonLd = JSON.stringify({
     '@context': 'https://schema.org',
@@ -302,7 +309,7 @@ export default async function StateManualCategoryPage({ params }) {
               href={`/category?state=${state}&lang=${lang}`}
               className="text-xs font-semibold text-[#2563EB] hover:text-[#1D4ED8] transition"
             >
-              Free Test →
+              Free Test
             </Link>
           </div>
         </div>
@@ -399,13 +406,13 @@ export default async function StateManualCategoryPage({ params }) {
             {name} {catInfo.testLabel} Practice
           </h2>
           <p className="text-sm text-[#94A3B8] mb-4">
-            Real questions based on the official {name} {catInfo.label}. Free | no signup needed.
+            Real questions based on the official {name} {catInfo.label}. Free, no signup needed.
           </p>
           <Link
             href={`/test?state=${state}&category=${catInfo.testCat}&lang=${lang}`}
             className="inline-flex items-center gap-2 px-6 py-3 bg-[#2563EB] text-white rounded-xl font-semibold hover:bg-[#1D4ED8] transition-colors text-sm"
           >
-            Take Free {catInfo.testLabel} →
+            Take Free {catInfo.testLabel}
           </Link>
         </div>
 
@@ -469,7 +476,7 @@ export default async function StateManualCategoryPage({ params }) {
               href="/manuals"
               className="p-3 rounded-xl border border-[#2563EB] bg-[#EFF6FF] text-sm font-semibold text-[#2563EB] text-center col-span-2 hover:bg-[#DBEAFE] transition-colors"
             >
-              All 50 States →
+              All 50 States
             </Link>
           </div>
         </div>

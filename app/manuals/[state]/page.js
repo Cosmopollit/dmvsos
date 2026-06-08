@@ -172,14 +172,6 @@ export default async function StateManualPage({ params }) {
           <p className="text-sm text-[#64748B] mb-1">
             {tex.manualsStateSubtitle.replace('{agency}', meta.agency)}
           </p>
-          {manual && (
-            <p className="text-xs text-[#94A3B8] mb-4">
-              {tex.manualsPageCount
-                .replace('{pages}', String(manual.totalPages))
-                .replace('{sections}', String(manual.sections.length))}
-            </p>
-          )}
-
           {/* Language switcher */}
           <ManualLangSwitch currentLang={lang} />
         </div>

@@ -9,6 +9,7 @@ import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { flags } from '@/lib/flags';
 import { PASS_META, EXTENSION } from '@/lib/plans';
+import { examRulesFor } from '@/lib/exam-rules';
 import SupportFooter from '@/app/components/SupportFooter';
 import AccountSettings from './AccountSettings';
 
@@ -234,7 +235,9 @@ function ProfileContent() {
                   </div>
                   <ul className="space-y-2">
                     {sessions.map((s) => {
-                      const passed = s.total > 0 && s.score / s.total >= 0.7;
+                      const pRule = examRulesFor(s.state, s.category);
+                      const pMark = pRule ? pRule.pass / pRule.questions : 0.8;
+                      const passed = s.total > 0 && s.score / s.total >= pMark;
                       return (
                         <li
                           key={s.id}
