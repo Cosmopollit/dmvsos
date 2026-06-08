@@ -74,7 +74,7 @@ const COMPARISON = [
   },
   {
     feature: 'Refund policy',
-    dmvsos: '24h full refund, no questions',
+    dmvsos: 'All sales final (CDL Pro: pass or 100% refund)',
     driversed: '72h with conditions',
     aceable: 'Varies by state',
     drivingtests: 'N/A',
@@ -95,7 +95,7 @@ const COMPARISON = [
   },
   {
     feature: 'CDL Pass Guarantee',
-    dmvsos: 'Refund or 90-day extension if you fail real test',
+    dmvsos: '100% refund if you fail the real CDL test',
     driversed: 'Pass Guarantee on some courses',
     aceable: 'No',
     drivingtests: 'No',

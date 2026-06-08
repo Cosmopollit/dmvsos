@@ -75,8 +75,7 @@ export default function AboutPage() {
                 <strong>Free to start.</strong> 20 questions per state per language, no signup.
               </li>
               <li>
-                <strong>CDL Pass Guarantee:</strong> if you score 85%+ on practice and fail the
-                actual DMV test, we refund or extend 90 days. Your choice.
+                <strong>CDL Pass Guarantee:</strong> pass the real CDL test or get a 100% refund.
               </li>
             </ul>
 
@@ -129,7 +128,7 @@ export default function AboutPage() {
                 <a href="https://t.me/dmvsos_support_bot" target="_blank" rel="noopener noreferrer" className="text-[#2563EB]">@dmvsos_support_bot</a>
               </p>
               <p>
-                <strong>Refunds:</strong> Full refund within 24 hours of purchase. Just reply to the receipt or message me.
+                <strong>Questions about a charge?</strong> Just message me and I&apos;ll sort it out.
               </p>
               <p>
                 <strong>Terms / Privacy:</strong>{' '}
@@ -143,7 +142,7 @@ export default function AboutPage() {
 
         <div className="mt-6 text-center">
           <Link href="/" className="inline-flex items-center gap-1 text-sm text-[#2563EB] font-medium hover:underline">
-            ← {tex.home || 'Home'}
+            {tex.home || 'Home'}
           </Link>
         </div>
       </div>

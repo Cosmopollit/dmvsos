@@ -23,7 +23,7 @@ const QA = [
   },
   {
     q: 'Do you offer the Commercial Driver License (CDL) test?',
-    a: 'Yes. CDL Pro pass includes General Knowledge, Air Brakes, and Combination Vehicles sections. Specific endorsements (Hazmat, Tanker, Passenger, School Bus) are coming. CDL Pro includes our Pass Guarantee: if you score 85%+ on practice and fail the real DMV test, we refund or extend 90 days.',
+    a: 'Yes. CDL Pro pass includes General Knowledge, Air Brakes, and Combination Vehicles sections. Specific endorsements (Hazmat, Tanker, Passenger, School Bus) are coming. CDL Pro includes our Pass Guarantee: pass the real CDL test or get a 100% refund.',
   },
   {
     q: 'Is there a subscription?',
@@ -31,7 +31,7 @@ const QA = [
   },
   {
     q: 'What is the refund policy?',
-    a: 'Full refund within 24 hours of purchase, no questions asked. Just message us. CDL Pro also has a Pass Guarantee: 90-day extension or refund if you fail the actual DMV test after scoring 85%+ on our practice.',
+    a: 'Passes are one-time purchases, so they are final. If something is wrong, message us and we will make it right. CDL Pro carries a Pass Guarantee: pass the real CDL test or get a 100% refund (submit your DMV fail letter within 30 days).',
   },
   {
     q: 'Do I need to create an account?',
@@ -162,7 +162,7 @@ export default function FaqPage() {
 
         <div className="mt-6 text-center">
           <Link href="/" className="inline-flex items-center gap-1 text-sm text-[#2563EB] font-medium hover:underline">
-            ← Home
+            Home
           </Link>
         </div>
       </div>

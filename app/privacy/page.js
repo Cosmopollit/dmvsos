@@ -120,7 +120,7 @@ export default function Privacy() {
         </div>
 
         <Link href="/" className="inline-block mt-6 text-sm text-[#94A3B8] hover:text-[#2563EB] transition">
-          &larr; Back to Home
+          Back to Home
         </Link>
       </div>
     </main>

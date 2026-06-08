@@ -114,7 +114,7 @@ export default function DmvTestIndexPage() {
           <p className="text-[#94A3B8] text-sm mb-4">Select your state above and start practicing for free.</p>
           <div className="flex items-center justify-center gap-2 mb-4">
             <span className="text-xs font-semibold text-[#10B981] bg-[#10B981]/10 px-3 py-1 rounded-full border border-[#10B981]/30">
-              🛡️ Pass or your money back
+              Free to start · no signup
             </span>
           </div>
           <Link

@@ -425,7 +425,7 @@ export default function Home() {
             </>
           ) : (
             <p className="text-sm text-center text-[#94A3B8] py-4 mt-2">
-              ↑ {tex.pickStateFirst || 'Choose your state to continue'}
+              {tex.pickStateFirst || 'Choose your state to continue'}
             </p>
           )}
         </div>

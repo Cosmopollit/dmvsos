@@ -145,7 +145,7 @@ export default async function StateManualPage({ params }) {
             </Link>
             <Link href={`/category?state=${state}&lang=${lang}`}
               className="text-xs font-semibold text-[#2563EB] hover:text-[#1D4ED8] transition">
-              {tex.startFree || 'Free Test →'}
+              {tex.startFree || 'Free Test'}
             </Link>
           </div>
         </div>
@@ -243,11 +243,6 @@ export default async function StateManualPage({ params }) {
           <p className="text-sm text-[#94A3B8] mb-4">
             {tex.manualsTestDesc.replace('{state}', name)}
           </p>
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <span className="text-xs font-semibold text-[#10B981] bg-[#10B981]/10 px-3 py-1 rounded-full border border-[#10B981]/30">
-              🛡️ {tex.moneyBack}
-            </span>
-          </div>
           <Link
             href={`/category?state=${state}&lang=${lang}`}
             className="inline-flex items-center gap-2 px-6 py-3 bg-[#2563EB] text-white rounded-xl font-semibold hover:bg-[#1D4ED8] transition-colors text-sm"

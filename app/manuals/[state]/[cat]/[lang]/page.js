@@ -32,34 +32,34 @@ const LANG_LABELS = {
 
 // Language-specific phrases for native speakers
 const LANG_NATIVE = {
-  en: { in: 'in English',       download: 'Download PDF',        study: 'Study for the DMV test',         cta: 'Take Free Practice Test →' },
-  es: { in: 'en Español',       download: 'Descargar PDF',        study: 'Estudia para el examen de manejo', cta: 'Tomar prueba gratis →' },
-  ru: { in: 'на русском',       download: 'Скачать PDF',          study: 'Подготовьтесь к экзамену ПДД',     cta: 'Бесплатный тест →' },
-  zh: { in: '中文版',            download: '下载 PDF',             study: '备考驾照笔试',                      cta: '免费练习测试 →' },
-  ua: { in: 'українською',      download: 'Завантажити PDF',      study: 'Підготуйтеся до екзамену',         cta: 'Безкоштовний тест →' },
-  vi: { in: 'tiếng Việt',       download: 'Tải PDF',              study: 'Ôn thi bằng lái xe',               cta: 'Kiểm tra miễn phí →' },
-  ko: { in: '한국어',            download: 'PDF 다운로드',          study: '운전면허 필기시험 준비',              cta: '무료 테스트 →' },
-  ar: { in: 'بالعربية',         download: 'تحميل PDF',            study: 'استعد لاختبار القيادة',             cta: 'اختبار مجاني →' },
-  fr: { in: 'en Français',      download: 'Télécharger PDF',      study: "Préparez l'examen du permis",       cta: 'Test gratuit →' },
-  de: { in: 'auf Deutsch',      download: 'PDF herunterladen',    study: 'Führerscheinprüfung vorbereiten',   cta: 'Kostenloser Test →' },
-  hy: { in: 'հայերեն',          download: 'Բեռնել PDF',           study: 'Պատրաստվեք քննությանը',            cta: 'Անվճար թեստ →' },
-  hi: { in: 'हिंदी में',         download: 'PDF डाउनलोड करें',    study: 'ड्राइविंग टेस्ट की तैयारी',        cta: 'मुफ्त टेस्ट →' },
-  pa: { in: 'ਪੰਜਾਬੀ ਵਿੱਚ',      download: 'PDF ਡਾਊਨਲੋਡ ਕਰੋ',    study: 'ਡ੍ਰਾਈਵਿੰਗ ਟੈਸਟ ਦੀ ਤਿਆਰੀ',         cta: 'ਮੁਫਤ ਟੈਸਟ →' },
-  ht: { in: 'an Kreyòl',        download: 'Telechaje PDF',        study: 'Prepare egzamen kondwit ou',        cta: 'Tès gratis →' },
-  so: { in: 'Soomaali',         download: 'Soo dejiso PDF',       study: 'U diyaarso imtixaanka baabulaynta', cta: 'Imtixaan bilaash →' },
-  sw: { in: 'Kiswahili',        download: 'Pakua PDF',            study: 'Jiandae kwa mtihani wa udereva',    cta: 'Mtihani wa bure →' },
-  my: { in: 'မြန်မာဘာသာ',       download: 'PDF ဒေါင်းလုပ်',      study: 'ယာဉ်မောင်းစာမေးပွဲ ပြင်ဆင်ပါ',   cta: 'အခမဲ့ စမ်းသပ် →' },
-  ne: { in: 'नेपालीमा',         download: 'PDF डाउनलोड गर्नुस्',  study: 'ड्राइभिङ परीक्षाको तयारी',         cta: 'निःशुल्क परीक्षा →' },
-  pt: { in: 'em Português',     download: 'Baixar PDF',           study: 'Estude para o exame de direção',    cta: 'Teste gratuito →' },
-  ja: { in: '日本語版',          download: 'PDF ダウンロード',      study: '運転免許筆記試験の勉強',              cta: '無料テスト →' },
-  hmn: { in: 'lus Hmoob',       download: 'Rub PDF',              study: 'Kawm rau kev sim tsav tsheb',       cta: 'Kev sim dawb →' },
-  tl:  { in: 'Filipino',        download: 'I-download ang PDF',   study: 'Mag-aral para sa DMV test',         cta: 'Libreng Pagsasanay →' },
-  sm:  { in: 'Gagana Sāmoa',    download: 'Lalau mai le PDF',     study: "Sauni mo le su'esu'ega",            cta: "Su'esu'e fua →" },
-  to:  { in: 'lea faka-Tonga',  download: 'Tukumai PDF',          study: 'Teuteu ki he fakamatala',           cta: 'Fakamatala tauhi →' },
-  haw: { in: 'ʻŌlelo Hawaiʻi',  download: 'Hoʻoiho PDF',         study: 'Aʻo no ka hoʻokolohua',            cta: 'Hoʻāʻo manuahi →' },
-  mh:  { in: 'Kajin M̧ajeļ',   download: 'Download PDF',         study: 'Kobban ñan test',                   cta: 'Test wōt →' },
-  ilo: { in: 'Ilocano',         download: 'I-download ti PDF',    study: 'Aralen para iti eksamen',           cta: 'Libre nga pagbasa →' },
-  chk: { in: 'Chuukese',        download: 'Download PDF',         study: 'Fen ren ewe test',                  cta: 'Free test →' },
+  en: { in: 'in English',       download: 'Download PDF',        study: 'Study for the DMV test',         cta: 'Take Free Practice Test' },
+  es: { in: 'en Español',       download: 'Descargar PDF',        study: 'Estudia para el examen de manejo', cta: 'Tomar prueba gratis' },
+  ru: { in: 'на русском',       download: 'Скачать PDF',          study: 'Подготовьтесь к экзамену ПДД',     cta: 'Бесплатный тест' },
+  zh: { in: '中文版',            download: '下载 PDF',             study: '备考驾照笔试',                      cta: '免费练习测试' },
+  ua: { in: 'українською',      download: 'Завантажити PDF',      study: 'Підготуйтеся до екзамену',         cta: 'Безкоштовний тест' },
+  vi: { in: 'tiếng Việt',       download: 'Tải PDF',              study: 'Ôn thi bằng lái xe',               cta: 'Kiểm tra miễn phí' },
+  ko: { in: '한국어',            download: 'PDF 다운로드',          study: '운전면허 필기시험 준비',              cta: '무료 테스트' },
+  ar: { in: 'بالعربية',         download: 'تحميل PDF',            study: 'استعد لاختبار القيادة',             cta: 'اختبار مجاني' },
+  fr: { in: 'en Français',      download: 'Télécharger PDF',      study: "Préparez l'examen du permis",       cta: 'Test gratuit' },
+  de: { in: 'auf Deutsch',      download: 'PDF herunterladen',    study: 'Führerscheinprüfung vorbereiten',   cta: 'Kostenloser Test' },
+  hy: { in: 'հայերեն',          download: 'Բեռնել PDF',           study: 'Պատրաստվեք քննությանը',            cta: 'Անվճար թեստ' },
+  hi: { in: 'हिंदी में',         download: 'PDF डाउनलोड करें',    study: 'ड्राइविंग टेस्ट की तैयारी',        cta: 'मुफ्त टेस्ट' },
+  pa: { in: 'ਪੰਜਾਬੀ ਵਿੱਚ',      download: 'PDF ਡਾਊਨਲੋਡ ਕਰੋ',    study: 'ਡ੍ਰਾਈਵਿੰਗ ਟੈਸਟ ਦੀ ਤਿਆਰੀ',         cta: 'ਮੁਫਤ ਟੈਸਟ' },
+  ht: { in: 'an Kreyòl',        download: 'Telechaje PDF',        study: 'Prepare egzamen kondwit ou',        cta: 'Tès gratis' },
+  so: { in: 'Soomaali',         download: 'Soo dejiso PDF',       study: 'U diyaarso imtixaanka baabulaynta', cta: 'Imtixaan bilaash' },
+  sw: { in: 'Kiswahili',        download: 'Pakua PDF',            study: 'Jiandae kwa mtihani wa udereva',    cta: 'Mtihani wa bure' },
+  my: { in: 'မြန်မာဘာသာ',       download: 'PDF ဒေါင်းလုပ်',      study: 'ယာဉ်မောင်းစာမေးပွဲ ပြင်ဆင်ပါ',   cta: 'အခမဲ့ စမ်းသပ်' },
+  ne: { in: 'नेपालीमा',         download: 'PDF डाउनलोड गर्नुस्',  study: 'ड्राइभिङ परीक्षाको तयारी',         cta: 'निःशुल्क परीक्षा' },
+  pt: { in: 'em Português',     download: 'Baixar PDF',           study: 'Estude para o exame de direção',    cta: 'Teste gratuito' },
+  ja: { in: '日本語版',          download: 'PDF ダウンロード',      study: '運転免許筆記試験の勉強',              cta: '無料テスト' },
+  hmn: { in: 'lus Hmoob',       download: 'Rub PDF',              study: 'Kawm rau kev sim tsav tsheb',       cta: 'Kev sim dawb' },
+  tl:  { in: 'Filipino',        download: 'I-download ang PDF',   study: 'Mag-aral para sa DMV test',         cta: 'Libreng Pagsasanay' },
+  sm:  { in: 'Gagana Sāmoa',    download: 'Lalau mai le PDF',     study: "Sauni mo le su'esu'ega",            cta: "Su'esu'e fua" },
+  to:  { in: 'lea faka-Tonga',  download: 'Tukumai PDF',          study: 'Teuteu ki he fakamatala',           cta: 'Fakamatala tauhi' },
+  haw: { in: 'ʻŌlelo Hawaiʻi',  download: 'Hoʻoiho PDF',         study: 'Aʻo no ka hoʻokolohua',            cta: 'Hoʻāʻo manuahi' },
+  mh:  { in: 'Kajin M̧ajeļ',   download: 'Download PDF',         study: 'Kobban ñan test',                   cta: 'Test wōt' },
+  ilo: { in: 'Ilocano',         download: 'I-download ti PDF',    study: 'Aralen para iti eksamen',           cta: 'Libre nga pagbasa' },
+  chk: { in: 'Chuukese',        download: 'Download PDF',         study: 'Fen ren ewe test',                  cta: 'Free test' },
 };
 
 // Full language name in English for SEO titles
@@ -227,7 +227,7 @@ export default async function StateManualLangPage({ params }) {
               href={`/category?state=${state}&lang=${lang}`}
               className="text-xs font-semibold text-[#2563EB] hover:text-[#1D4ED8] transition"
             >
-              Free Test →
+              Free Test
             </Link>
           </div>
         </div>
@@ -349,7 +349,7 @@ export default async function StateManualLangPage({ params }) {
                 href={`/manuals/${state}/${cat}`}
                 className="p-3 rounded-xl border border-[#2563EB] bg-[#EFF6FF] text-sm font-semibold text-[#2563EB] text-center col-span-2 hover:bg-[#DBEAFE] transition-colors"
               >
-                All {name} {catInfo.label} Languages →
+                All {name} {catInfo.label} Languages
               </Link>
             </div>
           </div>
