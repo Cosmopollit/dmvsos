@@ -233,7 +233,7 @@ function UpgradeContent() {
               <div className="text-xs text-[#64748B]">{plan.duration}</div>
               <div className="text-[10px] mb-4 mt-0.5 text-[#94A3B8]">{tex.extensionHint}</div>
               <ul className="space-y-2 mb-5 flex-1">
-                {plan.features.map((f, i) => (
+                {plan.features.filter(f => lang !== 'en' || !/🌐/u.test(f)).map((f, i) => (
                   <li key={i} className="flex items-start gap-2 text-xs text-[#475569]">
                     <svg width="15" height="15" viewBox="0 0 16 16" className="shrink-0 mt-0.5">
                       <circle cx="8" cy="8" r="8" fill="#16A34A" />

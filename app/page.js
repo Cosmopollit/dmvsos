@@ -409,7 +409,7 @@ export default function Home() {
                   card made the surface feel cramped. */}
               <div className="flex flex-col gap-3">
                 {[
-                  { id: 'dmv',  label: tex.catCar,  sub: tex.catCarSub,  img: '/vehicles/car.png',   gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' },
+                  { id: 'dmv',  label: tex.catCar,  sub: tex.catCarSub,  img: '/vehicles/car-hero.png', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' },
                   { id: 'cdl',  label: tex.catCdl,  sub: tex.catCdlSub,  img: '/vehicles/truck.png', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)' },
                   { id: 'moto', label: tex.catMoto, sub: tex.catMotoSub, img: '/vehicles/moto.png',  gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)' },
                 ].map(cat => (
@@ -530,7 +530,7 @@ export default function Home() {
             <div className="text-2xl font-black text-[#0B1C3D] mb-0.5 text-center">{PASS_META.moto.price}</div>
             <div className="text-xs text-[#64748B] mb-3 text-center">{tex.planDuration}</div>
             <ul className="space-y-1.5 text-xs text-[#475569] mb-4 flex-1">
-              {(tex.featMoto || []).map((f, i) => (
+              {(tex.featMoto || []).filter(f => langCode !== 'en' || !/🌐/u.test(f)).map((f, i) => (
                 <li key={i} className="flex items-start gap-2">
                   <svg width="14" height="14" viewBox="0 0 16 16" className="shrink-0 mt-0.5"><circle cx="8" cy="8" r="8" fill="#16A34A" /><path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" /></svg>
                   <span>{String(f).replace(/^[^\p{L}\p{N}]+/u, '')}</span>
@@ -556,7 +556,7 @@ export default function Home() {
             <div className="text-2xl font-black text-[#0B1C3D] mb-0.5 text-center">{PASS_META.auto.price}</div>
             <div className="text-xs text-[#64748B] mb-3 text-center">{tex.planDuration}</div>
             <ul className="space-y-1.5 text-xs text-[#475569] mb-4 flex-1">
-              {(tex.featCar || []).map((f, i) => (
+              {(tex.featCar || []).filter(f => langCode !== 'en' || !/🌐/u.test(f)).map((f, i) => (
                 <li key={i} className="flex items-start gap-2">
                   <svg width="14" height="14" viewBox="0 0 16 16" className="shrink-0 mt-0.5"><circle cx="8" cy="8" r="8" fill="#16A34A" /><path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" /></svg>
                   <span>{String(f).replace(/^[^\p{L}\p{N}]+/u, '')}</span>
@@ -582,7 +582,7 @@ export default function Home() {
             <div className="text-2xl font-black text-[#0B1C3D] mb-0.5 text-center">{PASS_META.cdl.price}</div>
             <div className="text-xs text-[#64748B] mb-3 text-center">{tex.planDuration}</div>
             <ul className="space-y-1.5 text-xs text-[#475569] mb-4 flex-1">
-              {(tex.featCdl || []).map((f, i) => (
+              {(tex.featCdl || []).filter(f => langCode !== 'en' || !/🌐/u.test(f)).map((f, i) => (
                 <li key={i} className="flex items-start gap-2">
                   <svg width="14" height="14" viewBox="0 0 16 16" className="shrink-0 mt-0.5"><circle cx="8" cy="8" r="8" fill="#16A34A" /><path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" /></svg>
                   <span>{String(f).replace(/^[^\p{L}\p{N}]+/u, '')}</span>
