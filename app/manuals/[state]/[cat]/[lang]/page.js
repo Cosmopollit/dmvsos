@@ -263,7 +263,7 @@ export default async function StateManualLangPage({ params }) {
             <span className="block text-[#2563EB]">{native.in}</span>
           </h1>
           <p className="text-sm text-[#64748B]">
-            {name} {catInfo.label} in {langEN} | official {year} edition by {meta.agency}.
+            The official {year} {name} {catInfo.label} in {langEN}, published by {meta.agency}.
             Free PDF download below.
           </p>
         </div>
@@ -272,7 +272,7 @@ export default async function StateManualLangPage({ params }) {
         <div className="bg-white rounded-2xl border-2 border-[#2563EB] p-6 mb-5 shadow-md text-center">
           <div className="text-4xl mb-3">{flag}</div>
           <p className="text-base font-bold text-[#0B1C3D] mb-1">
-            {name} {catInfo.label} | {nativeLabel}
+            {name} {catInfo.label} · {nativeLabel}
           </p>
           <p className="text-xs text-[#64748B] mb-5">
             {meta.agency} · {year} Edition · Free
@@ -292,7 +292,7 @@ export default async function StateManualLangPage({ params }) {
         {otherLangs.length > 0 && (
           <div className="bg-white rounded-2xl border border-[#E2E8F0] p-5 mb-5 shadow-sm">
             <h2 className="text-sm font-bold text-[#0B1C3D] mb-3">
-              {name} {catInfo.label} | Other Languages
+              {name} {catInfo.label} · Other Languages
             </h2>
             <div className="flex flex-wrap gap-2">
               {otherLangs.map(l => (
@@ -332,7 +332,7 @@ export default async function StateManualLangPage({ params }) {
         {otherStatesWithLang.length > 0 && (
           <div className="mb-8">
             <h2 className="text-sm font-bold text-[#0B1C3D] mb-3">
-              {catInfo.icon} {catInfo.label} {native.in} | Other States
+              {catInfo.icon} {catInfo.label} {native.in} · Other States
             </h2>
             <div className="grid grid-cols-2 gap-2">
               {otherStatesWithLang.map(s => (
@@ -359,7 +359,7 @@ export default async function StateManualLangPage({ params }) {
 
       <footer className="border-t border-[#E2E8F0] py-8 text-center text-xs text-[#94A3B8]">
         <div className="max-w-lg mx-auto px-4">
-          DMVSOS.com | Free DMV Practice Tests &amp; Driver Manuals for All 50 States
+          DMVSOS.com · Free DMV Practice Tests &amp; Driver Manuals for All 50 States
         </div>
       </footer>
     </div>

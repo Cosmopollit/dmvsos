@@ -408,11 +408,6 @@ export default function Home() {
                     <span className="text-3xl shrink-0">{cat.icon}</span>
                     <div className="flex-1 min-w-0">
                       <div className="font-bold text-[#1E293B] text-[15px]">{cat.label}</div>
-                      <div className="text-[12px] text-[#64748B] mt-0.5">
-                        <span className="font-semibold text-[#16A34A]">{cat.freeCount} {tex.freeWord || 'free'}</span>
-                        <span className="text-[#CBD5E1] mx-1.5">·</span>
-                        <span>{tex.priceFrom || 'from'} <span className="font-semibold" style={{ color: cat.accent }}>{cat.price}</span></span>
-                      </div>
                     </div>
                     <span className="text-[#94A3B8] text-lg shrink-0"></span>
                   </button>

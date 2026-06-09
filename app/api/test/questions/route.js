@@ -183,7 +183,6 @@ export async function GET(req) {
       state: 'eq.' + state,
       category: 'eq.' + category,
       language: 'eq.' + language,
-      limit: String(limit),
     });
     if (subcategory) params.set('subcategory', 'eq.' + subcategory);
 
@@ -191,12 +190,24 @@ export async function GET(req) {
     // mid-test to fetch in-place translations for the currently active question
     // set. Sanitized: only alphanumeric + underscore allowed in codes; max 100.
     const clusterCsv = url.searchParams.get('cluster_codes');
+    let isClusterRefetch = false;
     if (clusterCsv) {
       const codes = clusterCsv.split(',').slice(0, 100).filter(c => /^[a-z0-9_]{1,40}$/i.test(c));
       if (codes.length > 0) {
         const quoted = codes.map(c => `"${c}"`).join(',');
         params.set('cluster_code', `in.(${quoted})`);
+        params.set('limit', String(Math.min(codes.length, MAX_LIMIT)));
+        isClusterRefetch = true;
       }
+    }
+    if (!isClusterRefetch) {
+      // Pull a larger pool than `limit` so the test can be shuffled (a fresh
+      // mix each attempt instead of always the same first N) and so we can cap
+      // how many questions share the EXACT same wording. Many sign questions
+      // legitimately share a generic stem ("What does this sign mean?") for
+      // different images — without a cap a single test could show that wording
+      // 6+ times and read as duplicates (tester feedback, Diana 2026-06-08).
+      params.set('limit', String(Math.min(Math.max(limit * 8, 200), 1000)));
     }
 
     const r = await fetch(`${SUPA_URL}/rest/v1/questions?${params}`, {
@@ -206,7 +217,31 @@ export async function GET(req) {
       const text = await r.text();
       return corsJson({ ok: false, error: 'db', detail: text.slice(0, 200) }, { status: 500 });
     }
-    const rawQuestions = await r.json();
+    let rawQuestions = await r.json();
+
+    // Main fetch only: shuffle for variety + cap identical question_text.
+    if (!isClusterRefetch && Array.isArray(rawQuestions) && rawQuestions.length > limit) {
+      for (let i = rawQuestions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [rawQuestions[i], rawQuestions[j]] = [rawQuestions[j], rawQuestions[i]];
+      }
+      const MAX_PER_TEXT = 2;
+      const textCount = new Map();
+      const picked = [];
+      const overflow = [];
+      for (const q of rawQuestions) {
+        if (picked.length >= limit) break;
+        const n = textCount.get(q.question_text) || 0;
+        if (n < MAX_PER_TEXT) { picked.push(q); textCount.set(q.question_text, n + 1); }
+        else overflow.push(q);
+      }
+      // Backfill if the cap left us short of `limit`.
+      for (const q of overflow) {
+        if (picked.length >= limit) break;
+        picked.push(q);
+      }
+      rawQuestions = picked;
+    }
 
     // Strip real UUIDs and mint opaque tokens. The token decrypts only
     // server-side via lib/questionToken; the client never sees real IDs.

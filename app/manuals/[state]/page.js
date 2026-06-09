@@ -296,7 +296,7 @@ export default async function StateManualPage({ params }) {
 
       <footer className="border-t border-[#E2E8F0] py-8 text-center text-xs text-[#94A3B8]">
         <div className="max-w-lg mx-auto px-4">
-          DMVSOS.com | Free DMV Practice Tests &amp; Driver Manuals for All 50 States
+          DMVSOS.com · Free DMV Practice Tests &amp; Driver Manuals for All 50 States
         </div>
       </footer>
     </div>

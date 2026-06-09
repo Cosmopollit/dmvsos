@@ -475,7 +475,7 @@ function TestContent() {
         count: realCount,
         color: '#2563EB',
         gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)',
-        time: `⏱ 60 ${tex.minLabel}`,
+        time: `⏱ ${categoryTimeLimit[category] / 60} ${tex.minLabel}`,
         locked: !hasFullAccess,
       },
       // Extended only for car/cdl — moto exam is short, 80q doesn't make sense
@@ -649,7 +649,7 @@ function TestContent() {
                 onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
                 className="w-full py-3.5 rounded-2xl font-bold text-white text-base mb-3 btn-pulse"
                 style={{ background: 'linear-gradient(135deg, #2563EB, #1D4ED8)' }}>
-                {tex.unlockCta || `Unlock from ${plan.price}`}
+                {(tex.unlockCta || 'Unlock from {price}').replace('{price}', plan.price)}
               </button>
               <button type="button" onClick={() => setShowLockModal(false)}
                 className="text-sm text-[#94A3B8] hover:text-[#64748B]">
@@ -1320,7 +1320,7 @@ function TestContent() {
               onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
               className="w-full py-3.5 rounded-2xl font-bold text-white text-base mb-3 btn-pulse"
               style={{ background: 'linear-gradient(135deg, #2563EB, #1D4ED8)' }}>
-              {tex.unlockCta || `Unlock from ${plan.price}`}
+              {(tex.unlockCta || 'Unlock from {price}').replace('{price}', plan.price)}
             </button>
             <button type="button" onClick={() => setShowLockModal(false)}
               className="text-sm text-[#94A3B8] hover:text-[#64748B]">
