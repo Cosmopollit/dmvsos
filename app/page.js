@@ -649,13 +649,20 @@ export default function Home() {
 
       {/* Final CTA */}
       <section className="w-full max-w-lg mx-auto mb-8 px-4">
-        <button
-          type="button"
-          onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
-          className="w-full py-4 rounded-2xl font-semibold text-base bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition-all shadow-sm"
-        >
-          {tex.finalCtaText || 'Ready? Choose your state and start practicing'}
-        </button>
+        <div className="relative overflow-hidden rounded-3xl px-6 py-8 text-center shadow-lg" style={{ background: 'linear-gradient(135deg, #0B1C3D 0%, #1E3A5F 100%)' }}>
+          <h2 className="relative z-10 text-xl font-bold text-white mb-2">{tex.pricingHeading}</h2>
+          <p className="relative z-10 text-sm text-[#94A3B8] mb-5">{tex.footerFree || 'Free for everyone. No credit card needed.'}</p>
+          <button
+            type="button"
+            onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
+            className="relative z-10 inline-block px-8 py-3.5 rounded-2xl font-bold text-base text-[#0B1C3D] transition-all shadow-lg hover:brightness-105"
+            style={{ background: 'linear-gradient(135deg, #FDE68A, #FBBF24)' }}
+          >
+            {tex.finalCtaText || 'Choose your state and start'}
+          </button>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/vehicles/car-hero.png" alt="" aria-hidden="true" className="absolute right-[-14px] bottom-[-8px] h-[80px] w-auto opacity-95 z-0 pointer-events-none select-none" />
+        </div>
       </section>
 
       {/* Footer with guarantee badge */}
@@ -668,8 +675,7 @@ export default function Home() {
         <p className="text-xs text-[#94A3B8] text-center leading-relaxed">
           {tex.footerLegal || 'By continuing, you agree to our'}{' '}
           <Link href="/terms" className="text-[#2563EB] font-medium">{tex.terms || 'Terms'}</Link> {tex.and || 'and'}{' '}
-          <Link href="/privacy" className="text-[#2563EB] font-medium">{tex.privacy || 'Privacy Policy'}</Link>.<br />
-          {tex.footerFree || 'Free for everyone. No credit card needed.'}
+          <Link href="/privacy" className="text-[#2563EB] font-medium">{tex.privacy || 'Privacy Policy'}</Link>.
         </p>
       </footer>
 
