@@ -14,6 +14,9 @@ import { useExperiment } from '@/lib/experiments';
 import SupportFooter from '@/app/components/SupportFooter';
 import WelcomeBanner from '@/app/components/WelcomeBanner';
 
+// Category illustrations live in /public/vehicles (transparent PNGs, same art
+// used in the mobile app for a consistent look across web + native).
+
 const codeToName = { en: 'English', ru: 'Русский', es: 'Español', zh: '中文', ua: 'Українська' };
 
 export default function Home() {
@@ -297,18 +300,18 @@ export default function Home() {
             icon whose shackle rotates open on hover. Click navigates to the
             /upgrade page — the line tells the user the same questions are
             "locked" behind a Pass and invites them to unlock. */}
-        {tex.heroTrustLine && (
+        {!isPro && tex.heroTrustLine && (
           <button
             type="button"
             onClick={() => router.push(`/upgrade?lang=${langCode}`)}
             className="group hero-trust-pill inline-flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 cursor-pointer"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" className="shrink-0" style={{ overflow: 'visible' }}>
-              <rect x="6" y="11" width="12" height="9" rx="2" fill="#F59E0B" />
+              <rect x="6" y="11" width="12" height="9" rx="2" fill="#0B1C3D" />
               <path
                 className="hero-trust-shackle"
                 d="M8 11V8a4 4 0 0 1 8 0v3"
-                stroke="#92400E"
+                stroke="#0B1C3D"
                 strokeWidth="2"
                 fill="none"
                 strokeLinecap="round"
@@ -323,15 +326,30 @@ export default function Home() {
         )}
         <style jsx>{`
           .hero-trust-pill {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(37, 99, 235, 0.06) 100%);
-            border: 1px solid rgba(245, 158, 11, 0.28);
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #FDE68A 0%, #FBBF24 100%);
+            border: 1px solid rgba(180, 120, 10, 0.25);
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.30);
+          }
+          .hero-trust-pill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -60%;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+            transform: skewX(-20deg);
+            animation: heroShine 3.5s ease-in-out infinite;
+          }
+          @keyframes heroShine {
+            0% { left: -60%; }
+            55%, 100% { left: 130%; }
           }
           .hero-trust-pill:hover {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(37, 99, 235, 0.10) 100%);
-            border-color: rgba(245, 158, 11, 0.55);
             transform: translateY(-1px);
-            box-shadow: 0 6px 16px -4px rgba(245, 158, 11, 0.25);
+            box-shadow: 0 8px 20px -4px rgba(245, 158, 11, 0.42);
           }
           .hero-trust-shackle {
             transform-origin: 16px 11px;
@@ -391,9 +409,9 @@ export default function Home() {
                   card made the surface feel cramped. */}
               <div className="flex flex-col gap-3">
                 {[
-                  { id: 'dmv',  icon: '🚗', label: tex.catCar,  freeCount: 20, price: '$29.99', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', accent: '#2563EB' },
-                  { id: 'cdl',  icon: '🚛', label: tex.catCdl,  freeCount: 20, price: '$49.99', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)', accent: '#0EA5E9' },
-                  { id: 'moto', icon: '🏍️', label: tex.catMoto, freeCount: 5,  price: '$19.99', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)', accent: '#D97706' },
+                  { id: 'dmv',  label: tex.catCar,  sub: tex.catCarSub,  img: '/vehicles/car.png',   gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' },
+                  { id: 'cdl',  label: tex.catCdl,  sub: tex.catCdlSub,  img: '/vehicles/truck.png', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)' },
+                  { id: 'moto', label: tex.catMoto, sub: tex.catMotoSub, img: '/vehicles/moto.png',  gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)' },
                 ].map(cat => (
                   <button
                     key={cat.id}
@@ -402,14 +420,15 @@ export default function Home() {
                       if (cat.id === 'cdl') router.push(`/cdl-category?state=${state}&lang=${langCode}`);
                       else router.push(`/test?state=${state}&category=${cat.id}&lang=${langCode}`);
                     }}
-                    className="rounded-2xl p-4 flex items-center gap-3 hover:shadow-md transition-all text-left border-2 border-white/60 shadow-sm hover:-translate-y-0.5"
+                    className="relative overflow-hidden rounded-2xl px-4 py-4 min-h-[72px] flex flex-col justify-center shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all text-left"
                     style={{ background: cat.gradient }}
                   >
-                    <span className="text-3xl shrink-0">{cat.icon}</span>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-bold text-[#1E293B] text-[15px]">{cat.label}</div>
+                    <div className="relative z-10">
+                      <div className="font-bold text-[#0B1C3D] text-[16px]">{cat.label}</div>
+                      <div className="text-[11px] text-[#64748B] mt-0.5">{cat.sub}</div>
                     </div>
-                    <span className="text-[#94A3B8] text-lg shrink-0"></span>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={cat.img} alt="" aria-hidden="true" className="absolute right-[-6px] bottom-[-4px] h-[60px] w-auto z-0 pointer-events-none select-none" />
                   </button>
                 ))}
               </div>
@@ -432,7 +451,10 @@ export default function Home() {
           href="/manuals"
           className="flex items-center gap-3 bg-blue-50 rounded-2xl px-4 py-4 shadow-sm border border-blue-100 border-l-4 border-l-blue-500 hover:bg-blue-100 hover:shadow-md transition-all group"
         >
-          <div className="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center text-2xl shrink-0 group-hover:bg-blue-200 transition-colors">📖</div>
+          <div className="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center shrink-0 group-hover:bg-blue-200 transition-colors">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/illustrations/manual.png" alt="" aria-hidden="true" className="w-9 h-9 object-contain" />
+          </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-0.5">
               <span className="text-sm font-bold text-[#0B1C3D] group-hover:text-[#2563EB]">
