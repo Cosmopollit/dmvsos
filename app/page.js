@@ -169,7 +169,7 @@ export default function Home() {
               >
                 <span>{currentLang.flag}</span>
                 <span>{currentLang.label}</span>
-                <span className="text-[#94A3B8] text-[10px] ml-0.5">▾</span>
+                <svg width="9" height="9" viewBox="0 0 12 12" className="ml-0.5 shrink-0" style={{ fill: '#94A3B8' }}><path d="M6 8L1 3h10z" /></svg>
               </button>
               {showLangMenu && (
                 <div className="absolute right-0 top-full mt-1 bg-white border border-[#E2E8F0] rounded-xl shadow-lg z-50 py-1 min-w-[110px]">
@@ -239,11 +239,11 @@ export default function Home() {
         <div className="flex items-center justify-center gap-2 pb-3">
           <Link href="/dmv-test"
             className="text-xs font-semibold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] rounded-full px-3 py-1 hover:bg-[#DBEAFE] transition-colors">
-            📋 {tex.practiceTests}
+            {tex.practiceTests}
           </Link>
           <Link href="/manuals"
             className="text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-3 py-1 hover:border-[#2563EB] hover:text-[#2563EB] transition-colors">
-            📖 {tex.navManuals}
+            {tex.navManuals}
           </Link>
           {/* "Courses · soon" tab removed 2026-05-26 — promising vapor was
               reading as a marketing tease and competing for attention with
@@ -435,7 +435,7 @@ export default function Home() {
               {isPro && (
                 <p className="text-xs text-center mt-4 text-[#B45309] font-medium">{tex.proActive}</p>
               )}
-              <p className="text-xs text-gray-400 mt-3 text-center">🟢 {liveCount} {tex.practicingNow}</p>
+              <p className="text-xs text-gray-400 mt-3 text-center"><span className="inline-block w-2 h-2 rounded-full bg-[#16A34A] mr-1.5 align-middle" />{liveCount} {tex.practicingNow}</p>
             </>
           ) : (
             <p className="text-sm text-center text-[#94A3B8] py-4 mt-2">
@@ -639,7 +639,7 @@ export default function Home() {
             <details key={i} className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm group">
               <summary className="px-5 py-4 text-sm font-semibold text-[#0B1C3D] cursor-pointer list-none flex items-center justify-between">
                 <span>{item.q}</span>
-                <span className="text-[#94A3B8] text-xs group-open:rotate-180 transition-transform ml-3 shrink-0">▾</span>
+                <span className="text-[#94A3B8] group-open:rotate-180 transition-transform ml-3 shrink-0"><svg width="12" height="12" viewBox="0 0 12 12" style={{ fill: 'currentColor' }}><path d="M6 8L1 3h10z" /></svg></span>
               </summary>
               <p className="px-5 pb-4 text-sm text-[#475569] leading-relaxed">{item.a}</p>
             </details>
@@ -662,7 +662,7 @@ export default function Home() {
       <footer className="w-full max-w-lg mx-auto px-4 mt-8 pb-8">
         <div className="text-center mb-4">
           <span className="inline-flex items-center gap-1.5 text-xs text-[#10B981] font-medium bg-[#ECFDF5] px-3 py-1.5 rounded-full">
-            🛡️ {tex.guaranteeBadge}
+            <svg width="13" height="13" viewBox="0 0 24 24" className="shrink-0" style={{ fill: '#10B981' }}><path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1Z" /></svg>{tex.guaranteeBadge}
           </span>
         </div>
         <p className="text-xs text-[#94A3B8] text-center leading-relaxed">
