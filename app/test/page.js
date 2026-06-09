@@ -27,10 +27,21 @@ function TestContent() {
   const state = params.get('state') || 'washington';
   const category = params.get('category') || 'car';
   const subcategory = params.get('subcategory') || null;
-  const [lang, setLangState] = useState(params.get('lang') || getSavedLang());
+  const urlLang = params.get('lang');
+  const [lang, setLangState] = useState(urlLang || getSavedLang());
   const [showLangMenu, setShowLangMenu] = useState(false);
   const currentLang = langs.find(l => l.code === lang) || langs[0];
   function switchLang(code) { setLangState(code); saveLang(code); setShowLangMenu(false); }
+
+  // Hydration guard: useSearchParams can read empty on the first client render
+  // on some browsers (notably iOS Safari), so the useState init above may fall
+  // back to the saved lang and a RU/ES/etc. visitor arriving from the home
+  // category button can briefly land on an English test. Re-apply the URL lang
+  // once it is available. (A manual in-test switch changes state but not the
+  // URL, so urlLang stays put and this effect will not fight it.)
+  useEffect(() => {
+    if (urlLang && langs.some(l => l.code === urlLang)) setLangState(urlLang);
+  }, [urlLang]);
 
   // Per-question English reference view — lets non-English learners study in
   // their language and tap to see the canonical EN original on any question.
