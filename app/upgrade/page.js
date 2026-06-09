@@ -187,7 +187,7 @@ function UpgradeContent() {
       </p>
 
       {/* Free tier chip */}
-      <div className="w-full max-w-2xl mb-5 rounded-2xl p-4 border border-white/10 bg-white/5 flex items-center gap-4">
+      <Link href={`/?lang=${lang}`} className="w-full max-w-2xl mb-5 rounded-2xl p-4 border border-white/10 bg-white/5 flex items-center gap-4 cursor-pointer hover:bg-white/10 hover:border-white/20 transition-colors">
         <svg width="22" height="22" viewBox="0 0 24 24" className="shrink-0" style={{ fill: '#16A34A' }}><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" /></svg>
         <div className="flex-1">
           <div className="text-sm font-bold text-white">{tex.freePracticeLabel}</div>
@@ -196,7 +196,7 @@ function UpgradeContent() {
         <span className="text-xs font-semibold text-[#16A34A] bg-[#16A34A]/10 px-2.5 py-1 rounded-full border border-[#16A34A]/20 shrink-0">
           {tex.freePracticePrice}
         </span>
-      </div>
+      </Link>
 
       {/* 3 Plan cards */}
       <div className="w-full max-w-2xl flex flex-col sm:flex-row gap-4 mb-6">
