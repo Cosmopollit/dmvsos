@@ -163,8 +163,8 @@ function UpgradeContent() {
       {/* Logo */}
       <Link href="/" className="inline-block">
         <div className="flex items-center gap-3 mb-8 cursor-pointer hover:opacity-80">
-          <Image src="/logo.png" alt="DMVSOS" width={40} height={40} className="rounded-xl" />
-          <span className="text-2xl font-bold text-white">DMV<span className="text-[#F59E0B]">SOS</span></span>
+          <Image src="/logo.png" alt="DMVSOS" width={36} height={36} className="rounded-lg" />
+          <span className="text-xl font-bold text-white" style={{ letterSpacing: '-0.02em' }}>DMVSOS</span>
         </div>
       </Link>
 
