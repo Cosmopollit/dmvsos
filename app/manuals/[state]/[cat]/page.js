@@ -289,10 +289,14 @@ export default async function StateManualCategoryPage({ params }) {
     >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
 
-      <div className="fixed top-[-200px] right-[-200px] w-[600px] h-[600px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(26,86,219,0.08) 0%, transparent 70%)' }} />
-      <div className="fixed bottom-[-150px] left-[-150px] w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 70%)' }} />
+      {/* Decorative glow, clipped to the viewport so the off-screen circles
+          never cause horizontal scroll on mobile. */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div className="absolute top-[-200px] right-[-200px] w-[600px] h-[600px] rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(26,86,219,0.08) 0%, transparent 70%)' }} />
+        <div className="absolute bottom-[-150px] left-[-150px] w-[500px] h-[500px] rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 70%)' }} />
+      </div>
 
       {/* Header */}
       <header className="w-full max-w-lg mx-auto pt-5 pb-4 px-4">
@@ -326,14 +330,13 @@ export default async function StateManualCategoryPage({ params }) {
             <li>/</li>
             <li><Link href={`/manuals/${state}`} className="hover:text-[#2563EB]">{name}</Link></li>
             <li>/</li>
-            <li className="text-[#1A2B4A] font-medium">{catInfo.icon} {catInfo.label}</li>
+            <li className="text-[#1A2B4A] font-medium">{catInfo.label}</li>
           </ol>
         </nav>
 
         {/* H1 */}
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-2xl">{catInfo.icon}</span>
             <span className="text-xs font-semibold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] rounded-full px-3 py-1">
               Official {year} handbook
             </span>
