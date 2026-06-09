@@ -84,10 +84,10 @@ export default function Home() {
 
   const stateOptions = STATE_OPTIONS.map((display) => ({ name: display, code: stateToSlug(display) }));
   const steps = [
-    { emoji: '📱', label: tex.step1, msg: tex.stepMsg1 },
-    { emoji: '🏛️', label: tex.step2, msg: tex.stepMsg2 },
-    { emoji: '🪪', label: tex.step3, msg: tex.stepMsg3 },
-    { emoji: '🚗', label: tex.step4, msg: tex.stepMsg4 },
+    { label: tex.step1, msg: tex.stepMsg1 },
+    { label: tex.step2, msg: tex.stepMsg2 },
+    { label: tex.step3, msg: tex.stepMsg3 },
+    { label: tex.step4, msg: tex.stepMsg4 },
   ];
 
   const faqJsonLd = JSON.stringify({
@@ -503,12 +503,11 @@ export default function Home() {
               <div className="w-5 h-5 rounded-full bg-[#2563EB] text-white text-[10px] font-bold flex items-center justify-center mb-2">
                 {i + 1}
               </div>
-              <span className="text-3xl mb-2 block">{step.emoji}</span>
               <span className="text-xs text-center font-semibold leading-tight text-[#0B1C3D]">
-                {step.label}
+                {String(step.label || '').replace(/\p{Extended_Pictographic}/gu, '').trim()}
               </span>
               <span className="text-[10px] text-center text-[#94A3B8] mt-1 leading-tight">
-                {step.msg}
+                {String(step.msg || '').replace(/\p{Extended_Pictographic}/gu, '').trim()}
               </span>
             </div>
           ))}
@@ -521,35 +520,47 @@ export default function Home() {
         <p className="text-sm text-[#64748B] text-center mb-6 leading-relaxed max-w-md mx-auto">{tex.pricingSubtext}</p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
-          {/* Moto Pass  ·  white, gray border */}
-          <div className="bg-white rounded-2xl p-5 border border-[#E2E8F0] shadow-sm flex flex-col text-center">
-            <div className="text-3xl mb-2">🏍️</div>
-            <h3 className="text-sm font-bold text-[#2563EB] mb-1">{tex.planMotoPass}</h3>
-            <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">{PASS_META.moto.price}</div>
-            <div className="text-xs text-[#64748B] mb-3">{tex.planDuration}</div>
-            <ul className="space-y-1.5 text-xs text-[#475569] mb-4 text-left flex-1">
+          {/* Moto Pass */}
+          <div className="bg-white rounded-2xl p-5 border border-[#E2E8F0] shadow-sm flex flex-col">
+            <div className="h-[66px] flex items-center justify-center mb-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/vehicles/moto-hero.png" alt="" aria-hidden="true" className="max-h-[62px] w-auto object-contain" />
+            </div>
+            <h3 className="text-sm font-bold mb-1 text-center" style={{ color: '#D97706' }}>{tex.planMotoPass}</h3>
+            <div className="text-2xl font-black text-[#0B1C3D] mb-0.5 text-center">{PASS_META.moto.price}</div>
+            <div className="text-xs text-[#64748B] mb-3 text-center">{tex.planDuration}</div>
+            <ul className="space-y-1.5 text-xs text-[#475569] mb-4 flex-1">
               {(tex.featMoto || []).map((f, i) => (
-                <li key={i}>{f}</li>
+                <li key={i} className="flex items-start gap-2">
+                  <svg width="14" height="14" viewBox="0 0 16 16" className="shrink-0 mt-0.5"><circle cx="8" cy="8" r="8" fill="#16A34A" /><path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" /></svg>
+                  <span>{String(f).replace(/^[^\p{L}\p{N}]+/u, '')}</span>
+                </li>
               ))}
             </ul>
             <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=${PASS_META.moto.id}`)}
-              className="w-full py-2.5 rounded-xl font-semibold text-sm border border-[#E2E8F0] text-[#0B1C3D] hover:bg-[#F1F5F9] transition-all">
+              className="w-full py-2.5 rounded-xl font-bold text-sm bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition-all">
               {tex.planGetMoto}
             </button>
           </div>
 
-          {/* Auto Pass  ·  dark navy, blue border, MOST POPULAR */}
-          <div className="relative bg-[#0B1C3D] rounded-2xl p-5 border-2 border-[#2563EB] shadow-sm flex flex-col text-center">
+          {/* Auto Pass  ·  most popular */}
+          <div className="relative bg-white rounded-2xl p-5 border-2 border-[#2563EB] shadow-md flex flex-col">
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#2563EB] text-white text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap">
               {tex.mostPopular}
             </span>
-            <div className="text-3xl mb-2 mt-1">🚗</div>
-            <h3 className="text-sm font-bold text-[#F59E0B] mb-1">{tex.planAutoPass}</h3>
-            <div className="text-2xl font-black text-white mb-0.5">{PASS_META.auto.price}</div>
-            <div className="text-xs text-[#94A3B8] mb-3">{tex.planDuration}</div>
-            <ul className="space-y-1.5 text-xs text-[#CBD5E1] mb-4 text-left flex-1">
+            <div className="h-[66px] flex items-center justify-center mb-2 mt-1">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/vehicles/car-hero.png" alt="" aria-hidden="true" className="max-h-[62px] w-auto object-contain" />
+            </div>
+            <h3 className="text-sm font-bold mb-1 text-center" style={{ color: '#2563EB' }}>{tex.planAutoPass}</h3>
+            <div className="text-2xl font-black text-[#0B1C3D] mb-0.5 text-center">{PASS_META.auto.price}</div>
+            <div className="text-xs text-[#64748B] mb-3 text-center">{tex.planDuration}</div>
+            <ul className="space-y-1.5 text-xs text-[#475569] mb-4 flex-1">
               {(tex.featCar || []).map((f, i) => (
-                <li key={i}>{f}</li>
+                <li key={i} className="flex items-start gap-2">
+                  <svg width="14" height="14" viewBox="0 0 16 16" className="shrink-0 mt-0.5"><circle cx="8" cy="8" r="8" fill="#16A34A" /><path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" /></svg>
+                  <span>{String(f).replace(/^[^\p{L}\p{N}]+/u, '')}</span>
+                </li>
               ))}
             </ul>
             <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=${PASS_META.auto.id}`)}
@@ -558,22 +569,29 @@ export default function Home() {
             </button>
           </div>
 
-          {/* CDL Pro  ·  white, gold border */}
-          <div className="relative bg-white rounded-2xl p-5 border-2 border-[#F59E0B] shadow-sm flex flex-col text-center">
+          {/* CDL Pro  ·  best value */}
+          <div className="relative bg-white rounded-2xl p-5 border-2 border-[#F59E0B] shadow-md flex flex-col">
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#F59E0B] text-[#0B1C3D] text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap">
               {tex.planGuaranteedBadge}
             </span>
-            <div className="text-3xl mb-2 mt-1">🚛</div>
-            <h3 className="text-sm font-bold text-[#92400E] mb-1">{tex.planCdlPro}</h3>
-            <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">{PASS_META.cdl.price}</div>
-            <div className="text-xs text-[#64748B] mb-3">{tex.planDuration}</div>
-            <ul className="space-y-1.5 text-xs text-[#475569] mb-4 text-left flex-1">
+            <div className="h-[66px] flex items-center justify-center mb-2 mt-1">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/vehicles/truck-hero.png" alt="" aria-hidden="true" className="max-h-[62px] w-auto object-contain" />
+            </div>
+            <h3 className="text-sm font-bold mb-1 text-center" style={{ color: '#B45309' }}>{tex.planCdlPro}</h3>
+            <div className="text-2xl font-black text-[#0B1C3D] mb-0.5 text-center">{PASS_META.cdl.price}</div>
+            <div className="text-xs text-[#64748B] mb-3 text-center">{tex.planDuration}</div>
+            <ul className="space-y-1.5 text-xs text-[#475569] mb-4 flex-1">
               {(tex.featCdl || []).map((f, i) => (
-                <li key={i}>{f}</li>
+                <li key={i} className="flex items-start gap-2">
+                  <svg width="14" height="14" viewBox="0 0 16 16" className="shrink-0 mt-0.5"><circle cx="8" cy="8" r="8" fill="#16A34A" /><path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" /></svg>
+                  <span>{String(f).replace(/^[^\p{L}\p{N}]+/u, '')}</span>
+                </li>
               ))}
             </ul>
             <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=${PASS_META.cdl.id}`)}
-              className="w-full py-2.5 rounded-xl font-semibold text-sm bg-[#F59E0B] text-[#0B1C3D] hover:bg-[#FBBF24] transition-all">
+              className="w-full py-2.5 rounded-xl font-bold text-sm text-[#0B1C3D] hover:brightness-105 transition-all"
+              style={{ background: 'linear-gradient(135deg, #FDE68A, #FBBF24)' }}>
               {tex.planGetCdl}
             </button>
           </div>
