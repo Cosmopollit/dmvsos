@@ -651,7 +651,7 @@ export default function Home() {
       <section className="w-full max-w-lg mx-auto mb-8 px-4">
         <div className="relative overflow-hidden rounded-3xl px-6 py-8 text-center shadow-lg" style={{ background: 'linear-gradient(135deg, #0B1C3D 0%, #1E3A5F 100%)' }}>
           <h2 className="relative z-10 text-xl font-bold text-white mb-2">{tex.pricingHeading}</h2>
-          <p className="relative z-10 text-sm text-[#94A3B8] mb-5">{tex.footerFree || 'Free for everyone. No credit card needed.'}</p>
+          <p className="relative z-10 text-sm text-[#94A3B8] mb-5">{tex.benefitFree || '20 free questions, no signup needed'}</p>
           <button
             type="button"
             onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
