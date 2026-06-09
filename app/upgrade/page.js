@@ -44,6 +44,7 @@ function UpgradeContent() {
   const plans = [
     {
       ...PASS_META.moto,
+      img: '/vehicles/moto-hero.png',
       name: tex.planMotoPass,
       duration: tex.planDuration,
       features: tex.featMoto,
@@ -51,6 +52,7 @@ function UpgradeContent() {
     },
     {
       ...PASS_META.auto,
+      img: '/vehicles/car-hero.png',
       name: tex.planAutoPass,
       duration: tex.planDuration,
       badge: tex.mostPopular,
@@ -59,6 +61,7 @@ function UpgradeContent() {
     },
     {
       ...PASS_META.cdl,
+      img: '/vehicles/truck-hero.png',
       name: tex.planCdlPro,
       duration: tex.planDuration,
       badge: tex.planGuaranteedBadge,
@@ -142,14 +145,14 @@ function UpgradeContent() {
         <div className="relative">
           <button type="button" onClick={() => setShowLangMenu(v => !v)} onBlur={() => setTimeout(() => setShowLangMenu(false), 150)}
             className="flex items-center gap-1 text-xs font-semibold text-white bg-white/10 border border-white/20 rounded-full px-2.5 py-1.5 hover:border-white/40 transition-colors">
-            <span>{currentLang.flag}</span><span>{currentLang.label}</span><span className="text-white/50 text-[10px] ml-0.5">▾</span>
+            <span>{currentLang.label}</span><svg width="9" height="9" viewBox="0 0 12 12" className="ml-0.5" style={{ fill: 'rgba(255,255,255,0.5)' }}><path d="M6 8L1 3h10z" /></svg>
           </button>
           {showLangMenu && (
             <div className="absolute right-0 top-full mt-1 bg-[#1E3A5F] border border-white/20 rounded-xl shadow-lg z-50 py-1 min-w-[90px]">
               {langs.map(l => (
                 <button key={l.code} type="button" onMouseDown={() => switchLang(l.code)}
                   className={`w-full text-left px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 hover:bg-white/10 transition-colors ${lang === l.code ? 'text-[#F59E0B]' : 'text-[#94A3B8]'}`}>
-                  <span>{l.flag}</span> <span>{l.label}</span>
+                  <span>{l.label}</span>
                 </button>
               ))}
             </div>
@@ -185,7 +188,7 @@ function UpgradeContent() {
 
       {/* Free tier chip */}
       <div className="w-full max-w-2xl mb-5 rounded-2xl p-4 border border-white/10 bg-white/5 flex items-center gap-4">
-        <span className="text-2xl">✏️</span>
+        <svg width="22" height="22" viewBox="0 0 24 24" className="shrink-0" style={{ fill: '#16A34A' }}><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" /></svg>
         <div className="flex-1">
           <div className="text-sm font-bold text-white">{tex.freePracticeLabel}</div>
           <div className="text-xs text-[#94A3B8] mt-0.5">{tex.freePracticeDesc}</div>
@@ -204,12 +207,12 @@ function UpgradeContent() {
           return (
             <div
               key={plan.id}
-              className={`flex-1 rounded-2xl p-6 flex flex-col relative ${
-                isBlue
-                  ? 'bg-[#0B1C3D] border-2 border-[#2563EB]'
-                  : isGold
-                  ? 'bg-white border-2 border-[#F59E0B]'
-                  : 'bg-white border border-[#E2E8F0]'
+              className={`flex-1 bg-white rounded-2xl p-5 flex flex-col relative shadow-xl ${
+                isGold
+                  ? 'border-2 border-[#F59E0B]'
+                  : isBlue
+                  ? 'border-2 border-[#2563EB]'
+                  : 'border border-[#E2E8F0]'
               } ${isPreselected ? 'ring-2 ring-offset-2 ring-offset-[#0B1C3D] ring-[#F59E0B]' : ''}`}
             >
               {plan.badge && (
@@ -219,23 +222,24 @@ function UpgradeContent() {
                   {plan.badge}
                 </span>
               )}
-              <div className="text-3xl mb-3 mt-1">{plan.icon}</div>
-              <div className={`text-sm font-bold mb-1 ${isBlue ? 'text-[#F59E0B]' : isGold ? 'text-[#92400E]' : 'text-[#2563EB]'}`}>
+              <div className="h-[78px] flex items-center justify-center mt-1 mb-3">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={plan.img} alt="" aria-hidden="true" className="max-h-[74px] w-auto object-contain" />
+              </div>
+              <div className="text-sm font-bold mb-1" style={{ color: isGold ? '#B45309' : isBlue ? '#2563EB' : '#D97706' }}>
                 {plan.name}
               </div>
-              <div className={`text-3xl font-black mb-1 ${isBlue ? 'text-white' : 'text-[#0B1C3D]'}`}>
-                {plan.price}
-              </div>
-              <div className={`text-xs ${isBlue ? 'text-[#94A3B8]' : 'text-[#64748B]'}`}>
-                {plan.duration}
-              </div>
-              <div className={`text-[10px] mb-5 mt-0.5 ${isBlue ? 'text-[#64748B]' : 'text-[#94A3B8]'}`}>
-                {tex.extensionHint}
-              </div>
+              <div className="text-3xl font-black mb-0.5 text-[#0B1C3D]">{plan.price}</div>
+              <div className="text-xs text-[#64748B]">{plan.duration}</div>
+              <div className="text-[10px] mb-4 mt-0.5 text-[#94A3B8]">{tex.extensionHint}</div>
               <ul className="space-y-2 mb-5 flex-1">
                 {plan.features.map((f, i) => (
-                  <li key={i} className={`text-xs ${isBlue ? 'text-[#CBD5E1]' : 'text-[#475569]'}`}>
-                    {f}
+                  <li key={i} className="flex items-start gap-2 text-xs text-[#475569]">
+                    <svg width="15" height="15" viewBox="0 0 16 16" className="shrink-0 mt-0.5">
+                      <circle cx="8" cy="8" r="8" fill="#16A34A" />
+                      <path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                    </svg>
+                    <span>{String(f).replace(/^[^\p{L}\p{N}]+/u, '')}</span>
                   </li>
                 ))}
               </ul>
@@ -244,12 +248,9 @@ function UpgradeContent() {
                 onClick={() => handleCheckout(plan.id)}
                 disabled={loadingPlan !== null}
                 className={`w-full py-3 rounded-xl font-bold text-sm transition disabled:opacity-60 ${
-                  isBlue
-                    ? 'bg-[#2563EB] text-white hover:bg-[#1D4ED8]'
-                    : isGold
-                    ? 'bg-[#F59E0B] text-[#0B1C3D] hover:bg-[#FBBF24]'
-                    : 'bg-[#F1F5F9] text-[#0B1C3D] hover:bg-[#E2E8F0]'
+                  isGold ? 'text-[#0B1C3D] hover:brightness-105' : 'bg-[#2563EB] text-white hover:bg-[#1D4ED8]'
                 }`}
+                style={isGold ? { background: 'linear-gradient(135deg, #FDE68A, #FBBF24)' } : undefined}
               >
                 {loadingPlan === plan.id ? '…' : plan.btnLabel}
               </button>
@@ -274,7 +275,7 @@ function UpgradeContent() {
       <div className="w-full max-w-2xl mb-6 rounded-2xl p-5 sm:p-6 border border-[#F59E0B]/30"
         style={{ background: 'linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(37,99,235,0.06) 100%)' }}>
         <div className="flex items-start gap-3 mb-3">
-          <span className="text-2xl shrink-0">🤝</span>
+          <svg width="24" height="24" viewBox="0 0 24 24" className="shrink-0" fill="none" stroke="#F59E0B" strokeWidth="2"><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="4" /><path d="M5 5l3.4 3.4M15.6 15.6L19 19M19 5l-3.4 3.4M8.4 15.6L5 19" /></svg>
           <div>
             <h3 className="text-base font-bold text-white leading-tight">
               {tex.bureaucracyHelpTitle || 'Getting your license can be confusing'}
