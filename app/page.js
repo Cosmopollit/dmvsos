@@ -326,6 +326,14 @@ export default function Home() {
           style={{ color: '#64748B', letterSpacing: '-0.01em' }}>
           {tex.heroSub}
         </p>
+        {/* Real, above-the-fold trust line. Our knockout numbers (35k+ dwarfs
+            competitors' few hundred) carry the credibility — no agency name so
+            it reads right whether the state runs a DMV, DOL or DPS. */}
+        {tex.heroTrustStats && (
+          <p className="text-[12.5px] font-semibold mb-3" style={{ color: '#94A3B8', letterSpacing: '0.01em' }}>
+            {tex.heroTrustStats}
+          </p>
+        )}
         {/* Trust-line is interactive: amber-tinted pill with a closed-lock
             icon whose shackle rotates open on hover. Click navigates to the
             /upgrade page — the line tells the user the same questions are
