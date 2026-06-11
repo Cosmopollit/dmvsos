@@ -14,6 +14,7 @@ import { agencyAbbrForState } from '@/lib/agencies';
 import { useExperiment } from '@/lib/experiments';
 import SupportFooter from '@/app/components/SupportFooter';
 import WelcomeBanner from '@/app/components/WelcomeBanner';
+import BreakButton from '@/app/components/BreakButton';
 
 // Category illustrations live in /public/vehicles (transparent PNGs, same art
 // used in the mobile app for a consistent look across web + native).
@@ -100,10 +101,10 @@ export default function Home() {
       icon: <img src="/logo.png" alt="" aria-hidden="true" className="w-[26px] h-[26px] rounded-md" />,
     },
     {
-      label: tex.step2, ring: '#2563EB',
+      label: tex.step2, ring: '#F59E0B', festive: true,
       icon: (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="#2563EB" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M3 21h18M4 21V9.5L12 4l8 5.5V21M9 21v-5h6v5M8 12h.01M12 12h.01M16 12h.01" />
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M5 12.5l4.5 4.5L19 7" />
         </svg>
       ),
     },
@@ -265,19 +266,20 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Row 2: nav links  ·  centered */}
-        <div className="flex items-center justify-center gap-2 pb-3">
+        {/* Row 2: nav links  ·  centered. Tests + Manuals are live for everyone;
+            "Take a break" unlocks after the first finished test (see BreakButton). */}
+        <div className="flex flex-wrap items-center justify-center gap-2 pb-3">
           <Link href="/dmv-test"
-            className="text-xs font-semibold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] rounded-full px-3 py-1 hover:bg-[#DBEAFE] transition-colors">
+            className="inline-flex items-center gap-1.5 whitespace-nowrap text-xs font-semibold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] rounded-full px-3 py-1 hover:bg-[#DBEAFE] active:scale-95 transition">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="3" width="14" height="18" rx="2" /><path d="M9 7h6M9 11h6M9 15h4" /></svg>
             {tex.practiceTests}
           </Link>
           <Link href="/manuals"
-            className="text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-3 py-1 hover:border-[#2563EB] hover:text-[#2563EB] transition-colors">
+            className="inline-flex items-center gap-1.5 whitespace-nowrap text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-3 py-1 hover:border-[#2563EB] hover:text-[#2563EB] active:scale-95 transition">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 5a2 2 0 0 1 2-2h7v16H6a2 2 0 0 0-2 2V5z" /><path d="M13 3h5a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2h-5" /></svg>
             {tex.navManuals}
           </Link>
-          {/* "Courses · soon" tab removed 2026-05-26 — promising vapor was
-              reading as a marketing tease and competing for attention with
-              the actual product. Will return when courses ship. */}
+          <BreakButton langCode={langCode} />
         </div>
       </header>
 
@@ -384,6 +386,18 @@ export default function Home() {
           @keyframes heroShine {
             0% { left: -60%; }
             55%, 100% { left: 130%; }
+          }
+          .road-sparkle {
+            display: inline-block;
+            transform-origin: center;
+            animation: roadSparkle 2.4s ease-in-out infinite;
+          }
+          @keyframes roadSparkle {
+            0%, 100% { transform: scale(0.6); opacity: 0.35; }
+            50% { transform: scale(1); opacity: 1; }
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .road-sparkle { animation: none; opacity: 0.85; }
           }
           .hero-trust-pill:hover {
             transform: translateY(-1px);
@@ -539,13 +553,39 @@ export default function Home() {
             <div className="relative grid grid-cols-4 gap-1">
               {steps.map((step, i) => (
                 <div key={i} className="flex flex-col items-center text-center">
-                  <div
-                    className="w-11 h-11 rounded-full flex items-center justify-center bg-white"
-                    style={{ border: `2px solid ${step.ring}`, boxShadow: '0 2px 8px rgba(11, 28, 61, 0.08)' }}
+                  {step.festive ? (
+                    <div className="relative">
+                      {/* sparkle burst around the win */}
+                      <span aria-hidden="true" className="absolute -top-1.5 -left-1.5 road-sparkle" style={{ animationDelay: '0s' }}>
+                        <svg width="10" height="10" viewBox="0 0 12 12"><path d="M6 0l1 5 5 1-5 1-1 5-1-5-5-1 5-1z" fill="#F59E0B" /></svg>
+                      </span>
+                      <span aria-hidden="true" className="absolute -top-1 -right-2 road-sparkle" style={{ animationDelay: '.5s' }}>
+                        <svg width="8" height="8" viewBox="0 0 12 12"><path d="M6 0l1 5 5 1-5 1-1 5-1-5-5-1 5-1z" fill="#FBBF24" /></svg>
+                      </span>
+                      <span aria-hidden="true" className="absolute -bottom-1 -right-1.5 road-sparkle" style={{ animationDelay: '1s' }}>
+                        <svg width="7" height="7" viewBox="0 0 12 12"><path d="M6 0l1 5 5 1-5 1-1 5-1-5-5-1 5-1z" fill="#F59E0B" /></svg>
+                      </span>
+                      <div
+                        className="w-11 h-11 rounded-full flex items-center justify-center"
+                        style={{ background: 'linear-gradient(140deg, #FBBF24 0%, #F59E0B 100%)', boxShadow: '0 4px 14px rgba(245, 158, 11, 0.45)' }}
+                      >
+                        {step.icon}
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      className="w-11 h-11 rounded-full flex items-center justify-center bg-white"
+                      style={{ border: `2px solid ${step.ring}`, boxShadow: '0 2px 8px rgba(11, 28, 61, 0.08)' }}
+                    >
+                      {step.icon}
+                    </div>
+                  )}
+                  <span
+                    className="text-[12px] leading-tight mt-2"
+                    style={{ fontWeight: step.festive ? 700 : 600, color: step.festive ? '#B45309' : '#0B1C3D' }}
                   >
-                    {step.icon}
-                  </div>
-                  <span className="text-[12px] font-semibold leading-tight text-[#0B1C3D] mt-2">{step.label}</span>
+                    {step.label}
+                  </span>
                 </div>
               ))}
             </div>

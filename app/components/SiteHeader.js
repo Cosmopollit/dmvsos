@@ -8,6 +8,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { flags } from '@/lib/flags';
+import BreakButton from '@/app/components/BreakButton';
 
 const codeToName = { en: 'English', ru: 'Русский', es: 'Español', zh: '中文', ua: 'Українська' };
 const langs = [
@@ -29,6 +30,7 @@ export default function SiteHeader() {
   const [showLangMenu, setShowLangMenu] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-shot client-only read of the saved lang after mount
     setLang(codeToName[getSavedLang()] || 'English');
   }, []);
 
@@ -126,19 +128,18 @@ export default function SiteHeader() {
         </div>
       </div>
 
-      <div className="flex items-center justify-center gap-2 pb-3">
+      <div className="flex flex-wrap items-center justify-center gap-2 pb-3">
         <Link href="/dmv-test"
-          className={`text-xs font-semibold rounded-full px-3 py-1 transition-colors ${onPracticeTests ? 'text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE]' : 'text-[#64748B] bg-white border border-[#E2E8F0] hover:border-[#2563EB] hover:text-[#2563EB]'}`}>
-          📋 {tex.practiceTests}
+          className={`inline-flex items-center gap-1.5 whitespace-nowrap text-xs font-semibold rounded-full px-3 py-1 active:scale-95 transition ${onPracticeTests ? 'text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE]' : 'text-[#64748B] bg-white border border-[#E2E8F0] hover:border-[#2563EB] hover:text-[#2563EB]'}`}>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="3" width="14" height="18" rx="2" /><path d="M9 7h6M9 11h6M9 15h4" /></svg>
+          {tex.practiceTests}
         </Link>
         <Link href="/manuals"
-          className={`text-xs font-semibold rounded-full px-3 py-1 transition-colors ${onManuals ? 'text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE]' : 'text-[#64748B] bg-white border border-[#E2E8F0] hover:border-[#2563EB] hover:text-[#2563EB]'}`}>
-          📖 {tex.navManuals}
+          className={`inline-flex items-center gap-1.5 whitespace-nowrap text-xs font-semibold rounded-full px-3 py-1 active:scale-95 transition ${onManuals ? 'text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE]' : 'text-[#64748B] bg-white border border-[#E2E8F0] hover:border-[#2563EB] hover:text-[#2563EB]'}`}>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 5a2 2 0 0 1 2-2h7v16H6a2 2 0 0 0-2 2V5z" /><path d="M13 3h5a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2h-5" /></svg>
+          {tex.navManuals}
         </Link>
-        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#94A3B8] bg-[#F8FAFC] border border-[#E2E8F0] rounded-full px-3 py-1 cursor-default select-none">
-          🎓 {tex.navCourses}
-          <span className="text-[9px] font-bold bg-[#E2E8F0] text-[#94A3B8] px-1.5 py-0.5 rounded-full leading-none">{tex.navSoon}</span>
-        </span>
+        <BreakButton langCode={langCode} />
       </div>
     </header>
   );

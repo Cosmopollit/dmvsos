@@ -39,6 +39,11 @@ function ResultContent() {
   const [inApp, setInApp] = useState(false);
   // eslint-disable-next-line react-hooks/set-state-in-effect -- one-shot client-only UA sniff after mount
   useEffect(() => { setInApp(isInAppBrowser()); }, []);
+  // Reaching the result screen means a test was finished — unlock the
+  // "Take a break" arcade in the header (works for free + Pro, any device).
+  useEffect(() => {
+    try { localStorage.setItem('dmvsos_break_unlocked', '1'); } catch { /* private mode */ }
+  }, []);
   // sessionStorage is client-only; must sync after hydration
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {

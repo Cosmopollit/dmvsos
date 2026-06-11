@@ -16,8 +16,11 @@ const csp = [
   "font-src 'self' https://fonts.gstatic.com",
   // GA4 sends event beacons to region1.google-analytics.com (and similar).
   "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://accounts.google.com https://*.google-analytics.com https://*.googletagmanager.com https://*.analytics.google.com",
-  "frame-src https://js.stripe.com https://accounts.google.com",
-  "frame-ancestors 'none'",
+  // 'self' lets the app embed its own pages (the /break.html arcade overlay).
+  "frame-src 'self' https://js.stripe.com https://accounts.google.com",
+  // 'self' allows same-origin framing (the Break Mode overlay) while still
+  // blocking cross-origin clickjacking on login/checkout.
+  "frame-ancestors 'self'",
   "base-uri 'self'",
   "form-action 'self' https://checkout.stripe.com",
   "object-src 'none'",
@@ -34,7 +37,7 @@ const nextConfig = {
       {
         source: '/(.*)',
         headers: [
-          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },

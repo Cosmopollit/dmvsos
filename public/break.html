@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="robots" content="noindex">
+<title>DMVSOS · Break Mode</title>
+<style>
+  html, body {
+    margin: 0; padding: 0;
+    background: #050913; color: #cfd8e8;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    height: 100%; overflow: hidden;
+    -webkit-user-select: none; user-select: none;
+    touch-action: none;
+    overscroll-behavior: none;
+  }
+  body { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+  .wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  canvas {
+    background: #000;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    border: 1px solid #1f2a44;
+    touch-action: none;
+    outline: none;
+    box-shadow: 0 0 0 6px #050913, 0 8px 40px rgba(0,0,0,0.7);
+    cursor: pointer;
+    width: min(85vw, 320px);
+    aspect-ratio: 240 / 400;
+    height: auto;
+  }
+  canvas.shake { animation: shake 0.4s linear; }
+  @keyframes shake {
+    0%, 100% { transform: translate(0, 0); }
+    10%      { transform: translate(-4px, 2px); }
+    20%      { transform: translate(5px, -2px); }
+    35%      { transform: translate(-3px, 3px); }
+    50%      { transform: translate(4px, -3px); }
+    65%      { transform: translate(-3px, 1px); }
+    80%      { transform: translate(2px, -1px); }
+  }
+  .hud { display: flex; gap: 24px; font-size: 12px; opacity: 0.9; letter-spacing: 0.1em; }
+  .hud .veh { color: #2563EB; }
+  .hint { font-size: 10px; opacity: 0.45; margin-top: 4px; letter-spacing: 0.1em; }
+  .title { font-size: 11px; opacity: 0.5; letter-spacing: 0.3em; margin-bottom: 4px; color: #6b86b8; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="title">DMVSOS · BREAK MODE</div>
+    <div class="hud">
+      <span id="score">SCORE 0000</span>
+      <span id="veh" class="veh">CAR</span>
+      <span id="best">BEST 0000</span>
+    </div>
+    <canvas id="c" width="240" height="400" tabindex="0"></canvas>
+    <div class="hint">← →  ·  A D  ·  TAP / SWIPE  ·  V = VEHICLE  ·  SPACE = RESTART</div>
+  </div>
+<script>
+(() => {
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+  const scoreEl = document.getElementById('score');
+  const bestEl = document.getElementById('best');
+  const vehEl = document.getElementById('veh');
+
+  // i18n — UI strings localize from ?lang=. Road signs (SIGN_TEXTS) and the
+  // CAR/MOTO/CDL vehicle codes stay English on purpose (US road signage).
+  const LANGS = {
+    en: { title: 'DMVSOS · BREAK MODE', score: 'SCORE', best: 'BEST', hint: '← →  ·  A D  ·  TAP / SWIPE  ·  V = VEHICLE  ·  SPACE = RESTART', over: 'GAME OVER', pick: 'PICK VEHICLE', retry: 'TAP TO RETRY', restart: 'SPACE = RESTART  ·  V = CYCLE', foot: 'DMVSOS · STUDY, THEN CHILL' },
+    ru: { title: 'DMVSOS · ПЕРЕРЫВ', score: 'СЧЁТ', best: 'РЕКОРД', hint: '← →  ·  A D  ·  ТАП / СВАЙП  ·  V = ТРАНСПОРТ  ·  SPACE = ЗАНОВО', over: 'ИГРА ОКОНЧЕНА', pick: 'ВЫБЕРИ ТРАНСПОРТ', retry: 'ИГРАТЬ СНОВА', restart: 'SPACE = ЗАНОВО  ·  V = СМЕНА', foot: 'DMVSOS · ПОУЧИЛСЯ — ОТДОХНИ' },
+    es: { title: 'DMVSOS · DESCANSO', score: 'PUNTOS', best: 'RÉCORD', hint: '← →  ·  A D  ·  TOCA / DESLIZA  ·  V = VEHÍCULO  ·  SPACE = REINICIAR', over: 'FIN DEL JUEGO', pick: 'ELIGE VEHÍCULO', retry: 'JUGAR DE NUEVO', restart: 'SPACE = REINICIAR  ·  V = CAMBIAR', foot: 'DMVSOS · ESTUDIA Y DESCANSA' },
+    zh: { title: 'DMVSOS · 休息一下', score: '得分', best: '最高', hint: '← →  ·  A D  ·  点击 / 滑动  ·  V = 车辆  ·  SPACE = 重来', over: '游戏结束', pick: '选择车辆', retry: '再玩一次', restart: 'SPACE = 重来  ·  V = 切换', foot: 'DMVSOS · 学完，放松一下' },
+    ua: { title: 'DMVSOS · ПЕРЕРВА', score: 'РАХУНОК', best: 'РЕКОРД', hint: '← →  ·  A D  ·  ТАП / СВАЙП  ·  V = ТРАНСПОРТ  ·  SPACE = СПОЧАТКУ', over: 'ГРУ ЗАВЕРШЕНО', pick: 'ОБЕРИ ТРАНСПОРТ', retry: 'ГРАТИ ЗНОВУ', restart: 'SPACE = СПОЧАТКУ  ·  V = ЗМІНА', foot: 'DMVSOS · ПОВЧИВСЯ — ВІДПОЧИНЬ' },
+  };
+  const L = LANGS[new URLSearchParams(location.search).get('lang')] || LANGS.en;
+  document.querySelector('.title').textContent = L.title;
+  document.querySelector('.hint').textContent = L.hint;
+
+  const W = canvas.width;     // 240
+  const H = canvas.height;    // 400
+  const CELL = 20;
+  const LANES = 3;
+  const ROAD_W = 180;
+  const ROAD_X = (W - ROAD_W) / 2;   // 30
+  const LANE_W = ROAD_W / LANES;     // 60
+
+  // DMVSOS palette
+  const COL_SHOULDER = '#0B1C3D';   // navy — brand
+  const COL_ROAD     = '#070707';
+  const COL_EDGE     = '#1e3a5f';
+  const COL_DASH     = '#3a3a3a';
+  const COL_OBST     = '#DC2626';   // brand error red — cones
+  const COL_TRUCK    = '#F59E0B';   // brand pro amber — trucks
+  const COL_COIN     = '#f5d046';
+  const COL_WINDOW   = 'rgba(0,0,0,0.45)';
+  const COL_SIGN     = '#0c2856';
+  const COL_SIGN_FG  = '#9cb8e8';
+  const COL_PICK     = '#39d353';
+
+  // Vehicles match app categories (Car / Moto / CDL)
+  const VEHICLES = {
+    car:  { name: 'CAR',  color: '#2563EB', w: 2, h: 3 },  // brand blue sedan
+    moto: { name: 'MOTO', color: '#16A34A', w: 1, h: 2 },  // narrow success-green moto
+    cdl:  { name: 'CDL',  color: '#F59E0B', w: 2, h: 4 },  // tall amber truck
+  };
+  const VKEYS = Object.keys(VEHICLES);
+  let vehicleKey = localStorage.getItem('chill.vehicle');
+  if (!VEHICLES[vehicleKey]) vehicleKey = 'car';
+
+  let carLane, carXSmooth, obstacles, coins, dust, signs;
+  let scrollY, speed, elapsed, lastT, alive, score;
+  let spawnT, coinSpawnT, signSpawnT, pickedCoinBonus;
+  let best = +(localStorage.getItem('chill.best') || 0);
+
+  const laneX = i => ROAD_X + i * LANE_W + LANE_W / 2;
+  const vehW = () => VEHICLES[vehicleKey].w * CELL;
+  const vehH = () => VEHICLES[vehicleKey].h * CELL;
+
+  const SIGN_TEXTS = [
+    'DMVSOS', 'NEXT EXIT', 'STUDY', 'EXAM AHEAD', 'PRACTICE',
+    '85% PASS', '50 STATES', 'REAL EXAM', 'EXIT 50', 'DMV·SOS',
+  ];
+
+  function reset() {
+    carLane = 1;
+    carXSmooth = laneX(carLane);
+    obstacles = [];
+    coins = [];
+    dust = [];
+    signs = [];
+    scrollY = 0;
+    speed = 130;
+    elapsed = 0;
+    score = 0;
+    spawnT = 0.4;
+    coinSpawnT = 1.8;
+    signSpawnT = 0.6;
+    pickedCoinBonus = 0;
+    alive = true;
+    canvas.classList.remove('shake');
+  }
+
+  function spawn() {
+    let lane = (Math.random() * LANES) | 0;
+    const recent = obstacles.filter(o => o.y < 80);
+    const blocked = new Set(recent.map(o => o.lane));
+    if (blocked.size >= LANES - 1) {
+      for (let i = 0; i < LANES; i++) {
+        if (!blocked.has(i)) { lane = i === lane ? (i + 1) % LANES : lane; break; }
+      }
+    }
+    const isTruck = Math.random() < 0.22;
+    obstacles.push({
+      lane, y: -60,
+      w: CELL * 2,
+      h: isTruck ? CELL * 4 : CELL * 2,
+      type: isTruck ? 'truck' : 'cone',
+    });
+  }
+
+  function spawnCoin() {
+    const nearY = 140;
+    const taken = new Set([
+      ...obstacles.filter(o => o.y < nearY).map(o => o.lane),
+      ...coins.filter(c => c.y < nearY).map(c => c.lane),
+    ]);
+    const free = [];
+    for (let i = 0; i < LANES; i++) if (!taken.has(i)) free.push(i);
+    if (!free.length) return;
+    const lane = free[(Math.random() * free.length) | 0];
+    coins.push({ lane, y: -20, picked: false });
+  }
+
+  let signSideAlt = 0;
+  function spawnSign() {
+    signSideAlt = 1 - signSideAlt;
+    signs.push({
+      side: signSideAlt ? 'R' : 'L',
+      y: -28,
+      text: SIGN_TEXTS[(Math.random() * SIGN_TEXTS.length) | 0],
+    });
+  }
+
+  function update(dt) {
+    if (!alive) return;
+    elapsed += dt;
+    score = Math.floor(elapsed * 10 + pickedCoinBonus);
+    speed = 130 + Math.min(elapsed * 7, 260);
+
+    spawnT -= dt;
+    const cadence = Math.max(0.42, 1.1 - elapsed * 0.018);
+    if (spawnT <= 0) { spawn(); spawnT = cadence; }
+
+    coinSpawnT -= dt;
+    if (coinSpawnT <= 0) { spawnCoin(); coinSpawnT = 1.6 + Math.random() * 1.2; }
+
+    signSpawnT -= dt;
+    if (signSpawnT <= 0) { spawnSign(); signSpawnT = 1.8 + Math.random() * 1.4; }
+
+    scrollY = (scrollY + speed * dt) % 40;
+
+    const tx = laneX(carLane);
+    carXSmooth += (tx - carXSmooth) * Math.min(1, dt * 35);
+
+    for (const o of obstacles) o.y += speed * dt;
+    obstacles = obstacles.filter(o => o.y < H + 80);
+
+    for (const c of coins) c.y += speed * dt;
+    coins = coins.filter(c => c.y < H + 30 && !c.picked);
+
+    // signs scroll a touch slower for parallax depth
+    for (const s of signs) s.y += speed * dt * 0.85;
+    signs = signs.filter(s => s.y < H + 30);
+
+    // dust trail behind car
+    if (Math.random() < 0.55) {
+      const v = VEHICLES[vehicleKey];
+      const halfW = (v.w * CELL) / 2;
+      dust.push({
+        x: carXSmooth + (Math.random() * halfW * 1.2 - halfW * 0.6),
+        y: H - CELL - 2 + Math.random() * 3,
+        life: 0.5, max: 0.5,
+        w: 2 + ((Math.random() * 2) | 0),
+      });
+    }
+    for (const d of dust) { d.life -= dt; d.y += 18 * dt; }
+    dust = dust.filter(d => d.life > 0);
+
+    const carW = vehW(), carH = vehH();
+    const cx = carXSmooth - carW / 2;
+    const cy = H - carH - CELL;
+
+    // coin pickup
+    const cs = 10;
+    for (const c of coins) {
+      if (c.picked) continue;
+      const cox = laneX(c.lane) - cs / 2;
+      if (cx < cox + cs && cx + carW > cox && cy < c.y + cs && cy + carH > c.y) {
+        c.picked = true;
+        pickedCoinBonus += 50;
+      }
+    }
+
+    // obstacle collision
+    for (const o of obstacles) {
+      const ox = laneX(o.lane) - o.w / 2;
+      const pad = 2;
+      if (cx + pad < ox + o.w - pad &&
+          cx + carW - pad > ox + pad &&
+          cy + pad < o.y + o.h - pad &&
+          cy + carH - pad > o.y + pad) {
+        die();
+        break;
+      }
+    }
+  }
+
+  function die() {
+    alive = false;
+    if (score > best) {
+      best = score;
+      try { localStorage.setItem('chill.best', String(best)); } catch (_) {}
+    }
+    canvas.classList.remove('shake');
+    void canvas.offsetWidth;
+    canvas.classList.add('shake');
+  }
+
+  function drawVehicle(x, y, v, scale) {
+    const sc = scale || 1;
+    const w = v.w * CELL * sc, h = v.h * CELL * sc;
+    ctx.fillStyle = v.color;
+    ctx.fillRect(x, y, w, h);
+    // windshield / details
+    ctx.fillStyle = COL_WINDOW;
+    if (v.h >= 3) {
+      ctx.fillRect(x + 4*sc, y + 6*sc, w - 8*sc, 8*sc);
+      ctx.fillRect(x + 4*sc, y + h - 16*sc, w - 8*sc, 6*sc);
+    } else {
+      // moto: single helmet strip
+      ctx.fillRect(x + 2*sc, y + 4*sc, w - 4*sc, 6*sc);
+    }
+    // headlights
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(x + 2*sc, y + 2*sc, Math.min(4, w/2 - 1)*sc, 3*sc);
+    if (w >= 8*sc) ctx.fillRect(x + w - 6*sc, y + 2*sc, 4*sc, 3*sc);
+    // taillights
+    ctx.fillStyle = '#ff3a3a';
+    ctx.fillRect(x + 2*sc, y + h - 5*sc, Math.min(4, w/2 - 1)*sc, 3*sc);
+    if (w >= 8*sc) ctx.fillRect(x + w - 6*sc, y + h - 5*sc, 4*sc, 3*sc);
+  }
+
+  function drawSign(s) {
+    const sw = 30, sh = 16;
+    // shoulders span 0..ROAD_X (left) and ROAD_X+ROAD_W..W (right)
+    const x = s.side === 'L'
+      ? Math.max(2, (ROAD_X - sw) / 2)
+      : Math.min(W - sw - 2, ROAD_X + ROAD_W + (W - ROAD_X - ROAD_W - sw) / 2);
+    // post
+    ctx.fillStyle = '#1e3a5f';
+    ctx.fillRect(x + sw / 2 - 1, s.y + sh, 2, 8);
+    // board
+    ctx.fillStyle = COL_SIGN;
+    ctx.fillRect(x, s.y, sw, sh);
+    ctx.fillStyle = COL_SIGN_FG;
+    ctx.fillRect(x, s.y, sw, 1);
+    ctx.fillRect(x, s.y + sh - 1, sw, 1);
+    // text
+    ctx.fillStyle = COL_SIGN_FG;
+    ctx.font = 'bold 6px ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(s.text, x + sw / 2, s.y + sh / 2);
+    ctx.textBaseline = 'alphabetic';
+  }
+
+  let pickerRects = [];
+  let retryRect = null;
+
+  function drawGameOver() {
+    ctx.fillStyle = 'rgba(5,9,19,0.88)';
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 22px ui-monospace, monospace';
+    ctx.fillText(L.over, W / 2, 56);
+
+    ctx.font = '10px ui-monospace, monospace';
+    ctx.fillStyle = '#7a8aa8';
+    ctx.fillText(L.score, W / 2, 82);
+    ctx.font = 'bold 26px ui-monospace, monospace';
+    ctx.fillStyle = COL_PICK;
+    ctx.fillText(String(score), W / 2, 110);
+
+    // vehicle picker
+    ctx.font = '9px ui-monospace, monospace';
+    ctx.fillStyle = '#7a8aa8';
+    ctx.fillText(L.pick, W / 2, 138);
+
+    pickerRects = [];
+    const slotW = 58, slotH = 56, gap = 8;
+    const totalW = slotW * VKEYS.length + gap * (VKEYS.length - 1);
+    let px = (W - totalW) / 2;
+    const py = 148;
+    VKEYS.forEach(k => {
+      const v = VEHICLES[k];
+      const selected = k === vehicleKey;
+      ctx.fillStyle = selected ? '#0c2856' : '#10141e';
+      ctx.fillRect(px, py, slotW, slotH);
+      ctx.fillStyle = selected ? COL_PICK : '#2a3550';
+      ctx.fillRect(px, py, slotW, 2);
+      ctx.fillRect(px, py + slotH - 2, slotW, 2);
+      ctx.fillRect(px, py, 2, slotH);
+      ctx.fillRect(px + slotW - 2, py, 2, slotH);
+      // mini vehicle preview
+      const miniCell = 5;
+      const miniW = v.w * miniCell, miniH = v.h * miniCell;
+      const mx = px + (slotW - miniW) / 2;
+      const my = py + (slotH - miniH) / 2 - 4;
+      ctx.fillStyle = v.color;
+      ctx.fillRect(mx, my, miniW, miniH);
+      // label
+      ctx.fillStyle = selected ? COL_PICK : '#7a8aa8';
+      ctx.font = 'bold 9px ui-monospace, monospace';
+      ctx.fillText(v.name, px + slotW / 2, py + slotH - 6);
+      pickerRects.push({ x: px, y: py, w: slotW, h: slotH, key: k });
+      px += slotW + gap;
+    });
+
+    // retry button
+    const bw = 170, bh = 40;
+    const bx = (W - bw) / 2;
+    const by = py + slotH + 18;
+    ctx.fillStyle = COL_PICK;
+    ctx.fillRect(bx, by, bw, bh);
+    ctx.fillStyle = '#031a08';
+    ctx.font = 'bold 13px ui-monospace, monospace';
+    ctx.fillText(L.retry, W / 2, by + 25);
+    retryRect = { x: bx, y: by, w: bw, h: bh };
+
+    // hint + footer
+    ctx.font = '8px ui-monospace, monospace';
+    ctx.fillStyle = '#3a4a6a';
+    ctx.fillText(L.restart, W / 2, by + bh + 14);
+    ctx.fillText(L.foot, W / 2, H - 12);
+  }
+
+  function draw() {
+    // shoulders
+    ctx.fillStyle = COL_SHOULDER;
+    ctx.fillRect(0, 0, W, H);
+    // road
+    ctx.fillStyle = COL_ROAD;
+    ctx.fillRect(ROAD_X, 0, ROAD_W, H);
+    // road edges (solid white-ish)
+    ctx.fillStyle = COL_EDGE;
+    ctx.fillRect(ROAD_X - 1, 0, 2, H);
+    ctx.fillRect(ROAD_X + ROAD_W - 1, 0, 2, H);
+    // dashed lane dividers
+    ctx.fillStyle = COL_DASH;
+    for (let i = 1; i < LANES; i++) {
+      const x = ROAD_X + i * LANE_W;
+      for (let y = -40 + scrollY; y < H; y += 40) {
+        ctx.fillRect(x - 2, y, 4, 20);
+      }
+    }
+
+    // roadside signs (on shoulders)
+    for (const s of signs) drawSign(s);
+
+    // dust
+    for (const d of dust) {
+      const a = Math.max(0, d.life / d.max);
+      ctx.fillStyle = `rgba(120,120,120,${a * 0.55})`;
+      ctx.fillRect(d.x | 0, d.y | 0, d.w, d.w);
+    }
+
+    // coins
+    for (const c of coins) {
+      const cox = laneX(c.lane) - 5;
+      ctx.fillStyle = COL_COIN;
+      ctx.fillRect(cox, c.y, 10, 10);
+      ctx.fillStyle = 'rgba(0,0,0,0.35)';
+      ctx.fillRect(cox + 7, c.y + 2, 2, 6);
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      ctx.fillRect(cox + 2, c.y + 2, 2, 2);
+    }
+
+    // obstacles
+    for (const o of obstacles) {
+      ctx.fillStyle = o.type === 'truck' ? COL_TRUCK : COL_OBST;
+      const ox = laneX(o.lane) - o.w / 2;
+      ctx.fillRect(ox, o.y, o.w, o.h);
+      ctx.fillStyle = 'rgba(0,0,0,0.35)';
+      ctx.fillRect(ox, o.y + o.h - 4, o.w, 4);
+      if (o.type === 'truck') {
+        ctx.fillStyle = 'rgba(0,0,0,0.4)';
+        ctx.fillRect(ox + 4, o.y + 4, o.w - 8, 10);
+      }
+    }
+
+    // player vehicle
+    const v = VEHICLES[vehicleKey];
+    const carW = v.w * CELL, carH = v.h * CELL;
+    drawVehicle(carXSmooth - carW / 2, H - carH - CELL, v, 1);
+
+    if (!alive) drawGameOver();
+  }
+
+  function frame(t) {
+    if (!lastT) lastT = t;
+    const dt = Math.min(0.05, (t - lastT) / 1000);
+    lastT = t;
+    update(dt);
+    draw();
+    scoreEl.textContent = L.score + ' ' + String(score).padStart(4, '0');
+    bestEl.textContent  = L.best  + ' ' + String(best).padStart(4, '0');
+    vehEl.textContent   = VEHICLES[vehicleKey].name;
+    vehEl.style.color   = VEHICLES[vehicleKey].color;
+    requestAnimationFrame(frame);
+  }
+
+  function move(dir) {
+    if (!alive) return;
+    carLane = Math.max(0, Math.min(LANES - 1, carLane + dir));
+  }
+
+  function cycleVehicle() {
+    const i = VKEYS.indexOf(vehicleKey);
+    vehicleKey = VKEYS[(i + 1) % VKEYS.length];
+    try { localStorage.setItem('chill.vehicle', vehicleKey); } catch (_) {}
+  }
+
+  window.addEventListener('keydown', e => {
+    if (e.repeat) return;
+    if (e.key === 'ArrowLeft'  || e.key === 'a' || e.key === 'A') { move(-1); e.preventDefault(); }
+    else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { move(1); e.preventDefault(); }
+    else if (e.key === ' ' || e.key === 'Enter') { if (!alive) reset(); e.preventDefault(); }
+    else if (e.key === 'v' || e.key === 'V') { cycleVehicle(); e.preventDefault(); }
+  }, { passive: false });
+
+  function canvasLocal(e) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: (e.clientX - rect.left) * (W / rect.width),
+      y: (e.clientY - rect.top) * (H / rect.height),
+    };
+  }
+  function hit(r, p) {
+    return p.x >= r.x && p.x <= r.x + r.w && p.y >= r.y && p.y <= r.y + r.h;
+  }
+
+  let dragStartX = null;
+  let dragFired = false;
+
+  canvas.addEventListener('pointerdown', e => {
+    canvas.focus({ preventScroll: true });
+    dragStartX = e.clientX;
+    dragFired = false;
+    const p = canvasLocal(e);
+    if (!alive) {
+      for (const r of pickerRects) {
+        if (hit(r, p)) {
+          vehicleKey = r.key;
+          try { localStorage.setItem('chill.vehicle', vehicleKey); } catch (_) {}
+          e.preventDefault();
+          return;
+        }
+      }
+      if (retryRect && hit(retryRect, p)) { reset(); e.preventDefault(); return; }
+      // tap on empty area while dead = no-op (don't accidentally restart)
+      e.preventDefault();
+      return;
+    }
+    move(p.x < W / 2 ? -1 : 1);
+    e.preventDefault();
+  });
+
+  canvas.addEventListener('pointermove', e => {
+    if (dragStartX === null || dragFired || !alive) return;
+    const dx = e.clientX - dragStartX;
+    if (Math.abs(dx) > 30) {
+      move(dx > 0 ? 1 : -1);
+      dragFired = true;
+    }
+  });
+  canvas.addEventListener('pointerup',     () => { dragStartX = null; });
+  canvas.addEventListener('pointercancel', () => { dragStartX = null; });
+
+  setTimeout(() => canvas.focus({ preventScroll: true }), 0);
+
+  reset();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
