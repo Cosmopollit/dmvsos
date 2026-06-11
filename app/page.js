@@ -623,20 +623,26 @@ export default function Home() {
         </p>
       </section>
 
-      {/* FAQ — collapsed by default, each question opens on tap. */}
+      {/* FAQ — the whole section is a dropdown, and each question inside is too.
+          Both collapsed by default to keep the page short. */}
       <section className="w-full max-w-lg mx-auto mb-8 px-4">
-        <h2 className="text-lg font-bold text-[#0B1C3D] text-center mb-5">{tex.faqTitle}</h2>
-        <div className="flex flex-col gap-2">
-          {(tex.faq || []).map((item, i) => (
-            <details key={i} className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm group">
-              <summary className="px-5 py-4 text-sm font-semibold text-[#0B1C3D] cursor-pointer list-none flex items-center justify-between">
-                <span>{item.q}</span>
-                <span className="text-[#94A3B8] group-open:rotate-180 transition-transform ml-3 shrink-0"><svg width="12" height="12" viewBox="0 0 12 12" style={{ fill: 'currentColor' }}><path d="M6 8L1 3h10z" /></svg></span>
-              </summary>
-              <p className="px-5 pb-4 text-sm text-[#475569] leading-relaxed">{item.a}</p>
-            </details>
-          ))}
-        </div>
+        <details className="group/sec">
+          <summary className="cursor-pointer list-none flex items-center justify-center gap-2 mb-5">
+            <h2 className="text-lg font-bold text-[#0B1C3D]">{tex.faqTitle}</h2>
+            <span className="text-[#94A3B8] group-open/sec:rotate-180 transition-transform"><svg width="14" height="14" viewBox="0 0 12 12" style={{ fill: 'currentColor' }}><path d="M6 8L1 3h10z" /></svg></span>
+          </summary>
+          <div className="flex flex-col gap-2">
+            {(tex.faq || []).map((item, i) => (
+              <details key={i} className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm group">
+                <summary className="px-5 py-4 text-sm font-semibold text-[#0B1C3D] cursor-pointer list-none flex items-center justify-between">
+                  <span>{item.q}</span>
+                  <span className="text-[#94A3B8] group-open:rotate-180 transition-transform ml-3 shrink-0"><svg width="12" height="12" viewBox="0 0 12 12" style={{ fill: 'currentColor' }}><path d="M6 8L1 3h10z" /></svg></span>
+                </summary>
+                <p className="px-5 pb-4 text-sm text-[#475569] leading-relaxed">{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </details>
       </section>
 
       {/* Final CTA — a license card whose fields ARE the value props, so reading
