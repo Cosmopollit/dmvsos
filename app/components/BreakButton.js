@@ -1,29 +1,44 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { t } from '@/lib/translations';
+import { useAuth } from '@/lib/AuthContext';
 
-// "Take a break" header entry. It's a reward, not a toy: the pill stays locked
-// (greyed, padlock, tooltip) until the visitor finishes a test, then unlocks
-// and opens the Break Mode arcade (/break.html) in an overlay. Unlock state is
-// a localStorage flag set on the result page, so it works for free + Pro,
-// logged-in or not. Shared by the home header and SiteHeader.
+// "Take a break" header entry. It's a reward, not a toy. Subscribers (Pro) get
+// it unconditionally; free users unlock it by finishing one test (a localStorage
+// flag set on the result page). Until unlocked it shows a greyed padlock pill
+// with a visible "unlocks after your first test" tooltip on hover/tap. When
+// unlocked it opens the Break Mode arcade (/break.html) in an overlay. Shared by
+// the home header and SiteHeader.
 const UNLOCK_KEY = 'dmvsos_break_unlocked';
 
 export default function BreakButton({ langCode = 'en' }) {
   const tex = t[langCode] || t.en;
-  const [unlocked, setUnlocked] = useState(false);
+  const { isPro } = useAuth();
+  const [completedTest, setCompletedTest] = useState(false);
   const [open, setOpen] = useState(false);
+  const [showHint, setShowHint] = useState(false);
 
-  // Read the unlock flag after mount (client-only) and re-check when the tab
-  // regains focus, so finishing a test in another tab flips it without reload.
+  // Read the test-completed flag after mount (client-only) and re-check when the
+  // tab regains focus, so finishing a test in another tab flips it without reload.
   useEffect(() => {
     const read = () => {
-      try { setUnlocked(localStorage.getItem(UNLOCK_KEY) === '1'); } catch { /* private mode */ }
+      try { setCompletedTest(localStorage.getItem(UNLOCK_KEY) === '1'); } catch { /* private mode */ }
     };
     read();
     window.addEventListener('focus', read);
     return () => window.removeEventListener('focus', read);
   }, []);
+
+  // Subscribers always have it; free users earn it by finishing a test.
+  const unlocked = isPro || completedTest;
+
+  // The locked hint is hover-driven on desktop; on touch there is no hover, so a
+  // tap shows it and it auto-dismisses.
+  useEffect(() => {
+    if (!showHint) return;
+    const id = setTimeout(() => setShowHint(false), 2600);
+    return () => clearTimeout(id);
+  }, [showHint]);
 
   // Lock body scroll + close on Escape while the arcade overlay is open.
   useEffect(() => {
@@ -66,13 +81,29 @@ export default function BreakButton({ langCode = 'en' }) {
           <span>{label}</span>
         </button>
       ) : (
-        <span
-          title={lockedHint}
-          aria-disabled="true"
-          className="inline-flex items-center gap-1.5 whitespace-nowrap text-xs font-semibold text-[#94A3B8] bg-[#F8FAFC] border border-[#E2E8F0] rounded-full px-3 py-1 cursor-default select-none"
-        >
-          {lock}
-          <span>{label}</span>
+        <span className="relative inline-flex">
+          <button
+            type="button"
+            aria-label={`${label} — ${lockedHint}`}
+            onMouseEnter={() => setShowHint(true)}
+            onMouseLeave={() => setShowHint(false)}
+            onFocus={() => setShowHint(true)}
+            onBlur={() => setShowHint(false)}
+            onClick={() => setShowHint(v => !v)}
+            className="inline-flex items-center gap-1.5 whitespace-nowrap text-xs font-semibold text-[#94A3B8] bg-[#F8FAFC] border border-[#E2E8F0] rounded-full px-3 py-1 cursor-help select-none active:scale-95 transition"
+          >
+            {lock}
+            <span>{label}</span>
+          </button>
+          {showHint && (
+            <span
+              role="tooltip"
+              className="absolute left-1/2 -translate-x-1/2 top-full mt-2 z-[60] w-max max-w-[220px] text-center leading-snug text-[11px] font-medium text-white bg-[#0B1C3D] rounded-lg px-2.5 py-1.5 shadow-lg"
+            >
+              {lockedHint}
+              <span aria-hidden="true" className="absolute left-1/2 -translate-x-1/2 -top-1 w-2 h-2 rotate-45 bg-[#0B1C3D]" />
+            </span>
+          )}
         </span>
       )}
 

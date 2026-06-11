@@ -856,7 +856,7 @@ function TestContent() {
   handleNextRef.current = handleNext;
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
+    <main className="min-h-dvh bg-[#F8FAFC] flex flex-col items-center justify-center px-6 pt-6 pb-[calc(env(safe-area-inset-bottom)+4rem)]">
       <div className="w-full max-w-md">
 
         {/* Header with nav */}
