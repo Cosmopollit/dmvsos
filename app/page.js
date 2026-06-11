@@ -652,49 +652,60 @@ export default function Home() {
         <h2 className="text-xl font-bold text-[#0B1C3D] text-center mb-1">{tex.licCtaTitle || 'Ready to get your license?'}</h2>
         <p className="text-sm text-[#64748B] text-center mb-4">{tex.licCtaSub || "Let's practice: 20 free questions, no signup"}</p>
 
-        <div className="relative overflow-hidden rounded-2xl border border-[#CBD5E1] shadow-lg bg-gradient-to-br from-[#F8FAFC] to-[#EFF6FF]">
-          {/* holographic sheen */}
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0" style={{ background: 'linear-gradient(120deg, transparent 42%, rgba(255,255,255,0.4) 50%, transparent 58%)' }} />
+        {/* Gentle 3D tilt: mutate transform directly (no state, no re-render);
+            resets smoothly on leave. Touch devices simply never fire it. */}
+        <div
+          className="relative overflow-hidden rounded-3xl border border-[#E2E8F0] bg-gradient-to-br from-white to-[#F5F9FF]"
+          style={{ boxShadow: '0 12px 32px rgba(11, 28, 61, 0.10)', transition: 'transform 0.35s ease, box-shadow 0.35s ease', willChange: 'transform' }}
+          onMouseMove={(e) => {
+            const el = e.currentTarget;
+            const r = el.getBoundingClientRect();
+            const x = (e.clientX - r.left) / r.width - 0.5;
+            const y = (e.clientY - r.top) / r.height - 0.5;
+            el.style.transform = `perspective(900px) rotateY(${(x * 5).toFixed(2)}deg) rotateX(${(-y * 5).toFixed(2)}deg)`;
+            el.style.boxShadow = '0 18px 44px rgba(11, 28, 61, 0.16)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg)';
+            e.currentTarget.style.boxShadow = '0 12px 32px rgba(11, 28, 61, 0.10)';
+          }}
+        >
+          {/* soft sheen */}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0" style={{ background: 'linear-gradient(120deg, transparent 44%, rgba(255,255,255,0.5) 52%, transparent 60%)' }} />
 
           {/* header band */}
-          <div className="relative z-10 flex items-center justify-between px-5 py-3" style={{ background: 'linear-gradient(115deg, #0B1C3D 0%, #1E3A5F 55%, #2563EB 100%)' }}>
-            <div className="flex items-center gap-2.5">
-              <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" className="shrink-0" style={{ fill: '#FBBF24' }}>
-                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
-              </svg>
-              <div className="leading-none">
-                <span className="block text-[12px] font-extrabold tracking-[0.2em] text-white">DRIVER LICENSE</span>
-                <span className="block mt-1 text-[8px] font-bold tracking-[0.24em] text-[#93C5FD]">UNITED STATES &middot; PRACTICE</span>
-              </div>
+          <div className="relative z-10 flex items-center justify-between px-6 py-3.5" style={{ background: 'linear-gradient(115deg, #16294D 0%, #1E3A5F 60%, #2B4C7E 100%)' }}>
+            <div className="leading-none">
+              <span className="block text-[12px] font-bold tracking-[0.2em] text-[#F1F5F9]">DRIVER LICENSE</span>
+              <span className="block mt-1.5 text-[8px] font-semibold tracking-[0.26em] text-[#9DB8DD]">UNITED STATES &middot; PRACTICE</span>
             </div>
-            <span className="text-[12px] font-extrabold tracking-[0.14em] text-[#FBBF24]">DMVSOS</span>
+            <span className="text-[12px] font-bold tracking-[0.16em] text-[#FBCB5C]">DMVSOS</span>
           </div>
 
-          {/* body: verified emblem + value-prop fields */}
+          {/* body: brand emblem in the photo slot + value-prop fields */}
           <div className="relative z-10 flex gap-4 px-5 py-5 items-center">
-            <div className="w-[68px] h-[84px] rounded-xl bg-gradient-to-br from-[#2563EB] to-[#0B1C3D] flex items-center justify-center shrink-0 shadow-md">
-              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M5 12.5l4.2 4.2L19 7" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+            <div className="w-[64px] h-[80px] rounded-2xl bg-white border border-[#E2E8F0] flex items-center justify-center shrink-0" style={{ boxShadow: 'inset 0 1px 4px rgba(11, 28, 61, 0.06)' }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo.png" alt="" aria-hidden="true" className="w-[46px] h-[46px] rounded-xl" />
             </div>
 
-            <div className="flex-1 min-w-0 text-[#0B1C3D]">
-              <div className="grid grid-cols-[auto_1fr] gap-x-3.5 gap-y-2.5 text-[12.5px] leading-tight items-center">
-                <span className="font-bold text-[10px] text-[#94A3B8] tracking-wider">CLASS</span><span className="font-extrabold">Car &middot; Moto &middot; CDL</span>
-                <span className="font-bold text-[10px] text-[#94A3B8] tracking-wider">COVERAGE</span><span className="font-extrabold">{tex.licRowCoverage || 'All 50 states'}</span>
-                <span className="font-bold text-[10px] text-[#94A3B8] tracking-wider">LANGUAGES</span><span className="font-extrabold">{tex.licRowLangs || '5 languages'}</span>
-                <span className="font-bold text-[10px] text-[#94A3B8] tracking-wider">BANK</span><span className="font-extrabold">{tex.licRowBank || '35,000+ questions'}</span>
+            <div className="flex-1 min-w-0 text-[#1E293B]">
+              <div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-2.5 text-[12.5px] leading-tight items-center">
+                <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">CLASS</span><span className="font-semibold whitespace-nowrap">Car &middot; Moto &middot; CDL</span>
+                <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">COVERAGE</span><span className="font-semibold">{tex.licRowCoverage || 'All 50 states'}</span>
+                <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">LANGUAGES</span><span className="font-semibold">{tex.licRowLangs || '5 languages'}</span>
+                <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">BANK</span><span className="font-semibold">{tex.licRowBank || '35,000+ questions'}</span>
               </div>
             </div>
           </div>
 
           {/* CTA */}
-          <div className="relative z-10 px-5 pb-5 pt-0">
+          <div className="relative z-10 px-6 pb-6 pt-0.5">
             <button
               type="button"
               onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
-              className="w-full px-8 py-3.5 rounded-xl font-bold text-base text-[#0B1C3D] transition-all shadow-md hover:brightness-105"
-              style={{ background: 'linear-gradient(135deg, #FDE68A, #FBBF24)' }}
+              className="w-full px-8 py-3.5 rounded-2xl font-bold text-base text-[#0B1C3D] transition-all hover:brightness-[1.04] active:scale-[0.99]"
+              style={{ background: 'linear-gradient(135deg, #FDE68A, #FBBF24)', boxShadow: '0 6px 16px rgba(245, 158, 11, 0.28)' }}
             >
               {tex.finalCtaText || 'Choose your state and start'}
             </button>
