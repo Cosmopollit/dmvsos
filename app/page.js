@@ -647,21 +647,55 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Final CTA */}
+      {/* Final CTA — the license they came for, rendered as a real DL card.
+          Field labels stay in English caps like an actual US license (document
+          authenticity, not marketing shouting); title/sub/button localize. */}
       <section className="w-full max-w-lg mx-auto mb-8 px-4">
-        <div className="relative overflow-hidden rounded-3xl px-6 py-8 text-center shadow-lg" style={{ background: 'linear-gradient(135deg, #0B1C3D 0%, #1E3A5F 100%)' }}>
-          <h2 className="relative z-10 text-xl font-bold text-white mb-2">{tex.pricingHeading}</h2>
-          <p className="relative z-10 text-sm text-[#94A3B8] mb-5">{tex.benefitFree || '20 free questions, no signup needed'}</p>
-          <button
-            type="button"
-            onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
-            className="relative z-10 inline-block px-8 py-3.5 rounded-2xl font-bold text-base text-[#0B1C3D] transition-all shadow-lg hover:brightness-105"
-            style={{ background: 'linear-gradient(135deg, #FDE68A, #FBBF24)' }}
-          >
-            {tex.finalCtaText || 'Choose your state and start'}
-          </button>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/vehicles/car-hero.png" alt="" aria-hidden="true" className="absolute right-[-14px] bottom-[-8px] h-[80px] w-auto opacity-95 z-0 pointer-events-none select-none" />
+        <h2 className="text-xl font-bold text-[#0B1C3D] text-center mb-1">{tex.licCtaTitle || 'Ready to get your license?'}</h2>
+        <p className="text-sm text-[#64748B] text-center mb-4">{tex.licCtaSub || "Let's practice: 20 free questions, no signup"}</p>
+
+        <div className="relative overflow-hidden rounded-2xl border border-[#CBD5E1] shadow-lg bg-gradient-to-br from-[#F8FAFC] via-[#EFF6FF] to-[#E0F2FE]">
+          {/* header band */}
+          <div className="flex items-center justify-between px-5 py-2.5" style={{ background: 'linear-gradient(135deg, #0B1C3D, #1E3A5F)' }}>
+            <span className="text-[11px] font-extrabold tracking-[0.18em] text-white">DRIVER LICENSE</span>
+            <span className="text-[11px] font-extrabold tracking-[0.14em] text-[#FBBF24]">DMVSOS</span>
+          </div>
+
+          {/* body: photo + fields */}
+          <div className="relative flex gap-4 px-5 pt-4 pb-3 items-start">
+            <div className="w-[84px] h-[104px] rounded-lg bg-[#DBEAFE] border border-[#BFDBFE] flex items-center justify-center shrink-0">
+              <svg width="46" height="46" viewBox="0 0 24 24" aria-hidden="true" style={{ fill: '#93C5FD' }}>
+                <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
+              </svg>
+            </div>
+
+            <div className="flex-1 min-w-0 text-[#0B1C3D]">
+              <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-[12px] leading-tight">
+                <span className="font-bold text-[#94A3B8] tracking-wide">NAME</span><span className="font-extrabold tracking-wide truncate">YOUR NAME</span>
+                <span className="font-bold text-[#94A3B8] tracking-wide">CLASS</span><span className="font-extrabold">C · M · CDL</span>
+                <span className="font-bold text-[#94A3B8] tracking-wide">STATE</span><span className="font-extrabold">ALL 50</span>
+                <span className="font-bold text-[#94A3B8] tracking-wide">REST</span><span className="font-extrabold">NONE</span>
+              </div>
+              <div className="mt-3.5 w-3/4 border-b border-[#94A3B8]">
+                <span className="block text-[9px] font-bold text-[#94A3B8] tracking-[0.14em] mb-0.5">SIGNATURE</span>
+              </div>
+            </div>
+
+            {/* gold seal */}
+            <div aria-hidden="true" className="absolute right-5 bottom-2 w-12 h-12 rounded-full opacity-25 pointer-events-none" style={{ background: 'radial-gradient(circle at 35% 35%, #FDE68A, #F59E0B)' }} />
+          </div>
+
+          {/* CTA */}
+          <div className="px-5 pb-5 pt-1">
+            <button
+              type="button"
+              onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
+              className="w-full px-8 py-3.5 rounded-xl font-bold text-base text-[#0B1C3D] transition-all shadow-md hover:brightness-105"
+              style={{ background: 'linear-gradient(135deg, #FDE68A, #FBBF24)' }}
+            >
+              {tex.finalCtaText || 'Choose your state and start'}
+            </button>
+          </div>
         </div>
       </section>
 
