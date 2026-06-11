@@ -22,16 +22,23 @@ const langs = [
 // Shared header used across landing/SEO pages. Mirrors the home page header
 // so SEO landings (e.g. /dmv-test) get the same lang switcher, auth pill,
 // and nav row without each page reimplementing them.
-export default function SiteHeader() {
+export default function SiteHeader({ initialLang = 'en' }) {
   const { user, isPro, planType } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
-  const [lang, setLang] = useState('English');
+  // Seed from the server-read cookie (initialLang) so SSR and the first client
+  // render agree on the flag — initializing to a constant would re-render to the
+  // saved lang after mount and trip a hydration mismatch on the flag SVG.
+  const [lang, setLang] = useState(codeToName[initialLang] || 'English');
   const [showLangMenu, setShowLangMenu] = useState(false);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-shot client-only read of the saved lang after mount
-    setLang(codeToName[getSavedLang()] || 'English');
+    // Reconcile against localStorage in the rare case it drifted from the cookie
+    // used for SSR. The functional update bails out when they already match, so
+    // the common path never re-renders or flickers.
+    const savedName = codeToName[getSavedLang()] || 'English';
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-shot reconcile of cookie-seeded lang against localStorage; bails out when they match
+    setLang(prev => (prev === savedName ? prev : savedName));
   }, []);
 
   const langToCode = { English: 'en', 'Русский': 'ru', 'Español': 'es', '中文': 'zh', 'Українська': 'ua' };
