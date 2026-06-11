@@ -637,16 +637,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Final CTA — the license they came for, rendered as a real DL card.
-          Field labels stay in English caps like an actual US license (document
-          authenticity, not marketing shouting); title/sub/button localize. */}
+      {/* Final CTA — a license card whose fields ARE the value props, so reading
+          it makes you want the license. No fake personal data / barcode /
+          signature; the rows sell what you actually get. */}
       <section className="w-full max-w-lg mx-auto mb-8 px-4">
         <h2 className="text-xl font-bold text-[#0B1C3D] text-center mb-1">{tex.licCtaTitle || 'Ready to get your license?'}</h2>
         <p className="text-sm text-[#64748B] text-center mb-4">{tex.licCtaSub || "Let's practice: 20 free questions, no signup"}</p>
 
-        <div className="relative overflow-hidden rounded-2xl border border-[#CBD5E1] shadow-lg bg-gradient-to-br from-[#F8FAFC] via-[#EFF6FF] to-[#E0F2FE]">
+        <div className="relative overflow-hidden rounded-2xl border border-[#CBD5E1] shadow-lg bg-gradient-to-br from-[#F8FAFC] to-[#EFF6FF]">
           {/* holographic sheen */}
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0" style={{ background: 'linear-gradient(115deg, transparent 38%, rgba(255,255,255,0.55) 48%, transparent 58%)' }} />
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0" style={{ background: 'linear-gradient(120deg, transparent 42%, rgba(255,255,255,0.4) 50%, transparent 58%)' }} />
 
           {/* header band */}
           <div className="relative z-10 flex items-center justify-between px-5 py-3" style={{ background: 'linear-gradient(115deg, #0B1C3D 0%, #1E3A5F 55%, #2563EB 100%)' }}>
@@ -662,35 +662,26 @@ export default function Home() {
             <span className="text-[12px] font-extrabold tracking-[0.14em] text-[#FBBF24]">DMVSOS</span>
           </div>
 
-          {/* body: photo + fields */}
-          <div className="relative z-10 flex gap-4 px-5 pt-4 pb-3 items-start">
-            <div className="w-[84px] h-[104px] rounded-lg bg-gradient-to-b from-[#DBEAFE] to-[#BFDBFE] border border-[#BFDBFE] flex items-center justify-center shrink-0 shadow-inner">
-              <svg width="46" height="46" viewBox="0 0 24 24" aria-hidden="true" style={{ fill: '#93C5FD' }}>
-                <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
+          {/* body: verified emblem + value-prop fields */}
+          <div className="relative z-10 flex gap-4 px-5 py-5 items-center">
+            <div className="w-[68px] h-[84px] rounded-xl bg-gradient-to-br from-[#2563EB] to-[#0B1C3D] flex items-center justify-center shrink-0 shadow-md">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 12.5l4.2 4.2L19 7" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
 
             <div className="flex-1 min-w-0 text-[#0B1C3D]">
-              <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-[12px] leading-tight">
-                <span className="font-bold text-[#94A3B8] tracking-wide">NAME</span><span className="font-extrabold tracking-wide truncate">YOUR NAME</span>
-                <span className="font-bold text-[#94A3B8] tracking-wide">CLASS</span><span className="font-extrabold">C &middot; M &middot; CDL</span>
-                <span className="font-bold text-[#94A3B8] tracking-wide">STATE</span><span className="font-extrabold">ALL 50</span>
-                <span className="font-bold text-[#94A3B8] tracking-wide">REST</span><span className="font-extrabold">NONE</span>
-              </div>
-              <div className="mt-3.5 w-3/4 border-b border-[#94A3B8]">
-                <span className="block text-[9px] font-bold text-[#94A3B8] tracking-[0.14em] mb-0.5">SIGNATURE</span>
+              <div className="grid grid-cols-[auto_1fr] gap-x-3.5 gap-y-2.5 text-[12.5px] leading-tight items-center">
+                <span className="font-bold text-[10px] text-[#94A3B8] tracking-wider">CLASS</span><span className="font-extrabold">Car &middot; Moto &middot; CDL</span>
+                <span className="font-bold text-[10px] text-[#94A3B8] tracking-wider">COVERAGE</span><span className="font-extrabold">{tex.licRowCoverage || 'All 50 states'}</span>
+                <span className="font-bold text-[10px] text-[#94A3B8] tracking-wider">LANGUAGES</span><span className="font-extrabold">{tex.licRowLangs || '5 languages'}</span>
+                <span className="font-bold text-[10px] text-[#94A3B8] tracking-wider">BANK</span><span className="font-extrabold">{tex.licRowBank || '35,000+ questions'}</span>
               </div>
             </div>
-
-            {/* gold seal */}
-            <div aria-hidden="true" className="absolute right-5 bottom-2 w-12 h-12 rounded-full opacity-25 pointer-events-none" style={{ background: 'radial-gradient(circle at 35% 35%, #FDE68A, #F59E0B)' }} />
           </div>
 
-          {/* faux barcode strip for document feel */}
-          <div aria-hidden="true" className="relative z-10 mx-5 mb-1 h-6 rounded-sm opacity-80" style={{ background: 'repeating-linear-gradient(90deg, #0B1C3D 0, #0B1C3D 2px, transparent 2px, transparent 4px, #0B1C3D 4px, #0B1C3D 5px, transparent 5px, transparent 9px, #0B1C3D 9px, #0B1C3D 10px, transparent 10px, transparent 13px)' }} />
-
           {/* CTA */}
-          <div className="relative z-10 px-5 pb-5 pt-2">
+          <div className="relative z-10 px-5 pb-5 pt-0">
             <button
               type="button"
               onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
