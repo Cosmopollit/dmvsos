@@ -625,7 +625,7 @@ export default function Home() {
 
       {/* FAQ — the whole section is a dropdown, and each question inside is too.
           Both collapsed by default to keep the page short. */}
-      <section className="w-full max-w-lg mx-auto mb-8 px-4">
+      <section className="w-full max-w-lg mx-auto mb-5 px-4">
         <details className="group/sec">
           <summary className="cursor-pointer list-none flex items-center justify-center gap-2 mb-5">
             <h2 className="text-lg font-bold text-[#0B1C3D]">{tex.faqTitle}</h2>
@@ -648,7 +648,7 @@ export default function Home() {
       {/* Final CTA — a license card whose fields ARE the value props, so reading
           it makes you want the license. No fake personal data / barcode /
           signature; the rows sell what you actually get. */}
-      <section className="w-full max-w-lg mx-auto mb-8 px-4">
+      <section className="w-full max-w-lg mx-auto mb-3 px-4">
         <h2 className="text-xl font-bold text-[#0B1C3D] text-center mb-1">{tex.licCtaTitle || 'Ready to get your license?'}</h2>
         <p className="text-sm text-[#64748B] text-center mb-4">{tex.licCtaSub || "Let's practice: 20 free questions, no signup"}</p>
 
@@ -703,7 +703,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="w-full max-w-lg mx-auto px-4 mt-8 pb-8">
+      <footer className="w-full max-w-lg mx-auto px-4 mt-3 pb-6">
         <p className="text-xs text-[#94A3B8] text-center leading-relaxed">
           {tex.footerLegal || 'By continuing, you agree to our'}{' '}
           <Link href="/terms" className="text-[#2563EB] font-medium">{tex.terms || 'Terms'}</Link> {tex.and || 'and'}{' '}
