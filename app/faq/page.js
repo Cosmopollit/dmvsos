@@ -23,7 +23,7 @@ const QA = [
   },
   {
     q: 'Do you offer the Commercial Driver License (CDL) test?',
-    a: 'Yes. CDL Pro pass includes General Knowledge, Air Brakes, and Combination Vehicles sections. Specific endorsements (Hazmat, Tanker, Passenger, School Bus) are coming. CDL Pro includes our Pass Guarantee: pass the real CDL test or get a 100% refund.',
+    a: 'Yes. CDL Pro pass includes General Knowledge, Air Brakes, and Combination Vehicles sections, and the Car tests are included too. Specific endorsements (Hazmat, Tanker, Passenger, School Bus) are coming.',
   },
   {
     q: 'Is there a subscription?',
@@ -31,7 +31,7 @@ const QA = [
   },
   {
     q: 'What is the refund policy?',
-    a: 'Passes are one-time purchases, so they are final. If something is wrong, message us and we will make it right. CDL Pro carries a Pass Guarantee: pass the real CDL test or get a 100% refund (submit your DMV fail letter within 30 days).',
+    a: 'Passes are one-time purchases, so they are final. If something is wrong, message us on Telegram and we will make it right.',
   },
   {
     q: 'Do I need to create an account?',

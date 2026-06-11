@@ -64,7 +64,7 @@ function UpgradeContent() {
       img: '/vehicles/truck-hero.png',
       name: tex.planCdlPro,
       duration: tex.planDuration,
-      badge: tex.planGuaranteedBadge,
+      badge: tex.planCdlBadge || 'Car tests included',
       features: tex.featCdl,
       btnLabel: tex.planGetCdl,
     },
@@ -303,11 +303,8 @@ function UpgradeContent() {
         </ul>
       </div>
 
-      {/* Removed: pricing value-prop line claimed "money back if you don't
-          pass" — that's NOT our actual policy (24h refund is universal,
-          fail-refund only exists for CDL Pro Pass Guarantee). Kept the
-          24h-refund / no-subscription wording inside the bureaucracy block
-          and the upgradeSubtext at the top — those are accurate. */}
+      {/* No refund or guarantee claims anywhere: there is no pass guarantee,
+          no money-back, no 24h refund, on any plan. All sales are final. */}
 
       {error && (
         <p className="text-center text-xs text-red-400 font-medium mb-4">

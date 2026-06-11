@@ -131,7 +131,7 @@ const jsonLd = {
           name: 'CDL Pro',
           price: '49.99',
           priceCurrency: 'USD',
-          description: '30 days unlimited CDL (Commercial Driver License) practice tests with Pass Guarantee.',
+          description: '30 days unlimited CDL (Commercial Driver License) practice tests, with the Car tests included.',
         },
       ],
       featureList: [

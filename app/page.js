@@ -118,14 +118,6 @@ export default function Home() {
           text: 'Yes. DMVSOS covers all 50 US states for Car, CDL, and Motorcycle permit tests.',
         },
       },
-      {
-        '@type': 'Question',
-        name: 'What is the Pass Guarantee?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: `CDL Pro (${PASS_META.cdl.price}, 30-day access) includes a 100% money-back guarantee if you fail your CDL test, plus direct support via Telegram in your language.`,
-        },
-      },
     ],
   });
 
@@ -572,7 +564,7 @@ export default function Home() {
           {/* CDL Pro  ·  best value */}
           <div className="relative bg-white rounded-2xl p-5 border-2 border-[#F59E0B] shadow-md flex flex-col">
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#F59E0B] text-[#0B1C3D] text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap">
-              {tex.planGuaranteedBadge}
+              {tex.planCdlBadge || 'Car tests included'}
             </span>
             <div className="h-[66px] flex items-center justify-center mb-2 mt-1">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -711,13 +703,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer with guarantee badge */}
+      {/* Footer */}
       <footer className="w-full max-w-lg mx-auto px-4 mt-8 pb-8">
-        <div className="text-center mb-4">
-          <span className="inline-flex items-center gap-1.5 text-xs text-[#10B981] font-medium bg-[#ECFDF5] px-3 py-1.5 rounded-full">
-            <svg width="13" height="13" viewBox="0 0 24 24" className="shrink-0" style={{ fill: '#10B981' }}><path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1Z" /></svg>{tex.guaranteeBadge}
-          </span>
-        </div>
         <p className="text-xs text-[#94A3B8] text-center leading-relaxed">
           {tex.footerLegal || 'By continuing, you agree to our'}{' '}
           <Link href="/terms" className="text-[#2563EB] font-medium">{tex.terms || 'Terms'}</Link> {tex.and || 'and'}{' '}

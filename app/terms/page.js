@@ -59,8 +59,7 @@ export default function Terms() {
                 Moto Pass ($19.99) for motorcycle tests, Auto Pass ($29.99) for car tests, and CDL Pro
                 ($49.99) for CDL tests with car content included. Each pass unlocks 30 days of access.
                 An Extension ($9.99) adds another 30 days to any active pass.
-                All purchases are final. The CDL Pro plan includes a Pass Guarantee — a full refund if you fail your
-                CDL test (subject to verification by submitting your DMV fail letter within 30 days).
+                All purchases are final.
               </p>
             </section>
 

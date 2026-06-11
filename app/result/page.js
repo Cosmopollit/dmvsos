@@ -274,7 +274,7 @@ function ResultContent() {
                     borderColor: rIsCdl ? '#F59E0B' : rIsMoto ? '#D97706' : '#2563EB',
                     background: rIsCdl ? '#FFFBEB' : rIsMoto ? '#FFF7ED' : '#EFF6FF',
                   }}>
-                  {rIsCdl && <div className="text-[9px] font-bold text-[#0B1C3D] bg-[#F59E0B] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">{tex.planGuaranteedBadge}</div>}
+                  {rIsCdl && <div className="text-[9px] font-bold text-[#0B1C3D] bg-[#F59E0B] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">{tex.planCdlBadge || 'Car tests included'}</div>}
                   {!rIsCdl && !rIsMoto && <div className="text-[9px] font-bold text-white bg-[#2563EB] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">{tex.planPopular}</div>}
                   <div className="text-3xl mb-1">{rPlan.icon}</div>
                   <div className="text-xs font-bold mb-0.5" style={{ color: rIsCdl ? '#92400E' : rIsMoto ? '#D97706' : '#2563EB' }}>

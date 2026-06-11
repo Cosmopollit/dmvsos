@@ -75,7 +75,7 @@ export default function AboutPage() {
                 <strong>Free to start.</strong> 20 questions per state per language, no signup.
               </li>
               <li>
-                <strong>CDL Pass Guarantee:</strong> pass the real CDL test or get a 100% refund.
+                <strong>CDL Pro includes the Car tests too.</strong> One pass covers commercial and car prep.
               </li>
             </ul>
 

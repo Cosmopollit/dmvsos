@@ -117,20 +117,17 @@ Or just type your question - I'll forward it.`,
 
 🏍️ Moto Pass - $19.99 / 30 days
 🚗 Auto Pass - $29.99 / 30 days
-🚛 CDL Pro - $49.99 / 30 days + Pass Guarantee
+🚛 CDL Pro - $49.99 / 30 days (Car tests included)
 
-🔄 Need more time? Extend any pass for $9.99 / +30 days
-
-24h full refund. No questions asked.`,
+🔄 Need more time? Extend any pass for $9.99 / +30 days`,
     states: `🗽 We cover <b>all 50 US states + DC</b>.
 
 Just pick your state on dmvsos.com - every state has its own question bank built from the official driver's handbook.`,
     languages: `🌍 We support 5 languages:
 🇺🇸 English  🇷🇺 Русский  🇪🇸 Español  🇨🇳 中文  🇺🇦 Українська`,
-    refund: `💸 <b>Refund policy</b>
+    refund: `💸 <b>Payments</b>
 
-Within 24h of purchase: full refund, no questions asked.
-CDL Pro Pass Guarantee: refund or 90d extension if you fail the actual DMV test with 85%+ practice score.`,
+Passes are one-time purchases, so they are final. If something is wrong, message us here and we will make it right.`,
     human: `🧑‍💻 Sending your message to Evgenii (founder). Usually replies within 4 hours.`,
     forwardedAck: `✅ Got it. Evgenii will reply shortly.`,
     unknown: `Commands: /start /pricing /states /languages /refund /human /lang`,
@@ -139,10 +136,10 @@ CDL Pro Pass Guarantee: refund or 90d extension if you fail the actual DMV test 
   },
   ru: {
     welcome: `👋 Привет! Я бот поддержки DMVSOS.\n\n/pricing /states /languages /refund /human /lang\n\nИли просто напиши вопрос - передам.`,
-    pricing: `💰 <b>Одноразовая оплата - без подписок</b>\n\n🏍️ Moto Pass - $19.99 / 30 дней\n🚗 Auto Pass - $29.99 / 30 дней\n🚛 CDL Pro - $49.99 / 30 дней + Pass Guarantee\n\n🔄 Продление $9.99 / +30 дней\n24h полный refund.`,
+    pricing: `💰 <b>Одноразовая оплата - без подписок</b>\n\n🏍️ Moto Pass - $19.99 / 30 дней\n🚗 Auto Pass - $29.99 / 30 дней\n🚛 CDL Pro - $49.99 / 30 дней (тесты для авто включены)\n\n🔄 Продление $9.99 / +30 дней`,
     states: `🗽 Покрываем <b>все 50 штатов + DC</b>. Выбери штат на dmvsos.com.`,
     languages: `🌍 5 языков: 🇺🇸 EN · 🇷🇺 RU · 🇪🇸 ES · 🇨🇳 ZH · 🇺🇦 UA`,
-    refund: `💸 24h полный refund без вопросов. CDL Pro Pass Guarantee: refund или продление 90 дней при провале с 85%+ score.`,
+    refund: `💸 Пропуска - разовая покупка, поэтому они окончательны. Если что-то не так, напиши сюда, разберёмся.`,
     human: `🧑‍💻 Передаю Евгению. Обычно отвечает в течение 4 часов.`,
     forwardedAck: `✅ Получил. Евгений ответит скоро.`,
     unknown: `Команды: /start /pricing /states /languages /refund /human /lang`,
@@ -154,7 +151,7 @@ CDL Pro Pass Guarantee: refund or 90d extension if you fail the actual DMV test 
     pricing: `💰 Pago único, sin suscripciones\n🏍️ Moto $19.99 · 🚗 Auto $29.99 · 🚛 CDL $49.99 / 30 días\nExtensión $9.99 / +30 días`,
     states: `🗽 Los 50 estados + DC en dmvsos.com.`,
     languages: `🌍 5 idiomas: EN · RU · ES · ZH · UA`,
-    refund: `💸 Reembolso completo en 24h.`,
+    refund: `💸 Las compras son únicas y finales. Si algo está mal, escríbenos aquí y lo resolvemos.`,
     human: `🧑‍💻 Enviando a Evgenii. Responde en ~4h.`,
     forwardedAck: `✅ Recibido.`,
     unknown: `Comandos: /start /pricing /states /languages /refund /human /lang`,
@@ -166,7 +163,7 @@ CDL Pro Pass Guarantee: refund or 90d extension if you fail the actual DMV test 
     pricing: `💰 一次性付款\n🏍️ $19.99 · 🚗 $29.99 · 🚛 $49.99 / 30天`,
     states: `🗽 全美50州 + DC，在 dmvsos.com 选择`,
     languages: `🌍 5种语言`,
-    refund: `💸 24小时全额退款。`,
+    refund: `💸 通行证为一次性购买，因此为最终交易。如有问题，请在此联系我们，我们会处理。`,
     human: `🧑‍💻 转发给Evgenii，约4小时回复。`,
     forwardedAck: `✅ 已收到。`,
     unknown: `命令: /start /pricing /states /languages /refund /human /lang`,
@@ -178,7 +175,7 @@ CDL Pro Pass Guarantee: refund or 90d extension if you fail the actual DMV test 
     pricing: `💰 Разова оплата, без підписок\n🏍️ $19.99 · 🚗 $29.99 · 🚛 $49.99 / 30 днів`,
     states: `🗽 Усі 50 штатів + DC на dmvsos.com.`,
     languages: `🌍 5 мов`,
-    refund: `💸 Повне повернення протягом 24h.`,
+    refund: `💸 Пропуски - разова покупка, тож вони остаточні. Якщо щось не так, напиши сюди, розберемося.`,
     human: `🧑‍💻 Передаю Євгенію. Відповідає за ~4 години.`,
     forwardedAck: `✅ Прийнято.`,
     unknown: `Команди: /start /pricing /states /languages /refund /human /lang`,

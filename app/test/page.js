@@ -1234,7 +1234,7 @@ function TestContent() {
                     borderColor: isCdl ? '#F59E0B' : isMoto ? '#D97706' : '#2563EB',
                     background: isCdl ? '#FFFBEB' : isMoto ? '#FFF7ED' : '#EFF6FF',
                   }}>
-                  {isCdl && <div className="text-[9px] font-bold text-[#0B1C3D] bg-[#F59E0B] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">{tex.planGuaranteedBadge}</div>}
+                  {isCdl && <div className="text-[9px] font-bold text-[#0B1C3D] bg-[#F59E0B] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">{tex.planCdlBadge || 'Car tests included'}</div>}
                   {!isCdl && !isMoto && <div className="text-[9px] font-bold text-white bg-[#2563EB] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">{tex.planPopular}</div>}
                   <div className="text-3xl mb-1">{plan.icon}</div>
                   <div className="text-xs font-bold mb-0.5" style={{ color: isCdl ? '#92400E' : isMoto ? '#D97706' : '#2563EB' }}>
