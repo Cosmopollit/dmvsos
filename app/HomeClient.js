@@ -282,11 +282,12 @@ export default function HomeClient({ initialLang = 'en' }) {
         {/* Row 2: nav links  ·  centered. Tests + Manuals are live for everyone;
             "Take a break" unlocks after the first finished test (see BreakButton). */}
         <div className="flex flex-wrap items-center justify-center gap-2 pb-3">
-          <Link href="/dmv-test"
+          <button type="button"
+            onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
             className="inline-flex items-center gap-1.5 whitespace-nowrap text-xs font-semibold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] rounded-full px-3 py-1 hover:bg-[#DBEAFE] active:scale-95 transition">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="3" width="14" height="18" rx="2" /><path d="M9 7h6M9 11h6M9 15h4" /></svg>
             {tex.practiceTests}
-          </Link>
+          </button>
           <Link href="/manuals"
             className="inline-flex items-center gap-1.5 whitespace-nowrap text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-3 py-1 hover:border-[#2563EB] hover:text-[#2563EB] active:scale-95 transition">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 5a2 2 0 0 1 2-2h7v16H6a2 2 0 0 0-2 2V5z" /><path d="M13 3h5a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2h-5" /></svg>

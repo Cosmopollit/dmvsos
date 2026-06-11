@@ -136,7 +136,7 @@ export default function SiteHeader({ initialLang = 'en' }) {
       </div>
 
       <div className="flex flex-wrap items-center justify-center gap-2 pb-3">
-        <Link href="/dmv-test"
+        <Link href="/#state-selector"
           className={`inline-flex items-center gap-1.5 whitespace-nowrap text-xs font-semibold rounded-full px-3 py-1 active:scale-95 transition ${onPracticeTests ? 'text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE]' : 'text-[#64748B] bg-white border border-[#E2E8F0] hover:border-[#2563EB] hover:text-[#2563EB]'}`}>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="3" width="14" height="18" rx="2" /><path d="M9 7h6M9 11h6M9 15h4" /></svg>
           {tex.practiceTests}
