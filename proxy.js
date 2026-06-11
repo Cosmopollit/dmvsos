@@ -220,16 +220,21 @@ function isHighRiskIp(ip) {
   return false
 }
 
-// Paths the scraper has been observed crawling. Block fires only when
-// origin (country or IP) AND bot score AND path ALL match — a real
-// browser hitting any of these still passes because its score is 0-2.
-//   /api/test/questions   — the question bank API
-//   /manuals/...          — state driver manuals (we saw /manuals/new-hampshire)
-//   /dmv-test/<state>     — server-rendered SEO landing pages with content
+// Paths worth protecting from scrapers. Block fires only when origin
+// (country or IP) AND bot score AND path ALL match — a real browser hitting
+// these still passes because its score is 0-2.
+//
+// SCOPED DOWN to the question-bank API only. /manuals and /dmv-test used to
+// be here too, but those are public SEO landing pages MEANT to be crawled —
+// blocking them by IP range zapped Google's GCP-based crawlers
+// (Google-InspectionTool / GoogleOther) and collapsed google.com referrals
+// to ~8% of Bing's (see analytics + proxy good-bot history). The UA
+// allow-list patched the known Google crawlers, but blocking SEO pages by IP
+// is fragile: one new Google UA we don't list and the harm recurs. The
+// proprietary moat is the /api/test/questions data, not the marketing HTML —
+// so only the API stays defended; SEO pages are freely crawlable.
 const SCRAPER_TARGET_PATTERNS = [
   /^\/api\/test\/questions(?:\?|$)/,
-  /^\/manuals(?:\/|$)/,
-  /^\/dmv-test\/[\w-]+(?:\/|$)/,
 ]
 
 function isScraperTargetPath(path) {

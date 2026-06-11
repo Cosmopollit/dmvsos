@@ -44,6 +44,20 @@ const nextConfig = {
       },
     ];
   },
+  // Collapse the www host onto the canonical apex with a real 301. Both
+  // hosts were serving 200 (duplicate content); the canonical tag already
+  // pointed Google at the apex, but a hard redirect is the unambiguous
+  // signal and consolidates any www backlinks/crawl onto one host.
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.dmvsos.com' }],
+        destination: 'https://dmvsos.com/:path*',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
