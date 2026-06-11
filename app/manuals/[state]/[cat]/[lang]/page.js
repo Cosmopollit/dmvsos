@@ -14,14 +14,6 @@ const CAT_META = {
   motorcycle: { label: 'Motorcycle Handbook', icon: '🏍️', testCat: 'moto' },
 };
 
-const LANG_FLAGS = {
-  en: '🇺🇸', es: '🇪🇸', ru: '🇷🇺', zh: '🇨🇳', ua: '🇺🇦',
-  vi: '🇻🇳', ko: '🇰🇷', ar: '🇸🇦', fr: '🇫🇷', de: '🇩🇪',
-  hy: '🇦🇲', hi: '🇮🇳', pa: '🇮🇳', ht: '🇭🇹', so: '🇸🇴',
-  sw: '🇰🇪', my: '🇲🇲', ne: '🇳🇵', pt: '🇧🇷', ja: '🇯🇵', hmn: '🌿',
-  tl: '🇵🇭', sm: '🇼🇸', to: '🇹🇴', haw: '🌺', mh: '🇲🇭', ilo: '🇵🇭', chk: '🇫🇲',
-};
-
 const LANG_LABELS = {
   en: 'English', es: 'Español', zh: '中文', ru: 'Русский', ua: 'Українська',
   vi: 'Tiếng Việt', hy: 'Հայերեն', hi: 'हिन्दी', pa: 'ਪੰਜਾਬੀ', ht: 'Kreyòl',
@@ -60,6 +52,66 @@ const LANG_NATIVE = {
   mh:  { in: 'Kajin M̧ajeļ',   download: 'Download PDF',         study: 'Kobban ñan test',                   cta: 'Test wōt' },
   ilo: { in: 'Ilocano',         download: 'I-download ti PDF',    study: 'Aralen para iti eksamen',           cta: 'Libre nga pagbasa' },
   chk: { in: 'Chuukese',        download: 'Download PDF',         study: 'Fen ren ewe test',                  cta: 'Free test' },
+};
+
+// Localized category label (visible body only; metadata/JSON-LD stay English).
+// Falls back to CAT_META[cat].label for languages not listed here.
+const CAT_I18N = {
+  ru: { car: 'Руководство водителя', cdl: 'Руководство CDL', motorcycle: 'Руководство мотоциклиста' },
+  es: { car: 'Manual del conductor', cdl: 'Manual CDL', motorcycle: 'Manual de motocicleta' },
+  zh: { car: '驾驶手册',            cdl: 'CDL 手册',      motorcycle: '摩托车手册' },
+  ua: { car: 'Посібник водія',      cdl: 'Посібник CDL',  motorcycle: 'Посібник мотоцикліста' },
+};
+
+// Page chrome (buttons, headings, sentences) for the 5 core app languages.
+// Other manual languages fall back to English (en). Placeholders: {year}
+// {agency} {name} {nl}=native language label. No em-dashes in any language.
+const LANG_CHROME = {
+  en: {
+    allManuals: 'All Manuals', freeTest: 'Free Test', home: 'Home', manuals: 'Manuals',
+    official: 'Official', subtitle: 'The official {year} edition, published by {agency}. Free PDF below.',
+    edition: '{year} Edition · Free', opensPdf: 'Opens official PDF · No signup required',
+    otherLanguages: 'Other Languages', practiceTitle: '{name} Practice Test',
+    realQuestions: 'Real questions · {nl} · Free · No signup', otherStates: 'Other States',
+    allLanguages: 'All languages · {name}',
+    footer: 'Free DMV Practice Tests & Driver Manuals for All 50 States',
+  },
+  ru: {
+    allManuals: 'Все руководства', freeTest: 'Бесплатный тест', home: 'Главная', manuals: 'Руководства',
+    official: 'Официальное', subtitle: 'Официальное издание {year} года от {agency}. Бесплатный PDF ниже.',
+    edition: 'Издание {year} · Бесплатно', opensPdf: 'Открывает официальный PDF · Без регистрации',
+    otherLanguages: 'Другие языки', practiceTitle: 'Пробный тест · {name}',
+    realQuestions: 'Реальные вопросы · {nl} · Бесплатно · Без регистрации', otherStates: 'Другие штаты',
+    allLanguages: 'Все языки · {name}',
+    footer: 'Бесплатные тесты и руководства для всех 50 штатов',
+  },
+  es: {
+    allManuals: 'Todos los manuales', freeTest: 'Examen gratis', home: 'Inicio', manuals: 'Manuales',
+    official: 'Oficial', subtitle: 'Edición oficial {year}, publicada por {agency}. PDF gratis abajo.',
+    edition: 'Edición {year} · Gratis', opensPdf: 'Abre el PDF oficial · Sin registro',
+    otherLanguages: 'Otros idiomas', practiceTitle: 'Examen de práctica · {name}',
+    realQuestions: 'Preguntas reales · {nl} · Gratis · Sin registro', otherStates: 'Otros estados',
+    allLanguages: 'Todos los idiomas · {name}',
+    footer: 'Exámenes y manuales gratuitos para los 50 estados',
+  },
+  zh: {
+    allManuals: '所有手册', freeTest: '免费测试', home: '首页', manuals: '手册',
+    official: '官方', subtitle: '{agency} 发布的 {year} 年官方版本。下方提供免费 PDF。',
+    edition: '{year} 年版 · 免费', opensPdf: '打开官方 PDF · 无需注册',
+    otherLanguages: '其他语言', practiceTitle: '{name} 模拟考试',
+    realQuestions: '真实题目 · {nl} · 免费 · 无需注册', otherStates: '其他州',
+    allLanguages: '所有语言 · {name}',
+    footer: '全部 50 个州的免费练习测试和驾驶手册',
+  },
+  ua: {
+    allManuals: 'Усі посібники', freeTest: 'Безкоштовний тест', home: 'Головна', manuals: 'Посібники',
+    official: 'Офіційне', subtitle: 'Офіційне видання {year} року від {agency}. Безкоштовний PDF нижче.',
+    edition: 'Видання {year} · Безкоштовно', opensPdf: 'Відкриває офіційний PDF · Без реєстрації',
+    otherLanguages: 'Інші мови', practiceTitle: 'Пробний тест · {name}',
+    realQuestions: 'Справжні питання · {nl} · Безкоштовно · Без реєстрації', otherStates: 'Інші штати',
+    allLanguages: 'Усі мови · {name}',
+    footer: 'Безкоштовні тести та посібники для всіх 50 штатів',
+  },
 };
 
 // Full language name in English for SEO titles
@@ -158,8 +210,10 @@ export default async function StateManualLangPage({ params }) {
   const catInfo = CAT_META[cat];
   const native = LANG_NATIVE[lang] || LANG_NATIVE.en;
   const langEN = LANG_ENGLISH_NAME[lang] || lang.toUpperCase();
-  const flag = LANG_FLAGS[lang] || '📄';
   const nativeLabel = LANG_LABELS[lang] || lang.toUpperCase();
+  // Localized page chrome + category label (English fallback for non-core langs).
+  const ui = { ...LANG_CHROME.en, ...(LANG_CHROME[lang] || {}) };
+  const catLabel = CAT_I18N[lang]?.[cat] || catInfo.label;
 
   // Fetch PDF URL for this exact state/cat/lang
   const index = await fetchManualIndex();
@@ -221,13 +275,13 @@ export default async function StateManualLangPage({ params }) {
           </Link>
           <div className="flex items-center gap-3">
             <Link href="/manuals" className="text-xs font-medium text-[#64748B] hover:text-[#2563EB] transition">
-              All Manuals
+              {ui.allManuals}
             </Link>
             <Link
               href={`/category?state=${state}&lang=${lang}`}
               className="text-xs font-semibold text-[#2563EB] hover:text-[#1D4ED8] transition"
             >
-              Free Test
+              {ui.freeTest}
             </Link>
           </div>
         </div>
@@ -238,44 +292,42 @@ export default async function StateManualLangPage({ params }) {
         {/* Breadcrumb */}
         <nav className="text-xs text-[#94A3B8] mb-5 mt-1" aria-label="Breadcrumb">
           <ol className="flex items-center gap-1.5 flex-wrap">
-            <li><Link href="/" className="hover:text-[#2563EB]">Home</Link></li>
+            <li><Link href="/" className="hover:text-[#2563EB]">{ui.home}</Link></li>
             <li>/</li>
-            <li><Link href="/manuals" className="hover:text-[#2563EB]">Manuals</Link></li>
+            <li><Link href="/manuals" className="hover:text-[#2563EB]">{ui.manuals}</Link></li>
             <li>/</li>
             <li><Link href={`/manuals/${state}`} className="hover:text-[#2563EB]">{name}</Link></li>
             <li>/</li>
-            <li><Link href={`/manuals/${state}/${cat}`} className="hover:text-[#2563EB]">{catInfo.label}</Link></li>
+            <li><Link href={`/manuals/${state}/${cat}`} className="hover:text-[#2563EB]">{catLabel}</Link></li>
             <li>/</li>
-            <li className="text-[#1A2B4A] font-medium">{flag} {nativeLabel}</li>
+            <li className="text-[#1A2B4A] font-medium">{nativeLabel}</li>
           </ol>
         </nav>
 
         {/* H1 */}
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-3 flex-wrap">
-            <span className="text-2xl">{flag}</span>
             <span className="text-xs font-semibold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] rounded-full px-3 py-1">
-              Official {year} · {nativeLabel}
+              {ui.official} {year} · {nativeLabel}
             </span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-black text-[#0B1C3D] mb-2 leading-tight" style={{ letterSpacing: '-0.02em' }}>
-            {name} {catInfo.label}
+            {name} {catLabel}
             <span className="block text-[#2563EB]">{native.in}</span>
           </h1>
           <p className="text-sm text-[#64748B]">
-            The official {year} {name} {catInfo.label} in {langEN}, published by {meta.agency}.
-            Free PDF download below.
+            {ui.subtitle.replace('{year}', year).replace('{agency}', meta.agency)}
           </p>
         </div>
 
         {/* Primary PDF download | big CTA */}
         <div className="bg-white rounded-2xl border-2 border-[#2563EB] p-6 mb-5 shadow-md text-center">
-          <div className="text-4xl mb-3">{flag}</div>
+          <div className="text-4xl mb-3">{catInfo.icon}</div>
           <p className="text-base font-bold text-[#0B1C3D] mb-1">
-            {name} {catInfo.label} · {nativeLabel}
+            {name} {catLabel} · {nativeLabel}
           </p>
           <p className="text-xs text-[#64748B] mb-5">
-            {meta.agency} · {year} Edition · Free
+            {meta.agency} · {ui.edition.replace('{year}', year)}
           </p>
           <a
             href={pdfUrl}
@@ -285,14 +337,14 @@ export default async function StateManualLangPage({ params }) {
           >
             📥 {native.download}
           </a>
-          <p className="text-xs text-[#94A3B8] mt-3">Opens official PDF · No signup required</p>
+          <p className="text-xs text-[#94A3B8] mt-3">{ui.opensPdf}</p>
         </div>
 
         {/* Other languages for same state/cat */}
         {otherLangs.length > 0 && (
           <div className="bg-white rounded-2xl border border-[#E2E8F0] p-5 mb-5 shadow-sm">
             <h2 className="text-sm font-bold text-[#0B1C3D] mb-3">
-              {name} {catInfo.label} · Other Languages
+              {name} {catLabel} · {ui.otherLanguages}
             </h2>
             <div className="flex flex-wrap gap-2">
               {otherLangs.map(l => (
@@ -301,7 +353,6 @@ export default async function StateManualLangPage({ params }) {
                   href={`/manuals/${state}/${cat}/${l}`}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] hover:border-[#2563EB] hover:bg-[#EFF6FF] hover:text-[#2563EB] transition-all text-xs font-medium text-[#475569]"
                 >
-                  <span className="text-base leading-none">{LANG_FLAGS[l] || '📄'}</span>
                   <span>{LANG_LABELS[l] || l.toUpperCase()}</span>
                 </Link>
               ))}
@@ -315,10 +366,10 @@ export default async function StateManualLangPage({ params }) {
             {native.study}
           </p>
           <h2 className="text-base font-bold text-white mb-1">
-            {name} DMV Practice Test
+            {ui.practiceTitle.replace('{name}', name)}
           </h2>
           <p className="text-sm text-[#94A3B8] mb-4">
-            Real questions · {nativeLabel} · Free · No signup
+            {ui.realQuestions.replace('{nl}', nativeLabel)}
           </p>
           <Link
             href={`/test?state=${state}&category=${catInfo.testCat}&lang=${lang}`}
@@ -332,7 +383,7 @@ export default async function StateManualLangPage({ params }) {
         {otherStatesWithLang.length > 0 && (
           <div className="mb-8">
             <h2 className="text-sm font-bold text-[#0B1C3D] mb-3">
-              {catInfo.icon} {catInfo.label} {native.in} · Other States
+              {catInfo.icon} {catLabel} {native.in} · {ui.otherStates}
             </h2>
             <div className="grid grid-cols-2 gap-2">
               {otherStatesWithLang.map(s => (
@@ -341,7 +392,7 @@ export default async function StateManualLangPage({ params }) {
                   href={`/manuals/${s}/${cat}/${lang}`}
                   className="p-3 rounded-xl border border-[#E2E8F0] bg-white hover:border-[#2563EB] hover:shadow-sm transition-all text-sm font-medium text-[#1A2B4A] hover:text-[#2563EB]"
                 >
-                  {flag} {STATE_DISPLAY[s]}{' '}
+                  {STATE_DISPLAY[s]}{' '}
                   <span className="text-[#94A3B8] text-xs">({STATE_META[s].abbr})</span>
                 </Link>
               ))}
@@ -349,7 +400,7 @@ export default async function StateManualLangPage({ params }) {
                 href={`/manuals/${state}/${cat}`}
                 className="p-3 rounded-xl border border-[#2563EB] bg-[#EFF6FF] text-sm font-semibold text-[#2563EB] text-center col-span-2 hover:bg-[#DBEAFE] transition-colors"
               >
-                All {name} {catInfo.label} Languages
+                {ui.allLanguages.replace('{name}', name)}
               </Link>
             </div>
           </div>
@@ -359,7 +410,7 @@ export default async function StateManualLangPage({ params }) {
 
       <footer className="border-t border-[#E2E8F0] py-8 text-center text-xs text-[#94A3B8]">
         <div className="max-w-lg mx-auto px-4">
-          DMVSOS.com · Free DMV Practice Tests &amp; Driver Manuals for All 50 States
+          DMVSOS.com · {ui.footer}
         </div>
       </footer>
     </div>
