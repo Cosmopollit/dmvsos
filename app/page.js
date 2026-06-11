@@ -10,6 +10,7 @@ import { getSavedLang, saveLang, hasSavedLang, detectBrowserLang, isLangBannerDi
 import { STATE_OPTIONS, stateToSlug } from '@/lib/states';
 import { flags } from '@/lib/flags';
 import { PASS_META, EXTENSION } from '@/lib/plans';
+import { agencyAbbrForState } from '@/lib/agencies';
 import { useExperiment } from '@/lib/experiments';
 import SupportFooter from '@/app/components/SupportFooter';
 import WelcomeBanner from '@/app/components/WelcomeBanner';
@@ -37,6 +38,8 @@ export default function Home() {
   // Also pre-select the state from the geo cookie set by proxy.js, and suggest
   // the browser language banner if nothing is saved yet.
   const [suggestedLang, setSuggestedLang] = useState(null);
+  // The final-CTA envelope: closed until the user tears it open.
+  const [letterOpen, setLetterOpen] = useState(false);
   useEffect(() => {
     const urlLang = new URLSearchParams(window.location.search).get('lang');
     const valid = ['en', 'ru', 'es', 'zh', 'ua'];
@@ -83,11 +86,46 @@ export default function Home() {
   }
 
   const stateOptions = STATE_OPTIONS.map((display) => ({ name: display, code: stateToSlug(display) }));
+  // Envelope return address: "CALIFORNIA DMV" when we know the state
+  // (saved pick or geo cookie), plain "DMV" otherwise.
+  const stateNameForLetter = state
+    ? (stateOptions.find(o => o.code === state)?.name || '').replace(/\s*\([A-Z]{2}\)\s*$/, '')
+    : '';
+  const agencyLabel = state ? `${stateNameForLetter} ${agencyAbbrForState(state)}`.trim() : 'DMV';
+  // Road stops: practice here (brand logo) → DMV office → the license → the road.
   const steps = [
-    { label: tex.step1, msg: tex.stepMsg1 },
-    { label: tex.step2, msg: tex.stepMsg2 },
-    { label: tex.step3, msg: tex.stepMsg3 },
-    { label: tex.step4, msg: tex.stepMsg4 },
+    {
+      label: tex.step1, msg: tex.stepMsg1, ring: '#2563EB',
+      // eslint-disable-next-line @next/next/no-img-element
+      icon: <img src="/logo.png" alt="" aria-hidden="true" className="w-[26px] h-[26px] rounded-md" />,
+    },
+    {
+      label: tex.step2, msg: tex.stepMsg2, ring: '#2563EB',
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="#2563EB" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 21h18M4 21V9.5L12 4l8 5.5V21M9 21v-5h6v5M8 12h.01M12 12h.01M16 12h.01" />
+        </svg>
+      ),
+    },
+    {
+      label: tex.step3, msg: tex.stepMsg3, ring: '#F59E0B',
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="#B45309" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="5" width="18" height="14" rx="2.5" />
+          <circle cx="8.2" cy="11" r="1.8" />
+          <path d="M5.8 15.6c.5-1.3 1.4-2 2.4-2s1.9.7 2.4 2M14 9.5h4.5M14 12.5h4.5M14 15.5h3" />
+        </svg>
+      ),
+    },
+    {
+      label: tex.step4, msg: tex.stepMsg4, ring: '#16A34A',
+      icon: (
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="#15803D" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M5 16l1.2-4.2A2 2 0 0 1 8.1 10h7.8a2 2 0 0 1 1.9 1.8L19 16M5 16h14M5 16v3h1.8l.7-1.6h9l.7 1.6H19v-3" />
+          <path d="M7.6 13.4h.01M16.4 13.4h.01" />
+        </svg>
+      ),
+    },
   ];
 
   const faqJsonLd = JSON.stringify({
@@ -479,30 +517,32 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How it works  ·  static 4-column grid */}
+      {/* The road to your license — four stops on a dashed road. Stop 1 is the
+          brand (practicing here), stop 2 will later link to the DMV-offices
+          directory, the goal is the license, then the open road. */}
       <section className="w-full max-w-lg mx-auto mb-8 px-4">
         <h2 className="text-center text-lg font-bold text-[#0B1C3D] mb-6">
           {tex.howItWorks}
         </h2>
 
-        <div className="grid grid-cols-4 gap-2">
-          {steps.map((step, i) => (
-            <div
-              key={i}
-              className="flex flex-col items-center p-3 rounded-2xl bg-white border border-[#F1F5F9] shadow-sm"
-            >
-              {/* Step number */}
-              <div className="w-5 h-5 rounded-full bg-[#2563EB] text-white text-[10px] font-bold flex items-center justify-center mb-2">
-                {i + 1}
-              </div>
-              <span className="text-xs text-center font-semibold leading-tight text-[#0B1C3D]">
-                {String(step.label || '').replace(/\p{Extended_Pictographic}/gu, '').trim()}
-              </span>
-              <span className="text-[10px] text-center text-[#94A3B8] mt-1 leading-tight">
-                {String(step.msg || '').replace(/\p{Extended_Pictographic}/gu, '').trim()}
-              </span>
+        <div className="bg-white rounded-2xl border border-[#F1F5F9] shadow-sm px-3 py-5">
+          <div className="relative">
+            <div aria-hidden="true" className="absolute left-[12%] right-[12%] top-[22px] border-t-[3px] border-dashed border-[#CBD5E1]" />
+            <div className="relative grid grid-cols-4 gap-1">
+              {steps.map((step, i) => (
+                <div key={i} className="flex flex-col items-center text-center">
+                  <div
+                    className="w-11 h-11 rounded-full flex items-center justify-center bg-white"
+                    style={{ border: `2px solid ${step.ring}`, boxShadow: '0 2px 8px rgba(11, 28, 61, 0.08)' }}
+                  >
+                    {step.icon}
+                  </div>
+                  <span className="text-[12px] font-semibold leading-tight text-[#0B1C3D] mt-2">{step.label}</span>
+                  <span className="text-[10.5px] text-[#94A3B8] mt-0.5 leading-tight px-0.5">{step.msg}</span>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </section>
 
@@ -645,66 +685,124 @@ export default function Home() {
         </details>
       </section>
 
-      {/* Final CTA — a license card whose fields ARE the value props, so reading
-          it makes you want the license. No fake personal data / barcode /
-          signature; the rows sell what you actually get. */}
+      {/* Final CTA — a sealed letter from the user's DMV/DOL. The button tears
+          the corner open and the license letter (value props + CTA) is inside.
+          Agency line personalizes from the saved/geo state. */}
       <section className="w-full max-w-lg mx-auto mb-3 px-4">
         <h2 className="text-xl font-bold text-[#0B1C3D] text-center mb-1">{tex.licCtaTitle || 'Ready to get your license?'}</h2>
         <p className="text-sm text-[#64748B] text-center mb-4">{tex.licCtaSub || "Let's practice: 20 free questions, no signup"}</p>
 
-        {/* Gentle 3D tilt: mutate transform directly (no state, no re-render);
-            resets smoothly on leave. Touch devices simply never fire it. */}
         <div
-          className="relative overflow-hidden rounded-3xl border border-[#E2E8F0] bg-gradient-to-br from-white to-[#F5F9FF]"
-          style={{ boxShadow: '0 12px 32px rgba(11, 28, 61, 0.10)', transition: 'transform 0.35s ease, box-shadow 0.35s ease', willChange: 'transform' }}
-          onMouseMove={(e) => {
-            const el = e.currentTarget;
-            const r = el.getBoundingClientRect();
-            const x = (e.clientX - r.left) / r.width - 0.5;
-            const y = (e.clientY - r.top) / r.height - 0.5;
-            el.style.transform = `perspective(900px) rotateY(${(x * 5).toFixed(2)}deg) rotateX(${(-y * 5).toFixed(2)}deg)`;
-            el.style.boxShadow = '0 18px 44px rgba(11, 28, 61, 0.16)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg)';
-            e.currentTarget.style.boxShadow = '0 12px 32px rgba(11, 28, 61, 0.10)';
+          className="relative overflow-hidden rounded-2xl border"
+          style={{
+            minHeight: 320,
+            borderColor: letterOpen ? '#E2E8F0' : '#E5DCC8',
+            background: letterOpen ? '#FFFFFF' : 'linear-gradient(180deg, #FFFDF7, #F8F1E2)',
+            boxShadow: '0 12px 32px rgba(11, 28, 61, 0.10)',
+            transition: 'background 0.5s ease 0.3s, border-color 0.5s ease 0.3s',
           }}
         >
-          {/* soft sheen */}
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0" style={{ background: 'linear-gradient(120deg, transparent 44%, rgba(255,255,255,0.5) 52%, transparent 60%)' }} />
+          {/* airmail edge strip */}
+          <div
+            aria-hidden="true"
+            className="absolute left-0 right-0 top-0 h-[7px] z-10"
+            style={{
+              background: 'repeating-linear-gradient(115deg, #D85A5A 0 14px, #FFFDF7 14px 26px, #3E6DB5 26px 40px, #FFFDF7 40px 52px)',
+              opacity: letterOpen ? 0 : 0.85,
+              transition: 'opacity 0.4s ease 0.25s',
+            }}
+          />
 
-          {/* header band */}
-          <div className="relative z-10 flex items-center justify-between px-6 py-3.5" style={{ background: 'linear-gradient(115deg, #16294D 0%, #1E3A5F 60%, #2B4C7E 100%)' }}>
-            <div className="leading-none">
-              <span className="block text-[12px] font-bold tracking-[0.2em] text-[#F1F5F9]">DRIVER LICENSE</span>
-              <span className="block mt-1.5 text-[8px] font-semibold tracking-[0.26em] text-[#9DB8DD]">UNITED STATES &middot; PRACTICE</span>
-            </div>
-            <span className="text-[12px] font-bold tracking-[0.16em] text-[#FBCB5C]">DMVSOS</span>
+          {/* the corner that tears off */}
+          <div
+            aria-hidden="true"
+            className="absolute right-0 top-0 z-30 pointer-events-none"
+            style={{
+              width: 64, height: 48,
+              transformOrigin: '100% 0%',
+              transform: letterOpen ? 'rotate(38deg) translate(40px, -50px)' : 'none',
+              opacity: letterOpen ? 0 : 1,
+              transition: 'transform 0.5s ease, opacity 0.4s ease 0.12s',
+            }}
+          >
+            <svg viewBox="0 0 64 48" className="w-full h-full block">
+              <path d="M0 0 H64 V43 L55 37 L48 43 L40 34 L33 40 L26 31 L19 36 L11 25 L5 28 L0 16 Z" fill="#F2E9D5" stroke="#DCCFB0" strokeWidth="1" />
+              <path d="M3 4 L13 22" stroke="#C9B98F" strokeWidth="1" strokeDasharray="3 3" />
+            </svg>
           </div>
 
-          {/* body: brand emblem in the photo slot + value-prop fields */}
-          <div className="relative z-10 flex gap-4 px-5 py-5 items-center">
-            <div className="w-[64px] h-[80px] rounded-2xl bg-white border border-[#E2E8F0] flex items-center justify-center shrink-0" style={{ boxShadow: 'inset 0 1px 4px rgba(11, 28, 61, 0.06)' }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.png" alt="" aria-hidden="true" className="w-[46px] h-[46px] rounded-xl" />
-            </div>
-
-            <div className="flex-1 min-w-0 text-[#1E293B]">
-              <div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-2.5 text-[12.5px] leading-tight items-center">
-                <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">CLASS</span><span className="font-semibold whitespace-nowrap">Car &middot; Moto &middot; CDL</span>
-                <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">COVERAGE</span><span className="font-semibold">{tex.licRowCoverage || 'All 50 states'}</span>
-                <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">LANGUAGES</span><span className="font-semibold">{tex.licRowLangs || '5 languages'}</span>
-                <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">BANK</span><span className="font-semibold">{tex.licRowBank || '35,000+ questions'}</span>
+          {/* closed envelope face */}
+          <div
+            className="absolute inset-0 z-20 flex flex-col justify-between p-5 pt-7"
+            style={{
+              opacity: letterOpen ? 0 : 1,
+              pointerEvents: letterOpen ? 'none' : 'auto',
+              transition: 'opacity 0.35s ease 0.2s',
+            }}
+            aria-hidden={letterOpen}
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="leading-tight pt-1">
+                <span className="block text-[9px] font-semibold tracking-[0.18em] text-[#A1937B]">FROM</span>
+                <span className="block text-[13px] font-bold tracking-wide text-[#4A3F2C] mt-1 uppercase">
+                  {(tex.licLetterFrom || 'A letter from {agency}').replace('{agency}', agencyLabel)}
+                </span>
+              </div>
+              {/* stamp: brand logo with perforated border + postmark */}
+              <div className="relative shrink-0 mr-12 mt-2">
+                <div className="w-[52px] h-[60px] bg-white flex items-center justify-center" style={{ border: '2px dashed #C9B98F', transform: 'rotate(3deg)' }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/logo.png" alt="" aria-hidden="true" className="w-[34px] h-[34px] rounded-md" />
+                </div>
+                <div aria-hidden="true" className="absolute -left-5 top-3 w-[46px] h-[46px] rounded-full" style={{ border: '1.5px solid rgba(74, 63, 44, 0.35)' }} />
               </div>
             </div>
+
+            <div className="text-center px-4">
+              <span className="block text-[15px] italic text-[#4A3F2C]" style={{ fontFamily: 'Georgia, serif' }}>
+                {tex.licLetterTo || 'To: the future driver'}
+              </span>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setLetterOpen(true)}
+              className="w-full px-8 py-3.5 rounded-xl font-bold text-base text-[#0B1C3D] transition-all hover:brightness-[1.04] active:scale-[0.99]"
+              style={{ background: 'linear-gradient(135deg, #FDE68A, #FBBF24)', boxShadow: '0 6px 16px rgba(245, 158, 11, 0.28)' }}
+            >
+              {tex.licOpenLetter || 'Open the letter'}
+            </button>
           </div>
 
-          {/* CTA */}
-          <div className="relative z-10 px-6 pb-6 pt-0.5">
+          {/* the letter inside */}
+          <div
+            className="relative z-10 p-5 pt-6"
+            style={{
+              opacity: letterOpen ? 1 : 0,
+              transform: letterOpen ? 'translateY(0)' : 'translateY(16px)',
+              pointerEvents: letterOpen ? 'auto' : 'none',
+              transition: 'opacity 0.45s ease 0.4s, transform 0.45s ease 0.4s',
+            }}
+            aria-hidden={!letterOpen}
+          >
+            <div className="flex items-center gap-2.5 pb-3 mb-4 border-b border-[#F1F5F9]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo.png" alt="" aria-hidden="true" className="w-[26px] h-[26px] rounded-md" />
+              <span className="text-[12px] font-bold tracking-[0.14em] text-[#0B1C3D]">DMVSOS</span>
+              <span className="ml-auto text-[9px] font-semibold tracking-[0.18em] text-[#A3B2C6] uppercase">{agencyLabel}</span>
+            </div>
+
+            <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2.5 text-[13px] leading-tight items-center text-[#1E293B] mb-5">
+              <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">CLASS</span><span className="font-semibold whitespace-nowrap">Car &middot; Moto &middot; CDL</span>
+              <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">COVERAGE</span><span className="font-semibold">{tex.licRowCoverage || 'All 50 states'}</span>
+              <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">LANGUAGES</span><span className="font-semibold">{tex.licRowLangs || '5 languages'}</span>
+              <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">BANK</span><span className="font-semibold">{tex.licRowBank || '35,000+ questions'}</span>
+            </div>
+
             <button
               type="button"
               onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
-              className="w-full px-8 py-3.5 rounded-2xl font-bold text-base text-[#0B1C3D] transition-all hover:brightness-[1.04] active:scale-[0.99]"
+              className="w-full px-8 py-3.5 rounded-xl font-bold text-base text-[#0B1C3D] transition-all hover:brightness-[1.04] active:scale-[0.99]"
               style={{ background: 'linear-gradient(135deg, #FDE68A, #FBBF24)', boxShadow: '0 6px 16px rgba(245, 158, 11, 0.28)' }}
             >
               {tex.finalCtaText || 'Choose your state and start'}
