@@ -687,17 +687,17 @@ export default function Home() {
       {/* Final CTA — a sealed letter from the user's DMV/DOL. The button tears
           the corner open and the license letter (value props + CTA) is inside.
           Agency line personalizes from the saved/geo state. */}
-      <section className="w-full max-w-lg mx-auto mb-3 px-4">
+      <section className="w-full max-w-md mx-auto mb-3 px-4">
         <h2 className="text-xl font-bold text-[#0B1C3D] text-center mb-1">{tex.licCtaTitle || 'Ready to get your license?'}</h2>
         <p className="text-sm text-[#64748B] text-center mb-4">{tex.licCtaSub || "Let's practice: 20 free questions, no signup"}</p>
 
         <div
           className="relative overflow-hidden rounded-2xl border"
           style={{
-            minHeight: 320,
+            minHeight: 196,
             borderColor: letterOpen ? '#E2E8F0' : '#E5DCC8',
-            background: letterOpen ? '#FFFFFF' : 'linear-gradient(180deg, #FFFDF7, #F8F1E2)',
-            boxShadow: '0 12px 32px rgba(11, 28, 61, 0.10)',
+            background: letterOpen ? '#FFFFFF' : 'linear-gradient(180deg, #FFFDF7, #F6EEDC)',
+            boxShadow: '0 12px 30px rgba(11, 28, 61, 0.10)',
             transition: 'background 0.5s ease 0.3s, border-color 0.5s ease 0.3s',
           }}
         >
@@ -707,66 +707,72 @@ export default function Home() {
             className="absolute left-0 right-0 top-0 h-[7px] z-10"
             style={{
               background: 'repeating-linear-gradient(115deg, #D85A5A 0 14px, #FFFDF7 14px 26px, #3E6DB5 26px 40px, #FFFDF7 40px 52px)',
-              opacity: letterOpen ? 0 : 0.85,
-              transition: 'opacity 0.4s ease 0.25s',
+              opacity: letterOpen ? 0 : 0.9,
+              transition: 'opacity 0.4s ease 0.2s',
             }}
           />
 
-          {/* the corner that tears off */}
+          {/* the corner that tears off — explicit identity transform when closed
+              so the browser actually animates the rip (transition from 'none'
+              gets skipped). */}
           <div
             aria-hidden="true"
             className="absolute right-0 top-0 z-30 pointer-events-none"
             style={{
-              width: 64, height: 48,
+              width: 78, height: 60,
               transformOrigin: '100% 0%',
-              transform: letterOpen ? 'rotate(38deg) translate(40px, -50px)' : 'none',
+              transform: letterOpen ? 'translate(64px, -52px) rotate(52deg)' : 'translate(0px, 0px) rotate(0deg)',
               opacity: letterOpen ? 0 : 1,
-              transition: 'transform 0.5s ease, opacity 0.4s ease 0.12s',
+              filter: 'drop-shadow(-2px 3px 3px rgba(74, 63, 44, 0.22))',
+              transition: 'transform 0.55s cubic-bezier(.45,.05,.25,1), opacity 0.3s ease 0.28s',
             }}
           >
-            <svg viewBox="0 0 64 48" className="w-full h-full block">
-              <path d="M0 0 H64 V43 L55 37 L48 43 L40 34 L33 40 L26 31 L19 36 L11 25 L5 28 L0 16 Z" fill="#F2E9D5" stroke="#DCCFB0" strokeWidth="1" />
-              <path d="M3 4 L13 22" stroke="#C9B98F" strokeWidth="1" strokeDasharray="3 3" />
+            <svg viewBox="0 0 78 60" className="w-full h-full block">
+              <path d="M0 0 H78 V54 L67 46 L58 54 L48 42 L40 50 L31 38 L23 44 L14 31 L7 35 L0 20 Z" fill="#F4ECD9" stroke="#D9CBA8" strokeWidth="1.2" />
+              <path d="M3 5 L16 28" stroke="#C2AE80" strokeWidth="1.2" strokeDasharray="3 3" />
             </svg>
           </div>
 
           {/* closed envelope face */}
           <div
-            className="absolute inset-0 z-20 flex flex-col justify-between p-5 pt-7"
+            className="absolute inset-0 z-20 flex flex-col p-4 pt-6"
             style={{
               opacity: letterOpen ? 0 : 1,
               pointerEvents: letterOpen ? 'none' : 'auto',
-              transition: 'opacity 0.35s ease 0.2s',
+              transition: 'opacity 0.3s ease 0.18s',
             }}
             aria-hidden={letterOpen}
           >
             <div className="flex items-start justify-between gap-3">
-              <div className="leading-tight pt-1">
+              <div className="leading-tight">
                 <span className="block text-[9px] font-semibold tracking-[0.18em] text-[#A1937B]">FROM</span>
                 <span className="block text-[13px] font-bold tracking-wide text-[#4A3F2C] mt-1 uppercase">
                   {(tex.licLetterFrom || 'A letter from {agency}').replace('{agency}', agencyLabel)}
                 </span>
+                <span className="block text-[13px] italic text-[#6B5E45] mt-2" style={{ fontFamily: 'Georgia, serif' }}>
+                  {tex.licLetterTo || 'To: the best driver'}
+                </span>
               </div>
-              {/* stamp: brand logo with perforated border + postmark */}
-              <div className="relative shrink-0 mr-12 mt-2">
-                <div className="w-[52px] h-[60px] bg-white flex items-center justify-center" style={{ border: '2px dashed #C9B98F', transform: 'rotate(3deg)' }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/logo.png" alt="" aria-hidden="true" className="w-[34px] h-[34px] rounded-md" />
+              {/* US flag postage stamp with postmark ring */}
+              <div className="relative shrink-0 mr-7 mt-1">
+                <div className="bg-white p-[3px]" style={{ border: '1.5px dashed #C9B98F', transform: 'rotate(4deg)' }}>
+                  <svg width="42" height="30" viewBox="0 0 40 28" className="block">
+                    <rect width="40" height="28" fill="#fff" />
+                    <g fill="#B22234">
+                      <rect width="40" height="4" y="0" /><rect width="40" height="4" y="8" /><rect width="40" height="4" y="16" /><rect width="40" height="4" y="24" />
+                    </g>
+                    <rect width="17" height="16" fill="#3C3B6E" />
+                    <g fill="#fff"><circle cx="4" cy="4" r="1.1" /><circle cx="9" cy="4" r="1.1" /><circle cx="14" cy="4" r="1.1" /><circle cx="6.5" cy="8" r="1.1" /><circle cx="11.5" cy="8" r="1.1" /><circle cx="4" cy="12" r="1.1" /><circle cx="9" cy="12" r="1.1" /><circle cx="14" cy="12" r="1.1" /></g>
+                  </svg>
                 </div>
-                <div aria-hidden="true" className="absolute -left-5 top-3 w-[46px] h-[46px] rounded-full" style={{ border: '1.5px solid rgba(74, 63, 44, 0.35)' }} />
+                <div aria-hidden="true" className="absolute -left-4 top-2 w-[40px] h-[40px] rounded-full" style={{ border: '1.5px solid rgba(74, 63, 44, 0.3)' }} />
               </div>
-            </div>
-
-            <div className="text-center px-4">
-              <span className="block text-[15px] italic text-[#4A3F2C]" style={{ fontFamily: 'Georgia, serif' }}>
-                {tex.licLetterTo || 'To: the future driver'}
-              </span>
             </div>
 
             <button
               type="button"
               onClick={() => setLetterOpen(true)}
-              className="w-full px-8 py-3.5 rounded-xl font-bold text-base text-[#0B1C3D] transition-all hover:brightness-[1.04] active:scale-[0.99]"
+              className="mt-auto w-full px-8 py-3.5 rounded-xl font-bold text-base text-[#0B1C3D] transition-all hover:brightness-[1.04] active:scale-[0.99]"
               style={{ background: 'linear-gradient(135deg, #FDE68A, #FBBF24)', boxShadow: '0 6px 16px rgba(245, 158, 11, 0.28)' }}
             >
               {tex.licOpenLetter || 'Open the letter'}
@@ -775,23 +781,23 @@ export default function Home() {
 
           {/* the letter inside */}
           <div
-            className="relative z-10 p-5 pt-6"
+            className="relative z-10 p-4 pt-5"
             style={{
               opacity: letterOpen ? 1 : 0,
-              transform: letterOpen ? 'translateY(0)' : 'translateY(16px)',
+              transform: letterOpen ? 'translateY(0)' : 'translateY(14px)',
               pointerEvents: letterOpen ? 'auto' : 'none',
-              transition: 'opacity 0.45s ease 0.4s, transform 0.45s ease 0.4s',
+              transition: 'opacity 0.4s ease 0.42s, transform 0.4s ease 0.42s',
             }}
             aria-hidden={!letterOpen}
           >
-            <div className="flex items-center gap-2.5 pb-3 mb-4 border-b border-[#F1F5F9]">
+            <div className="flex items-center gap-2.5 pb-2.5 mb-3 border-b border-[#F1F5F9]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.png" alt="" aria-hidden="true" className="w-[26px] h-[26px] rounded-md" />
+              <img src="/logo.png" alt="" aria-hidden="true" className="w-[24px] h-[24px] rounded-md" />
               <span className="text-[12px] font-bold tracking-[0.14em] text-[#0B1C3D]">DMVSOS</span>
-              <span className="ml-auto text-[9px] font-semibold tracking-[0.18em] text-[#A3B2C6] uppercase">{agencyLabel}</span>
+              <span className="ml-auto text-[9px] font-semibold tracking-[0.16em] text-[#A3B2C6] uppercase">{agencyLabel}</span>
             </div>
 
-            <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2.5 text-[13px] leading-tight items-center text-[#1E293B] mb-5">
+            <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-[13px] leading-tight items-center text-[#1E293B] mb-4">
               <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">CLASS</span><span className="font-semibold whitespace-nowrap">Car &middot; Moto &middot; CDL</span>
               <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">COVERAGE</span><span className="font-semibold">{tex.licRowCoverage || 'All 50 states'}</span>
               <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">LANGUAGES</span><span className="font-semibold">{tex.licRowLangs || '5 languages'}</span>
