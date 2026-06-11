@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase';
 import { t } from '@/lib/translations';
 import { getSavedLang } from '@/lib/lang';
 import { normalizeEmail, suggestEmailFix } from '@/lib/emailHints';
+import { localizeAuthError } from '@/lib/authErrors';
 
 // Step 1 of password reset: user enters their email, we ask Supabase
 // to send a reset-link email. The link points to /auth/reset (Step 2)
@@ -40,7 +41,7 @@ function ResetRequestContent() {
       const { error: err } = await supabase.auth.resetPasswordForEmail(emailNorm, {
         redirectTo: `${window.location.origin}/auth/reset`,
       });
-      if (err) { setError(err.message); return; }
+      if (err) { setError(localizeAuthError(err.message, tex)); return; }
       setSentTo(emailNorm);
     } catch { setError(tex.somethingWentWrong || 'Something went wrong'); }
     finally { setLoading(false); }

@@ -9,6 +9,7 @@ import { getSavedLang } from '@/lib/lang';
 import SupportFooter from '@/app/components/SupportFooter';
 import { safeInternalPath } from '@/lib/safeNext';
 import { normalizeEmail, suggestEmailFix, isInAppBrowser } from '@/lib/emailHints';
+import { localizeAuthError } from '@/lib/authErrors';
 
 // OAuth provider availability. Toggle each flag to true ONLY after the
 // matching provider is fully configured in Supabase Dashboard →
@@ -188,7 +189,7 @@ function LoginContent() {
           password,
           options: { emailRedirectTo: authRedirectTo() },
         });
-        if (error) { setEmailError(error.message); return; }
+        if (error) { setEmailError(localizeAuthError(error.message, tex)); return; }
         // When Supabase has email confirmation on, signUp returns a user
         // but no session — the user must click the link in their inbox
         // before they can sign in. Show a "check your email" panel
@@ -211,7 +212,7 @@ function LoginContent() {
         // surface a useful hint instead of a dead-end error.
         const collision = await isOauthOnlyEmail(emailNorm);
         if (collision) { setOauthCollision(true); return; }
-        setEmailError(error.message);
+        setEmailError(localizeAuthError(error.message, tex));
         return;
       }
       router.push(safeInternalPath(searchParams.get('next'), '/test'));
