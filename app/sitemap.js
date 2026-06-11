@@ -30,10 +30,10 @@ export default async function sitemap() {
 
   const pages = [
     { url: baseUrl,                    lastModified: now, changeFrequency: 'weekly',  priority: 1.0 },
-    { url: `${baseUrl}/upgrade`,       lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/dmv-test`,      lastModified: now, changeFrequency: 'weekly',  priority: 0.9 },
     { url: `${baseUrl}/manuals`,       lastModified: now, changeFrequency: 'weekly',  priority: 0.9 },
-    { url: `${baseUrl}/login`,         lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
+    // /login and /upgrade intentionally excluded — they are noindex (auth/paywall
+    // utility pages), so listing them in the sitemap would be a mixed signal.
     { url: `${baseUrl}/terms`,         lastModified: now, changeFrequency: 'yearly',  priority: 0.2 },
     { url: `${baseUrl}/privacy`,       lastModified: now, changeFrequency: 'yearly',  priority: 0.2 },
     { url: `${baseUrl}/about`,         lastModified: now, changeFrequency: 'monthly', priority: 0.6 },

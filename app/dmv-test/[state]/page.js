@@ -162,7 +162,7 @@ export default async function StateDmvTestPage({ params }) {
     { value: '35,000+', label: 'Questions' },
     { value: '3',       label: 'Categories' },
     { value: '5',       label: 'Languages' },
-    { value: '94%',     label: 'Pass Rate' },
+    { value: `${exam.passingPct}%`, label: 'Score to pass' },
   ];
 
   const whatToExpect = [
