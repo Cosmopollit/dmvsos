@@ -631,18 +631,16 @@ export default function Home() {
         </p>
       </section>
 
-      {/* FAQ */}
+      {/* FAQ — always open. These answers sell, so we never hide them behind a
+          dropdown the visitor has to discover. */}
       <section className="w-full max-w-lg mx-auto mb-8 px-4">
         <h2 className="text-lg font-bold text-[#0B1C3D] text-center mb-5">{tex.faqTitle}</h2>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2.5">
           {(tex.faq || []).map((item, i) => (
-            <details key={i} className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm group">
-              <summary className="px-5 py-4 text-sm font-semibold text-[#0B1C3D] cursor-pointer list-none flex items-center justify-between">
-                <span>{item.q}</span>
-                <span className="text-[#94A3B8] group-open:rotate-180 transition-transform ml-3 shrink-0"><svg width="12" height="12" viewBox="0 0 12 12" style={{ fill: 'currentColor' }}><path d="M6 8L1 3h10z" /></svg></span>
-              </summary>
-              <p className="px-5 pb-4 text-sm text-[#475569] leading-relaxed">{item.a}</p>
-            </details>
+            <div key={i} className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm px-5 py-4">
+              <p className="text-sm font-bold text-[#0B1C3D] mb-1.5">{item.q}</p>
+              <p className="text-sm text-[#475569] leading-relaxed">{item.a}</p>
+            </div>
           ))}
         </div>
       </section>
@@ -655,15 +653,26 @@ export default function Home() {
         <p className="text-sm text-[#64748B] text-center mb-4">{tex.licCtaSub || "Let's practice: 20 free questions, no signup"}</p>
 
         <div className="relative overflow-hidden rounded-2xl border border-[#CBD5E1] shadow-lg bg-gradient-to-br from-[#F8FAFC] via-[#EFF6FF] to-[#E0F2FE]">
+          {/* holographic sheen */}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0" style={{ background: 'linear-gradient(115deg, transparent 38%, rgba(255,255,255,0.55) 48%, transparent 58%)' }} />
+
           {/* header band */}
-          <div className="flex items-center justify-between px-5 py-2.5" style={{ background: 'linear-gradient(135deg, #0B1C3D, #1E3A5F)' }}>
-            <span className="text-[11px] font-extrabold tracking-[0.18em] text-white">DRIVER LICENSE</span>
-            <span className="text-[11px] font-extrabold tracking-[0.14em] text-[#FBBF24]">DMVSOS</span>
+          <div className="relative z-10 flex items-center justify-between px-5 py-3" style={{ background: 'linear-gradient(115deg, #0B1C3D 0%, #1E3A5F 55%, #2563EB 100%)' }}>
+            <div className="flex items-center gap-2.5">
+              <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" className="shrink-0" style={{ fill: '#FBBF24' }}>
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
+              </svg>
+              <div className="leading-none">
+                <span className="block text-[12px] font-extrabold tracking-[0.2em] text-white">DRIVER LICENSE</span>
+                <span className="block mt-1 text-[8px] font-bold tracking-[0.24em] text-[#93C5FD]">UNITED STATES &middot; PRACTICE</span>
+              </div>
+            </div>
+            <span className="text-[12px] font-extrabold tracking-[0.14em] text-[#FBBF24]">DMVSOS</span>
           </div>
 
           {/* body: photo + fields */}
-          <div className="relative flex gap-4 px-5 pt-4 pb-3 items-start">
-            <div className="w-[84px] h-[104px] rounded-lg bg-[#DBEAFE] border border-[#BFDBFE] flex items-center justify-center shrink-0">
+          <div className="relative z-10 flex gap-4 px-5 pt-4 pb-3 items-start">
+            <div className="w-[84px] h-[104px] rounded-lg bg-gradient-to-b from-[#DBEAFE] to-[#BFDBFE] border border-[#BFDBFE] flex items-center justify-center shrink-0 shadow-inner">
               <svg width="46" height="46" viewBox="0 0 24 24" aria-hidden="true" style={{ fill: '#93C5FD' }}>
                 <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
               </svg>
@@ -672,7 +681,7 @@ export default function Home() {
             <div className="flex-1 min-w-0 text-[#0B1C3D]">
               <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-[12px] leading-tight">
                 <span className="font-bold text-[#94A3B8] tracking-wide">NAME</span><span className="font-extrabold tracking-wide truncate">YOUR NAME</span>
-                <span className="font-bold text-[#94A3B8] tracking-wide">CLASS</span><span className="font-extrabold">C · M · CDL</span>
+                <span className="font-bold text-[#94A3B8] tracking-wide">CLASS</span><span className="font-extrabold">C &middot; M &middot; CDL</span>
                 <span className="font-bold text-[#94A3B8] tracking-wide">STATE</span><span className="font-extrabold">ALL 50</span>
                 <span className="font-bold text-[#94A3B8] tracking-wide">REST</span><span className="font-extrabold">NONE</span>
               </div>
@@ -685,8 +694,11 @@ export default function Home() {
             <div aria-hidden="true" className="absolute right-5 bottom-2 w-12 h-12 rounded-full opacity-25 pointer-events-none" style={{ background: 'radial-gradient(circle at 35% 35%, #FDE68A, #F59E0B)' }} />
           </div>
 
+          {/* faux barcode strip for document feel */}
+          <div aria-hidden="true" className="relative z-10 mx-5 mb-1 h-6 rounded-sm opacity-80" style={{ background: 'repeating-linear-gradient(90deg, #0B1C3D 0, #0B1C3D 2px, transparent 2px, transparent 4px, #0B1C3D 4px, #0B1C3D 5px, transparent 5px, transparent 9px, #0B1C3D 9px, #0B1C3D 10px, transparent 10px, transparent 13px)' }} />
+
           {/* CTA */}
-          <div className="px-5 pb-5 pt-1">
+          <div className="relative z-10 px-5 pb-5 pt-2">
             <button
               type="button"
               onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
