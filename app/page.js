@@ -95,12 +95,12 @@ export default function Home() {
   // Road stops: practice here (brand logo) → DMV office → the license → the road.
   const steps = [
     {
-      label: tex.step1, msg: tex.stepMsg1, ring: '#2563EB',
+      label: tex.step1, ring: '#2563EB',
       // eslint-disable-next-line @next/next/no-img-element
       icon: <img src="/logo.png" alt="" aria-hidden="true" className="w-[26px] h-[26px] rounded-md" />,
     },
     {
-      label: tex.step2, msg: tex.stepMsg2, ring: '#2563EB',
+      label: tex.step2, ring: '#2563EB',
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="#2563EB" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <path d="M3 21h18M4 21V9.5L12 4l8 5.5V21M9 21v-5h6v5M8 12h.01M12 12h.01M16 12h.01" />
@@ -108,7 +108,7 @@ export default function Home() {
       ),
     },
     {
-      label: tex.step3, msg: tex.stepMsg3, ring: '#F59E0B',
+      label: tex.step3, ring: '#F59E0B',
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="#B45309" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <rect x="3" y="5" width="18" height="14" rx="2.5" />
@@ -118,7 +118,7 @@ export default function Home() {
       ),
     },
     {
-      label: tex.step4, msg: tex.stepMsg4, ring: '#16A34A',
+      label: tex.step4, ring: '#16A34A',
       icon: (
         <svg width="23" height="23" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="#15803D" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <path d="M5 16l1.2-4.2A2 2 0 0 1 8.1 10h7.8a2 2 0 0 1 1.9 1.8L19 16M5 16h14M5 16v3h1.8l.7-1.6h9l.7 1.6H19v-3" />
@@ -538,7 +538,6 @@ export default function Home() {
                     {step.icon}
                   </div>
                   <span className="text-[12px] font-semibold leading-tight text-[#0B1C3D] mt-2">{step.label}</span>
-                  <span className="text-[10.5px] text-[#94A3B8] mt-0.5 leading-tight px-0.5">{step.msg}</span>
                 </div>
               ))}
             </div>
