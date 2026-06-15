@@ -144,3 +144,4 @@ translation-quality-audit-*.csv
 .moto-deletes-rollback-*.json
 .bulk-retranslate-stale.json.bak-*
 .clean-moto-cdl-rollback.json
+.fix-moto-cdl-explanations-rollback.json
