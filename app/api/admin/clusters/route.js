@@ -39,8 +39,11 @@ export async function POST(req) {
     .not('cluster_code', 'is', null)
     .order('cluster_code', { ascending: true });
 
+  // A specific subcategory filters to it; "All CDL" (empty) must show every
+  // CDL cluster regardless of subcategory. The old `is('subcategory', null)`
+  // branch matched only legacy NULL-subcategory rows — but every CDL question
+  // now carries a real subcategory, so "All CDL" returned nothing.
   if (subcategory) enQuery = enQuery.eq('subcategory', subcategory);
-  else if (category === 'cdl') enQuery = enQuery.is('subcategory', null);
 
   // Server-side search on EN text or cluster_code
   if (search.trim()) {
