@@ -17,7 +17,6 @@
  */
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
 import { getSavedLang } from '@/lib/lang';
@@ -35,6 +34,7 @@ export default function WelcomeBanner() {
   // re-check sets it back to true.
   const [ready, setReady] = useState(false);
 
+  /* eslint-disable react-hooks/set-state-in-effect -- one-shot client-only auth-settle gating after mount */
   useEffect(() => {
     if (loading) return;
     if (!user) { setReady(true); return; }
@@ -66,6 +66,14 @@ export default function WelcomeBanner() {
     const storageKey = `dmvsos_wb_${variant}_${user.id}`;
     if (typeof window !== 'undefined') localStorage.setItem(storageKey, '1');
     setDismissed(true);
+  }
+
+  // CTA goes to the home state-selector (pick state → category → test), NOT a
+  // param-less /test which drops the user into a defaulted, unselected test.
+  function goToSelector() {
+    const el = typeof document !== 'undefined' && document.getElementById('state-selector');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    else if (typeof window !== 'undefined') window.location.href = '/#state-selector';
   }
 
   // Copy with safe fallbacks — translations.js can ship keys later without
@@ -139,12 +147,13 @@ export default function WelcomeBanner() {
             </p>
           </div>
 
-          <Link
-            href="/test"
+          <button
+            type="button"
+            onClick={goToSelector}
             className="hidden sm:inline-flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all hover:scale-[1.03]"
             style={{ background: '#F59E0B', color: '#0B1C3D' }}>
             {proCta}
-          </Link>
+          </button>
 
           <button
             type="button"
@@ -189,12 +198,13 @@ export default function WelcomeBanner() {
           </p>
         </div>
 
-        <Link
-          href="/test"
+        <button
+          type="button"
+          onClick={goToSelector}
           className="hidden sm:inline-flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all hover:scale-[1.03]"
           style={{ background: '#2563EB', color: 'white' }}>
           {welcomeCta}
-        </Link>
+        </button>
 
         <button
           type="button"
