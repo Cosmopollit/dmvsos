@@ -33,8 +33,8 @@ export default function WelcomeBanner() {
   // flash where dismissed briefly resolves to false before the localStorage
   // re-check sets it back to true.
   const [ready, setReady] = useState(false);
+  const [leaving, setLeaving] = useState(false);
 
-  /* eslint-disable react-hooks/set-state-in-effect -- one-shot client-only auth-settle gating after mount */
   useEffect(() => {
     if (loading) return;
     if (!user) { setReady(true); return; }
@@ -50,6 +50,22 @@ export default function WelcomeBanner() {
     // onAuthStateChange tick). isPro change still re-runs and re-checks
     // dismissed against the new storage key (welcome → pro).
   }, [user?.id, isPro, loading]);
+
+  // The Pro celebration is strictly one-time: it appears briefly after purchase
+  // + first login, then slides away for good. We mark it seen at slide-out time
+  // (so it never returns, even across a reload) and unmount once the slide
+  // animation finishes. The user can still dismiss early via the ✕.
+  useEffect(() => {
+    if (!ready || !user || variant !== 'pro' || dismissed) return;
+    const storageKey = `dmvsos_wb_pro_${user.id}`;
+    const slideAt = setTimeout(() => {
+      try { localStorage.setItem(storageKey, '1'); } catch { /* private mode */ }
+      setLeaving(true);
+    }, 5000);
+    const removeAt = setTimeout(() => setDismissed(true), 5500);
+    return () => { clearTimeout(slideAt); clearTimeout(removeAt); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, user?.id, variant, dismissed]);
 
   if (!ready || !user || !variant || dismissed) return null;
 
@@ -123,7 +139,7 @@ export default function WelcomeBanner() {
   // ── Pro celebration ─────────────────────────────────────────────────────
   if (isPremium) {
     return (
-      <div className="relative w-full overflow-hidden animate-wb-fade-in"
+      <div className={`relative w-full overflow-hidden ${leaving ? 'animate-wb-slide-out' : 'animate-wb-fade-in'}`}
            style={{
              background: 'linear-gradient(135deg, #0B1C3D 0%, #1E3A8A 50%, #F59E0B 130%)',
              boxShadow: '0 10px 25px -10px rgba(11, 28, 61, 0.25)',
@@ -171,6 +187,13 @@ export default function WelcomeBanner() {
           }
           .animate-wb-fade-in {
             animation: wb-fade-in 0.4s ease-out;
+          }
+          @keyframes wb-slide-out {
+            from { opacity: 1; transform: translateY(0); }
+            to   { opacity: 0; transform: translateY(-100%); }
+          }
+          .animate-wb-slide-out {
+            animation: wb-slide-out 0.5s ease-in forwards;
           }
         `}</style>
       </div>
