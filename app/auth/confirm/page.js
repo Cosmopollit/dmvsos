@@ -51,7 +51,7 @@ function ConfirmContent() {
 
       setStatus('success');
       // Brief delay so the user sees the success state before navigating.
-      const dest = safeInternalPath(searchParams.get('next'), '/test');
+      const dest = safeInternalPath(searchParams.get('next'), '/');
       setTimeout(() => { router.replace(dest); }, 1200);
     })();
     return () => { cancelled = true; };

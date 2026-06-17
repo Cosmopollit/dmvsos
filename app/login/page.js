@@ -201,7 +201,7 @@ function LoginContent() {
           return;
         }
         // Confirmation disabled in dashboard — session is live immediately.
-        router.push(safeInternalPath(searchParams.get('next'), '/test'));
+        router.push(safeInternalPath(searchParams.get('next'), '/'));
         return;
       }
       // Sign-in path
@@ -215,7 +215,7 @@ function LoginContent() {
         setEmailError(localizeAuthError(error.message, tex));
         return;
       }
-      router.push(safeInternalPath(searchParams.get('next'), '/test'));
+      router.push(safeInternalPath(searchParams.get('next'), '/'));
     } catch { setEmailError(tex.somethingWentWrong || 'Something went wrong'); }
     finally { setEmailLoading(false); }
   }
