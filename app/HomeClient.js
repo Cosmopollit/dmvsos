@@ -450,6 +450,9 @@ export default function HomeClient({ initialLang = 'en' }) {
 
           <select
             ref={stateSelectRef}
+            id="home-state-select"
+            name="state"
+            aria-label={tex.selectStateLabel}
             value={state}
             onChange={e => setState(e.target.value)}
             className="w-full py-4 px-4 rounded-xl border-2 border-gray-100 focus:border-blue-500 outline-none text-base bg-white text-gray-700 cursor-pointer appearance-none"
