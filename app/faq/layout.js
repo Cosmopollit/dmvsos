@@ -1,7 +1,7 @@
 export const metadata = {
   title: 'FAQ | DMVSOS practice tests',
   description:
-    'Common questions about DMVSOS: pricing, refunds, languages, official manuals, CDL pass guarantee, and how it compares to subscription sites.',
+    'Common questions about DMVSOS: pricing, refunds, languages, official manuals, and how it compares to subscription sites.',
   alternates: { canonical: 'https://dmvsos.com/faq' },
   openGraph: {
     title: 'DMVSOS FAQ',
