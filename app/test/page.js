@@ -348,6 +348,11 @@ function TestContent() {
   useEffect(() => {
     if (!testMode || !questions.length) return;
     function onKeyDown(e) {
+      // Don't hijack keys while the user is typing in a field (e.g. the
+      // question-report comment box) — Space and 1-4 must type normally there.
+      const el = e.target;
+      const tag = el?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || el?.isContentEditable) return;
       if (showUpgradeBanner) return;
       const key = e.key;
       if (key === 'ArrowLeft') {
