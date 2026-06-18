@@ -721,10 +721,12 @@ export default function HomeClient({ initialLang = 'en' }) {
           </div>
         </div>
         <p className="text-center text-xs text-[#94A3B8]">{tex.socialProofReviews}</p>
+        {/* Trustpilot review link — temporarily hidden until the review flow is polished. Do NOT delete; restore when ready.
         <p className="text-center text-xs mt-1">
           <a href="https://www.trustpilot.com/review/dmvsos.com" target="_blank" rel="noopener noreferrer"
             className="text-[#2563EB] hover:underline">{tex.socialProofTrustpilot}</a>
         </p>
+        */}
       </section>
 
       {/* FAQ — the whole section is a dropdown, and each question inside is too.
