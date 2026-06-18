@@ -159,7 +159,7 @@ export default async function StateDmvTestPage({ params }) {
   const otherStates = STATE_SLUGS.filter((_, i) => i !== stateIdx).slice(0, 8);
 
   const stats = [
-    { value: '35,000+', label: 'Questions' },
+    { value: '25,000+', label: 'Questions' },
     { value: '3',       label: 'Categories' },
     { value: '5',       label: 'Languages' },
     { value: `${exam.passingPct}%`, label: 'Score to pass' },

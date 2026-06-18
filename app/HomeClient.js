@@ -541,7 +541,7 @@ export default function HomeClient({ initialLang = 'en' }) {
         <div className="grid grid-cols-4 gap-2">
           {[
             { value: '5K+', label: tex.statUsers },
-            { value: '30K+', label: tex.statQuestions },
+            { value: '25K+', label: tex.statQuestions },
             { value: '50', label: tex.statStates },
             { value: '5', label: tex.statLanguages },
           ].map((stat) => (
@@ -705,7 +705,7 @@ export default function HomeClient({ initialLang = 'en' }) {
         <h2 className="text-lg font-bold text-[#0B1C3D] text-center mb-6">{tex.socialProofTitle}</h2>
         <div className="grid grid-cols-3 gap-4 mb-4">
           <div className="bg-white rounded-2xl p-4 text-center shadow-sm border border-[#E2E8F0]/60">
-            <div className="text-2xl font-black text-[#2563EB]">34K+</div>
+            <div className="text-2xl font-black text-[#2563EB]">25K+</div>
             <div className="text-xs text-[#94A3B8] font-medium mt-0.5">{tex.socialProofQuestionsLabel}</div>
           </div>
           <div className="bg-white rounded-2xl p-4 text-center shadow-sm border border-[#E2E8F0]/60">
@@ -863,7 +863,7 @@ export default function HomeClient({ initialLang = 'en' }) {
               <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">CLASS</span><span className="font-semibold whitespace-nowrap">Car &middot; Moto &middot; CDL</span>
               <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">COVERAGE</span><span className="font-semibold">{tex.licRowCoverage || 'All 50 states'}</span>
               <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">LANGUAGES</span><span className="font-semibold">{tex.licRowLangs || '5 languages'}</span>
-              <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">BANK</span><span className="font-semibold">{tex.licRowBank || '35,000+ questions'}</span>
+              <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">BANK</span><span className="font-semibold">{tex.licRowBank || '25,000+ questions'}</span>
             </div>
 
             <button

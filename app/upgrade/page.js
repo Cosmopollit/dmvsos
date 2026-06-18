@@ -183,7 +183,7 @@ function UpgradeContent() {
           rather than ALL CAPS, per brand voice. */}
       <p className="text-sm sm:text-[15px] text-white/90 text-center mb-6 max-w-md font-medium tracking-tight">
         <span className="font-bold text-[#F59E0B]">{tex.statsLine?.split(' ')[0] || 'All'}</span>{' '}
-        {(tex.statsLine || 'All 35,000+ questions · 5 languages · all 50 states').split(' ').slice(1).join(' ')}
+        {(tex.statsLine || 'All 25,000+ questions · 5 languages · all 50 states').split(' ').slice(1).join(' ')}
       </p>
 
       {/* Free tier chip */}
