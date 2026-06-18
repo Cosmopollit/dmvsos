@@ -24,6 +24,9 @@ const codeToName = { en: 'English', ru: 'Русский', es: 'Español', zh: '�
 export default function HomeClient({ initialLang = 'en' }) {
   const { user, isPro, planType } = useAuth();
   useExperiment('home_visit', user?.id);
+  // A/B the hero headline (v1 control / v2 uniqueness / v3 confidence). Starts
+  // on v1, switches to the assigned variant after mount — see useExperiment.
+  const heroVariant = useExperiment('hero_copy', user?.id);
   // Seed from the server-read cookie (initialLang) so SSR and the first client
   // render agree — reading localStorage in the initializer would desync the two
   // and trip a hydration mismatch on the flag SVG. localStorage is reconciled
@@ -38,6 +41,9 @@ export default function HomeClient({ initialLang = 'en' }) {
   const langToCode = { English: 'en', 'Русский': 'ru', 'Español': 'es', '中文': 'zh', 'Українська': 'ua' };
   const langCode = langToCode[lang] || 'en';
   const tex = t[langCode] || t.en;
+  const heroTitleText = heroVariant === 'v2' ? (tex.heroTitleB || tex.heroTitle)
+    : heroVariant === 'v3' ? (tex.heroTitleC || tex.heroTitle)
+    : tex.heroTitle;
 
   // ?lang=xx in URL (e.g. from a Google hreflang result) overrides the saved lang.
   // Also pre-select the state from the geo cookie set by proxy.js, and suggest
@@ -336,7 +342,7 @@ export default function HomeClient({ initialLang = 'en' }) {
       <section className="w-full max-w-md mx-auto px-4 pt-1 pb-6 text-center">
         <h1 className="text-[32px] sm:text-[42px] font-semibold text-[#0B1C3D] leading-[1.13] mb-3 whitespace-pre-line"
           style={{ fontFamily: "'DM Sans', var(--font-dm-sans), sans-serif", letterSpacing: '-0.025em' }}>
-          {tex.heroTitle}
+          {heroTitleText}
         </h1>
         <p className="text-[15px] font-normal leading-relaxed mb-3"
           style={{ color: '#64748B', letterSpacing: '-0.01em' }}>
