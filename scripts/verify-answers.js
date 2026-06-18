@@ -38,6 +38,7 @@ const DRY_RUN = process.argv.includes('--dry-run');
 const ALL_LANGS = process.argv.includes('--all-langs');
 const LANG_ARG = process.argv.find(a => a.startsWith('--lang='))?.split('=')[1];
 const STATE_ARG = process.argv.find(a => a.startsWith('--state='))?.split('=')[1];
+const CATEGORY_ARG = process.argv.find(a => a.startsWith('--category='))?.split('=')[1];
 const MANUALS_DIR = path.join(__dirname, '..', '.manuals-text');
 const BATCH_SIZE = 10;
 const CONCURRENCY = parseInt(process.argv.find(a => a.startsWith('--concurrency='))?.split('=')[1] || '5', 10);
@@ -691,6 +692,7 @@ async function processLanguage(lang) {
   console.log('\n=== Phase 1: Load questions ===\n');
   let filter = `language=eq.${lang}&select=id,state,category,question_text,option_a,option_b,option_c,option_d,correct_answer&order=id`;
   if (STATE_ARG) filter += `&state=eq.${STATE_ARG}`;
+  if (CATEGORY_ARG) filter += `&category=eq.${CATEGORY_ARG}`;
 
   const questions = await supabaseGetAll('questions', filter);
   console.log(`  Loaded: ${questions.length} questions`);
