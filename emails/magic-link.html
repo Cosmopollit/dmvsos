@@ -1,0 +1,114 @@
+<!--
+  Magic-link email body (English). Drop-in for whichever sender renders it.
+  ------------------------------------------------------------------------
+  WHERE this lives depends on the setup (there is no email code in this repo,
+  so it is configured in a dashboard):
+
+    A) Supabase Auth template (Resend used only as SMTP transport):
+       Supabase Dashboard > Authentication > Email Templates > "Magic Link".
+       Link variable: {{ .ConfirmationURL }}  (already used below).
+
+    B) Resend template fed by a Supabase "Send Email Hook":
+       Edit the HTML in the Resend dashboard.
+       Link variable: whatever the hook injects (often {{magic_link}}).
+
+  THE ONE RULE: use the SAME link variable your CURRENT working email uses.
+  Your existing email already delivers a live link, so that variable is the
+  correct one. Below it is written as {{ .ConfirmationURL }} (option A); if
+  you are in Resend (option B), swap both occurrences for your hook variable
+  (e.g. {{magic_link}}).
+
+  Subject:  Your key to the road is ready 🔑
+  Notes:
+    - One template is sent to every user regardless of app language.
+    - Expiry wording is soft on purpose. For a hard number, add
+      "valid for 24 hours" to match your OTP expiry setting.
+    - Footer: support line (Telegram bot @dmvsos_support_bot + email
+      maindmvsos@gmail.com) above DMV SOS / dmvsos.com. No phone, no partner brand.
+    - Header logo loads from https://dmvsos.com/logo.png (it must stay public
+      so email clients can fetch it). A local preview sandbox may block that
+      external image, but real inboxes load it fine.
+-->
+<body style="margin:0; padding:0; background-color:#EEF2F7;">
+  <style>@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');</style>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#EEF2F7; padding:24px 0;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px; background-color:#FFFFFF; border-radius:16px; overflow:hidden; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+          <!-- Header -->
+          <tr>
+            <td align="center" style="background-color:#0B1C3D; padding:28px 24px 26px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" align="center">
+                <tr>
+                  <td style="vertical-align:middle; padding-right:14px;">
+                    <img src="https://dmvsos.com/logo.png" width="64" height="64" alt="DMV SOS" style="display:block; border-radius:16px; border:0;">
+                  </td>
+                  <td style="vertical-align:middle;">
+                    <div style="font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif; color:#FFFFFF; font-size:23px; font-weight:500; letter-spacing:0.2px;">dmvsos.com</div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Body -->
+          <tr>
+            <td style="padding:30px 32px 28px;">
+              <div style="text-align:center;">
+                <img src="https://dmvsos.com/email/car-key.jpg" width="100" height="100" alt="DMV SOS car key" style="display:inline-block; border:0;">
+              </div>
+              <h1 style="margin:18px 0 0; text-align:center; font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif; color:#0B1C3D; font-size:22px; font-weight:700;">Your key to the road has arrived</h1>
+
+              <!-- Tinted callout: greeting + explanation -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0 0; background-color:#EFF6FF; border-radius:12px;">
+                <tr>
+                  <td style="padding:18px 20px;">
+                    <p style="margin:0; color:#0B1C3D; font-size:16px; font-weight:700;">Hi there!</p>
+                    <p style="margin:8px 0 0; color:#334155; font-size:15px; line-height:1.6;">
+                      Our team has spent years building the best prep we could, so you can study real, up-to-date material and walk into the exam ready to pass on your first try. Tap the button below to sign in and pick up right where you left off. We believe in you. Train with us, and good luck on your exam.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- CTA -->
+              <table role="presentation" cellpadding="0" cellspacing="0" align="center" style="margin:26px auto 0;">
+                <tr>
+                  <td align="center" style="background-color:#F59E0B; border-radius:12px;">
+                    <a href="{{ .ConfirmationURL }}" target="_blank" style="display:inline-block; padding:15px 36px; font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif; color:#0B1C3D; font-size:16px; font-weight:700; text-decoration:none;">Sign in to dmvsos.com</a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:22px 0 0; text-align:center; color:#94A3B8; font-size:13px; line-height:1.5;">
+                This link is just for you. It works one time, and for your security it expires automatically, so please use it soon.
+              </p>
+
+              <hr style="border:none; border-top:1px solid #E2E8F0; margin:24px 0;">
+
+              <p style="margin:0; text-align:center; color:#94A3B8; font-size:13px; line-height:1.5;">
+                Button not working? Copy and paste this link into your browser:
+              </p>
+              <p style="margin:6px 0 0; text-align:center; word-break:break-all;">
+                <a href="{{ .ConfirmationURL }}" style="color:#2563EB; font-size:13px;">{{ .ConfirmationURL }}</a>
+              </p>
+
+              <p style="margin:24px 0 0; text-align:center; color:#94A3B8; font-size:12px; line-height:1.5;">
+                Did not request this? You can safely ignore this email. No one can sign in to your account without the link above.
+              </p>
+            </td>
+          </tr>
+          <!-- Footer -->
+          <tr>
+            <td align="center" style="background-color:#F8FAFC; padding:22px 24px; border-top:1px solid #E2E8F0;">
+              <div style="color:#475569; font-size:13px; line-height:1.6;">
+                Questions? Message our <a href="https://t.me/dmvsos_support_bot" style="color:#2563EB; text-decoration:none; font-weight:600;">Telegram bot</a> or email <a href="mailto:maindmvsos@gmail.com" style="color:#2563EB; text-decoration:none; font-weight:600;">maindmvsos@gmail.com</a>
+              </div>
+              <div style="color:#0B1C3D; font-size:13px; font-weight:700; margin-top:14px;">DMV SOS</div>
+              <div style="color:#94A3B8; font-size:12px; margin-top:2px;">dmvsos.com</div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
