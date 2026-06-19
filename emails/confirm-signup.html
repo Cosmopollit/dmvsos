@@ -1,0 +1,94 @@
+<!--
+  Supabase Auth email template: CONFIRM SIGN UP (token_hash flow).
+  Paste into: Supabase Dashboard > Authentication > Emails > "Confirm sign up" > Body.
+
+  Subject:  Welcome to DMV SOS, confirm your email
+
+  Link: keeps your existing token_hash flow (handled by /auth/confirm). Do NOT
+  switch to {{ .ConfirmationURL }} here. The link below is:
+    {{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/test
+  Header logo + key image load from dmvsos.com (keep them public).
+-->
+<body style="margin:0; padding:0; background-color:#EEF2F7;">
+  <style>@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');</style>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#EEF2F7; padding:24px 0;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px; background-color:#FFFFFF; border-radius:16px; overflow:hidden; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+          <!-- Header -->
+          <tr>
+            <td align="center" style="background-color:#0B1C3D; padding:28px 24px 26px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" align="center">
+                <tr>
+                  <td style="vertical-align:middle; padding-right:14px;">
+                    <img src="https://dmvsos.com/logo.png" width="64" height="64" alt="DMV SOS" style="display:block; border-radius:16px; border:0;">
+                  </td>
+                  <td style="vertical-align:middle;">
+                    <span style="font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif; color:#FFFFFF; font-size:23px; font-weight:500; letter-spacing:0.2px;">dmvsos.&#8203;com</span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Body -->
+          <tr>
+            <td style="padding:30px 32px 28px;">
+              <div style="text-align:center;">
+                <img src="https://dmvsos.com/email/car-key.jpg?v=2" width="100" height="100" alt="DMV SOS car key" style="display:inline-block; border:0;">
+              </div>
+              <h1 style="margin:18px 0 0; text-align:center; font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif; color:#0B1C3D; font-size:22px; font-weight:700;">Welcome to DMV SOS</h1>
+
+              <!-- Tinted callout: greeting + explanation -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0 0; background-color:#EFF6FF; border-radius:12px;">
+                <tr>
+                  <td style="padding:18px 20px;">
+                    <p style="margin:0; color:#0B1C3D; font-size:16px; font-weight:700;">Hi there!</p>
+                    <p style="margin:8px 0 0; color:#334155; font-size:15px; line-height:1.6;">
+                      Welcome aboard. You are one tap from your account. Confirm your email below to activate it, then start practicing on real, up-to-date material. Our team built this so you can walk into the exam ready to pass on your first try. Glad to have you here.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- CTA -->
+              <table role="presentation" cellpadding="0" cellspacing="0" align="center" style="margin:26px auto 0;">
+                <tr>
+                  <td align="center" style="background-color:#F59E0B; border-radius:12px;">
+                    <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/test" target="_blank" style="display:inline-block; padding:15px 36px; font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif; color:#0B1C3D; font-size:16px; font-weight:700; text-decoration:none;">Confirm my email</a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:22px 0 0; text-align:center; color:#94A3B8; font-size:13px; line-height:1.5;">
+                This link is just for you and works one time.
+              </p>
+
+              <hr style="border:none; border-top:1px solid #E2E8F0; margin:24px 0;">
+
+              <p style="margin:0; text-align:center; color:#94A3B8; font-size:13px; line-height:1.5;">
+                Button not working? Copy and paste this link into your browser:
+              </p>
+              <p style="margin:6px 0 0; text-align:center; word-break:break-all;">
+                <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/test" style="color:#2563EB; font-size:13px;">{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/test</a>
+              </p>
+
+              <p style="margin:24px 0 0; text-align:center; color:#94A3B8; font-size:12px; line-height:1.5;">
+                Did not request this? You can safely ignore this email. No account is activated without confirming above.
+              </p>
+            </td>
+          </tr>
+          <!-- Footer -->
+          <tr>
+            <td align="center" style="background-color:#F8FAFC; padding:22px 24px; border-top:1px solid #E2E8F0;">
+              <div style="color:#475569; font-size:13px; line-height:1.6;">
+                Questions? Message our <a href="https://t.me/dmvsos_support_bot" style="color:#2563EB; text-decoration:none; font-weight:600;">Telegram bot</a> or email <a href="mailto:maindmvsos@gmail.com" style="color:#2563EB; text-decoration:none; font-weight:600;">maindmvsos@gmail.com</a>
+              </div>
+              <div style="color:#0B1C3D; font-size:13px; font-weight:700; margin-top:14px;">DMV SOS</div>
+              <div style="margin-top:2px;"><span style="color:#94A3B8; font-size:12px;">dmvsos.&#8203;com</span></div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
