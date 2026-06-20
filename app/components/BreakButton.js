@@ -3,12 +3,10 @@ import { useState, useEffect } from 'react';
 import { t } from '@/lib/translations';
 import { useAuth } from '@/lib/AuthContext';
 
-// "Take a break" header entry. It's a reward, not a toy. Subscribers (Pro) get
-// it unconditionally; free users unlock it by finishing one test (a localStorage
-// flag set on the result page). Until unlocked it shows a greyed padlock pill
-// with a visible "unlocks after your first test" tooltip on hover/tap. When
-// unlocked it opens the Break Mode arcade (/break.html) in an overlay. Shared by
-// the home header and SiteHeader.
+// "Take a break" header entry. Opens the Break Mode arcade (/break.html) in
+// an overlay. Now open to everyone (previously gated behind first-test-pass).
+// The `dmvsos_break_unlocked` localStorage flag is still set by the test result
+// page but no longer required to play.
 const UNLOCK_KEY = 'dmvsos_break_unlocked';
 
 export default function BreakButton({ langCode = 'en' }) {
@@ -29,8 +27,8 @@ export default function BreakButton({ langCode = 'en' }) {
     return () => window.removeEventListener('focus', read);
   }, []);
 
-  // Subscribers always have it; free users earn it by finishing a test.
-  const unlocked = isPro || completedTest;
+  // Open to everyone. (Was: const unlocked = isPro || completedTest;)
+  const unlocked = true;
 
   // The locked hint is hover-driven on desktop; on touch there is no hover, so a
   // tap shows it and it auto-dismisses.
@@ -128,6 +126,15 @@ export default function BreakButton({ langCode = 'en' }) {
               className="block rounded-2xl border border-[#1f2a44] shadow-2xl bg-[#050913]"
               style={{ width: 'min(92vw, 360px)', height: 'min(86vh, 680px)' }}
             />
+            <a
+              href="/game/"
+              target="_blank"
+              rel="noopener"
+              onClick={e => e.stopPropagation()}
+              className="block text-center mt-3 text-[11px] font-semibold tracking-[0.18em] text-[#fde047] hover:text-white"
+            >
+              ABOUT THE GAME →
+            </a>
           </div>
         </div>
       )}

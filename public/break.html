@@ -1388,10 +1388,12 @@
       return;
     }
 
-    // BMW — black sedan signals LEFT but actually swaps RIGHT (or vice versa).
-    // Joke obstacle + tactical surprise: don't trust the blinker.
+    // CRAZY BIMMER — black sedan signals LEFT but actually swaps RIGHT (or vice
+    // versa). Joke obstacle + tactical surprise: don't trust the blinker.
+    // Has a persistent "CRAZY BIMMER" name tag drawn above the car (see drawBMW)
+    // so players always recognize who just cut them off.
     if (Math.random() < 0.05) {
-      // pick a swap direction the BMW will actually take (toward a valid lane)
+      // pick a swap direction the Bimmer will actually take (toward a valid lane)
       const tryDirs = lane === 0 ? [1] : lane === LANES - 1 ? [-1] : (Math.random() < 0.5 ? [-1, 1] : [1, -1]);
       const actualDir = tryDirs[0];
       const signalSide = actualDir === 1 ? 'L' : 'R';   // OPPOSITE of actual move
@@ -1399,7 +1401,7 @@
         lane, y: -70,
         w: CELL * 2, h: CELL * 3,
         type: 'bmw', relSpeed: 0.75,
-        // Slower windup so player has more reaction time when they see the BMW
+        // Slower windup so player has more reaction time when they see the Bimmer
         swapDelay: 1.9 + Math.random() * 0.7,
         actualDir, signalSide,
         startLane: lane,
@@ -1407,7 +1409,6 @@
         swapAnimT: 0,    // ramps 0→1 during the swap animation
       });
       teachSound('bmw', turnClick);
-      maybeLabel('bmw', 'BMW · LIES ABOUT TURNS', laneX(lane), -82, '#facc15', 0.75);
       return;
     }
 
@@ -4876,7 +4877,9 @@
     ctx.fillRect(x + 4, y + h - 3, w - 8, 1);
   }
 
-  // BMW — black sedan with kidney grille + mismatched turn signal
+  // CRAZY BIMMER — black sedan with kidney grille + mismatched turn signal.
+  // Persistent "CRAZY BIMMER" name tag is rendered above the car body so players
+  // always see who just cut them off (no fade — moves with the car).
   function drawBMW(x, y, w, h, signalSide) {
     // shadow
     ctx.fillStyle = 'rgba(0,0,0,0.35)';
@@ -4937,6 +4940,40 @@
         ctx.fillRect(x + w - 2, y + h - 5, 4, 5);
       }
     }
+
+    // Persistent name tag floating above the car — "CRAZY BIMMER" in red on a
+    // yellow pill. Doesn't fade. Bobs slightly + a little arrow points down at
+    // the roof so the connection between tag and car is unambiguous.
+    const tagBob = Math.sin(elapsed * 4 + y * 0.05) * 0.6;
+    const tagText = 'CRAZY BIMMER';
+    const tagH = 9;
+    ctx.font = 'bold 7px ui-monospace, "SF Mono", Menlo, monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const tagW = Math.ceil(ctx.measureText(tagText).width) + 8;
+    const tagX = x + w / 2 - tagW / 2;
+    const tagY = y - tagH - 4 + tagBob;
+    // outer black border for contrast against any backdrop
+    ctx.fillStyle = '#0a0000';
+    ctx.fillRect(tagX - 1, tagY - 1, tagW + 2, tagH + 2);
+    // yellow pill body
+    ctx.fillStyle = '#fde047';
+    ctx.fillRect(tagX, tagY, tagW, tagH);
+    // top highlight
+    ctx.fillStyle = '#fff7a8';
+    ctx.fillRect(tagX, tagY, tagW, 1);
+    // red bold text
+    ctx.fillStyle = '#b91c1c';
+    ctx.fillText(tagText, x + w / 2, tagY + tagH / 2 + 0.5);
+    // tiny arrow pointing down at the car
+    ctx.fillStyle = '#0a0000';
+    ctx.fillRect(x + w / 2 - 2, tagY + tagH, 4, 1);
+    ctx.fillRect(x + w / 2 - 1, tagY + tagH + 1, 2, 1);
+    ctx.fillStyle = '#fde047';
+    ctx.fillRect(x + w / 2 - 1, tagY + tagH, 2, 1);
+    // reset text alignment defaults
+    ctx.textAlign = 'start';
+    ctx.textBaseline = 'alphabetic';
   }
 
   // DRIFTER — black sports car doing donuts (constantly rotating)
