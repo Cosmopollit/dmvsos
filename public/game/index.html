@@ -1,0 +1,273 @@
+<!doctype html>
+<!--
+  EXAM SKIPPER 3000 · landing page  ·  (c) DMVSOS.com — ALL RIGHTS RESERVED.
+  Static HTML — no Next.js routing involved. Game lives at /break.html.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="copyright" content="(c) DMVSOS.com — All rights reserved.">
+<meta name="author" content="DMVSOS">
+<meta name="description" content="EXAM SKIPPER 3000 — a DMV-test arcade game. More than fun: on real roads anything can happen. Stay sharp. Respect everyone. Take care of yourself.">
+<meta name="robots" content="index, follow, noai, noimageai">
+<meta property="og:title" content="EXAM SKIPPER 3000 · DMVSOS">
+<meta property="og:description" content="More than fun. Real roads, unpredictable hazards, respect, care.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dmvsos.com/game/">
+<title>EXAM SKIPPER 3000 · DMVSOS</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: #0a0000;
+    color: #cfd8e8;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  /* Top bar */
+  .top {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 2px solid #fde047;
+    background: linear-gradient(180deg, #1a0d08 0%, #0a0000 100%);
+  }
+  .back {
+    color: #fde047; text-decoration: none;
+    font-weight: bold; letter-spacing: 0.18em; font-size: 13px;
+    padding: 6px 12px;
+    border: 1px solid #fde047; border-radius: 4px;
+    transition: background 0.1s;
+  }
+  .back:hover { background: #7f1d1d; }
+  .brand { color: #7a8aa8; font-size: 11px; letter-spacing: 0.3em; }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    padding: 50px 20px 30px;
+    background: radial-gradient(ellipse at top, rgba(139,29,29,0.4) 0%, transparent 60%);
+  }
+  .hero h1 {
+    margin: 0 0 6px;
+    font-size: clamp(40px, 9vw, 64px);
+    font-style: italic;
+    color: #fde047;
+    text-shadow:
+      2px 0 0 #0a0000, -2px 0 0 #0a0000, 0 2px 0 #0a0000, 0 -2px 0 #0a0000,
+      3px 3px 0 #7f1d1d, -1px -1px 0 #dc2626;
+    letter-spacing: 0.06em;
+  }
+  .hero .badge {
+    display: inline-block;
+    margin: 4px 0 20px;
+    padding: 6px 18px;
+    background: #dc2626;
+    color: #fff;
+    font-size: clamp(22px, 5vw, 32px);
+    font-weight: bold;
+    font-style: italic;
+    border: 2px solid #fde047;
+    box-shadow: 3px 3px 0 #0a0000;
+  }
+  .hero .tagline {
+    color: #fde047; font-style: italic; font-weight: bold;
+    font-size: clamp(13px, 3vw, 16px);
+    margin: 12px 0 28px;
+    letter-spacing: 0.04em;
+  }
+  .play {
+    display: inline-block;
+    background: #5ee08b; color: #031a08;
+    font-weight: bold; font-size: clamp(16px, 4vw, 22px);
+    padding: 16px 40px;
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    border: 3px solid #fde047;
+    box-shadow: 4px 4px 0 #0a0000;
+    transition: transform 0.06s;
+  }
+  .play:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #0a0000; }
+
+  /* Section blocks */
+  section {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 36px 20px;
+    border-bottom: 1px solid rgba(253,224,71,0.15);
+  }
+  h2 {
+    font-style: italic;
+    color: #fde047;
+    font-size: clamp(20px, 5vw, 28px);
+    margin: 0 0 18px;
+    letter-spacing: 0.04em;
+    text-shadow: 2px 2px 0 #7f1d1d;
+  }
+  p {
+    color: #cfd8e8;
+    line-height: 1.55;
+    font-size: 14px;
+    margin: 0 0 14px;
+  }
+  p.lead {
+    font-size: 16px;
+    color: #fde047;
+    font-weight: bold;
+  }
+  /* Hazards grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .card {
+    background: rgba(12,40,86,0.5);
+    border: 1px solid #2a3550;
+    border-left: 3px solid #fde047;
+    padding: 10px 12px;
+  }
+  .card .emoji { font-size: 22px; margin-right: 6px; }
+  .card .name {
+    color: #fde047; font-weight: bold; font-size: 11px;
+    letter-spacing: 0.12em;
+  }
+  .card .desc {
+    color: #9ca3af; font-size: 11px; line-height: 1.4;
+    margin-top: 4px;
+  }
+  /* Tenets list */
+  .tenets {
+    list-style: none; padding: 0; margin: 0;
+  }
+  .tenets li {
+    padding: 14px 16px;
+    margin: 0 0 8px;
+    background: rgba(127,29,29,0.25);
+    border-left: 3px solid #dc2626;
+    color: #fff;
+    font-weight: bold;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+  }
+  .tenets li small {
+    display: block; font-weight: normal;
+    color: #9ca3af; font-size: 11px;
+    margin-top: 4px; letter-spacing: 0;
+  }
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 30px 20px 40px;
+    color: #7a8aa8;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+  }
+  footer a { color: #fde047; text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+  <div class="top">
+    <a href="https://dmvsos.com" class="back">← DMVSOS.COM</a>
+    <span class="brand">STUDY · SKIP · REPEAT</span>
+  </div>
+
+  <header class="hero">
+    <h1>EXAM SKIPPER</h1>
+    <div class="badge">3000</div>
+    <div class="tagline">IT'S NOT A GAME · IT'S LIFE</div>
+    <a href="/break.html" class="play">▶ TAP TO PLAY</a>
+  </header>
+
+  <section>
+    <h2>★ THE POINT</h2>
+    <p class="lead">
+      This isn't just an arcade. It's a philosophy.
+    </p>
+    <p>
+      On real roads, anything can happen. A gator on the highway in Florida.
+      A drifter doing donuts in front of you. A BMW that signals left and
+      swerves right. A wide load you can't predict. A pothole at 2&nbsp;a.m.
+    </p>
+    <p>
+      You can't memorize every hazard. The DMV manual gives you the rules,
+      but the road gives you the curveballs. <strong>EXAM SKIPPER 3000</strong>
+      drops you in the middle of those curveballs &mdash; cartoonish, sure,
+      but the lesson is real: <em>stay sharp, respect everyone, and protect
+      yourself.</em>
+    </p>
+  </section>
+
+  <section>
+    <h2>★ THREE TENETS</h2>
+    <ul class="tenets">
+      <li>
+        STAY SHARP
+        <small>Roads change every second. Distraction costs lives. Look ahead, scan sides, expect the unexpected.</small>
+      </li>
+      <li>
+        RESPECT EVERYONE
+        <small>The student driver, the slow Prius, the soccer-mom SUV, even the BMW that lies. They're all going home.</small>
+      </li>
+      <li>
+        PROTECT YOURSELF
+        <small>Hold your line. Know when to brake. Don't trust strangers' turn signals. Repair what you can; survive what you can't.</small>
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>★ HAZARDS YOU'LL MEET</h2>
+    <p>Pulled straight from real American highways and twisted into pixel art:</p>
+    <div class="grid">
+      <div class="card"><span class="emoji">🐊</span><span class="name">GATOR</span><div class="desc">Florida visitor on the road</div></div>
+      <div class="card"><span class="emoji">🦌</span><span class="name">BAMBI</span><div class="desc">Deer crossings &mdash; PNW &amp; Texas</div></div>
+      <div class="card"><span class="emoji">🌲</span><span class="name">FALLEN TREE</span><div class="desc">Two lanes blocked &mdash; thread the third</div></div>
+      <div class="card"><span class="emoji">🚧</span><span class="name">NEVERENDING LLC</span><div class="desc">Construction zones that never end</div></div>
+      <div class="card"><span class="emoji">🚧</span><span class="name">CONES</span><div class="desc">At the lane edge &mdash; stay centered</div></div>
+      <div class="card"><span class="emoji">🕳️</span><span class="name">POTHOLE</span><div class="desc">NYC &amp; Chicago specials</div></div>
+      <div class="card"><span class="emoji">🛢️</span><span class="name">OIL SLICK</span><div class="desc">Force-skid into the next lane</div></div>
+      <div class="card"><span class="emoji">🚗</span><span class="name">BMW</span><div class="desc">Lies about turns. Watch the body, not the blinker.</div></div>
+      <div class="card"><span class="emoji">💨</span><span class="name">YOUNG DRIFTER</span><div class="desc">Spinning donuts where you need to be</div></div>
+      <div class="card"><span class="emoji">🪻</span><span class="name">STONED DRIVER</span><div class="desc">VW van, swaying, slow</div></div>
+      <div class="card"><span class="emoji">👮</span><span class="name">POLICE · ICE</span><div class="desc">Slow federal SUVs &mdash; overtake politely</div></div>
+      <div class="card"><span class="emoji">🚚</span><span class="name">U-HALT TRUCK</span><div class="desc">Student moving day. Wide load, slow.</div></div>
+      <div class="card"><span class="emoji">🚛</span><span class="name">SKETCHY TRAILER</span><div class="desc">Wobbles lane-to-lane</div></div>
+      <div class="card"><span class="emoji">⚡</span><span class="name">CYBERTRUCK</span><div class="desc">Fast, quiet, sharp edges</div></div>
+      <div class="card"><span class="emoji">🌫️</span><span class="name">WEATHER</span><div class="desc">Fog, rain, sun glare, NYC steam</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>★ HOW TO WIN</h2>
+    <p>
+      Collect <strong style="color:#3b82f6">5 DMV LICENSES</strong> in a single run
+      &mdash; rare blue cards that drop ~2% of coins. Each license rewards
+      <strong>+500 points</strong> and <strong>+1 HP</strong>.
+    </p>
+    <p>
+      Hit 5/5 and you trigger the WIN screen: Hall of Fame, your name, your
+      comment, your time. Your name lives on in the cabinet.
+    </p>
+    <p style="color:#fde047; font-style:italic; font-weight:bold;">
+      Real driving prize: a license that doesn't expire because you didn't.
+    </p>
+  </section>
+
+  <section style="text-align:center; padding-top: 30px; padding-bottom: 50px; border-bottom: none;">
+    <a href="/break.html" class="play">▶ PLAY NOW</a>
+    <p style="margin-top: 18px; color: #7a8aa8; font-size: 12px;">
+      Then come back to <a href="https://dmvsos.com" style="color:#fde047;">DMVSOS.com</a>
+      and crush the real exam.
+    </p>
+  </section>
+
+  <footer>
+    EXAM SKIPPER 3000 · v1.0 · <a href="https://dmvsos.com">DMVSOS.COM</a><br>
+    &copy; DMVSOS &mdash; All Rights Reserved &middot; No copying without permission
+  </footer>
+</body>
+</html>
