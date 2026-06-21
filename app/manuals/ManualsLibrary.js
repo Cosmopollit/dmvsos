@@ -10,9 +10,9 @@ import StateSearchDropdown from './StateSearchDropdown';
 // choose state, choose category, go. Each routes to the manual page for that
 // state + category.
 const CATS = [
-  { id: 'car',        icon: '🚗', labelKey: 'catCar',  gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', accent: '#2563EB' },
-  { id: 'cdl',        icon: '🚛', labelKey: 'catCdl',  gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)', accent: '#0EA5E9' },
-  { id: 'motorcycle', icon: '🏍️', labelKey: 'catMoto', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)', accent: '#D97706' },
+  { id: 'car',        img: '/illustrations/manual-car.png',  labelKey: 'catCar',  readKey: 'readManualCar',  accent: '#2563EB' },
+  { id: 'cdl',        img: '/illustrations/manual-cdl.png',  labelKey: 'catCdl',  readKey: 'readManualCdl',  accent: '#0EA5E9' },
+  { id: 'motorcycle', img: '/illustrations/manual-moto.png', labelKey: 'catMoto', readKey: 'readManualMoto', accent: '#D97706' },
 ];
 
 export default function ManualsLibrary({ statesData, serverLang }) {
@@ -42,28 +42,68 @@ export default function ManualsLibrary({ statesData, serverLang }) {
             </button>
           </div>
           <div className="flex flex-col gap-3">
-            {CATS.map(cat => (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => {
-                  // Only navigate with a real, deliberately-chosen state.
-                  // If selection is somehow invalid, return to the prompt
-                  // instead of jumping to a default/wrong state.
-                  if (!selected || !statesData.some(s => s.slug === selected)) {
-                    setSelected(null);
-                    return;
-                  }
-                  router.push(`/manuals/${selected}/${cat.id}`);
-                }}
-                className="w-full rounded-2xl p-4 flex items-center gap-4 text-left border-2 border-white/60 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
-                style={{ background: cat.gradient }}
-              >
-                <span className="text-3xl shrink-0">{cat.icon}</span>
-                <span className="flex-1 font-bold text-[#1E293B] text-[15px]">{tex[cat.labelKey] || cat.id}</span>
-              </button>
-            ))}
+            {CATS.map(cat => {
+              // Same navigation target for both the top card and the secondary
+              // "Read handbook" link — both go to /manuals/[state]/[cat] where
+              // the user picks language and reads the PDF. The duplicated CTA
+              // mirrors the mobile layout (book row + explicit "Read manual"
+              // link) so the action is unmissable.
+              const go = () => {
+                if (!selected || !statesData.some(s => s.slug === selected)) {
+                  setSelected(null);
+                  return;
+                }
+                router.push(`/manuals/${selected}/${cat.id}`);
+              };
+              return (
+                <div
+                  key={cat.id}
+                  className="w-full rounded-2xl bg-white shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all overflow-hidden border border-[#E2E8F0]"
+                  style={{ borderTopWidth: 3, borderTopColor: cat.accent }}
+                >
+                  <button
+                    type="button"
+                    onClick={go}
+                    className="w-full px-4 py-3 flex items-center gap-3 text-left hover:bg-[#F8FAFC] transition"
+                  >
+                    <img src={cat.img} alt="" width={56} height={56} className="shrink-0 select-none object-contain" />
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold text-[#1E293B] text-[15px]">{tex[cat.labelKey] || cat.id}</div>
+                      <div className="text-xs text-[#94A3B8] mt-0.5">English · PDF</div>
+                    </div>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={cat.accent} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0" aria-hidden="true">
+                      <path d="M7 17L17 7M9 7h8v8" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={go}
+                    className="w-full border-t border-[#F1F5F9] px-4 py-2.5 flex items-center justify-between text-left hover:bg-[#F8FAFC] transition"
+                    style={{ color: cat.accent }}
+                  >
+                    <span className="font-semibold text-sm">{tex[cat.readKey] || 'Read the handbook'}</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0" aria-hidden="true">
+                      <path d="M7 17L17 7M9 7h8v8" />
+                    </svg>
+                  </button>
+                </div>
+              );
+            })}
           </div>
+
+          {/* Find a driving school — language-matched maps search. Bridge to
+              the /services concierge for users already in the manuals flow. */}
+          <Link
+            href={`/driving-schools?state=${selected}&lang=${serverLang}`}
+            className="block w-full mt-4 rounded-2xl bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all p-4 flex items-center gap-4"
+          >
+            <img src="/illustrations/map.png" alt="" width={56} height={46} className="shrink-0 select-none object-contain" />
+            <div className="flex-1 min-w-0">
+              <div className="font-bold text-[#0B1C3D] text-[15px]">{tex.drivingSchoolsEntryTitle || 'Find a driving school'}</div>
+              <div className="text-xs text-[#64748B] mt-0.5">{tex.drivingSchoolsEntrySub || 'In your language, near you'}</div>
+            </div>
+            <span className="text-[#94A3B8] text-xl shrink-0">›</span>
+          </Link>
         </div>
       ) : (
         /* No state yet: just the search box. Its placeholder is the prompt. */

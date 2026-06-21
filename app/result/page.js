@@ -134,7 +134,16 @@ function ResultContent() {
 
         {/* Result card */}
         <div className="bg-white rounded-2xl p-8 w-full shadow-sm border border-[#E2E8F0] text-center">
-          <div className="text-5xl mb-4">{passed ? '🎉' : '😓'}</div>
+          <div className="flex justify-center mb-4 h-[110px]">
+            <Image
+              src={passed ? '/illustrations/trophy.png' : '/illustrations/diary.png'}
+              alt=""
+              width={passed ? 110 : 160}
+              height={passed ? 110 : 110}
+              className="select-none h-full w-auto object-contain"
+              priority
+            />
+          </div>
           <div
             className={`inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-4 ${
               passed ? 'bg-[#F0FDF4] text-[#16A34A]' : 'bg-[#FEF2F2] text-[#DC2626]'
@@ -281,7 +290,13 @@ function ResultContent() {
                   }}>
                   {rIsCdl && <div className="text-[9px] font-bold text-[#0B1C3D] bg-[#F59E0B] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">{tex.planCdlBadge || 'Car tests included'}</div>}
                   {!rIsCdl && !rIsMoto && <div className="text-[9px] font-bold text-white bg-[#2563EB] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">{tex.planPopular}</div>}
-                  <div className="text-3xl mb-1">{rPlan.icon}</div>
+                  <div className="flex justify-center mb-1 h-12">
+                    <img
+                      src={rIsCdl ? '/vehicles/truck-hero.png' : rIsMoto ? '/vehicles/moto-hero.png' : '/vehicles/mustang.png'}
+                      alt=""
+                      className="h-full w-auto object-contain select-none"
+                    />
+                  </div>
                   <div className="text-xs font-bold mb-0.5" style={{ color: rIsCdl ? '#92400E' : rIsMoto ? '#D97706' : '#2563EB' }}>
                     {rIsCdl ? tex.planCdlPro : rIsMoto ? tex.planMotoPass : tex.planAutoPass}
                   </div>

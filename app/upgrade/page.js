@@ -52,7 +52,7 @@ function UpgradeContent() {
     },
     {
       ...PASS_META.auto,
-      img: '/vehicles/car-hero.png',
+      img: '/vehicles/mustang.png',
       name: tex.planAutoPass,
       duration: tex.planDuration,
       badge: tex.mostPopular,

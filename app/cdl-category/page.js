@@ -9,9 +9,9 @@ import { STATE_OPTIONS } from '@/lib/states';
 import { flags } from '@/lib/flags';
 
 const cdlSubs = [
-  { id: 'general_knowledge', icon: '📋', titleKey: 'cdlGeneral', descKey: 'cdlGeneralDesc', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)' },
-  { id: 'air_brakes',        icon: '💨', titleKey: 'cdlAirBrakes', descKey: 'cdlAirBrakesDesc', gradient: 'linear-gradient(135deg, #EEF2FF, #E0E7FF)' },
-  { id: 'combination_vehicles', icon: '🔗', titleKey: 'cdlCombination', descKey: 'cdlCombinationDesc', gradient: 'linear-gradient(135deg, #F5F3FF, #EDE9FE)' },
+  { id: 'general_knowledge', img: '/illustrations/cdl-general.png',      titleKey: 'cdlGeneral',     descKey: 'cdlGeneralDesc',     gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)', accent: '#0EA5E9' },
+  { id: 'air_brakes',        img: '/illustrations/cdl-brakes.png',       titleKey: 'cdlAirBrakes',   descKey: 'cdlAirBrakesDesc',   gradient: 'linear-gradient(135deg, #EEF2FF, #E0E7FF)', accent: '#6366F1' },
+  { id: 'combination_vehicles', img: '/illustrations/cdl-combination.png', titleKey: 'cdlCombination', descKey: 'cdlCombinationDesc', gradient: 'linear-gradient(135deg, #F5F3FF, #EDE9FE)', accent: '#8B5CF6' },
 ];
 
 const langs = [
@@ -90,7 +90,9 @@ function CdlCategoryContent() {
         {stateName && (
           <p className="text-sm font-semibold text-[#2563EB] mb-1 uppercase tracking-wide">{stateName}</p>
         )}
-        <div className="text-4xl mb-3">🚛</div>
+        <div className="flex justify-center mb-3">
+          <img src="/vehicles/truck-hero.png" alt="" width={96} height={48} className="object-contain select-none" />
+        </div>
         <h2 className="text-xl font-bold text-[#1E293B] mb-1">{tex.catCdl || 'CDL Test'}</h2>
         <p className="text-sm text-[#94A3B8]">{tex.cdlChooseSub || 'Choose a test section'}</p>
       </div>
@@ -101,15 +103,24 @@ function CdlCategoryContent() {
             key={sub.id}
             type="button"
             onClick={() => router.push(`/test?state=${state}&category=cdl&subcategory=${sub.id}&lang=${lang}`)}
-            className="w-full rounded-2xl p-5 flex items-center gap-5 hover:shadow-lg transition-all text-left border-2 border-white/60 shadow-md"
+            className="relative w-full rounded-2xl py-5 pl-5 pr-[150px] min-h-[112px] flex items-center text-left border border-white/60 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all overflow-hidden"
             style={{ background: sub.gradient }}
           >
-            <div className="text-4xl flex-shrink-0">{sub.icon}</div>
-            <div className="flex-1 min-w-0">
-              <span className="font-bold text-[#1E293B] text-lg">{tex[sub.titleKey] || sub.id.replace(/_/g, ' ')}</span>
-              <div className="text-sm text-[#64748B] mt-0.5">{tex[sub.descKey] || ''}</div>
+            <div className="flex-1 min-w-0 z-10">
+              <span className="font-bold text-[#1E293B] text-lg block">{tex[sub.titleKey] || sub.id.replace(/_/g, ' ')}</span>
+              <div className="text-sm text-[#64748B] mt-0.5 leading-snug">{tex[sub.descKey] || ''}</div>
             </div>
-            <div className="text-[#94A3B8] text-lg shrink-0"></div>
+            {/* Illustration tucked into the right side of the card — capped
+                in BOTH dimensions so every truck (cab-only, cab+trailer, with
+                stacked gauges) lands in the same visual envelope. Soft fade on
+                the left edge so it never visually crowds the title. */}
+            <img
+              src={sub.img}
+              alt=""
+              className="absolute right-3 top-1/2 -translate-y-1/2 max-w-[96px] max-h-[84px] w-auto h-auto object-contain select-none pointer-events-none"
+              style={{ WebkitMaskImage: 'linear-gradient(to right, transparent 0, #000 22%)', maskImage: 'linear-gradient(to right, transparent 0, #000 22%)' }}
+              aria-hidden="true"
+            />
           </button>
         ))}
       </div>

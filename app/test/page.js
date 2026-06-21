@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
-import { t } from '@/lib/translations';
+import { t, pluralizeQuestions } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { flags } from '@/lib/flags';
 import { agencyAbbrForState } from '@/lib/agencies';
@@ -1119,7 +1119,7 @@ function TestContent() {
         {/* Q18 pre-paywall nudge */}
         {!hasFullAccess && current === nudgeAt && showAnswer && (
           <div className="bg-[#FFF7ED] border border-[#FED7AA] rounded-xl px-4 py-3 mb-4 text-sm text-[#92400E] font-medium text-center">
-            🔔 {(tex.nudgeFreeLeft || '{n} questions left in your free test').replace('{n}', freeLimit - current - 1)}  ·  {tex.nudgeUnlockFrom || 'unlock all from'} {plan.price}
+            🔔 {(tex.nudgeFreeLeft || '{n} {w} left in your free test').replace('{n}', freeLimit - current - 1).replace('{w}', pluralizeQuestions(freeLimit - current - 1, lang))}  ·  {tex.nudgeUnlockFrom || 'unlock all from'} {plan.price}
           </div>
         )}
 

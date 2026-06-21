@@ -2463,6 +2463,12 @@
   }
   pauseBtn.addEventListener('click', e => { e.preventDefault(); ensureAudio(); togglePause(); });
 
+  // Force-pause hook for the native shell / parent frame. When the user
+  // leaves the game tab, the host posts 'dmvsos:pause' so the loop + audio
+  // stop instead of running in the background. Idempotent — never unpauses.
+  window.__dmvsosPause = () => { if (alive && !paused) setPaused(true); };
+  window.addEventListener('message', (ev) => { if (ev && ev.data === 'dmvsos:pause') window.__dmvsosPause(); });
+
   // ── Chiptune backing loop ──
   // Simple 6-note arpeggio in C major, played via Web Audio scheduling
   // (lookahead-based so it stays in sync). Volume is gentle.
@@ -6224,6 +6230,25 @@
   let repairRect = null;   // hit zone for the repair prompt during gameplay
   let shareRect = null;    // hit zone for COPY SCORE button on win screen
   let shareFlashT = 0;     // shows "COPIED!" feedback when share button used
+  let backRect = null;     // hit zone for "BACK TO TESTS" exit on game-over/win
+
+  // Navigate the top-level window back to DMVSOS practice tests. Works in BOTH
+  // standalone (/break.html opened directly) and embedded modes (iframe inside
+  // BreakButton overlay) since the iframe is same-origin with the parent app.
+  // Falls back to dmvsos.com if for any reason top-level access throws.
+  function exitToTests() {
+    try {
+      if (window.top && window.top !== window) {
+        // Embedded: close the overlay if a parent listener exists, else navigate.
+        try { window.parent.postMessage({ type: 'dmvsos:exit-game' }, '*'); } catch (_) {}
+        window.top.location.href = '/';
+      } else {
+        window.location.href = '/';
+      }
+    } catch (_) {
+      window.location.href = 'https://dmvsos.com/';
+    }
+  }
 
   // ===== WIN SCREEN — celebrates collecting all 5 LICENSES =====
   function drawWinScreen() {
@@ -6401,6 +6426,23 @@
     ctx.fillText(shareLabel, W / 2, sby + 20);
     shareRect = { x: sbx, y: sby, w: sbw, h: sbh };
     pickerRects = [];
+
+    // BACK TO TESTS — small secondary exit below the share button so winners
+    // can return to DMVSOS practice without hunting for a way out.
+    const wBackW = 156, wBackH = 18;
+    const wBackX = (W - wBackW) / 2;
+    const wBackY = sby + sbh + 6;
+    ctx.fillStyle = '#0f1d3a';
+    ctx.fillRect(wBackX, wBackY, wBackW, wBackH);
+    ctx.fillStyle = '#fde047';
+    ctx.fillRect(wBackX, wBackY, wBackW, 1);
+    ctx.fillRect(wBackX, wBackY + wBackH - 1, wBackW, 1);
+    ctx.fillRect(wBackX, wBackY, 1, wBackH);
+    ctx.fillRect(wBackX + wBackW - 1, wBackY, 1, wBackH);
+    ctx.fillStyle = '#fde047';
+    ctx.font = 'bold 9px ui-monospace, monospace';
+    ctx.fillText('← BACK TO DMVSOS TESTS', W / 2, wBackY + 13);
+    backRect = { x: wBackX, y: wBackY, w: wBackW, h: wBackH };
 
     // brand footer
     ctx.fillStyle = '#7a8aa8';
@@ -6948,12 +6990,31 @@
       ctx.restore();
     }
 
-    // brand footer at bottom edge — accented dot + tagline
-    ctx.fillStyle = COL_PICK;
-    ctx.fillRect(W / 2 - 78, H - 14, 2, 2);   // tiny green brand dot
-    ctx.fillStyle = '#3a4a6a';
-    ctx.font = '8px ui-monospace, monospace';
-    ctx.fillText('DMVSOS · STUDY, THEN CHILL', W / 2, H - 14);
+    // BACK TO TESTS — anchored to the canvas bottom so it replaces the old
+    // brand footer ("DMVSOS · STUDY, THEN CHILL"). It serves both purposes:
+    // it carries the brand name AND is the functional exit. Fades in with the
+    // keyboard hint so it doesn't fight RETRY for attention initially.
+    const backW = 168, backH = 20;
+    const backX = W / 2 - backW / 2;
+    const backY = H - backH - 4;
+    if (hintT > 0) {
+      ctx.save();
+      ctx.globalAlpha = hintT;
+      ctx.fillStyle = '#0f1d3a';
+      ctx.fillRect(backX, backY, backW, backH);
+      ctx.fillStyle = '#fde047';
+      ctx.fillRect(backX, backY, backW, 1);
+      ctx.fillRect(backX, backY + backH - 1, backW, 1);
+      ctx.fillRect(backX, backY, 1, backH);
+      ctx.fillRect(backX + backW - 1, backY, 1, backH);
+      ctx.fillStyle = '#fde047';
+      ctx.font = 'bold 10px ui-monospace, monospace';
+      ctx.fillText('← BACK TO DMVSOS TESTS', W / 2, backY + 14);
+      ctx.restore();
+      backRect = { x: backX, y: backY, w: backW, h: backH };
+    } else {
+      backRect = null;
+    }
   }
 
   function draw() {
@@ -9049,6 +9110,16 @@
         blip(740, 0.1, 'square', 0.1);
         vibe(15);
         e.preventDefault();
+        return;
+      }
+      // BACK TO DMVSOS TESTS — exit the game and return to practice tests.
+      // Works in both standalone (/break.html) and iframe (BreakButton overlay)
+      // modes since exitToTests() navigates the top-level window.
+      if (backRect && hit(backRect, p)) {
+        blip(440, 0.08, 'square', 0.08);
+        vibe(10);
+        e.preventDefault();
+        exitToTests();
         return;
       }
       // SHARE button (only on WIN screen)

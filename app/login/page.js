@@ -274,8 +274,26 @@ function LoginContent() {
             </button>
           </>
         ) : (<>
-        <h1 className="text-lg font-bold text-[#1E293B] text-center mb-2">{tex.signInTitle}</h1>
-        <p className="text-sm text-[#94A3B8] text-center mb-6">{tex.signInSubtitle || 'Save your progress and access all tests'}</p>
+        <div className="flex justify-center mb-6">
+          <Image
+            src="/illustrations/key.png"
+            alt=""
+            width={96}
+            height={96}
+            className="dmvsos-floating-key select-none"
+            priority
+          />
+        </div>
+        <style jsx global>{`
+          @keyframes dmvsos-key-float {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50%      { transform: translateY(-8px) rotate(2deg); }
+          }
+          .dmvsos-floating-key {
+            animation: dmvsos-key-float 4.4s ease-in-out infinite;
+            transform-origin: 50% 50%;
+          }
+        `}</style>
 
         {/* In-app browser (FB / IG / TikTok webview): Google OAuth is blocked
             by Google itself there, so hide the OAuth buttons and steer the
@@ -393,20 +411,28 @@ function LoginContent() {
           )}
         </form>
 
-        {/* Recovery path for users who paid but can't find / get into their
-            account (forgot which email, typo'd it at an old anonymous
-            checkout, etc.). We can't reveal which emails exist for privacy,
-            so the honest answer is a direct line to support. */}
+        {/* Support channels — covers both "got questions" and the recovery
+            path for users who paid but can't find / get into their account.
+            Two channels (Gmail / Telegram) lets people pick what's faster. */}
         <div className="mt-5 pt-4 border-t border-[#F1F5F9] text-center">
-          <p className="text-xs text-[#94A3B8] leading-relaxed mb-2">{tex.paidCantFindAccount}</p>
-          <a
-            href="https://t.me/dmvsos_support_bot"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] hover:underline"
-          >
-            @dmvsos_support_bot
-          </a>
+          <p className="text-xs text-[#94A3B8] leading-relaxed mb-2">{tex.haveQuestionsWriteUs || tex.paidCantFindAccount}</p>
+          <div className="flex items-center justify-center gap-2">
+            <a
+              href="mailto:maindmvsos@gmail.com"
+              className="text-xs font-semibold text-[#2563EB] hover:underline px-1"
+            >
+              Gmail
+            </a>
+            <span className="text-xs text-[#94A3B8]">·</span>
+            <a
+              href="https://t.me/dmvsos_support_bot"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-semibold text-[#2563EB] hover:underline px-1"
+            >
+              Telegram
+            </a>
+          </div>
         </div>
 
         <button

@@ -76,11 +76,13 @@ function ProfileContent() {
     return Math.max(0, Math.ceil(ms / 86400000));
   }
 
-  // Icon + Stripe id from lib/plans.js, label from translations.
+  // Vehicle illustration + Stripe id from lib/plans.js, label from translations.
+  // Each pass shows its corresponding transport (mustang/moto/truck) so users
+  // recognize what each card unlocks at a glance — parity with mobile.
   const PASS_DISPLAY = {
-    moto: { ...PASS_META.moto, label: tex.planMotoPass },
-    auto: { ...PASS_META.auto, label: tex.planAutoPass },
-    cdl:  { ...PASS_META.cdl,  label: tex.planCdlPro },
+    moto: { ...PASS_META.moto, label: tex.planMotoPass, art: '/vehicles/moto-hero.png' },
+    auto: { ...PASS_META.auto, label: tex.planAutoPass, art: '/vehicles/mustang.png' },
+    cdl:  { ...PASS_META.cdl,  label: tex.planCdlPro,   art: '/vehicles/truck-hero.png' },
   };
   const passEntries = Object.entries(activePasses || {});
 
@@ -140,9 +142,15 @@ function ProfileContent() {
           </div>
         </div>
         <div className="bg-white rounded-2xl p-8 w-full shadow-sm border border-[#E2E8F0] text-center">
-          <div className="w-16 h-16 rounded-full bg-[#0B1C3D] flex items-center justify-center text-white text-2xl font-bold mx-auto mb-5">
-            {user.email?.[0].toUpperCase()}
-          </div>
+          {isPro ? (
+            <div className="flex justify-center mb-4">
+              <img src="/illustrations/trophy.png" alt="" width={96} height={96} className="select-none" />
+            </div>
+          ) : (
+            <div className="w-16 h-16 rounded-full bg-[#0B1C3D] flex items-center justify-center text-white text-2xl font-bold mx-auto mb-5">
+              {user.email?.[0].toUpperCase()}
+            </div>
+          )}
           <h2 className="text-xl font-bold text-[#1E293B] mb-1">{user.user_metadata?.full_name || tex.signInTitle || 'User'}</h2>
           <p className="text-sm text-[#94A3B8] mb-5">{user.email}</p>
           <span className={`inline-block text-xs font-bold px-3 py-1.5 rounded-full ${isPro ? 'bg-[#FEF3C7] text-[#B45309]' : 'bg-[#EFF6FF] text-[#2563EB]'}`}>
@@ -184,7 +192,11 @@ function ProfileContent() {
                 const lowDays = left <= 3;
                 return (
                   <div key={type} className="flex items-center gap-3 p-3 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC]">
-                    <span className="text-2xl">{meta.icon}</span>
+                    {meta.art ? (
+                      <img src={meta.art} alt="" width={48} height={32} className="shrink-0 select-none object-contain" />
+                    ) : (
+                      <span className="text-2xl">{meta.icon}</span>
+                    )}
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-bold text-[#0B1C3D]">{meta.label}</div>
                       <div className={`text-xs ${lowDays ? 'text-[#DC2626]' : 'text-[#64748B]'}`}>
@@ -208,6 +220,21 @@ function ProfileContent() {
             </p>
           </div>
         )}
+
+        {/* Find help nearby — concierge entry. Pro-gated on the destination,
+            but the card itself stays visible so free users see what they get. */}
+        <button
+          type="button"
+          onClick={() => router.push(`/services?lang=${lang}`)}
+          className="w-full mt-5 bg-white rounded-2xl p-4 shadow-sm border border-[#E2E8F0] hover:shadow-md hover:-translate-y-0.5 transition-all flex items-center gap-4 text-left"
+        >
+          <img src="/illustrations/map.png" alt="" width={64} height={52} className="shrink-0 select-none object-contain" />
+          <div className="flex-1 min-w-0">
+            <div className="font-bold text-[#0B1C3D] text-[15px]">{tex.servicesHubTitle || 'Find help nearby'}</div>
+            <div className="text-xs text-[#64748B] mt-0.5 leading-snug">{tex.drivingSchoolsEntrySub || 'In your language, near you'}</div>
+          </div>
+          <span className="text-[#94A3B8] text-xl shrink-0">›</span>
+        </button>
 
         {sessions.length > 0 && (
           <div className="bg-white rounded-2xl p-6 w-full mt-5 shadow-sm border border-[#E2E8F0]">
