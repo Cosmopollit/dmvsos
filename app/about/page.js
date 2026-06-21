@@ -16,7 +16,7 @@ export default function AboutPage() {
         '@type': 'AboutPage',
         name: 'About DMVSOS',
         url: 'https://dmvsos.com/about',
-        description: 'Founder story and product overview for DMVSOS | free DMV practice tests for all 50 US states in 5 languages.',
+        description: 'About DMVSOS | free DMV practice tests for all 50 US states in 5 languages, built from official state Driver Handbooks.',
       },
       {
         '@type': 'BreadcrumbList',
@@ -40,12 +40,11 @@ export default function AboutPage() {
 
         <article className="bg-white rounded-2xl p-8 sm:p-10 shadow-sm border border-[#E2E8F0]">
           <h1 className="text-3xl font-bold text-[#0B1C3D] mb-2">About DMVSOS</h1>
-          <p className="text-[#64748B] text-sm mb-8">Run by one person. Built around state-official content.</p>
+          <p className="text-[#64748B] text-sm mb-8">Built around state-official content.</p>
 
           <section className="space-y-5 text-[#1E293B] leading-relaxed">
             <p>
-              Hi, I&apos;m <strong>Evgenii</strong>. I built DMVSOS because the existing DMV
-              prep options are stuck on three things: English-only content, generic questions
+              Most DMV prep is stuck on three things: English-only content, generic questions
               that don&apos;t match the state you&apos;re actually testing in, and monthly
               subscriptions that bill you forever after you got your license.
             </p>
@@ -81,20 +80,20 @@ export default function AboutPage() {
 
             <h2 className="text-xl font-bold text-[#0B1C3D] pt-4">Where the questions come from</h2>
             <p>
-              I&apos;m not selling you leaked exam answers. Nobody legitimate has those. Every
+              We&apos;re not selling you leaked exam answers. Nobody legitimate has those. Every
               question is written from the official state Driver Handbook (the same source the
               real DMV exam draws from), in the same format and difficulty. We cite the exact
               section of the handbook under each question.
             </p>
             <p>
               If you spot a question that looks wrong, there&apos;s a 🐛 Report button under
-              every answer. It pings me directly via Telegram. I fix the question that day or
-              the next.
+              every answer. It goes straight to our team via Telegram, and we fix the question
+              that day or the next.
             </p>
 
             <h2 className="text-xl font-bold text-[#0B1C3D] pt-4">Support</h2>
             <p>
-              No call center, no chatbot maze. Write to me on Telegram:{' '}
+              No call center, no chatbot maze. Write to us on Telegram:{' '}
               <a
                 href="https://t.me/dmvsos_support_bot"
                 target="_blank"
@@ -107,17 +106,7 @@ export default function AboutPage() {
               <a href="mailto:maindmvsos@gmail.com" className="text-[#2563EB] underline underline-offset-2 font-medium">
                 maindmvsos@gmail.com
               </a>
-              . I read everything personally, usually reply within 4 hours.
-            </p>
-
-            <h2 className="text-xl font-bold text-[#0B1C3D] pt-4">Why I keep it small</h2>
-            <p>
-              No investors, no growth team, no marketing fluff. Just me, your money goes to
-              running the servers and translating new questions when state handbooks update.
-              The whole thing exists because I needed it and figured others did too.
-            </p>
-            <p>
-              If you pass your test thanks to this, send a message. It keeps me going.
+              . We read everything, usually reply within 4 hours.
             </p>
 
             <div className="pt-6 mt-6 border-t border-[#E2E8F0] text-sm text-[#64748B] space-y-2">
@@ -128,7 +117,7 @@ export default function AboutPage() {
                 <a href="https://t.me/dmvsos_support_bot" target="_blank" rel="noopener noreferrer" className="text-[#2563EB]">@dmvsos_support_bot</a>
               </p>
               <p>
-                <strong>Questions about a charge?</strong> Just message me and I&apos;ll sort it out.
+                <strong>Questions about a charge?</strong> Just message us and we&apos;ll sort it out.
               </p>
               <p>
                 <strong>Terms / Privacy:</strong>{' '}

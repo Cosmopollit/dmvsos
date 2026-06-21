@@ -30,8 +30,7 @@ const SUPA_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 // Chat IDs allowed to use /grant and /check. Defaults to the admin chat
 // if TELEGRAM_GRANT_CHAT_IDS isn't set, so the feature works for one admin
-// out of the box. Add a comma-separated list to include co-admins
-// (e.g. "472198072,380411112" for evgeniy + anastasiya).
+// out of the box. Add a comma-separated list of chat IDs to include co-admins.
 const GRANT_ALLOWED_CHAT_IDS = new Set(
   (process.env.TELEGRAM_GRANT_CHAT_IDS || process.env.TELEGRAM_ADMIN_CHAT_ID || '')
     .split(',').map(s => s.trim()).filter(Boolean)
@@ -110,7 +109,7 @@ I can help with:
 /states - Which states we cover
 /languages - Available languages
 /refund - Refund policy
-/human - Talk to Evgenii (founder) directly
+/human - Talk to our team directly
 
 Or just type your question - I'll forward it.`,
     pricing: `💰 <b>Flat-rate one-time payments - no subscriptions</b>
@@ -128,8 +127,8 @@ Just pick your state on dmvsos.com - every state has its own question bank built
     refund: `💸 <b>Payments</b>
 
 Passes are one-time purchases, so they are final. If something is wrong, message us here and we will make it right.`,
-    human: `🧑‍💻 Sending your message to Evgenii (founder). Usually replies within 4 hours.`,
-    forwardedAck: `✅ Got it. Evgenii will reply shortly.`,
+    human: `🧑‍💻 Sending your message to our team. Usually replies within 4 hours.`,
+    forwardedAck: `✅ Got it. We'll reply shortly.`,
     unknown: `Commands: /start /pricing /states /languages /refund /human /lang`,
     pickCategory: `🚦 Pick a license type for <b>{state}</b>:`,
     pickState: `🗽 Which state? Pick or open the site for all 50:`,
@@ -140,8 +139,8 @@ Passes are one-time purchases, so they are final. If something is wrong, message
     states: `🗽 Покрываем <b>все 50 штатов + DC</b>. Выбери штат на dmvsos.com.`,
     languages: `🌍 5 языков: 🇺🇸 EN · 🇷🇺 RU · 🇪🇸 ES · 🇨🇳 ZH · 🇺🇦 UA`,
     refund: `💸 Пропуска - разовая покупка, поэтому они окончательны. Если что-то не так, напиши сюда, разберёмся.`,
-    human: `🧑‍💻 Передаю Евгению. Обычно отвечает в течение 4 часов.`,
-    forwardedAck: `✅ Получил. Евгений ответит скоро.`,
+    human: `🧑‍💻 Передаю команде поддержки. Обычно отвечаем в течение 4 часов.`,
+    forwardedAck: `✅ Получил. Ответим скоро.`,
     unknown: `Команды: /start /pricing /states /languages /refund /human /lang`,
     pickCategory: `🚦 Выбери категорию прав для штата <b>{state}</b>:`,
     pickState: `🗽 В каком штате? Выбери из топ-6 или открой все 50 на сайте:`,
@@ -152,7 +151,7 @@ Passes are one-time purchases, so they are final. If something is wrong, message
     states: `🗽 Los 50 estados + DC en dmvsos.com.`,
     languages: `🌍 5 idiomas: EN · RU · ES · ZH · UA`,
     refund: `💸 Las compras son únicas y finales. Si algo está mal, escríbenos aquí y lo resolvemos.`,
-    human: `🧑‍💻 Enviando a Evgenii. Responde en ~4h.`,
+    human: `🧑‍💻 Enviando a nuestro equipo. Responde en ~4h.`,
     forwardedAck: `✅ Recibido.`,
     unknown: `Comandos: /start /pricing /states /languages /refund /human /lang`,
     pickCategory: `🚦 Elige tipo de licencia para <b>{state}</b>:`,
@@ -164,7 +163,7 @@ Passes are one-time purchases, so they are final. If something is wrong, message
     states: `🗽 全美50州 + DC，在 dmvsos.com 选择`,
     languages: `🌍 5种语言`,
     refund: `💸 通行证为一次性购买，因此为最终交易。如有问题，请在此联系我们，我们会处理。`,
-    human: `🧑‍💻 转发给Evgenii，约4小时回复。`,
+    human: `🧑‍💻 转发给我们的团队，约4小时回复。`,
     forwardedAck: `✅ 已收到。`,
     unknown: `命令: /start /pricing /states /languages /refund /human /lang`,
     pickCategory: `🚦 选择 <b>{state}</b> 的驾照类型:`,
@@ -176,7 +175,7 @@ Passes are one-time purchases, so they are final. If something is wrong, message
     states: `🗽 Усі 50 штатів + DC на dmvsos.com.`,
     languages: `🌍 5 мов`,
     refund: `💸 Пропуски - разова покупка, тож вони остаточні. Якщо щось не так, напиши сюди, розберемося.`,
-    human: `🧑‍💻 Передаю Євгенію. Відповідає за ~4 години.`,
+    human: `🧑‍💻 Передаю команді підтримки. Відповідаємо за ~4 години.`,
     forwardedAck: `✅ Прийнято.`,
     unknown: `Команди: /start /pricing /states /languages /refund /human /lang`,
     pickCategory: `🚦 Обери категорію прав для штату <b>{state}</b>:`,

@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 
-// Admin customers dashboard (for Anastasia + Evgenii).
+// Admin customers dashboard (internal staff only).
 // Password-gated like the rest of /admin. Shows who bought what, days left,
 // where they practice, and lets an admin delete an account (with a typed
 // email confirmation so it can't be a mis-click).

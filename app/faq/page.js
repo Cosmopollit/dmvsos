@@ -43,19 +43,15 @@ const QA = [
   },
   {
     q: 'How do you compare to DriversEd, Aceable, or Driving-Tests.org?',
-    a: 'Three differences. (1) We support 5 languages including Russian and Ukrainian, while most competitors are English-only. (2) We charge one-time, not monthly. (3) DMVSOS is run by one founder. You can reach me personally via Telegram or email and I reply within 4 hours.',
+    a: 'Three differences. (1) We support 5 languages including Russian and Ukrainian, while most competitors are English-only. (2) We charge one-time, not monthly. (3) Fast, direct support: reach us on Telegram or email and we reply within 4 hours.',
   },
   {
     q: 'How can I report a wrong answer or bad translation?',
-    a: 'Every question has a small 🐛 Report button under the explanation. Tap it, pick a reason (wrong answer, bad translation, unclear, etc.), optionally add a comment. The report pings me directly via Telegram. I fix it the same day or the next.',
+    a: 'Every question has a small 🐛 Report button under the explanation. Tap it, pick a reason (wrong answer, bad translation, unclear, etc.), optionally add a comment. The report goes straight to our team on Telegram and we fix it the same day or the next.',
   },
   {
     q: 'Is my payment information secure?',
-    a: 'Yes. We never see or store your card details. All payments go through Stripe (PCI Level 1 compliant). We only see the last 4 digits of your card for support purposes.',
-  },
-  {
-    q: 'Where are you based?',
-    a: 'DMVSOS is run by Evgenii, a solo founder based in the US. The platform is hosted on Vercel + Supabase. Customer support is via Telegram (@dmvsos_support_bot) or email (maindmvsos@gmail.com).',
+    a: 'Yes. We never see or store your full card details — payments are encrypted and processed by a certified payment provider. We only see the last 4 digits for support purposes.',
   },
   {
     q: 'How often are questions updated?',
