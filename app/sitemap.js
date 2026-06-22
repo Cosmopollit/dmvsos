@@ -10,23 +10,9 @@ const states = [
   'west-virginia', 'wisconsin', 'wyoming',
 ];
 
-const SUPABASE_URL = 'https://yaogndpgnewqffbjrsgz.supabase.co';
-const INDEX_URL = `${SUPABASE_URL}/storage/v1/object/public/manuals/manuals-index.json`;
-
-async function fetchManualIndex() {
-  try {
-    const res = await fetch(INDEX_URL, { next: { revalidate: 86400 } });
-    if (!res.ok) return null;
-    return res.json();
-  } catch {
-    return null;
-  }
-}
-
-export default async function sitemap() {
+export default function sitemap() {
   const baseUrl = 'https://dmvsos.com';
   const now = new Date().toISOString();
-  const index = await fetchManualIndex();
 
   const pages = [
     { url: baseUrl,                    lastModified: now, changeFrequency: 'weekly',  priority: 1.0 },
@@ -51,7 +37,12 @@ export default async function sitemap() {
     });
   }
 
-  // Manual pages — state + category sub-pages
+  // Manual hubs: state + category. The per-language leaf pages
+  // (/manuals/{state}/{cat}/{lang}) are intentionally OMITTED: ~242 thin
+  // PDF-link pages were ~half the sitemap, diluting crawl budget and sitting
+  // as "Discovered - currently not indexed". The category page already lists
+  // every language, so the leaves added URLs without unique value. They still
+  // resolve for users; they just no longer compete for crawl budget.
   for (const st of states) {
     pages.push({
       url: `${baseUrl}/manuals/${st}`,
@@ -66,16 +57,6 @@ export default async function sitemap() {
         changeFrequency: 'monthly',
         priority: 0.75,
       });
-      // Language sub-pages — only where PDFs actually exist
-      const langs = index?.[st]?.[cat] ? Object.keys(index[st][cat]) : [];
-      for (const lang of langs) {
-        pages.push({
-          url: `${baseUrl}/manuals/${st}/${cat}/${lang}`,
-          lastModified: now,
-          changeFrequency: 'monthly',
-          priority: 0.7,
-        });
-      }
     }
   }
 
