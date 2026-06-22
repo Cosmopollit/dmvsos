@@ -18,6 +18,7 @@
 <title>EXAM SKIPPER 3000 · DMVSOS</title>
 <style>
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   html, body {
     margin: 0; padding: 0;
     background: #0a0000;
@@ -89,6 +90,21 @@
     transition: transform 0.06s;
   }
   .play:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #0a0000; }
+  /* Secondary CTA, same shape family as .play but outlined — jumps to the info below. */
+  .about-row { margin-top: 16px; }
+  .about {
+    display: inline-block;
+    background: transparent; color: #fde047;
+    font-weight: bold; font-size: clamp(13px, 3.2vw, 16px);
+    padding: 12px 30px;
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    border: 2px solid #fde047;
+    box-shadow: 3px 3px 0 #0a0000;
+    transition: transform 0.06s, background 0.12s;
+  }
+  .about:hover { background: rgba(253,224,71,0.12); }
+  .about:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #0a0000; }
 
   /* Section blocks */
   section {
@@ -96,6 +112,7 @@
     margin: 0 auto;
     padding: 36px 20px;
     border-bottom: 1px solid rgba(253,224,71,0.15);
+    scroll-margin-top: 16px;
   }
   h2 {
     font-style: italic;
@@ -180,9 +197,10 @@
     <div class="badge">3000</div>
     <div class="tagline">IT'S NOT A GAME · IT'S LIFE</div>
     <a href="/break.html" class="play">▶ TAP TO PLAY</a>
+    <div class="about-row"><a href="#about" class="about">★ ABOUT THE GAME</a></div>
   </header>
 
-  <section>
+  <section id="about">
     <h2>★ THE POINT</h2>
     <p class="lead">
       A game with a point.
