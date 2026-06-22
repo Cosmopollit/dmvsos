@@ -303,8 +303,13 @@ async function handleGrantCommand(chatId, actorName, textRaw) {
 
   try {
     const r = await grantPass({ email, passType, days, sendMagicLink: sendLink });
+    // Supabase admin/generate_link RETURNS the link but does NOT email it, so we
+    // must surface it here for the admin to forward. (Plain <code> = copyable but
+    // not a hyperlink, so it isn't accidentally clicked + consumed in this chat.)
     const linkLine = sendLink
-      ? (typeof r.magicLink === 'string' ? `🔗 Magic link sent` : `⚠️ Magic link FAILED: ${r.magicLink?.error || 'unknown'}`)
+      ? (typeof r.magicLink === 'string'
+          ? `🔗 Login link (forward to the user — one-time, ~24h):\n<code>${escapeHtml(r.magicLink)}</code>`
+          : `⚠️ Magic link FAILED: ${r.magicLink?.error || 'unknown'}`)
       : `🔗 No link sent (--no-link)`;
     const summary =
       `✅ <b>${escapeHtml(r.email)}</b> — <b>${r.passType}</b>, ${r.days}d\n` +
