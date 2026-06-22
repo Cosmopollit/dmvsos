@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { cookies } from 'next/headers';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 import { getStatesWithManuals } from '@/lib/manual-parser';
-import { getHreflangAlternates } from '@/lib/hreflang';
+import { manualsHubMeta, localizedAlternates, APP_LANG_TO_OG_LOCALE, APP_LANG_TO_HTML_LANG } from '@/lib/i18n-meta';
 import { t } from '@/lib/translations';
 import ManualsLibrary from './ManualsLibrary';
 import ManualsLangSwitcher from './ManualsLangSwitcher';
@@ -11,19 +11,40 @@ import ManualsLangSwitcher from './ManualsLangSwitcher';
 const SUPABASE_URL = 'https://yaogndpgnewqffbjrsgz.supabase.co';
 const INDEX_URL = `${SUPABASE_URL}/storage/v1/object/public/manuals/manuals-index.json`;
 
-export const metadata = {
-  title: 'Free DMV Driver Manuals | All 50 States | DMVSOS',
-  description: 'The largest free driver manual library online. Official DMV handbooks for all 50 US states in 27 languages. Download PDF or read online.',
-  alternates: getHreflangAlternates('/manuals'),
-  openGraph: {
-    title: 'Free DMV Driver Manuals | All 50 States',
-    description: 'Official DMV driver handbooks for all 50 US states. Download free PDF in 27 languages including Spanish, Russian, Chinese, and more.',
-    url: 'https://dmvsos.com/manuals',
-    siteName: 'DMVSOS',
-    type: 'website',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Free DMV Driver Manuals | All 50 States' }],
-  },
-};
+const SUPPORTED_LANGS = ['en', 'ru', 'es', 'zh', 'ua'];
+function resolveLang(raw) {
+  return SUPPORTED_LANGS.includes(raw) ? raw : 'en';
+}
+
+export async function generateMetadata({ searchParams }) {
+  const sp = (await searchParams) || {};
+  const lang = resolveLang(Array.isArray(sp.lang) ? sp.lang[0] : sp.lang);
+  const m = manualsHubMeta(lang);
+  const alts = localizedAlternates('/manuals', lang);
+  return {
+    title: m.title,
+    description: m.description,
+    alternates: alts,
+    openGraph: {
+      title: m.title,
+      description: m.description,
+      url: alts.canonical,
+      siteName: 'DMVSOS',
+      type: 'website',
+      locale: APP_LANG_TO_OG_LOCALE[lang],
+      alternateLocale: Object.values(APP_LANG_TO_OG_LOCALE).filter(l => l !== APP_LANG_TO_OG_LOCALE[lang]),
+      images: [{ url: '/og-image.png', width: 1200, height: 630, alt: m.title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: m.title,
+      description: m.description,
+    },
+    other: {
+      'content-language': APP_LANG_TO_HTML_LANG[lang],
+    },
+  };
+}
 
 async function fetchManualIndex() {
   try {

@@ -1,11 +1,18 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
-import { getHreflangAlternates } from '@/lib/hreflang';
 import { MIN_PRICE } from '@/lib/plans';
 import { examRulesFor, passPercentFor } from '@/lib/exam-rules';
+import { neighborsOf } from '@/lib/state-neighbors';
+import { citiesOf } from '@/lib/state-cities';
+import { stateMeta, localizedAlternates, APP_LANG_TO_OG_LOCALE, APP_LANG_TO_HTML_LANG } from '@/lib/i18n-meta';
 import SiteHeader from '@/app/components/SiteHeader';
 import SupportFooter from '@/app/components/SupportFooter';
+
+const SUPPORTED_LANGS = ['en', 'ru', 'es', 'zh', 'ua'];
+function resolveLang(raw) {
+  return SUPPORTED_LANGS.includes(raw) ? raw : 'en';
+}
 
 // Exam facts come from the single source of truth (lib/exam-rules.js),
 // not a local table, so counts + pass scores never drift or go stale.
@@ -27,30 +34,40 @@ export function generateStaticParams() {
   return STATE_SLUGS.map(state => ({ state }));
 }
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata({ params, searchParams }) {
   const { state } = await params;
+  const sp = (await searchParams) || {};
+  const lang = resolveLang(Array.isArray(sp.lang) ? sp.lang[0] : sp.lang);
   const name = STATE_DISPLAY[state];
   if (!name) return {};
   const meta = STATE_META[state];
   const exam = examFor(state);
   const year = new Date().getFullYear();
+  const vars = { name, abbr: meta.abbr, agency: meta.dmvAbbr, questions: exam.questions, year };
+  const m = stateMeta(lang, vars);
+  const alts = localizedAlternates(`/dmv-test/${state}`, lang);
 
   return {
-    title: `${name} DMV Practice Test ${year}  ·  Free | DMVSOS`,
-    description: `Free ${name} DMV practice test ${year}. Study ${exam.questions}+ real ${meta.abbr} knowledge test questions in 5 languages. Pass on your first try  ·  no signup required.`,
-    alternates: getHreflangAlternates(`/dmv-test/${state}`),
+    title: m.title,
+    description: m.description,
+    alternates: alts,
     openGraph: {
-      title: `${name} DMV Practice Test ${year}  ·  Free`,
-      description: `Free ${name} DMV practice test. Real ${meta.abbr} knowledge test questions in English, Spanish, Russian, Chinese and Ukrainian.`,
-      url: `https://dmvsos.com/dmv-test/${state}`,
+      title: m.title,
+      description: m.description,
+      url: alts.canonical,
       siteName: 'DMVSOS',
       type: 'website',
-      images: [{ url: '/og-image.png', width: 1200, height: 630, alt: `${name} DMV Practice Test` }],
+      locale: APP_LANG_TO_OG_LOCALE[lang],
+      alternateLocale: Object.values(APP_LANG_TO_OG_LOCALE).filter(l => l !== APP_LANG_TO_OG_LOCALE[lang]),
+      images: [{ url: '/og-image.png', width: 1200, height: 630, alt: m.title }],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${name} DMV Practice Test ${year}  ·  Free`,
-      description: `Free ${name} DMV practice test. Real questions, 5 languages.`,
+      title: m.title,
+      description: m.description,
+    },
+    other: {
+      'content-language': APP_LANG_TO_HTML_LANG[lang],
     },
   };
 }
@@ -155,8 +172,16 @@ export default async function StateDmvTestPage({ params }) {
     ],
   });
 
+  // Geographic neighbors first — real adjacency reads as a coherent regional
+  // map to crawlers (Florida → Georgia, Alabama; not alphabetical Alaska).
+  // Fall back to top-traffic states for the second row if the state has few
+  // neighbors (e.g. Florida only borders 2 states; New England states < 4).
   const stateIdx = STATE_SLUGS.indexOf(state);
-  const otherStates = STATE_SLUGS.filter((_, i) => i !== stateIdx).slice(0, 8);
+  const neighborStates = neighborsOf(state).filter(s => s !== state);
+  const TOP_STATES = ['california', 'texas', 'florida', 'new-york', 'illinois', 'pennsylvania', 'ohio', 'georgia'];
+  const fillerStates = TOP_STATES.filter(s => s !== state && !neighborStates.includes(s));
+  const otherStates = [...neighborStates, ...fillerStates].slice(0, 8);
+  const cities = citiesOf(state);
 
   const stats = [
     { value: '25,000+', label: 'Questions' },
@@ -363,9 +388,40 @@ export default async function StateDmvTestPage({ params }) {
           <p className="text-xs text-[#64748B] mt-2">One-time payment · 30 days · No subscription</p>
         </div>
 
-        {/* Other states */}
+        {/* Languages section — mirrors real search intent. The product's
+            unique edge: native-language practice for the {state} {agency}
+            test. Spelled out so Google indexes "free Florida DMV test in
+            Russian / Spanish / Chinese / Ukrainian" long-tail combos. */}
+        <section className="bg-white rounded-2xl border border-[#E2E8F0] p-6 mb-5 shadow-sm">
+          <h2 className="text-base font-bold text-[#0B1C3D] mb-3">
+            Free {name} {meta.dmvAbbr} practice test in your language
+          </h2>
+          <p className="text-sm text-[#64748B] mb-4 leading-relaxed">
+            DMVSOS is the only free {name} {meta.dmvAbbr} practice test pulled directly from the official driver
+            handbook and translated into five languages. Same {exam.questions}-question format you will see at the
+            {' '}{meta.dmvAbbr} window — practice and walk in ready.
+          </p>
+          <ul className="space-y-2 mb-4">
+            <li className="text-sm text-[#1A2B4A]"><strong>🇺🇸 English</strong> — official source text, all {exam.questions} {name} knowledge-test topics covered</li>
+            <li className="text-sm text-[#1A2B4A]"><strong>🇪🇸 Español</strong> — examen de manejo de {name} gratis, traducido por hablantes nativos</li>
+            <li className="text-sm text-[#1A2B4A]"><strong>🇷🇺 Русский</strong> — бесплатный тест {meta.dmvAbbr} {name} на русском, реальные вопросы</li>
+            <li className="text-sm text-[#1A2B4A]"><strong>🇨🇳 中文</strong> — {name} {meta.dmvAbbr} 笔试免费练习，中英对照</li>
+            <li className="text-sm text-[#1A2B4A]"><strong>🇺🇦 Українська</strong> — безкоштовний тест {meta.dmvAbbr} {name} українською</li>
+          </ul>
+          {cities.length > 0 && (
+            <p className="text-xs text-[#64748B] leading-relaxed border-t border-[#F1F5F9] pt-4">
+              Questions are statewide — the same exam runs whether you test in {cities.slice(0, 6).join(', ')}
+              {cities.length > 6 ? `, or any other ${name} ${meta.dmvAbbr} location` : ''}.
+            </p>
+          )}
+        </section>
+
+        {/* Geographically-relevant nearby states first, then top-traffic states
+            as filler so the section is never thin. Internal linking signal. */}
         <section>
-          <h2 className="text-sm font-bold text-[#0B1C3D] mb-3">Practice tests for other states</h2>
+          <h2 className="text-sm font-bold text-[#0B1C3D] mb-3">
+            {neighborStates.length > 0 ? `Practice tests near ${name}` : 'Popular state practice tests'}
+          </h2>
           <div className="grid grid-cols-2 gap-2">
             {otherStates.map(s => (
               <Link

@@ -4,7 +4,12 @@ import { notFound } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { t } from '@/lib/translations';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META, LANG_NAMES } from '@/lib/manual-data';
-import { getHreflangAlternates } from '@/lib/hreflang';
+import { stateCatManualMeta, categoryLabel, localizedAlternates, APP_LANG_TO_OG_LOCALE, APP_LANG_TO_HTML_LANG } from '@/lib/i18n-meta';
+
+const SUPPORTED_LANGS = ['en', 'ru', 'es', 'zh', 'ua'];
+function resolveLang(raw) {
+  return SUPPORTED_LANGS.includes(raw) ? raw : 'en';
+}
 import { examRulesFor } from '@/lib/exam-rules';
 
 const SUPABASE_URL = 'https://yaogndpgnewqffbjrsgz.supabase.co';
@@ -179,27 +184,37 @@ export function generateStaticParams() {
   return params;
 }
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata({ params, searchParams }) {
   const { state, cat } = await params;
+  const sp = (await searchParams) || {};
+  const lang = resolveLang(Array.isArray(sp.lang) ? sp.lang[0] : sp.lang);
   const name = STATE_DISPLAY[state];
   if (!name || !VALID_CATS.includes(cat)) return {};
   const meta = STATE_META[state];
-  const year = new Date().getFullYear();
-  const catInfo = CAT_META[cat];
-
-  const title = `${name} ${catInfo.label} ${year} | Free PDF | DMVSOS`;
-  const description = `Download the official ${name} ${catInfo.labelFull} (${year}) as a free PDF or read online. Study for the ${meta.abbr} ${catInfo.testLabel}, available in multiple languages.`;
+  const vars = { name, abbr: meta.abbr, agency: meta.dmvAbbr, catLabel: categoryLabel(lang, cat) };
+  const m = stateCatManualMeta(lang, vars);
+  const alts = localizedAlternates(`/manuals/${state}/${cat}`, lang);
 
   return {
-    title,
-    description,
-    alternates: getHreflangAlternates(`/manuals/${state}/${cat}`),
+    title: m.title,
+    description: m.description,
+    alternates: alts,
     openGraph: {
-      title: `${name} ${catInfo.label} ${year} | Free PDF`,
-      description,
-      url: `https://dmvsos.com/manuals/${state}/${cat}`,
+      title: m.title,
+      description: m.description,
+      url: alts.canonical,
       siteName: 'DMVSOS',
       type: 'article',
+      locale: APP_LANG_TO_OG_LOCALE[lang],
+      alternateLocale: Object.values(APP_LANG_TO_OG_LOCALE).filter(l => l !== APP_LANG_TO_OG_LOCALE[lang]),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: m.title,
+      description: m.description,
+    },
+    other: {
+      'content-language': APP_LANG_TO_HTML_LANG[lang],
     },
   };
 }
