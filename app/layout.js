@@ -1,5 +1,4 @@
 import { Inter, DM_Sans, Geist_Mono } from "next/font/google";
-import { cookies } from "next/headers";
 import "./globals.css";
 import { AuthProvider } from "@/lib/AuthContext";
 import { Analytics } from "@vercel/analytics/next";
@@ -155,11 +154,13 @@ const jsonLd = {
   ],
 };
 
-export default async function RootLayout({ children }) {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get('dmvsos_lang')?.value || 'en';
+export default function RootLayout({ children }) {
+  // English-first canonical content, so <html lang> is static "en". Reading the
+  // lang cookie here forced the whole route tree to render dynamically (no
+  // static/ISR) AND a cookieless crawler saw lang=en regardless. The client UI
+  // still localizes per ?lang / saved preference after hydration.
   return (
-    <html lang={lang}>
+    <html lang="en">
       <head>
         <script
           type="application/ld+json"
