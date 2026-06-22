@@ -1,4 +1,5 @@
 import { Inter, DM_Sans, Geist_Mono } from "next/font/google";
+import { cookies } from "next/headers";
 import "./globals.css";
 import { AuthProvider } from "@/lib/AuthContext";
 import { Analytics } from "@vercel/analytics/next";
@@ -154,13 +155,16 @@ const jsonLd = {
   ],
 };
 
-export default function RootLayout({ children }) {
-  // English-first canonical content, so <html lang> is static "en". Reading the
-  // lang cookie here forced the whole route tree to render dynamically (no
-  // static/ISR) AND a cookieless crawler saw lang=en regardless. The client UI
-  // still localizes per ?lang / saved preference after hydration.
+export default async function RootLayout({ children }) {
+  // NOTE: reading cookies() here makes the whole route tree render dynamically.
+  // That is intentional FOR NOW: removing it flips the app to static generation,
+  // which surfaces latent `useSearchParams() without <Suspense>` errors in admin
+  // pages (e.g. /admin/clusters/new) and breaks the production build. Re-enable
+  // static only after every such page is wrapped in a Suspense boundary.
+  const cookieStore = await cookies();
+  const lang = cookieStore.get('dmvsos_lang')?.value || 'en';
   return (
-    <html lang="en">
+    <html lang={lang}>
       <head>
         <script
           type="application/ld+json"
