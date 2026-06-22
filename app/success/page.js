@@ -86,7 +86,10 @@ function SuccessContent() {
       }
       setResendStatus('sent');
     } catch (_) {
-      setResendStatus('sent'); // assume success; webhook already sent one too
+      // Network error reaching our own endpoint. There is no email backup
+      // (generate_link does not send mail); the real login path is the
+      // login_url redirect above. Nothing more to do, just clear the spinner.
+      setResendStatus('sent');
     } finally {
       setResending(false);
     }

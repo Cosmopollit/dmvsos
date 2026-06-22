@@ -1,13 +1,15 @@
 // Safety net for the anonymous-checkout flow.
 //
-// The webhook already (a) creates the auth.users row, (b) writes
-// active_passes, and (c) fires sendMagicLink for the buying email — so most
-// paying customers land on /success and get auto-logged-in. This route
-// handles the stragglers:
+// The webhook already (a) creates the auth.users row and (b) writes
+// active_passes; most paying customers then land on /success and get
+// auto-logged-in via the in-page magic-link redirect. NOTE: that magic
+// link is delivered by the redirect, NOT by email. admin/generate_link
+// returns the link but never sends mail, so there is no customer email in
+// this flow. This route handles the stragglers who never completed the
+// redirect:
 //
 //   - User closed the Stripe tab before /success could load, so the in-page
 //     redirect to the magic-link never ran.
-//   - Supabase SMTP email landed in spam.
 //   - Cold-start race meant /success raced ahead of the webhook and the
 //     first magic-link never had a paid pass attached.
 //

@@ -45,7 +45,9 @@ export async function POST(req) {
       return Response.json({ error: 'no email on session' }, { status: 400 });
     }
 
-    // Generate magic-link (Supabase will also email it as backup)
+    // Generate a one-time magic-link. NOTE: admin/generate_link RETURNS the
+    // link but does NOT send any email. Login happens via the redirect the
+    // success page performs with login_url (below), not by email.
     const res = await fetch(`${SUPA_URL}/auth/v1/admin/generate_link`, {
       method: 'POST',
       headers: sbHeaders,
