@@ -3,6 +3,8 @@ import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 import { hubMeta, localizedAlternates, APP_LANG_TO_OG_LOCALE, APP_LANG_TO_HTML_LANG } from '@/lib/i18n-meta';
 import SiteHeader from '@/app/components/SiteHeader';
 import SupportFooter from '@/app/components/SupportFooter';
+import { getServerLang } from '@/lib/lang-server';
+import { t } from '@/lib/translations';
 
 const SUPPORTED_LANGS = ['en', 'ru', 'es', 'zh', 'ua'];
 function resolveLang(raw) {
@@ -62,7 +64,16 @@ const jsonLd = JSON.stringify({
   ],
 });
 
-export default function DmvTestIndexPage() {
+// Body language comes from the saved-language cookie (same as the homepage),
+// so a returning RU/ES/ZH/UA visitor sees a fully-localized page instead of
+// the old English-only hero under the localized nav. The SEO <title> /
+// description (generateMetadata) and the cookieless crawler stay English, so
+// keyword targeting is unchanged. Strings are reused from lib/translations.js
+// — no new copy.
+export default async function DmvTestIndexPage() {
+  const lang = await getServerLang();
+  const tex = t[lang] || t.en;
+
   return (
     <div
       className="min-h-screen font-[family-name:var(--font-inter)]"
@@ -80,33 +91,32 @@ export default function DmvTestIndexPage() {
         {/* Breadcrumb */}
         <nav className="text-xs text-[#94A3B8] mb-5 mt-2" aria-label="Breadcrumb">
           <ol className="flex items-center gap-1.5">
-            <li><Link href="/" className="hover:text-[#2563EB]">Home</Link></li>
+            <li><Link href="/" className="hover:text-[#2563EB]">{tex.home || 'Home'}</Link></li>
             <li>/</li>
-            <li className="text-[#1A2B4A] font-medium">DMV Tests</li>
+            <li className="text-[#1A2B4A] font-medium">{tex.practiceTests || 'DMV Tests'}</li>
           </ol>
         </nav>
 
         {/* Hero */}
-        <h1 className="text-3xl sm:text-4xl font-black text-[#0B1C3D] mb-3 leading-tight" style={{ letterSpacing: '-0.02em' }}>
-          Free DMV Practice Tests  ·  All 50 States {year}
+        <h1 className="text-3xl sm:text-4xl font-black text-[#0B1C3D] mb-3 leading-tight whitespace-pre-line" style={{ letterSpacing: '-0.02em' }}>
+          {tex.heroTitle || `Free DMV Practice Tests  ·  All 50 States ${year}`}
         </h1>
         <p className="text-base text-[#64748B] mb-6 leading-relaxed">
-          Pick your state to start practicing. Real knowledge test questions in
-          English, Spanish, Russian, Chinese, and Ukrainian. No signup required.
+          {tex.heroSub || 'Pick your state to start practicing. Real knowledge test questions in English, Spanish, Russian, Chinese, and Ukrainian. No signup required.'}
         </p>
 
-        {/* Trust tags */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          {['25,000+ Questions', '5 Languages', 'Car · CDL · Motorcycle', 'Official Handbook', 'Free to Start'].map(tag => (
-            <span key={tag} className="text-xs font-semibold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] rounded-full px-3 py-1">
-              {tag}
+        {/* Trust line */}
+        {tex.heroTrustStats && (
+          <div className="flex flex-wrap gap-2 mb-8">
+            <span className="text-xs font-semibold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] rounded-full px-3 py-1">
+              {tex.heroTrustStats}
             </span>
-          ))}
-        </div>
+          </div>
+        )}
 
         {/* State grid */}
         <section>
-          <h2 className="text-base font-bold text-[#0B1C3D] mb-4">Choose your state</h2>
+          <h2 className="text-base font-bold text-[#0B1C3D] mb-4">{tex.selectStateLabel || 'Choose your state'}</h2>
           <div className="grid grid-cols-2 gap-2">
             {STATE_SLUGS.map(state => (
               <Link
@@ -120,7 +130,7 @@ export default function DmvTestIndexPage() {
                       {STATE_DISPLAY[state]}
                     </div>
                     <div className="text-[10px] text-[#94A3B8] mt-0.5">
-                      {STATE_META[state].abbr} · Free test
+                      {STATE_META[state].abbr} · {tex.freeTestLink || 'Free test'}
                     </div>
                   </div>
                   <span className="text-xs text-[#2563EB] opacity-0 group-hover:opacity-100 transition-opacity shrink-0"></span>
@@ -132,18 +142,18 @@ export default function DmvTestIndexPage() {
 
         {/* Bottom CTA */}
         <div className="mt-10 bg-[#0B1C3D] rounded-2xl p-6 text-center shadow-lg">
-          <p className="text-white font-bold text-base mb-1">Ready to pass on your first try?</p>
-          <p className="text-[#94A3B8] text-sm mb-4">Select your state above and start practicing for free.</p>
+          <p className="text-white font-bold text-base mb-1">{tex.selectStateLabel || 'Ready to pass on your first try?'}</p>
+          <p className="text-[#94A3B8] text-sm mb-4">{tex.heroSub || 'Select your state above and start practicing for free.'}</p>
           <div className="flex items-center justify-center gap-2 mb-4">
             <span className="text-xs font-semibold text-[#10B981] bg-[#10B981]/10 px-3 py-1 rounded-full border border-[#10B981]/30">
-              Free to start · no signup
+              {tex.footerFree || 'Free to start · no signup'}
             </span>
           </div>
           <Link
             href="/"
             className="inline-flex items-center gap-2 px-6 py-3 bg-[#2563EB] text-white rounded-xl font-semibold hover:bg-[#1D4ED8] transition-colors text-sm"
           >
-            Start Practicing
+            {tex.startPracticing || 'Start Practicing'}
           </Link>
         </div>
 
@@ -155,11 +165,11 @@ export default function DmvTestIndexPage() {
         <div className="max-w-lg mx-auto px-4">
           <p>DMVSOS.com  ·  Free DMV Practice Tests for All 50 States</p>
           <p className="mt-1">
-            <Link href="/terms" className="hover:text-[#2563EB]">Terms</Link>
+            <Link href="/terms" className="hover:text-[#2563EB]">{tex.terms || 'Terms'}</Link>
             {' · '}
-            <Link href="/privacy" className="hover:text-[#2563EB]">Privacy</Link>
+            <Link href="/privacy" className="hover:text-[#2563EB]">{tex.privacy || 'Privacy'}</Link>
             {' · '}
-            <Link href="/manuals" className="hover:text-[#2563EB]">Driver Manuals</Link>
+            <Link href="/manuals" className="hover:text-[#2563EB]">{tex.navManuals || 'Driver Manuals'}</Link>
           </p>
         </div>
       </footer>
