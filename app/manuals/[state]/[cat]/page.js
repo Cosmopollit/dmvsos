@@ -10,6 +10,143 @@ const SUPPORTED_LANGS = ['en', 'ru', 'es', 'zh', 'ua'];
 function resolveLang(raw) {
   return SUPPORTED_LANGS.includes(raw) ? raw : 'en';
 }
+
+// Local i18n for the user-visible strings on this page. Kept self-contained so
+// shared files stay untouched. Metadata + JSON-LD stay English on purpose.
+// Interpolations are passed as values: {name}, {year}, {agency}, {label},
+// {labelFull}, {testLabel}, {n}, {plural}.
+const PAGE_I18N = {
+  en: {
+    allManuals: 'All Manuals',
+    freeTest: 'Free Test',
+    home: 'Home',
+    manuals: 'Manuals',
+    officialBadge: ({ year }) => `Official ${year} handbook`,
+    publishedBy: ({ labelFull, agency }) => `Official ${labelFull} published by ${agency}.`,
+    availableIn: ({ n, plural }) => `Available in ${n} language${plural}.`,
+    downloadOrRead: 'Download links below or read online.',
+    downloadHeading: ({ name, label }) => `Download the ${name} ${label}`,
+    pickLanguage: 'Free official PDF. Pick your language.',
+    pdfNotYet: 'PDF not yet in our library',
+    visit: 'Visit the',
+    officialDmvSite: ({ name }) => `official ${name} DMV website`,
+    toDownloadLatest: ({ label }) => `to download the latest ${label} directly.`,
+    readyToTest: 'Ready to test your knowledge?',
+    practiceHeading: ({ name, testLabel }) => `${name} ${testLabel} Practice`,
+    practiceSub: ({ name, label }) => `Real questions based on the official ${name} ${label}. Free, no signup needed.`,
+    takeFreeTest: ({ testLabel }) => `Take Free ${testLabel}`,
+    faqTitle: 'Frequently Asked Questions',
+    otherManuals: ({ name }) => `Other ${name} Manuals`,
+    allStateManuals: ({ name }) => `All ${name} Manuals`,
+    inNearbyStates: ({ icon, label }) => `${icon} ${label} in Nearby States`,
+    all50States: 'All 50 States',
+    footer: 'DMVSOS.com · Free DMV Practice Tests & Driver Manuals for All 50 States',
+  },
+  ru: {
+    allManuals: 'Все руководства',
+    freeTest: 'Бесплатный тест',
+    home: 'Главная',
+    manuals: 'Руководства',
+    officialBadge: ({ year }) => `Официальное руководство ${year}`,
+    publishedBy: ({ labelFull, agency }) => `Официальное ${labelFull}, издано ${agency}.`,
+    availableIn: ({ n }) => `Доступно на ${n} ${n === 1 ? 'языке' : 'языках'}.`,
+    downloadOrRead: 'Ссылки для скачивания ниже или читайте онлайн.',
+    downloadHeading: ({ name, label }) => `Скачать ${name} ${label}`,
+    pickLanguage: 'Бесплатный официальный PDF. Выберите язык.',
+    pdfNotYet: 'PDF пока нет в нашей библиотеке',
+    visit: 'Зайдите на',
+    officialDmvSite: ({ name }) => `официальный сайт DMV штата ${name}`,
+    toDownloadLatest: ({ label }) => `, чтобы скачать актуальное ${label} напрямую.`,
+    readyToTest: 'Готовы проверить свои знания?',
+    practiceHeading: ({ name, testLabel }) => `Практика ${name} ${testLabel}`,
+    practiceSub: ({ name, label }) => `Реальные вопросы на основе официального ${name} ${label}. Бесплатно, без регистрации.`,
+    takeFreeTest: ({ testLabel }) => `Пройти бесплатно ${testLabel}`,
+    faqTitle: 'Частые вопросы',
+    otherManuals: ({ name }) => `Другие руководства ${name}`,
+    allStateManuals: ({ name }) => `Все руководства ${name}`,
+    inNearbyStates: ({ icon, label }) => `${icon} ${label} в соседних штатах`,
+    all50States: 'Все 50 штатов',
+    footer: 'DMVSOS.com · Бесплатные тесты DMV и руководства водителя для всех 50 штатов',
+  },
+  es: {
+    allManuals: 'Todos los manuales',
+    freeTest: 'Prueba gratis',
+    home: 'Inicio',
+    manuals: 'Manuales',
+    officialBadge: ({ year }) => `Manual oficial ${year}`,
+    publishedBy: ({ labelFull, agency }) => `${labelFull} oficial publicado por ${agency}.`,
+    availableIn: ({ n }) => `Disponible en ${n} ${n === 1 ? 'idioma' : 'idiomas'}.`,
+    downloadOrRead: 'Enlaces de descarga abajo o léelo en línea.',
+    downloadHeading: ({ name, label }) => `Descargar el ${label} de ${name}`,
+    pickLanguage: 'PDF oficial gratis. Elige tu idioma.',
+    pdfNotYet: 'El PDF aún no está en nuestra biblioteca',
+    visit: 'Visita el',
+    officialDmvSite: ({ name }) => `sitio oficial del DMV de ${name}`,
+    toDownloadLatest: ({ label }) => `para descargar el ${label} más reciente directamente.`,
+    readyToTest: '¿Listo para poner a prueba tus conocimientos?',
+    practiceHeading: ({ name, testLabel }) => `Práctica del ${testLabel} de ${name}`,
+    practiceSub: ({ name, label }) => `Preguntas reales basadas en el ${label} oficial de ${name}. Gratis, sin registro.`,
+    takeFreeTest: ({ testLabel }) => `Hacer el ${testLabel} gratis`,
+    faqTitle: 'Preguntas frecuentes',
+    otherManuals: ({ name }) => `Otros manuales de ${name}`,
+    allStateManuals: ({ name }) => `Todos los manuales de ${name}`,
+    inNearbyStates: ({ icon, label }) => `${icon} ${label} en estados cercanos`,
+    all50States: 'Los 50 estados',
+    footer: 'DMVSOS.com · Pruebas de práctica del DMV y manuales de conducir gratis para los 50 estados',
+  },
+  zh: {
+    allManuals: '所有手册',
+    freeTest: '免费测试',
+    home: '主页',
+    manuals: '手册',
+    officialBadge: ({ year }) => `${year}年官方手册`,
+    publishedBy: ({ labelFull, agency }) => `由 ${agency} 发布的官方${labelFull}。`,
+    availableIn: ({ n }) => `提供 ${n} 种语言。`,
+    downloadOrRead: '下方为下载链接，或在线阅读。',
+    downloadHeading: ({ name, label }) => `下载 ${name} ${label}`,
+    pickLanguage: '免费官方 PDF。选择你的语言。',
+    pdfNotYet: '我们的资料库暂无此 PDF',
+    visit: '请访问',
+    officialDmvSite: ({ name }) => `${name} DMV 官方网站`,
+    toDownloadLatest: ({ label }) => `，直接下载最新的${label}。`,
+    readyToTest: '准备好检验你的知识了吗？',
+    practiceHeading: ({ name, testLabel }) => `${name} ${testLabel}练习`,
+    practiceSub: ({ name, label }) => `基于官方 ${name} ${label} 的真实题目。免费，无需注册。`,
+    takeFreeTest: ({ testLabel }) => `免费参加${testLabel}`,
+    faqTitle: '常见问题',
+    otherManuals: ({ name }) => `${name} 的其他手册`,
+    allStateManuals: ({ name }) => `${name} 所有手册`,
+    inNearbyStates: ({ icon, label }) => `${icon} 邻近各州的${label}`,
+    all50States: '全部 50 个州',
+    footer: 'DMVSOS.com · 全美 50 个州的免费 DMV 练习测试和驾驶手册',
+  },
+  ua: {
+    allManuals: 'Усі посібники',
+    freeTest: 'Безкоштовний тест',
+    home: 'Головна',
+    manuals: 'Посібники',
+    officialBadge: ({ year }) => `Офіційний посібник ${year}`,
+    publishedBy: ({ labelFull, agency }) => `Офіційний ${labelFull}, виданий ${agency}.`,
+    availableIn: ({ n }) => `Доступно ${n} ${n === 1 ? 'мовою' : 'мовами'}.`,
+    downloadOrRead: 'Посилання для завантаження нижче або читайте онлайн.',
+    downloadHeading: ({ name, label }) => `Завантажити ${name} ${label}`,
+    pickLanguage: 'Безкоштовний офіційний PDF. Оберіть мову.',
+    pdfNotYet: 'PDF поки немає в нашій бібліотеці',
+    visit: 'Завітайте на',
+    officialDmvSite: ({ name }) => `офіційний сайт DMV штату ${name}`,
+    toDownloadLatest: ({ label }) => `, щоб завантажити актуальний ${label} напряму.`,
+    readyToTest: 'Готові перевірити свої знання?',
+    practiceHeading: ({ name, testLabel }) => `Практика ${name} ${testLabel}`,
+    practiceSub: ({ name, label }) => `Реальні питання на основі офіційного ${name} ${label}. Безкоштовно, без реєстрації.`,
+    takeFreeTest: ({ testLabel }) => `Пройти безкоштовно ${testLabel}`,
+    faqTitle: 'Поширені запитання',
+    otherManuals: ({ name }) => `Інші посібники ${name}`,
+    allStateManuals: ({ name }) => `Усі посібники ${name}`,
+    inNearbyStates: ({ icon, label }) => `${icon} ${label} у сусідніх штатах`,
+    all50States: 'Усі 50 штатів',
+    footer: 'DMVSOS.com · Безкоштовні тести DMV та посібники водія для всіх 50 штатів',
+  },
+};
 import { examRulesFor } from '@/lib/exam-rules';
 
 const SUPABASE_URL = 'https://yaogndpgnewqffbjrsgz.supabase.co';
@@ -242,6 +379,7 @@ export default async function StateManualCategoryPage({ params }) {
   const cookieStore = await cookies();
   const lang = cookieStore.get('dmvsos_lang')?.value || 'en';
   const tex = t[lang] || t.en;
+  const tx = PAGE_I18N[lang] || PAGE_I18N.en;
 
   // Fetch PDFs for this specific category
   const index = await fetchManualIndex();
@@ -322,13 +460,13 @@ export default async function StateManualCategoryPage({ params }) {
           </Link>
           <div className="flex items-center gap-3">
             <Link href="/manuals" className="text-xs font-medium text-[#64748B] hover:text-[#2563EB] transition">
-              All Manuals
+              {tx.allManuals}
             </Link>
             <Link
               href={`/category?state=${state}&lang=${lang}`}
               className="text-xs font-semibold text-[#2563EB] hover:text-[#1D4ED8] transition"
             >
-              Free Test
+              {tx.freeTest}
             </Link>
           </div>
         </div>
@@ -339,9 +477,9 @@ export default async function StateManualCategoryPage({ params }) {
         {/* Breadcrumb */}
         <nav className="text-xs text-[#94A3B8] mb-5 mt-1" aria-label="Breadcrumb">
           <ol className="flex items-center gap-1.5 flex-wrap">
-            <li><Link href="/" className="hover:text-[#2563EB]">Home</Link></li>
+            <li><Link href="/" className="hover:text-[#2563EB]">{tx.home}</Link></li>
             <li>/</li>
-            <li><Link href="/manuals" className="hover:text-[#2563EB]">Manuals</Link></li>
+            <li><Link href="/manuals" className="hover:text-[#2563EB]">{tx.manuals}</Link></li>
             <li>/</li>
             <li><Link href={`/manuals/${state}`} className="hover:text-[#2563EB]">{name}</Link></li>
             <li>/</li>
@@ -353,17 +491,17 @@ export default async function StateManualCategoryPage({ params }) {
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-3">
             <span className="text-xs font-semibold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] rounded-full px-3 py-1">
-              Official {year} handbook
+              {tx.officialBadge({ year })}
             </span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-black text-[#0B1C3D] mb-2 leading-tight" style={{ letterSpacing: '-0.02em' }}>
             {name} {catInfo.label} {year}
           </h1>
           <p className="text-sm text-[#64748B]">
-            Official {catInfo.labelFull} published by {meta.agency}.{' '}
+            {tx.publishedBy({ labelFull: catInfo.labelFull, agency: meta.agency })}{' '}
             {pdfs.length > 0
-              ? `Available in ${pdfs.length} language${pdfs.length > 1 ? 's' : ''}.`
-              : 'Download links below or read online.'}
+              ? tx.availableIn({ n: pdfs.length, plural: pdfs.length > 1 ? 's' : '' })
+              : tx.downloadOrRead}
           </p>
         </div>
 
@@ -371,9 +509,9 @@ export default async function StateManualCategoryPage({ params }) {
         {pdfs.length > 0 ? (
           <div className="bg-white rounded-2xl border border-[#E2E8F0] p-5 mb-5 shadow-sm">
             <h2 className="text-base font-bold text-[#0B1C3D] mb-1">
-              Download the {name} {catInfo.label}
+              {tx.downloadHeading({ name, label: catInfo.label })}
             </h2>
-            <p className="text-xs text-[#94A3B8] mb-4">Free official PDF. Pick your language.</p>
+            <p className="text-xs text-[#94A3B8] mb-4">{tx.pickLanguage}</p>
             <div className="flex flex-col gap-2">
               {pdfs.map(({ langCode, url }) => (
                 <a
@@ -399,18 +537,18 @@ export default async function StateManualCategoryPage({ params }) {
           </div>
         ) : (
           <div className="bg-[#FFFBEB] border border-[#FDE68A] rounded-2xl p-5 mb-5">
-            <p className="text-sm font-medium text-[#92400E] mb-1">PDF not yet in our library</p>
+            <p className="text-sm font-medium text-[#92400E] mb-1">{tx.pdfNotYet}</p>
             <p className="text-xs text-[#B45309]">
-              Visit the{' '}
+              {tx.visit}{' '}
               <a
                 href={`https://www.google.com/search?q=${encodeURIComponent(`${name} ${catInfo.labelFull} PDF official`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline"
               >
-                official {name} DMV website
+                {tx.officialDmvSite({ name })}
               </a>{' '}
-              to download the latest {catInfo.label} directly.
+              {tx.toDownloadLatest({ label: catInfo.label })}
             </p>
           </div>
         )}
@@ -418,26 +556,26 @@ export default async function StateManualCategoryPage({ params }) {
         {/* Practice Test CTA */}
         <div className="bg-[#0B1C3D] rounded-2xl p-6 mb-5 text-center shadow-lg border border-[#1e3a5f]">
           <p className="text-sm font-semibold text-[#60A5FA] mb-2">
-            Ready to test your knowledge?
+            {tx.readyToTest}
           </p>
           <h2 className="text-base font-bold text-white mb-1">
-            {name} {catInfo.testLabel} Practice
+            {tx.practiceHeading({ name, testLabel: catInfo.testLabel })}
           </h2>
           <p className="text-sm text-[#94A3B8] mb-4">
-            Real questions based on the official {name} {catInfo.label}. Free, no signup needed.
+            {tx.practiceSub({ name, label: catInfo.label })}
           </p>
           <Link
             href={`/test?state=${state}&category=${catInfo.testCat}&lang=${lang}`}
             className="inline-flex items-center gap-2 px-6 py-3 bg-[#2563EB] text-white rounded-xl font-semibold hover:bg-[#1D4ED8] transition-colors text-sm"
           >
-            Take Free {catInfo.testLabel}
+            {tx.takeFreeTest({ testLabel: catInfo.testLabel })}
           </Link>
         </div>
 
         {/* FAQ */}
         <div className="mb-8">
           <h2 className="text-lg font-bold text-[#0B1C3D] mb-4">
-            Frequently Asked Questions
+            {tx.faqTitle}
           </h2>
           <div className="space-y-3">
             {faqs.map(({ q, a }) => (
@@ -452,7 +590,7 @@ export default async function StateManualCategoryPage({ params }) {
         {/* Other categories for this state */}
         <div className="mb-8">
           <h2 className="text-sm font-bold text-[#0B1C3D] mb-3">
-            Other {name} Manuals
+            {tx.otherManuals({ name })}
           </h2>
           <div className="grid grid-cols-2 gap-2">
             {otherCats.map(c => (
@@ -469,7 +607,7 @@ export default async function StateManualCategoryPage({ params }) {
               href={`/manuals/${state}`}
               className="p-3 rounded-xl border border-[#E2E8F0] bg-white hover:border-[#2563EB] hover:shadow-sm transition-all text-sm font-medium text-[#1A2B4A] hover:text-[#2563EB] text-center"
             >
-              All {name} Manuals
+              {tx.allStateManuals({ name })}
             </Link>
           </div>
         </div>
@@ -477,7 +615,7 @@ export default async function StateManualCategoryPage({ params }) {
         {/* Nearby states | same category */}
         <div className="mb-8">
           <h2 className="text-sm font-bold text-[#0B1C3D] mb-3">
-            {catInfo.icon} {catInfo.label} in Nearby States
+            {tx.inNearbyStates({ icon: catInfo.icon, label: catInfo.label })}
           </h2>
           <div className="grid grid-cols-2 gap-2">
             {neighbors.slice(0, 4).map(s => (
@@ -494,7 +632,7 @@ export default async function StateManualCategoryPage({ params }) {
               href="/manuals"
               className="p-3 rounded-xl border border-[#2563EB] bg-[#EFF6FF] text-sm font-semibold text-[#2563EB] text-center col-span-2 hover:bg-[#DBEAFE] transition-colors"
             >
-              All 50 States
+              {tx.all50States}
             </Link>
           </div>
         </div>
@@ -503,7 +641,7 @@ export default async function StateManualCategoryPage({ params }) {
 
       <footer className="border-t border-[#E2E8F0] py-8 text-center text-xs text-[#94A3B8]">
         <div className="max-w-lg mx-auto px-4">
-          DMVSOS.com · Free DMV Practice Tests &amp; Driver Manuals for All 50 States
+          {tx.footer}
         </div>
       </footer>
     </div>

@@ -178,7 +178,7 @@ function SuccessContent() {
 
 export default function Success() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-[#64748B]">Loading...</div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-6 h-6 border-2 border-[#94A3B8] border-t-transparent rounded-full animate-spin" /></div>}>
       <SuccessContent />
     </Suspense>
   );

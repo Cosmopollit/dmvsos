@@ -227,9 +227,9 @@ function TestContent() {
         if (!ok) {
           if (error === 'rate_limited') {
             const mins = resetAt ? Math.ceil((resetAt - Date.now()) / 60000) : 10;
-            setLoadError(`Too many requests. Try again in ~${mins} min.`);
+            setLoadError((tex.tooManyRequestsRetry || 'Too many requests. Try again in ~{min} min.').replace('{min}', mins));
           } else {
-            setLoadError(error || 'Failed to load questions.');
+            setLoadError(error || tex.failedToLoad || 'Failed to load questions.');
           }
           setAllQuestions([]);
           setLoadingQuestions(false);

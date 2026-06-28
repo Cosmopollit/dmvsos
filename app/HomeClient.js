@@ -263,7 +263,7 @@ export default function HomeClient({ initialLang = 'en' }) {
                       <span className="hidden sm:inline text-[10px] font-semibold bg-[#F3F4F6] text-[#4B5563] px-1.5 py-0.5 rounded-full whitespace-nowrap">Moto Pass</span>
                     )}
                     {!isPro && (
-                      <span className="hidden sm:inline text-[10px] font-semibold bg-[#F3F4F6] text-[#9CA3AF] px-1.5 py-0.5 rounded-full whitespace-nowrap">Free</span>
+                      <span className="hidden sm:inline text-[10px] font-semibold bg-[#F3F4F6] text-[#9CA3AF] px-1.5 py-0.5 rounded-full whitespace-nowrap">{tex.freeBadge || 'Free'}</span>
                     )}
                   </button>
                   <button onClick={handleSignOut} type="button"
