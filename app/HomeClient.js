@@ -40,6 +40,62 @@ function PlanOwnedCta({ tex, onClick }) {
   );
 }
 
+// Stat number that counts up from 0 the first time it scrolls into view. State
+// seeds to the target so SSR / no-JS / crawlers see the real number; after
+// hydration it resets to 0 (below the fold, off-screen) then ticks up on view.
+function CountUpStat({ value }) {
+  const match = String(value).match(/^([\d.]+)(.*)$/);
+  const target = match ? parseFloat(match[1]) : 0;
+  const suffix = match ? match[2] : String(value);
+  const [shown, setShown] = useState(target);
+  const ref = useRef(null);
+  const done = useRef(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || done.current) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-shot reset to 0 after hydration (off-screen, below the fold); SSR keeps the real number for crawlers, the count-up starts from zero when scrolled into view
+    setShown(0);
+    const io = new IntersectionObserver((entries) => {
+      if (!entries[0].isIntersecting || done.current) return;
+      done.current = true;
+      io.disconnect();
+      const dur = 1100, t0 = performance.now();
+      const tick = (now) => {
+        const p = Math.min(1, (now - t0) / dur);
+        setShown(Math.round(target * (1 - Math.pow(1 - p, 3))));
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }, { threshold: 0.5 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [target]);
+  return <span ref={ref}>{shown}{suffix}</span>;
+}
+
+// Hero title that reveals word by word (fade + rise via CSS). Splits on \n so the
+// original line breaks survive; each word gets a staggered animation-delay. The
+// text stays in the DOM, so crawlers and reduced-motion users get the full title.
+function RevealTitle({ text }) {
+  let order = 0;
+  return (
+    <>
+      {String(text).split('\n').map((line, li) => (
+        <span key={li} style={{ display: 'block' }}>
+          {line.split(' ').flatMap((word, wi, arr) => {
+            const delay = order++ * 0.05;
+            const out = [
+              <span key={`w${li}-${wi}`} className="reveal-word" style={{ animationDelay: `${delay}s` }}>{word}</span>,
+            ];
+            if (wi < arr.length - 1) out.push(<span key={`s${li}-${wi}`}> </span>);
+            return out;
+          })}
+        </span>
+      ))}
+    </>
+  );
+}
+
 export default function HomeClient({ initialLang = 'en' }) {
   const { user, isPro, planType } = useAuth();
   // Owned-category mapping — mirrors SiteHeader's planType branches exactly so
@@ -379,9 +435,9 @@ export default function HomeClient({ initialLang = 'en' }) {
           inside the same visual block so the three messages read as a single
           paragraph instead of three orphaned text elements. */}
       <section className="w-full max-w-md mx-auto px-4 pt-1 pb-6 text-center">
-        <h1 className="text-[32px] sm:text-[42px] font-semibold text-[#0B1C3D] leading-[1.13] mb-3 whitespace-pre-line"
+        <h1 className="text-[32px] sm:text-[42px] font-semibold text-[#0B1C3D] leading-[1.13] mb-3"
           style={{ fontFamily: "'DM Sans', var(--font-dm-sans), sans-serif", letterSpacing: '-0.025em' }}>
-          {heroTitleText}
+          <RevealTitle text={heroTitleText} />
         </h1>
         <p className="text-[15px] font-normal leading-relaxed mb-3"
           style={{ color: '#64748B', letterSpacing: '-0.01em' }}>
@@ -526,7 +582,12 @@ export default function HomeClient({ initialLang = 'en' }) {
                   { id: 'dmv',  owned: ownsCar,  label: tex.catCar,  sub: tex.catCarSub,  img: '/vehicles/mustang.png', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' },
                   { id: 'cdl',  owned: ownsCdl,  label: tex.catCdl,  sub: tex.catCdlSub,  img: '/vehicles/truck-hero.png', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)' },
                   { id: 'moto', owned: ownsMoto, label: tex.catMoto, sub: tex.catMotoSub, img: '/vehicles/moto-hero.png',  gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)' },
-                ].map(cat => (
+                ]
+                  // Lead with the category the user already owns (its tile also
+                  // shows the green "Active" state). Stable sort keeps the rest
+                  // in default order. SSR / free users keep dmv-cdl-moto.
+                  .sort((a, b) => Number(b.owned) - Number(a.owned))
+                  .map(cat => (
                   <button
                     key={cat.id}
                     type="button"
@@ -602,7 +663,7 @@ export default function HomeClient({ initialLang = 'en' }) {
             { value: '5', label: tex.statLanguages },
           ].map((stat) => (
             <div key={stat.label} className="bg-white rounded-2xl p-3 text-center shadow-sm border border-[#E2E8F0]/60">
-              <div className="text-lg sm:text-xl font-black text-[#0B1C3D]">{stat.value}</div>
+              <div className="text-lg sm:text-xl font-black text-[#0B1C3D]"><CountUpStat value={stat.value} /></div>
               <div className="text-[10px] text-[#94A3B8] font-medium mt-0.5">{stat.label}</div>
             </div>
           ))}

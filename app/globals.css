@@ -79,6 +79,21 @@ body {
   animation: btn-shine 3.5s ease-in-out infinite;
 }
 
+/* RevealTitle: hero words fade + rise in, staggered. Pure CSS so it plays even
+   without JS; the H1 text stays in the DOM (opacity only) so crawlers read it. */
+@keyframes word-rise {
+  from { opacity: 0; transform: translateY(0.4em); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.reveal-word {
+  display: inline-block;
+  opacity: 0;
+  animation: word-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal-word { animation: none; opacity: 1; transform: none; }
+}
+
 /* ScoreRing sweep: the gradient arc draws in from empty to the score. The
    target offset is set inline per-render via --ring-target. */
 @keyframes ring-sweep {
