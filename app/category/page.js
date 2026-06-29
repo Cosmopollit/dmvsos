@@ -13,7 +13,7 @@ import { flags } from '@/lib/flags';
 // art the mobile app and home page use) — keeps the look consistent across
 // web + native. Maps mirror HomeClient's vehicle → category pairing.
 const categories = [
-  { id: 'dmv',  img: '/vehicles/car-hero.png',   titleKey: 'catCar',  descKey: 'carDesc',   color: '#2563EB', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' },
+  { id: 'dmv',  img: '/vehicles/mustang.png',   titleKey: 'catCar',  descKey: 'carDesc',   color: '#2563EB', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' },
   { id: 'cdl',  img: '/vehicles/truck-hero.png', titleKey: 'catCdl',  descKey: 'truckDesc', color: '#0EA5E9', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)' },
   { id: 'moto', img: '/vehicles/moto-hero.png',  titleKey: 'catMoto', descKey: 'motoDesc',  color: '#D97706', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)' },
 ];

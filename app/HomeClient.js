@@ -523,9 +523,9 @@ export default function HomeClient({ initialLang = 'en' }) {
                   card made the surface feel cramped. */}
               <div className="flex flex-col gap-3">
                 {[
-                  { id: 'dmv',  owned: ownsCar,  label: tex.catCar,  sub: tex.catCarSub,  img: '/vehicles/car-hero.png', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' },
-                  { id: 'cdl',  owned: ownsCdl,  label: tex.catCdl,  sub: tex.catCdlSub,  img: '/vehicles/truck.png', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)' },
-                  { id: 'moto', owned: ownsMoto, label: tex.catMoto, sub: tex.catMotoSub, img: '/vehicles/moto.png',  gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)' },
+                  { id: 'dmv',  owned: ownsCar,  label: tex.catCar,  sub: tex.catCarSub,  img: '/vehicles/mustang.png', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' },
+                  { id: 'cdl',  owned: ownsCdl,  label: tex.catCdl,  sub: tex.catCdlSub,  img: '/vehicles/truck-hero.png', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)' },
+                  { id: 'moto', owned: ownsMoto, label: tex.catMoto, sub: tex.catMotoSub, img: '/vehicles/moto-hero.png',  gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)' },
                 ].map(cat => (
                   <button
                     key={cat.id}
@@ -703,7 +703,7 @@ export default function HomeClient({ initialLang = 'en' }) {
             </span>
             <div className="h-[66px] flex items-center justify-center mb-2 mt-1">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/vehicles/car-hero.png" alt="" aria-hidden="true" className="max-h-[62px] w-auto object-contain" />
+              <img src="/vehicles/mustang.png" alt="" aria-hidden="true" className="max-h-[62px] w-auto object-contain" />
             </div>
             <h3 className="text-sm font-bold mb-1 text-center" style={{ color: '#2563EB' }}>{tex.planAutoPass}</h3>
             <div className="text-2xl font-black text-[#0B1C3D] mb-0.5 text-center">{PASS_META.auto.price}</div>
