@@ -39,8 +39,8 @@ export default function sitemap() {
 
   // Localized DMV-test routes (ru/es/zh/ua) under a /[locale]/ path prefix.
   // These have genuinely localized, server-rendered bodies + hreflang, so each
-  // language gets its own indexable URL. EN stays at the root above. /manuals
-  // and the home page get locale URLs in a later phase (no locale routes yet).
+  // language gets its own indexable URL. EN stays at the root above. The home
+  // and /manuals tree get their own locale block further below.
   const dmvLocales = ['ru', 'es', 'zh', 'ua'];
   for (const locale of dmvLocales) {
     pages.push({
@@ -79,6 +79,31 @@ export default function sitemap() {
         changeFrequency: 'monthly',
         priority: 0.75,
       });
+    }
+  }
+
+  // Localized routes (ru/es/zh/ua) for the home + manuals tree — genuinely
+  // localized server bodies + hreflang, each its own indexable URL. EN stays
+  // at the root above. (PDF leaf /manuals/{state}/{cat}/{lang} stays omitted.)
+  const manualLocales = ['ru', 'es', 'zh', 'ua'];
+  for (const locale of manualLocales) {
+    pages.push({ url: `${baseUrl}/${locale}`,         lastModified: now, changeFrequency: 'weekly',  priority: 1.0 });
+    pages.push({ url: `${baseUrl}/${locale}/manuals`, lastModified: now, changeFrequency: 'weekly',  priority: 0.9 });
+    for (const st of states) {
+      pages.push({
+        url: `${baseUrl}/${locale}/manuals/${st}`,
+        lastModified: now,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      });
+      for (const cat of ['car', 'cdl', 'motorcycle']) {
+        pages.push({
+          url: `${baseUrl}/${locale}/manuals/${st}/${cat}`,
+          lastModified: now,
+          changeFrequency: 'monthly',
+          priority: 0.75,
+        });
+      }
     }
   }
 

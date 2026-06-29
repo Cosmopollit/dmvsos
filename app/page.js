@@ -15,7 +15,7 @@ export async function generateMetadata({ searchParams }) {
   const sp = (await searchParams) || {};
   const lang = resolveLang(Array.isArray(sp.lang) ? sp.lang[0] : sp.lang);
   const m = homeMeta(lang);
-  const alts = localizedAlternates('/', lang);
+  const alts = localizedAlternates('/', lang, { hreflang: true });
   return {
     title: m.title,
     description: m.description,
