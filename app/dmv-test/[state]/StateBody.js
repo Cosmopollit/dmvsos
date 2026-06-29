@@ -1,0 +1,418 @@
+import Link from 'next/link';
+import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
+import { MIN_PRICE } from '@/lib/plans';
+import { examRulesFor, passPercentFor } from '@/lib/exam-rules';
+import { neighborsOf } from '@/lib/state-neighbors';
+import { citiesOf } from '@/lib/state-cities';
+import SiteHeader from '@/app/components/SiteHeader';
+import SupportFooter from '@/app/components/SupportFooter';
+import { t } from '@/lib/translations';
+
+// Exam facts come from the single source of truth (lib/exam-rules.js),
+// not a local table, so counts + pass scores never drift or go stale.
+export function examFor(state) {
+  const rule = examRulesFor(state, 'car');
+  if (!rule) return { questions: 40, passing: 32, passingPct: 80 };
+  return { questions: rule.questions, passing: rule.pass, passingPct: passPercentFor(state, 'car') };
+}
+
+const LANG_OPTIONS = [
+  { code: 'en', label: 'English',    emoji: '🇺🇸' },
+  { code: 'ru', label: 'Русский',    emoji: '🇷🇺' },
+  { code: 'es', label: 'Español',    emoji: '🇪🇸' },
+  { code: 'zh', label: '中文',        emoji: '🇨🇳' },
+  { code: 'ua', label: 'Українська', emoji: '🇺🇦' },
+];
+
+// Shared server-rendered body for the state DMV-test landing page.
+// `lang` and `state` arrive as props: the root wrapper passes the cookie
+// language, the /[locale]/ wrapper passes the path-segment locale. This
+// component reads NO cookies, so a cookieless crawler hitting /ru/dmv-test/x
+// gets a genuinely Russian body. The SEO <title>/description live in the
+// wrappers' generateMetadata; the JSON-LD + FAQ stay derived from the same
+// state values. Generic strings come from lib/translations.js; state values
+// are interpolated in.
+export default function StateBody({ lang, state }) {
+  const tex = t[lang] || t.en;
+  const name = STATE_DISPLAY[state];
+
+  const meta = STATE_META[state];
+  const exam = examFor(state);
+  const year = new Date().getFullYear();
+
+  const jsonLd = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'FAQPage',
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: `How many questions are on the ${name} DMV knowledge test?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: `The ${name} DMV written knowledge test has ${exam.questions} questions. You need to answer at least ${exam.passing} correctly (${exam.passingPct}%) to pass.`,
+            },
+          },
+          {
+            '@type': 'Question',
+            name: `What is the passing score for the ${meta.abbr} DMV written test?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: `The passing score for the ${name} (${meta.abbr}) DMV written test is ${exam.passingPct}%  ·  you must answer ${exam.passing} out of ${exam.questions} questions correctly.`,
+            },
+          },
+          {
+            '@type': 'Question',
+            name: `Can I take the ${name} DMV practice test in Spanish or other languages?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: `Yes! DMVSOS offers the ${name} DMV practice test in English, Spanish, Russian, Chinese, and Ukrainian. Select your language and start practicing for free.`,
+            },
+          },
+          {
+            '@type': 'Question',
+            name: `Is the ${name} DMV practice test free?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: `Yes. DMVSOS provides a free ${name} DMV practice test with real knowledge test questions. One-time passes from ${MIN_PRICE} (30 days) unlock extended 40-question tests and detailed answer explanations — no subscription.`,
+            },
+          },
+          {
+            '@type': 'Question',
+            name: `What topics are covered on the ${meta.abbr} DMV test?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: `The ${name} DMV knowledge test covers traffic signs and signals, right-of-way rules, speed limits, safe following distance, DUI laws, and road markings. DMVSOS practice questions cover all ${name} DMV test topics.`,
+            },
+          },
+        ],
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home',             item: 'https://dmvsos.com' },
+          { '@type': 'ListItem', position: 2, name: 'DMV Tests',        item: 'https://dmvsos.com/dmv-test' },
+          { '@type': 'ListItem', position: 3, name: `${name} DMV Test`, item: `https://dmvsos.com/dmv-test/${state}` },
+        ],
+      },
+      {
+        '@type': 'HowTo',
+        name: `How to pass the ${name} DMV knowledge test in ${year}`,
+        description: `Step-by-step guide to passing the ${name} (${meta.abbr}) DMV written knowledge test on your first try.`,
+        totalTime: 'PT7D',
+        supply: [
+          { '@type': 'HowToSupply', name: `Official ${name} Driver Handbook (free PDF)` },
+          { '@type': 'HowToSupply', name: 'Practice tests with real questions (free at DMVSOS)' },
+          { '@type': 'HowToSupply', name: 'Valid ID and proof of residency' },
+        ],
+        step: [
+          { '@type': 'HowToStep', position: 1, name: 'Read the official handbook', text: `Download the free ${name} Driver Handbook PDF from DMVSOS or your state DMV. Skim the table of contents, then read sections on traffic signs, right-of-way, and DUI laws first.` },
+          { '@type': 'HowToStep', position: 2, name: 'Practice with DMV-format questions', text: `Take free practice tests on DMVSOS in your native language. The ${name} test has ${exam.questions} questions; practice that exact format until you consistently score above ${exam.passingPct}%.` },
+          { '@type': 'HowToStep', position: 3, name: 'Review your mistakes', text: 'Wrong answers come with explanations citing the handbook section. Re-read those sections, retake practice on the same topic.' },
+          { '@type': 'HowToStep', position: 4, name: 'Book your test appointment', text: `Schedule online through the ${meta.agency} website. Bring ID, proof of residency, and the application fee.` },
+          { '@type': 'HowToStep', position: 5, name: 'Take the test', text: `Arrive 15 minutes early. The ${name} test is computer-based at most locations. You need ${exam.passing} correct out of ${exam.questions} to pass.` },
+        ],
+      },
+      {
+        '@type': 'Course',
+        name: `${name} DMV Practice Test`,
+        description: `Free practice tests for the ${name} (${meta.abbr}) DMV knowledge exam. Real question format, all topics covered, ${exam.questions}-question full tests, available in 5 languages.`,
+        provider: { '@type': 'Organization', name: 'DMVSOS', url: 'https://dmvsos.com' },
+        educationalLevel: 'beginner',
+        inLanguage: ['en', 'es', 'ru', 'uk', 'zh'],
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD',
+          availability: 'https://schema.org/InStock',
+        },
+      },
+    ],
+  });
+
+  // Geographic neighbors first — real adjacency reads as a coherent regional
+  // map to crawlers (Florida → Georgia, Alabama; not alphabetical Alaska).
+  // Fall back to top-traffic states for the second row if the state has few
+  // neighbors (e.g. Florida only borders 2 states; New England states < 4).
+  const stateIdx = STATE_SLUGS.indexOf(state);
+  const neighborStates = neighborsOf(state).filter(s => s !== state);
+  const TOP_STATES = ['california', 'texas', 'florida', 'new-york', 'illinois', 'pennsylvania', 'ohio', 'georgia'];
+  const fillerStates = TOP_STATES.filter(s => s !== state && !neighborStates.includes(s));
+  const otherStates = [...neighborStates, ...fillerStates].slice(0, 8);
+  const cities = citiesOf(state);
+
+  // Fill {tokens} in the localized FAQ / language-section strings with this
+  // state's real values. Keeps interpolation working across all 5 languages
+  // without per-language word-order assumptions.
+  const repl = (str) => (str || '')
+    .replaceAll('{name}', name)
+    .replaceAll('{abbr}', meta.abbr)
+    .replaceAll('{agency}', meta.dmvAbbr)
+    .replaceAll('{q}', String(exam.questions))
+    .replaceAll('{pass}', String(exam.passing))
+    .replaceAll('{pct}', String(exam.passingPct))
+    .replaceAll('{price}', String(MIN_PRICE));
+  const cityList = cities.slice(0, 6).join(', ');
+  const citiesText = cities.length > 6 ? `${cityList}, ${repl(tex.dtCitiesOther)}` : cityList;
+  const fill = (str) => repl(str).replaceAll('{cities}', citiesText);
+
+  const stats = [
+    { value: '25,000+', label: tex.dtStatQuestions || 'Questions' },
+    { value: '3',       label: tex.dtStatCategories || 'Categories' },
+    { value: '5',       label: tex.dtStatLanguages || 'Languages' },
+    { value: `${exam.passingPct}%`, label: tex.dtStatPass || 'Score to pass' },
+  ];
+
+  const whatToExpect = [
+    { icon: '📋', label: tex.dtRowQuestions || 'Questions',     value: `${exam.questions} ${tex.dtMcq || 'multiple-choice questions'}` },
+    { icon: '✅', label: tex.dtRowPass || 'Passing score',      value: `${exam.passing} ${tex.dtCorrect || 'correct'} (${exam.passingPct}%)` },
+    { icon: '🏛️', label: tex.dtRowAdmin || 'Administered by',   value: meta.agency },
+    { icon: '🌐', label: tex.dtRowLangs || 'Languages',         value: tex.dtValLangs || 'English, Spanish, Russian, Chinese, Ukrainian' },
+    { icon: '🔄', label: tex.dtRowRetakes || 'Retakes',          value: tex.dtValRetakes || 'Allowed after a waiting period if you fail' },
+  ];
+
+  const categories = [
+    { cat: 'dmv',  emoji: '🚗', title: tex.catCar || 'Car (DMV)',   desc: tex.carDesc   || "Regular driver's license for cars, SUVs and pickups", bg: '#EFF6FF' },
+    { cat: 'cdl',  emoji: '🚛', title: tex.catCdl || 'CDL',         desc: tex.truckDesc || "Commercial Driver's License for trucks and buses",   bg: '#F0F9FF' },
+    { cat: 'moto', emoji: '🏍️', title: tex.catMoto || 'Motorcycle', desc: tex.motoDesc  || 'Motorcycle and scooter permit test',                  bg: '#FFF7ED' },
+  ];
+
+  const faqs = [
+    { q: fill(tex.dtFaqQ1), a: fill(tex.dtFaqA1) },
+    { q: fill(tex.dtFaqQ2), a: fill(tex.dtFaqA2) },
+    { q: fill(tex.dtFaqQ3), a: fill(tex.dtFaqA3) },
+    { q: fill(tex.dtFaqQ4), a: fill(tex.dtFaqA4) },
+    { q: fill(tex.dtFaqQ5), a: fill(tex.dtFaqA5) },
+  ];
+
+  return (
+    <div
+      className="min-h-screen font-[family-name:var(--font-inter)]"
+      style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}
+    >
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
+
+      <div className="fixed top-[-200px] right-[-200px] w-[600px] h-[600px] rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(26,86,219,0.08) 0%, transparent 70%)' }} />
+      <div className="fixed bottom-[-150px] left-[-150px] w-[500px] h-[500px] rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 70%)' }} />
+
+      <SiteHeader />
+
+      <main className="max-w-lg mx-auto px-4 pb-16">
+
+        {/* Breadcrumb */}
+        <nav className="text-xs text-[#94A3B8] mb-5 mt-2" aria-label="Breadcrumb">
+          <ol className="flex items-center gap-1.5 flex-wrap">
+            <li><Link href="/" className="hover:text-[#2563EB]">{tex.home || 'Home'}</Link></li>
+            <li>/</li>
+            <li><Link href="/dmv-test" className="hover:text-[#2563EB]">{tex.practiceTests || 'DMV Tests'}</Link></li>
+            <li>/</li>
+            <li className="text-[#1A2B4A] font-medium">{name}</li>
+          </ol>
+        </nav>
+
+        {/* H1 */}
+        <h1 className="text-3xl sm:text-4xl font-black text-[#0B1C3D] mb-3 leading-tight" style={{ letterSpacing: '-0.02em' }}>
+          {name} {tex.dtTitleSuffix || 'DMV Practice Test'} {year}  ·  {tex.dtFree || 'Free'}
+        </h1>
+        <p className="text-base text-[#64748B] mb-6 leading-relaxed">
+          {tex.dtIntro || `Practice with real ${meta.abbr} knowledge test questions and pass on your first try. Study in your language: English, Spanish, Russian, Chinese, and Ukrainian.`}
+        </p>
+
+        {/* Language CTA card */}
+        <div className="bg-[#0B1C3D] rounded-2xl p-6 mb-6 shadow-lg">
+          <p className="text-[#94A3B8] text-xs font-semibold mb-4 uppercase tracking-widest">
+            {tex.dtChooseLang || 'Choose your language and start:'}
+          </p>
+          <div className="grid grid-cols-1 gap-2.5">
+            {LANG_OPTIONS.map(({ code, label, emoji }) => (
+              <Link
+                key={code}
+                href={`/category?state=${state}&lang=${code}`}
+                className="flex items-center justify-between px-5 py-3 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-xl font-semibold text-sm transition-colors"
+              >
+                <span>{emoji} {label}</span>
+                <span className="opacity-70 text-xs">{tex.startFree || 'Start Free'}</span>
+              </Link>
+            ))}
+          </div>
+          <p className="text-xs text-[#64748B] mt-4 text-center">
+            {tex.dtNoSignup || 'No signup required · 20 free questions per test'}
+          </p>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-4 gap-2 mb-8">
+          {stats.map(({ value, label }) => (
+            <div key={label} className="bg-white rounded-2xl p-3 text-center shadow-sm border border-[#E2E8F0]/60">
+              <div className="text-lg font-black text-[#0B1C3D]">{value}</div>
+              <div className="text-[10px] text-[#94A3B8] font-medium mt-0.5 leading-tight">{label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* What to expect */}
+        <section className="bg-white rounded-2xl border border-[#E2E8F0] p-6 mb-5 shadow-sm">
+          <h2 className="text-base font-bold text-[#0B1C3D] mb-4">
+            {tex.dtExpectTitle || `What to expect on the ${meta.abbr} DMV knowledge test`}
+          </h2>
+          <ul className="space-y-3">
+            {whatToExpect.map(({ icon, label, value }) => (
+              <li key={label} className="flex items-start gap-3">
+                <span className="text-base mt-0.5 shrink-0">{icon}</span>
+                <div>
+                  <span className="text-sm font-semibold text-[#0B1C3D]">{label}: </span>
+                  <span className="text-sm text-[#64748B]">{value}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* License categories */}
+        <section className="bg-white rounded-2xl border border-[#E2E8F0] p-6 mb-5 shadow-sm">
+          <h2 className="text-base font-bold text-[#0B1C3D] mb-4">
+            {tex.dtTypesTitle || `Available ${name} practice test types`}
+          </h2>
+          <div className="space-y-3">
+            {categories.map(({ cat, emoji, title, desc, bg }) => (
+              <Link
+                key={cat}
+                href={`/category?state=${state}&lang=en`}
+                className="flex items-center gap-4 p-4 rounded-xl border border-[#E2E8F0] hover:border-[#2563EB] hover:shadow-sm transition-all"
+                style={{ background: bg }}
+              >
+                <span className="text-3xl shrink-0">{emoji}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="font-semibold text-sm text-[#0B1C3D]">{title}</div>
+                  <div className="text-xs text-[#64748B] mt-0.5 leading-relaxed">{desc}</div>
+                </div>
+                <span className="text-xs font-semibold text-[#2563EB] shrink-0">{tex.dtStart || 'Start'}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="mb-8">
+          <h2 className="text-lg font-bold text-[#0B1C3D] mb-4">
+            {name}  ·  {tex.dtFaqTitle || 'Frequently Asked Questions'}
+          </h2>
+          <div className="space-y-3">
+            {faqs.map(({ q, a }) => (
+              <details key={q} className="bg-white rounded-2xl border border-[#E2E8F0] p-5 shadow-sm group">
+                <summary className="font-semibold text-sm text-[#0B1C3D] cursor-pointer list-none flex justify-between items-center gap-3">
+                  <span>{q}</span>
+                  <span className="text-[#2563EB] shrink-0 transition-transform group-open:rotate-180">▾</span>
+                </summary>
+                <p className="mt-3 text-sm text-[#64748B] leading-relaxed">{a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* Manual link */}
+        <div className="bg-white rounded-2xl border border-[#E2E8F0] p-5 mb-5 shadow-sm flex items-center justify-between gap-4">
+          <div>
+            <p className="text-sm font-semibold text-[#0B1C3D]">{tex.dtManualTitle || `Official ${name} Driver Handbook`}</p>
+            <p className="text-xs text-[#94A3B8] mt-0.5">{tex.dtManualSub || 'Read or download the free PDF manual'}</p>
+          </div>
+          <Link
+            href={`/manuals/${state}`}
+            className="shrink-0 px-4 py-2 bg-[#EFF6FF] text-[#2563EB] rounded-xl text-sm font-semibold hover:bg-[#DBEAFE] transition-colors"
+          >
+            {tex.dtViewManual || 'View Manual'}
+          </Link>
+        </div>
+
+        {/* Pro upgrade */}
+        <div className="bg-gradient-to-r from-[#0B1C3D] to-[#1E3A5F] rounded-2xl p-6 mb-8 text-center shadow-lg border border-[#1e3a5f]">
+          <div className="text-[#F59E0B] font-black text-xs mb-2 uppercase tracking-widest">✨ {tex.dtProKicker || 'Unlock Full Access'}</div>
+          <p className="text-white font-bold text-base mb-1">{tex.dtProTitle || 'Practice with current, verified questions and walk in ready'}</p>
+          <p className="text-[#94A3B8] text-sm mb-4">{tex.dtProSub || 'Full 40-question tests · Detailed explanations · All categories'}</p>
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <span className="text-xs font-semibold text-[#10B981] bg-[#10B981]/10 px-3 py-1 rounded-full border border-[#10B981]/30">
+              {tex.footerFree || 'Free to start · no signup'}
+            </span>
+          </div>
+          <Link
+            href="/upgrade"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[#F59E0B] text-[#0B1C3D] rounded-xl font-bold text-sm hover:bg-[#FBBF24] transition-colors"
+          >
+            {tex.dtProBtn || 'Unlock Full Access'}  ·  {tex.dtFrom || 'from'} {MIN_PRICE}
+          </Link>
+          <p className="text-xs text-[#64748B] mt-2">{tex.dtProNote || 'One-time payment · 30 days · No subscription'}</p>
+        </div>
+
+        {/* Languages section — mirrors real search intent. The product's
+            unique edge: native-language practice for the {state} {agency}
+            test. Spelled out so Google indexes "free Florida DMV test in
+            Russian / Spanish / Chinese / Ukrainian" long-tail combos. */}
+        <section className="bg-white rounded-2xl border border-[#E2E8F0] p-6 mb-5 shadow-sm">
+          <h2 className="text-base font-bold text-[#0B1C3D] mb-3">
+            {fill(tex.dtLangSecTitle)}
+          </h2>
+          <p className="text-sm text-[#64748B] mb-4 leading-relaxed">
+            {fill(tex.dtLangSecIntro)}
+          </p>
+          <ul className="space-y-2 mb-4">
+            <li className="text-sm text-[#1A2B4A]"><strong>🇺🇸 English</strong> — official source text, all {exam.questions} {name} knowledge-test topics covered</li>
+            <li className="text-sm text-[#1A2B4A]"><strong>🇪🇸 Español</strong> — examen de manejo de {name} gratis, traducido por hablantes nativos</li>
+            <li className="text-sm text-[#1A2B4A]"><strong>🇷🇺 Русский</strong> — бесплатный тест {meta.dmvAbbr} {name} на русском, реальные вопросы</li>
+            <li className="text-sm text-[#1A2B4A]"><strong>🇨🇳 中文</strong> — {name} {meta.dmvAbbr} 笔试免费练习，中英对照</li>
+            <li className="text-sm text-[#1A2B4A]"><strong>🇺🇦 Українська</strong> — безкоштовний тест {meta.dmvAbbr} {name} українською</li>
+          </ul>
+          {cities.length > 0 && (
+            <p className="text-xs text-[#64748B] leading-relaxed border-t border-[#F1F5F9] pt-4">
+              {fill(tex.dtLangSecCities)}
+            </p>
+          )}
+        </section>
+
+        {/* Geographically-relevant nearby states first, then top-traffic states
+            as filler so the section is never thin. Internal linking signal. */}
+        <section>
+          <h2 className="text-sm font-bold text-[#0B1C3D] mb-3">
+            {neighborStates.length > 0 ? `${tex.dtNearby || 'Practice tests near'} ${name}` : (tex.dtPopular || 'Popular state practice tests')}
+          </h2>
+          <div className="grid grid-cols-2 gap-2">
+            {otherStates.map(s => (
+              <Link
+                key={s}
+                href={`/dmv-test/${s}`}
+                className="p-3 rounded-xl border border-[#E2E8F0] bg-white hover:border-[#2563EB] hover:shadow-sm transition-all text-sm font-medium text-[#1A2B4A] hover:text-[#2563EB]"
+              >
+                {STATE_DISPLAY[s]}{' '}
+                <span className="text-[#94A3B8] text-xs">({STATE_META[s].abbr})</span>
+              </Link>
+            ))}
+            <Link
+              href="/dmv-test"
+              className="p-3 rounded-xl border border-[#2563EB] bg-[#EFF6FF] text-sm font-semibold text-[#2563EB] text-center col-span-2 hover:bg-[#DBEAFE] transition-colors"
+            >
+              {tex.dtViewAll || 'View all 50 states'}
+            </Link>
+          </div>
+        </section>
+
+      </main>
+
+      <SupportFooter />
+
+      <footer className="border-t border-[#E2E8F0] py-6 text-center text-xs text-[#94A3B8]">
+        <div className="max-w-lg mx-auto px-4">
+          <p>DMVSOS.com  ·  Free DMV Practice Tests for All 50 States</p>
+          <p className="mt-1">
+            <Link href="/terms" className="hover:text-[#2563EB]">{tex.terms || 'Terms'}</Link>
+            {' · '}
+            <Link href="/privacy" className="hover:text-[#2563EB]">{tex.privacy || 'Privacy'}</Link>
+            {' · '}
+            <Link href="/manuals" className="hover:text-[#2563EB]">{tex.navManuals || 'Driver Manuals'}</Link>
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}

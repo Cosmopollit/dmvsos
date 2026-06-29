@@ -37,6 +37,28 @@ export default function sitemap() {
     });
   }
 
+  // Localized DMV-test routes (ru/es/zh/ua) under a /[locale]/ path prefix.
+  // These have genuinely localized, server-rendered bodies + hreflang, so each
+  // language gets its own indexable URL. EN stays at the root above. /manuals
+  // and the home page get locale URLs in a later phase (no locale routes yet).
+  const dmvLocales = ['ru', 'es', 'zh', 'ua'];
+  for (const locale of dmvLocales) {
+    pages.push({
+      url: `${baseUrl}/${locale}/dmv-test`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    });
+    for (const st of states) {
+      pages.push({
+        url: `${baseUrl}/${locale}/dmv-test/${st}`,
+        lastModified: now,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      });
+    }
+  }
+
   // Manual hubs: state + category. The per-language leaf pages
   // (/manuals/{state}/{cat}/{lang}) are intentionally OMITTED: ~242 thin
   // PDF-link pages were ~half the sitemap, diluting crawl budget and sitting
