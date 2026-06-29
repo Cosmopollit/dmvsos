@@ -611,7 +611,10 @@ export default function HomeClient({ initialLang = 'en' }) {
                       <div className="text-[11px] text-[#64748B] mt-0.5">{cat.owned ? (tex.startPracticing || cat.sub) : cat.sub}</div>
                     </div>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={cat.img} alt="" aria-hidden="true" className="absolute right-[-6px] bottom-[-4px] h-[60px] w-auto z-0 pointer-events-none select-none" />
+                    {/* Uniform box + object-contain so all three vehicles render at the
+                        same footprint and stay vertically centered, regardless of their
+                        very different aspect ratios (the mustang is wide, truck/moto tall). */}
+                    <img src={cat.img} alt="" aria-hidden="true" className="absolute right-3 top-1/2 -translate-y-1/2 h-[54px] w-[92px] object-contain z-0 pointer-events-none select-none" />
                   </button>
                 ))}
               </div>
