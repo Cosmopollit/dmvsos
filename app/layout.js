@@ -1,11 +1,11 @@
 import { Inter, DM_Sans, Geist_Mono } from "next/font/google";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import "./globals.css";
+import { APP_LANG_TO_HTML_LANG } from "@/lib/i18n-meta";
 import { AuthProvider } from "@/lib/AuthContext";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import { getHreflangAlternates } from "@/lib/hreflang";
 import PersonalGreeting from "./components/PersonalGreeting";
 import NastyaGreeting from "./NastyaGreeting";
 
@@ -54,7 +54,6 @@ export const metadata = {
     description: 'Free DMV practice tests for all 50 states in 5 languages: English, Spanish, Russian, Ukrainian, Chinese. Sourced from official state Driver Handbooks.',
     images: ['/og-image.png'],
   },
-  alternates: getHreflangAlternates('/'),
 };
 
 const jsonLd = {
@@ -162,9 +161,13 @@ export default async function RootLayout({ children }) {
   // pages (e.g. /admin/clusters/new) and breaks the production build. Re-enable
   // static only after every such page is wrapped in a Suspense boundary.
   const cookieStore = await cookies();
-  const lang = cookieStore.get('dmvsos_lang')?.value || 'en';
+  // Path locale (set by proxy.js for /ru, /es, /zh, /ua) wins over the cookie,
+  // so a cookieless crawler on a locale route gets <html lang> matching the
+  // localized page. Map app codes to the proper html lang (zh -> zh-Hans, ua -> uk).
+  const pathLocale = (await headers()).get('x-locale');
+  const lang = pathLocale || cookieStore.get('dmvsos_lang')?.value || 'en';
   return (
-    <html lang={lang}>
+    <html lang={APP_LANG_TO_HTML_LANG[lang] || 'en'}>
       <head>
         <script
           type="application/ld+json"

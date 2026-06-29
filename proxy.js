@@ -303,6 +303,11 @@ export async function proxy(request) {
     requestHeaders.set('x-bot-reasons', botReasons.join(','))
   }
 
+  // Path-locale hint for the root layout's <html lang>, so cookieless crawlers
+  // on /ru, /es, /zh, /ua get the language attribute matching the localized page.
+  const localeMatch = path.match(/^\/(ru|es|zh|ua)(?:\/|$)/)
+  if (localeMatch) requestHeaders.set('x-locale', localeMatch[1])
+
   let supabaseResponse = NextResponse.next({
     request: { headers: requestHeaders },
   })
