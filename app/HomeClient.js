@@ -15,14 +15,40 @@ import { useExperiment } from '@/lib/experiments';
 import SupportFooter from '@/app/components/SupportFooter';
 import WelcomeBanner from '@/app/components/WelcomeBanner';
 import BreakButton from '@/app/components/BreakButton';
+import GradientButton from '@/app/components/GradientButton';
 
 // Category illustrations live in /public/vehicles (transparent PNGs, same art
 // used in the mobile app for a consistent look across web + native).
 
 const codeToName = { en: 'English', ru: 'Русский', es: 'Español', zh: '中文', ua: 'Українська' };
 
+// Owned-plan footer for a pricing card: a green "Active" line replaces the
+// price-anchored buy button, and a green CTA drops the user straight into the
+// test they already paid for. Mirrors the mobile app's owned-card treatment.
+function PlanOwnedCta({ tex, onClick }) {
+  return (
+    <div className="mt-auto">
+      <div className="flex items-center justify-center gap-1.5 mb-2 text-[#15803D] font-bold text-sm">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="#16A34A" /><path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" /></svg>
+        {tex.planActive || 'Active'}
+      </div>
+      <button type="button" onClick={onClick}
+        className="w-full py-2.5 rounded-xl font-bold text-sm bg-[#F0FDF4] text-[#15803D] border-[1.5px] border-[#16A34A] hover:bg-[#DCFCE7] transition-all">
+        {tex.startPracticing || 'Start Practicing'}
+      </button>
+    </div>
+  );
+}
+
 export default function HomeClient({ initialLang = 'en' }) {
   const { user, isPro, planType } = useAuth();
+  // Owned-category mapping — mirrors SiteHeader's planType branches exactly so
+  // the home, header, and profile all agree on "what does this user own".
+  // guaranteed_pass is the legacy all-access plan (it already lives in the CDL
+  // list and unlocks all three categories).
+  const ownsCdl = ['cdl', 'cdl_pass', 'guaranteed_pass'].includes(planType);
+  const ownsCar = ['auto', 'car_pass', 'full_prep', 'guaranteed_pass'].includes(planType);
+  const ownsMoto = ['moto', 'moto_pass', 'quick_pass', 'guaranteed_pass'].includes(planType);
   useExperiment('home_visit', user?.id);
   // A/B the hero headline (v1 control / v2 uniqueness / v3 confidence). Starts
   // on v1, switches to the assigned variant after mount — see useExperiment.
@@ -103,6 +129,19 @@ export default function HomeClient({ initialLang = 'en' }) {
 
   async function handleSignOut() {
     await supabase.auth.signOut();
+  }
+
+  // Owned-plan "Start practicing" CTA. Routes straight into the test the user
+  // already paid for when a state is picked; otherwise nudges them to the
+  // state selector first (the test route needs a state). catId uses the home's
+  // category ids: 'dmv' (car), 'cdl', 'moto'.
+  function goPractice(catId) {
+    if (!state) {
+      document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+    if (catId === 'cdl') router.push(`/cdl-category?state=${state}&lang=${langCode}`);
+    else router.push(`/test?state=${state}&category=${catId}&lang=${langCode}`);
   }
 
   const stateOptions = STATE_OPTIONS.map((display) => ({ name: display, code: stateToSlug(display) }));
@@ -484,9 +523,9 @@ export default function HomeClient({ initialLang = 'en' }) {
                   card made the surface feel cramped. */}
               <div className="flex flex-col gap-3">
                 {[
-                  { id: 'dmv',  label: tex.catCar,  sub: tex.catCarSub,  img: '/vehicles/car-hero.png', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' },
-                  { id: 'cdl',  label: tex.catCdl,  sub: tex.catCdlSub,  img: '/vehicles/truck.png', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)' },
-                  { id: 'moto', label: tex.catMoto, sub: tex.catMotoSub, img: '/vehicles/moto.png',  gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)' },
+                  { id: 'dmv',  owned: ownsCar,  label: tex.catCar,  sub: tex.catCarSub,  img: '/vehicles/car-hero.png', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' },
+                  { id: 'cdl',  owned: ownsCdl,  label: tex.catCdl,  sub: tex.catCdlSub,  img: '/vehicles/truck.png', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)' },
+                  { id: 'moto', owned: ownsMoto, label: tex.catMoto, sub: tex.catMotoSub, img: '/vehicles/moto.png',  gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)' },
                 ].map(cat => (
                   <button
                     key={cat.id}
@@ -495,12 +534,20 @@ export default function HomeClient({ initialLang = 'en' }) {
                       if (cat.id === 'cdl') router.push(`/cdl-category?state=${state}&lang=${langCode}`);
                       else router.push(`/test?state=${state}&category=${cat.id}&lang=${langCode}`);
                     }}
-                    className="relative overflow-hidden rounded-2xl px-4 py-4 min-h-[72px] flex flex-col justify-center shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all text-left"
-                    style={{ background: cat.gradient }}
+                    className={`relative overflow-hidden rounded-2xl px-4 py-4 min-h-[72px] flex flex-col justify-center shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all text-left ${cat.owned ? 'ring-1.5 ring-[#16A34A]' : ''}`}
+                    style={{ background: cat.gradient, ...(cat.owned ? { boxShadow: '0 4px 14px rgba(22,163,74,0.16)', border: '1.5px solid #16A34A' } : {}) }}
                   >
                     <div className="relative z-10">
-                      <div className="font-bold text-[#0B1C3D] text-[16px]">{cat.label}</div>
-                      <div className="text-[11px] text-[#64748B] mt-0.5">{cat.sub}</div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <div className="font-bold text-[#0B1C3D] text-[16px]">{cat.label}</div>
+                        {cat.owned && (
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[#F0FDF4] text-[10px] font-bold text-[#15803D]">
+                            <svg width="11" height="11" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="#16A34A" /><path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" /></svg>
+                            {tex.planActive || 'Active'}
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-[11px] text-[#64748B] mt-0.5">{cat.owned ? (tex.startPracticing || cat.sub) : cat.sub}</div>
                     </div>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={cat.img} alt="" aria-hidden="true" className="absolute right-[-6px] bottom-[-4px] h-[60px] w-auto z-0 pointer-events-none select-none" />
@@ -639,10 +686,14 @@ export default function HomeClient({ initialLang = 'en' }) {
                 </li>
               ))}
             </ul>
-            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=${PASS_META.moto.id}`)}
-              className="w-full py-2.5 rounded-xl font-bold text-sm bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition-all">
-              {tex.planGetMoto}
-            </button>
+            {ownsMoto ? (
+              <PlanOwnedCta tex={tex} onClick={() => goPractice('moto')} />
+            ) : (
+              <GradientButton variant="blue" className="mt-auto"
+                onClick={() => router.push(`/upgrade?lang=${langCode}&plan=${PASS_META.moto.id}`)}>
+                {tex.planGetMoto}
+              </GradientButton>
+            )}
           </div>
 
           {/* Auto Pass  ·  most popular */}
@@ -665,10 +716,14 @@ export default function HomeClient({ initialLang = 'en' }) {
                 </li>
               ))}
             </ul>
-            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=${PASS_META.auto.id}`)}
-              className="w-full py-2.5 rounded-xl font-bold text-sm bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition-all">
-              {tex.planGetAuto}
-            </button>
+            {ownsCar ? (
+              <PlanOwnedCta tex={tex} onClick={() => goPractice('dmv')} />
+            ) : (
+              <GradientButton variant="blue" className="mt-auto"
+                onClick={() => router.push(`/upgrade?lang=${langCode}&plan=${PASS_META.auto.id}`)}>
+                {tex.planGetAuto}
+              </GradientButton>
+            )}
           </div>
 
           {/* CDL Pro  ·  best value */}
@@ -691,11 +746,14 @@ export default function HomeClient({ initialLang = 'en' }) {
                 </li>
               ))}
             </ul>
-            <button type="button" onClick={() => router.push(`/upgrade?lang=${langCode}&plan=${PASS_META.cdl.id}`)}
-              className="w-full py-2.5 rounded-xl font-bold text-sm text-[#0B1C3D] hover:brightness-105 transition-all"
-              style={{ background: 'linear-gradient(135deg, #FDE68A, #FBBF24)' }}>
-              {tex.planGetCdl}
-            </button>
+            {ownsCdl ? (
+              <PlanOwnedCta tex={tex} onClick={() => goPractice('cdl')} />
+            ) : (
+              <GradientButton variant="gold" className="mt-auto"
+                onClick={() => router.push(`/upgrade?lang=${langCode}&plan=${PASS_META.cdl.id}`)}>
+                {tex.planGetCdl}
+              </GradientButton>
+            )}
           </div>
 
         </div>
@@ -708,6 +766,30 @@ export default function HomeClient({ initialLang = 'en' }) {
           </button>
         </p>
       </section>
+
+      {/* Find help nearby — links to the services hub. Mirrors the mobile
+          home's "Find help nearby" row; teal-tinted so it reads as a distinct
+          utility row from the blue Driver Manual card above. */}
+      <div className="w-full max-w-lg mx-auto px-4 mb-8">
+        <Link
+          href="/services"
+          className="flex items-center gap-3 bg-[#ECFDF5] rounded-2xl px-4 py-4 shadow-sm border border-[#CCFBF1] border-l-4 border-l-[#0D9488] hover:bg-[#D1FAE5] hover:shadow-md transition-all group"
+        >
+          <div className="w-11 h-11 rounded-xl bg-[#CCFBF1] flex items-center justify-center shrink-0 group-hover:bg-[#99F6E4] transition-colors">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/illustrations/map.png" alt="" aria-hidden="true" className="w-9 h-9 object-contain" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-bold text-[#0B1C3D] group-hover:text-[#0D9488] mb-0.5">
+              {tex.servicesHubTitle || 'Find help nearby'}
+            </div>
+            <div className="text-[11px] text-[#64748B]">
+              {tex.servicesHubSubtitle}
+            </div>
+          </div>
+          <div className="text-[#5EEAD4] shrink-0 group-hover:text-[#0D9488] font-bold">›</div>
+        </Link>
+      </div>
 
       {/* Social proof */}
       <section className="w-full max-w-lg mx-auto mb-8 px-4">

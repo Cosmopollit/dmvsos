@@ -8,10 +8,91 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { flags } from '@/lib/flags';
-import { planForCategory } from '@/lib/plans';
+import { PLANS } from '@/lib/plans';
 import { examRulesFor } from '@/lib/exam-rules';
 import { isInAppBrowser } from '@/lib/emailHints';
 import SupportFooter from '@/app/components/SupportFooter';
+import GradientButton from '@/app/components/GradientButton';
+import AnimatedLock from '@/app/components/AnimatedLock';
+
+// Animated SVG score ring, ported from the app's ScoreRing.tsx: a soft track,
+// a gradient arc that sweeps in on mount (CSS stroke-dashoffset), and a tick
+// on the track marking the pass threshold. Colored success vs error.
+function ScoreRing({ percent, passPercent, passed, size = 188, stroke = 16, children }) {
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  const target = Math.max(0, Math.min(100, percent)) / 100;
+  const offset = c * (1 - target);
+  const cx = size / 2;
+  // Pass-mark tick: a dot on the track at the threshold angle, clockwise
+  // from 12 o'clock (matches the sweep direction).
+  let tick = null;
+  if (passPercent != null && passPercent > 0 && passPercent < 100) {
+    const theta = ((-90 + 360 * (passPercent / 100)) * Math.PI) / 180;
+    tick = { x: cx + r * Math.cos(theta), y: cx + r * Math.sin(theta) };
+  }
+  return (
+    <div className="relative" style={{ width: size, height: size }}>
+      <svg width={size} height={size} className="absolute inset-0">
+        <circle cx={cx} cy={cx} r={r} stroke="#EEF2F7" strokeWidth={stroke} fill="none" />
+        <circle
+          className="score-ring-arc"
+          cx={cx}
+          cy={cx}
+          r={r}
+          stroke={`url(#ringGrad-${passed ? 'pass' : 'fail'})`}
+          strokeWidth={stroke}
+          strokeLinecap="round"
+          fill="none"
+          strokeDasharray={c}
+          style={{ '--ring-circ': c, '--ring-target': offset, strokeDashoffset: offset }}
+          transform={`rotate(-90 ${cx} ${cx})`}
+        />
+        {tick && (
+          <circle cx={tick.x} cy={tick.y} r={stroke * 0.28} fill="#0B1C3D" stroke="#FFFFFF" strokeWidth={2} />
+        )}
+        <defs>
+          <linearGradient id="ringGrad-pass" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#22C55E" />
+            <stop offset="1" stopColor="#16A34A" />
+          </linearGradient>
+          <linearGradient id="ringGrad-fail" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#FBBF24" />
+            <stop offset="1" stopColor="#F59E0B" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// The big % counts up from 0 on mount via requestAnimationFrame, matching the
+// app's CountUp. Falls back to the final value if effects don't run (SSR/no-JS).
+function useCountUp(value, duration = 1100, delay = 220) {
+  const [shown, setShown] = useState(0);
+  useEffect(() => {
+    let raf;
+    let cancelled = false;
+    const start = performance.now() + delay;
+    const tick = (now) => {
+      if (cancelled) return;
+      const elapsed = now - start;
+      if (elapsed < 0) {
+        raf = requestAnimationFrame(tick);
+        return;
+      }
+      const p = Math.min(1, elapsed / duration);
+      setShown(Math.round(value * p));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => { cancelled = true; cancelAnimationFrame(raf); };
+  }, [value, duration, delay]);
+  return shown;
+}
 
 const langs = [
   { label: 'EN', flag: flags.us, code: 'en' },
@@ -63,7 +144,10 @@ function ResultContent() {
   const category = testResults?.category ?? 'car';
   const passRule = examRulesFor(state, category);
   const passMark = passRule ? passRule.pass / passRule.questions : 0.8;
+  const passPercent = Math.round(passMark * 100);
   const passed = total > 0 && score / total >= passMark;
+  const wrongCount = Math.max(0, total - score);
+  const countedPercent = useCountUp(percent);
   const lang = langOverride ?? testResults?.lang ?? getSavedLang();
   const currentLang = langs.find(l => l.code === lang) || langs[0];
   function switchLang(code) { setLangOverride(code); saveLang(code); setShowLangMenu(false); }
@@ -132,40 +216,59 @@ function ResultContent() {
           </div>
         </div>
 
-        {/* Result card */}
-        <div className="bg-white rounded-2xl p-8 w-full shadow-sm border border-[#E2E8F0] text-center">
-          <div className="flex justify-center mb-4 h-[110px]">
+        {/* Result hero: illustration, animated score ring + count-up %, badge,
+            pass-mark line, and a health-app style 3-cell metric strip. */}
+        <div className="bg-white rounded-2xl p-8 w-full shadow-sm border border-[#E2E8F0] text-center flex flex-col items-center">
+          <div className="flex justify-center mb-5 h-[100px]">
             <Image
               src={passed ? '/illustrations/trophy.png' : '/illustrations/diary.png'}
               alt=""
-              width={passed ? 110 : 160}
-              height={passed ? 110 : 110}
+              width={passed ? 100 : 150}
+              height={passed ? 100 : 100}
               className="select-none h-full w-auto object-contain"
               priority
             />
           </div>
+
+          <ScoreRing percent={percent} passPercent={passPercent} passed={passed} size={188} stroke={16}>
+            <div className="text-5xl font-bold text-[#0B1C3D] leading-none">{countedPercent}%</div>
+            <div className="text-sm text-[#94A3B8] mt-1.5 font-medium">
+              {score}/{total} {tex.resultCorrect}
+            </div>
+          </ScoreRing>
+
           <div
-            className={`inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-4 ${
+            className={`inline-block px-4 py-1.5 rounded-full text-sm font-bold mt-5 ${
               passed ? 'bg-[#F0FDF4] text-[#16A34A]' : 'bg-[#FEF2F2] text-[#DC2626]'
             }`}
           >
             {passed ? tex.passed : tex.notPassed}
           </div>
-          <div className="text-5xl font-bold text-[#0B1C3D] mb-1">{percent}%</div>
-          <p className="text-[#94A3B8] text-sm mb-2">
-            {(tex.resultText || 'You answered {score} out of {total} correctly').replace(/\{score\}/g, String(score)).replace(/\{total\}/g, String(total))}
+
+          <p className="text-[#94A3B8] text-xs mt-2.5">
+            {tex.passMark} · {passPercent}%
           </p>
-          {elapsed > 0 && (
-            <p className="text-[#94A3B8] text-sm mb-6">{tex.completedIn} {formatTime(elapsed)}</p>
-          )}
-          {elapsed === 0 && <div className="mb-6" />}
-          <div className="w-full h-1.5 bg-[#E2E8F0] rounded-full mb-6">
-            <div
-              className={`h-1.5 rounded-full transition-all duration-700 ${
-                passed ? 'bg-[#16A34A]' : 'bg-[#DC2626]'
-              }`}
-              style={{ width: `${percent}%` }}
-            />
+
+          {/* Metric strip: Correct / Wrong / Time. Time cell only when timed. */}
+          <div className="flex items-stretch justify-center w-full mt-5 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] py-3.5">
+            <div className="flex-1 flex flex-col items-center px-2">
+              <span className="text-2xl font-bold text-[#16A34A] leading-none">{score}</span>
+              <span className="text-[11px] text-[#94A3B8] font-medium mt-1">{tex.resultCorrect}</span>
+            </div>
+            <div className="w-px bg-[#E2E8F0] self-stretch my-1" />
+            <div className="flex-1 flex flex-col items-center px-2">
+              <span className="text-2xl font-bold text-[#DC2626] leading-none">{wrongCount}</span>
+              <span className="text-[11px] text-[#94A3B8] font-medium mt-1">{tex.resultWrong}</span>
+            </div>
+            {elapsed > 0 && (
+              <>
+                <div className="w-px bg-[#E2E8F0] self-stretch my-1" />
+                <div className="flex-1 flex flex-col items-center px-2">
+                  <span className="text-2xl font-bold text-[#0B1C3D] leading-none tabular-nums">{formatTime(elapsed)}</span>
+                  <span className="text-[11px] text-[#94A3B8] font-medium mt-1">{tex.resultTime}</span>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -273,66 +376,70 @@ function ResultContent() {
           </div>
         )}
 
-        {/* Upgrade banner  ·  hidden for Pro users */}
+        {/* Post-test upsell at the moment of highest motivation: the full offer
+            (all 3 passes + prices) and one strong gradient CTA, not just the
+            single category the user happened to test. Hidden for Pro users.
+            Owned-aware filtering is a separate future task. */}
         {!isPro && (() => {
-          const rPlan = planForCategory(category);
-          const rIsMoto = rPlan.pass_type === 'moto';
-          const rIsCdl = rPlan.pass_type === 'cdl';
+          const planName = (p) => (
+            p.pass_type === 'cdl' ? tex.planCdlPro
+              : p.pass_type === 'moto' ? tex.planMotoPass
+                : tex.planAutoPass
+          );
+          const tints = {
+            moto: { bg: '#FFF7ED', color: '#D97706' },
+            auto: { bg: '#EFF6FF', color: '#2563EB' },
+            cdl: { bg: '#FEF3C7', color: '#B45309' },
+          };
+          const planArt = { moto: '/vehicles/moto-hero.png', auto: '/vehicles/mustang.png', cdl: '/vehicles/truck-hero.png' };
           return (
             <div className="bg-white rounded-2xl p-5 w-full border border-[#E2E8F0] shadow-sm">
-              <p className="text-[#0B1C3D] font-bold text-base mb-1 text-center">{tex.upgradeModalTitle || 'Unlock Full Access'}</p>
-              <p className="text-[#64748B] text-xs mb-4 text-center">{tex.cancelAnytime}</p>
-              <div className="flex justify-center mb-3">
-                <div className="w-full max-w-[200px] border-2 rounded-xl p-4 text-center flex flex-col"
-                  style={{
-                    borderColor: rIsCdl ? '#F59E0B' : rIsMoto ? '#D97706' : '#2563EB',
-                    background: rIsCdl ? '#FFFBEB' : rIsMoto ? '#FFF7ED' : '#EFF6FF',
-                  }}>
-                  {rIsCdl && <div className="text-[9px] font-bold text-[#0B1C3D] bg-[#F59E0B] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">{tex.planCdlBadge || 'Car tests included'}</div>}
-                  {!rIsCdl && !rIsMoto && <div className="text-[9px] font-bold text-white bg-[#2563EB] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">{tex.planPopular}</div>}
-                  <div className="flex justify-center mb-1 h-12">
-                    <img
-                      src={rIsCdl ? '/vehicles/truck-hero.png' : rIsMoto ? '/vehicles/moto-hero.png' : '/vehicles/mustang.png'}
-                      alt=""
-                      className="h-full w-auto object-contain select-none"
-                    />
-                  </div>
-                  <div className="text-xs font-bold mb-0.5" style={{ color: rIsCdl ? '#92400E' : rIsMoto ? '#D97706' : '#2563EB' }}>
-                    {rIsCdl ? tex.planCdlPro : rIsMoto ? tex.planMotoPass : tex.planAutoPass}
-                  </div>
-                  <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">{rPlan.price}</div>
-                  <div className="text-[10px] text-[#64748B] mb-3">{tex.planDuration || '30-day access'}</div>
-                  <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=${rPlan.id}`)}
-                    className="w-full py-2 rounded-lg text-sm font-bold text-white transition"
-                    style={{ background: rIsCdl ? '#0B1C3D' : rIsMoto ? '#D97706' : '#2563EB' }}>
-                    {tex.getIt || 'Get it'}
-                  </button>
-                </div>
+              <p className="text-[#0B1C3D] font-bold text-base mb-1 text-center">{tex.unlockEverything}</p>
+              <p className="text-[#64748B] text-xs mb-4 text-center">{tex.unlockEverythingSub}</p>
+              <div className="flex flex-col gap-2 mb-4">
+                {PLANS.map((p) => {
+                  const tint = tints[p.pass_type] || tints.auto;
+                  return (
+                    <div key={p.pass_type} className="flex items-center gap-3 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2.5">
+                      <span
+                        className="flex items-center justify-center w-12 h-9 rounded-lg shrink-0 overflow-hidden"
+                        style={{ background: tint.bg }}
+                      >
+                        <Image src={planArt[p.pass_type] || '/vehicles/mustang.png'} alt="" width={44} height={32} className="object-contain w-full h-full" />
+                      </span>
+                      <span className="flex-1 text-sm font-semibold text-[#0B1C3D] truncate">{planName(p)}</span>
+                      <span className="text-sm font-bold" style={{ color: tint.color }}>{p.price}</span>
+                    </div>
+                  );
+                })}
               </div>
+              <GradientButton variant="gold" href={`/upgrade?lang=${lang}`}>
+                <AnimatedLock size={20} color="#0B1C3D" />
+                {tex.unlockFullAccess}
+              </GradientButton>
             </div>
           );
         })()}
 
         {/* Buttons */}
-        <button
-          type="button"
-          onClick={() => router.push(`/category?state=${state}&lang=${lang}`)}
-          className="w-full bg-[#2563EB] text-white py-3.5 rounded-xl font-semibold text-base hover:bg-[#1D4ED8] transition-all"
-        >
-          {tex.tryAgain}
-        </button>
         {wrongQuestions.length > 0 && (
-          <button
-            type="button"
+          <GradientButton
+            variant="blue"
             onClick={() => {
               sessionStorage.setItem('retryQuestions', JSON.stringify(wrongQuestions));
               router.push(`/test?state=${state}&category=${category}&lang=${lang}&retry=true`);
             }}
-            className="w-full bg-white border border-[#E2E8F0] text-[#1E293B] py-3.5 rounded-xl font-semibold text-base hover:border-[#2563EB] hover:text-[#2563EB] hover:bg-[#F8FAFC] transition-all"
           >
             {tex.retryWrong} ({wrongQuestions.length})
-          </button>
+          </GradientButton>
         )}
+        <button
+          type="button"
+          onClick={() => router.push(`/category?state=${state}&lang=${lang}`)}
+          className="w-full bg-white border border-[#E2E8F0] text-[#1E293B] py-3.5 rounded-xl font-semibold text-base hover:border-[#2563EB] hover:text-[#2563EB] hover:bg-[#F8FAFC] transition-all"
+        >
+          {tex.tryAgain}
+        </button>
         <button
           type="button"
           onClick={() => router.push('/')}

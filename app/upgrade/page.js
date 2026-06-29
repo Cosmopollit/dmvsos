@@ -11,6 +11,7 @@ import { flags } from '@/lib/flags';
 import { PASS_META } from '@/lib/plans';
 import { useExperiment } from '@/lib/experiments';
 import SupportFooter from '@/app/components/SupportFooter';
+import GradientButton from '@/app/components/GradientButton';
 
 const langs = [
   { label: 'EN', flag: flags.us, code: 'en' },
@@ -204,17 +205,31 @@ function UpgradeContent() {
           const isPreselected = preselect === plan.id;
           const isBlue = plan.style === 'blue';
           const isGold = plan.style === 'gold';
+          // The flagship "Most popular" card (Auto) gets the app-style
+          // emphasis: a subtle surface gradient + a slow shine sweep, reusing
+          // the existing gradient-btn-shine keyframe. Plan order, features,
+          // prices, and the badge are untouched.
+          const isMostPopular = plan.badge === tex.mostPopular;
           return (
             <div
               key={plan.id}
-              className={`flex-1 bg-white rounded-2xl p-5 flex flex-col relative shadow-xl ${
+              className={`flex-1 rounded-2xl p-5 flex flex-col relative shadow-xl overflow-hidden ${
                 isGold
                   ? 'border-2 border-[#F59E0B]'
                   : isBlue
                   ? 'border-2 border-[#2563EB]'
                   : 'border border-[#E2E8F0]'
               } ${isPreselected ? 'ring-2 ring-offset-2 ring-offset-[#0B1C3D] ring-[#F59E0B]' : ''}`}
+              style={isMostPopular
+                ? { background: 'linear-gradient(160deg, #FFFFFF 0%, #F4F8FF 100%)' }
+                : { background: '#FFFFFF' }}
             >
+              {isMostPopular && (
+                <span
+                  aria-hidden="true"
+                  className="gradient-btn-shine pointer-events-none absolute inset-y-0 -left-1/2 w-1/2"
+                />
+              )}
               {plan.badge && (
                 <span className={`absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap ${
                   isGold ? 'bg-[#F59E0B] text-[#0B1C3D]' : 'bg-[#2563EB] text-white'
@@ -243,17 +258,13 @@ function UpgradeContent() {
                   </li>
                 ))}
               </ul>
-              <button
-                type="button"
+              <GradientButton
+                variant={isGold ? 'gold' : 'blue'}
                 onClick={() => handleCheckout(plan.id)}
-                disabled={loadingPlan !== null}
-                className={`w-full py-3 rounded-xl font-bold text-sm transition disabled:opacity-60 ${
-                  isGold ? 'text-[#0B1C3D] hover:brightness-105' : 'bg-[#2563EB] text-white hover:bg-[#1D4ED8]'
-                }`}
-                style={isGold ? { background: 'linear-gradient(135deg, #FDE68A, #FBBF24)' } : undefined}
+                className={`text-sm ${loadingPlan !== null ? 'pointer-events-none opacity-60' : ''}`}
               >
                 {loadingPlan === plan.id ? '…' : plan.btnLabel}
-              </button>
+              </GradientButton>
             </div>
           );
         })}

@@ -103,9 +103,13 @@ function CdlCategoryContent() {
             key={sub.id}
             type="button"
             onClick={() => router.push(`/test?state=${state}&category=cdl&subcategory=${sub.id}&lang=${lang}`)}
-            className="relative w-full rounded-2xl py-5 pl-5 pr-[150px] min-h-[112px] flex items-center text-left border border-white/60 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all overflow-hidden"
+            className="group relative w-full rounded-2xl py-5 pl-5 pr-[150px] min-h-[112px] flex items-center text-left border border-white/60 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98] transition-all overflow-hidden"
             style={{ background: sub.gradient }}
           >
+            {/* Soft diagonal shine sweeping across the card on an interval — the
+                app's "переливание". Reuses the existing .gradient-btn-shine
+                utility (btn-shine keyframe) as an absolute overlay strip. */}
+            <span aria-hidden="true" className="gradient-btn-shine pointer-events-none absolute top-0 bottom-0 -left-1/4 w-1/3 z-20" />
             <div className="flex-1 min-w-0 z-10">
               <span className="font-bold text-[#1E293B] text-lg block">{tex[sub.titleKey] || sub.id.replace(/_/g, ' ')}</span>
               <div className="text-sm text-[#64748B] mt-0.5 leading-snug">{tex[sub.descKey] || ''}</div>

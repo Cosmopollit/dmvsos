@@ -18,6 +18,25 @@ const langs = [
   { label: 'UA', flag: flags.ua, code: 'ua' },
 ];
 
+// Distinct hue per category (teal / amber / violet / green) so no two cards
+// blend, mirroring the app. Each ships its transparent illustration that bleeds
+// off the right edge of the gradient card. Categories without art fall back to
+// their emoji glyph in a soft circle (FALLBACK_VISUAL).
+const CARD_VISUALS = {
+  instructor:        { grad: ['#14B8A6', '#0D9488', '#134E4A'], img: '/services/instructor.png', imgAspect: 1.518, imgH: 86 },
+  courses:           { grad: ['#F59E0B', '#B45309', '#7C2D12'], img: '/services/courses.png', imgAspect: 1.371, imgH: 90 },
+  translator_notary: { grad: ['#8B5CF6', '#6D28D9', '#3B0764'], img: '/services/translator.png', imgAspect: 1.118, imgH: 94 },
+  car_insurance:     { grad: ['#10B981', '#047857', '#064E3B'], img: '/services/insurance.png', imgAspect: 1.109, imgH: 96 },
+};
+const FALLBACK_VISUAL = { grad: ['#3B82F6', '#2563EB', '#4F46E5'] };
+// "In development" cards drop their vibrant hue for a calm slate so it reads as
+// "coming", not "broken".
+const SOON_GRAD = ['#8A98AC', '#64748B', '#475569'];
+
+function gradientCss(colors) {
+  return `linear-gradient(135deg, ${colors[0]} 0%, ${colors[1]} 50%, ${colors[2]} 100%)`;
+}
+
 function ServicesContent() {
   const router = useRouter();
   const params = useSearchParams();
@@ -96,32 +115,64 @@ function ServicesContent() {
           </div>
         )}
 
-        {/* Category cards */}
+        {/* Category cards — deep gradient per category with the illustration
+            bleeding off the right, matching the app. */}
         <div className="flex flex-col gap-3">
           {SERVICE_CATEGORIES.map(cat => {
             const locked = !isPro;
             const soon = cat.status === 'soon';
+            const v = CARD_VISUALS[cat.id] || FALLBACK_VISUAL;
+            const imgW = Math.round((v.imgH || 80) * (v.imgAspect || 1));
             return (
               <button
                 key={cat.id}
                 type="button"
                 onClick={() => openCategory(cat)}
-                className="w-full bg-white rounded-2xl border border-[#E2E8F0] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all p-4 flex items-center gap-4 text-left"
+                className="relative w-full rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all overflow-hidden text-left"
+                style={{ background: gradientCss(soon ? SOON_GRAD : v.grad), minHeight: 96 }}
               >
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl shrink-0 ${locked ? 'bg-[#F1F5F9]' : 'bg-[#EFF6FF]'}`}>
-                  <span aria-hidden="true">{cat.icon}</span>
+                {/* Top gloss */}
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-x-0 top-0 h-[58%]"
+                  style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.18), rgba(255,255,255,0))' }}
+                />
+
+                {/* Text content */}
+                <div className="relative z-10 px-[18px] py-4 max-w-[64%]">
+                  <div className="font-bold text-white text-[17px]" style={{ letterSpacing: '-0.2px' }}>{tex[cat.titleKey] || cat.id}</div>
+                  {soon ? (
+                    <span className="inline-flex items-center gap-1 mt-1.5 rounded-full bg-white/20 border border-white/35 pl-[7px] pr-[9px] py-[3px] text-[11px] font-extrabold uppercase tracking-wide text-white">
+                      🔒 {tex.soonTag || 'Soon'}
+                    </span>
+                  ) : null}
+                  <div className="text-[13px] text-white/90 mt-1 leading-[18px] line-clamp-2">{tex[cat.descKey] || ''}</div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="font-bold text-[#0B1C3D] text-[15px]">{tex[cat.titleKey] || cat.id}</div>
-                  <div className="text-xs text-[#64748B] mt-0.5 leading-snug line-clamp-2">{tex[cat.descKey] || ''}</div>
-                </div>
-                {locked ? (
-                  <span aria-label="locked" className="text-[#94A3B8] text-lg">🔒</span>
-                ) : soon ? (
-                  <span className="text-[10px] font-bold uppercase tracking-wide px-2 py-1 rounded-full bg-[#FEF3C7] text-[#92400E]">{tex.soonTag || 'Soon'}</span>
+
+                {/* Illustration bleeding off the right (fallback: emoji glyph) */}
+                {v.img ? (
+                  <span aria-hidden="true" className="pointer-events-none absolute right-[-6px] top-0 bottom-0 z-[1] flex items-center justify-end">
+                    <Image
+                      src={v.img}
+                      alt=""
+                      width={imgW}
+                      height={v.imgH || 80}
+                      className="object-contain select-none"
+                      style={{ opacity: soon ? 0.5 : 1, width: imgW, height: v.imgH || 80 }}
+                    />
+                  </span>
                 ) : (
-                  <span className="text-[#94A3B8] text-lg">›</span>
+                  <span aria-hidden="true" className="pointer-events-none absolute right-[18px] top-0 bottom-0 z-[1] flex items-center">
+                    <span className="w-[52px] h-[52px] rounded-2xl bg-white/20 flex items-center justify-center text-2xl">{cat.icon}</span>
+                  </span>
                 )}
+
+                {/* Lock / chevron chip — only when there's no illustration to keep the art clean */}
+                {!soon && !v.img ? (
+                  <span className="pointer-events-none absolute top-3 right-3 z-[3] min-w-[26px] h-[26px] px-2 rounded-full bg-white/[0.22] flex items-center justify-center text-white text-sm">
+                    {locked ? <span aria-label="locked">🔒</span> : '›'}
+                  </span>
+                ) : null}
               </button>
             );
           })}

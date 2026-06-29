@@ -9,10 +9,13 @@ import { useAuth } from '@/lib/AuthContext';
 import { STATE_OPTIONS } from '@/lib/states';
 import { flags } from '@/lib/flags';
 
+// Category illustrations live in /public/vehicles (transparent PNGs, the same
+// art the mobile app and home page use) — keeps the look consistent across
+// web + native. Maps mirror HomeClient's vehicle → category pairing.
 const categories = [
-  { id: 'dmv',  icon: '🚗', titleKey: 'catCar',  descKey: 'carDesc',   color: '#2563EB', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', emojiSize: 'text-6xl' },
-  { id: 'cdl',  icon: '🚛', titleKey: 'catCdl',  descKey: 'truckDesc', color: '#0EA5E9', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)', emojiSize: 'text-4xl' },
-  { id: 'moto', icon: '🏍️', titleKey: 'catMoto', descKey: 'motoDesc',  color: '#D97706', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)', emojiSize: 'text-4xl' },
+  { id: 'dmv',  img: '/vehicles/car-hero.png',   titleKey: 'catCar',  descKey: 'carDesc',   color: '#2563EB', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' },
+  { id: 'cdl',  img: '/vehicles/truck-hero.png', titleKey: 'catCdl',  descKey: 'truckDesc', color: '#0EA5E9', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)' },
+  { id: 'moto', img: '/vehicles/moto-hero.png',  titleKey: 'catMoto', descKey: 'motoDesc',  color: '#D97706', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)' },
 ];
 
 const langs = [
@@ -111,8 +114,8 @@ function CategoryContent() {
               className="w-full rounded-2xl p-5 flex items-center gap-5 hover:shadow-lg transition-all text-left border-2 border-white/60 shadow-md"
               style={{ background: cat.gradient }}
             >
-              <div className={`flex-shrink-0 ${cat.emojiSize}`}>
-                {cat.icon}
+              <div className="flex-shrink-0 w-16 h-16 flex items-center justify-center">
+                <Image src={cat.img} alt="" aria-hidden="true" width={64} height={64} className="rounded-xl object-contain select-none pointer-events-none" />
               </div>
               <div className="flex-1 min-w-0">
                 <span className="font-bold text-[#1E293B] text-lg">{tex[cat.titleKey]}</span>
