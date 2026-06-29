@@ -5,11 +5,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { t } from '@/lib/translations';
 import { getSavedLang } from '@/lib/lang';
+import { trackPurchase } from '@/lib/gtag';
 
 function SuccessContent() {
   const router = useRouter();
   const params = useSearchParams();
   const sessionId = params.get('session_id');
+  // Pass type + kind ride in on the Stripe success_url so we can attribute the
+  // conversion value without a round trip. Absent for legacy/subscription buys.
+  const purchasePt = params.get('pt');
+  const purchaseKind = params.get('k') || 'new';
   const lang = getSavedLang();
   const tex = t[lang] || t.en;
 
@@ -20,6 +25,20 @@ function SuccessContent() {
   const [email, setEmail] = useState(null);
   const [resending, setResending] = useState(false);
   const [resendStatus, setResendStatus] = useState('idle'); // 'idle' | 'sent'
+
+  // Fire the GA4 `purchase` conversion once, on mount — before the ~4s login
+  // redirect below. gtag sends via sendBeacon, so it flushes even as the page
+  // navigates away. Deduped per session_id so a manual /success reload can't
+  // double-count (GA4 also dedupes by transaction_id as a backstop).
+  useEffect(() => {
+    if (!sessionId || !purchasePt) return;
+    const key = `dmvsos_purchase_tracked_${sessionId}`;
+    try {
+      if (sessionStorage.getItem(key)) return;
+      sessionStorage.setItem(key, '1');
+    } catch { /* private mode: GA4 still dedupes by transaction_id */ }
+    trackPurchase({ transactionId: sessionId, passType: purchasePt, kind: purchaseKind });
+  }, [sessionId, purchasePt, purchaseKind]);
 
   useEffect(() => {
     if (!sessionId) return;

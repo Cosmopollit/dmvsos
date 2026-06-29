@@ -149,10 +149,17 @@ export async function POST(req) {
     // Cash App Pay, Klarna, etc.) based on customer locale + device.
     // 60% of our visitors are mobile; 48% on iOS. Apple Pay is critical for
     // checkout conversion on iPhone (two taps vs typing a card number).
+    // Pass type + kind ride along on success_url so /success can fire the GA4
+    // `purchase` conversion immediately on mount (with the right value) without
+    // a second round trip to Stripe. Stripe replaces {CHECKOUT_SESSION_ID} and
+    // leaves our static params intact. Only added for one-time pass purchases.
+    const purchaseTracking = metadata.pass_type
+      ? `&pt=${metadata.pass_type}&k=${metadata.kind}`
+      : '';
     const sessionParams = {
       mode: isSubscription ? 'subscription' : 'payment',
       line_items: [{ price: PLAN_PRICE_IDS[planType], quantity: 1 }],
-      success_url: `${SITE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${SITE_URL}/success?session_id={CHECKOUT_SESSION_ID}${purchaseTracking}`,
       cancel_url: `${SITE_URL}/upgrade`,
       metadata,
       phone_number_collection: { enabled: true },

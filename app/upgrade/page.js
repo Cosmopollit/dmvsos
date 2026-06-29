@@ -9,6 +9,7 @@ import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { flags } from '@/lib/flags';
 import { PASS_META } from '@/lib/plans';
+import { trackBeginCheckout } from '@/lib/gtag';
 import { useExperiment } from '@/lib/experiments';
 import SupportFooter from '@/app/components/SupportFooter';
 import GradientButton from '@/app/components/GradientButton';
@@ -112,8 +113,12 @@ function UpgradeContent() {
         router.push('/profile');
         return;
       }
-      if (data?.url) window.location.href = data.url;
-      else setError(true);
+      if (data?.url) {
+        // Funnel step fires only once we're actually sending the user to Stripe
+        // (not on the 409 own-already / error paths). planId is onetime_<type>.
+        trackBeginCheckout(planId.replace('onetime_', ''), 'new');
+        window.location.href = data.url;
+      } else setError(true);
     } catch {
       setError(true);
     } finally {

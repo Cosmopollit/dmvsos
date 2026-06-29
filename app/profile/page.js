@@ -9,6 +9,7 @@ import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { flags } from '@/lib/flags';
 import { PASS_META, EXTENSION } from '@/lib/plans';
+import { trackBeginCheckout } from '@/lib/gtag';
 import { examRulesFor } from '@/lib/exam-rules';
 import SupportFooter from '@/app/components/SupportFooter';
 import AccountSettings from './AccountSettings';
@@ -62,7 +63,10 @@ function ProfileContent() {
         body: JSON.stringify({ planType: 'extension', passType, lang }),
       });
       const data = await res.json();
-      if (data?.url) window.location.href = data.url;
+      if (data?.url) {
+        trackBeginCheckout(passType, 'extension');
+        window.location.href = data.url;
+      }
     } catch {
       // Network/parse error — button re-enables so user can retry.
     } finally {
