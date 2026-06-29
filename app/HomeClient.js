@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
 import { getSavedLang, saveLang, hasSavedLang, detectBrowserLang, isLangBannerDismissed, dismissLangBanner } from '@/lib/lang';
+import dynamic from 'next/dynamic';
 import { STATE_OPTIONS, stateToSlug } from '@/lib/states';
 import { flags } from '@/lib/flags';
 import { PASS_META, EXTENSION } from '@/lib/plans';
@@ -16,6 +17,19 @@ import SupportFooter from '@/app/components/SupportFooter';
 import WelcomeBanner from '@/app/components/WelcomeBanner';
 import BreakButton from '@/app/components/BreakButton';
 import GradientButton from '@/app/components/GradientButton';
+
+// The clickable US map is ~136KB of SVG path data, so it loads client-side only
+// (after hydration) to keep it out of the home's server HTML and protect LCP.
+// SEO discovery of the state pages rides on the plain "All 50 states" HTML link
+// rendered below the map, not on the SVG itself.
+const UsStateMap = dynamic(() => import('@/app/components/UsStateMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-[280px] sm:h-[360px] flex items-center justify-center">
+      <div className="w-6 h-6 border-2 border-[#BFDBFE] border-t-[#2563EB] rounded-full animate-spin" />
+    </div>
+  ),
+});
 
 // Category illustrations live in /public/vehicles (transparent PNGs, same art
 // used in the mobile app for a consistent look across web + native).
@@ -1032,6 +1046,34 @@ export default function HomeClient({ initialLang = 'en' }) {
               {tex.finalCtaText || 'Choose your state and start'}
             </button>
           </div>
+        </div>
+      </section>
+
+      {/* Practice tests by state — crawlable internal-link hub. The home is the
+          highest-authority page on the site, so linking every /dmv-test/[state]
+          landing from here gives Googlebot a real crawl path and passes authority
+          to them. Previously those pages were reachable only via the sitemap,
+          which left them stuck in "Discovered - currently not indexed". */}
+      <section className="w-full max-w-2xl mx-auto px-4 mt-8 mb-2">
+        <h2 className="text-base font-bold text-[#0B1C3D] text-center mb-1">
+          {tex.byStateHeading || 'Free DMV practice tests by state'}
+        </h2>
+        <p className="text-xs text-[#94A3B8] text-center mb-4">
+          {tex.byStateSub || 'Pick your state to practice the real exam format in 5 languages.'}
+        </p>
+        <div className="bg-white rounded-2xl border border-[#E2E8F0]/70 shadow-sm px-3 py-4 sm:px-5 sm:py-5">
+          <UsStateMap />
+        </div>
+        {/* Plain HTML link = the crawlable path Googlebot follows to every state
+            landing (the /dmv-test hub lists all 50 as real <a> links). Keep this
+            even though the map links too — Google does not reliably crawl SVG. */}
+        <div className="text-center mt-4">
+          <Link
+            href="/dmv-test"
+            className="inline-flex items-center gap-1 text-[13px] font-semibold text-[#2563EB] hover:underline"
+          >
+            {tex.byStateAll || 'All 50 states and license types'} &rarr;
+          </Link>
         </div>
       </section>
 
