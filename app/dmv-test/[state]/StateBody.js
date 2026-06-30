@@ -299,7 +299,7 @@ export default function StateBody({ lang, state }) {
                   <div className="font-bold text-sm text-[#0B1C3D]">{title}</div>
                   <div className="text-xs text-[#64748B] mt-0.5 leading-relaxed">{desc}</div>
                 </div>
-                <span className="text-xs font-semibold text-[#2563EB] shrink-0">{tex.dtStart || 'Start'} &rarr;</span>
+                <span className="text-xs font-semibold text-[#2563EB] shrink-0">{tex.dtStart || 'Start'}</span>
               </Link>
             ))}
           </div>
@@ -341,7 +341,6 @@ export default function StateBody({ lang, state }) {
             </div>
             <div className="text-[11px] text-[#64748B]">{tex.dtManualSub || 'Read or download the free PDF manual'}</div>
           </div>
-          <span className="text-blue-400 shrink-0 group-hover:text-blue-600 transition-transform group-hover:translate-x-0.5">&rarr;</span>
         </Link>
 
         {/* Pro upgrade */}
@@ -359,31 +358,6 @@ export default function StateBody({ lang, state }) {
           </GradientButton>
           <p className="text-xs text-[#64748B] mt-3">{tex.dtProNote || 'One-time payment · 30 days · No subscription'}</p>
         </div>
-
-        {/* Languages section — mirrors real search intent. The product's
-            unique edge: native-language practice for the {state} {agency}
-            test. Spelled out so Google indexes "free Florida DMV test in
-            Russian / Spanish / Chinese / Ukrainian" long-tail combos. */}
-        <section className="bg-white rounded-2xl border border-[#E2E8F0] p-6 mb-5 shadow-sm">
-          <h2 className="text-base font-bold text-[#0B1C3D] mb-3">
-            {fill(tex.dtLangSecTitle)}
-          </h2>
-          <p className="text-sm text-[#64748B] mb-4 leading-relaxed">
-            {fill(tex.dtLangSecIntro)}
-          </p>
-          <ul className="space-y-2 mb-4">
-            <li className="text-sm text-[#1A2B4A]"><strong>English</strong> — official source text, all {exam.questions} {name} knowledge-test topics covered</li>
-            <li className="text-sm text-[#1A2B4A]"><strong>Español</strong> — examen de manejo de {name} gratis, traducido por hablantes nativos</li>
-            <li className="text-sm text-[#1A2B4A]"><strong>Русский</strong> — бесплатный тест {meta.dmvAbbr} {name} на русском, реальные вопросы</li>
-            <li className="text-sm text-[#1A2B4A]"><strong>中文</strong> — {name} {meta.dmvAbbr} 笔试免费练习，中英对照</li>
-            <li className="text-sm text-[#1A2B4A]"><strong>Українська</strong> — безкоштовний тест {meta.dmvAbbr} {name} українською</li>
-          </ul>
-          {cities.length > 0 && (
-            <p className="text-xs text-[#64748B] leading-relaxed border-t border-[#F1F5F9] pt-4">
-              {fill(tex.dtLangSecCities)}
-            </p>
-          )}
-        </section>
 
         {/* Geographically-relevant nearby states first, then top-traffic states
             as filler so the section is never thin. Internal linking signal. */}

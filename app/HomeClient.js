@@ -1053,10 +1053,10 @@ export default function HomeClient({ initialLang = 'en' }) {
           which left them stuck in "Discovered - currently not indexed". */}
       <section className="w-full max-w-2xl mx-auto px-4 mt-8 mb-2">
         <h2 className="text-base font-bold text-[#0B1C3D] text-center mb-1">
-          {tex.byStateHeading || 'Free DMV practice tests by state'}
+          {tex.byStateHeading || 'Practice tests for every state'}
         </h2>
         <p className="text-xs text-[#94A3B8] text-center mb-4">
-          {tex.byStateSub || 'Pick your state to practice the real exam format in 5 languages.'}
+          {tex.byStateSub || 'Free, in your language.'}
         </p>
         <div className="bg-white rounded-2xl border border-[#E2E8F0]/70 shadow-sm px-3 py-4 sm:px-5 sm:py-5">
           <UsStateMap />
@@ -1069,7 +1069,7 @@ export default function HomeClient({ initialLang = 'en' }) {
             href="/dmv-test"
             className="inline-flex items-center gap-1 text-[13px] font-semibold text-[#2563EB] hover:underline"
           >
-            {tex.byStateAll || 'All 50 states and license types'} &rarr;
+            {tex.byStateAll || 'All 50 states and license types'}
           </Link>
         </div>
       </section>
