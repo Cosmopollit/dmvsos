@@ -9,7 +9,6 @@ import { t } from '@/lib/translations';
 import { getSavedLang, saveLang, hasSavedLang, detectBrowserLang, isLangBannerDismissed, dismissLangBanner } from '@/lib/lang';
 import dynamic from 'next/dynamic';
 import { STATE_OPTIONS, stateToSlug } from '@/lib/states';
-import { flags } from '@/lib/flags';
 import { PASS_META, EXTENSION } from '@/lib/plans';
 import { agencyAbbrForState } from '@/lib/agencies';
 import { useExperiment } from '@/lib/experiments';
@@ -188,11 +187,11 @@ export default function HomeClient({ initialLang = 'en' }) {
   }, [state]);
 
   const langs = [
-    { label: 'EN', flag: flags.us, code: 'en', name: 'English' },
-    { label: 'RU', flag: flags.ru, code: 'ru', name: 'Русский' },
-    { label: 'ES', flag: flags.es, code: 'es', name: 'Español' },
-    { label: 'ZH', flag: flags.cn, code: 'zh', name: '中文' },
-    { label: 'UA', flag: flags.ua, code: 'ua', name: 'Українська' },
+    { label: 'EN', code: 'en', name: 'English' },
+    { label: 'RU', code: 'ru', name: 'Русский' },
+    { label: 'ES', code: 'es', name: 'Español' },
+    { label: 'ZH', code: 'zh', name: '中文' },
+    { label: 'UA', code: 'ua', name: 'Українська' },
   ];
 
   const currentLang = langs.find(l => l.name === lang) || langs[0];
@@ -326,7 +325,6 @@ export default function HomeClient({ initialLang = 'en' }) {
                 onBlur={() => setTimeout(() => setShowLangMenu(false), 150)}
                 className="flex items-center gap-1 text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-2.5 py-1.5 hover:border-[#2563EB] transition-colors"
               >
-                <span>{currentLang.flag}</span>
                 <span>{currentLang.label}</span>
                 <svg width="9" height="9" viewBox="0 0 12 12" className="ml-0.5 shrink-0" style={{ fill: '#94A3B8' }}><path d="M6 8L1 3h10z" /></svg>
               </button>
@@ -339,7 +337,7 @@ export default function HomeClient({ initialLang = 'en' }) {
                       onMouseDown={() => { setLang(l.name); saveLang(l.code); setShowLangMenu(false); }}
                       className={`w-full text-left px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 hover:bg-[#F8FAFC] transition-colors ${lang === l.name ? 'text-[#2563EB]' : 'text-[#64748B]'}`}
                     >
-                      <span>{l.flag}</span> <span>{l.label}</span>
+                      <span>{l.label}</span>
                     </button>
                   ))}
                 </div>
@@ -420,7 +418,6 @@ export default function HomeClient({ initialLang = 'en' }) {
         return (
           <div className="w-full max-w-lg mx-auto px-4 mb-3">
             <div className="flex items-center gap-2 bg-white border border-[#BFDBFE] rounded-xl px-3 py-2 shadow-sm">
-              <span className="text-base shrink-0">{suggested.flag}</span>
               <button
                 type="button"
                 onClick={() => {

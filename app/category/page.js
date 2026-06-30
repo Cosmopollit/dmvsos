@@ -7,7 +7,6 @@ import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { useAuth } from '@/lib/AuthContext';
 import { STATE_OPTIONS } from '@/lib/states';
-import { flags } from '@/lib/flags';
 
 // Category illustrations live in /public/vehicles (transparent PNGs, the same
 // art the mobile app and home page use) — keeps the look consistent across
@@ -19,11 +18,11 @@ const categories = [
 ];
 
 const langs = [
-  { label: 'EN', flag: flags.us, code: 'en' },
-  { label: 'RU', flag: flags.ru, code: 'ru' },
-  { label: 'ES', flag: flags.es, code: 'es' },
-  { label: 'ZH', flag: flags.cn, code: 'zh' },
-  { label: 'UA', flag: flags.ua, code: 'ua' },
+  { label: 'EN', code: 'en' },
+  { label: 'RU', code: 'ru' },
+  { label: 'ES', code: 'es' },
+  { label: 'ZH', code: 'zh' },
+  { label: 'UA', code: 'ua' },
 ];
 
 // slug → "Washington" display name
@@ -70,7 +69,6 @@ function CategoryContent() {
             onBlur={() => setTimeout(() => setShowLangMenu(false), 150)}
             className="flex items-center gap-1 text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-2.5 py-1.5 hover:border-[#2563EB] transition-colors"
           >
-            <span>{currentLang.flag}</span>
             <span>{currentLang.label}</span>
             <span className="text-[#94A3B8] text-[10px] ml-0.5">▾</span>
           </button>
@@ -83,7 +81,7 @@ function CategoryContent() {
                   onMouseDown={() => switchLang(l.code)}
                   className={`w-full text-left px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 hover:bg-[#F8FAFC] transition-colors ${lang === l.code ? 'text-[#2563EB]' : 'text-[#64748B]'}`}
                 >
-                  <span>{l.flag}</span> <span>{l.label}</span>
+                  <span>{l.label}</span>
                 </button>
               ))}
             </div>

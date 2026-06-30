@@ -7,7 +7,6 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
-import { flags } from '@/lib/flags';
 import { PASS_META } from '@/lib/plans';
 import { trackBeginCheckout } from '@/lib/gtag';
 import { useExperiment } from '@/lib/experiments';
@@ -15,11 +14,11 @@ import SupportFooter from '@/app/components/SupportFooter';
 import GradientButton from '@/app/components/GradientButton';
 
 const langs = [
-  { label: 'EN', flag: flags.us, code: 'en' },
-  { label: 'RU', flag: flags.ru, code: 'ru' },
-  { label: 'ES', flag: flags.es, code: 'es' },
-  { label: 'ZH', flag: flags.cn, code: 'zh' },
-  { label: 'UA', flag: flags.ua, code: 'ua' },
+  { label: 'EN', code: 'en' },
+  { label: 'RU', code: 'ru' },
+  { label: 'ES', code: 'es' },
+  { label: 'ZH', code: 'zh' },
+  { label: 'UA', code: 'ua' },
 ];
 
 function UpgradeContent() {

@@ -7,16 +7,15 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
-import { flags } from '@/lib/flags';
 import BreakButton from '@/app/components/BreakButton';
 
 const codeToName = { en: 'English', ru: 'Русский', es: 'Español', zh: '中文', ua: 'Українська' };
 const langs = [
-  { label: 'EN', flag: flags.us, code: 'en', name: 'English' },
-  { label: 'RU', flag: flags.ru, code: 'ru', name: 'Русский' },
-  { label: 'ES', flag: flags.es, code: 'es', name: 'Español' },
-  { label: 'ZH', flag: flags.cn, code: 'zh', name: '中文' },
-  { label: 'UA', flag: flags.ua, code: 'ua', name: 'Українська' },
+  { label: 'EN', code: 'en', name: 'English' },
+  { label: 'RU', code: 'ru', name: 'Русский' },
+  { label: 'ES', code: 'es', name: 'Español' },
+  { label: 'ZH', code: 'zh', name: '中文' },
+  { label: 'UA', code: 'ua', name: 'Українська' },
 ];
 
 // Shared header used across landing/SEO pages. Mirrors the home page header
@@ -68,7 +67,6 @@ export default function SiteHeader({ initialLang = 'en' }) {
               onBlur={() => setTimeout(() => setShowLangMenu(false), 150)}
               className="flex items-center gap-1 text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-2.5 py-1.5 hover:border-[#2563EB] transition-colors"
             >
-              <span>{currentLang.flag}</span>
               <span>{currentLang.label}</span>
               <span className="text-[#94A3B8] text-[10px] ml-0.5">▾</span>
             </button>
@@ -81,7 +79,7 @@ export default function SiteHeader({ initialLang = 'en' }) {
                     onMouseDown={() => { setLang(l.name); saveLang(l.code); setShowLangMenu(false); }}
                     className={`w-full text-left px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 hover:bg-[#F8FAFC] transition-colors ${lang === l.name ? 'text-[#2563EB]' : 'text-[#64748B]'}`}
                   >
-                    <span>{l.flag}</span> <span>{l.label}</span>
+                    <span>{l.label}</span>
                   </button>
                 ))}
               </div>

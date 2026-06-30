@@ -7,7 +7,7 @@ import { citiesOf } from '@/lib/state-cities';
 import SiteHeader from '@/app/components/SiteHeader';
 import SupportFooter from '@/app/components/SupportFooter';
 import GradientButton from '@/app/components/GradientButton';
-import { flags } from '@/lib/flags';
+import StateLangStart from '@/app/components/StateLangStart';
 import { t } from '@/lib/translations';
 
 // Brand line icons (kills the old emoji in the "what to expect" rows). Small,
@@ -27,14 +27,6 @@ export function examFor(state) {
   if (!rule) return { questions: 40, passing: 32, passingPct: 80 };
   return { questions: rule.questions, passing: rule.pass, passingPct: passPercentFor(state, 'car') };
 }
-
-const LANG_OPTIONS = [
-  { code: 'en', label: 'English',    flag: 'us' },
-  { code: 'ru', label: 'Русский',    flag: 'ru' },
-  { code: 'es', label: 'Español',    flag: 'es' },
-  { code: 'zh', label: '中文',        flag: 'cn' },
-  { code: 'ua', label: 'Українська', flag: 'ua' },
-];
 
 // Shared server-rendered body for the state DMV-test landing page.
 // `lang` and `state` arrive as props: the root wrapper passes the cookie
@@ -141,7 +133,9 @@ export default function StateBody({ lang, state }) {
         },
       },
     ],
-  });
+  // Match the visible copy: refer to this state's real agency, not generic
+  // "DMV" (WA = DOL, TX = DPS, …). \b keeps the brand "DMVSOS" intact.
+  }).replace(/\bDMV\b/g, meta.dmvAbbr);
 
   // Geographic neighbors first — real adjacency reads as a coherent regional
   // map to crawlers (Florida → Georgia, Alabama; not alphabetical Alaska).
@@ -164,7 +158,11 @@ export default function StateBody({ lang, state }) {
     .replaceAll('{q}', String(exam.questions))
     .replaceAll('{pass}', String(exam.passing))
     .replaceAll('{pct}', String(exam.passingPct))
-    .replaceAll('{price}', String(MIN_PRICE));
+    .replaceAll('{price}', String(MIN_PRICE))
+    // Many states are not "DMV" (WA = DOL, TX = DPS, IL = SOS, …). Swap the
+    // generic word for this state's real agency so copy reads authentically.
+    // \b keeps the brand "DMVSOS" intact; no-op for true DMV states.
+    .replace(/\bDMV\b/g, meta.dmvAbbr);
   const cityList = cities.slice(0, 6).join(', ');
   const citiesText = cities.length > 6 ? `${cityList}, ${repl(tex.dtCitiesOther)}` : cityList;
   const fill = (str) => repl(str).replaceAll('{cities}', citiesText);
@@ -229,7 +227,7 @@ export default function StateBody({ lang, state }) {
 
         {/* H1 */}
         <h1 className="text-3xl sm:text-4xl font-black text-[#0B1C3D] mb-3 leading-tight" style={{ letterSpacing: '-0.02em' }}>
-          {name} {tex.dtTitleSuffix || 'DMV Practice Test'} {year}  ·  {tex.dtFree || 'Free'}
+          {name} {String(tex.dtTitleSuffix || 'DMV Practice Test').replace(/\bDMV\b/, meta.dmvAbbr)} {year}  ·  {tex.dtFree || 'Free'}
         </h1>
         <p className="text-base text-[#64748B] mb-6 leading-relaxed">
           {tex.dtIntro || `Practice with real ${meta.abbr} knowledge test questions and pass on your first try. Study in your language: English, Spanish, Russian, Chinese, and Ukrainian.`}
@@ -242,23 +240,8 @@ export default function StateBody({ lang, state }) {
           <p className="relative text-[#94A3B8] text-xs font-semibold mb-4 uppercase tracking-widest">
             {tex.dtChooseLang || 'Choose your language and start:'}
           </p>
-          <div className="relative grid grid-cols-1 gap-2.5">
-            {LANG_OPTIONS.map(({ code, label, flag }) => (
-              <Link
-                key={code}
-                href={`/category?state=${state}&lang=${code}`}
-                className="group flex items-center justify-between pl-4 pr-4 py-3 bg-[#2563EB] hover:bg-[#1D4ED8] hover:-translate-y-0.5 hover:shadow-lg text-white rounded-xl font-semibold text-sm transition-all"
-              >
-                <span className="flex items-center gap-3">
-                  <span className="shrink-0 flex ring-1 ring-white/30 rounded-[3px] overflow-hidden">{flags[flag]}</span>
-                  {label}
-                </span>
-                <span className="inline-flex items-center gap-1 text-xs text-white/70">
-                  {tex.startFree || 'Start Free'}
-                  <span className="transition-transform group-hover:translate-x-0.5">&rarr;</span>
-                </span>
-              </Link>
-            ))}
+          <div className="relative">
+            <StateLangStart state={state} lang={lang} startLabel={tex.startFree || 'Start Free'} />
           </div>
           <p className="relative text-xs text-[#64748B] mt-4 text-center">
             {tex.dtNoSignup || 'No signup required · 20 free questions per test'}
@@ -388,12 +371,12 @@ export default function StateBody({ lang, state }) {
           <p className="text-sm text-[#64748B] mb-4 leading-relaxed">
             {fill(tex.dtLangSecIntro)}
           </p>
-          <ul className="space-y-2.5 mb-4">
-            <li className="flex items-start gap-2.5 text-sm text-[#1A2B4A]"><span className="shrink-0 mt-0.5 flex ring-1 ring-[#E2E8F0] rounded-[3px] overflow-hidden">{flags.us}</span><span><strong>English</strong> — official source text, all {exam.questions} {name} knowledge-test topics covered</span></li>
-            <li className="flex items-start gap-2.5 text-sm text-[#1A2B4A]"><span className="shrink-0 mt-0.5 flex ring-1 ring-[#E2E8F0] rounded-[3px] overflow-hidden">{flags.es}</span><span><strong>Español</strong> — examen de manejo de {name} gratis, traducido por hablantes nativos</span></li>
-            <li className="flex items-start gap-2.5 text-sm text-[#1A2B4A]"><span className="shrink-0 mt-0.5 flex ring-1 ring-[#E2E8F0] rounded-[3px] overflow-hidden">{flags.ru}</span><span><strong>Русский</strong> — бесплатный тест {meta.dmvAbbr} {name} на русском, реальные вопросы</span></li>
-            <li className="flex items-start gap-2.5 text-sm text-[#1A2B4A]"><span className="shrink-0 mt-0.5 flex ring-1 ring-[#E2E8F0] rounded-[3px] overflow-hidden">{flags.cn}</span><span><strong>中文</strong> — {name} {meta.dmvAbbr} 笔试免费练习，中英对照</span></li>
-            <li className="flex items-start gap-2.5 text-sm text-[#1A2B4A]"><span className="shrink-0 mt-0.5 flex ring-1 ring-[#E2E8F0] rounded-[3px] overflow-hidden">{flags.ua}</span><span><strong>Українська</strong> — безкоштовний тест {meta.dmvAbbr} {name} українською</span></li>
+          <ul className="space-y-2 mb-4">
+            <li className="text-sm text-[#1A2B4A]"><strong>English</strong> — official source text, all {exam.questions} {name} knowledge-test topics covered</li>
+            <li className="text-sm text-[#1A2B4A]"><strong>Español</strong> — examen de manejo de {name} gratis, traducido por hablantes nativos</li>
+            <li className="text-sm text-[#1A2B4A]"><strong>Русский</strong> — бесплатный тест {meta.dmvAbbr} {name} на русском, реальные вопросы</li>
+            <li className="text-sm text-[#1A2B4A]"><strong>中文</strong> — {name} {meta.dmvAbbr} 笔试免费练习，中英对照</li>
+            <li className="text-sm text-[#1A2B4A]"><strong>Українська</strong> — безкоштовний тест {meta.dmvAbbr} {name} українською</li>
           </ul>
           {cities.length > 0 && (
             <p className="text-xs text-[#64748B] leading-relaxed border-t border-[#F1F5F9] pt-4">
