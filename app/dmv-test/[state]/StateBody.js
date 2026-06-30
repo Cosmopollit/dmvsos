@@ -241,11 +241,14 @@ export default function StateBody({ lang, state }) {
             {tex.dtChooseLang || 'Choose your language and start:'}
           </p>
           <div className="relative">
-            <StateLangStart state={state} lang={lang} startLabel={tex.startFree || 'Start Free'} />
+            <StateLangStart
+              state={state}
+              lang={lang}
+              startFree={tex.startFree || 'Start Free'}
+              startPro={tex.startPracticing || 'Start Practicing'}
+              noteFree={tex.dtNoSignup || 'No signup required · 20 free questions per test'}
+            />
           </div>
-          <p className="relative text-xs text-[#64748B] mt-4 text-center">
-            {tex.dtNoSignup || 'No signup required · 20 free questions per test'}
-          </p>
         </div>
 
         {/* Stats */}
