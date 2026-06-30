@@ -52,6 +52,13 @@ function TestContent() {
   const isRetry = params.get('retry') === 'true';
   const tex = t[lang] || t.en;
 
+  // Per-state agency naming: many states are not "DMV" (WA→DOL, TX→DPS,
+  // IL→SOS, ...). Swap the standalone word "DMV" in rendered state-specific
+  // copy for the real agency. The \b word-boundary keeps "DMVSOS" and the
+  // /dmv-test route intact, and it's a no-op for true-DMV states.
+  const ag = agencyAbbrForState(state);
+  const dmv = (s) => String(s || '').replace(/\bDMV\b/g, ag);
+
   const { isPro, hasCar, hasMoto, hasCdl, loading: authLoading, user } = useAuth();
   useExperiment('test_visit', user?.id);
 
@@ -485,8 +492,8 @@ function TestContent() {
       {
         id: 'real',
         icon: '🎯',
-        label: tex.modeReal,
-        desc: tex.modeRealDesc,
+        label: dmv(tex.modeReal),
+        desc: dmv(tex.modeRealDesc),
         count: realCount,
         color: '#2563EB',
         gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)',
@@ -639,8 +646,8 @@ function TestContent() {
                 className="mt-0.5 w-4 h-4 accent-[#2563EB] rounded shrink-0"
               />
               <div>
-                <div className="text-sm font-semibold text-[#1E293B]">{tex.hideExplanations}</div>
-                <div className="text-xs text-[#64748B] mt-0.5">{tex.hideExplanationsDesc}</div>
+                <div className="text-sm font-semibold text-[#1E293B]">{dmv(tex.hideExplanations)}</div>
+                <div className="text-xs text-[#64748B] mt-0.5">{dmv(tex.hideExplanationsDesc)}</div>
               </div>
             </label>
           )}
@@ -1213,14 +1220,14 @@ function TestContent() {
           <div className="bg-white rounded-2xl w-full max-w-md shadow-xl border border-[#E2E8F0] overflow-hidden">
             <div className="h-1.5 bg-gradient-to-r from-[#F59E0B] via-[#FB923C] to-[#F59E0B]" />
             <div className="p-6">
-              <h2 className="text-xl font-bold text-[#0B1C3D] mb-1 text-center">{tex.upgradeModalTitle || `20 done. The actual DMV looks just like this.`}</h2>
+              <h2 className="text-xl font-bold text-[#0B1C3D] mb-1 text-center">{dmv(tex.upgradeModalTitle || `20 done. The actual DMV looks just like this.`)}</h2>
               <p className="text-[#2563EB] font-bold text-sm mb-3 text-center">
                 {(tex.upgradeScoreSoFar || 'Your score: {score}/20').replace('{score}', String(score)).replace('{percent}', String(Math.round((score / 20) * 100)))}
               </p>
 
               {/* Body — explains weird questions, links to official handbook */}
               <p className="text-sm text-[#475569] mb-4 text-center leading-relaxed">
-                {tex.upgradeModalBody1 || "If a question looks weird, that's how the DMV asks it. We work from your state's "}
+                {dmv(tex.upgradeModalBody1 || "If a question looks weird, that's how the DMV asks it. We work from your state's ")}
                 <Link
                   href="/manuals"
                   target="_blank"
@@ -1228,7 +1235,7 @@ function TestContent() {
                 >
                   {tex.upgradeModalBodyLink || 'official driver handbook'}
                 </Link>
-                {tex.upgradeModalBody2 || ' — same source as the real test.'}
+                {dmv(tex.upgradeModalBody2 || ' — same source as the real test.')}
               </p>
 
               {/* Highlighted plan card for current category */}

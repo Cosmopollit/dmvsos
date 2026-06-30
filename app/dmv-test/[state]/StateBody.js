@@ -8,6 +8,7 @@ import SiteHeader from '@/app/components/SiteHeader';
 import SupportFooter from '@/app/components/SupportFooter';
 import GradientButton from '@/app/components/GradientButton';
 import StateLangStart from '@/app/components/StateLangStart';
+import FreeOnly from '@/app/components/FreeOnly';
 import { t } from '@/lib/translations';
 
 // Brand line icons (kills the old emoji in the "what to expect" rows). Small,
@@ -292,7 +293,7 @@ export default function StateBody({ lang, state }) {
             {categories.map(({ cat, img, title, desc, bg }) => (
               <Link
                 key={cat}
-                href={`/category?state=${state}&lang=en`}
+                href={`/category?state=${state}&lang=${lang}`}
                 className="flex items-center gap-3 p-3.5 rounded-2xl border border-white/60 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
                 style={{ background: bg }}
               >
@@ -346,21 +347,23 @@ export default function StateBody({ lang, state }) {
           </div>
         </Link>
 
-        {/* Pro upgrade */}
-        <div className="bg-gradient-to-r from-[#0B1C3D] to-[#1E3A5F] rounded-2xl p-6 mb-8 text-center shadow-lg border border-[#1e3a5f]">
-          <div className="text-[#F59E0B] font-black text-xs mb-2 uppercase tracking-widest">{tex.dtProKicker || 'Unlock Full Access'}</div>
-          <p className="text-white font-bold text-base mb-1">{tex.dtProTitle || 'Practice with current, verified questions and walk in ready'}</p>
-          <p className="text-[#94A3B8] text-sm mb-4">{tex.dtProSub || 'Full 40-question tests · Detailed explanations · All categories'}</p>
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <span className="text-xs font-semibold text-[#10B981] bg-[#10B981]/10 px-3 py-1 rounded-full border border-[#10B981]/30">
-              {tex.footerFree || 'Free to start · no signup'}
-            </span>
+        {/* Pro upgrade — hidden for users who already paid (FreeOnly). */}
+        <FreeOnly>
+          <div className="bg-gradient-to-r from-[#0B1C3D] to-[#1E3A5F] rounded-2xl p-6 mb-8 text-center shadow-lg border border-[#1e3a5f]">
+            <div className="text-[#F59E0B] font-black text-xs mb-2 uppercase tracking-widest">{tex.dtProKicker || 'Unlock Full Access'}</div>
+            <p className="text-white font-bold text-base mb-1">{tex.dtProTitle || 'Practice with current, verified questions and walk in ready'}</p>
+            <p className="text-[#94A3B8] text-sm mb-4">{tex.dtProSub || 'Full 40-question tests · Detailed explanations · All categories'}</p>
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <span className="text-xs font-semibold text-[#10B981] bg-[#10B981]/10 px-3 py-1 rounded-full border border-[#10B981]/30">
+                {tex.footerFree || 'Free to start · no signup'}
+              </span>
+            </div>
+            <GradientButton href="/upgrade" variant="gold" className="max-w-xs mx-auto">
+              {tex.dtProBtn || 'Unlock Full Access'}  ·  {tex.dtFrom || 'from'} {MIN_PRICE}
+            </GradientButton>
+            <p className="text-xs text-[#64748B] mt-3">{tex.dtProNote || 'One-time payment · 30 days · No subscription'}</p>
           </div>
-          <GradientButton href="/upgrade" variant="gold" className="max-w-xs mx-auto">
-            {tex.dtProBtn || 'Unlock Full Access'}  ·  {tex.dtFrom || 'from'} {MIN_PRICE}
-          </GradientButton>
-          <p className="text-xs text-[#64748B] mt-3">{tex.dtProNote || 'One-time payment · 30 days · No subscription'}</p>
-        </div>
+        </FreeOnly>
 
         {/* Geographically-relevant nearby states first, then top-traffic states
             as filler so the section is never thin. Internal linking signal. */}

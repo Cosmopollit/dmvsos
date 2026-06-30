@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { t } from '@/lib/translations';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 import { examRulesFor } from '@/lib/exam-rules';
+import { agencyAbbrForState } from '@/lib/agencies';
 
 // Local i18n for the user-visible strings on this page. Kept self-contained so
 // shared files stay untouched. Metadata + JSON-LD stay English on purpose.
@@ -328,6 +329,12 @@ export default async function StateCatManualBody({ lang, state, cat }) {
   const tex = t[lang] || t.en;
   const tx = PAGE_I18N[lang] || PAGE_I18N.en;
 
+  // Per-state agency naming: swap the standalone word "DMV" in rendered
+  // state-specific copy for the real agency (WA→DOL, TX→DPS, IL→SOS, ...).
+  // The \b word-boundary keeps "DMVSOS" intact; no-op for true-DMV states.
+  const ag = agencyAbbrForState(state);
+  const dmv = (s) => String(s || '').replace(/\bDMV\b/g, ag);
+
   // Fetch PDFs for this specific category
   const index = await fetchManualIndex();
   const catLangs = index?.[state]?.[cat];
@@ -341,8 +348,12 @@ export default async function StateCatManualBody({ lang, state, cat }) {
   // Neighbor states (geographic)
   const neighbors = STATE_NEIGHBORS[state] || STATE_SLUGS.filter(s => s !== state).slice(0, 4);
 
-  // FAQ for structured data
-  const faqs = catInfo.faqQuestions(name, meta.abbr, examRulesFor(state, cat));
+  // FAQ for structured data. Swap the hardcoded "DMV" in the question/answer
+  // templates for the state's real agency (e.g. "Check with the {name} DMV"
+  // → "...DOL" for WA). Applied here so both the rendered FAQ and the JSON-LD
+  // stay consistent. No-op for true-DMV states.
+  const faqs = catInfo.faqQuestions(name, meta.abbr, examRulesFor(state, cat))
+    .map(({ q, a }) => ({ q: dmv(q), a: dmv(a) }));
 
   const jsonLd = JSON.stringify({
     '@context': 'https://schema.org',
@@ -493,7 +504,7 @@ export default async function StateCatManualBody({ lang, state, cat }) {
                 rel="noopener noreferrer"
                 className="underline"
               >
-                {tx.officialDmvSite({ name })}
+                {dmv(tx.officialDmvSite({ name }))}
               </a>{' '}
               {tx.toDownloadLatest({ label: catInfo.label })}
             </p>

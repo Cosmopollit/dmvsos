@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 import SiteHeader from '@/app/components/SiteHeader';
 import SupportFooter from '@/app/components/SupportFooter';
+import FreeOnly from '@/app/components/FreeOnly';
 import { t } from '@/lib/translations';
 
 const year = new Date().getFullYear();
@@ -104,11 +105,13 @@ export default function DmvTestHubBody({ lang }) {
         <div className="mt-10 bg-[#0B1C3D] rounded-2xl p-6 text-center shadow-lg">
           <p className="text-white font-bold text-base mb-1">{tex.selectStateLabel || 'Ready to pass on your first try?'}</p>
           <p className="text-[#94A3B8] text-sm mb-4">{tex.heroSub || 'Select your state above and start practicing for free.'}</p>
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <span className="text-xs font-semibold text-[#10B981] bg-[#10B981]/10 px-3 py-1 rounded-full border border-[#10B981]/30">
-              {tex.footerFree || 'Free to start · no signup'}
-            </span>
-          </div>
+          <FreeOnly>
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <span className="text-xs font-semibold text-[#10B981] bg-[#10B981]/10 px-3 py-1 rounded-full border border-[#10B981]/30">
+                {tex.footerFree || 'Free to start · no signup'}
+              </span>
+            </div>
+          </FreeOnly>
           <Link
             href="/"
             className="inline-flex items-center gap-2 px-6 py-3 bg-[#2563EB] text-white rounded-xl font-semibold hover:bg-[#1D4ED8] transition-colors text-sm"

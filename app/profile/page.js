@@ -161,7 +161,12 @@ function ProfileContent() {
           </span>
           {isPro && planType && (
             <p className="text-xs text-[#64748B] mt-2 mb-1">
-              {planType === 'cdl_pass' ? tex.planCdlPro : planType === 'car_pass' ? tex.planAutoPass : planType === 'moto_pass' ? tex.planMotoPass : planType.replace(/_/g, ' ')}
+              {({
+                cdl: tex.planCdlPro, cdl_pass: tex.planCdlPro,
+                auto: tex.planAutoPass, car_pass: tex.planAutoPass, full_prep: tex.planAutoPass,
+                moto: tex.planMotoPass, moto_pass: tex.planMotoPass, quick_pass: tex.planMotoPass,
+                guaranteed_pass: tex.planFullAccess || 'Full access',
+              })[planType] || tex.proBadge || 'Pro'}
               {planExpiresAt && ` · ${tex.expiresOn || 'expires'} ${planExpiresAt.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}`}
             </p>
           )}

@@ -55,9 +55,13 @@ export async function generateMetadata({ params, searchParams }) {
 // (same as the homepage). A returning RU/ES/ZH/UA visitor gets a localized
 // hero + chrome; a cookieless crawler resolves to 'en'. The genuinely
 // localized, indexable variants live under /[locale]/dmv-test/[state].
-export default async function StateDmvTestPage({ params }) {
+export default async function StateDmvTestPage({ params, searchParams }) {
   const { state } = await params;
   if (!STATE_DISPLAY[state]) notFound();
-  const lang = await getServerLang();
+  // Honor ?lang= so the body matches the ?lang-aware <title>; otherwise fall
+  // back to the saved-cookie lang. A cookieless crawler still resolves to 'en'.
+  const sp = (await searchParams) || {};
+  const raw = Array.isArray(sp.lang) ? sp.lang[0] : sp.lang;
+  const lang = ['en', 'ru', 'es', 'zh', 'ua'].includes(raw) ? raw : await getServerLang();
   return <StateBody lang={lang} state={state} />;
 }

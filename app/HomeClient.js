@@ -833,13 +833,15 @@ export default function HomeClient({ initialLang = 'en' }) {
 
         </div>
         <p className="text-center text-sm text-[#64748B] mt-4">{tex.pricingValueProp}</p>
-        <p className="text-center text-sm text-[#64748B] mt-2">
-          <button type="button"
-            onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
-            className="text-[#2563EB] hover:underline font-medium">
-            {tex.pricingStartFree || 'Or start free  ·  20 questions, no signup needed'}
-          </button>
-        </p>
+        {!isPro && (
+          <p className="text-center text-sm text-[#64748B] mt-2">
+            <button type="button"
+              onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
+              className="text-[#2563EB] hover:underline font-medium">
+              {tex.pricingStartFree || 'Or start free  ·  20 questions, no signup needed'}
+            </button>
+          </p>
+        )}
       </section>
 
       {/* Find help nearby — links to the services hub. Mirrors the mobile
@@ -919,7 +921,9 @@ export default function HomeClient({ initialLang = 'en' }) {
           Agency line personalizes from the saved/geo state. */}
       <section className="w-full max-w-md mx-auto mb-3 px-4">
         <h2 className="text-xl font-bold text-[#0B1C3D] text-center mb-1">{tex.licCtaTitle || 'Ready to get your license?'}</h2>
-        <p className="text-sm text-[#64748B] text-center mb-4">{tex.licCtaSub || "Let's practice: 20 free questions, no signup"}</p>
+        {!isPro && (
+          <p className="text-sm text-[#64748B] text-center mb-4">{tex.licCtaSub || "Let's practice: 20 free questions, no signup"}</p>
+        )}
 
         <div
           className="relative overflow-hidden rounded-2xl border"

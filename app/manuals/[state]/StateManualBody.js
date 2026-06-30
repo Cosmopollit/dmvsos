@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { t } from '@/lib/translations';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
+import { agencyAbbrForState } from '@/lib/agencies';
 import ManualLangSwitch from './ManualLangSwitch';
 
 const SUPABASE_URL = 'https://yaogndpgnewqffbjrsgz.supabase.co';
@@ -47,6 +48,12 @@ export default async function StateManualBody({ lang, state }) {
   const year = new Date().getFullYear();
 
   const tex = t[lang] || t.en;
+
+  // Per-state agency naming: swap the standalone word "DMV" in rendered
+  // state-specific copy for the real agency (WA→DOL, TX→DPS, IL→SOS, ...).
+  // The \b word-boundary keeps "DMVSOS" intact; no-op for true-DMV states.
+  const ag = agencyAbbrForState(state);
+  const dmv = (s) => String(s || '').replace(/\bDMV\b/g, ag);
 
   const index = await fetchManualIndex();
   const stateIndex = index?.[state];
@@ -213,7 +220,7 @@ export default async function StateManualBody({ lang, state }) {
             {tex.manualsTestKnowledge}
           </h2>
           <p className="text-sm text-[#94A3B8] mb-4">
-            {tex.manualsTestDesc.replace('{state}', name)}
+            {dmv(tex.manualsTestDesc.replace('{state}', name))}
           </p>
           <Link
             href={`/category?state=${state}&lang=${lang}`}

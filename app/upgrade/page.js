@@ -24,7 +24,7 @@ const langs = [
 function UpgradeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { user } = useAuth();
+  const { user, hasCar, hasMoto, hasCdl } = useAuth();
   useExperiment('upgrade_visit', user?.id);
   const [lang, setLangState] = useState(searchParams.get('lang') || getSavedLang());
   const [showLangMenu, setShowLangMenu] = useState(false);
@@ -207,6 +207,10 @@ function UpgradeContent() {
       <div className="w-full max-w-2xl flex flex-col sm:flex-row gap-4 mb-6">
         {plans.map((plan) => {
           const isPreselected = preselect === plan.id;
+          // Already own this category? Show an Active state instead of a Buy
+          // button (the server also blocks the purchase with a 409, but the UI
+          // shouldn't pitch a paid user something they already have).
+          const owned = { moto: hasMoto, auto: hasCar, cdl: hasCdl }[plan.pass_type];
           const isBlue = plan.style === 'blue';
           const isGold = plan.style === 'gold';
           // The flagship "Most popular" card (Auto) gets the app-style
@@ -262,13 +266,25 @@ function UpgradeContent() {
                   </li>
                 ))}
               </ul>
-              <GradientButton
-                variant={isGold ? 'gold' : 'blue'}
-                onClick={() => handleCheckout(plan.id)}
-                className={`text-sm ${loadingPlan !== null ? 'pointer-events-none opacity-60' : ''}`}
-              >
-                {loadingPlan === plan.id ? '…' : plan.btnLabel}
-              </GradientButton>
+              {owned ? (
+                <div className="mt-auto">
+                  <div className="flex items-center justify-center gap-1.5 mb-2 text-[#15803D] font-bold text-sm">
+                    <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="#16A34A" /><path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" /></svg>
+                    {tex.planActive || 'Active'}
+                  </div>
+                  <Link href="/profile" className="block w-full text-center py-3 rounded-xl font-bold text-sm bg-[#F0FDF4] text-[#15803D] border-[1.5px] border-[#16A34A] hover:bg-[#DCFCE7] transition-all">
+                    {tex.planManage || 'Manage / Extend'}
+                  </Link>
+                </div>
+              ) : (
+                <GradientButton
+                  variant={isGold ? 'gold' : 'blue'}
+                  onClick={() => handleCheckout(plan.id)}
+                  className={`text-sm ${loadingPlan !== null ? 'pointer-events-none opacity-60' : ''}`}
+                >
+                  {loadingPlan === plan.id ? '…' : plan.btnLabel}
+                </GradientButton>
+              )}
             </div>
           );
         })}
