@@ -6,7 +6,19 @@ import { neighborsOf } from '@/lib/state-neighbors';
 import { citiesOf } from '@/lib/state-cities';
 import SiteHeader from '@/app/components/SiteHeader';
 import SupportFooter from '@/app/components/SupportFooter';
+import GradientButton from '@/app/components/GradientButton';
+import { flags } from '@/lib/flags';
 import { t } from '@/lib/translations';
+
+// Brand line icons (kills the old emoji in the "what to expect" rows). Small,
+// navy-stroked, sit inside a tinted rounded chip — matches the rest of the site.
+const ICONS = {
+  questions: <path d="M8 6h8M8 10h8M8 14h5" />,
+  pass: <path d="M5 12l4 4 10-10" />,
+  admin: <path d="M4 20h16M6 20V9l6-4 6 4v11M10 20v-5h4v5" />,
+  langs: <path d="M12 3a9 9 0 100 18 9 9 0 000-18zM3 12h18M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18" />,
+  retakes: <path d="M4 11a8 8 0 0114-5l2 2M20 13a8 8 0 01-14 5l-2-2M17 4v4h-4M7 20v-4h4" />,
+};
 
 // Exam facts come from the single source of truth (lib/exam-rules.js),
 // not a local table, so counts + pass scores never drift or go stale.
@@ -17,11 +29,11 @@ export function examFor(state) {
 }
 
 const LANG_OPTIONS = [
-  { code: 'en', label: 'English',    emoji: '🇺🇸' },
-  { code: 'ru', label: 'Русский',    emoji: '🇷🇺' },
-  { code: 'es', label: 'Español',    emoji: '🇪🇸' },
-  { code: 'zh', label: '中文',        emoji: '🇨🇳' },
-  { code: 'ua', label: 'Українська', emoji: '🇺🇦' },
+  { code: 'en', label: 'English',    flag: 'us' },
+  { code: 'ru', label: 'Русский',    flag: 'ru' },
+  { code: 'es', label: 'Español',    flag: 'es' },
+  { code: 'zh', label: '中文',        flag: 'cn' },
+  { code: 'ua', label: 'Українська', flag: 'ua' },
 ];
 
 // Shared server-rendered body for the state DMV-test landing page.
@@ -165,17 +177,19 @@ export default function StateBody({ lang, state }) {
   ];
 
   const whatToExpect = [
-    { icon: '📋', label: tex.dtRowQuestions || 'Questions',     value: `${exam.questions} ${tex.dtMcq || 'multiple-choice questions'}` },
-    { icon: '✅', label: tex.dtRowPass || 'Passing score',      value: `${exam.passing} ${tex.dtCorrect || 'correct'} (${exam.passingPct}%)` },
-    { icon: '🏛️', label: tex.dtRowAdmin || 'Administered by',   value: meta.agency },
-    { icon: '🌐', label: tex.dtRowLangs || 'Languages',         value: tex.dtValLangs || 'English, Spanish, Russian, Chinese, Ukrainian' },
-    { icon: '🔄', label: tex.dtRowRetakes || 'Retakes',          value: tex.dtValRetakes || 'Allowed after a waiting period if you fail' },
+    { icon: 'questions', label: tex.dtRowQuestions || 'Questions',     value: `${exam.questions} ${tex.dtMcq || 'multiple-choice questions'}` },
+    { icon: 'pass',      label: tex.dtRowPass || 'Passing score',      value: `${exam.passing} ${tex.dtCorrect || 'correct'} (${exam.passingPct}%)` },
+    { icon: 'admin',     label: tex.dtRowAdmin || 'Administered by',   value: meta.agency },
+    { icon: 'langs',     label: tex.dtRowLangs || 'Languages',         value: tex.dtValLangs || 'English, Spanish, Russian, Chinese, Ukrainian' },
+    { icon: 'retakes',   label: tex.dtRowRetakes || 'Retakes',          value: tex.dtValRetakes || 'Allowed after a waiting period if you fail' },
   ];
 
+  // Vehicle art (the same transparent PNGs the home + /category use) instead of
+  // the old emoji, so the license tiles match the rest of the brand.
   const categories = [
-    { cat: 'dmv',  emoji: '🚗', title: tex.catCar || 'Car (DMV)',   desc: tex.carDesc   || "Regular driver's license for cars, SUVs and pickups", bg: '#EFF6FF' },
-    { cat: 'cdl',  emoji: '🚛', title: tex.catCdl || 'CDL',         desc: tex.truckDesc || "Commercial Driver's License for trucks and buses",   bg: '#F0F9FF' },
-    { cat: 'moto', emoji: '🏍️', title: tex.catMoto || 'Motorcycle', desc: tex.motoDesc  || 'Motorcycle and scooter permit test',                  bg: '#FFF7ED' },
+    { cat: 'dmv',  img: '/vehicles/mustang.png',   title: tex.catCar || 'Car (DMV)',   desc: tex.carDesc   || "Regular driver's license for cars, SUVs and pickups", bg: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' },
+    { cat: 'cdl',  img: '/vehicles/truck-hero.png', title: tex.catCdl || 'CDL',         desc: tex.truckDesc || "Commercial Driver's License for trucks and buses",   bg: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)' },
+    { cat: 'moto', img: '/vehicles/moto-hero.png',  title: tex.catMoto || 'Motorcycle', desc: tex.motoDesc  || 'Motorcycle and scooter permit test',                  bg: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)' },
   ];
 
   const faqs = [
@@ -222,23 +236,31 @@ export default function StateBody({ lang, state }) {
         </p>
 
         {/* Language CTA card */}
-        <div className="bg-[#0B1C3D] rounded-2xl p-6 mb-6 shadow-lg">
-          <p className="text-[#94A3B8] text-xs font-semibold mb-4 uppercase tracking-widest">
+        <div className="relative overflow-hidden bg-[#0B1C3D] rounded-2xl p-6 mb-6 shadow-xl">
+          <div aria-hidden="true" className="absolute -top-20 -right-20 w-56 h-56 rounded-full pointer-events-none"
+            style={{ background: 'radial-gradient(circle, rgba(37,99,235,0.28) 0%, transparent 70%)' }} />
+          <p className="relative text-[#94A3B8] text-xs font-semibold mb-4 uppercase tracking-widest">
             {tex.dtChooseLang || 'Choose your language and start:'}
           </p>
-          <div className="grid grid-cols-1 gap-2.5">
-            {LANG_OPTIONS.map(({ code, label, emoji }) => (
+          <div className="relative grid grid-cols-1 gap-2.5">
+            {LANG_OPTIONS.map(({ code, label, flag }) => (
               <Link
                 key={code}
                 href={`/category?state=${state}&lang=${code}`}
-                className="flex items-center justify-between px-5 py-3 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-xl font-semibold text-sm transition-colors"
+                className="group flex items-center justify-between pl-4 pr-4 py-3 bg-[#2563EB] hover:bg-[#1D4ED8] hover:-translate-y-0.5 hover:shadow-lg text-white rounded-xl font-semibold text-sm transition-all"
               >
-                <span>{emoji} {label}</span>
-                <span className="opacity-70 text-xs">{tex.startFree || 'Start Free'}</span>
+                <span className="flex items-center gap-3">
+                  <span className="shrink-0 flex ring-1 ring-white/30 rounded-[3px] overflow-hidden">{flags[flag]}</span>
+                  {label}
+                </span>
+                <span className="inline-flex items-center gap-1 text-xs text-white/70">
+                  {tex.startFree || 'Start Free'}
+                  <span className="transition-transform group-hover:translate-x-0.5">&rarr;</span>
+                </span>
               </Link>
             ))}
           </div>
-          <p className="text-xs text-[#64748B] mt-4 text-center">
+          <p className="relative text-xs text-[#64748B] mt-4 text-center">
             {tex.dtNoSignup || 'No signup required · 20 free questions per test'}
           </p>
         </div>
@@ -261,7 +283,11 @@ export default function StateBody({ lang, state }) {
           <ul className="space-y-3">
             {whatToExpect.map(({ icon, label, value }) => (
               <li key={label} className="flex items-start gap-3">
-                <span className="text-base mt-0.5 shrink-0">{icon}</span>
+                <span className="shrink-0 w-7 h-7 rounded-lg bg-[#EFF6FF] flex items-center justify-center mt-0.5">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    {ICONS[icon]}
+                  </svg>
+                </span>
                 <div>
                   <span className="text-sm font-semibold text-[#0B1C3D]">{label}: </span>
                   <span className="text-sm text-[#64748B]">{value}</span>
@@ -277,19 +303,20 @@ export default function StateBody({ lang, state }) {
             {tex.dtTypesTitle || `Available ${name} practice test types`}
           </h2>
           <div className="space-y-3">
-            {categories.map(({ cat, emoji, title, desc, bg }) => (
+            {categories.map(({ cat, img, title, desc, bg }) => (
               <Link
                 key={cat}
                 href={`/category?state=${state}&lang=en`}
-                className="flex items-center gap-4 p-4 rounded-xl border border-[#E2E8F0] hover:border-[#2563EB] hover:shadow-sm transition-all"
+                className="flex items-center gap-3 p-3.5 rounded-2xl border border-white/60 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
                 style={{ background: bg }}
               >
-                <span className="text-3xl shrink-0">{emoji}</span>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={img} alt="" aria-hidden="true" className="w-14 h-11 object-contain shrink-0 select-none pointer-events-none" />
                 <div className="flex-1 min-w-0">
-                  <div className="font-semibold text-sm text-[#0B1C3D]">{title}</div>
+                  <div className="font-bold text-sm text-[#0B1C3D]">{title}</div>
                   <div className="text-xs text-[#64748B] mt-0.5 leading-relaxed">{desc}</div>
                 </div>
-                <span className="text-xs font-semibold text-[#2563EB] shrink-0">{tex.dtStart || 'Start'}</span>
+                <span className="text-xs font-semibold text-[#2563EB] shrink-0">{tex.dtStart || 'Start'} &rarr;</span>
               </Link>
             ))}
           </div>
@@ -302,10 +329,12 @@ export default function StateBody({ lang, state }) {
           </h2>
           <div className="space-y-3">
             {faqs.map(({ q, a }) => (
-              <details key={q} className="bg-white rounded-2xl border border-[#E2E8F0] p-5 shadow-sm group">
+              <details key={q} className="bg-white rounded-2xl border border-[#E2E8F0] p-5 shadow-sm group hover:border-[#BFDBFE] transition-colors">
                 <summary className="font-semibold text-sm text-[#0B1C3D] cursor-pointer list-none flex justify-between items-center gap-3">
                   <span>{q}</span>
-                  <span className="text-[#2563EB] shrink-0 transition-transform group-open:rotate-180">▾</span>
+                  <span className="shrink-0 w-6 h-6 rounded-full bg-[#EFF6FF] flex items-center justify-center transition-transform group-open:rotate-180">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+                  </span>
                 </summary>
                 <p className="mt-3 text-sm text-[#64748B] leading-relaxed">{a}</p>
               </details>
@@ -313,37 +342,39 @@ export default function StateBody({ lang, state }) {
           </div>
         </section>
 
-        {/* Manual link */}
-        <div className="bg-white rounded-2xl border border-[#E2E8F0] p-5 mb-5 shadow-sm flex items-center justify-between gap-4">
-          <div>
-            <p className="text-sm font-semibold text-[#0B1C3D]">{tex.dtManualTitle || `Official ${name} Driver Handbook`}</p>
-            <p className="text-xs text-[#94A3B8] mt-0.5">{tex.dtManualSub || 'Read or download the free PDF manual'}</p>
+        {/* Manual link — mirrors the home's driver-manual card */}
+        <Link
+          href={`/manuals/${state}`}
+          className="group flex items-center gap-3 bg-blue-50 rounded-2xl px-4 py-4 mb-5 shadow-sm border border-blue-100 border-l-4 border-l-blue-500 hover:bg-blue-100 hover:shadow-md transition-all"
+        >
+          <div className="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center shrink-0 group-hover:bg-blue-200 transition-colors">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/illustrations/manual.png" alt="" aria-hidden="true" className="w-9 h-9 object-contain" />
           </div>
-          <Link
-            href={`/manuals/${state}`}
-            className="shrink-0 px-4 py-2 bg-[#EFF6FF] text-[#2563EB] rounded-xl text-sm font-semibold hover:bg-[#DBEAFE] transition-colors"
-          >
-            {tex.dtViewManual || 'View Manual'}
-          </Link>
-        </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-0.5">
+              <span className="text-sm font-bold text-[#0B1C3D] group-hover:text-[#2563EB]">{tex.dtManualTitle || `Official ${name} Driver Handbook`}</span>
+              <span className="text-[10px] font-bold bg-blue-500 text-white px-1.5 py-0.5 rounded-full leading-none">FREE</span>
+            </div>
+            <div className="text-[11px] text-[#64748B]">{tex.dtManualSub || 'Read or download the free PDF manual'}</div>
+          </div>
+          <span className="text-blue-400 shrink-0 group-hover:text-blue-600 transition-transform group-hover:translate-x-0.5">&rarr;</span>
+        </Link>
 
         {/* Pro upgrade */}
         <div className="bg-gradient-to-r from-[#0B1C3D] to-[#1E3A5F] rounded-2xl p-6 mb-8 text-center shadow-lg border border-[#1e3a5f]">
-          <div className="text-[#F59E0B] font-black text-xs mb-2 uppercase tracking-widest">✨ {tex.dtProKicker || 'Unlock Full Access'}</div>
+          <div className="text-[#F59E0B] font-black text-xs mb-2 uppercase tracking-widest">{tex.dtProKicker || 'Unlock Full Access'}</div>
           <p className="text-white font-bold text-base mb-1">{tex.dtProTitle || 'Practice with current, verified questions and walk in ready'}</p>
           <p className="text-[#94A3B8] text-sm mb-4">{tex.dtProSub || 'Full 40-question tests · Detailed explanations · All categories'}</p>
-          <div className="flex items-center justify-center gap-2 mb-3">
+          <div className="flex items-center justify-center gap-2 mb-4">
             <span className="text-xs font-semibold text-[#10B981] bg-[#10B981]/10 px-3 py-1 rounded-full border border-[#10B981]/30">
               {tex.footerFree || 'Free to start · no signup'}
             </span>
           </div>
-          <Link
-            href="/upgrade"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-[#F59E0B] text-[#0B1C3D] rounded-xl font-bold text-sm hover:bg-[#FBBF24] transition-colors"
-          >
+          <GradientButton href="/upgrade" variant="gold" className="max-w-xs mx-auto">
             {tex.dtProBtn || 'Unlock Full Access'}  ·  {tex.dtFrom || 'from'} {MIN_PRICE}
-          </Link>
-          <p className="text-xs text-[#64748B] mt-2">{tex.dtProNote || 'One-time payment · 30 days · No subscription'}</p>
+          </GradientButton>
+          <p className="text-xs text-[#64748B] mt-3">{tex.dtProNote || 'One-time payment · 30 days · No subscription'}</p>
         </div>
 
         {/* Languages section — mirrors real search intent. The product's
@@ -357,12 +388,12 @@ export default function StateBody({ lang, state }) {
           <p className="text-sm text-[#64748B] mb-4 leading-relaxed">
             {fill(tex.dtLangSecIntro)}
           </p>
-          <ul className="space-y-2 mb-4">
-            <li className="text-sm text-[#1A2B4A]"><strong>🇺🇸 English</strong> — official source text, all {exam.questions} {name} knowledge-test topics covered</li>
-            <li className="text-sm text-[#1A2B4A]"><strong>🇪🇸 Español</strong> — examen de manejo de {name} gratis, traducido por hablantes nativos</li>
-            <li className="text-sm text-[#1A2B4A]"><strong>🇷🇺 Русский</strong> — бесплатный тест {meta.dmvAbbr} {name} на русском, реальные вопросы</li>
-            <li className="text-sm text-[#1A2B4A]"><strong>🇨🇳 中文</strong> — {name} {meta.dmvAbbr} 笔试免费练习，中英对照</li>
-            <li className="text-sm text-[#1A2B4A]"><strong>🇺🇦 Українська</strong> — безкоштовний тест {meta.dmvAbbr} {name} українською</li>
+          <ul className="space-y-2.5 mb-4">
+            <li className="flex items-start gap-2.5 text-sm text-[#1A2B4A]"><span className="shrink-0 mt-0.5 flex ring-1 ring-[#E2E8F0] rounded-[3px] overflow-hidden">{flags.us}</span><span><strong>English</strong> — official source text, all {exam.questions} {name} knowledge-test topics covered</span></li>
+            <li className="flex items-start gap-2.5 text-sm text-[#1A2B4A]"><span className="shrink-0 mt-0.5 flex ring-1 ring-[#E2E8F0] rounded-[3px] overflow-hidden">{flags.es}</span><span><strong>Español</strong> — examen de manejo de {name} gratis, traducido por hablantes nativos</span></li>
+            <li className="flex items-start gap-2.5 text-sm text-[#1A2B4A]"><span className="shrink-0 mt-0.5 flex ring-1 ring-[#E2E8F0] rounded-[3px] overflow-hidden">{flags.ru}</span><span><strong>Русский</strong> — бесплатный тест {meta.dmvAbbr} {name} на русском, реальные вопросы</span></li>
+            <li className="flex items-start gap-2.5 text-sm text-[#1A2B4A]"><span className="shrink-0 mt-0.5 flex ring-1 ring-[#E2E8F0] rounded-[3px] overflow-hidden">{flags.cn}</span><span><strong>中文</strong> — {name} {meta.dmvAbbr} 笔试免费练习，中英对照</span></li>
+            <li className="flex items-start gap-2.5 text-sm text-[#1A2B4A]"><span className="shrink-0 mt-0.5 flex ring-1 ring-[#E2E8F0] rounded-[3px] overflow-hidden">{flags.ua}</span><span><strong>Українська</strong> — безкоштовний тест {meta.dmvAbbr} {name} українською</span></li>
           </ul>
           {cities.length > 0 && (
             <p className="text-xs text-[#64748B] leading-relaxed border-t border-[#F1F5F9] pt-4">
