@@ -73,7 +73,7 @@ export default function BreakButton({ langCode = 'en' }) {
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="inline-flex items-center gap-1.5 whitespace-nowrap text-xs font-semibold text-[#B45309] bg-[#FEF3C7] border border-[#FDE68A] rounded-full px-3 py-1 hover:bg-[#FDE68A] active:scale-95 transition"
+          className="inline-flex items-center gap-1.5 whitespace-nowrap text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-3 py-1 hover:border-[#F59E0B] hover:text-[#B45309] active:scale-95 transition"
         >
           {coffee}
           <span>{label}</span>

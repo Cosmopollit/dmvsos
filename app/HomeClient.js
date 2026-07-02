@@ -144,8 +144,24 @@ export default function HomeClient({ initialLang = 'en' }) {
   // Also pre-select the state from the geo cookie set by proxy.js, and suggest
   // the browser language banner if nothing is saved yet.
   const [suggestedLang, setSuggestedLang] = useState(null);
-  // The final-CTA envelope: closed until the user tears it open.
+  // The final-CTA envelope. Auto-opens when scrolled into view: the user at
+  // max scroll depth is the highest-intent visitor on the page, and making
+  // them solve a riddle button ("open the letter") shed people. The tear-open
+  // animation still plays — it just doesn't require the extra tap.
   const [letterOpen, setLetterOpen] = useState(false);
+  const letterRef = useRef(null);
+  useEffect(() => {
+    const el = letterRef.current;
+    if (!el || letterOpen) return;
+    const io = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setLetterOpen(true);
+        io.disconnect();
+      }
+    }, { threshold: 0.55 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [letterOpen]);
   useEffect(() => {
     const urlLang = new URLSearchParams(window.location.search).get('lang');
     const valid = ['en', 'ru', 'es', 'zh', 'ua'];
@@ -594,11 +610,11 @@ export default function HomeClient({ initialLang = 'en' }) {
               removed from inside the card to avoid duplication.) */}
           <div className="mb-4" />
 
-          {/* Category buttons — only enabled once a state is picked. With
-              geolocation auto-fill most users see this state already, so
-              this is usually a single-tap surface. */}
-          {state ? (
-            <>
+          {/* Category buttons — ALWAYS rendered (first-time visitors with no
+              geo cookie used to see just a dropdown and a gray hint: the whole
+              product menu was hidden from exactly the people who most need
+              convincing). Without a state, tapping a card focuses the select. */}
+          <>
               {/* Drop the "Выберите тест" sub-heading — three labelled cards
                   below are self-explanatory and an extra heading inside the
                   card made the surface feel cramped. */}
@@ -617,6 +633,11 @@ export default function HomeClient({ initialLang = 'en' }) {
                     key={cat.id}
                     type="button"
                     onClick={() => {
+                      if (!state) {
+                        stateSelectRef.current?.focus();
+                        stateSelectRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+                        return;
+                      }
                       if (cat.id === 'cdl') router.push(`/cdl-category?state=${state}&lang=${langCode}`);
                       else router.push(`/test?state=${state}&category=${cat.id}&lang=${langCode}`);
                     }}
@@ -646,12 +667,12 @@ export default function HomeClient({ initialLang = 'en' }) {
               {isPro && (
                 <p className="text-xs text-center mt-4 text-[#B45309] font-medium">{tex.proActive}</p>
               )}
-            </>
-          ) : (
-            <p className="text-sm text-center text-[#94A3B8] py-4 mt-2">
-              {tex.pickStateFirst || 'Choose your state to continue'}
-            </p>
-          )}
+              {!state && (
+                <p className="text-xs text-center mt-3 text-[#94A3B8]">
+                  {tex.pickStateFirst || 'Choose your state to continue'}
+                </p>
+              )}
+          </>
         </div>
       </div>
 
@@ -754,6 +775,12 @@ export default function HomeClient({ initialLang = 'en' }) {
       {/* Pricing */}
       <section className="w-full max-w-2xl mx-auto mb-8 px-4">
         <h2 className="text-xl font-bold text-[#0B1C3D] text-center mb-2">{tex.pricingHeading}</h2>
+        {/* Human trust signal at the money surface (the stats-bar "5K+ passed"
+            claim, moved to where the buying decision happens). */}
+        <p className="text-[13px] font-semibold text-[#15803D] text-center mb-2 flex items-center justify-center gap-1.5">
+          <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="#16A34A" /><path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" /></svg>
+          {tex.pricingTrust || '5,000+ drivers passed with us'}
+        </p>
         <p className="text-sm text-[#64748B] text-center mb-6 leading-relaxed max-w-md mx-auto">{tex.pricingSubtext}</p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
@@ -936,6 +963,7 @@ export default function HomeClient({ initialLang = 'en' }) {
         )}
 
         <div
+          ref={letterRef}
           className="relative overflow-hidden rounded-2xl border"
           style={{
             minHeight: 196,

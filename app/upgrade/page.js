@@ -34,7 +34,10 @@ function UpgradeContent() {
   const tex = t[lang] || t.en;
 
   const [loadingPlan, setLoadingPlan] = useState(null);
-  const [error, setError] = useState(false);
+  // Per-card notice rendered right under the tapped Buy button (the old global
+  // error line sat below the bureaucracy block — off-screen on mobile, so a
+  // failed tap looked like "nothing happened"). type: 'error' | 'owned'.
+  const [cardNotice, setCardNotice] = useState(null);
   // Guard against the auto-resume effect firing more than once on the same
   // mount. Without this, if React StrictMode double-invokes effects in dev,
   // we'd issue two checkout-session-create calls in a row.
@@ -92,7 +95,7 @@ function UpgradeContent() {
       return;
     }
     setLoadingPlan(planId);
-    setError(false);
+    setCardNotice(null);
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const fetchOpts = {
@@ -107,9 +110,10 @@ function UpgradeContent() {
       }
       const res = await fetch('/api/create-checkout', fetchOpts);
       const data = await res.json();
-      // User already owns this type → redirect to profile/extension flow
+      // User already owns this type → explain it in the card (a silent redirect
+      // to /profile read as "the button is broken").
       if (res.status === 409 && data?.error === 'pass_already_active') {
-        router.push('/profile');
+        setCardNotice({ planId, type: 'owned' });
         return;
       }
       if (data?.url) {
@@ -117,9 +121,9 @@ function UpgradeContent() {
         // (not on the 409 own-already / error paths). planId is onetime_<type>.
         trackBeginCheckout(planId.replace('onetime_', ''), 'new');
         window.location.href = data.url;
-      } else setError(true);
+      } else setCardNotice({ planId, type: 'error' });
     } catch {
-      setError(true);
+      setCardNotice({ planId, type: 'error' });
     } finally {
       setLoadingPlan(null);
     }
@@ -190,18 +194,6 @@ function UpgradeContent() {
         <span className="font-bold text-[#F59E0B]">{tex.statsLine?.split(' ')[0] || 'All'}</span>{' '}
         {(tex.statsLine || 'All 25,000+ questions · 5 languages · all 50 states').split(' ').slice(1).join(' ')}
       </p>
-
-      {/* Free tier chip */}
-      <Link href={`/?lang=${lang}`} className="w-full max-w-2xl mb-5 rounded-2xl p-4 border border-white/10 bg-white/5 flex items-center gap-4 cursor-pointer hover:bg-white/10 hover:border-white/20 transition-colors">
-        <svg width="22" height="22" viewBox="0 0 24 24" className="shrink-0" style={{ fill: '#16A34A' }}><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" /></svg>
-        <div className="flex-1">
-          <div className="text-sm font-bold text-white">{tex.freePracticeLabel}</div>
-          <div className="text-xs text-[#94A3B8] mt-0.5">{tex.freePracticeDesc}</div>
-        </div>
-        <span className="text-xs font-semibold text-[#16A34A] bg-[#16A34A]/10 px-2.5 py-1 rounded-full border border-[#16A34A]/20 shrink-0">
-          {tex.freePracticePrice}
-        </span>
-      </Link>
 
       {/* 3 Plan cards */}
       <div className="w-full max-w-2xl flex flex-col sm:flex-row gap-4 mb-6">
@@ -285,10 +277,42 @@ function UpgradeContent() {
                   {loadingPlan === plan.id ? '…' : plan.btnLabel}
                 </GradientButton>
               )}
+              {/* Inline notice right under the tapped button — visible where
+                  the user is looking, instead of a line below the fold. */}
+              {cardNotice?.planId === plan.id && (
+                cardNotice.type === 'owned' ? (
+                  <p className="mt-2 text-xs text-center font-medium text-[#16A34A]">
+                    {tex.alreadyOwnPass || 'You already have this pass.'}{' '}
+                    <Link href="/profile" className="underline font-semibold">{tex.planManage || 'Manage / Extend'}</Link>
+                  </p>
+                ) : (
+                  <p className="mt-2 text-xs text-center font-medium text-red-500">
+                    {tex.checkoutError || 'Something went wrong. Please try again.'}
+                  </p>
+                )
+              )}
             </div>
           );
         })}
       </div>
+
+      {/* Price anchor — factual comparison, no fear copy, no guarantees. */}
+      <p className="text-center text-xs text-[#94A3B8] -mt-2 mb-5">
+        {tex.priceAnchor || 'Less than a single driving lesson'}
+      </p>
+
+      {/* Free tier chip — demoted BELOW the plans: people arriving with buy
+          intent used to see the free exit as the first interactive element. */}
+      <Link href={`/?lang=${lang}`} className="w-full max-w-2xl mb-5 rounded-2xl p-4 border border-white/10 bg-white/5 flex items-center gap-4 cursor-pointer hover:bg-white/10 hover:border-white/20 transition-colors">
+        <svg width="22" height="22" viewBox="0 0 24 24" className="shrink-0" style={{ fill: '#16A34A' }}><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" /></svg>
+        <div className="flex-1">
+          <div className="text-sm font-bold text-white">{tex.freePracticeLabel}</div>
+          <div className="text-xs text-[#94A3B8] mt-0.5">{tex.freePracticeDesc}</div>
+        </div>
+        <span className="text-xs font-semibold text-[#16A34A] bg-[#16A34A]/10 px-2.5 py-1 rounded-full border border-[#16A34A]/20 shrink-0">
+          {tex.freePracticePrice}
+        </span>
+      </Link>
 
       {/* CDL endorsements teaser */}
       <div className="w-full max-w-2xl mb-5 rounded-2xl p-4 border border-white/10 bg-white/5 text-center">
@@ -336,12 +360,6 @@ function UpgradeContent() {
 
       {/* No refund or guarantee claims anywhere: there is no pass guarantee,
           no money-back, no 24h refund, on any plan. All sales are final. */}
-
-      {error && (
-        <p className="text-center text-xs text-red-400 font-medium mb-4">
-          {tex.checkoutError || 'Something went wrong. Please try again.'}
-        </p>
-      )}
 
       <p className="text-center text-xs text-[#64748B] mb-6">
         {tex.cancelAnytime || 'One-time payment · 30 days · No subscription'}
