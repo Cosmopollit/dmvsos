@@ -9,6 +9,7 @@ import { t, pluralizeQuestions } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { agencyAbbrForState } from '@/lib/agencies';
 import { examRulesFor } from '@/lib/exam-rules';
+import { pickHardest } from '@/lib/question-difficulty';
 import { planForCategory } from '@/lib/plans';
 import { useExperiment } from '@/lib/experiments';
 
@@ -326,7 +327,13 @@ function TestContent() {
     const realLimits = { dmv: realFromState || 40, car: realFromState || 40, cdl: 50, moto: realFromState || 30, motorcycle: realFromState || 30 };
     const limits = { free: freeLimit, real: realLimits[category] || 40, extended: 80, marathon: Infinity };
     const limit = limits[mode] ?? 40;
-    setQuestions(allQuestions.slice(0, Math.min(limit, allQuestions.length)));
+    // FREE tier draws from the hardest slice of the pool (numbers, exceptions,
+    // confusable options — see lib/question-difficulty). The free ride should
+    // feel like the exam's tricky end, so full prep sells itself. Paid modes
+    // keep the natural difficulty mix (Real must stay representative).
+    setQuestions(mode === 'free'
+      ? pickHardest(allQuestions, Math.min(limit, allQuestions.length))
+      : allQuestions.slice(0, Math.min(limit, allQuestions.length)));
     setCurrent(0);
     setScore(0);
     setUserAnswers([]);
@@ -1221,22 +1228,16 @@ function TestContent() {
             <div className="h-1.5 bg-gradient-to-r from-[#F59E0B] via-[#FB923C] to-[#F59E0B]" />
             <div className="p-6">
               <h2 className="text-xl font-bold text-[#0B1C3D] mb-1 text-center">{dmv(tex.upgradeModalTitle || `20 done. The actual DMV looks just like this.`)}</h2>
-              <p className="text-[#2563EB] font-bold text-sm mb-3 text-center">
-                {(tex.upgradeScoreSoFar || 'Your score: {score}/20').replace('{score}', String(score)).replace('{percent}', String(Math.round((score / 20) * 100)))}
+              <p className="text-[#2563EB] font-bold text-sm mb-4 text-center">
+                {(tex.upgradeScoreSoFar || 'Your score: {score}/{total}')
+                  .replace('{score}', String(score))
+                  .replace('{total}', String(freeLimit))
+                  .replace('{percent}', String(Math.round((score / freeLimit) * 100)))}
               </p>
-
-              {/* Body — explains weird questions, links to official handbook */}
-              <p className="text-sm text-[#475569] mb-4 text-center leading-relaxed">
-                {dmv(tex.upgradeModalBody1 || "If a question looks weird, that's how the DMV asks it. We work from your state's ")}
-                <Link
-                  href="/manuals"
-                  target="_blank"
-                  className="text-[#2563EB] underline hover:text-[#1D4ED8]"
-                >
-                  {tex.upgradeModalBodyLink || 'official driver handbook'}
-                </Link>
-                {dmv(tex.upgradeModalBody2 || ' — same source as the real test.')}
-              </p>
+              {/* NOTE: no /manuals link here on purpose. The paywall is the buy
+                  moment — advertising the free handbook at this exact point sent
+                  buyers off to read the source instead (and violates the brand
+                  rule: never pitch "from the manual"). */}
 
               {/* Highlighted plan card for current category */}
               <div className="flex justify-center mb-4">

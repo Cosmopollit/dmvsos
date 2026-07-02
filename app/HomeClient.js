@@ -128,7 +128,9 @@ export default function HomeClient({ initialLang = 'en' }) {
   // after mount in the effect below (no-op when it already matches the cookie).
   const [lang, setLang] = useState(() => codeToName[initialLang] || 'English');
   const [state, setState] = useState('');
-  const [liveCount] = useState(() => Math.floor(Math.random() * 60) + 110);
+  // Fake randomized "live" counter removed 2026-07-01: reload changed the number
+  // (122 → 154), a trust landmine next to the buy decision. Reintroduce only as a
+  // REAL cached count once anonymous sessions are recorded server-side.
   const [showLangMenu, setShowLangMenu] = useState(false);
   const stateSelectRef = useRef(null);
   const router = useRouter();
@@ -632,7 +634,6 @@ export default function HomeClient({ initialLang = 'en' }) {
               {isPro && (
                 <p className="text-xs text-center mt-4 text-[#B45309] font-medium">{tex.proActive}</p>
               )}
-              <p className="text-xs text-gray-400 mt-3 text-center"><span className="inline-block w-2 h-2 rounded-full bg-[#16A34A] mr-1.5 align-middle" />{liveCount} {tex.practicingNow}</p>
             </>
           ) : (
             <p className="text-sm text-center text-[#94A3B8] py-4 mt-2">

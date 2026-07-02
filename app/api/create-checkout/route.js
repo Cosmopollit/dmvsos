@@ -162,7 +162,10 @@ export async function POST(req) {
       success_url: `${SITE_URL}/success?session_id={CHECKOUT_SESSION_ID}${purchaseTracking}`,
       cancel_url: `${SITE_URL}/upgrade`,
       metadata,
-      phone_number_collection: { enabled: true },
+      // phone_number_collection removed 2026-07-01: a REQUIRED phone field on a
+      // $19.99-$49.99 one-time digital purchase measurably kills mobile checkout
+      // completion (privacy-wary audience, 60% mobile) and nothing in the
+      // webhook/fulfillment path uses the phone.
       locale: checkoutLocale,
     };
 
