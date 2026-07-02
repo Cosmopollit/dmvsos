@@ -119,9 +119,9 @@ export default function HomeClient({ initialLang = 'en' }) {
   const ownsCar = ['auto', 'car_pass', 'full_prep', 'guaranteed_pass'].includes(planType);
   const ownsMoto = ['moto', 'moto_pass', 'quick_pass', 'guaranteed_pass'].includes(planType);
   useExperiment('home_visit', user?.id);
-  // A/B the hero headline (v1 control / v2 uniqueness / v3 confidence). Starts
-  // on v1, switches to the assigned variant after mount — see useExperiment.
-  const heroVariant = useExperiment('hero_copy', user?.id);
+  // hero_copy A/B retired 2026-07-01: the post-mount variant swap re-ran the
+  // word-reveal animation at the LCP moment (headline appeared, vanished,
+  // re-animated) and at ~5 sales/mo could never reach significance. Ship v1.
   // Seed from the server-read cookie (initialLang) so SSR and the first client
   // render agree — reading localStorage in the initializer would desync the two
   // and trip a hydration mismatch on the flag SVG. localStorage is reconciled
@@ -138,9 +138,7 @@ export default function HomeClient({ initialLang = 'en' }) {
   const langToCode = { English: 'en', 'Русский': 'ru', 'Español': 'es', '中文': 'zh', 'Українська': 'ua' };
   const langCode = langToCode[lang] || 'en';
   const tex = t[langCode] || t.en;
-  const heroTitleText = heroVariant === 'v2' ? (tex.heroTitleB || tex.heroTitle)
-    : heroVariant === 'v3' ? (tex.heroTitleC || tex.heroTitle)
-    : tex.heroTitle;
+  const heroTitleText = tex.heroTitle;
 
   // ?lang=xx in URL (e.g. from a Google hreflang result) overrides the saved lang.
   // Also pre-select the state from the geo cookie set by proxy.js, and suggest
@@ -464,14 +462,14 @@ export default function HomeClient({ initialLang = 'en' }) {
             {tex.heroTrustStats}
           </p>
         )}
-        {/* Trust-line is interactive: amber-tinted pill with a closed-lock
-            icon whose shackle rotates open on hover. Click navigates to the
-            /upgrade page — the line tells the user the same questions are
-            "locked" behind a Pass and invites them to unlock. */}
+        {/* Trust pill ("same questions as your exam"). Used to route to
+            /upgrade — which sent the coldest traffic straight into the login
+            wall as their FIRST tap. Now it starts the funnel like everything
+            else above the fold: scroll to the state selector. */}
         {!isPro && tex.heroTrustLine && (
           <button
             type="button"
-            onClick={() => router.push(`/upgrade?lang=${langCode}`)}
+            onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
             className="group hero-trust-pill inline-flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 cursor-pointer"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" className="shrink-0" style={{ overflow: 'visible' }}>
@@ -492,6 +490,20 @@ export default function HomeClient({ initialLang = 'en' }) {
             </span>
           </button>
         )}
+        {/* THE primary above-the-fold action: start the free test. Explicit
+            verb + free framing (the audit found "free · no signup" was first
+            mentioned ~7 screens down). Pro users get a neutral label. */}
+        <div className="mt-4">
+          <GradientButton
+            onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
+            className="max-w-xs mx-auto"
+          >
+            {isPro ? (tex.startPracticing || 'Start Practicing') : (tex.heroCtaStart || 'Start the free test')}
+          </GradientButton>
+          {!isPro && (
+            <p className="text-xs text-[#94A3B8] mt-2">{tex.dtNoSignup || 'No signup required · 20 free questions per test'}</p>
+          )}
+        </div>
         <style jsx>{`
           .hero-trust-pill {
             position: relative;
@@ -895,26 +907,23 @@ export default function HomeClient({ initialLang = 'en' }) {
         */}
       </section>
 
-      {/* FAQ — the whole section is a dropdown, and each question inside is too.
-          Both collapsed by default to keep the page short. */}
+      {/* FAQ — the section itself is always visible (it holds the page's best
+          objection-handling copy: "are these real questions?", "why not a free
+          app?" — a double-collapsed section gave it near-zero exposure). Each
+          question stays individually collapsible to keep the page short. */}
       <section className="w-full max-w-lg mx-auto mb-5 px-4">
-        <details className="group/sec">
-          <summary className="cursor-pointer list-none flex items-center justify-center gap-2 mb-5">
-            <h2 className="text-lg font-bold text-[#0B1C3D]">{tex.faqTitle}</h2>
-            <span className="text-[#94A3B8] group-open/sec:rotate-180 transition-transform"><svg width="14" height="14" viewBox="0 0 12 12" style={{ fill: 'currentColor' }}><path d="M6 8L1 3h10z" /></svg></span>
-          </summary>
-          <div className="flex flex-col gap-2">
-            {(tex.faq || []).map((item, i) => (
-              <details key={i} className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm group">
-                <summary className="px-5 py-4 text-sm font-semibold text-[#0B1C3D] cursor-pointer list-none flex items-center justify-between">
-                  <span>{item.q}</span>
-                  <span className="text-[#94A3B8] group-open:rotate-180 transition-transform ml-3 shrink-0"><svg width="12" height="12" viewBox="0 0 12 12" style={{ fill: 'currentColor' }}><path d="M6 8L1 3h10z" /></svg></span>
-                </summary>
-                <p className="px-5 pb-4 text-sm text-[#475569] leading-relaxed">{item.a}</p>
-              </details>
-            ))}
-          </div>
-        </details>
+        <h2 className="text-lg font-bold text-[#0B1C3D] text-center mb-5">{tex.faqTitle}</h2>
+        <div className="flex flex-col gap-2">
+          {(tex.faq || []).map((item, i) => (
+            <details key={i} className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm group">
+              <summary className="px-5 py-4 text-sm font-semibold text-[#0B1C3D] cursor-pointer list-none flex items-center justify-between">
+                <span>{item.q}</span>
+                <span className="text-[#94A3B8] group-open:rotate-180 transition-transform ml-3 shrink-0"><svg width="12" height="12" viewBox="0 0 12 12" style={{ fill: 'currentColor' }}><path d="M6 8L1 3h10z" /></svg></span>
+              </summary>
+              <p className="px-5 pb-4 text-sm text-[#475569] leading-relaxed">{item.a}</p>
+            </details>
+          ))}
+        </div>
       </section>
 
       {/* Final CTA — a sealed letter from the user's DMV/DOL. The button tears

@@ -8,8 +8,9 @@ import { useAuth } from '@/lib/AuthContext';
 import { t, pluralizeQuestions } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { agencyAbbrForState } from '@/lib/agencies';
-import { examRulesFor } from '@/lib/exam-rules';
+import { examRulesFor, passPercentFor } from '@/lib/exam-rules';
 import { pickHardest } from '@/lib/question-difficulty';
+import { trackBeginCheckout } from '@/lib/gtag';
 import { planForCategory } from '@/lib/plans';
 import { useExperiment } from '@/lib/experiments';
 
@@ -343,6 +344,43 @@ function TestContent() {
     setShowAnswer(false); setShowManualQuote(false); setShowReport(false); setReportReason(""); setReportComment(""); setReportSent(false);
     setElapsed(0);
     setTestMode(mode);
+  }
+
+  // Paywall modal "Get it": go STRAIGHT to Stripe instead of re-selling on
+  // /upgrade (every extra screen sheds buyers). Logged-in → create the checkout
+  // session right here; anonymous → /login with intent=checkout so the existing
+  // auto-resume on /upgrade fires the session without another Buy tap. Any
+  // failure falls back to the /upgrade pricing page rather than a dead end.
+  const [modalBuyLoading, setModalBuyLoading] = useState(false);
+  async function modalCheckout() {
+    if (modalBuyLoading) return;
+    setModalBuyLoading(true);
+    const fallback = `/upgrade?lang=${lang}&plan=${suggestPlan}`;
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) {
+        const next = `/upgrade?plan=${suggestPlan}&lang=${lang}&intent=checkout`;
+        router.push(`/login?next=${encodeURIComponent(next)}&lang=${lang}`);
+        return;
+      }
+      const res = await fetch('/api/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ planType: suggestPlan, lang }),
+      });
+      const data = await res.json();
+      if (res.status === 409 && data?.error === 'pass_already_active') { router.push('/profile'); return; }
+      if (data?.url) {
+        trackBeginCheckout(suggestPlan.replace('onetime_', ''), 'new');
+        window.location.href = data.url;
+        return;
+      }
+      router.push(fallback);
+    } catch {
+      router.push(fallback);
+    } finally {
+      setModalBuyLoading(false);
+    }
   }
 
   // Keyboard shortcuts: 1-4 to select answer, Enter/Space to advance
@@ -1227,7 +1265,22 @@ function TestContent() {
           <div className="bg-white rounded-2xl w-full max-w-md shadow-xl border border-[#E2E8F0] overflow-hidden">
             <div className="h-1.5 bg-gradient-to-r from-[#F59E0B] via-[#FB923C] to-[#F59E0B]" />
             <div className="p-6">
-              <h2 className="text-xl font-bold text-[#0B1C3D] mb-1 text-center">{dmv(tex.upgradeModalTitle || `20 done. The actual DMV looks just like this.`)}</h2>
+              {/* Score-aware headline: tie the moment to the state's real pass
+                  mark (factual mentor feedback, not fear copy). Below the mark →
+                  "let's fix that"; at/above → "lock it in". */}
+              {(() => {
+                const pct = Math.round((score / freeLimit) * 100);
+                const passPct = passPercentFor(state, category === 'cdl' ? 'cdl' : category === 'moto' ? 'motorcycle' : 'car') || 80;
+                const belowPass = pct < passPct;
+                const titleTpl = belowPass
+                  ? (tex.upgradeModalTitleShort || 'Below the {agency} pass mark ({passPct}%) — let’s fix that')
+                  : (tex.upgradeModalTitlePass || 'You’d pass this one. Lock it in for exam day.');
+                return (
+                  <h2 className="text-xl font-bold text-[#0B1C3D] mb-1 text-center">
+                    {titleTpl.replace('{agency}', ag).replace('{passPct}', String(passPct))}
+                  </h2>
+                );
+              })()}
               <p className="text-[#2563EB] font-bold text-sm mb-4 text-center">
                 {(tex.upgradeScoreSoFar || 'Your score: {score}/{total}')
                   .replace('{score}', String(score))
@@ -1254,15 +1307,20 @@ function TestContent() {
                   </div>
                   <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">{plan.price}</div>
                   <div className="text-[10px] text-[#64748B] mb-3">{tex.planDuration || '30-day access'}</div>
-                  <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
-                    className="w-full py-2 rounded-lg text-sm font-bold text-white transition"
+                  <button type="button" onClick={modalCheckout} disabled={modalBuyLoading}
+                    className="w-full py-2 rounded-lg text-sm font-bold text-white transition disabled:opacity-60"
                     style={{ background: isCdl ? '#0B1C3D' : isMoto ? '#D97706' : '#2563EB' }}>
-                    {tex.getIt || 'Get it'}
+                    {modalBuyLoading ? '…' : (tex.getIt || 'Get it')}
                   </button>
                 </div>
               </div>
 
-              <p className="text-center text-xs text-[#94A3B8] mb-3">{tex.cancelAnytime}</p>
+              <p className="text-center text-xs text-[#94A3B8] mb-1">{tex.cancelAnytime}</p>
+              <p className="text-center mb-3">
+                <Link href={`/upgrade?lang=${lang}`} className="text-xs text-[#94A3B8] underline hover:text-[#64748B]">
+                  {tex.seeAllPlans || 'See all plans'}
+                </Link>
+              </p>
 
               <button type="button" onClick={() => {
                 const allAnswers = userAnswersRef.current;

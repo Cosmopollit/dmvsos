@@ -7,8 +7,9 @@ import { t } from '@/lib/translations';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import { getSavedLang, saveLang } from '@/lib/lang';
-import { PLANS } from '@/lib/plans';
-import { examRulesFor } from '@/lib/exam-rules';
+import { PLANS, planForCategory } from '@/lib/plans';
+import { examRulesFor, passPercentFor } from '@/lib/exam-rules';
+import { agencyAbbrForState } from '@/lib/agencies';
 import { isInAppBrowser } from '@/lib/emailHints';
 import SupportFooter from '@/app/components/SupportFooter';
 import GradientButton from '@/app/components/GradientButton';
@@ -311,6 +312,60 @@ function ResultContent() {
           </div>
         )}
 
+        {/* Post-test upsell — ABOVE the review on purpose: this is the highest-
+            intent moment in the product, and burying the offer under 20 scrolls
+            of question review meant most users never saw it. The headline ties
+            to the state's real pass mark (same keys as the paywall modal), and
+            the CTA preselects the tested category's plan. Hidden for Pro. */}
+        {!isPro && (() => {
+          const planName = (p) => (
+            p.pass_type === 'cdl' ? tex.planCdlPro
+              : p.pass_type === 'moto' ? tex.planMotoPass
+                : tex.planAutoPass
+          );
+          const tints = {
+            moto: { bg: '#FFF7ED', color: '#D97706' },
+            auto: { bg: '#EFF6FF', color: '#2563EB' },
+            cdl: { bg: '#FEF3C7', color: '#B45309' },
+          };
+          const planArt = { moto: '/vehicles/moto-hero.png', auto: '/vehicles/mustang.png', cdl: '/vehicles/truck-hero.png' };
+          const pct = total > 0 ? Math.round((score / total) * 100) : 0;
+          const passPct = passPercentFor(state, category === 'cdl' ? 'cdl' : category === 'moto' ? 'motorcycle' : 'car') || 80;
+          const belowPass = pct < passPct;
+          const ag = agencyAbbrForState(state);
+          const headline = (belowPass
+            ? (tex.upgradeModalTitleShort || 'Below the {agency} pass mark ({passPct}%) — let’s fix that')
+            : (tex.upgradeModalTitlePass || 'You’d pass this one. Lock it in for exam day.'))
+            .replace('{agency}', ag).replace('{passPct}', String(passPct));
+          return (
+            <div className="bg-white rounded-2xl p-5 w-full border border-[#E2E8F0] shadow-sm">
+              <p className={`font-bold text-base mb-1 text-center ${belowPass ? 'text-[#B45309]' : 'text-[#15803D]'}`}>{headline}</p>
+              <p className="text-[#64748B] text-xs mb-4 text-center">{tex.unlockEverythingSub}</p>
+              <div className="flex flex-col gap-2 mb-4">
+                {PLANS.map((p) => {
+                  const tint = tints[p.pass_type] || tints.auto;
+                  return (
+                    <div key={p.pass_type} className="flex items-center gap-3 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2.5">
+                      <span
+                        className="flex items-center justify-center w-12 h-9 rounded-lg shrink-0 overflow-hidden"
+                        style={{ background: tint.bg }}
+                      >
+                        <Image src={planArt[p.pass_type] || '/vehicles/mustang.png'} alt="" width={44} height={32} className="object-contain w-full h-full" />
+                      </span>
+                      <span className="flex-1 text-sm font-semibold text-[#0B1C3D] truncate">{planName(p)}</span>
+                      <span className="text-sm font-bold" style={{ color: tint.color }}>{p.price}</span>
+                    </div>
+                  );
+                })}
+              </div>
+              <GradientButton variant="gold" href={`/upgrade?lang=${lang}&plan=${planForCategory(category).id}`}>
+                <AnimatedLock size={20} color="#0B1C3D" />
+                {tex.unlockFullAccess}
+              </GradientButton>
+            </div>
+          );
+        })()}
+
         {/* Question-by-question review */}
         {questions.length > 0 && (
           <div className="bg-white rounded-2xl p-6 w-full shadow-sm border border-[#E2E8F0]">
@@ -374,51 +429,6 @@ function ResultContent() {
             </ul>
           </div>
         )}
-
-        {/* Post-test upsell at the moment of highest motivation: the full offer
-            (all 3 passes + prices) and one strong gradient CTA, not just the
-            single category the user happened to test. Hidden for Pro users.
-            Owned-aware filtering is a separate future task. */}
-        {!isPro && (() => {
-          const planName = (p) => (
-            p.pass_type === 'cdl' ? tex.planCdlPro
-              : p.pass_type === 'moto' ? tex.planMotoPass
-                : tex.planAutoPass
-          );
-          const tints = {
-            moto: { bg: '#FFF7ED', color: '#D97706' },
-            auto: { bg: '#EFF6FF', color: '#2563EB' },
-            cdl: { bg: '#FEF3C7', color: '#B45309' },
-          };
-          const planArt = { moto: '/vehicles/moto-hero.png', auto: '/vehicles/mustang.png', cdl: '/vehicles/truck-hero.png' };
-          return (
-            <div className="bg-white rounded-2xl p-5 w-full border border-[#E2E8F0] shadow-sm">
-              <p className="text-[#0B1C3D] font-bold text-base mb-1 text-center">{tex.unlockEverything}</p>
-              <p className="text-[#64748B] text-xs mb-4 text-center">{tex.unlockEverythingSub}</p>
-              <div className="flex flex-col gap-2 mb-4">
-                {PLANS.map((p) => {
-                  const tint = tints[p.pass_type] || tints.auto;
-                  return (
-                    <div key={p.pass_type} className="flex items-center gap-3 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2.5">
-                      <span
-                        className="flex items-center justify-center w-12 h-9 rounded-lg shrink-0 overflow-hidden"
-                        style={{ background: tint.bg }}
-                      >
-                        <Image src={planArt[p.pass_type] || '/vehicles/mustang.png'} alt="" width={44} height={32} className="object-contain w-full h-full" />
-                      </span>
-                      <span className="flex-1 text-sm font-semibold text-[#0B1C3D] truncate">{planName(p)}</span>
-                      <span className="text-sm font-bold" style={{ color: tint.color }}>{p.price}</span>
-                    </div>
-                  );
-                })}
-              </div>
-              <GradientButton variant="gold" href={`/upgrade?lang=${lang}`}>
-                <AnimatedLock size={20} color="#0B1C3D" />
-                {tex.unlockFullAccess}
-              </GradientButton>
-            </div>
-          );
-        })()}
 
         {/* Buttons */}
         {wrongQuestions.length > 0 && (
