@@ -9,9 +9,16 @@ const INDEX_URL = `${SUPABASE_URL}/storage/v1/object/public/manuals/manuals-inde
 const VALID_CATS = ['car', 'cdl', 'motorcycle'];
 
 const CAT_META = {
-  car:        { label: "Driver's Handbook", icon: '🚗', testCat: 'dmv' },
-  cdl:        { label: 'CDL Manual',        icon: '🚛', testCat: 'cdl' },
-  motorcycle: { label: 'Motorcycle Handbook', icon: '🏍️', testCat: 'moto' },
+  car:        { label: "Driver's Handbook",   testCat: 'dmv' },
+  cdl:        { label: 'CDL Manual',          testCat: 'cdl' },
+  motorcycle: { label: 'Motorcycle Handbook', testCat: 'moto' },
+};
+
+// Category illustration for the download card (same art as /manuals cards).
+const CAT_ART = {
+  car:        '/illustrations/manual-car.png',
+  cdl:        '/illustrations/manual-cdl.png',
+  motorcycle: '/illustrations/manual-moto.png',
 };
 
 const LANG_LABELS = {
@@ -322,20 +329,32 @@ export default async function StateManualLangPage({ params }) {
 
         {/* Primary PDF download | big CTA */}
         <div className="bg-white rounded-2xl border-2 border-[#2563EB] p-6 mb-5 shadow-md text-center">
-          <div className="text-4xl mb-3">{catInfo.icon}</div>
+          <div className="flex justify-center mb-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={CAT_ART[cat] || '/illustrations/manual.png'} alt="" className="h-16 object-contain select-none" />
+          </div>
           <p className="text-base font-bold text-[#0B1C3D] mb-1">
             {name} {catLabel} · {nativeLabel}
           </p>
           <p className="text-xs text-[#64748B] mb-5">
             {meta.agency} · {ui.edition.replace('{year}', year)}
           </p>
+          {/* GradientButton (blue) visual, inlined on an <a> because the PDF
+              must keep opening in a new tab and GradientButton's Link does
+              not forward target/rel. */}
           <a
             href={pdfUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-[#2563EB] text-white rounded-xl font-bold text-sm hover:bg-[#1D4ED8] transition-colors shadow-md"
+            className="gradient-btn relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-2xl px-8 py-4 text-sm font-bold text-white transition-transform duration-100 active:scale-[0.98]"
+            style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #2563EB 50%, #1D4ED8 100%)', boxShadow: '0 6px 18px rgba(37,99,235,0.35)' }}
           >
-            📥 {native.download}
+            <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-1/2" style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.22), rgba(255,255,255,0))' }} />
+            <span aria-hidden="true" className="gradient-btn-shine pointer-events-none absolute inset-y-0 -left-1/2 w-1/2" />
+            <span className="relative z-10 flex items-center justify-center gap-2">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3v12" /><path d="m8 11 4 4 4-4" /><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" /></svg>
+              {native.download}
+            </span>
           </a>
           <p className="text-xs text-[#94A3B8] mt-3">{ui.opensPdf}</p>
         </div>
@@ -383,7 +402,7 @@ export default async function StateManualLangPage({ params }) {
         {otherStatesWithLang.length > 0 && (
           <div className="mb-8">
             <h2 className="text-sm font-bold text-[#0B1C3D] mb-3">
-              {catInfo.icon} {catLabel} {native.in} · {ui.otherStates}
+              {catLabel} {native.in} · {ui.otherStates}
             </h2>
             <div className="grid grid-cols-2 gap-2">
               {otherStatesWithLang.map(s => (

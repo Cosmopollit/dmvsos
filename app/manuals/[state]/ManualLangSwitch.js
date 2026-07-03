@@ -2,12 +2,13 @@
 import { saveLang } from '@/lib/lang';
 import { useRouter } from 'next/navigation';
 
+// Text-only labels (no flag emoji) — mirrors ManualsLangSwitcher.js.
 const LANGS = [
-  { code: 'en', label: 'EN', flag: '🇺🇸' },
-  { code: 'ru', label: 'RU', flag: '🇷🇺' },
-  { code: 'es', label: 'ES', flag: '🇪🇸' },
-  { code: 'zh', label: 'ZH', flag: '🇨🇳' },
-  { code: 'ua', label: 'UA', flag: '🇺🇦' },
+  { code: 'en', label: 'EN' },
+  { code: 'ru', label: 'RU' },
+  { code: 'es', label: 'ES' },
+  { code: 'zh', label: 'ZH' },
+  { code: 'ua', label: 'UA' },
 ];
 
 export default function ManualLangSwitch({ currentLang }) {
@@ -20,7 +21,7 @@ export default function ManualLangSwitch({ currentLang }) {
 
   return (
     <div className="flex gap-1.5 flex-wrap">
-      {LANGS.map(({ code, label, flag }) => (
+      {LANGS.map(({ code, label }) => (
         <button
           key={code}
           type="button"
@@ -31,7 +32,7 @@ export default function ManualLangSwitch({ currentLang }) {
               : 'bg-white border border-[#E2E8F0] text-[#64748B] hover:border-[#2563EB] hover:text-[#2563EB]'
           }`}
         >
-          {flag} {label}
+          {label}
         </button>
       ))}
     </div>

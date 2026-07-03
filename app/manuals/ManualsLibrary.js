@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { t } from '@/lib/translations';
 import StateSearchDropdown from './StateSearchDropdown';
+import GradientButton from '@/app/components/GradientButton';
 
 // Category cards shown once a state is picked — same flow as the home page:
 // choose state, choose category, go. Each routes to the manual page for that
@@ -102,7 +103,7 @@ export default function ManualsLibrary({ statesData, serverLang }) {
               <div className="font-bold text-[#0B1C3D] text-[15px]">{tex.drivingSchoolsEntryTitle || 'Find a driving school'}</div>
               <div className="text-xs text-[#64748B] mt-0.5">{tex.drivingSchoolsEntrySub || 'In your language, near you'}</div>
             </div>
-            <span className="text-[#94A3B8] text-xl shrink-0">›</span>
+            <svg width="12" height="12" viewBox="0 0 12 12" className="shrink-0 text-[#94A3B8]" aria-hidden="true"><path d="M4 2l4 4-4 4" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </Link>
         </div>
       ) : (
@@ -118,12 +119,9 @@ export default function ManualsLibrary({ statesData, serverLang }) {
       <div className="bg-[#0B1C3D] rounded-2xl p-6 text-center mt-8 mb-10">
         <p className="text-white font-bold text-base mb-1.5">{tex.manualsReady || 'Ready to practice?'}</p>
         <p className="text-[#AAB7CC] text-sm mb-5 leading-relaxed max-w-xs mx-auto">{tex.manualsReadySub || 'After studying, take a free practice test.'}</p>
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-[#2563EB] text-white rounded-xl font-semibold hover:bg-[#1D4ED8] active:scale-[0.98] transition-all text-sm"
-        >
+        <GradientButton href="/" variant="blue" className="max-w-xs mx-auto">
           {tex.manualsReadyCta || 'Take a free practice test'}
-        </Link>
+        </GradientButton>
       </div>
 
       {/* SEO: crawler-discoverable links to every state manual page. Hidden

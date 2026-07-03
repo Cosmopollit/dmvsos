@@ -8,6 +8,8 @@ import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { useAuth } from '@/lib/AuthContext';
 import { SERVICE_CATEGORIES } from '@/lib/services';
+import GradientButton from '@/app/components/GradientButton';
+import AnimatedLock from '@/app/components/AnimatedLock';
 
 const langs = [
   { label: 'EN', code: 'en' },
@@ -20,7 +22,7 @@ const langs = [
 // Distinct hue per category (teal / amber / violet / green) so no two cards
 // blend, mirroring the app. Each ships its transparent illustration that bleeds
 // off the right edge of the gradient card. Categories without art fall back to
-// their emoji glyph in a soft circle (FALLBACK_VISUAL).
+// a plain gradient (FALLBACK_VISUAL).
 const CARD_VISUALS = {
   instructor:        { grad: ['#14B8A6', '#0D9488', '#134E4A'], img: '/services/instructor.png', imgAspect: 1.518, imgH: 86 },
   courses:           { grad: ['#F59E0B', '#B45309', '#7C2D12'], img: '/services/courses.png', imgAspect: 1.371, imgH: 90 },
@@ -77,7 +79,8 @@ function ServicesContent() {
         <div className="relative">
           <button type="button" onClick={() => setShowLangMenu(v => !v)} onBlur={() => setTimeout(() => setShowLangMenu(false), 150)}
             className="flex items-center gap-1 text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-2.5 py-1.5 hover:border-[#2563EB] transition-colors">
-            <span>{currentLang.label}</span><span className="text-[#94A3B8] text-[10px] ml-0.5">▾</span>
+            <span>{currentLang.label}</span>
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none" className="ml-0.5 text-[#94A3B8]" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </button>
           {showLangMenu && (
             <div className="absolute right-0 top-full mt-1 bg-white border border-[#E2E8F0] rounded-xl shadow-lg z-50 py-1 min-w-[90px]">
@@ -107,7 +110,7 @@ function ServicesContent() {
         {/* Pro lock banner */}
         {!isPro && (
           <div className="bg-[#FEF3C7] border border-[#FDE68A] rounded-xl p-3 mb-4 flex items-start gap-2">
-            <span className="text-lg leading-none mt-0.5">✨</span>
+            <AnimatedLock size={18} color="#92400E" className="mt-0.5" />
             <p className="text-sm text-[#92400E] font-semibold leading-snug flex-1">
               {tex.servicesLockedBody || 'Finding nearby help is part of Pro. Unlock it with any pass.'}
             </p>
@@ -118,7 +121,6 @@ function ServicesContent() {
             bleeding off the right, matching the app. */}
         <div className="flex flex-col gap-3">
           {SERVICE_CATEGORIES.map(cat => {
-            const locked = !isPro;
             const soon = cat.status === 'soon';
             const v = CARD_VISUALS[cat.id] || FALLBACK_VISUAL;
             const imgW = Math.round((v.imgH || 80) * (v.imgAspect || 1));
@@ -142,13 +144,14 @@ function ServicesContent() {
                   <div className="font-bold text-white text-[17px]" style={{ letterSpacing: '-0.2px' }}>{tex[cat.titleKey] || cat.id}</div>
                   {soon ? (
                     <span className="inline-flex items-center gap-1 mt-1.5 rounded-full bg-white/20 border border-white/35 pl-[7px] pr-[9px] py-[3px] text-[11px] font-extrabold uppercase tracking-wide text-white">
-                      🔒 {tex.soonTag || 'Soon'}
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" /><rect x="4.5" y="10" width="15" height="10.5" rx="2.5" stroke="currentColor" strokeWidth="2.5" /></svg>
+                      {tex.soonTag || 'Soon'}
                     </span>
                   ) : null}
                   <div className="text-[13px] text-white/90 mt-1 leading-[18px] line-clamp-2">{tex[cat.descKey] || ''}</div>
                 </div>
 
-                {/* Illustration bleeding off the right (fallback: emoji glyph) */}
+                {/* Illustration bleeding off the right (every category ships art) */}
                 {v.img ? (
                   <span aria-hidden="true" className="pointer-events-none absolute right-[-6px] top-0 bottom-0 z-[1] flex items-center justify-end">
                     <Image
@@ -160,17 +163,6 @@ function ServicesContent() {
                       style={{ opacity: soon ? 0.5 : 1, width: imgW, height: v.imgH || 80 }}
                     />
                   </span>
-                ) : (
-                  <span aria-hidden="true" className="pointer-events-none absolute right-[18px] top-0 bottom-0 z-[1] flex items-center">
-                    <span className="w-[52px] h-[52px] rounded-2xl bg-white/20 flex items-center justify-center text-2xl">{cat.icon}</span>
-                  </span>
-                )}
-
-                {/* Lock / chevron chip — only when there's no illustration to keep the art clean */}
-                {!soon && !v.img ? (
-                  <span className="pointer-events-none absolute top-3 right-3 z-[3] min-w-[26px] h-[26px] px-2 rounded-full bg-white/[0.22] flex items-center justify-center text-white text-sm">
-                    {locked ? <span aria-label="locked">🔒</span> : '›'}
-                  </span>
                 ) : null}
               </button>
             );
@@ -178,13 +170,13 @@ function ServicesContent() {
         </div>
 
         {!isPro && (
-          <button
-            type="button"
+          <GradientButton
             onClick={() => router.push(`/upgrade?lang=${lang}`)}
-            className="w-full mt-5 bg-[#2563EB] text-white py-4 rounded-xl font-bold text-base hover:bg-[#1D4ED8] transition"
+            variant="gold"
+            className="mt-5"
           >
             {tex.servicesUnlockCta || 'Unlock with Pro'}
-          </button>
+          </GradientButton>
         )}
       </div>
     </main>

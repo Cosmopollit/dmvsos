@@ -3,6 +3,7 @@ import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 import SiteHeader from '@/app/components/SiteHeader';
 import SupportFooter from '@/app/components/SupportFooter';
 import FreeOnly from '@/app/components/FreeOnly';
+import GradientButton from '@/app/components/GradientButton';
 import { t } from '@/lib/translations';
 
 const year = new Date().getFullYear();
@@ -94,7 +95,9 @@ export default function DmvTestHubBody({ lang }) {
                       {STATE_META[state].abbr} · {tex.freeTestLink || 'Free test'}
                     </div>
                   </div>
-                  <span className="text-xs text-[#2563EB] opacity-0 group-hover:opacity-100 transition-opacity shrink-0"></span>
+                  <span className="text-[#2563EB] opacity-0 group-hover:opacity-100 transition-opacity shrink-0" aria-hidden="true">
+                    <svg width="9" height="9" viewBox="0 0 12 12" style={{ fill: 'currentColor' }}><path d="M4 1l5 5-5 5z" /></svg>
+                  </span>
                 </div>
               </Link>
             ))}
@@ -112,12 +115,9 @@ export default function DmvTestHubBody({ lang }) {
               </span>
             </div>
           </FreeOnly>
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-[#2563EB] text-white rounded-xl font-semibold hover:bg-[#1D4ED8] transition-colors text-sm"
-          >
+          <GradientButton href="/" className="max-w-xs mx-auto">
             {tex.startPracticing || 'Start Practicing'}
-          </Link>
+          </GradientButton>
         </div>
 
       </main>

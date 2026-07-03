@@ -10,6 +10,7 @@ import { STATE_DISPLAY } from '@/lib/manual-data';
 import { curatedFor, mapsSearchUrl, webSearchUrl } from '@/lib/driving-schools';
 import { logServiceLead } from '@/lib/services';
 import StateSearchDropdown from '@/app/manuals/StateSearchDropdown';
+import GradientButton from '@/app/components/GradientButton';
 
 const langs = [
   { label: 'EN', code: 'en' },
@@ -54,7 +55,8 @@ function DrivingSchoolsContent() {
         <div className="relative">
           <button type="button" onClick={() => setShowLangMenu(v => !v)} onBlur={() => setTimeout(() => setShowLangMenu(false), 150)}
             className="flex items-center gap-1 text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-2.5 py-1.5 hover:border-[#2563EB] transition-colors">
-            <span>{currentLang.label}</span><span className="text-[#94A3B8] text-[10px] ml-0.5">▾</span>
+            <span>{currentLang.label}</span>
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none" className="ml-0.5 text-[#94A3B8]" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </button>
           {showLangMenu && (
             <div className="absolute right-0 top-full mt-1 bg-white border border-[#E2E8F0] rounded-xl shadow-lg z-50 py-1 min-w-[90px]">
@@ -100,7 +102,7 @@ function DrivingSchoolsContent() {
           )}
           {lang !== 'en' && (
             <p className="text-xs text-[#2563EB] mt-3 flex items-start gap-1.5">
-              <span>🌐</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 mt-px" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M3 12h18" /><path d="M12 3a13.5 13.5 0 0 1 0 18 13.5 13.5 0 0 1 0-18z" /></svg>
               <span>{tex.drivingSchoolsLangNote || 'We will find driving schools near you.'}</span>
             </p>
           )}
@@ -118,13 +120,15 @@ function DrivingSchoolsContent() {
                 {s.note && <p className="text-xs text-[#94A3B8] italic mt-1">{s.note}</p>}
                 <div className="flex gap-4 mt-3">
                   {s.phone && (
-                    <a href={`tel:${s.phone}`} className="text-sm font-semibold text-[#2563EB] hover:underline">
-                      📞 {tex.drivingSchoolsCallLabel || 'Call'}
+                    <a href={`tel:${s.phone}`} className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#2563EB] hover:underline">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.4 2.1L8 10a16 16 0 0 0 6 6l1.3-1.4a2 2 0 0 1 2.1-.4c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2z" /></svg>
+                      {tex.drivingSchoolsCallLabel || 'Call'}
                     </a>
                   )}
                   {s.url && (
-                    <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-[#2563EB] hover:underline">
-                      🌐 {tex.drivingSchoolsWebsiteLabel || 'Website'}
+                    <a href={s.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#2563EB] hover:underline">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M3 12h18" /><path d="M12 3a13.5 13.5 0 0 1 0 18 13.5 13.5 0 0 1 0-18z" /></svg>
+                      {tex.drivingSchoolsWebsiteLabel || 'Website'}
                     </a>
                   )}
                 </div>
@@ -132,14 +136,14 @@ function DrivingSchoolsContent() {
             ))}
 
             {/* Primary CTA — Google Maps */}
-            <button
-              type="button"
+            <GradientButton
               onClick={() => { logServiceLead('instructor', state, lang); open(mapsSearchUrl(state, lang)); }}
-              className="w-full bg-[#2563EB] text-white py-4 rounded-xl font-bold text-base flex items-center justify-center gap-2 hover:bg-[#1D4ED8] transition mb-3"
+              variant="blue"
+              className="mb-3"
             >
-              <span>🗺️</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 21s-7-5.4-7-11a7 7 0 0 1 14 0c0 5.6-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" /></svg>
               {tex.drivingSchoolsFindOnMap || 'Find on the map'}
-            </button>
+            </GradientButton>
 
             {/* Secondary — plain web search */}
             <button
@@ -147,7 +151,7 @@ function DrivingSchoolsContent() {
               onClick={() => { logServiceLead('instructor', state, lang); open(webSearchUrl(state, lang)); }}
               className="w-full bg-white border border-[#E2E8F0] text-[#2563EB] py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:border-[#2563EB] transition mb-4"
             >
-              <span>🔍</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
               {tex.drivingSchoolsSearchWeb || 'Search the web'}
             </button>
 

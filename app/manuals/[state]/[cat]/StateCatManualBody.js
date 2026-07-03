@@ -4,6 +4,7 @@ import { t } from '@/lib/translations';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 import { examRulesFor } from '@/lib/exam-rules';
 import { agencyAbbrForState } from '@/lib/agencies';
+import GradientButton from '@/app/components/GradientButton';
 
 // Local i18n for the user-visible strings on this page. Kept self-contained so
 // shared files stay untouched. Metadata + JSON-LD stay English on purpose.
@@ -151,7 +152,6 @@ const CAT_META = {
   car: {
     label: "Driver's Handbook",
     labelFull: "Driver's Handbook / DMV Manual",
-    icon: '🚗',
     testLabel: 'DMV Written Test',
     testCat: 'dmv',
     descSuffix: 'car license written knowledge test',
@@ -179,7 +179,6 @@ const CAT_META = {
   cdl: {
     label: 'CDL Manual',
     labelFull: 'Commercial Driver License Manual',
-    icon: '🚛',
     testLabel: 'CDL Knowledge Test',
     testCat: 'cdl',
     descSuffix: 'commercial driver license (CDL) knowledge test',
@@ -207,7 +206,6 @@ const CAT_META = {
   motorcycle: {
     label: 'Motorcycle Handbook',
     labelFull: 'Motorcycle Rider Handbook',
-    icon: '🏍️',
     testLabel: 'Motorcycle Knowledge Test',
     testCat: 'moto',
     descSuffix: 'motorcycle license written knowledge test',
@@ -234,12 +232,11 @@ const CAT_META = {
   },
 };
 
-const LANG_FLAGS = {
-  en: '🇺🇸', es: '🇪🇸', ru: '🇷🇺', zh: '🇨🇳', ua: '🇺🇦',
-  vi: '🇻🇳', ko: '🇰🇷', ar: '🇸🇦', fr: '🇫🇷', de: '🇩🇪',
-  hy: '🇦🇲', hi: '🇮🇳', pa: '🇮🇳', ht: '🇭🇹', so: '🇸🇴',
-  sw: '🇰🇪', my: '🇲🇲', ne: '🇳🇵', pt: '🇧🇷', ja: '🇯🇵', hmn: '🌿',
-  tl: '🇵🇭', sm: '🇼🇸', to: '🇹🇴', haw: '🌺', mh: '🇲🇭', ilo: '🇵🇭', chk: '🇫🇲',
+// Brand illustration per manual category (used by the "other manuals" links).
+const CAT_ART = {
+  car: '/illustrations/manual-car.png',
+  cdl: '/illustrations/manual-cdl.png',
+  motorcycle: '/illustrations/manual-moto.png',
 };
 
 const LANG_LABELS = {
@@ -480,7 +477,6 @@ export default async function StateCatManualBody({ lang, state, cat }) {
                   className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-[#E2E8F0] bg-white hover:border-[#2563EB] hover:bg-[#EFF6FF] transition-all"
                 >
                   <span className="flex items-center gap-2.5 text-sm font-medium text-[#1A2B4A]">
-                    <span className="text-lg leading-none">{LANG_FLAGS[langCode] || '📄'}</span>
                     {LANG_LABELS[langCode] || langCode.toUpperCase()}
                   </span>
                   <span className="flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] shrink-0">
@@ -522,12 +518,13 @@ export default async function StateCatManualBody({ lang, state, cat }) {
           <p className="text-sm text-[#94A3B8] mb-4">
             {tx.practiceSub({ name, label: catInfo.label })}
           </p>
-          <Link
+          <GradientButton
             href={`/test?state=${state}&category=${catInfo.testCat}&lang=${lang}`}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-[#2563EB] text-white rounded-xl font-semibold hover:bg-[#1D4ED8] transition-colors text-sm"
+            variant="blue"
+            className="max-w-xs mx-auto"
           >
             {tx.takeFreeTest({ testLabel: catInfo.testLabel })}
-          </Link>
+          </GradientButton>
         </div>
 
         {/* FAQ */}
@@ -557,7 +554,8 @@ export default async function StateCatManualBody({ lang, state, cat }) {
                 href={`/manuals/${state}/${c}`}
                 className="p-3 rounded-xl border border-[#E2E8F0] bg-white hover:border-[#2563EB] hover:shadow-sm transition-all text-sm font-medium text-[#1A2B4A] hover:text-[#2563EB] flex items-center gap-2"
               >
-                <span>{CAT_META[c].icon}</span>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={CAT_ART[c]} alt="" className="w-8 h-8 object-contain shrink-0 select-none" />
                 <span>{CAT_META[c].label}</span>
               </Link>
             ))}
@@ -573,7 +571,10 @@ export default async function StateCatManualBody({ lang, state, cat }) {
         {/* Nearby states | same category */}
         <div className="mb-8">
           <h2 className="text-sm font-bold text-[#0B1C3D] mb-3">
-            {tx.inNearbyStates({ icon: catInfo.icon, label: catInfo.label })}
+            {/* Icon slot intentionally empty: the emoji was dropped for the
+                2026-06 brand system; trim() removes the leftover leading space
+                without touching the i18n template signature. */}
+            {tx.inNearbyStates({ icon: '', label: catInfo.label }).trim()}
           </h2>
           <div className="grid grid-cols-2 gap-2">
             {neighbors.slice(0, 4).map(s => (

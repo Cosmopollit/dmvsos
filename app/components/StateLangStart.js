@@ -52,7 +52,7 @@ export default function StateLangStart({ state, lang = 'en', startFree = 'Start 
                   role="option"
                   aria-selected={l.code === sel}
                   onMouseDown={() => { setSel(l.code); setOpen(false); }}
-                  className={`w-full text-left px-4 py-2 text-sm font-medium hover:bg-white/[0.06] transition-colors ${l.code === sel ? 'text-[#60A5FA]' : 'text-white/80'}`}
+                  className={`w-full text-left px-4 py-2 text-sm font-medium hover:bg-white/[0.06] transition-colors ${l.code === sel ? 'text-[#F59E0B]' : 'text-white/80'}`}
                 >
                   {l.label}
                 </button>
@@ -68,7 +68,7 @@ export default function StateLangStart({ state, lang = 'en', startFree = 'Start 
       </div>
 
       {!isPro && noteFree && (
-        <p className="relative text-xs text-[#64748B] mt-4 text-center">{noteFree}</p>
+        <p className="relative text-xs text-[#94A3B8] mt-4 text-center">{noteFree}</p>
       )}
     </>
   );

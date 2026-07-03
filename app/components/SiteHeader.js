@@ -68,7 +68,7 @@ export default function SiteHeader({ initialLang = 'en' }) {
               className="flex items-center gap-1 text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-2.5 py-1.5 hover:border-[#2563EB] transition-colors"
             >
               <span>{currentLang.label}</span>
-              <span className="text-[#94A3B8] text-[10px] ml-0.5">▾</span>
+              <svg width="9" height="9" viewBox="0 0 12 12" className="ml-0.5 shrink-0" style={{ fill: '#94A3B8' }}><path d="M6 8L1 3h10z" /></svg>
             </button>
             {showLangMenu && (
               <div className="absolute right-0 top-full mt-1 bg-white border border-[#E2E8F0] rounded-xl shadow-lg z-50 py-1 min-w-[110px]">
@@ -100,7 +100,7 @@ export default function SiteHeader({ initialLang = 'en' }) {
                   <div className="w-6 h-6 rounded-full bg-[#0B1C3D] flex items-center justify-center text-white text-[10px] font-bold shrink-0">
                     {initial}
                   </div>
-                  <span className="hidden sm:block text-xs font-medium text-[#1E293B] max-w-[80px] truncate">{firstName}</span>
+                  <span className="hidden sm:block text-xs font-medium text-[#0B1C3D] max-w-[80px] truncate">{firstName}</span>
                   {isPro && ['cdl', 'cdl_pass', 'guaranteed_pass'].includes(planType) && (
                     <span className="hidden sm:inline text-[10px] font-semibold bg-[#FEF3C7] text-[#B45309] px-1.5 py-0.5 rounded-full whitespace-nowrap">CDL Pro</span>
                   )}
@@ -108,16 +108,16 @@ export default function SiteHeader({ initialLang = 'en' }) {
                     <span className="hidden sm:inline text-[10px] font-semibold bg-[#DBEAFE] text-[#1D4ED8] px-1.5 py-0.5 rounded-full whitespace-nowrap">Auto Pass</span>
                   )}
                   {isPro && ['moto', 'moto_pass', 'quick_pass'].includes(planType) && (
-                    <span className="hidden sm:inline text-[10px] font-semibold bg-[#F3F4F6] text-[#4B5563] px-1.5 py-0.5 rounded-full whitespace-nowrap">Moto Pass</span>
+                    <span className="hidden sm:inline text-[10px] font-semibold bg-[#F1F5F9] text-[#64748B] px-1.5 py-0.5 rounded-full whitespace-nowrap">Moto Pass</span>
                   )}
                   {!isPro && (
-                    <span className="hidden sm:inline text-[10px] font-semibold bg-[#F3F4F6] text-[#9CA3AF] px-1.5 py-0.5 rounded-full whitespace-nowrap">{tex.freeBadge || 'Free'}</span>
+                    <span className="hidden sm:inline text-[10px] font-semibold bg-[#F1F5F9] text-[#64748B] px-1.5 py-0.5 rounded-full whitespace-nowrap">{tex.freeBadge || 'Free'}</span>
                   )}
                 </button>
                 <button onClick={handleSignOut} type="button"
                   className="text-[11px] text-[#94A3B8] hover:text-[#64748B] hover:underline transition"
                   aria-label="Sign out">
-                  ✕
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
                 </button>
               </div>
             );

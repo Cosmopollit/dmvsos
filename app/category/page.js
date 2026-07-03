@@ -12,9 +12,9 @@ import { STATE_OPTIONS } from '@/lib/states';
 // art the mobile app and home page use) — keeps the look consistent across
 // web + native. Maps mirror HomeClient's vehicle → category pairing.
 const categories = [
-  { id: 'dmv',  img: '/vehicles/mustang.png',   titleKey: 'catCar',  descKey: 'carDesc',   color: '#2563EB', gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' },
-  { id: 'cdl',  img: '/vehicles/truck-hero.png', titleKey: 'catCdl',  descKey: 'truckDesc', color: '#0EA5E9', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)' },
-  { id: 'moto', img: '/vehicles/moto-hero.png',  titleKey: 'catMoto', descKey: 'motoDesc',  color: '#D97706', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)' },
+  { id: 'dmv',  img: '/vehicles/mustang.png',   titleKey: 'catCar',  descKey: 'carDesc',   gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' },
+  { id: 'cdl',  img: '/vehicles/truck-hero.png', titleKey: 'catCdl',  descKey: 'truckDesc', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)' },
+  { id: 'moto', img: '/vehicles/moto-hero.png',  titleKey: 'catMoto', descKey: 'motoDesc',  gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)' },
 ];
 
 const langs = [
@@ -70,7 +70,7 @@ function CategoryContent() {
             className="flex items-center gap-1 text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-2.5 py-1.5 hover:border-[#2563EB] transition-colors"
           >
             <span>{currentLang.label}</span>
-            <span className="text-[#94A3B8] text-[10px] ml-0.5">▾</span>
+            <svg width="9" height="9" viewBox="0 0 12 12" className="ml-0.5 shrink-0" style={{ fill: '#94A3B8' }}><path d="M6 8L1 3h10z" /></svg>
           </button>
           {showLangMenu && (
             <div className="absolute right-0 top-full mt-1 bg-white border border-[#E2E8F0] rounded-xl shadow-lg z-50 py-1 min-w-[90px]">
@@ -93,7 +93,7 @@ function CategoryContent() {
         {stateName && (
           <p className="text-sm font-semibold text-[#2563EB] mb-1 uppercase tracking-wide">{stateName}</p>
         )}
-        <h2 className="text-xl font-bold text-[#1E293B] mb-1">{tex.chooseTest}</h2>
+        <h2 className="text-xl font-bold text-[#0B1C3D] mb-1">{tex.chooseTest}</h2>
         <p className="text-sm text-[#94A3B8]">{tex.selectLicense}</p>
       </div>
 
@@ -116,7 +116,7 @@ function CategoryContent() {
                 <Image src={cat.img} alt="" aria-hidden="true" width={64} height={64} className="rounded-xl object-contain select-none pointer-events-none" />
               </div>
               <div className="flex-1 min-w-0">
-                <span className="font-bold text-[#1E293B] text-lg">{tex[cat.titleKey]}</span>
+                <span className="font-bold text-[#0B1C3D] text-lg">{tex[cat.titleKey]}</span>
                 <div className="text-sm text-[#64748B] mt-0.5">{tex[cat.descKey]}</div>
               </div>
               <div className="text-[#94A3B8] text-lg shrink-0"></div>

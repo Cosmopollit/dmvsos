@@ -151,7 +151,8 @@ export default function WelcomeBanner() {
         <div className="relative max-w-3xl mx-auto px-5 py-4 sm:py-5 flex items-center gap-4">
           <div className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center"
                style={{ background: 'rgba(245, 158, 11, 0.15)', border: '1px solid rgba(245, 158, 11, 0.4)' }}>
-            <span className="text-2xl sm:text-3xl">🎉</span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/illustrations/trophy.png" alt="" aria-hidden="true" className="w-10 h-10 object-contain" />
           </div>
 
           <div className="flex-1 min-w-0">
@@ -176,7 +177,7 @@ export default function WelcomeBanner() {
             onClick={handleDismiss}
             aria-label="Dismiss"
             className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-colors">
-            ✕
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
           </button>
         </div>
 
@@ -209,7 +210,8 @@ export default function WelcomeBanner() {
          }}>
       <div className="max-w-3xl mx-auto px-5 py-4 sm:py-5 flex items-center gap-4">
         <div className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center bg-white shadow-sm border border-[#E2E8F0]">
-          <span className="text-2xl sm:text-3xl">👋</span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/illustrations/key.png" alt="" aria-hidden="true" className="w-10 h-10 object-contain" />
         </div>
 
         <div className="flex-1 min-w-0">
@@ -234,7 +236,7 @@ export default function WelcomeBanner() {
           onClick={handleDismiss}
           aria-label="Dismiss"
           className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-[#94A3B8] hover:text-[#475569] hover:bg-white/60 transition-colors">
-          ✕
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
       </div>
 

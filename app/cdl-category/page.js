@@ -8,9 +8,9 @@ import { getSavedLang, saveLang } from '@/lib/lang';
 import { STATE_OPTIONS } from '@/lib/states';
 
 const cdlSubs = [
-  { id: 'general_knowledge', img: '/illustrations/cdl-general.png',      titleKey: 'cdlGeneral',     descKey: 'cdlGeneralDesc',     gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)', accent: '#0EA5E9' },
-  { id: 'air_brakes',        img: '/illustrations/cdl-brakes.png',       titleKey: 'cdlAirBrakes',   descKey: 'cdlAirBrakesDesc',   gradient: 'linear-gradient(135deg, #EEF2FF, #E0E7FF)', accent: '#6366F1' },
-  { id: 'combination_vehicles', img: '/illustrations/cdl-combination.png', titleKey: 'cdlCombination', descKey: 'cdlCombinationDesc', gradient: 'linear-gradient(135deg, #F5F3FF, #EDE9FE)', accent: '#8B5CF6' },
+  { id: 'general_knowledge', img: '/illustrations/cdl-general.png',      titleKey: 'cdlGeneral',     descKey: 'cdlGeneralDesc',     gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)' },
+  { id: 'air_brakes',        img: '/illustrations/cdl-brakes.png',       titleKey: 'cdlAirBrakes',   descKey: 'cdlAirBrakesDesc',   gradient: 'linear-gradient(135deg, #EEF2FF, #E0E7FF)' },
+  { id: 'combination_vehicles', img: '/illustrations/cdl-combination.png', titleKey: 'cdlCombination', descKey: 'cdlCombinationDesc', gradient: 'linear-gradient(135deg, #F5F3FF, #EDE9FE)' },
 ];
 
 const langs = [
@@ -65,7 +65,7 @@ function CdlCategoryContent() {
             className="flex items-center gap-1 text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-2.5 py-1.5 hover:border-[#2563EB] transition-colors"
           >
             <span>{currentLang.label}</span>
-            <span className="text-[#94A3B8] text-[10px] ml-0.5">▾</span>
+            <svg width="9" height="9" viewBox="0 0 12 12" className="ml-0.5 shrink-0" style={{ fill: '#94A3B8' }}><path d="M6 8L1 3h10z" /></svg>
           </button>
           {showLangMenu && (
             <div className="absolute right-0 top-full mt-1 bg-white border border-[#E2E8F0] rounded-xl shadow-lg z-50 py-1 min-w-[90px]">
@@ -91,7 +91,7 @@ function CdlCategoryContent() {
         <div className="flex justify-center mb-3">
           <img src="/vehicles/truck-hero.png" alt="" width={96} height={48} className="object-contain select-none" />
         </div>
-        <h2 className="text-xl font-bold text-[#1E293B] mb-1">{tex.catCdl || 'CDL Test'}</h2>
+        <h2 className="text-xl font-bold text-[#0B1C3D] mb-1">{tex.catCdl || 'CDL Test'}</h2>
         <p className="text-sm text-[#94A3B8]">{tex.cdlChooseSub || 'Choose a test section'}</p>
       </div>
 
@@ -109,7 +109,7 @@ function CdlCategoryContent() {
                 utility (btn-shine keyframe) as an absolute overlay strip. */}
             <span aria-hidden="true" className="gradient-btn-shine pointer-events-none absolute top-0 bottom-0 -left-1/4 w-1/3 z-20" />
             <div className="flex-1 min-w-0 z-10">
-              <span className="font-bold text-[#1E293B] text-lg block">{tex[sub.titleKey] || sub.id.replace(/_/g, ' ')}</span>
+              <span className="font-bold text-[#0B1C3D] text-lg block">{tex[sub.titleKey] || sub.id.replace(/_/g, ' ')}</span>
               <div className="text-sm text-[#64748B] mt-0.5 leading-snug">{tex[sub.descKey] || ''}</div>
             </div>
             {/* Illustration tucked into the right side of the card — capped

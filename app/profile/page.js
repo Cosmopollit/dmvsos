@@ -11,6 +11,7 @@ import { PASS_META, EXTENSION } from '@/lib/plans';
 import { trackBeginCheckout } from '@/lib/gtag';
 import { examRulesFor } from '@/lib/exam-rules';
 import SupportFooter from '@/app/components/SupportFooter';
+import GradientButton from '@/app/components/GradientButton';
 import AccountSettings from './AccountSettings';
 
 const langs = [
@@ -130,7 +131,7 @@ function ProfileContent() {
           <div className="relative">
             <button type="button" onClick={() => setShowLangMenu(v => !v)} onBlur={() => setTimeout(() => setShowLangMenu(false), 150)}
               className="flex items-center gap-1 text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-2.5 py-1.5 hover:border-[#2563EB] transition-colors">
-              <span>{currentLang.label}</span><span className="text-[#94A3B8] text-[10px] ml-0.5">▾</span>
+              <span>{currentLang.label}</span><svg width="9" height="9" viewBox="0 0 12 12" className="ml-0.5 shrink-0" style={{ fill: '#94A3B8' }}><path d="M6 8L1 3h10z" /></svg>
             </button>
             {showLangMenu && (
               <div className="absolute right-0 top-full mt-1 bg-white border border-[#E2E8F0] rounded-xl shadow-lg z-50 py-1 min-w-[90px]">
@@ -154,10 +155,13 @@ function ProfileContent() {
               {user.email?.[0].toUpperCase()}
             </div>
           )}
-          <h2 className="text-xl font-bold text-[#1E293B] mb-1">{user.user_metadata?.full_name || tex.signInTitle || 'User'}</h2>
+          <h2 className="text-xl font-bold text-[#0B1C3D] mb-1">{user.user_metadata?.full_name || tex.signInTitle || 'User'}</h2>
           <p className="text-sm text-[#94A3B8] mb-5">{user.email}</p>
-          <span className={`inline-block text-xs font-bold px-3 py-1.5 rounded-full ${isPro ? 'bg-[#FEF3C7] text-[#B45309]' : 'bg-[#EFF6FF] text-[#2563EB]'}`}>
-            {isPro ? `👑 ${tex.proBadge}` : tex.freeBadge}
+          <span className={`inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-full ${isPro ? 'bg-[#FEF3C7] text-[#B45309]' : 'bg-[#EFF6FF] text-[#2563EB]'}`}>
+            {isPro && (
+              <svg viewBox="0 0 24 24" fill="#B45309" width="14" height="14" className="shrink-0" aria-hidden="true"><path d="M3 8l4 4 5-6 5 6 4-4v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" /></svg>
+            )}
+            {isPro ? tex.proBadge : tex.freeBadge}
           </span>
           {isPro && planType && (
             <p className="text-xs text-[#64748B] mt-2 mb-1">
@@ -171,20 +175,22 @@ function ProfileContent() {
             </p>
           )}
           {isPro && (
-            <p className="text-sm text-[#16A34A] font-medium mb-4">{tex.proFullAccess || '✅ You have full access to all tests'}</p>
+            <p className="text-sm text-[#16A34A] font-medium mb-4 flex items-center justify-center gap-1.5">
+              <svg width="16" height="16" viewBox="0 0 16 16" className="shrink-0" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="#16A34A" /><path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" /></svg>
+              <span>{(tex.proFullAccess || 'You have full access to all tests').replace(/^✅\s*/u, '')}</span>
+            </p>
           )}
           {!isPro && planType && (
             <p className="text-xs text-[#DC2626] mt-2 mb-4">{tex.planExpired || 'Your plan has expired'}</p>
           )}
           <div className="flex flex-col gap-3">
             {!isPro && (
-              <button type="button" onClick={() => router.push(`/upgrade?lang=${lang}`)}
-                className="w-full bg-[#F59E0B] text-[#0B1C3D] py-3.5 rounded-xl font-semibold text-sm hover:bg-[#FBBF24] transition border-0">
+              <GradientButton variant="gold" onClick={() => router.push(`/upgrade?lang=${lang}`)}>
                 {tex.upgradeCta}
-              </button>
+              </GradientButton>
             )}
             <button type="button" onClick={async () => { await supabase.auth.signOut(); router.push('/'); }}
-              className="w-full bg-white border border-[#E2E8F0] text-[#1E293B] py-3.5 rounded-xl font-semibold text-sm hover:border-[#94A3B8] hover:bg-[#F8FAFC] transition">
+              className="w-full bg-white border border-[#E2E8F0] text-[#0B1C3D] py-3.5 rounded-xl font-semibold text-sm hover:border-[#94A3B8] hover:bg-[#F8FAFC] transition">
               {tex.signOut || 'Sign Out'}
             </button>
           </div>
@@ -196,14 +202,14 @@ function ProfileContent() {
             <div className="space-y-3">
               {passEntries.map(([type, exp]) => {
                 const left = daysLeft(exp);
-                const meta = PASS_DISPLAY[type] || { icon: '🎫', label: type };
+                const meta = PASS_DISPLAY[type] || { label: type };
                 const lowDays = left <= 3;
                 return (
                   <div key={type} className="flex items-center gap-3 p-3 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC]">
                     {meta.art ? (
                       <img src={meta.art} alt="" width={48} height={32} className="shrink-0 select-none object-contain" />
                     ) : (
-                      <span className="text-2xl">{meta.icon}</span>
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#64748B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0" aria-hidden="true"><path d="M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 6v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-6z" /><path d="M13 5v2M13 11v2M13 17v2" /></svg>
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-bold text-[#0B1C3D]">{meta.label}</div>
@@ -241,7 +247,7 @@ function ProfileContent() {
             <div className="font-bold text-[#0B1C3D] text-[15px]">{tex.servicesHubTitle || 'Find help nearby'}</div>
             <div className="text-xs text-[#64748B] mt-0.5 leading-snug">{tex.drivingSchoolsEntrySub || 'In your language, near you'}</div>
           </div>
-          <span className="text-[#94A3B8] text-xl shrink-0">›</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
         </button>
 
         {sessions.length > 0 && (
@@ -279,18 +285,18 @@ function ProfileContent() {
                           className="rounded-xl px-4 py-3 border border-[#E2E8F0] text-left text-sm bg-white"
                         >
                           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                            <span className="font-medium text-[#1E293B]">{formatState(s.state)}</span>
+                            <span className="font-medium text-[#0B1C3D]">{formatState(s.state)}</span>
                             <span className="text-[#94A3B8]">·</span>
-                            <span className="text-[#1E293B]">{formatCategory(s.category, tex)}</span>
+                            <span className="text-[#0B1C3D]">{formatCategory(s.category, tex)}</span>
                             <span className="text-[#94A3B8]">·</span>
                             <span className="font-semibold">{s.score}/{s.total}</span>
                             <span className="text-[#94A3B8]">{formatDate(s.created_at)}</span>
                             <span
                               className={`ml-auto inline-block text-xs font-semibold px-2 py-0.5 rounded-full ${
-                                passed ? 'bg-[#F0FDF4] text-[#16A34A]' : 'bg-[#FEF2F2] text-[#DC2626]'
+                                passed ? 'bg-[#F0FDF4] text-[#15803D]' : 'bg-[#FEF2F2] text-[#DC2626]'
                               }`}
                             >
-                              {passed ? (tex.passed || 'Passed') : (tex.notPassed || 'Not passed')}
+                              {(passed ? (tex.passed || 'Passed') : (tex.notPassed || 'Not passed')).replace(/[✅❌]/gu, '').trim()}
                             </span>
                           </div>
                         </li>

@@ -47,7 +47,7 @@ function Row({ label, active, onClick, danger, children }) {
         className={`w-full text-left px-4 py-3 flex items-center justify-between text-sm font-medium ${danger ? 'text-[#DC2626]' : 'text-[#1E293B]'}`}
       >
         <span>{label}</span>
-        <span className="text-xs text-[#94A3B8]">{active ? '−' : '+'}</span>
+        <svg width="9" height="9" viewBox="0 0 12 12" className={`ml-0.5 shrink-0 transition-transform ${active ? 'rotate-180' : ''}`} style={{ fill: '#94A3B8' }} aria-hidden="true"><path d="M6 8L1 3h10z" /></svg>
       </button>
       {active && <div className="px-4 pb-4">{children}</div>}
     </div>

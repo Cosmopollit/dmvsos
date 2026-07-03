@@ -320,7 +320,7 @@ export default function HomeClient({ initialLang = 'en' }) {
 
       {/* Background blobs */}
       <div className="fixed top-[-200px] right-[-200px] w-[600px] h-[600px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(26,86,219,0.08) 0%, transparent 70%)' }} />
+        style={{ background: 'radial-gradient(circle, rgba(37,99,235,0.08) 0%, transparent 70%)' }} />
       <div className="fixed bottom-[-150px] left-[-150px] w-[500px] h-[500px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 70%)' }} />
 
@@ -375,7 +375,7 @@ export default function HomeClient({ initialLang = 'en' }) {
                     <div className="w-6 h-6 rounded-full bg-[#0B1C3D] flex items-center justify-center text-white text-[10px] font-bold shrink-0">
                       {initial}
                     </div>
-                    <span className="hidden sm:block text-xs font-medium text-[#1E293B] max-w-[80px] truncate">{firstName}</span>
+                    <span className="hidden sm:block text-xs font-medium text-[#0B1C3D] max-w-[80px] truncate">{firstName}</span>
                     {isPro && ['cdl', 'cdl_pass', 'guaranteed_pass'].includes(planType) && (
                       <span className="hidden sm:inline text-[10px] font-semibold bg-[#FEF3C7] text-[#B45309] px-1.5 py-0.5 rounded-full whitespace-nowrap">CDL Pro</span>
                     )}
@@ -383,16 +383,16 @@ export default function HomeClient({ initialLang = 'en' }) {
                       <span className="hidden sm:inline text-[10px] font-semibold bg-[#DBEAFE] text-[#1D4ED8] px-1.5 py-0.5 rounded-full whitespace-nowrap">Auto Pass</span>
                     )}
                     {isPro && ['moto', 'moto_pass', 'quick_pass'].includes(planType) && (
-                      <span className="hidden sm:inline text-[10px] font-semibold bg-[#F3F4F6] text-[#4B5563] px-1.5 py-0.5 rounded-full whitespace-nowrap">Moto Pass</span>
+                      <span className="hidden sm:inline text-[10px] font-semibold bg-[#F1F5F9] text-[#64748B] px-1.5 py-0.5 rounded-full whitespace-nowrap">Moto Pass</span>
                     )}
                     {!isPro && (
-                      <span className="hidden sm:inline text-[10px] font-semibold bg-[#F3F4F6] text-[#9CA3AF] px-1.5 py-0.5 rounded-full whitespace-nowrap">{tex.freeBadge || 'Free'}</span>
+                      <span className="hidden sm:inline text-[10px] font-semibold bg-[#F1F5F9] text-[#94A3B8] px-1.5 py-0.5 rounded-full whitespace-nowrap">{tex.freeBadge || 'Free'}</span>
                     )}
                   </button>
                   <button onClick={handleSignOut} type="button"
                     className="text-[11px] text-[#94A3B8] hover:text-[#64748B] hover:underline transition"
                     aria-label="Sign out">
-                    ✕
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
                   </button>
                 </div>
               );
@@ -451,7 +451,7 @@ export default function HomeClient({ initialLang = 'en' }) {
                 className="text-[#94A3B8] hover:text-[#64748B] text-sm px-1 shrink-0"
                 aria-label="Dismiss"
               >
-                ✕
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
               </button>
             </div>
           </div>
@@ -486,7 +486,7 @@ export default function HomeClient({ initialLang = 'en' }) {
           <button
             type="button"
             onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
-            className="group hero-trust-pill inline-flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 cursor-pointer"
+            className="group hero-trust-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full transition-all duration-300 cursor-pointer max-w-[320px]"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" className="shrink-0" style={{ overflow: 'visible' }}>
               <rect x="6" y="11" width="12" height="9" rx="2" fill="#0B1C3D" />
@@ -499,10 +499,8 @@ export default function HomeClient({ initialLang = 'en' }) {
                 strokeLinecap="round"
               />
             </svg>
-            <span className="text-[14px] font-semibold tracking-tight" style={{ color: '#0B1C3D', letterSpacing: '-0.01em' }}>
+            <span className="text-[13px] font-semibold tracking-tight" style={{ color: '#0B1C3D', letterSpacing: '-0.01em' }}>
               {tex.heroTrustLine}
-            </span>
-            <span className="hero-trust-arrow text-sm" style={{ color: '#94A3B8' }}>
             </span>
           </button>
         )}
@@ -566,15 +564,6 @@ export default function HomeClient({ initialLang = 'en' }) {
           .hero-trust-pill:hover .hero-trust-shackle {
             transform: rotate(-30deg) translateX(-1px);
           }
-          .hero-trust-arrow {
-            opacity: 0;
-            transform: translateX(-4px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-          }
-          .hero-trust-pill:hover .hero-trust-arrow {
-            opacity: 1;
-            transform: translateX(0);
-          }
         `}</style>
       </section>
 
@@ -597,8 +586,8 @@ export default function HomeClient({ initialLang = 'en' }) {
             aria-label={tex.selectStateLabel}
             value={state}
             onChange={e => setState(e.target.value)}
-            className="w-full py-4 px-4 rounded-xl border-2 border-gray-100 focus:border-blue-500 outline-none text-base bg-white text-gray-700 cursor-pointer appearance-none"
-            style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 16px center' }}
+            className="w-full py-4 px-4 rounded-xl border-2 border-[#E2E8F0] focus:border-[#2563EB] outline-none text-base bg-white text-[#475569] cursor-pointer appearance-none"
+            style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394A3B8' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 16px center' }}
           >
             <option value="">{tex.selectState}</option>
             {stateOptions.map(s => (
@@ -680,9 +669,9 @@ export default function HomeClient({ initialLang = 'en' }) {
       <div className="w-full max-w-lg mx-auto px-4 mb-4">
         <Link
           href="/manuals"
-          className="flex items-center gap-3 bg-blue-50 rounded-2xl px-4 py-4 shadow-sm border border-blue-100 border-l-4 border-l-blue-500 hover:bg-blue-100 hover:shadow-md transition-all group"
+          className="flex items-center gap-3 bg-[#EFF6FF] rounded-2xl px-4 py-4 shadow-sm border border-[#DBEAFE] border-l-4 border-l-[#2563EB] hover:bg-[#DBEAFE] hover:shadow-md transition-all group"
         >
-          <div className="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center shrink-0 group-hover:bg-blue-200 transition-colors">
+          <div className="w-11 h-11 rounded-xl bg-[#DBEAFE] flex items-center justify-center shrink-0 group-hover:bg-[#BFDBFE] transition-colors">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/illustrations/manual.png" alt="" aria-hidden="true" className="w-9 h-9 object-contain" />
           </div>
@@ -691,13 +680,12 @@ export default function HomeClient({ initialLang = 'en' }) {
               <span className="text-sm font-bold text-[#0B1C3D] group-hover:text-[#2563EB]">
                 {tex.manualsSectionTitle}
               </span>
-              <span className="text-[10px] font-bold bg-blue-500 text-white px-1.5 py-0.5 rounded-full leading-none">FREE</span>
+              <span className="text-[10px] font-bold bg-[#2563EB] text-white px-1.5 py-0.5 rounded-full leading-none">FREE</span>
             </div>
             <div className="text-[11px] text-[#64748B]">
               {tex.manualsSectionDesc}
             </div>
           </div>
-          <div className="text-blue-400 shrink-0 group-hover:text-blue-600 font-bold"></div>
         </Link>
       </div>
 
@@ -904,7 +892,7 @@ export default function HomeClient({ initialLang = 'en' }) {
               {tex.servicesHubSubtitle}
             </div>
           </div>
-          <div className="text-[#5EEAD4] shrink-0 group-hover:text-[#0D9488] font-bold">›</div>
+          <svg width="12" height="12" viewBox="0 0 12 12" className="shrink-0 text-[#5EEAD4] group-hover:text-[#0D9488]" style={{ fill: 'currentColor' }} aria-hidden="true"><path d="M4 1l5 5-5 5z" /></svg>
         </Link>
       </div>
 
@@ -1066,14 +1054,14 @@ export default function HomeClient({ initialLang = 'en' }) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logo.png" alt="" aria-hidden="true" className="w-[24px] h-[24px] rounded-md" />
               <span className="text-[12px] font-bold tracking-[0.14em] text-[#0B1C3D]">DMVSOS</span>
-              <span className="ml-auto text-[9px] font-semibold tracking-[0.16em] text-[#A3B2C6] uppercase">{agencyLabel}</span>
+              <span className="ml-auto text-[9px] font-semibold tracking-[0.16em] text-[#94A3B8] uppercase">{agencyLabel}</span>
             </div>
 
-            <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-[13px] leading-tight items-center text-[#1E293B] mb-4">
-              <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">CLASS</span><span className="font-semibold whitespace-nowrap">Car &middot; Moto &middot; CDL</span>
-              <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">COVERAGE</span><span className="font-semibold">{tex.licRowCoverage || 'All 50 states'}</span>
-              <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">LANGUAGES</span><span className="font-semibold">{tex.licRowLangs || '5 languages'}</span>
-              <span className="font-semibold text-[9.5px] text-[#A3B2C6] tracking-[0.1em]">BANK</span><span className="font-semibold">{tex.licRowBank || '25,000+ questions'}</span>
+            <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-[13px] leading-tight items-center text-[#0B1C3D] mb-4">
+              <span className="font-semibold text-[9.5px] text-[#94A3B8] tracking-[0.1em]">CLASS</span><span className="font-semibold whitespace-nowrap">Car &middot; Moto &middot; CDL</span>
+              <span className="font-semibold text-[9.5px] text-[#94A3B8] tracking-[0.1em]">COVERAGE</span><span className="font-semibold">{tex.licRowCoverage || 'All 50 states'}</span>
+              <span className="font-semibold text-[9.5px] text-[#94A3B8] tracking-[0.1em]">LANGUAGES</span><span className="font-semibold">{tex.licRowLangs || '5 languages'}</span>
+              <span className="font-semibold text-[9.5px] text-[#94A3B8] tracking-[0.1em]">BANK</span><span className="font-semibold">{tex.licRowBank || '25,000+ questions'}</span>
             </div>
 
             <button

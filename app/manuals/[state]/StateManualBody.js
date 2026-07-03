@@ -4,17 +4,10 @@ import { t } from '@/lib/translations';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 import { agencyAbbrForState } from '@/lib/agencies';
 import ManualLangSwitch from './ManualLangSwitch';
+import GradientButton from '@/app/components/GradientButton';
 
 const SUPABASE_URL = 'https://yaogndpgnewqffbjrsgz.supabase.co';
 const INDEX_URL = `${SUPABASE_URL}/storage/v1/object/public/manuals/manuals-index.json`;
-
-const LANG_FLAGS = {
-  en: '🇺🇸', es: '🇪🇸', ru: '🇷🇺', zh: '🇨🇳', ua: '🇺🇦',
-  vi: '🇻🇳', ko: '🇰🇷', ar: '🇸🇦', fr: '🇫🇷', de: '🇩🇪',
-  hy: '🇦🇲', hi: '🇮🇳', pa: '🇮🇳', ht: '🇭🇹', so: '🇸🇴',
-  sw: '🇰🇪', my: '🇲🇲', ne: '🇳🇵', pt: '🇧🇷', ja: '🇯🇵', hmn: '🌿',
-  tl: '🇵🇭', sm: '🇼🇸', to: '🇹🇴', haw: '🌺', mh: '🇲🇭', ilo: '🇵🇭', chk: '🇫🇲',
-};
 
 const LANG_LABELS = {
   en: 'English', es: 'Español', zh: '中文', ru: 'Русский', ua: 'Українська',
@@ -24,7 +17,13 @@ const LANG_LABELS = {
   tl: 'Filipino', sm: 'Samoa', to: 'Faka-Tonga', haw: 'ʻŌlelo Hawaiʻi', mh: 'Kajin M̧ajeļ', ilo: 'Ilocano', chk: 'Chuukese',
 };
 
-const CAT_ICONS = { car: '🚗', cdl: '🚛', motorcycle: '🏍️' };
+// Brand illustration per manual category (shared by the quick-link chips and
+// the PDF section headers below).
+const CAT_ART = {
+  car: '/illustrations/manual-car.png',
+  cdl: '/illustrations/manual-cdl.png',
+  motorcycle: '/illustrations/manual-moto.png',
+};
 const CAT_LABELS_KEY = { car: 'catCar', cdl: 'catCdl', motorcycle: 'catMoto' };
 
 async function fetchManualIndex() {
@@ -159,7 +158,6 @@ export default async function StateManualBody({ lang, state }) {
         {pdfCats.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-5">
             {pdfCats.map(cat => {
-              const icons = { car: '🚗', cdl: '🚛', motorcycle: '🏍️' };
               const labels = { car: "Driver's Handbook", cdl: 'CDL Manual', motorcycle: 'Motorcycle Handbook' };
               return (
                 <Link
@@ -167,7 +165,9 @@ export default async function StateManualBody({ lang, state }) {
                   href={`/manuals/${state}/${cat}`}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#E2E8F0] bg-white hover:border-[#2563EB] hover:bg-[#EFF6FF] hover:text-[#2563EB] transition-all text-xs font-semibold text-[#475569]"
                 >
-                  {icons[cat]} {labels[cat]}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={CAT_ART[cat]} alt="" className="w-6 h-6 object-contain shrink-0 select-none" />
+                  {labels[cat]}
                 </Link>
               );
             })}
@@ -177,14 +177,21 @@ export default async function StateManualBody({ lang, state }) {
         {/* PDF Downloads | grouped by category */}
         {pdfCats.length > 0 && (
           <div className="bg-white rounded-2xl border border-[#E2E8F0] p-5 mb-5 shadow-sm">
-            <h2 className="text-base font-bold text-[#0B1C3D] mb-4">
-              📥 {tex.manualsDownloadPdf}
+            <h2 className="flex items-center gap-2 text-base font-bold text-[#0B1C3D] mb-4">
+              <span className="inline-flex items-center justify-center w-7 h-7 bg-[#EFF6FF] rounded-lg shrink-0">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M12 3v12" /><path d="m7 11 5 5 5-5" /><path d="M5 21h14" />
+                </svg>
+              </span>
+              {tex.manualsDownloadPdf}
             </h2>
             <div className="space-y-4">
               {pdfCats.map(cat => (
                 <div key={cat}>
-                  <p className="text-sm font-semibold text-[#0B1C3D] mb-2">
-                    {CAT_ICONS[cat]} {tex[CAT_LABELS_KEY[cat]] || cat}
+                  <p className="flex items-center gap-2 text-sm font-semibold text-[#0B1C3D] mb-2">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={CAT_ART[cat]} alt="" className="w-10 h-10 object-contain shrink-0 select-none" />
+                    {tex[CAT_LABELS_KEY[cat]] || cat}
                   </p>
                   <div className="flex flex-col gap-2">
                     {pdfByCategory[cat].map(({ langCode, url }) => (
@@ -196,7 +203,6 @@ export default async function StateManualBody({ lang, state }) {
                         className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-[#E2E8F0] bg-white hover:border-[#2563EB] hover:bg-[#EFF6FF] transition-all"
                       >
                         <span className="flex items-center gap-2.5 text-sm font-medium text-[#1A2B4A]">
-                          <span className="text-lg leading-none">{LANG_FLAGS[langCode] || '📄'}</span>
                           {LANG_LABELS[langCode] || langCode.toUpperCase()}
                         </span>
                         <span className="flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] shrink-0">
@@ -222,12 +228,13 @@ export default async function StateManualBody({ lang, state }) {
           <p className="text-sm text-[#94A3B8] mb-4">
             {dmv(tex.manualsTestDesc.replace('{state}', name))}
           </p>
-          <Link
+          <GradientButton
             href={`/category?state=${state}&lang=${lang}`}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-[#2563EB] text-white rounded-xl font-semibold hover:bg-[#1D4ED8] transition-colors text-sm"
+            variant="blue"
+            className="max-w-xs mx-auto"
           >
             {tex.manualsTakeTest.replace('{state}', name)}
-          </Link>
+          </GradientButton>
         </div>
 
         {/* Done reading? CTA */}
@@ -238,12 +245,13 @@ export default async function StateManualBody({ lang, state }) {
           <p className="text-sm text-[#64748B] mb-4">
             {tex.manualsDoneReadingDesc || 'Test your knowledge with real DMV questions'}
           </p>
-          <Link
+          <GradientButton
             href={`/category?state=${state}&lang=${lang}`}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-[#2563EB] text-white rounded-xl font-semibold hover:bg-[#1D4ED8] transition-colors text-sm"
+            variant="blue"
+            className="max-w-xs mx-auto"
           >
             {tex.manualsTakeTest.replace('{state}', name)}
-          </Link>
+          </GradientButton>
         </div>
 
         {/* Other states */}

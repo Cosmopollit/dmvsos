@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { getSavedLang } from '@/lib/lang';
 import { t } from '@/lib/translations';
+import SiteHeader from '@/app/components/SiteHeader';
 
 // Local, page-scoped translations for the About page. Keyed by language code.
 // Metadata + JSON-LD stay English on purpose (SEO / cookieless crawler = en).
@@ -37,7 +37,7 @@ const ABOUT_I18N = {
     whereFrom: 'Where the questions come from',
     where1:
       "We’re not selling you leaked exam answers. Nobody legitimate has those. Every question is written from the official state Driver Handbook (the same source the real DMV exam draws from), in the same format and difficulty. We cite the exact section of the handbook under each question.",
-    where2Pre: 'If you spot a question that looks wrong, there’s a 🐛 Report button under every answer. It goes straight to our team via Telegram, and we fix the question that day or the next.',
+    where2Pre: 'If you spot a question that looks wrong, there’s a Report button under every answer. It goes straight to our team via Telegram, and we fix the question that day or the next.',
     support: 'Support',
     supportPre: 'No call center, no chatbot maze. Write to us on Telegram: ',
     supportMid: ' or email ',
@@ -77,7 +77,7 @@ const ABOUT_I18N = {
     whereFrom: 'Откуда берутся вопросы',
     where1:
       'Мы не продаём вам «слитые» ответы с экзамена. Ни у кого честного их нет. Каждый вопрос составлен по официальному руководству водителя штата (тот же источник, из которого берёт вопросы настоящий экзамен DMV), в том же формате и той же сложности. Под каждым вопросом мы указываем точный раздел руководства.',
-    where2Pre: 'Если вы заметили вопрос, который кажется неверным, под каждым ответом есть кнопка 🐛 «Сообщить». Она напрямую попадает к нашей команде через Telegram, и мы исправляем вопрос в тот же день или на следующий.',
+    where2Pre: 'Если вы заметили вопрос, который кажется неверным, под каждым ответом есть кнопка «Сообщить». Она напрямую попадает к нашей команде через Telegram, и мы исправляем вопрос в тот же день или на следующий.',
     support: 'Поддержка',
     supportPre: 'Никаких колл-центров и лабиринтов из чат-ботов. Пишите нам в Telegram: ',
     supportMid: ' или на почту ',
@@ -117,7 +117,7 @@ const ABOUT_I18N = {
     whereFrom: 'De dónde vienen las preguntas',
     where1:
       'No te vendemos respuestas filtradas del examen. Nadie legítimo las tiene. Cada pregunta se redacta a partir del Manual del Conductor oficial del estado (la misma fuente de la que sale el examen real del DMV), con el mismo formato y dificultad. Citamos la sección exacta del manual debajo de cada pregunta.',
-    where2Pre: 'Si encuentras una pregunta que parece incorrecta, hay un botón 🐛 «Reportar» debajo de cada respuesta. Llega directo a nuestro equipo por Telegram, y corregimos la pregunta ese mismo día o al siguiente.',
+    where2Pre: 'Si encuentras una pregunta que parece incorrecta, hay un botón «Reportar» debajo de cada respuesta. Llega directo a nuestro equipo por Telegram, y corregimos la pregunta ese mismo día o al siguiente.',
     support: 'Soporte',
     supportPre: 'Sin centros de llamadas ni laberintos de chatbots. Escríbenos por Telegram: ',
     supportMid: ' o por correo ',
@@ -157,7 +157,7 @@ const ABOUT_I18N = {
     whereFrom: '题目从何而来',
     where1:
       '我们不会向你兜售所谓泄露的考试答案，正规渠道根本没有这种东西。每道题都依据各州官方驾驶手册编写（与真实 DMV 考试同源），格式和难度一致。每道题下方都会标注手册的具体章节。',
-    where2Pre: '如果你发现某道题看起来有误，每个答案下方都有一个 🐛 报告按钮。它会通过 Telegram 直接发给我们的团队，我们会在当天或第二天修正这道题。',
+    where2Pre: '如果你发现某道题看起来有误，每个答案下方都有一个 报告按钮。它会通过 Telegram 直接发给我们的团队，我们会在当天或第二天修正这道题。',
     support: '支持',
     supportPre: '没有呼叫中心，也没有绕来绕去的聊天机器人。通过 Telegram 联系我们：',
     supportMid: ' 或发邮件至 ',
@@ -197,7 +197,7 @@ const ABOUT_I18N = {
     whereFrom: 'Звідки беруться запитання',
     where1:
       'Ми не продаємо вам «зливи» відповідей з іспиту. У жодної чесної людини їх немає. Кожне запитання складено за офіційним посібником водія штату (те саме джерело, з якого бере запитання справжній іспит DMV), у тому самому форматі та з тією самою складністю. Під кожним запитанням ми вказуємо точний розділ посібника.',
-    where2Pre: 'Якщо ви помітили запитання, яке здається хибним, під кожною відповіддю є кнопка 🐛 «Повідомити». Вона напряму потрапляє до нашої команди через Telegram, і ми виправляємо запитання того ж дня або наступного.',
+    where2Pre: 'Якщо ви помітили запитання, яке здається хибним, під кожною відповіддю є кнопка «Повідомити». Вона напряму потрапляє до нашої команди через Telegram, і ми виправляємо запитання того ж дня або наступного.',
     support: 'Підтримка',
     supportPre: 'Жодних колл-центрів і лабіринтів із чат-ботів. Пишіть нам у Telegram: ',
     supportMid: ' або на пошту ',
@@ -239,15 +239,12 @@ export default function AboutPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] py-10 px-4">
+    <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div className="max-w-2xl mx-auto">
-        {/* Logo + nav */}
-        <Link href="/" className="inline-flex items-center gap-2 mb-8 hover:opacity-90 transition">
-          <Image src="/logo.png" alt="DMVSOS" width={36} height={36} className="rounded-xl" />
-          <span className="text-[22px] font-bold text-[#0B1C3D] tracking-tight">DMVSOS</span>
-        </Link>
 
+      <SiteHeader initialLang={lang} />
+
+      <main className="w-full max-w-2xl mx-auto px-4 pt-4 pb-10 flex-1">
         <article className="bg-white rounded-2xl p-8 sm:p-10 shadow-sm border border-[#E2E8F0]">
           <h1 className="text-3xl font-bold text-[#0B1C3D] mb-2">{tx.title}</h1>
           <p className="text-[#64748B] text-sm mb-8">{tx.tagline}</p>
@@ -327,7 +324,7 @@ export default function AboutPage() {
             {tex.home || 'Home'}
           </Link>
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }

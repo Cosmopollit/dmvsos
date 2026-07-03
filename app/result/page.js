@@ -34,7 +34,7 @@ function ScoreRing({ percent, passPercent, passed, size = 188, stroke = 16, chil
   return (
     <div className="relative" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="absolute inset-0">
-        <circle cx={cx} cy={cx} r={r} stroke="#EEF2F7" strokeWidth={stroke} fill="none" />
+        <circle cx={cx} cy={cx} r={r} stroke="#F1F5F9" strokeWidth={stroke} fill="none" />
         <circle
           className="score-ring-arc"
           cx={cx}
@@ -201,7 +201,7 @@ function ResultContent() {
           <div className="relative">
             <button type="button" onClick={() => setShowLangMenu(v => !v)} onBlur={() => setTimeout(() => setShowLangMenu(false), 150)}
               className="flex items-center gap-1 text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-2.5 py-1.5 hover:border-[#2563EB] transition-colors">
-              <span>{currentLang.label}</span><span className="text-[#94A3B8] text-[10px] ml-0.5">▾</span>
+              <span>{currentLang.label}</span><svg width="9" height="9" viewBox="0 0 12 12" className="ml-0.5 shrink-0" style={{ fill: '#94A3B8' }}><path d="M6 8L1 3h10z" /></svg>
             </button>
             {showLangMenu && (
               <div className="absolute right-0 top-full mt-1 bg-white border border-[#E2E8F0] rounded-xl shadow-lg z-50 py-1 min-w-[90px]">
@@ -239,10 +239,10 @@ function ResultContent() {
 
           <div
             className={`inline-block px-4 py-1.5 rounded-full text-sm font-bold mt-5 ${
-              passed ? 'bg-[#F0FDF4] text-[#16A34A]' : 'bg-[#FEF2F2] text-[#DC2626]'
+              passed ? 'bg-[#F0FDF4] text-[#15803D]' : 'bg-[#FEF2F2] text-[#DC2626]'
             }`}
           >
-            {passed ? tex.passed : tex.notPassed}
+            {(passed ? tex.passed : tex.notPassed).replace(/[✅❌]/gu, '').trim()}
           </div>
 
           <p className="text-[#94A3B8] text-xs mt-2.5">
@@ -275,7 +275,12 @@ function ResultContent() {
         {/* Sign in to save results */}
         {!user && (
           <div className="bg-white rounded-2xl p-6 w-full shadow-sm border border-[#E2E8F0] text-center">
-            <h3 className="text-lg font-bold text-[#0B1C3D] mb-1">💾 {tex.saveResults}</h3>
+            <h3 className="text-lg font-bold text-[#0B1C3D] mb-1 flex items-center justify-center gap-2">
+              <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-[#EFF6FF] shrink-0">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" /></svg>
+              </span>
+              {tex.saveResults}
+            </h3>
             <p className="text-sm text-[#94A3B8] mb-4">{tex.saveSubtext}</p>
             {inApp ? (
               <div className="rounded-xl border border-[#F59E0B] bg-[#FEF3C7] p-3 text-left">
@@ -286,7 +291,7 @@ function ResultContent() {
                 <button
                   type="button"
                   onClick={handleGoogleSignIn}
-                  className="w-full bg-white text-[#1E293B] border border-[#E2E8F0] py-3 rounded-xl font-medium text-sm flex items-center justify-center gap-3 hover:bg-[#F8FAFC] hover:border-[#2563EB] transition-all"
+                  className="w-full bg-white text-[#0B1C3D] border border-[#E2E8F0] py-3 rounded-xl font-medium text-sm flex items-center justify-center gap-3 hover:bg-[#F8FAFC] hover:border-[#2563EB] transition-all"
                 >
                   <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2.04a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3z"/></svg>
                   {tex.continueGoogle}
@@ -388,9 +393,15 @@ function ResultContent() {
                       </div>
                     )}
                     <div className="flex gap-2 items-start">
-                      <span className="text-lg shrink-0">{correct ? '✅' : '❌'}</span>
+                      <span className="shrink-0 mt-0.5">
+                        {correct ? (
+                          <svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8" fill="#16A34A" /><path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" /></svg>
+                        ) : (
+                          <svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8" fill="#DC2626" /><path d="M5.2 5.2l5.6 5.6M10.8 5.2l-5.6 5.6" stroke="#fff" strokeWidth="2" strokeLinecap="round" /></svg>
+                        )}
+                      </span>
                       <div className="min-w-0">
-                        <p className="text-sm font-medium text-[#1E293B]">
+                        <p className="text-sm font-medium text-[#0B1C3D]">
                           {stripQuestion(q.question)}
                         </p>
                         {!correct && correctText != null && (
@@ -410,9 +421,9 @@ function ResultContent() {
                               onClick={() => setExpandedRefs(prev => ({ ...prev, [i]: !prev[i] }))}
                               className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] bg-white border border-[#BFDBFE] rounded-full px-3 py-1.5 hover:bg-[#EFF6FF] hover:border-[#2563EB] transition-all"
                             >
-                              <span className="text-sm">📖</span>
+                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0"><path d="M4 5a2 2 0 0 1 2-2h7v16H6a2 2 0 0 0-2 2V5z" /><path d="M13 3h5a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2h-5" /></svg>
                               <span>{q.manualSection || 'Driver Manual'}</span>
-                              <span className="text-[10px] opacity-70">{expandedRefs[i] ? '▲' : '▼'}</span>
+                              <svg width="9" height="9" viewBox="0 0 12 12" className={`ml-0.5 shrink-0 opacity-70 transition-transform ${expandedRefs[i] ? 'rotate-180' : ''}`} fill="currentColor"><path d="M6 8L1 3h10z" /></svg>
                             </button>
                             {expandedRefs[i] && (
                               <p className="mt-2 text-xs text-[#1E40AF] italic border-l-2 border-[#2563EB] pl-3 leading-relaxed">
@@ -445,14 +456,14 @@ function ResultContent() {
         <button
           type="button"
           onClick={() => router.push(`/category?state=${state}&lang=${lang}`)}
-          className="w-full bg-white border border-[#E2E8F0] text-[#1E293B] py-3.5 rounded-xl font-semibold text-base hover:border-[#2563EB] hover:text-[#2563EB] hover:bg-[#F8FAFC] transition-all"
+          className="w-full bg-white border border-[#E2E8F0] text-[#0B1C3D] py-3.5 rounded-xl font-semibold text-base hover:border-[#2563EB] hover:text-[#2563EB] hover:bg-[#F8FAFC] transition-all"
         >
           {tex.tryAgain}
         </button>
         <button
           type="button"
           onClick={() => router.push('/')}
-          className="w-full bg-white border border-[#E2E8F0] text-[#1E293B] py-3.5 rounded-xl font-semibold text-base hover:border-[#2563EB] hover:text-[#2563EB] hover:bg-[#F8FAFC] transition-all"
+          className="w-full bg-white border border-[#E2E8F0] text-[#0B1C3D] py-3.5 rounded-xl font-semibold text-base hover:border-[#2563EB] hover:text-[#2563EB] hover:bg-[#F8FAFC] transition-all"
         >
           {tex.home}
         </button>

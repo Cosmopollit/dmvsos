@@ -244,7 +244,7 @@ function LoginContent() {
         </Link>
         {awaitingConfirmEmail ? (
           <>
-            <h1 className="text-lg font-bold text-[#1E293B] text-center mb-2">{tex.checkYourEmailTitle}</h1>
+            <h1 className="text-lg font-bold text-[#0B1C3D] text-center mb-2">{tex.checkYourEmailTitle}</h1>
             <p className="text-sm text-[#64748B] text-center mb-6">
               {(tex.confirmEmailSentTo || '').replace('{email}', awaitingConfirmEmail)}
             </p>
@@ -309,7 +309,7 @@ function LoginContent() {
             <button
               onClick={handleGoogleSignIn}
               type="button"
-              className="w-full bg-white text-[#1E293B] border border-[#E2E8F0] py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#F8FAFC] hover:border-[#2563EB] transition-all"
+              className="w-full bg-white text-[#0B1C3D] border border-[#E2E8F0] py-3 rounded-xl font-medium text-[15px] flex items-center justify-center gap-3 mb-3 hover:bg-[#F8FAFC] hover:border-[#2563EB] transition-all"
             >
               <GoogleIcon />
               {tex.continueGoogle}
@@ -352,7 +352,7 @@ function LoginContent() {
             onChange={e => setEmail(e.target.value)}
             placeholder={tex.emailPlaceholder}
             required
-            className="w-full px-4 py-3 rounded-xl border border-[#E2E8F0] text-sm text-[#1E293B] placeholder-[#94A3B8] focus:border-[#2563EB] focus:outline-none transition"
+            className="w-full px-4 py-3 rounded-xl border border-[#E2E8F0] text-sm text-[#0B1C3D] placeholder-[#94A3B8] focus:border-[#2563EB] focus:outline-none transition"
           />
           {/* Domain-typo suggestion (gamil.com → gmail.com). One tap fixes
               the email. Catches the silent-bounce signup failure. */}
@@ -376,7 +376,7 @@ function LoginContent() {
             placeholder={tex.passwordPlaceholder}
             required
             minLength={6}
-            className="w-full px-4 py-3 rounded-xl border border-[#E2E8F0] text-sm text-[#1E293B] placeholder-[#94A3B8] focus:border-[#2563EB] focus:outline-none transition"
+            className="w-full px-4 py-3 rounded-xl border border-[#E2E8F0] text-sm text-[#0B1C3D] placeholder-[#94A3B8] focus:border-[#2563EB] focus:outline-none transition"
           />
           {emailError && <p className="text-xs text-[#DC2626]">{emailError}</p>}
           {oauthCollision && (

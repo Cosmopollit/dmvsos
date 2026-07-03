@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { getServerLang } from '@/lib/lang-server';
+import SiteHeader from '@/app/components/SiteHeader';
+import GradientButton from '@/app/components/GradientButton';
 
 export const metadata = {
   title: 'DMVSOS vs DriversEd, Aceable, Driving-Tests | 2026 Comparison',
@@ -612,15 +613,12 @@ export default async function VsPage() {
   const rows = COMPARISON_I18N[lang] || COMPARISON_I18N.en;
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] py-10 px-4">
+    <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <div className="max-w-4xl mx-auto">
-        <Link href="/" className="inline-flex items-center gap-2 mb-8 hover:opacity-90 transition">
-          <Image src="/logo.png" alt="DMVSOS" width={36} height={36} className="rounded-xl" />
-          <span className="text-[22px] font-bold text-[#0B1C3D] tracking-tight">DMVSOS</span>
-        </Link>
+      <SiteHeader initialLang={lang} />
 
+      <main className="w-full max-w-4xl mx-auto px-4 pt-4 pb-10 flex-1">
         <header className="mb-8">
           <h1 className="text-3xl font-bold text-[#0B1C3D] mb-2">
             {tx.h1}
@@ -680,10 +678,10 @@ export default async function VsPage() {
           <p className="text-sm text-[#475569] mb-4">
             {tx.ctaText}
           </p>
+          <GradientButton href="/" variant="blue" className="mb-3">
+            {tx.ctaStart}
+          </GradientButton>
           <div className="flex flex-wrap gap-3">
-            <Link href="/" className="inline-flex items-center gap-2 bg-[#2563EB] text-white px-5 py-3 rounded-xl font-semibold text-sm hover:bg-[#1D4ED8] transition">
-              {tx.ctaStart}
-            </Link>
             <Link href="/manuals" className="inline-flex items-center gap-2 bg-white border border-[#E2E8F0] text-[#1E293B] px-5 py-3 rounded-xl font-semibold text-sm hover:border-[#2563EB] hover:text-[#2563EB] transition">
               {tx.ctaManuals}
             </Link>
@@ -696,7 +694,7 @@ export default async function VsPage() {
         <p className="mt-8 text-xs text-[#94A3B8] text-center leading-relaxed">
           {tx.disclaimer}
         </p>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }

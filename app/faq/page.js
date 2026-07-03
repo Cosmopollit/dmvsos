@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { useState } from 'react';
 import { getSavedLang } from '@/lib/lang';
+import SiteHeader from '@/app/components/SiteHeader';
 
 // English Q&A, also the source for the FAQPage JSON-LD schema (kept English on purpose:
 // a cookieless crawler resolves the visible FAQ to `en`, matching this schema).
@@ -50,7 +50,7 @@ const QA = [
   },
   {
     q: 'How can I report a wrong answer or bad translation?',
-    a: 'Every question has a small 🐛 Report button under the explanation. Tap it, pick a reason (wrong answer, bad translation, unclear, etc.), optionally add a comment. The report goes straight to our team on Telegram and we fix it the same day or the next.',
+    a: 'Every question has a small Report button under the explanation. Tap it, pick a reason (wrong answer, bad translation, unclear, etc.), optionally add a comment. The report goes straight to our team on Telegram and we fix it the same day or the next.',
   },
   {
     q: 'Is my payment information secure?',
@@ -121,7 +121,7 @@ const FAQ_I18N = {
       },
       {
         q: 'Как сообщить о неправильном ответе или плохом переводе?',
-        a: 'Под пояснением к каждому вопросу есть маленькая кнопка 🐛 Report. Нажмите её, выберите причину (неверный ответ, плохой перевод, непонятно и т. д.), при желании добавьте комментарий. Сообщение сразу попадает к нашей команде в Telegram, и мы исправляем в тот же день или на следующий.',
+        a: 'Под пояснением к каждому вопросу есть маленькая кнопка Report. Нажмите её, выберите причину (неверный ответ, плохой перевод, непонятно и т. д.), при желании добавьте комментарий. Сообщение сразу попадает к нашей команде в Telegram, и мы исправляем в тот же день или на следующий.',
       },
       {
         q: 'Безопасны ли мои платёжные данные?',
@@ -183,7 +183,7 @@ const FAQ_I18N = {
       },
       {
         q: '¿Cómo reporto una respuesta incorrecta o una mala traducción?',
-        a: 'Cada pregunta tiene un pequeño botón 🐛 Report debajo de la explicación. Tócalo, elige un motivo (respuesta incorrecta, mala traducción, poco claro, etc.) y, si quieres, añade un comentario. El reporte llega directo a nuestro equipo en Telegram y lo corregimos el mismo día o al siguiente.',
+        a: 'Cada pregunta tiene un pequeño botón Report debajo de la explicación. Tócalo, elige un motivo (respuesta incorrecta, mala traducción, poco claro, etc.) y, si quieres, añade un comentario. El reporte llega directo a nuestro equipo en Telegram y lo corregimos el mismo día o al siguiente.',
       },
       {
         q: '¿Es segura mi información de pago?',
@@ -245,7 +245,7 @@ const FAQ_I18N = {
       },
       {
         q: '如何报告错误答案或不好的翻译？',
-        a: '每道题在解释下方都有一个小小的 🐛 Report 按钮。点一下，选择原因（答案错误、翻译不好、不清楚等），可以再加一句评论。报告会直接发送给我们 Telegram 上的团队，我们当天或第二天就会修正。',
+        a: '每道题在解释下方都有一个小小的 Report 按钮。点一下，选择原因（答案错误、翻译不好、不清楚等），可以再加一句评论。报告会直接发送给我们 Telegram 上的团队，我们当天或第二天就会修正。',
       },
       {
         q: '我的支付信息安全吗？',
@@ -307,7 +307,7 @@ const FAQ_I18N = {
       },
       {
         q: 'Як повідомити про неправильну відповідь або поганий переклад?',
-        a: 'Під поясненням до кожного запитання є невелика кнопка 🐛 Report. Натисніть її, оберіть причину (неправильна відповідь, поганий переклад, незрозуміло тощо), за бажанням додайте коментар. Повідомлення одразу потрапляє до нашої команди в Telegram, і ми виправляємо того ж дня або наступного.',
+        a: 'Під поясненням до кожного запитання є невелика кнопка Report. Натисніть її, оберіть причину (неправильна відповідь, поганий переклад, незрозуміло тощо), за бажанням додайте коментар. Повідомлення одразу потрапляє до нашої команди в Telegram, і ми виправляємо того ж дня або наступного.',
       },
       {
         q: 'Чи безпечні мої платіжні дані?',
@@ -360,18 +360,15 @@ export default function FaqPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] py-10 px-4">
+    <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="max-w-2xl mx-auto">
-        <Link href="/" className="inline-flex items-center gap-2 mb-8 hover:opacity-90 transition">
-          <Image src="/logo.png" alt="DMVSOS" width={36} height={36} className="rounded-xl" />
-          <span className="text-[22px] font-bold text-[#0B1C3D] tracking-tight">DMVSOS</span>
-        </Link>
+      <SiteHeader initialLang={lang} />
 
+      <main className="w-full max-w-2xl mx-auto px-4 pt-4 pb-10 flex-1">
         <header className="mb-8">
           <h1 className="text-3xl font-bold text-[#0B1C3D] mb-2">{tx.title}</h1>
           <p className="text-[#64748B] text-sm">
@@ -392,7 +389,20 @@ export default function FaqPage() {
                   <span className="faq-question text-sm sm:text-base font-semibold text-[#0B1C3D]">
                     {item.q}
                   </span>
-                  <span className="text-[#94A3B8] text-sm shrink-0">{isOpen ? '−' : '+'}</span>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true"
+                    stroke="#94A3B8"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={`shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
                 </button>
                 {isOpen && (
                   <div className="px-5 sm:px-6 pb-4 -mt-1">
@@ -426,7 +436,7 @@ export default function FaqPage() {
             Home
           </Link>
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }

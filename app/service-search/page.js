@@ -9,6 +9,16 @@ import { getSavedLang, saveLang } from '@/lib/lang';
 import { serviceById, serviceMapsUrl, serviceWebUrl, logServiceLead } from '@/lib/services';
 import { STATE_DISPLAY } from '@/lib/manual-data';
 import StateSearchDropdown from '@/app/manuals/StateSearchDropdown';
+import GradientButton from '@/app/components/GradientButton';
+
+// Category illustration for the hero, keyed by service id (same art as the
+// /services cards). Unknown/missing id falls back to the instructor art.
+const ART = {
+  instructor: '/services/instructor.png',
+  courses: '/services/courses.png',
+  translator_notary: '/services/translator.png',
+  car_insurance: '/services/insurance.png',
+};
 
 const langs = [
   { label: 'EN', code: 'en' },
@@ -56,7 +66,8 @@ function ServiceSearchContent() {
         <div className="relative">
           <button type="button" onClick={() => setShowLangMenu(v => !v)} onBlur={() => setTimeout(() => setShowLangMenu(false), 150)}
             className="flex items-center gap-1 text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-2.5 py-1.5 hover:border-[#2563EB] transition-colors">
-            <span>{currentLang.label}</span><span className="text-[#94A3B8] text-[10px] ml-0.5">▾</span>
+            <span>{currentLang.label}</span>
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none" className="ml-0.5 text-[#94A3B8]" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </button>
           {showLangMenu && (
             <div className="absolute right-0 top-full mt-1 bg-white border border-[#E2E8F0] rounded-xl shadow-lg z-50 py-1 min-w-[90px]">
@@ -73,7 +84,10 @@ function ServiceSearchContent() {
 
       <div className="w-full max-w-md mt-16">
         <div className="text-center mb-5">
-          <div className="flex justify-center mb-3 text-4xl">{svc?.icon || '🌍'}</div>
+          <div className="flex justify-center mb-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={ART[svc?.id] || ART.instructor} alt="" className="h-16 object-contain select-none" />
+          </div>
           <h1 className="text-2xl font-bold text-[#0B1C3D]">{title}</h1>
         </div>
 
@@ -104,21 +118,21 @@ function ServiceSearchContent() {
           <p className="text-center text-sm text-[#94A3B8] mt-6">{tex.drivingSchoolsPickFirst || 'Choose your state to search.'}</p>
         ) : (
           <>
-            <button
-              type="button"
+            <GradientButton
               onClick={() => { if (svc) logServiceLead(svc.id, state, lang); open(serviceMapsUrl(queryHead, state, lang)); }}
-              className="w-full bg-[#2563EB] text-white py-4 rounded-xl font-bold text-base flex items-center justify-center gap-2 hover:bg-[#1D4ED8] transition mb-3"
+              variant="blue"
+              className="mb-3"
             >
-              <span>🗺️</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 21s-7-5.4-7-11a7 7 0 0 1 14 0c0 5.6-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" /></svg>
               {tex.drivingSchoolsFindOnMap || 'Find on the map'}
-            </button>
+            </GradientButton>
 
             <button
               type="button"
               onClick={() => { if (svc) logServiceLead(svc.id, state, lang); open(serviceWebUrl(queryHead, state, lang)); }}
               className="w-full bg-white border border-[#E2E8F0] text-[#2563EB] py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:border-[#2563EB] transition mb-4"
             >
-              <span>🔍</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
               {tex.drivingSchoolsSearchWeb || 'Search the web'}
             </button>
 

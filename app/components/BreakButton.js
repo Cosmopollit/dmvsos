@@ -133,7 +133,7 @@ export default function BreakButton({ langCode = 'en' }) {
               onClick={e => e.stopPropagation()}
               className="block text-center mt-3 text-[11px] font-semibold tracking-[0.18em] text-[#fde047] hover:text-white"
             >
-              {tex.navAboutGame || 'ABOUT THE GAME'} →
+              {tex.navAboutGame || 'ABOUT THE GAME'} 
             </a>
           </div>
         </div>

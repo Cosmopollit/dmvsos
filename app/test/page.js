@@ -13,6 +13,42 @@ import { pickHardest } from '@/lib/question-difficulty';
 import { trackBeginCheckout } from '@/lib/gtag';
 import { planForCategory } from '@/lib/plans';
 import { useExperiment } from '@/lib/experiments';
+import GradientButton from '@/app/components/GradientButton';
+
+// Brand line icons (2px stroke) — replaces the page's pre-overhaul emoji set
+// (✏️🎯📚🏆🔒🔓📖🔔📨 …) with the SVG language the rest of the site speaks.
+const ICON_PATHS = {
+  pencil: <path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />,
+  target: <><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="4" /></>,
+  book: <path d="M4 19.5A2.5 2.5 0 016.5 17H20M4 19.5A2.5 2.5 0 006.5 22H20V2H6.5A2.5 2.5 0 004 4.5v15z" />,
+  trophy: <path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4zM7 6H4a3 3 0 003 3M17 6h3a3 3 0 01-3 3" />,
+  clock: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
+  lock: <><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 018 0v3" /></>,
+  unlock: <><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 017.5-1.5" /></>,
+  globe: <><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18" /></>,
+  bell: <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0" />,
+  mail: <><rect x="2" y="4" width="20" height="16" rx="2" /><path d="M22 6l-10 7L2 6" /></>,
+  flag: <path d="M4 21V4a1 1 0 011-1h11l-1.5 4L16 11H5" />,
+  inbox: <path d="M22 12h-6l-2 3h-4l-2-3H2M5 5h14l3 7v7H2v-7l3-7z" />,
+  offline: <path d="M2 8a15 15 0 0120 0M5 12a10 10 0 0114 0M8.5 15.5a5 5 0 017 0M12 19h.01M3 3l18 18" />,
+};
+function LineIcon({ name, size = 16, color = '#2563EB', className = '' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2"
+      strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      {ICON_PATHS[name]}
+    </svg>
+  );
+}
+// Green check / red cross dots (same art as the pricing feature lists).
+const CheckDot = ({ size = 14 }) => (
+  <svg width={size} height={size} viewBox="0 0 16 16" className="inline-block shrink-0 align-[-2px]" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="#16A34A" /><path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" /></svg>
+);
+const CrossDot = ({ size = 14 }) => (
+  <svg width={size} height={size} viewBox="0 0 16 16" className="inline-block shrink-0 align-[-2px]" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="#DC2626" /><path d="M5.5 5.5l5 5M10.5 5.5l-5 5" stroke="#fff" strokeWidth="2" strokeLinecap="round" /></svg>
+);
+// Paywall-modal plan art — same PNGs as the home/result plan cards.
+const PLAN_ART = { moto: '/vehicles/moto-hero.png', auto: '/vehicles/mustang.png', cdl: '/vehicles/truck-hero.png' };
 
 const langs = [
   { label: 'EN', code: 'en' },
@@ -506,7 +542,7 @@ function TestContent() {
   if (loading) return (
     <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
       <div className="text-center">
-        <div className="text-4xl mb-4 hourglass-spin">⏳</div>
+        <div className="w-8 h-8 mx-auto mb-4 border-2 border-[#BFDBFE] border-t-[#2563EB] rounded-full animate-spin" />
         <p className="text-[#94A3B8]">{tex.loadingQuestions}</p>
       </div>
     </main>
@@ -524,7 +560,7 @@ function TestContent() {
     const modes = [
       ...(!hasFullAccess ? [{
         id: 'free',
-        icon: '✏️',
+        icon: 'pencil',
         label: tex.modePractice || 'Quick Practice',
         desc: isMoto
           ? `${freeLimit} ${tex.modeQuestions || 'questions'}  ·  always free`
@@ -536,19 +572,19 @@ function TestContent() {
       }] : []),
       {
         id: 'real',
-        icon: '🎯',
+        icon: 'target',
         label: dmv(tex.modeReal),
         desc: dmv(tex.modeRealDesc),
         count: realCount,
         color: '#2563EB',
         gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)',
-        time: `⏱ ${categoryTimeLimit[category] / 60} ${tex.minLabel}`,
+        time: `${categoryTimeLimit[category] / 60} ${tex.minLabel}`,
         locked: !hasFullAccess,
       },
       // Extended only for car/cdl — moto exam is short, 80q doesn't make sense
       ...(!isMoto ? [{
         id: 'extended',
-        icon: '📚',
+        icon: 'book',
         label: tex.modeExtended,
         desc: tex.modeExtendedDesc,
         count: Math.min(80, totalAvailable),
@@ -558,7 +594,7 @@ function TestContent() {
       }] : []),
       {
         id: 'marathon',
-        icon: '🏆',
+        icon: 'trophy',
         label: tex.modeMarathon,
         desc: tex.modeMarathonDesc,
         count: totalAvailable,
@@ -583,7 +619,7 @@ function TestContent() {
           <div className="relative">
             <button type="button" onClick={() => setShowLangMenu(v => !v)} onBlur={() => setTimeout(() => setShowLangMenu(false), 150)}
               className="flex items-center gap-1 text-xs font-semibold text-[#64748B] bg-white border border-[#E2E8F0] rounded-full px-2.5 py-1.5 hover:border-[#2563EB] transition-colors">
-              <span>{currentLang.label}</span><span className="text-[#94A3B8] text-[10px] ml-0.5">▾</span>
+              <span>{currentLang.label}</span><svg width="9" height="9" viewBox="0 0 12 12" className="ml-0.5 shrink-0" style={{ fill: '#94A3B8' }} aria-hidden="true"><path d="M6 8L1 3h10z" /></svg>
             </button>
             {showLangMenu && (
               <div className="absolute right-0 top-full mt-1 bg-white border border-[#E2E8F0] rounded-xl shadow-lg z-50 py-1 min-w-[90px]">
@@ -600,7 +636,7 @@ function TestContent() {
 
         <div className="w-full max-w-md mt-12">
           <div className="text-center mb-5">
-            <h2 className="text-xl font-bold text-[#1E293B] mb-1">{tex.chooseMode}</h2>
+            <h2 className="text-xl font-bold text-[#0B1C3D] mb-1">{tex.chooseMode}</h2>
             <p className="text-sm text-[#94A3B8]">{totalAvailable} {tex.modeQuestions}</p>
           </div>
 
@@ -612,9 +648,9 @@ function TestContent() {
                   <button key={m.id} type="button" onClick={() => startWithMode(m.id)}
                     className="rounded-2xl p-5 flex items-center gap-4 hover:shadow-lg transition-all text-left border-2 border-white/60 shadow-md"
                     style={{ background: m.gradient }}>
-                    <span className="text-3xl">{m.icon}</span>
+                    <span className="w-11 h-11 rounded-xl bg-white/70 flex items-center justify-center shrink-0"><LineIcon name={m.icon} size={22} color={m.color} /></span>
                     <div className="flex-1">
-                      <div className="font-bold text-[#1E293B]">{m.label}</div>
+                      <div className="font-bold text-[#0B1C3D]">{m.label}</div>
                       <div className="text-sm text-[#64748B] mt-0.5">{m.desc}</div>
                     </div>
                     <div className="flex flex-col items-end gap-1 shrink-0">
@@ -648,9 +684,9 @@ function TestContent() {
                   style={{ background: m.gradient, opacity: 0.92 }}>
                   {/* Dimming overlay */}
                   <div className="absolute inset-0 bg-white/25 pointer-events-none rounded-2xl" />
-                  <span className="text-3xl relative" style={{ filter: 'grayscale(0.3)' }}>{m.icon}</span>
+                  <span className="w-11 h-11 rounded-xl bg-white/60 flex items-center justify-center shrink-0 relative"><LineIcon name={m.icon} size={22} color="#94A3B8" /></span>
                   <div className="flex-1 relative">
-                    <div className="font-bold text-[#1E293B]">{m.label}</div>
+                    <div className="font-bold text-[#0B1C3D]">{m.label}</div>
                     <div className="text-sm text-[#64748B] mt-0.5">{m.desc}</div>
                     {m.time && (
                       <div className="text-[11px] text-[#94A3B8] mt-1">{m.time}</div>
@@ -664,14 +700,14 @@ function TestContent() {
                     <span
                       key={lockAnimKey[m.id] || 0}
                       className={lockAnimKey[m.id] ? 'lock-animate' : ''}
-                      style={{ fontSize: 20, lineHeight: 1 }}>
-                      🔒
+                      style={{ lineHeight: 1 }}>
+                      <LineIcon name="lock" size={20} color="#475569" />
                     </span>
                   </div>
                   {/* Unlock CTA — replaces the old "CDL Pro · 99%" shimmer.
                       Shows state name + price so the offer is concrete. */}
                   <div className="badge-shimmer absolute bottom-0 left-0 right-0 flex items-center justify-center gap-1.5 py-2 rounded-b-2xl">
-                    <span style={{ fontSize: 12 }}>🔓</span>
+                    <LineIcon name="unlock" size={13} color="#92400E" />
                     <span className="text-[11px] font-bold tracking-wide" style={{ color: '#92400E' }}>
                       {unlockCtaText}
                     </span>
@@ -691,7 +727,7 @@ function TestContent() {
                 className="mt-0.5 w-4 h-4 accent-[#2563EB] rounded shrink-0"
               />
               <div>
-                <div className="text-sm font-semibold text-[#1E293B]">{dmv(tex.hideExplanations)}</div>
+                <div className="text-sm font-semibold text-[#0B1C3D]">{dmv(tex.hideExplanations)}</div>
                 <div className="text-xs text-[#64748B] mt-0.5">{dmv(tex.hideExplanationsDesc)}</div>
               </div>
             </label>
@@ -704,20 +740,18 @@ function TestContent() {
             onClick={() => setShowLockModal(false)}>
             <div className="bg-white rounded-3xl p-7 w-full max-w-sm shadow-2xl text-center"
               onClick={e => e.stopPropagation()}>
-              <div className="text-5xl mb-3">🔓</div>
+              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#EFF6FF] flex items-center justify-center"><LineIcon name="unlock" size={32} /></div>
               <h3 className="text-xl font-bold text-[#0B1C3D] mb-2">
                 {tex.unlockTitle || 'Unlock Full Access'}
               </h3>
               <p className="text-sm text-[#64748B] mb-6">
                 {tex.unlockDesc || 'Get all test modes, unlimited practice, and real exam simulation.'}
               </p>
-              <button
-                type="button"
+              <GradientButton
                 onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
-                className="w-full py-3.5 rounded-2xl font-bold text-white text-base mb-3 btn-pulse"
-                style={{ background: 'linear-gradient(135deg, #2563EB, #1D4ED8)' }}>
+                className="mb-3">
                 {(tex.unlockCta || 'Unlock from {price}').replace('{price}', plan.price)}
-              </button>
+              </GradientButton>
               <button type="button" onClick={() => setShowLockModal(false)}
                 className="text-sm text-[#94A3B8] hover:text-[#64748B]">
                 {tex.back}
@@ -736,7 +770,7 @@ function TestContent() {
       return (
         <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
           <div className="text-center max-w-sm">
-            <div className="text-5xl mb-4">📡</div>
+            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#F1F5F9] flex items-center justify-center"><LineIcon name="offline" size={30} color="#94A3B8" /></div>
             <h2 className="text-lg font-bold text-[#0B1C3D] mb-2">{tex.connectionProblem}</h2>
             <p className="text-sm text-[#64748B] mb-4">{tex.connectionProblemBody}</p>
             <div className="flex flex-col gap-2">
@@ -759,7 +793,7 @@ function TestContent() {
     return (
       <main className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
         <div className="text-center max-w-sm">
-          <div className="text-5xl mb-4">{isRateLimited ? '⏳' : '📭'}</div>
+          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#F1F5F9] flex items-center justify-center"><LineIcon name={isRateLimited ? 'clock' : 'inbox'} size={30} color="#94A3B8" /></div>
           <h2 className="text-lg font-bold text-[#0B1C3D] mb-2">
             {isRateLimited
               ? (tex.tooManyRequests || 'Too many requests')
@@ -775,7 +809,7 @@ function TestContent() {
             {canFallbackToEnglish && (
               <button type="button" onClick={() => { saveLang('en'); window.location.href = testUrl; }}
                 className="bg-[#2563EB] text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-[#1D4ED8] transition">
-                {tex.tryInEnglish || 'Try in English 🇺🇸'}
+                {tex.tryInEnglish || 'Try in English'}
               </button>
             )}
             <button type="button" onClick={() => router.push(`/category?state=${state}&lang=${lang}`)}
@@ -861,7 +895,6 @@ function TestContent() {
     userAnswersRef.current = updatedAnswers;
     setUserAnswers(updatedAnswers);
     const arr = correct ? tex.motivationalCorrect : tex.motivationalWrong;
-    // eslint-disable-next-line react-hooks/purity -- inside event handler, not render path
     const msg = arr[Math.floor(Math.random() * arr.length)];
     setMotivationalMessage({ text: msg, phase: 'show' });
   }
@@ -930,12 +963,12 @@ function TestContent() {
 
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
-            <span className="text-sm text-[#16A34A]">✅ {correctCount}</span>
-            <span className="text-sm text-[#DC2626]">❌ {wrongCount}</span>
+            <span className="text-sm text-[#16A34A] inline-flex items-center gap-1"><CheckDot /> {correctCount}</span>
+            <span className="text-sm text-[#DC2626] inline-flex items-center gap-1"><CrossDot /> {wrongCount}</span>
           </div>
           <div className="flex items-center gap-3">
             {hasTimer && (
-              <span className={`text-sm font-medium ${remaining <= 60 ? 'text-[#DC2626]' : 'text-[#94A3B8]'}`}>⏱ {formatTime(remaining)}</span>
+              <span className={`text-sm font-medium ${remaining <= 60 ? 'text-[#DC2626]' : 'text-[#94A3B8]'}`}><LineIcon name="clock" size={13} color="currentColor" className="inline-block align-[-2px] mr-1" />{formatTime(remaining)}</span>
             )}
             <span className="text-sm font-medium text-[#94A3B8]">{current + 1} / {total}</span>
           </div>
@@ -956,7 +989,7 @@ function TestContent() {
             </div>
           )}
 
-          <p className="text-[17px] font-bold text-[#1E293B] leading-relaxed mb-3">
+          <p className="text-[17px] font-bold text-[#0B1C3D] leading-relaxed mb-3">
             {(q.question || '').replace(/^\d+\.\s*/, '')}
           </p>
 
@@ -976,8 +1009,7 @@ function TestContent() {
                     : 'group inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-gradient-to-r from-[#FEF3C7] to-[#FFEDD5] border border-[#FCD34D] text-[#92400E] hover:from-[#FDE68A] hover:to-[#FED7AA] hover:border-[#F59E0B] hover:-translate-y-0.5 hover:shadow-md transition-all duration-150'
                 }
               >
-                {!hasFullAccess && <span className="text-[12px] leading-none">✨</span>}
-                <span>🇺🇸</span>
+                <span className="text-[10px] font-bold tracking-wide">EN</span>
                 <span>{(
                   showAltView
                     ? (tex.hideOriginal || 'Hide {agency} original')
@@ -1017,7 +1049,7 @@ function TestContent() {
 
           <div className="flex flex-col gap-2.5">
             {q.answers.map((opt, i) => {
-              let style = 'border border-[#E2E8F0] text-[#1E293B] bg-white';
+              let style = 'border border-[#E2E8F0] text-[#0B1C3D] bg-white';
               if (showAnswer) {
                 if (hideExplanations) {
                   // Real exam mode: only highlight selected answer, don't reveal correct
@@ -1051,7 +1083,7 @@ function TestContent() {
         {showAnswer && q.answers[q.correctAnswerIndex] && !hideExplanations && (
           <div className="bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl p-4 mb-5">
             <p className="text-sm text-[#1E40AF] leading-relaxed">
-              ✅ {tex.correct}: <strong>{q.answers[q.correctAnswerIndex].replace(/^[A-DА-Га-гa-d]\.\s*/, '')}</strong>
+              <CheckDot /> {tex.correct}: <strong>{q.answers[q.correctAnswerIndex].replace(/^[A-DА-Га-гa-d]\.\s*/, '')}</strong>
             </p>
             {q.explanation && (
               <p className="text-sm text-[#1E40AF]/80 leading-relaxed mt-2">
@@ -1065,11 +1097,11 @@ function TestContent() {
                   onClick={() => setShowManualQuote(v => !v)}
                   className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] bg-white border border-[#BFDBFE] rounded-full px-3 py-1.5 hover:bg-[#EFF6FF] hover:border-[#2563EB] transition-all"
                 >
-                  <span className="text-sm">📖</span>
+                  <LineIcon name="book" size={14} />
                   <span>
                     {q.manualSection || (tex.viewInManual || 'Driver Manual')}
                   </span>
-                  <span className="text-[10px] opacity-70">{showManualQuote ? '▲' : '▼'}</span>
+                  <svg width="10" height="10" viewBox="0 0 12 12" className={`shrink-0 transition-transform ${showManualQuote ? 'rotate-180' : ''}`} style={{ fill: 'currentColor', opacity: 0.7 }} aria-hidden="true"><path d="M6 8L1 3h10z" /></svg>
                 </button>
                 {showManualQuote && (
                   <p className="mt-2 text-xs text-[#1E40AF] italic border-l-2 border-[#2563EB] pl-3 leading-relaxed">
@@ -1088,7 +1120,7 @@ function TestContent() {
                   className="text-[11px] text-[#94A3B8] hover:text-[#DC2626] transition-colors"
                   title={tex.reportQuestion || 'Report a problem with this question'}
                 >
-                  🐛 {tex.reportQuestion || 'Report'}
+                  <LineIcon name="flag" size={12} color="currentColor" className="inline-block align-[-1px] mr-1" />{tex.reportQuestion || 'Report'}
                 </button>
               </div>
             )}
@@ -1096,7 +1128,7 @@ function TestContent() {
             {showReport && !reportSent && (
               <div className="mt-3 p-3 bg-white border border-[#FED7AA] rounded-xl">
                 <p className="text-xs font-semibold text-[#9A3412] mb-2">
-                  🐛 {tex.reportPrompt || 'What is wrong with this question?'}
+                  {tex.reportPrompt || 'What is wrong with this question?'}
                 </p>
                 <div className="flex flex-wrap gap-1.5 mb-2">
                   {[
@@ -1154,7 +1186,7 @@ function TestContent() {
             {reportSent && (
               <div className="mt-3 p-2 bg-[#ECFDF5] border border-[#A7F3D0] rounded-xl text-center">
                 <p className="text-xs text-[#065F46] font-semibold">
-                  ✅ {tex.reportThanks || 'Thanks! We will check it.'}
+                  <CheckDot size={13} /> {tex.reportThanks || 'Thanks! We will check it.'}
                 </p>
               </div>
             )}
@@ -1170,7 +1202,7 @@ function TestContent() {
         {/* Q18 pre-paywall nudge */}
         {!hasFullAccess && current === nudgeAt && showAnswer && (
           <div className="bg-[#FFF7ED] border border-[#FED7AA] rounded-xl px-4 py-3 mb-4 text-sm text-[#92400E] font-medium text-center">
-            🔔 {(tex.nudgeFreeLeft || '{n} {w} left in your free test').replace('{n}', freeLimit - current - 1).replace('{w}', pluralizeQuestions(freeLimit - current - 1, lang))}  ·  {tex.nudgeUnlockFrom || 'unlock all from'} {plan.price}
+            <LineIcon name="bell" size={13} color="currentColor" className="inline-block align-[-2px] mr-1" />{(tex.nudgeFreeLeft || '{n} {w} left in your free test').replace('{n}', freeLimit - current - 1).replace('{w}', pluralizeQuestions(freeLimit - current - 1, lang))}  ·  {tex.nudgeUnlockFrom || 'unlock all from'} {plan.price}
           </div>
         )}
 
@@ -1238,7 +1270,7 @@ function TestContent() {
                 </>
               ) : (
                 <>
-                  <div className="text-4xl text-center mb-3">📨</div>
+                  <div className="w-14 h-14 mx-auto mb-3 rounded-2xl bg-[#EFF6FF] flex items-center justify-center"><LineIcon name="mail" size={26} /></div>
                   <h2 className="text-lg font-bold text-[#0B1C3D] mb-1 text-center">
                     {tex.captureSentTitle || 'Check your email'}
                   </h2>
@@ -1301,17 +1333,21 @@ function TestContent() {
                   }}>
                   {isCdl && <div className="text-[9px] font-bold text-[#0B1C3D] bg-[#F59E0B] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">{tex.planCdlBadge || 'Car tests included'}</div>}
                   {!isCdl && !isMoto && <div className="text-[9px] font-bold text-white bg-[#2563EB] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">{tex.planPopular}</div>}
-                  <div className="text-3xl mb-1">{plan.icon}</div>
+                  <div className="h-[52px] flex items-center justify-center mb-1">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={PLAN_ART[plan.pass_type] || PLAN_ART.auto} alt="" aria-hidden="true" className="max-h-[48px] w-auto object-contain select-none pointer-events-none" />
+                  </div>
                   <div className="text-xs font-bold mb-0.5" style={{ color: isCdl ? '#92400E' : isMoto ? '#D97706' : '#2563EB' }}>
                     {isCdl ? tex.planCdlPro : isMoto ? tex.planMotoPass : tex.planAutoPass}
                   </div>
                   <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">{plan.price}</div>
                   <div className="text-[10px] text-[#64748B] mb-3">{tex.planDuration || '30-day access'}</div>
-                  <button type="button" onClick={modalCheckout} disabled={modalBuyLoading}
-                    className="w-full py-2 rounded-lg text-sm font-bold text-white transition disabled:opacity-60"
-                    style={{ background: isCdl ? '#0B1C3D' : isMoto ? '#D97706' : '#2563EB' }}>
+                  <GradientButton
+                    onClick={modalCheckout}
+                    variant={isCdl || isMoto ? 'gold' : 'blue'}
+                    className={`text-sm ${modalBuyLoading ? 'pointer-events-none opacity-60' : ''}`}>
                     {modalBuyLoading ? '…' : (tex.getIt || 'Get it')}
-                  </button>
+                  </GradientButton>
                 </div>
               </div>
 
@@ -1355,7 +1391,7 @@ function TestContent() {
               setRemaining(r => r + 10 * 60);
               setShowTimeUp(false);
             }}
-              className="w-full border border-[#E2E8F0] text-[#1E293B] py-3.5 rounded-xl font-semibold text-base hover:bg-[#F8FAFC] hover:border-[#2563EB] transition-all">
+              className="w-full border border-[#E2E8F0] text-[#0B1C3D] py-3.5 rounded-xl font-semibold text-base hover:bg-[#F8FAFC] hover:border-[#2563EB] transition-all">
               {tex.addTime}
             </button>
           </div>
@@ -1366,10 +1402,10 @@ function TestContent() {
       {showLeaveConfirm && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl border border-[#E2E8F0] text-center">
-            <p className="text-base font-semibold text-[#1E293B] mb-5">{tex.leaveConfirm}</p>
+            <p className="text-base font-semibold text-[#0B1C3D] mb-5">{tex.leaveConfirm}</p>
             <div className="flex gap-3">
               <button type="button" onClick={() => setShowLeaveConfirm(false)}
-                className="flex-1 py-3 rounded-xl border border-[#E2E8F0] text-[#1E293B] font-semibold text-sm hover:bg-[#F8FAFC] transition">
+                className="flex-1 py-3 rounded-xl border border-[#E2E8F0] text-[#0B1C3D] font-semibold text-sm hover:bg-[#F8FAFC] transition">
                 {tex.back || 'Cancel'}
               </button>
               <button type="button" onClick={() => router.push('/')}
@@ -1389,20 +1425,18 @@ function TestContent() {
           onClick={() => setShowLockModal(false)}>
           <div className="bg-white rounded-3xl p-7 w-full max-w-sm shadow-2xl text-center"
             onClick={e => e.stopPropagation()}>
-            <div className="text-5xl mb-3">🌐</div>
+            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#EFF6FF] flex items-center justify-center"><LineIcon name="globe" size={32} /></div>
             <h3 className="text-xl font-bold text-[#0B1C3D] mb-2">
               {tex.unlockTitle || 'Unlock Full Access'}
             </h3>
             <p className="text-sm text-[#64748B] mb-6">
               {tex.unlockDesc || 'Get all test modes, unlimited practice, and real exam simulation.'}
             </p>
-            <button
-              type="button"
+            <GradientButton
               onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
-              className="w-full py-3.5 rounded-2xl font-bold text-white text-base mb-3 btn-pulse"
-              style={{ background: 'linear-gradient(135deg, #2563EB, #1D4ED8)' }}>
+              className="mb-3">
               {(tex.unlockCta || 'Unlock from {price}').replace('{price}', plan.price)}
-            </button>
+            </GradientButton>
             <button type="button" onClick={() => setShowLockModal(false)}
               className="text-sm text-[#94A3B8] hover:text-[#64748B]">
               {tex.back}

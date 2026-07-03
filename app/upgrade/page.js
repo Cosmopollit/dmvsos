@@ -157,7 +157,7 @@ function UpgradeContent() {
             <span>{currentLang.label}</span><svg width="9" height="9" viewBox="0 0 12 12" className="ml-0.5" style={{ fill: 'rgba(255,255,255,0.5)' }}><path d="M6 8L1 3h10z" /></svg>
           </button>
           {showLangMenu && (
-            <div className="absolute right-0 top-full mt-1 bg-[#1E3A5F] border border-white/20 rounded-xl shadow-lg z-50 py-1 min-w-[90px]">
+            <div className="absolute right-0 top-full mt-1 bg-[#13284d] border border-white/15 rounded-xl shadow-lg z-50 py-1 min-w-[90px]">
               {langs.map(l => (
                 <button key={l.code} type="button" onMouseDown={() => switchLang(l.code)}
                   className={`w-full text-left px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 hover:bg-white/10 transition-colors ${lang === l.code ? 'text-[#F59E0B]' : 'text-[#94A3B8]'}`}>
@@ -264,7 +264,7 @@ function UpgradeContent() {
                     <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="#16A34A" /><path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" /></svg>
                     {tex.planActive || 'Active'}
                   </div>
-                  <Link href="/profile" className="block w-full text-center py-3 rounded-xl font-bold text-sm bg-[#F0FDF4] text-[#15803D] border-[1.5px] border-[#16A34A] hover:bg-[#DCFCE7] transition-all">
+                  <Link href="/profile" className="block w-full text-center py-3.5 rounded-2xl font-bold text-sm bg-[#F0FDF4] text-[#15803D] border-[1.5px] border-[#16A34A] hover:bg-[#DCFCE7] transition-all">
                     {tex.planManage || 'Manage / Extend'}
                   </Link>
                 </div>
@@ -286,7 +286,7 @@ function UpgradeContent() {
                     <Link href="/profile" className="underline font-semibold">{tex.planManage || 'Manage / Extend'}</Link>
                   </p>
                 ) : (
-                  <p className="mt-2 text-xs text-center font-medium text-red-500">
+                  <p className="mt-2 text-xs text-center font-medium text-[#DC2626]">
                     {tex.checkoutError || 'Something went wrong. Please try again.'}
                   </p>
                 )
@@ -335,7 +335,7 @@ function UpgradeContent() {
             <h3 className="text-base font-bold text-white leading-tight">
               {tex.bureaucracyHelpTitle || 'Getting your license can be confusing'}
             </h3>
-            <p className="text-sm text-[#CBD5E1] mt-1.5">
+            <p className="text-sm text-[#94A3B8] mt-1.5">
               {tex.bureaucracyHelpIntro || 'With a pass, you get more than tests. We guide you through the whole process.'}
             </p>
           </div>
@@ -347,7 +347,7 @@ function UpgradeContent() {
             tex.bureaucracyHelpExpect || 'What to expect on exam day',
             tex.bureaucracyHelpAsk || 'Got questions? Ask us anytime',
           ].map((line, i) => (
-            <li key={i} className="flex items-start gap-2 text-sm text-[#E2E8F0]">
+            <li key={i} className="flex items-start gap-2 text-sm text-[#94A3B8]">
               <svg width="14" height="14" viewBox="0 0 16 16" className="shrink-0 mt-1">
                 <circle cx="8" cy="8" r="8" fill="#F59E0B" />
                 <path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="#0B1C3D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
