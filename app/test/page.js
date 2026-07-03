@@ -586,7 +586,12 @@ function TestContent() {
         id: 'extended',
         icon: 'book',
         label: tex.modeExtended,
-        desc: tex.modeExtendedDesc,
+        // The translated desc hardcodes "80"; when this state's pool is smaller
+        // the count pill would contradict it (desc "80", pill "56") — swap in
+        // the real number (digits are language-neutral across all 5 locales).
+        desc: totalAvailable < 80
+          ? String(tex.modeExtendedDesc || '').replace('80', String(Math.min(80, totalAvailable)))
+          : tex.modeExtendedDesc,
         count: Math.min(80, totalAvailable),
         color: '#7C3AED',
         gradient: 'linear-gradient(135deg, #F5F3FF, #EDE9FE)',
@@ -643,26 +648,42 @@ function TestContent() {
           <div className="flex flex-col gap-3">
             {modes.map(m => {
               if (!m.locked) {
-                // Unlocked card
+                // Free user's single playable card is THE primary action on
+                // this screen — hero treatment (solid green, explicit CTA,
+                // shine sweep) so it doesn't blend into the locked pastels.
+                // Pro users see all modes unlocked, so they get the neutral
+                // per-mode style instead of four screaming green cards.
+                if (!hasFullAccess) {
+                  return (
+                    <button key={m.id} type="button" onClick={() => startWithMode(m.id)}
+                      className="relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 text-left border-2 border-[#16A34A] transition-all hover:-translate-y-0.5"
+                      style={{ background: 'linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%)', boxShadow: '0 10px 26px rgba(22,163,74,0.22)' }}>
+                      <span aria-hidden="true" className="gradient-btn-shine pointer-events-none absolute inset-y-0 -left-1/2 w-1/3" />
+                      <span className="w-12 h-12 rounded-xl bg-[#16A34A] flex items-center justify-center shrink-0 shadow-md relative"><LineIcon name={m.icon} size={24} color="#FFFFFF" /></span>
+                      <div className="flex-1 relative">
+                        <div className="font-bold text-[#0B1C3D] text-[17px]">{m.label}</div>
+                        <div className="text-sm text-[#475569] mt-0.5">{m.desc}</div>
+                      </div>
+                      <div className="flex flex-col items-end gap-1.5 shrink-0 relative">
+                        <span className="text-sm font-bold px-4 py-2 rounded-xl bg-[#16A34A] text-white shadow-sm">
+                          {tex.startFree || 'Start Free'}
+                        </span>
+                      </div>
+                    </button>
+                  );
+                }
                 return (
                   <button key={m.id} type="button" onClick={() => startWithMode(m.id)}
-                    className="rounded-2xl p-5 flex items-center gap-4 hover:shadow-lg transition-all text-left border-2 border-white/60 shadow-md"
+                    className="rounded-2xl p-5 flex items-center gap-4 hover:shadow-lg hover:-translate-y-0.5 transition-all text-left border border-[#E2E8F0] shadow-sm"
                     style={{ background: m.gradient }}>
-                    <span className="w-11 h-11 rounded-xl bg-white/70 flex items-center justify-center shrink-0"><LineIcon name={m.icon} size={22} color={m.color} /></span>
+                    <span className="w-11 h-11 rounded-xl bg-white flex items-center justify-center shrink-0 shadow-sm"><LineIcon name={m.icon} size={22} color={m.color} /></span>
                     <div className="flex-1">
-                      <div className="font-bold text-[#0B1C3D]">{m.label}</div>
-                      <div className="text-sm text-[#64748B] mt-0.5">{m.desc}</div>
+                      <div className="font-bold text-[#0B1C3D] text-[16px]">{m.label}</div>
+                      <div className="text-sm text-[#475569] mt-0.5">{m.desc}</div>
                     </div>
-                    <div className="flex flex-col items-end gap-1 shrink-0">
-                      <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-white/70" style={{ color: m.color }}>
-                        {m.count} {tex.modeQuestions}
-                      </span>
-                      {!hasFullAccess && (
-                        <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-[#DCFCE7] text-[#16A34A]">
-                          {tex.freeLabel}
-                        </span>
-                      )}
-                    </div>
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-white shadow-sm shrink-0" style={{ color: m.color }}>
+                      {m.count} {tex.modeQuestions}
+                    </span>
                   </button>
                 );
               }
@@ -680,20 +701,18 @@ function TestContent() {
                   type="button"
                   onMouseEnter={() => setLockAnimKey(k => ({ ...k, [m.id]: (k[m.id] || 0) + 1 }))}
                   onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
-                  className="rounded-2xl pt-5 px-5 pb-10 flex items-center gap-4 text-left border-2 border-white/40 shadow-md transition-all hover:shadow-lg relative overflow-hidden cursor-pointer"
-                  style={{ background: m.gradient, opacity: 0.92 }}>
-                  {/* Dimming overlay */}
-                  <div className="absolute inset-0 bg-white/25 pointer-events-none rounded-2xl" />
-                  <span className="w-11 h-11 rounded-xl bg-white/60 flex items-center justify-center shrink-0 relative"><LineIcon name={m.icon} size={22} color="#94A3B8" /></span>
+                  className="rounded-2xl pt-5 px-5 pb-10 flex items-center gap-4 text-left border border-[#E2E8F0] shadow-sm transition-all hover:shadow-lg hover:-translate-y-0.5 relative overflow-hidden cursor-pointer"
+                  style={{ background: m.gradient }}>
+                  <span className="w-11 h-11 rounded-xl bg-white flex items-center justify-center shrink-0 shadow-sm"><LineIcon name={m.icon} size={22} color={m.color} /></span>
                   <div className="flex-1 relative">
-                    <div className="font-bold text-[#0B1C3D]">{m.label}</div>
-                    <div className="text-sm text-[#64748B] mt-0.5">{m.desc}</div>
+                    <div className="font-bold text-[#0B1C3D] text-[16px]">{m.label}</div>
+                    <div className="text-sm text-[#475569] mt-0.5">{m.desc}</div>
                     {m.time && (
                       <div className="text-[11px] text-[#94A3B8] mt-1">{m.time}</div>
                     )}
                   </div>
                   <div className="flex flex-col items-end gap-1.5 shrink-0 relative">
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-white/70 text-[#94A3B8]">
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-white shadow-sm text-[#475569]">
                       {m.count} {tex.modeQuestions}
                     </span>
                     {/* Animated lock */}
