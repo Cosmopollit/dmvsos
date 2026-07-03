@@ -1,0 +1,78 @@
+Campaign,Ad Group,Keyword,Match Type
+DMVSOS-RU,RU-Generic,экзамен dmv на русском,Exact
+DMVSOS-RU,RU-Generic,экзамен dmv на русском,Phrase
+DMVSOS-RU,RU-Generic,тест dmv на русском,Exact
+DMVSOS-RU,RU-Generic,тест dmv на русском,Phrase
+DMVSOS-RU,RU-Generic,dmv на русском,Phrase
+DMVSOS-RU,RU-Generic,вопросы dmv на русском,Phrase
+DMVSOS-RU,RU-Generic,билеты dmv на русском,Phrase
+DMVSOS-RU,RU-Generic,экзамен на права в сша на русском,Phrase
+DMVSOS-RU,RU-Generic,экзамен на права в америке,Phrase
+DMVSOS-RU,RU-Generic,пдд сша на русском,Phrase
+DMVSOS-RU,RU-Generic,теория вождения сша,Phrase
+DMVSOS-RU,RU-Generic,пермит тест на русском,Phrase
+DMVSOS-RU,RU-Generic,экзамен на пермит,Phrase
+DMVSOS-RU,RU-States-California,экзамен на права калифорния,Phrase
+DMVSOS-RU,RU-States-California,dmv тест калифорния,Phrase
+DMVSOS-RU,RU-States-California,пермит тест калифорния,Phrase
+DMVSOS-RU,RU-States-Washington,экзамен на права вашингтон,Phrase
+DMVSOS-RU,RU-States-Washington,dol тест вашингтон,Phrase
+DMVSOS-RU,RU-States-Washington,пермит тест вашингтон,Phrase
+DMVSOS-RU,RU-States-NewYork,экзамен на права нью йорк,Phrase
+DMVSOS-RU,RU-States-NewYork,dmv тест нью йорк,Phrase
+DMVSOS-RU,RU-States-Florida,экзамен на права флорида,Phrase
+DMVSOS-RU,RU-States-Florida,dmv тест флорида,Phrase
+DMVSOS-RU,RU-States-Illinois,экзамен на права иллинойс,Phrase
+DMVSOS-RU,RU-States-Illinois,dmv тест иллинойс,Phrase
+DMVSOS-RU,RU-States-NewJersey,экзамен на права нью джерси,Phrase
+DMVSOS-RU,RU-States-Pennsylvania,экзамен на права пенсильвания,Phrase
+DMVSOS-RU,RU-CDL,cdl на русском,Exact
+DMVSOS-RU,RU-CDL,cdl на русском,Phrase
+DMVSOS-RU,RU-CDL,cdl тест на русском,Exact
+DMVSOS-RU,RU-CDL,cdl тест на русском,Phrase
+DMVSOS-RU,RU-CDL,cdl экзамен на русском,Phrase
+DMVSOS-RU,RU-CDL,билеты cdl на русском,Phrase
+DMVSOS-RU,RU-CDL,cdl пермит на русском,Phrase
+DMVSOS-RU,RU-CDL,cdl вопросы на русском,Phrase
+DMVSOS-ES,ES-Generic,examen de manejo en español,Exact
+DMVSOS-ES,ES-Generic,examen de manejo en español,Phrase
+DMVSOS-ES,ES-Generic,examen dmv en español,Exact
+DMVSOS-ES,ES-Generic,examen dmv en español,Phrase
+DMVSOS-ES,ES-Generic,examen teorico dmv,Phrase
+DMVSOS-ES,ES-Generic,preguntas del dmv en español,Phrase
+DMVSOS-ES,ES-Generic,examen escrito de manejo,Phrase
+DMVSOS-ES,ES-Generic,test dmv español,Phrase
+DMVSOS-ES,ES-Generic,examen de licencia de conducir,Phrase
+DMVSOS-ES,ES-States-California,examen de manejo california,Phrase
+DMVSOS-ES,ES-States-California,examen dmv california,Phrase
+DMVSOS-ES,ES-States-Texas,examen de manejo texas,Phrase
+DMVSOS-ES,ES-States-Texas,examen dps texas,Phrase
+DMVSOS-ES,ES-States-Florida,examen de manejo florida,Phrase
+DMVSOS-ES,ES-States-Florida,examen dmv florida,Phrase
+DMVSOS-ES,ES-States-NewYork,examen de manejo new york,Phrase
+DMVSOS-ES,ES-States-Arizona,examen de manejo arizona,Phrase
+DMVSOS-ES,ES-States-NewJersey,examen de manejo new jersey,Phrase
+DMVSOS-ES,ES-States-Illinois,examen de manejo illinois,Phrase
+DMVSOS-UA,UA-Generic,тест dmv українською,Exact
+DMVSOS-UA,UA-Generic,тест dmv українською,Phrase
+DMVSOS-UA,UA-Generic,іспит dmv українською,Phrase
+DMVSOS-UA,UA-Generic,іспит на права в сша,Phrase
+DMVSOS-UA,UA-Generic,пдр сша українською,Phrase
+DMVSOS-UA,UA-Generic,тест на права українською,Phrase
+DMVSOS-UA,UA-Generic,пермит тест українською,Phrase
+DMVSOS-UA,UA-States-California,іспит на права каліфорнія,Phrase
+DMVSOS-UA,UA-States-Washington,іспит на права вашингтон,Phrase
+DMVSOS-UA,UA-States-NewYork,іспит на права нью йорк,Phrase
+DMVSOS-UA,UA-States-Illinois,іспит на права іллінойс,Phrase
+DMVSOS-UA,UA-CDL,cdl українською,Phrase
+DMVSOS-UA,UA-CDL,cdl тест українською,Phrase
+DMVSOS-UA,UA-CDL,іспит cdl українською,Phrase
+DMVSOS-ZH,ZH-Generic,dmv 笔试,Phrase
+DMVSOS-ZH,ZH-Generic,dmv 中文考题,Phrase
+DMVSOS-ZH,ZH-Generic,美国驾照笔试,Phrase
+DMVSOS-ZH,ZH-Generic,美国驾照考试 中文,Phrase
+DMVSOS-ZH,ZH-Generic,驾照笔试练习,Phrase
+DMVSOS-ZH,ZH-States-California,加州驾照笔试,Phrase
+DMVSOS-ZH,ZH-States-NewYork,纽约驾照笔试,Phrase
+DMVSOS-ZH,ZH-States-Texas,德州驾照笔试,Phrase
+DMVSOS-ZH,ZH-States-Washington,华盛顿州驾照笔试,Phrase

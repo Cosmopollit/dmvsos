@@ -1,0 +1,56 @@
+# Минус-слова · залить на уровень всех 4 кампаний (phrase match)
+# Сервисные/нерелевантные интенты: офисы, записи, документы, работа.
+
+appointment
+appointments
+office
+hours
+near me
+phone number
+renewal
+renew
+real id
+registration
+title transfer
+plates
+status
+запись
+записаться
+офис
+часы работы
+телефон
+замена прав
+обмен прав
+продление
+регистрация автомобиля
+номера
+статус
+работа
+вакансии
+запис
+офіс
+години роботи
+заміна прав
+обмін прав
+реєстрація авто
+робота
+вакансії
+cita
+citas
+oficina
+horario
+telefono
+renovacion
+renovación
+registro de vehiculo
+placas
+estatus
+trabajo
+empleo
+预约
+办公室
+营业时间
+换驾照
+更新驾照
+车辆注册
+工作
