@@ -476,6 +476,36 @@ function TestContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [testMode, current, questions, score]);
 
+  // Freshest snapshot for the tab-close flush below, refreshed after every
+  // render so pagehide never writes a stale clock.
+  const latestSnapRef = useRef(null);
+  useEffect(() => {
+    const active = testMode && !isRetry && !progressDoneRef.current && questions.length > 0;
+    latestSnapRef.current = active
+      ? {
+          v: 1, savedAt: Date.now(), state, category, lang,
+          subcategory: subcategory || null, mode: testMode,
+          current, score, elapsed, questions, userAnswers: userAnswersRef.current,
+        }
+      : null;
+  });
+
+  // Mobile browsers kill background tabs without warning — flush the freshest
+  // snapshot when the tab hides or the page is being torn down.
+  useEffect(() => {
+    const flush = () => {
+      if (!latestSnapRef.current) return;
+      try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(latestSnapRef.current)); } catch { /* noop */ }
+    };
+    const onVisibility = () => { if (document.visibilityState === 'hidden') flush(); };
+    window.addEventListener('pagehide', flush);
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      window.removeEventListener('pagehide', flush);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, []);
+
   async function refreshResumedTokens(qs) {
     try {
       const codes = qs.filter(q => q.correctAnswerIndex == null && q.clusterCode).map(q => q.clusterCode);
