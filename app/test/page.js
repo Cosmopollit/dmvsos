@@ -203,7 +203,9 @@ function TestContent() {
 
   useEffect(() => {
     if (!testMode || testMode === null) return;
-    startTimeRef.current = Date.now();
+    // Resume support: shift the start time back by the saved elapsed seconds.
+    startTimeRef.current = Date.now() - (resumeElapsedRef.current || 0) * 1000;
+    resumeElapsedRef.current = 0;
     if (!hasTimer) {
       // Track elapsed time only (no countdown) for extended/marathon
       const interval = setInterval(() => {
@@ -432,6 +434,94 @@ function TestContent() {
   // times before router.push completes, producing 10-15 duplicate session
   // rows (see freiibersuarez data 2026-05-18 11:57:21 — 15 inserts in 1 sec).
   const sessionSavedRef = useRef(false);
+
+  // ── Mid-test progress persistence ─────────────────────────────────────────
+  // A Pro user lost an almost-finished Marathon when the browser closed (the
+  // whole test lived in React state). Every answer now snapshots the test to
+  // localStorage; coming back offers "Continue from question N". q_tokens
+  // expire after 4h, so resumes older than 3h re-fetch fresh tokens for the
+  // still-unanswered questions by cluster_code (answered ones are already
+  // revealed and need no token).
+  const PROGRESS_KEY = 'dmvsos_test_progress';
+  const resumeElapsedRef = useRef(0);
+  const progressDoneRef = useRef(false);
+  const [resumeSnap, setResumeSnap] = useState(null);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(PROGRESS_KEY);
+      if (!raw) return;
+      const snap = JSON.parse(raw);
+      const fresh = Date.now() - (snap.savedAt || 0) < 7 * 24 * 3600e3;
+      const match = snap.state === state && snap.category === category
+        && snap.lang === lang && (snap.subcategory || null) === (subcategory || null);
+      const unfinished = Array.isArray(snap.questions) && snap.questions.length > 0
+        && snap.current < snap.questions.length;
+      if (fresh && match && unfinished) setResumeSnap(snap);
+    } catch { /* corrupt snapshot: ignore */ }
+  }, [state, category, lang, subcategory]);
+
+  useEffect(() => {
+    if (!testMode || isRetry || progressDoneRef.current) return;
+    if (!questions.length) return;
+    try {
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify({
+        v: 1, savedAt: Date.now(), state, category, lang,
+        subcategory: subcategory || null, mode: testMode,
+        current, score, elapsed, questions, userAnswers: userAnswersRef.current,
+      }));
+    } catch { /* storage full/private mode: resume just won't be offered */ }
+    // elapsed is read from state at answer-time writes; the seconds between the
+    // last answer and a crash are lost, which is fine for resume purposes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [testMode, current, questions, score]);
+
+  async function refreshResumedTokens(qs) {
+    try {
+      const codes = qs.filter(q => q.correctAnswerIndex == null && q.clusterCode).map(q => q.clusterCode);
+      const categoryMap = { dmv: 'car', cdl: 'cdl', moto: 'motorcycle' };
+      const mappedCategory = categoryMap[category] || category;
+      for (let i = 0; i < codes.length; i += 100) {
+        const batch = codes.slice(i, i + 100);
+        const qsr = new URLSearchParams({
+          state, category: mappedCategory, language: lang,
+          cluster_codes: batch.join(','), limit: String(batch.length),
+        });
+        if (subcategory) qsr.set('subcategory', subcategory);
+        const r = await fetch('/api/test/questions?' + qsr, { cache: 'no-store' });
+        const data = await r.json();
+        if (!data.ok || !data.questions) continue;
+        const tokenByCluster = {};
+        for (const row of data.questions) if (row.cluster_code) tokenByCluster[row.cluster_code] = row.q_token;
+        setQuestions(prev => prev.map(q =>
+          (q.correctAnswerIndex == null && q.clusterCode && tokenByCluster[q.clusterCode])
+            ? { ...q, q_token: tokenByCluster[q.clusterCode] }
+            : q
+        ));
+      }
+    } catch { /* stale tokens degrade gracefully in /check */ }
+  }
+
+  function restoreProgress(snap) {
+    progressDoneRef.current = false;
+    sessionSavedRef.current = false;
+    setQuestions(snap.questions);
+    setCurrent(snap.current);
+    setScore(snap.score || 0);
+    userAnswersRef.current = snap.userAnswers || [];
+    setUserAnswers(snap.userAnswers || []);
+    setSelected(null);
+    setShowAnswer(false); setShowManualQuote(false); setShowReport(false);
+    resumeElapsedRef.current = snap.elapsed || 0;
+    setResumeSnap(null);
+    setTestMode(snap.mode);
+    if (Date.now() - (snap.savedAt || 0) > 3 * 3600e3) refreshResumedTokens(snap.questions);
+  }
+
+  function dismissResume() {
+    try { localStorage.removeItem(PROGRESS_KEY); } catch { /* noop */ }
+    setResumeSnap(null);
+  }
   useEffect(() => {
     if (!testMode || !questions.length) return;
     function onKeyDown(e) {
@@ -644,6 +734,35 @@ function TestContent() {
             <h2 className="text-xl font-bold text-[#0B1C3D] mb-1">{tex.chooseMode}</h2>
             <p className="text-sm text-[#94A3B8]">{totalAvailable} {tex.modeQuestions}</p>
           </div>
+
+          {/* Unfinished-test resume card — the fix for "браузер закрылся и всё
+              пропало": restores questions, answers, score and the clock. */}
+          {resumeSnap && (
+            <div className="rounded-2xl border-2 border-[#2563EB] bg-[#EFF6FF] p-5 mb-4 shadow-md">
+              <div className="flex items-center gap-3 mb-3">
+                <span className="w-11 h-11 rounded-xl bg-[#2563EB] flex items-center justify-center shrink-0">
+                  <LineIcon name="clock" size={22} color="#FFFFFF" />
+                </span>
+                <div className="flex-1">
+                  <div className="font-bold text-[#0B1C3D] text-[16px]">{tex.resumeTitle || 'Unfinished test'}</div>
+                  <div className="text-sm text-[#475569] mt-0.5">
+                    {(tex.resumeProgress || 'Question {n} of {total}')
+                      .replace('{n}', String(resumeSnap.current + 1))
+                      .replace('{total}', String(resumeSnap.questions.length))}
+                  </div>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <GradientButton onClick={() => restoreProgress(resumeSnap)} className="flex-1 text-sm">
+                  {tex.resumeContinue || 'Continue'}
+                </GradientButton>
+                <button type="button" onClick={dismissResume}
+                  className="px-4 py-2 rounded-xl border border-[#E2E8F0] bg-white text-sm font-semibold text-[#64748B] hover:border-[#2563EB] hover:text-[#2563EB] transition">
+                  {tex.resumeStartOver || 'Start over'}
+                </button>
+              </div>
+            </div>
+          )}
 
           <div className="flex flex-col gap-3">
             {modes.map(m => {
@@ -941,6 +1060,8 @@ function TestContent() {
       const allAnswers = userAnswersRef.current;
       const finalScore = allAnswers.reduce((acc, ans, i) => acc + (ans === questions[i]?.correctAnswerIndex ? 1 : 0), 0);
       const langParam = new URLSearchParams(window.location.search).get('lang') || 'en';
+      try { localStorage.removeItem(PROGRESS_KEY); } catch { /* noop */ }
+      progressDoneRef.current = true;
       sessionStorage.setItem(
         'testResults',
         JSON.stringify({ questions, userAnswers: allAnswers, elapsed, state, category, lang: langParam })
@@ -1380,6 +1501,8 @@ function TestContent() {
               <button type="button" onClick={() => {
                 const allAnswers = userAnswersRef.current;
                 const finalScore = allAnswers.reduce((acc, ans, i) => acc + (ans === questions[i]?.correctAnswerIndex ? 1 : 0), 0);
+                try { localStorage.removeItem(PROGRESS_KEY); } catch { /* noop */ }
+                progressDoneRef.current = true;
                 sessionStorage.setItem('testResults', JSON.stringify({ questions, userAnswers: allAnswers, elapsed, state, category, lang }));
                 router.push(`/result?score=${finalScore}&total=${questions.length}&lang=${lang}`);
               }}
@@ -1399,6 +1522,8 @@ function TestContent() {
             <button type="button" onClick={() => {
               const allAnswers = userAnswersRef.current;
               const finalScore = allAnswers.reduce((acc, ans, i) => acc + (ans === questions[i]?.correctAnswerIndex ? 1 : 0), 0);
+              try { localStorage.removeItem(PROGRESS_KEY); } catch { /* noop */ }
+              progressDoneRef.current = true;
               sessionStorage.setItem('testResults', JSON.stringify({ questions, userAnswers: allAnswers, elapsed, state, category, lang }));
               router.push(`/result?score=${finalScore}&total=${questions.length}&lang=${lang}`);
             }}
