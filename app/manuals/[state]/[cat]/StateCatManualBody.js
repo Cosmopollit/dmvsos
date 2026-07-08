@@ -4,7 +4,7 @@ import { t } from '@/lib/translations';
 import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 import { examRulesFor } from '@/lib/exam-rules';
 import { agencyAbbrForState } from '@/lib/agencies';
-import GradientButton from '@/app/components/GradientButton';
+import ManualPracticeCta from './ManualPracticeCta';
 
 // Local i18n for the user-visible strings on this page. Kept self-contained so
 // shared files stay untouched. Metadata + JSON-LD stay English on purpose.
@@ -30,6 +30,8 @@ const PAGE_I18N = {
     practiceHeading: ({ name, testLabel }) => `${name} ${testLabel} Practice`,
     practiceSub: ({ name, label }) => `Real questions based on the official ${name} ${label}. Free, no signup needed.`,
     takeFreeTest: ({ testLabel }) => `Take Free ${testLabel}`,
+    takeTest: ({ testLabel }) => `Practice ${testLabel}`,
+    practiceSubPro: ({ name, label }) => `Real questions based on the official ${name} ${label}.`,
     faqTitle: 'Frequently Asked Questions',
     otherManuals: ({ name }) => `Other ${name} Manuals`,
     allStateManuals: ({ name }) => `All ${name} Manuals`,
@@ -56,6 +58,8 @@ const PAGE_I18N = {
     practiceHeading: ({ name, testLabel }) => `Практика ${name} ${testLabel}`,
     practiceSub: ({ name, label }) => `Реальные вопросы на основе официального ${name} ${label}. Бесплатно, без регистрации.`,
     takeFreeTest: ({ testLabel }) => `Пройти бесплатно ${testLabel}`,
+    takeTest: ({ testLabel }) => `Практика ${testLabel}`,
+    practiceSubPro: ({ name, label }) => `Реальные вопросы на основе официального ${name} ${label}.`,
     faqTitle: 'Частые вопросы',
     otherManuals: ({ name }) => `Другие руководства ${name}`,
     allStateManuals: ({ name }) => `Все руководства ${name}`,
@@ -82,6 +86,8 @@ const PAGE_I18N = {
     practiceHeading: ({ name, testLabel }) => `Práctica del ${testLabel} de ${name}`,
     practiceSub: ({ name, label }) => `Preguntas reales basadas en el ${label} oficial de ${name}. Gratis, sin registro.`,
     takeFreeTest: ({ testLabel }) => `Hacer el ${testLabel} gratis`,
+    takeTest: ({ testLabel }) => `Hacer el ${testLabel}`,
+    practiceSubPro: ({ name, label }) => `Preguntas reales basadas en el ${label} oficial de ${name}.`,
     faqTitle: 'Preguntas frecuentes',
     otherManuals: ({ name }) => `Otros manuales de ${name}`,
     allStateManuals: ({ name }) => `Todos los manuales de ${name}`,
@@ -108,6 +114,8 @@ const PAGE_I18N = {
     practiceHeading: ({ name, testLabel }) => `${name} ${testLabel}练习`,
     practiceSub: ({ name, label }) => `基于官方 ${name} ${label} 的真实题目。免费，无需注册。`,
     takeFreeTest: ({ testLabel }) => `免费参加${testLabel}`,
+    takeTest: ({ testLabel }) => `参加${testLabel}`,
+    practiceSubPro: ({ name, label }) => `基于官方 ${name} ${label} 的真实题目。`,
     faqTitle: '常见问题',
     otherManuals: ({ name }) => `${name} 的其他手册`,
     allStateManuals: ({ name }) => `${name} 所有手册`,
@@ -134,6 +142,8 @@ const PAGE_I18N = {
     practiceHeading: ({ name, testLabel }) => `Практика ${name} ${testLabel}`,
     practiceSub: ({ name, label }) => `Реальні питання на основі офіційного ${name} ${label}. Безкоштовно, без реєстрації.`,
     takeFreeTest: ({ testLabel }) => `Пройти безкоштовно ${testLabel}`,
+    takeTest: ({ testLabel }) => `Пройти ${testLabel}`,
+    practiceSubPro: ({ name, label }) => `Реальні питання на основі офіційного ${name} ${label}.`,
     faqTitle: 'Поширені запитання',
     otherManuals: ({ name }) => `Інші посібники ${name}`,
     allStateManuals: ({ name }) => `Усі посібники ${name}`,
@@ -512,25 +522,16 @@ export default async function StateCatManualBody({ lang, state, cat }) {
           </div>
         )}
 
-        {/* Practice Test CTA */}
-        <div className="bg-[#0B1C3D] rounded-2xl p-6 mb-5 text-center shadow-lg border border-[#1e3a5f]">
-          <p className="text-sm font-semibold text-[#60A5FA] mb-2">
-            {tx.readyToTest}
-          </p>
-          <h2 className="text-base font-bold text-white mb-1">
-            {tx.practiceHeading({ name, testLabel: catInfo.testLabel })}
-          </h2>
-          <p className="text-sm text-[#94A3B8] mb-4">
-            {tx.practiceSub({ name, label: catInfo.label })}
-          </p>
-          <GradientButton
-            href={`/test?state=${state}&category=${catInfo.testCat}&lang=${lang}`}
-            variant="blue"
-            className="max-w-xs mx-auto"
-          >
-            {tx.takeFreeTest({ testLabel: catInfo.testLabel })}
-          </GradientButton>
-        </div>
+        {/* Practice Test CTA — state-aware (free invite vs clean Pro). */}
+        <ManualPracticeCta
+          href={`/test?state=${state}&category=${catInfo.testCat}&lang=${lang}`}
+          kicker={tx.readyToTest}
+          heading={tx.practiceHeading({ name, testLabel: catInfo.testLabel })}
+          subFree={tx.practiceSub({ name, label: catInfo.label })}
+          subPro={tx.practiceSubPro({ name, label: catInfo.label })}
+          ctaFree={tx.takeFreeTest({ testLabel: catInfo.testLabel })}
+          ctaPro={tx.takeTest({ testLabel: catInfo.testLabel })}
+        />
 
         {/* FAQ */}
         <div className="mb-8">
