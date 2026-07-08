@@ -14,6 +14,7 @@ import { trackBeginCheckout, trackTestStart, trackTestFinish, trackResume, track
 import { planForCategory } from '@/lib/plans';
 import { useExperiment } from '@/lib/experiments';
 import GradientButton from '@/app/components/GradientButton';
+import AccessTerminal from '@/app/components/AccessTerminal';
 
 // Brand line icons (2px stroke) — replaces the page's pre-overhaul emoji set
 // (✏️🎯📚🏆🔒🔓📖🔔📨 …) with the SVG language the rest of the site speaks.
@@ -48,7 +49,6 @@ const CrossDot = ({ size = 14 }) => (
   <svg width={size} height={size} viewBox="0 0 16 16" className="inline-block shrink-0 align-[-2px]" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="#DC2626" /><path d="M5.5 5.5l5 5M10.5 5.5l-5 5" stroke="#fff" strokeWidth="2" strokeLinecap="round" /></svg>
 );
 // Paywall-modal plan art — same PNGs as the home/result plan cards.
-const PLAN_ART = { moto: '/vehicles/moto-hero.png', auto: '/vehicles/mustang.png', cdl: '/vehicles/truck-hero.png' };
 
 const langs = [
   { label: 'EN', code: 'en' },
@@ -110,6 +110,11 @@ function TestContent() {
   const suggestPlan = plan.id;
   const isMoto = plan.pass_type === 'moto';
   const isCdl = plan.pass_type === 'cdl';
+  // Shared by the mode selector's gold CTA and the paywall terminal.
+  const stateTitle = state ? state.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ') : '';
+  const unlockCtaText = (tex.unlockAllStateTests || 'Unlock all {state} tests · {price}')
+    .replace('{state}', stateTitle)
+    .replace('{price}', plan.price);
   const freeLimit = isMoto ? 5 : 20;       // moto preview = 5q, car = 20q
   const nudgeAt   = isMoto ? 3 : 17;       // show nudge at question 4 (idx 3) for moto, 18 for car
 
@@ -814,13 +819,9 @@ function TestContent() {
         locked: !hasFullAccess,
       },
     ];
-    // One concrete offer for the whole locked group. The old design repeated
-    // this strip (state + price) on every locked card — three price tags in a
-    // row read as noise, not value.
-    const stateDisplayName = state ? state.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ') : '';
-    const unlockCtaText = (tex.unlockAllStateTests || 'Unlock all {state} tests · {price}')
-      .replace('{state}', stateDisplayName)
-      .replace('{price}', plan.price);
+    // One concrete offer for the whole locked group (unlockCtaText, hoisted
+    // above). The old design repeated a price strip on every locked card —
+    // three price tags in a row read as noise, not value.
 
     return (
       <main className="min-h-screen flex flex-col items-center justify-center p-6 relative" style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}>
@@ -1633,40 +1634,40 @@ function TestContent() {
                   buyers off to read the source instead (and violates the brand
                   rule: never pitch "from the manual"). */}
 
-              {/* Highlighted plan card for current category */}
-              <div className="flex justify-center mb-4">
-                <div className="w-full max-w-[200px] border-2 rounded-xl p-4 text-center flex flex-col"
-                  style={{
-                    borderColor: isCdl ? '#F59E0B' : isMoto ? '#D97706' : '#2563EB',
-                    background: isCdl ? '#FFFBEB' : isMoto ? '#FFF7ED' : '#EFF6FF',
-                  }}>
-                  {isCdl && <div className="text-[9px] font-bold text-[#0B1C3D] bg-[#F59E0B] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">{tex.planCdlBadge || 'Car tests included'}</div>}
-                  {!isCdl && !isMoto && <div className="text-[9px] font-bold text-white bg-[#2563EB] rounded-full px-1.5 py-0.5 mb-1 mx-auto w-fit">{tex.planPopular}</div>}
-                  <div className="h-[52px] flex items-center justify-center mb-1">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={PLAN_ART[plan.pass_type] || PLAN_ART.auto} alt="" aria-hidden="true" className="max-h-[48px] w-auto object-contain select-none pointer-events-none" />
-                  </div>
-                  <div className="text-xs font-bold mb-0.5" style={{ color: isCdl ? '#92400E' : isMoto ? '#D97706' : '#2563EB' }}>
-                    {isCdl ? tex.planCdlPro : isMoto ? tex.planMotoPass : tex.planAutoPass}
-                  </div>
-                  <div className="text-2xl font-black text-[#0B1C3D] mb-0.5">{plan.price}</div>
-                  <div className="text-[10px] text-[#64748B] mb-3">{tex.planDuration || '30-day access'}</div>
-                  <GradientButton
-                    onClick={modalCheckout}
-                    variant={isCdl || isMoto ? 'gold' : 'blue'}
-                    className={`text-sm ${modalBuyLoading ? 'pointer-events-none opacity-60' : ''}`}>
-                    {modalBuyLoading ? '…' : (tex.getIt || 'Get it')}
-                  </GradientButton>
-                  {modalNotice?.type === 'owned' && (
-                    <p className="text-[11px] text-[#B45309] mt-2 leading-snug">
-                      {tex.alreadyOwnPass || 'You already have this pass.'}{' '}
-                      <Link href={`/profile?lang=${lang}`} className="underline font-semibold">
-                        {tex.planManage || 'Manage'}
-                      </Link>
-                    </p>
-                  )}
-                </div>
-              </div>
+              {/* Access Terminal: the bank as a scan console. Honest numbers
+                  (real pool count, real redacted questions), suggestive frame
+                  — the "hack the base" fantasy, played legally. Theater ends
+                  here; Stripe checkout itself stays plain and honest. */}
+              <AccessTerminal
+                tex={tex}
+                stateName={stateTitle}
+                total={allQuestions.length}
+                seen={Math.min(freeLimit, allQuestions.length)}
+                rows={(() => {
+                  // Sample records SPREAD across the bank (not 4 consecutive
+                  // ones that all start with the same words) — the jumping
+                  // record numbers also show the bank's depth.
+                  const n = allQuestions.length;
+                  const picks = [...new Set([
+                    freeLimit,
+                    freeLimit + Math.floor((n - freeLimit) * 0.33),
+                    freeLimit + Math.floor((n - freeLimit) * 0.66),
+                    n - 1,
+                  ].filter(i => i >= 0 && i < n))];
+                  return picks.map(i => ({ n: i + 1, question: allQuestions[i]?.question }));
+                })()}
+                ctaText={unlockCtaText}
+                onBuy={modalCheckout}
+                buyLoading={modalBuyLoading}>
+                {modalNotice?.type === 'owned' && (
+                  <p className="text-[11px] text-[#FBBF24] mt-2 leading-snug" style={{ fontFamily: 'inherit' }}>
+                    {tex.alreadyOwnPass || 'You already have this pass.'}{' '}
+                    <Link href={`/profile?lang=${lang}`} className="underline font-semibold">
+                      {tex.planManage || 'Manage'}
+                    </Link>
+                  </p>
+                )}
+              </AccessTerminal>
 
               <p className="text-center text-xs text-[#94A3B8] mb-1">{tex.cancelAnytime}</p>
               <p className="text-center mb-3">
