@@ -773,7 +773,7 @@ function TestContent() {
           : (tex.modePracticeDesc || '20 questions  ·  always free'),
         count: Math.min(freeLimit, totalAvailable),
         color: '#16A34A',
-        gradient: 'linear-gradient(135deg, #F0FDF4, #DCFCE7)',
+        tint: '#F0FDF4',
         locked: false,
       }] : []),
       {
@@ -783,7 +783,7 @@ function TestContent() {
         desc: dmv(tex.modeRealDesc),
         count: realCount,
         color: '#2563EB',
-        gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)',
+        tint: '#EFF6FF',
         time: `${categoryTimeLimit[category] / 60} ${tex.minLabel}`,
         locked: !hasFullAccess,
       },
@@ -800,7 +800,7 @@ function TestContent() {
           : tex.modeExtendedDesc,
         count: Math.min(80, totalAvailable),
         color: '#7C3AED',
-        gradient: 'linear-gradient(135deg, #F5F3FF, #EDE9FE)',
+        tint: '#F5F3FF',
         locked: !hasFullAccess,
       }] : []),
       {
@@ -810,10 +810,17 @@ function TestContent() {
         desc: tex.modeMarathonDesc,
         count: totalAvailable,
         color: '#D97706',
-        gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)',
+        tint: '#FFF7ED',
         locked: !hasFullAccess,
       },
     ];
+    // One concrete offer for the whole locked group. The old design repeated
+    // this strip (state + price) on every locked card — three price tags in a
+    // row read as noise, not value.
+    const stateDisplayName = state ? state.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ') : '';
+    const unlockCtaText = (tex.unlockAllStateTests || 'Unlock all {state} tests · {price}')
+      .replace('{state}', stateDisplayName)
+      .replace('{price}', plan.price);
 
     return (
       <main className="min-h-screen flex flex-col items-center justify-center p-6 relative" style={{ background: 'linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%)' }}>
@@ -882,94 +889,98 @@ function TestContent() {
 
           <div className="flex flex-col gap-3">
             {modes.map(m => {
+              // Unified card anatomy for every row: white surface, one soft
+              // tinted icon tile, title + gray meta. The mode's color lives
+              // ONLY in the icon tile — three pastel card backgrounds next to
+              // each other read as noise, not hierarchy.
+              const metaLine = m.id === 'real'
+                ? `${m.count} ${tex.modeQuestions}${m.time ? ` · ${m.time}` : ''}`
+                : m.id === 'marathon'
+                  ? `${m.count} ${tex.modeQuestions}`
+                  : null;
               if (!m.locked) {
                 // Free user's single playable card is THE primary action on
-                // this screen — hero treatment (solid green, explicit CTA,
-                // shine sweep) so it doesn't blend into the locked pastels.
-                // Pro users see all modes unlocked, so they get the neutral
-                // per-mode style instead of four screaming green cards.
+                // this screen: green accent + explicit CTA with the brand
+                // shine. Pro users get the same quiet anatomy, unlocked.
                 if (!hasFullAccess) {
+                  // Two rows (text, then full-width CTA): inline buttons crush
+                  // the RU/ES/UA copy into 4-line wraps at 375px.
                   return (
                     <button key={m.id} type="button" onClick={() => startWithMode(m.id)}
-                      className="relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 text-left border-2 border-[#16A34A] transition-all hover:-translate-y-0.5"
-                      style={{ background: 'linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%)', boxShadow: '0 10px 26px rgba(22,163,74,0.22)' }}>
-                      <span aria-hidden="true" className="gradient-btn-shine pointer-events-none absolute inset-y-0 -left-1/2 w-1/3" />
-                      <span className="w-12 h-12 rounded-xl bg-[#16A34A] flex items-center justify-center shrink-0 shadow-md relative"><LineIcon name={m.icon} size={24} color="#FFFFFF" /></span>
-                      <div className="flex-1 relative">
-                        <div className="font-bold text-[#0B1C3D] text-[17px]">{m.label}</div>
-                        <div className="text-sm text-[#475569] mt-0.5">{m.desc}</div>
-                      </div>
-                      <div className="flex flex-col items-end gap-1.5 shrink-0 relative">
-                        <span className="text-sm font-bold px-4 py-2 rounded-xl bg-[#16A34A] text-white shadow-sm">
-                          {tex.startFree || 'Start Free'}
+                      className="relative overflow-hidden rounded-2xl p-5 text-left bg-white border border-[#86EFAC] transition-all hover:-translate-y-0.5"
+                      style={{ boxShadow: '0 8px 24px rgba(22,163,74,0.14)' }}>
+                      <div className="flex items-center gap-4 mb-4">
+                        <span className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: '#F0FDF4' }}>
+                          <LineIcon name={m.icon} size={22} color="#16A34A" />
                         </span>
+                        <div className="flex-1">
+                          <div className="font-bold text-[#0B1C3D] text-[16px]">{m.label}</div>
+                          <div className="text-[13px] text-[#64748B] mt-0.5">{m.desc}</div>
+                        </div>
                       </div>
+                      <span className="relative overflow-hidden block w-full text-center text-[15px] font-bold px-4 py-3 rounded-xl text-white"
+                        style={{ background: 'linear-gradient(135deg, #22C55E 0%, #16A34A 60%, #15803D 100%)', boxShadow: '0 4px 12px rgba(22,163,74,0.3)' }}>
+                        <span aria-hidden="true" className="gradient-btn-shine pointer-events-none absolute inset-y-0 -left-1/2 w-1/2" />
+                        <span className="relative">{tex.startFree || 'Start Free'}</span>
+                      </span>
                     </button>
                   );
                 }
                 return (
                   <button key={m.id} type="button" onClick={() => startWithMode(m.id)}
-                    className="rounded-2xl p-5 flex items-center gap-4 hover:shadow-lg hover:-translate-y-0.5 transition-all text-left border border-[#E2E8F0] shadow-sm"
-                    style={{ background: m.gradient }}>
-                    <span className="w-11 h-11 rounded-xl bg-white flex items-center justify-center shrink-0 shadow-sm"><LineIcon name={m.icon} size={22} color={m.color} /></span>
+                    className="rounded-2xl p-5 flex items-center gap-4 bg-white hover:shadow-lg hover:-translate-y-0.5 transition-all text-left border border-[#E2E8F0] shadow-sm">
+                    <span className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: m.tint }}>
+                      <LineIcon name={m.icon} size={22} color={m.color} />
+                    </span>
                     <div className="flex-1">
                       <div className="font-bold text-[#0B1C3D] text-[16px]">{m.label}</div>
-                      <div className="text-sm text-[#475569] mt-0.5">{m.desc}</div>
+                      <div className="text-[13px] text-[#64748B] mt-0.5">{m.desc}</div>
+                      {metaLine && <div className="text-[11px] text-[#94A3B8] mt-1">{metaLine}</div>}
                     </div>
-                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-white shadow-sm shrink-0" style={{ color: m.color }}>
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-full shrink-0" style={{ background: m.tint, color: m.color }}>
                       {m.count} {tex.modeQuestions}
                     </span>
                   </button>
                 );
               }
 
-              // Locked card  ·  click goes straight to /upgrade. Bottom strip
-              // is the unlock CTA so free users see the offer + price without
-              // an extra modal click in the way.
-              const stateDisplayName = state ? state.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ') : '';
-              const unlockCtaText = (tex.unlockAllStateTests || 'Unlock all {state} tests · {price}')
-                .replace('{state}', stateDisplayName)
-                .replace('{price}', plan.price);
+              // Locked card · click goes straight to /upgrade. One quiet lock,
+              // no per-card price strip — the single gold CTA below the list
+              // carries the offer.
               return (
                 <button
                   key={m.id}
                   type="button"
                   onMouseEnter={() => setLockAnimKey(k => ({ ...k, [m.id]: (k[m.id] || 0) + 1 }))}
                   onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
-                  className="rounded-2xl pt-5 px-5 pb-10 flex items-center gap-4 text-left border border-[#E2E8F0] shadow-sm transition-all hover:shadow-lg hover:-translate-y-0.5 relative overflow-hidden cursor-pointer"
-                  style={{ background: m.gradient }}>
-                  <span className="w-11 h-11 rounded-xl bg-white flex items-center justify-center shrink-0 shadow-sm"><LineIcon name={m.icon} size={22} color={m.color} /></span>
-                  <div className="flex-1 relative">
+                  className="rounded-2xl p-5 flex items-center gap-4 text-left bg-white border border-[#E2E8F0] shadow-sm transition-all hover:shadow-lg hover:-translate-y-0.5 cursor-pointer">
+                  <span className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: m.tint }}>
+                    <LineIcon name={m.icon} size={22} color={m.color} />
+                  </span>
+                  <div className="flex-1">
                     <div className="font-bold text-[#0B1C3D] text-[16px]">{m.label}</div>
-                    <div className="text-sm text-[#475569] mt-0.5">{m.desc}</div>
-                    {m.time && (
-                      <div className="text-[11px] text-[#94A3B8] mt-1">{m.time}</div>
-                    )}
+                    <div className="text-[13px] text-[#64748B] mt-0.5">{m.desc}</div>
+                    {metaLine && <div className="text-[11px] text-[#94A3B8] mt-1">{metaLine}</div>}
                   </div>
-                  <div className="flex flex-col items-end gap-1.5 shrink-0 relative">
-                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-white shadow-sm text-[#475569]">
-                      {m.count} {tex.modeQuestions}
-                    </span>
-                    {/* Animated lock */}
-                    <span
-                      key={lockAnimKey[m.id] || 0}
-                      className={lockAnimKey[m.id] ? 'lock-animate' : ''}
-                      style={{ lineHeight: 1 }}>
-                      <LineIcon name="lock" size={20} color="#475569" />
-                    </span>
-                  </div>
-                  {/* Unlock CTA — replaces the old "CDL Pro · 99%" shimmer.
-                      Shows state name + price so the offer is concrete. */}
-                  <div className="badge-shimmer absolute bottom-0 left-0 right-0 flex items-center justify-center gap-1.5 py-2 rounded-b-2xl">
-                    <LineIcon name="unlock" size={13} color="#92400E" />
-                    <span className="text-[11px] font-bold tracking-wide" style={{ color: '#92400E' }}>
-                      {unlockCtaText}
-                    </span>
-                  </div>
+                  <span
+                    key={lockAnimKey[m.id] || 0}
+                    className={`w-9 h-9 rounded-full bg-[#F1F5F9] flex items-center justify-center shrink-0 ${lockAnimKey[m.id] ? 'lock-animate' : ''}`}>
+                    <LineIcon name="lock" size={17} color="#64748B" />
+                  </span>
                 </button>
               );
             })}
           </div>
+
+          {/* Single concrete offer for the whole locked group (free users). */}
+          {!hasFullAccess && (
+            <GradientButton
+              variant="gold"
+              onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
+              className="mt-4">
+              <span className="text-[15px]">{unlockCtaText}</span>
+            </GradientButton>
+          )}
 
           {/* Real exam mode toggle (pro only) */}
           {hasFullAccess && (
