@@ -178,6 +178,24 @@ export async function POST(req) {
     // always create a customer, so only set this for one-time.
     if (isOneTime) {
       sessionParams.customer_creation = 'always';
+      // Restate the payment-model facts at the moment of highest anxiety,
+      // right under the Pay button. Checkout-forensics 2026-07-08: every
+      // abandoned session closed the page without ever touching the card
+      // form, so reassurance has to live on the Stripe page itself, not
+      // only on /upgrade. Stripe doesn't translate custom_text, so we
+      // localize it ourselves. payment mode only — the legacy subscription
+      // plans would make "not a subscription" a lie.
+      const SUBMIT_NOTE = {
+        en: 'One-time payment. 30 days of access. Not a subscription, nothing to cancel.',
+        ru: 'Разовый платёж. Доступ на 30 дней. Это не подписка, отменять ничего не нужно.',
+        es: 'Pago único. 30 días de acceso. No es una suscripción, no hay nada que cancelar.',
+        zh: '一次性付款，30天使用权。非订阅，无需取消。',
+        ua: 'Разовий платіж. Доступ на 30 днів. Це не підписка, нічого скасовувати не потрібно.',
+      };
+      sessionParams.submit_type = 'pay';
+      sessionParams.custom_text = {
+        submit: { message: SUBMIT_NOTE[body.lang] || SUBMIT_NOTE.en },
+      };
     }
 
     // Pass metadata to subscription object too (so renewal invoices see it)
