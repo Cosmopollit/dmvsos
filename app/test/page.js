@@ -1643,6 +1643,18 @@ function TestContent() {
                 stateName={stateTitle}
                 total={allQuestions.length}
                 seen={Math.min(freeLimit, allQuestions.length)}
+                target={(() => {
+                  // Real competence facts for this state+category: the correct
+                  // agency abbr (DPS/DOL/... not generic DMV) + real exam size
+                  // and pass mark. Language-neutral, pulled from live data.
+                  const catForRules = category === 'cdl' ? 'cdl' : category === 'moto' ? 'motorcycle' : 'car';
+                  const rule = examRulesFor(state, catForRules);
+                  return {
+                    agency: agencyAbbrForState(state),
+                    q: rule?.questions || null,
+                    p: passPercentFor(state, catForRules) || null,
+                  };
+                })()}
                 rows={(() => {
                   // Sample records SPREAD across the bank (not 4 consecutive
                   // ones that all start with the same words) — the jumping

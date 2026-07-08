@@ -23,9 +23,19 @@ function redact(text, keepWords) {
 }
 
 export default function AccessTerminal({
-  tex, stateName, total, seen, rows, ctaText, onBuy, buyLoading, children,
+  tex, stateName, total, seen, rows, target, ctaText, onBuy, buyLoading, children,
 }) {
   const pct = total > 0 ? Math.max(0.1, Math.round((seen / total) * 1000) / 10) : 0;
+  // Competence line: the system "identifies the target" using real facts we
+  // know about this state — the correct agency (DPS/DOL/MVD, not a generic
+  // DMV), the real exam size and pass mark. Proving we know the specifics is
+  // what makes the bank feel real instead of a fake gimmick.
+  const targetLine = target?.agency && target?.q && target?.p
+    ? (tex.termTarget || 'Target locked: {agency} · {q}-question exam · pass {p}%')
+        .replace('{agency}', target.agency)
+        .replace('{q}', String(target.q))
+        .replace('{p}', String(target.p))
+    : null;
   return (
     <div className="rounded-2xl overflow-hidden border border-[#1E3A5F] text-left mb-4"
       style={{ background: '#081226', fontFamily: MONO }}>
@@ -38,6 +48,13 @@ export default function AccessTerminal({
       </div>
 
       <div className="px-4 py-3.5">
+        {/* Competence: identify the target from real state facts */}
+        {targetLine && (
+          <div className="term-row flex items-start gap-1.5 text-[11px] text-[#5EEAD4] mb-2.5 leading-snug" style={{ animationDelay: '0.2s' }}>
+            <span className="text-[#0EA5E9] shrink-0">&gt;</span>
+            <span>{targetLine}</span>
+          </div>
+        )}
         {/* Scan */}
         <div className="text-[11px] text-[#94A3B8] mb-1.5">
           {tex.termScanning || 'Scanning the question bank...'}
