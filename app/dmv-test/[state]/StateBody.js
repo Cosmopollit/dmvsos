@@ -234,10 +234,14 @@ export default function StateBody({ lang, state }) {
           {tex.dtIntro || `Practice with real ${meta.abbr} knowledge test questions and pass on your first try. Study in your language: English, Spanish, Russian, Chinese, and Ukrainian.`}
         </p>
 
-        {/* Language CTA card */}
-        <div className="relative overflow-hidden bg-[#0B1C3D] rounded-2xl p-6 mb-6 shadow-xl">
-          <div aria-hidden="true" className="absolute -top-20 -right-20 w-56 h-56 rounded-full pointer-events-none"
-            style={{ background: 'radial-gradient(circle, rgba(37,99,235,0.28) 0%, transparent 70%)' }} />
+        {/* Language CTA card. overflow-hidden lives on the decorative-blob
+            layer ONLY, not the card — the card must let the language dropdown
+            open past its bottom edge (it was clipping 中文/Українська). */}
+        <div className="relative bg-[#0B1C3D] rounded-2xl p-6 mb-6 shadow-xl">
+          <div aria-hidden="true" className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
+            <div className="absolute -top-20 -right-20 w-56 h-56 rounded-full"
+              style={{ background: 'radial-gradient(circle, rgba(37,99,235,0.28) 0%, transparent 70%)' }} />
+          </div>
           <p className="relative text-[#94A3B8] text-xs font-semibold mb-4 uppercase tracking-widest">
             {tex.dtChooseLang || 'Choose your language and start:'}
           </p>
