@@ -11,7 +11,10 @@ export default function PersonalGreeting() {
     if (!user?.email) return;
     const email = user.email.toLowerCase();
     const flagKey = `dmvsos_greeted_${email}`;
-    if (localStorage.getItem(flagKey)) return;
+    // Blocked storage throws on access; treat as already greeted (don't show).
+    let greeted = true;
+    try { greeted = !!localStorage.getItem(flagKey); } catch { /* blocked storage */ }
+    if (greeted) return;
 
     let cancelled = false;
     (async () => {
@@ -25,7 +28,7 @@ export default function PersonalGreeting() {
       const { greeting: g } = await res.json();
       if (cancelled || !g) return;
       setGreeting(g);
-      localStorage.setItem(flagKey, '1');
+      try { localStorage.setItem(flagKey, '1'); } catch { /* blocked storage */ }
     })().catch(() => {});
 
     return () => { cancelled = true; };

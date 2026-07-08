@@ -14,7 +14,10 @@ export default function NastyaGreeting() {
     if (!user?.email) return;
     if (user.email.toLowerCase() !== NASTYA_EMAIL) return;
     if (typeof window === 'undefined') return;
-    if (localStorage.getItem(SEEN_FLAG) === 'true') return;
+    // Blocked storage throws on access; treat as already seen (don't show).
+    let seen = true;
+    try { seen = localStorage.getItem(SEEN_FLAG) === 'true'; } catch { /* blocked storage */ }
+    if (seen) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setShow(true);
   }, [user?.email]);

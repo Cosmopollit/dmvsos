@@ -8,7 +8,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { PASS_META } from '@/lib/plans';
-import { trackBeginCheckout } from '@/lib/gtag';
+import { trackBeginCheckout, trackCheckoutError } from '@/lib/gtag';
 import { useExperiment } from '@/lib/experiments';
 import SupportFooter from '@/app/components/SupportFooter';
 import GradientButton from '@/app/components/GradientButton';
@@ -109,6 +109,15 @@ function UpgradeContent() {
         fetchOpts.headers['Authorization'] = `Bearer ${session.access_token}`;
       }
       const res = await fetch('/api/create-checkout', fetchOpts);
+      // Stale cached session: the server rejected the token. Re-login and
+      // come back with the checkout intent intact (mirrors the not-logged-in
+      // branch above) instead of dead-ending on a generic error.
+      if (res.status === 401) {
+        trackCheckoutError(401, 'upgrade');
+        const next = `/upgrade?plan=${planId}&lang=${lang}&intent=checkout`;
+        router.push(`/login?next=${encodeURIComponent(next)}&lang=${lang}`);
+        return;
+      }
       const data = await res.json();
       // User already owns this type → explain it in the card (a silent redirect
       // to /profile read as "the button is broken").
@@ -121,8 +130,12 @@ function UpgradeContent() {
         // (not on the 409 own-already / error paths). planId is onetime_<type>.
         trackBeginCheckout(planId.replace('onetime_', ''), 'new');
         window.location.href = data.url;
-      } else setCardNotice({ planId, type: 'error' });
+      } else {
+        trackCheckoutError(res.status, 'upgrade');
+        setCardNotice({ planId, type: 'error' });
+      }
     } catch {
+      trackCheckoutError('network', 'upgrade');
       setCardNotice({ planId, type: 'error' });
     } finally {
       setLoadingPlan(null);
@@ -142,6 +155,11 @@ function UpgradeContent() {
     if (searchParams.get('intent') !== 'checkout') return;
     if (!preselect) return;
     autoCheckoutFiredRef.current = true;
+    // Disarm the history entry: Back from Stripe re-mounts this page with the
+    // same URL, and a live `intent` param would re-launch Stripe checkout.
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('intent');
+    router.replace(`/upgrade?${params.toString()}`, { scroll: false });
     handleCheckout(preselect);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, preselect]);

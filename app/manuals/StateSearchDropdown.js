@@ -152,7 +152,13 @@ export default function StateSearchDropdown({ lang = 'en', placeholder, onSelect
       <div className={`flex items-center bg-white rounded-2xl border shadow-sm px-4 py-3.5 transition-all ${
         open ? 'border-[#2563EB] ring-2 ring-[#2563EB]/10' : 'border-[#E2E8F0]'
       }`}>
-        <span className="text-[#94A3B8] mr-3 pointer-events-none text-base leading-none">🔍</span>
+        <span className="text-[#94A3B8] mr-3 pointer-events-none shrink-0 flex items-center">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+            strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m20.5 20.5-4.3-4.3" />
+          </svg>
+        </span>
         <input
           ref={inputRef}
           type="text"

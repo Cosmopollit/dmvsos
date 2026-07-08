@@ -80,7 +80,7 @@ export default function StateBody({ lang, state }) {
             name: `Is the ${name} DMV practice test free?`,
             acceptedAnswer: {
               '@type': 'Answer',
-              text: `Yes. DMVSOS provides a free ${name} DMV practice test with real knowledge test questions. One-time passes from ${MIN_PRICE} (30 days) unlock extended 40-question tests and detailed answer explanations — no subscription.`,
+              text: `Yes. DMVSOS provides a free ${name} DMV practice test with real knowledge test questions. One-time passes from ${MIN_PRICE} (30 days) add extended 40-question tests and detailed answer explanations. No subscription.`,
             },
           },
           {

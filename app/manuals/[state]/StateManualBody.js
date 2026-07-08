@@ -96,7 +96,9 @@ export default async function StateManualBody({ lang, state }) {
         areaServed: { '@type': 'State', name },
       },
     ],
-  });
+  // Match the visible copy: refer to this state's real agency, not generic
+  // "DMV" (WA = DOL, TX = DPS, ...). \b keeps the brand "DMVSOS" intact.
+  }).replace(/\bDMV\b/g, ag);
 
   return (
     <div

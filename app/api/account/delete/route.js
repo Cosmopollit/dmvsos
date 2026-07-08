@@ -28,6 +28,7 @@ export async function POST(req) {
     // send the user_id — they could send someone else's).
     const { data: userData, error: userErr } = await supabaseAdmin.auth.getUser(token);
     if (userErr || !userData?.user?.id) {
+      console.warn('[account/delete] invalid session', { message: userErr?.message });
       return Response.json({ error: 'Invalid session' }, { status: 401 });
     }
     const userId = userData.user.id;
@@ -36,6 +37,7 @@ export async function POST(req) {
     // Delete the auth row. FK CASCADE cleans active_passes.
     const { error: deleteErr } = await supabaseAdmin.auth.admin.deleteUser(userId);
     if (deleteErr) {
+      console.error('[account/delete] deleteUser failed', { userId, message: deleteErr.message });
       return Response.json({ error: deleteErr.message }, { status: 500 });
     }
 
@@ -55,6 +57,7 @@ export async function POST(req) {
 
     return Response.json({ ok: true });
   } catch (err) {
+    console.error('[account/delete] unhandled error', { message: err?.message });
     return Response.json({ error: err?.message || 'Internal error' }, { status: 500 });
   }
 }

@@ -98,13 +98,24 @@ export async function POST(req) {
     //   expired      — older than 4 hours
     const tokenResult = verifyQuestionToken(q_token);
     if (!tokenResult.ok) {
+      if (tokenResult.error === 'expired') {
+        // Expected when a test tab sits open past the 4h token TTL. The
+        // decrypted questionId survives expiry, so log it for correlation.
+        console.warn('[test/check] expired token', { questionId: tokenResult.questionId || null });
+      } else {
+        console.error('[test/check] invalid token', { reason: tokenResult.error });
+      }
       return corsJson({ ok: false, error: 'token_' + tokenResult.error }, { status: 400 });
     }
     const question_id = tokenResult.questionId;
 
     // Rate limit (per IP, or per IP+DeviceId for native clients).
-    const rl = rateLimit(clientKey(req));
+    const key = clientKey(req);
+    const rl = rateLimit(key);
     if (!rl.ok) {
+      // Deliberate protective 429, not an app error. Warn keeps it visible
+      // without flooding the error stream during a scrape burst.
+      console.warn('[test/check] rate_limited', { key });
       return corsJson(
         { ok: false, error: 'rate_limited', resetAt: rl.resetAt },
         { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetAt - Date.now()) / 1000)) } }
@@ -121,10 +132,14 @@ export async function POST(req) {
       headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY },
     });
     if (!r.ok) {
+      console.error('[test/check] db error', { status: r.status, questionId: question_id });
       return corsJson({ ok: false, error: 'db' }, { status: 500 });
     }
     const rows = await r.json();
     if (rows.length === 0) {
+      // Valid token but the question is gone — happens when a question is
+      // deleted (quality pipeline) after the token was minted.
+      console.warn('[test/check] question not found', { questionId: question_id });
       return corsJson({ ok: false, error: 'not_found' }, { status: 404 });
     }
     const q = rows[0];
@@ -144,6 +159,7 @@ export async function POST(req) {
         } }
     );
   } catch (err) {
+    console.error('[test/check] unhandled error', { message: err.message });
     return corsJson({ ok: false, error: err.message }, { status: 500 });
   }
 }

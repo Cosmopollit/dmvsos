@@ -160,7 +160,9 @@ export async function POST(req) {
       mode: isSubscription ? 'subscription' : 'payment',
       line_items: [{ price: PLAN_PRICE_IDS[planType], quantity: 1 }],
       success_url: `${SITE_URL}/success?session_id={CHECKOUT_SESSION_ID}${purchaseTracking}`,
-      cancel_url: `${SITE_URL}/upgrade`,
+      // Back from Stripe returns to /upgrade with the chosen plan preselected
+      // and the UI language intact (no intent param, so nothing auto-fires).
+      cancel_url: `${SITE_URL}/upgrade?plan=${encodeURIComponent(planType)}&lang=${encodeURIComponent(body.lang || 'en')}`,
       metadata,
       // phone_number_collection removed 2026-07-01: a REQUIRED phone field on a
       // $19.99-$49.99 one-time digital purchase measurably kills mobile checkout

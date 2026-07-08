@@ -19,7 +19,7 @@ function SuccessContent() {
   const lang = getSavedLang();
   const tex = t[lang] || t.en;
 
-  const [status, setStatus] = useState(sessionId ? 'logging-in' : 'no-session');
+  const [status, setStatus] = useState(sessionId ? 'logging-in' : 'redirect');
   const [error, setError] = useState(null);
   // Email comes back from /api/auth/checkout-login so we can show the user
   // which inbox to check on the error fallback, instead of vague "your email".
@@ -42,7 +42,13 @@ function SuccessContent() {
   }, [sessionId, purchasePt, purchaseKind]);
 
   useEffect(() => {
-    if (!sessionId) return;
+    if (!sessionId) {
+      // No Stripe session in the URL: nothing to confirm here. This page
+      // used to show "Payment successful! Welcome to Pro" to any direct
+      // visitor, which was a lie. Send them home instead.
+      router.replace(`/?lang=${lang}`);
+      return;
+    }
     // Signal AuthContext that a payment just happened, so it polls through
     // the webhook-processing window once the user lands logged-in (instead
     // of caching "free" if the webhook is still writing the pass). Set on
@@ -50,43 +56,68 @@ function SuccessContent() {
     // supabase.co and back. Consumed + cleared by AuthContext.
     try { sessionStorage.setItem('dmvsos_just_paid', '1'); } catch { /* private mode */ }
     let cancelled = false;
+    // Delayed methods (Klarna, Cash App, bank debits) redirect here while
+    // the payment is still settling (202 pending from checkout-login).
+    // Cash App usually clears in seconds, so poll a few times before
+    // settling into the pending screen.
+    const PENDING_RETRY_MS = [8000, 20000, 40000];
     (async () => {
-      try {
-        // Webhook needs to (a) read Stripe event, (b) optionally create the
-        // auth.users row via getOrCreateUserByEmail (which lists every user
-        // in the project), (c) insert active_passes + profiles + purchases.
-        // On warm dynos that runs in <1s but on cold start it can take 3-4s.
-        // Earlier 1500ms triggered a race where /success raced ahead of the
-        // webhook and the user landed logged-in but without active_pass —
-        // free tier UI, confusing.
-        await new Promise(r => setTimeout(r, 4000));
-        const res = await fetch('/api/auth/checkout-login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ session_id: sessionId }),
-        });
-        const data = await res.json();
+      // Webhook needs to (a) read Stripe event, (b) optionally create the
+      // auth.users row via getOrCreateUserByEmail (which lists every user
+      // in the project), (c) insert active_passes + profiles + purchases.
+      // On warm dynos that runs in <1s but on cold start it can take 3-4s.
+      // Earlier 1500ms triggered a race where /success raced ahead of the
+      // webhook and the user landed logged-in but without active_pass —
+      // free tier UI, confusing.
+      await new Promise(r => setTimeout(r, 4000));
+      for (let attempt = 0; ; attempt++) {
+        let res, data;
+        try {
+          res = await fetch('/api/auth/checkout-login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ session_id: sessionId }),
+          });
+          data = await res.json();
+        } catch (e) {
+          if (cancelled) return;
+          setError(e.message);
+          setStatus('error');
+          return;
+        }
         if (cancelled) return;
         if (data.email) setEmail(data.email);
         if (data.login_url) {
           // Redirect to Supabase verify URL - lands user logged-in on dmvsos.com
           window.location.href = data.login_url;
-        } else {
-          setError(data.error || 'login failed');
-          setStatus('error');
+          return;
         }
-      } catch (e) {
-        if (cancelled) return;
-        setError(e.message);
+        if (res.status === 202 && data.pending) {
+          setStatus('pending');
+          if (attempt < PENDING_RETRY_MS.length) {
+            await new Promise(r => setTimeout(r, PENDING_RETRY_MS[attempt]));
+            if (cancelled) return;
+            continue;
+          }
+          // Still settling: access activates via the async webhook, and
+          // never-signed-in buyers get an email from the recovery cron.
+          return;
+        }
+        if (res.status === 410) {
+          setStatus('expired');
+          return;
+        }
+        setError(data.error || 'login failed');
         setStatus('error');
+        return;
       }
     })();
     return () => { cancelled = true; };
-  }, [sessionId]);
+  }, [sessionId, router, lang]);
 
-  // Resend uses the same endpoint, which generates a fresh magic-link each
-  // call. Cheap on our side; useful when the first email landed in spam or
-  // hasn't arrived yet.
+  // Retry uses the same endpoint, which generates a fresh login link each
+  // call. On failure we say so honestly — there is no email fallback here,
+  // the real login path is the login_url redirect (or /login by email).
   async function handleResend() {
     if (!sessionId || resending) return;
     setResending(true);
@@ -104,12 +135,17 @@ function SuccessContent() {
         window.location.href = data.login_url;
         return;
       }
-      setResendStatus('sent');
+      if (res.status === 202 && data.pending) {
+        setStatus('pending');
+        return;
+      }
+      if (res.status === 410) {
+        setStatus('expired');
+        return;
+      }
+      setResendStatus('failed');
     } catch (_) {
-      // Network error reaching our own endpoint. There is no email backup
-      // (generate_link does not send mail); the real login path is the
-      // login_url redirect above. Nothing more to do, just clear the spinner.
-      setResendStatus('sent');
+      setResendStatus('failed');
     } finally {
       setResending(false);
     }
@@ -130,10 +166,12 @@ function SuccessContent() {
             </svg>
           </div>
           <h1 className="text-xl font-bold text-[#0B1C3D] mb-3">
-            {tex.paymentSuccess || 'Payment successful!'}
+            {status === 'pending'
+              ? (tex.successPendingTitle || 'Payment is processing')
+              : (tex.paymentSuccess || 'Payment successful!')}
           </h1>
 
-          {status === 'logging-in' && (
+          {(status === 'logging-in' || status === 'redirect') && (
             <>
               <p className="text-[#475569] text-sm leading-relaxed mb-2">
                 {tex.successLoggingIn || 'Setting up your account...'}
@@ -142,13 +180,26 @@ function SuccessContent() {
             </>
           )}
 
-          {status === 'no-session' && (
+          {status === 'pending' && (
+            <>
+              <p className="text-[#475569] text-sm leading-relaxed mb-4">
+                {tex.successPendingBody || 'Your payment method is confirming the payment. Access activates automatically as soon as it clears. If you are new here, we will email you a sign-in link.'}
+              </p>
+              <div className="inline-block w-6 h-6 border-2 border-[#F59E0B] border-t-transparent rounded-full animate-spin mb-4"></div>
+              <button type="button" onClick={() => router.push(`/?lang=${lang}`)}
+                className="w-full bg-white text-[#0B1C3D] border border-[#E2E8F0] py-3 rounded-xl font-medium text-sm hover:bg-[#F8FAFC] transition">
+                {tex.startPracticing || 'Go to site'}
+              </button>
+            </>
+          )}
+
+          {status === 'expired' && (
             <>
               <p className="text-[#475569] text-sm leading-relaxed mb-6">
-                {tex.welcomePro || 'Welcome to DMVSOS Pro! You now have access to all tests.'}
+                {tex.successSessionExpired || 'This confirmation link has expired. Sign in with your email to access your account.'}
               </p>
-              <GradientButton onClick={() => router.push(`/?lang=${lang}`)} className="mb-3">
-                {tex.startPracticing || 'Start practicing'}
+              <GradientButton onClick={() => router.push(`/login?lang=${lang}`)} className="mb-3">
+                {tex.successSignInCta || 'Sign in with email'}
               </GradientButton>
             </>
           )}
@@ -169,9 +220,9 @@ function SuccessContent() {
                   </div>
                 </div>
               )}
-              {resendStatus === 'sent' && (
-                <p className="text-xs text-[#16A34A] mb-3">
-                  {tex.successResent || 'New login link sent.'}
+              {resendStatus === 'failed' && (
+                <p className="text-xs text-[#DC2626] mb-3">
+                  {tex.successResendFailed || "Couldn't get a sign-in link. Try again in a minute, or sign in with your email."}
                 </p>
               )}
               <button
@@ -182,9 +233,9 @@ function SuccessContent() {
               >
                 {resending ? '...' : (tex.successResendCta || 'Resend login link')}
               </button>
-              <button type="button" onClick={() => router.push(`/?lang=${lang}`)}
+              <button type="button" onClick={() => router.push(`/login?lang=${lang}`)}
                 className="w-full bg-white text-[#0B1C3D] border border-[#E2E8F0] py-3 rounded-xl font-medium text-sm hover:bg-[#F8FAFC] transition mb-2">
-                {tex.startPracticing || 'Go to site'}
+                {tex.successSignInCta || 'Sign in with email'}
               </button>
               {error && (
                 <p className="text-[#94A3B8] text-[10px] mt-2 font-mono">{error}</p>

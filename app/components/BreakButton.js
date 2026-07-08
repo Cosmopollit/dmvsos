@@ -82,7 +82,7 @@ export default function BreakButton({ langCode = 'en' }) {
         <span className="relative inline-flex">
           <button
             type="button"
-            aria-label={`${label} — ${lockedHint}`}
+            aria-label={`${label}. ${lockedHint}`}
             onMouseEnter={() => setShowHint(true)}
             onMouseLeave={() => setShowHint(false)}
             onFocus={() => setShowHint(true)}

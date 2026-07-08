@@ -34,9 +34,28 @@ export async function POST(req) {
     try {
       session = await stripe.checkout.sessions.retrieve(session_id);
     } catch (e) {
+      console.error('[checkout-login] invalid session', session_id?.slice(0, 24), e.message);
       return Response.json({ error: 'invalid session' }, { status: 404 });
     }
+
+    // The session_id lives in the /success URL (browser history, screenshots).
+    // Without a cutoff it is a forever-valid login oracle for the buyer's
+    // account. 24h covers every legitimate "came back later" case; after
+    // that the normal login path takes over.
+    const AGE_LIMIT_SEC = 24 * 60 * 60;
+    if (session?.created && (Date.now() / 1000 - session.created) > AGE_LIMIT_SEC) {
+      return Response.json({ error: 'session expired' }, { status: 410 });
+    }
+
     if (!session || session.payment_status !== 'paid') {
+      // Distinguish "still processing" (delayed methods: Klarna, Cash App,
+      // bank debits redirect to /success while payment_status is 'unpaid')
+      // from a genuinely unpaid session, so /success can show an honest
+      // "payment is processing" state instead of an error.
+      const pendingEmail = session?.customer_details?.email || session?.customer_email || null;
+      if (session?.status === 'complete' && session?.payment_status === 'unpaid') {
+        return Response.json({ pending: true, email: pendingEmail }, { status: 202 });
+      }
       return Response.json({ error: 'session not paid' }, { status: 402 });
     }
 
@@ -54,8 +73,10 @@ export async function POST(req) {
       body: JSON.stringify({ type: 'magiclink', email }),
     });
     if (!res.ok) {
-      // Return email so the success page can show "we tried email@... — resend?"
-      return Response.json({ error: 'magic-link failed', email, detail: await res.text() }, { status: 500 });
+      const detail = await res.text();
+      console.error('[checkout-login] generate_link failed', res.status, detail.slice(0, 200));
+      // Return email so the success page can show which account is affected.
+      return Response.json({ error: 'magic-link failed', email, detail }, { status: 500 });
     }
     const data = await res.json();
     const loginUrl = data.action_link || data.properties?.action_link;
@@ -65,6 +86,7 @@ export async function POST(req) {
 
     return Response.json({ login_url: loginUrl, email });
   } catch (err) {
+    console.error('[checkout-login] error', err.message);
     return Response.json({ error: err.message }, { status: 500 });
   }
 }

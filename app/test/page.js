@@ -10,7 +10,7 @@ import { getSavedLang, saveLang } from '@/lib/lang';
 import { agencyAbbrForState } from '@/lib/agencies';
 import { examRulesFor, passPercentFor } from '@/lib/exam-rules';
 import { pickHardest } from '@/lib/question-difficulty';
-import { trackBeginCheckout } from '@/lib/gtag';
+import { trackBeginCheckout, trackTestStart, trackTestFinish, trackResume, trackCheckoutError } from '@/lib/gtag';
 import { planForCategory } from '@/lib/plans';
 import { useExperiment } from '@/lib/experiments';
 import GradientButton from '@/app/components/GradientButton';
@@ -312,6 +312,7 @@ function TestContent() {
           const j = Math.floor(Math.random() * (i + 1));
           [mapped[i], mapped[j]] = [mapped[j], mapped[i]];
         }
+        tokenMintedAtRef.current = Date.now();
         setAllQuestions(mapped);
         setLoadingQuestions(false);
       })
@@ -382,6 +383,7 @@ function TestContent() {
     setShowAnswer(false); setShowManualQuote(false); setShowReport(false); setReportReason(""); setReportComment(""); setReportSent(false);
     setElapsed(0);
     setTestMode(mode);
+    trackTestStart({ state, category, lang, mode });
   }
 
   // Paywall modal "Get it": go STRAIGHT to Stripe instead of re-selling on
@@ -390,9 +392,11 @@ function TestContent() {
   // auto-resume on /upgrade fires the session without another Buy tap. Any
   // failure falls back to the /upgrade pricing page rather than a dead end.
   const [modalBuyLoading, setModalBuyLoading] = useState(false);
+  const [modalNotice, setModalNotice] = useState(null);
   async function modalCheckout() {
     if (modalBuyLoading) return;
     setModalBuyLoading(true);
+    setModalNotice(null);
     const fallback = `/upgrade?lang=${lang}&plan=${suggestPlan}`;
     try {
       const { data: { session } } = await supabase.auth.getSession();
@@ -407,14 +411,26 @@ function TestContent() {
         body: JSON.stringify({ planType: suggestPlan, lang }),
       });
       const data = await res.json();
-      if (res.status === 409 && data?.error === 'pass_already_active') { router.push('/profile'); return; }
+      if (res.status === 409 && data?.error === 'pass_already_active') {
+        // Explain in place — the old silent /profile redirect read as
+        // "the button is broken" (same fix /upgrade already got).
+        setModalNotice({ type: 'owned', expires: data.expires_at });
+        return;
+      }
+      if (res.status === 401) {
+        const next = `/upgrade?plan=${suggestPlan}&lang=${lang}&intent=checkout`;
+        router.push(`/login?next=${encodeURIComponent(next)}&lang=${lang}`);
+        return;
+      }
       if (data?.url) {
         trackBeginCheckout(suggestPlan.replace('onetime_', ''), 'new');
         window.location.href = data.url;
         return;
       }
+      trackCheckoutError(res.status, 'paywall');
       router.push(fallback);
     } catch {
+      trackCheckoutError('network', 'paywall');
       router.push(fallback);
     } finally {
       setModalBuyLoading(false);
@@ -442,23 +458,49 @@ function TestContent() {
   // expire after 4h, so resumes older than 3h re-fetch fresh tokens for the
   // still-unanswered questions by cluster_code (answered ones are already
   // revealed and need no token).
-  const PROGRESS_KEY = 'dmvsos_test_progress';
+  // Scoped per state+category (+subcategory): a paused car marathon must
+  // survive the user taking a quick moto test in between. The legacy single
+  // key is still read once for snapshots saved before the split.
+  const LEGACY_PROGRESS_KEY = 'dmvsos_test_progress';
+  const PROGRESS_KEY = `${LEGACY_PROGRESS_KEY}:${state}:${category}${subcategory ? ':' + subcategory : ''}`;
   const resumeElapsedRef = useRef(0);
   const progressDoneRef = useRef(false);
+  // When the questions' q_tokens were minted (fetch or refresh time). Tokens
+  // expire 4h after MINT, so refresh decisions must use this, not savedAt —
+  // savedAt renews on every answer while the tokens keep aging.
+  const tokenMintedAtRef = useRef(Date.now());
   const [resumeSnap, setResumeSnap] = useState(null);
 
   useEffect(() => {
     try {
+      const isFresh = s => Date.now() - (s?.savedAt || 0) < 7 * 24 * 3600e3;
+      let snap = null;
       const raw = localStorage.getItem(PROGRESS_KEY);
-      if (!raw) return;
-      const snap = JSON.parse(raw);
-      const fresh = Date.now() - (snap.savedAt || 0) < 7 * 24 * 3600e3;
+      if (raw) snap = JSON.parse(raw);
+      if (!snap) {
+        // Pre-split snapshot: only usable if it belongs to this exact test.
+        const legacyRaw = localStorage.getItem(LEGACY_PROGRESS_KEY);
+        if (legacyRaw) snap = JSON.parse(legacyRaw);
+      }
+      // Drop expired sibling snapshots so scoped keys can't pile up forever.
+      for (const key of Object.keys(localStorage)) {
+        if (!key.startsWith(LEGACY_PROGRESS_KEY)) continue;
+        try {
+          const s = JSON.parse(localStorage.getItem(key));
+          if (!isFresh(s)) localStorage.removeItem(key);
+        } catch { localStorage.removeItem(key); }
+      }
+      if (!snap) return;
       const match = snap.state === state && snap.category === category
         && snap.lang === lang && (snap.subcategory || null) === (subcategory || null);
       const unfinished = Array.isArray(snap.questions) && snap.questions.length > 0
         && snap.current < snap.questions.length;
-      if (fresh && match && unfinished) setResumeSnap(snap);
-    } catch { /* corrupt snapshot: ignore */ }
+      if (isFresh(snap) && match && unfinished) {
+        setResumeSnap(snap);
+        trackResume('shown');
+      }
+    } catch { /* corrupt snapshot or storage blocked: no resume offered */ }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state, category, lang, subcategory]);
 
   useEffect(() => {
@@ -466,7 +508,8 @@ function TestContent() {
     if (!questions.length) return;
     try {
       localStorage.setItem(PROGRESS_KEY, JSON.stringify({
-        v: 1, savedAt: Date.now(), state, category, lang,
+        v: 1, savedAt: Date.now(), tokenMintedAt: tokenMintedAtRef.current,
+        state, category, lang,
         subcategory: subcategory || null, mode: testMode,
         current, score, elapsed, questions, userAnswers: userAnswersRef.current,
       }));
@@ -483,7 +526,8 @@ function TestContent() {
     const active = testMode && !isRetry && !progressDoneRef.current && questions.length > 0;
     latestSnapRef.current = active
       ? {
-          v: 1, savedAt: Date.now(), state, category, lang,
+          v: 1, savedAt: Date.now(), tokenMintedAt: tokenMintedAtRef.current,
+          state, category, lang,
           subcategory: subcategory || null, mode: testMode,
           current, score, elapsed, questions, userAnswers: userAnswersRef.current,
         }
@@ -498,12 +542,25 @@ function TestContent() {
       try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(latestSnapRef.current)); } catch { /* noop */ }
     };
     const onVisibility = () => { if (document.visibilityState === 'hidden') flush(); };
+    // BFCache thaw (iOS Safari back button after hours): the in-memory test
+    // never went through the resume path, so its q_tokens can be past the 4h
+    // TTL without anyone noticing until answers start failing.
+    const onPageShow = (e) => {
+      if (!e.persisted) return;
+      const qs = latestSnapRef.current?.questions;
+      if (qs?.length && Date.now() - (tokenMintedAtRef.current || 0) > 3 * 3600e3) {
+        refreshResumedTokens(qs);
+      }
+    };
     window.addEventListener('pagehide', flush);
+    window.addEventListener('pageshow', onPageShow);
     document.addEventListener('visibilitychange', onVisibility);
     return () => {
       window.removeEventListener('pagehide', flush);
+      window.removeEventListener('pageshow', onPageShow);
       document.removeEventListener('visibilitychange', onVisibility);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function refreshResumedTokens(qs) {
@@ -529,7 +586,28 @@ function TestContent() {
             : q
         ));
       }
-    } catch { /* stale tokens degrade gracefully in /check */ }
+      tokenMintedAtRef.current = Date.now();
+    } catch { /* stale tokens re-mint on demand in handleSelect */ }
+  }
+
+  // On-demand single-token re-mint: the last line of defense when a token
+  // expires mid-answer (marathon past 4h, BFCache thaw). Costs one
+  // /questions rate-limit unit; returns null on any failure.
+  async function mintFreshToken(question) {
+    if (!question?.clusterCode) return null;
+    try {
+      const categoryMap = { dmv: 'car', cdl: 'cdl', moto: 'motorcycle' };
+      const qsr = new URLSearchParams({
+        state, category: categoryMap[category] || category, language: lang,
+        cluster_codes: question.clusterCode, limit: '1',
+      });
+      if (subcategory) qsr.set('subcategory', subcategory);
+      const r = await fetch('/api/test/questions?' + qsr, { cache: 'no-store' });
+      const data = await r.json();
+      return (data.ok && data.questions?.[0]?.q_token) || null;
+    } catch {
+      return null;
+    }
   }
 
   function restoreProgress(snap) {
@@ -545,12 +623,18 @@ function TestContent() {
     resumeElapsedRef.current = snap.elapsed || 0;
     setResumeSnap(null);
     setTestMode(snap.mode);
-    if (Date.now() - (snap.savedAt || 0) > 3 * 3600e3) refreshResumedTokens(snap.questions);
+    trackResume('accepted');
+    // Refresh by token MINT age, not snapshot age: savedAt renews on every
+    // answer, so a 3.5h-old test saved 10 minutes ago still has dying tokens.
+    tokenMintedAtRef.current = snap.tokenMintedAt || snap.savedAt || 0;
+    if (Date.now() - tokenMintedAtRef.current > 3 * 3600e3) refreshResumedTokens(snap.questions);
   }
 
   function dismissResume() {
     try { localStorage.removeItem(PROGRESS_KEY); } catch { /* noop */ }
+    try { localStorage.removeItem(LEGACY_PROGRESS_KEY); } catch { /* noop */ }
     setResumeSnap(null);
+    trackResume('dismissed');
   }
   useEffect(() => {
     if (!testMode || !questions.length) return;
@@ -623,13 +707,15 @@ function TestContent() {
     if (authLoading) return;
     if (hasFullAccess) return;                        // already paid
     if (typeof window === 'undefined') return;
-    if (localStorage.getItem('dmvsos_email_seen')) return;
-    // Trigger at Q10 (0-indexed = 9). For moto where freeLimit=5, skip.
-    if (freeLimit < 20) return;
-    if (current === 9 && showAnswer) {
-      setShowEmailCapture(true);
-      localStorage.setItem('dmvsos_email_seen', '1');
-    }
+    try {
+      if (localStorage.getItem('dmvsos_email_seen')) return;
+      // Trigger at Q10 (0-indexed = 9). For moto where freeLimit=5, skip.
+      if (freeLimit < 20) return;
+      if (current === 9 && showAnswer) {
+        setShowEmailCapture(true);
+        localStorage.setItem('dmvsos_email_seen', '1');
+      }
+    } catch { /* storage blocked: capture stays off, test must not crash */ }
   }, [current, showAnswer, authLoading, hasFullAccess, freeLimit]);
 
   async function handleSubmitEmail(e) {
@@ -1013,34 +1099,52 @@ function TestContent() {
       setSubmittingAnswer(true);
       let networkFailed = false;
       try {
-        const res = await fetch('/api/test/check', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ q_token: q.q_token, choice: index }),
-        });
-        const data = await res.json();
-        if (!data.ok) {
-          // Server rejected the token (expired after 4h, or rate limited).
-          // Rare and NOT fixable by re-tapping, so accept the selection and
-          // mark it unverified (-1, no answer key highlighted) so the test
+        let token = q.q_token;
+        for (let attempt = 0; ; attempt++) {
+          const res = await fetch('/api/test/check', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ q_token: token, choice: index }),
+          });
+          const data = await res.json();
+          if (data.ok) {
+            correct = !!data.correct;
+            setQuestions(prev => prev.map((qq, i) =>
+              i === current
+                ? {
+                    ...qq,
+                    q_token: token,
+                    correctAnswerIndex: data.correct_answer ?? 0,
+                    explanation: data.explanation || null,
+                    manualSection: data.manual_section || null,
+                    manualReference: data.manual_reference || null,
+                  }
+                : qq
+            ));
+            break;
+          }
+          if (res.status === 429) {
+            // Protective rate limit (shared IP bursts). Fully retryable after
+            // a pause — treat like a network blip, never score it wrong.
+            networkFailed = true;
+            break;
+          }
+          if (data.error === 'token_expired' && attempt === 0) {
+            // Token aged past its 4h TTL mid-test (slow marathon, thawed
+            // tab). Mint a fresh one for this cluster and retry once —
+            // before this, every answer after expiry was silently counted
+            // wrong with no correct answer shown.
+            const fresh = await mintFreshToken(q);
+            if (fresh) { token = fresh; continue; }
+          }
+          // Unverifiable (tampered/ancient token, question deleted). Accept
+          // the selection unverified (-1, no key highlighted) so the test
           // can still be finished.
           correct = false;
           setQuestions(prev => prev.map((qq, i) =>
             i === current ? { ...qq, correctAnswerIndex: -1 } : qq
           ));
-        } else {
-          correct = !!data.correct;
-          setQuestions(prev => prev.map((qq, i) =>
-            i === current
-              ? {
-                  ...qq,
-                  correctAnswerIndex: data.correct_answer ?? 0,
-                  explanation: data.explanation || null,
-                  manualSection: data.manual_section || null,
-                  manualReference: data.manual_reference || null,
-                }
-              : qq
-          ));
+          break;
         }
       } catch {
         // Network blip (offline / dropped request). Retryable: do NOT score,
@@ -1069,6 +1173,32 @@ function TestContent() {
 
   handleSelectRef.current = handleSelect;
 
+  // Durable result hand-off. Order matters: write the result FIRST (both
+  // storages — sessionStorage for the same-tab /result read, localStorage so
+  // a closed-and-reopened browser can still show the review), and only then
+  // clear the progress snapshot. The old clear-then-unguarded-write order
+  // could destroy a finished test with nothing to show for it when setItem
+  // threw (private mode, quota on RU/ZH marathons).
+  function persistResultAndClearProgress({ finalScore, totalCount }) {
+    const payload = JSON.stringify({
+      savedAt: Date.now(),
+      questions, userAnswers: userAnswersRef.current,
+      elapsed, state, category, lang,
+      score: finalScore, total: totalCount,
+    });
+    try { sessionStorage.setItem('testResults', payload); } catch { /* private mode */ }
+    try { localStorage.setItem('dmvsos_last_result', payload); } catch { /* quota */ }
+    progressDoneRef.current = true;
+    latestSnapRef.current = null; // kill the pagehide flush before removal
+    if (!isRetry) {
+      // Retry mode never owned a snapshot; clearing here used to delete an
+      // unrelated paused test's progress.
+      try { localStorage.removeItem(PROGRESS_KEY); } catch { /* noop */ }
+      try { localStorage.removeItem(LEGACY_PROGRESS_KEY); } catch { /* noop */ }
+    }
+    trackTestFinish({ state, category, lang, mode: testMode, score: finalScore, total: totalCount });
+  }
+
   async function handleNext() {
     if (!hasFullAccess && total === freeLimit && current === freeLimit - 1) {
       setShowUpgradeBanner(true);
@@ -1089,13 +1219,7 @@ function TestContent() {
       // Use ref for answers  ·  guaranteed to include the last answer (no batching race)
       const allAnswers = userAnswersRef.current;
       const finalScore = allAnswers.reduce((acc, ans, i) => acc + (ans === questions[i]?.correctAnswerIndex ? 1 : 0), 0);
-      const langParam = new URLSearchParams(window.location.search).get('lang') || 'en';
-      try { localStorage.removeItem(PROGRESS_KEY); } catch { /* noop */ }
-      progressDoneRef.current = true;
-      sessionStorage.setItem(
-        'testResults',
-        JSON.stringify({ questions, userAnswers: allAnswers, elapsed, state, category, lang: langParam })
-      );
+      persistResultAndClearProgress({ finalScore, totalCount: total });
       // Guard against double-fire from rapid Enter/click before router.push
       // finishes. First call wins, subsequent calls are no-ops.
       const { data: { session } } = await supabase.auth.getSession();
@@ -1104,12 +1228,16 @@ function TestContent() {
         const row = { user_id: session.user.id, state, category, score: finalScore, total, lang };
         const { error: insErr } = await supabase.from('test_sessions').insert(row);
         if (insErr) {
+          console.error('[test] test_sessions insert failed', insErr.message || insErr.code || insErr);
           // Fallback: lang column may not exist yet
           const { lang: _lang, ...rowNoLang } = row;
           await supabase.from('test_sessions').insert(rowNoLang).catch(() => {});
         }
       }
-      router.push(`/result?score=${finalScore}&total=${total}&lang=${lang}`);
+      // state+category ride along so /result can compute the PASS/FAIL
+      // verdict against the right state's pass mark even with empty storage
+      // (it used to silently fall back to Washington's rules).
+      router.push(`/result?score=${finalScore}&total=${total}&lang=${lang}&state=${encodeURIComponent(state)}&category=${encodeURIComponent(category)}`);
     }
   }
   handleNextRef.current = handleNext;
@@ -1518,6 +1646,14 @@ function TestContent() {
                     className={`text-sm ${modalBuyLoading ? 'pointer-events-none opacity-60' : ''}`}>
                     {modalBuyLoading ? '…' : (tex.getIt || 'Get it')}
                   </GradientButton>
+                  {modalNotice?.type === 'owned' && (
+                    <p className="text-[11px] text-[#B45309] mt-2 leading-snug">
+                      {tex.alreadyOwnPass || 'You already have this pass.'}{' '}
+                      <Link href={`/profile?lang=${lang}`} className="underline font-semibold">
+                        {tex.planManage || 'Manage'}
+                      </Link>
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -1531,10 +1667,8 @@ function TestContent() {
               <button type="button" onClick={() => {
                 const allAnswers = userAnswersRef.current;
                 const finalScore = allAnswers.reduce((acc, ans, i) => acc + (ans === questions[i]?.correctAnswerIndex ? 1 : 0), 0);
-                try { localStorage.removeItem(PROGRESS_KEY); } catch { /* noop */ }
-                progressDoneRef.current = true;
-                sessionStorage.setItem('testResults', JSON.stringify({ questions, userAnswers: allAnswers, elapsed, state, category, lang }));
-                router.push(`/result?score=${finalScore}&total=${questions.length}&lang=${lang}`);
+                persistResultAndClearProgress({ finalScore, totalCount: questions.length });
+                router.push(`/result?score=${finalScore}&total=${questions.length}&lang=${lang}&state=${encodeURIComponent(state)}&category=${encodeURIComponent(category)}`);
               }}
                 className="w-full text-sm text-[#94A3B8] hover:text-[#64748B] transition text-center">
                 {tex.seeResults}
@@ -1552,10 +1686,8 @@ function TestContent() {
             <button type="button" onClick={() => {
               const allAnswers = userAnswersRef.current;
               const finalScore = allAnswers.reduce((acc, ans, i) => acc + (ans === questions[i]?.correctAnswerIndex ? 1 : 0), 0);
-              try { localStorage.removeItem(PROGRESS_KEY); } catch { /* noop */ }
-              progressDoneRef.current = true;
-              sessionStorage.setItem('testResults', JSON.stringify({ questions, userAnswers: allAnswers, elapsed, state, category, lang }));
-              router.push(`/result?score=${finalScore}&total=${questions.length}&lang=${lang}`);
+              persistResultAndClearProgress({ finalScore, totalCount: questions.length });
+              router.push(`/result?score=${finalScore}&total=${questions.length}&lang=${lang}&state=${encodeURIComponent(state)}&category=${encodeURIComponent(category)}`);
             }}
               className="w-full bg-[#2563EB] text-white py-3.5 rounded-xl font-semibold text-base hover:bg-[#1D4ED8] transition-all mb-3">
               {tex.seeResultsBtn}

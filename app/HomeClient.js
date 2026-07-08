@@ -11,6 +11,7 @@ import dynamic from 'next/dynamic';
 import { STATE_OPTIONS, stateToSlug } from '@/lib/states';
 import { PASS_META, EXTENSION } from '@/lib/plans';
 import { agencyAbbrForState } from '@/lib/agencies';
+import { localizeAuthError } from '@/lib/authErrors';
 import { useExperiment } from '@/lib/experiments';
 import SupportFooter from '@/app/components/SupportFooter';
 import WelcomeBanner from '@/app/components/WelcomeBanner';
@@ -184,14 +185,19 @@ export default function HomeClient({ initialLang = 'en' }) {
     // Pre-select state: prefer the user's own last pick (persisted), fall back to
     // Vercel geo only on first visit. Many users visit through VPN/proxy, so geo
     // is wrong more often than right — a saved choice is the trustworthy source.
-    const savedState = localStorage.getItem('dmvsos_state');
+    // Guarded: "Block all cookies" browsers throw on localStorage/cookie access.
+    let savedState = null;
+    try { savedState = localStorage.getItem('dmvsos_state'); } catch { /* blocked storage */ }
     if (savedState) {
       setState(savedState);
     } else {
-      const geoState = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('dmvsos_geo_state='))
-        ?.split('=')[1];
+      let geoState = null;
+      try {
+        geoState = document.cookie
+          .split('; ')
+          .find(row => row.startsWith('dmvsos_geo_state='))
+          ?.split('=')[1];
+      } catch { /* blocked cookies */ }
       if (geoState) setState(geoState);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only
@@ -199,8 +205,29 @@ export default function HomeClient({ initialLang = 'en' }) {
 
   // Persist the state so the dropdown remembers the user's pick across visits
   useEffect(() => {
-    if (state) localStorage.setItem('dmvsos_state', state);
+    if (state) {
+      try { localStorage.setItem('dmvsos_state', state); } catch { /* blocked storage */ }
+    }
   }, [state]);
+
+  // OAuth redirects land on the bare origin (the only whitelisted Supabase
+  // redirect URL), so when a provider flow is denied or fails, its error /
+  // error_description params arrive HERE, not on /login. Surface them in a
+  // dismissible banner, then clean the URL so reload doesn't re-show it.
+  const [authErrorNotice, setAuthErrorNotice] = useState(null);
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const hashParams = new URLSearchParams((url.hash || '').replace(/^#/, ''));
+    const desc = url.searchParams.get('error_description') || hashParams.get('error_description');
+    const code = url.searchParams.get('error') || hashParams.get('error');
+    if (!desc && !code) return;
+    console.error('OAuth redirect error:', code || '', desc || '');
+    setAuthErrorNotice(localizeAuthError(desc || code, tex));
+    ['error', 'error_description', 'error_code'].forEach(k => url.searchParams.delete(k));
+    url.hash = '';
+    window.history.replaceState(null, '', url.pathname + url.search);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only
+  }, []);
 
   const langs = [
     { label: 'EN', code: 'en', name: 'English' },
@@ -281,7 +308,7 @@ export default function HomeClient({ initialLang = 'en' }) {
         name: 'How does pricing work?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: `DMVSOS uses flat-rate one-time payments — no subscriptions. Moto Pass (${PASS_META.moto.price}), Auto Pass (${PASS_META.auto.price}), and CDL Pro (${PASS_META.cdl.price}) each unlock 30 days of access. Extend any pass by 30 days for ${EXTENSION.price}.`,
+          text: `DMVSOS uses flat-rate one-time payments, no subscriptions. Moto Pass (${PASS_META.moto.price}), Auto Pass (${PASS_META.auto.price}), and CDL Pro (${PASS_META.cdl.price}) each gives 30 days of access. Extend any pass by 30 days for ${EXTENSION.price}.`,
         },
       },
       {
@@ -425,6 +452,23 @@ export default function HomeClient({ initialLang = 'en' }) {
           <BreakButton langCode={langCode} />
         </div>
       </header>
+
+      {/* Sign-in failure banner (post-OAuth-redirect). Red-tinted, dismissible. */}
+      {authErrorNotice && (
+        <div className="w-full max-w-lg mx-auto px-4 mb-3">
+          <div className="flex items-center gap-2 bg-[#FEF2F2] border border-[#FECACA] rounded-xl px-3 py-2 shadow-sm">
+            <p className="flex-1 text-sm font-medium text-[#DC2626]">{authErrorNotice}</p>
+            <button
+              type="button"
+              onClick={() => setAuthErrorNotice(null)}
+              className="text-[#DC2626]/60 hover:text-[#DC2626] text-sm px-1 shrink-0"
+              aria-label="Dismiss"
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Browser-language suggestion banner */}
       {suggestedLang && (() => {

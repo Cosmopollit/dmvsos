@@ -57,19 +57,27 @@ export async function POST(req) {
   try {
     const ip = getClientIp(req);
     if (!checkRate(ip)) {
+      console.warn('[auth/check-email] rate_limited', { ip });
       return Response.json({ error: 'rate_limited' }, { status: 429 });
     }
 
     let body;
-    try { body = await req.json(); } catch { return Response.json({ error: 'Bad JSON' }, { status: 400 }); }
+    try { body = await req.json(); } catch {
+      console.warn('[auth/check-email] bad JSON body');
+      return Response.json({ error: 'Bad JSON' }, { status: 400 });
+    }
     const email = String(body?.email || '').trim().toLowerCase();
     if (!email || !email.includes('@')) {
+      console.warn('[auth/check-email] missing or malformed email');
       return Response.json({ error: 'Email required' }, { status: 400 });
     }
 
     for (let page = 1; page <= MAX_PAGES; page++) {
       const { data, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 200 });
-      if (error) return Response.json({ error: error.message }, { status: 500 });
+      if (error) {
+        console.error('[auth/check-email] listUsers failed', { page, message: error.message });
+        return Response.json({ error: error.message }, { status: 500 });
+      }
       const users = data?.users || [];
       const hit = users.find(u => (u.email || '').toLowerCase() === email);
       if (hit) {
@@ -84,6 +92,7 @@ export async function POST(req) {
     }
     return Response.json({ exists: false, hasPassword: false });
   } catch (err) {
+    console.error('[auth/check-email] unhandled error', { message: err?.message });
     return Response.json({ error: err?.message || 'Internal error' }, { status: 500 });
   }
 }

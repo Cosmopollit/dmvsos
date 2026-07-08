@@ -79,6 +79,26 @@ function LoginContent() {
 
   useEffect(() => { setInApp(isInAppBrowser()); }, []);
 
+  // Surface OAuth redirect failures. When the user denies consent or the
+  // provider flow breaks, Supabase sends them back with error /
+  // error_description in the query string or the hash fragment. Without this
+  // the user just lands back on the form with zero feedback. Reuse the email
+  // form's error line, then clean the URL so reload/back doesn't re-show a
+  // stale error.
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const hashParams = new URLSearchParams((url.hash || '').replace(/^#/, ''));
+    const desc = url.searchParams.get('error_description') || hashParams.get('error_description');
+    const code = url.searchParams.get('error') || hashParams.get('error');
+    if (!desc && !code) return;
+    console.error('OAuth redirect error:', code || '', desc || '');
+    setEmailError(localizeAuthError(desc || code, tex));
+    ['error', 'error_description', 'error_code'].forEach(k => url.searchParams.delete(k));
+    url.hash = '';
+    window.history.replaceState(null, '', url.pathname + url.search);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only
+  }, []);
+
   // After login Supabase redirects here with ?code=... — we hand it
   // straight to Supabase JS SDK on the home page, which auto-exchanges
   // the code (`detectSessionInUrl: true` is on by default).
@@ -114,37 +134,49 @@ function LoginContent() {
     }
   }
 
+  // signInWithOAuth returns { error } when the flow fails to even START
+  // (misconfigured provider, network). Ignoring it made the button silently
+  // dead; that exact silence hid a broken redirectTo for 5 hours once.
+  function surfaceOAuthError(error) {
+    if (!error) return;
+    console.error('OAuth start failed:', error);
+    setEmailError(localizeAuthError(error.message, tex));
+  }
+
   async function handleGoogleSignIn() {
     stashPostLoginNext();
-    await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: authRedirectTo(),
         skipBrowserRedirect: false,
       },
     });
+    surfaceOAuthError(error);
   }
 
   async function handleAppleSignIn() {
     stashPostLoginNext();
-    await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'apple',
       options: {
         redirectTo: authRedirectTo(),
         skipBrowserRedirect: false,
       },
     });
+    surfaceOAuthError(error);
   }
 
   async function handleFacebookSignIn() {
     stashPostLoginNext();
-    await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'facebook',
       options: {
         redirectTo: authRedirectTo(),
         skipBrowserRedirect: false,
       },
     });
+    surfaceOAuthError(error);
   }
 
   // Returns true if this email is already registered AND has no

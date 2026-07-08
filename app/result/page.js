@@ -118,7 +118,6 @@ function ResultContent() {
   // OAuth buttons here break inside FB/IG/TikTok webviews (Google blocks
   // OAuth in webviews). Detected after mount to avoid hydration mismatch.
   const [inApp, setInApp] = useState(false);
-  // eslint-disable-next-line react-hooks/set-state-in-effect -- one-shot client-only UA sniff after mount
   useEffect(() => { setInApp(isInAppBrowser()); }, []);
   // Reaching the result screen means a test was finished — unlock the
   // "Take a break" arcade in the header (works for free + Pro, any device).
@@ -126,22 +125,40 @@ function ResultContent() {
     try { localStorage.setItem('dmvsos_break_unlocked', '1'); } catch { /* private mode */ }
   }, []);
   // sessionStorage is client-only; must sync after hydration
-  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
+    // sessionStorage first (same-tab flow), then the durable localStorage
+    // copy: closing the browser after finishing a test used to destroy the
+    // whole review. The durable copy is only trusted if it plausibly belongs
+    // to THIS result URL (score/total match when present) and is fresh.
+    let parsed = null;
     try {
       const raw = sessionStorage.getItem('testResults');
-      setTestResults(raw ? JSON.parse(raw) : null);
-    } catch {
-      setTestResults(null);
+      parsed = raw ? JSON.parse(raw) : null;
+    } catch { /* blocked storage */ }
+    if (!parsed) {
+      try {
+        const raw = localStorage.getItem('dmvsos_last_result');
+        const stored = raw ? JSON.parse(raw) : null;
+        const fresh = stored && Date.now() - (stored.savedAt || 0) < 7 * 24 * 3600e3;
+        const urlScore = params.get('score');
+        const urlTotal = params.get('total');
+        const matches = stored && (urlScore == null
+          || (String(stored.score) === urlScore && String(stored.total) === urlTotal));
+        if (fresh && matches) parsed = stored;
+      } catch { /* blocked storage */ }
     }
+    setTestResults(parsed);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  /* eslint-enable react-hooks/set-state-in-effect */
 
   const questions = testResults?.questions ?? [];
   const userAnswers = testResults?.userAnswers ?? [];
   const elapsed = testResults?.elapsed ?? 0;
-  const state = testResults?.state ?? 'washington';
-  const category = testResults?.category ?? 'car';
+  // URL params take precedence: they are written by the test page at finish
+  // and survive everything. The old storage-then-'washington' fallback could
+  // flip the PASS/FAIL verdict for states with a different pass mark.
+  const state = params.get('state') || testResults?.state || 'washington';
+  const category = params.get('category') || testResults?.category || 'car';
   const passRule = examRulesFor(state, category);
   const passMark = passRule ? passRule.pass / passRule.questions : 0.8;
   const passPercent = Math.round(passMark * 100);
@@ -155,28 +172,21 @@ function ResultContent() {
   const tex = t[lang] || t.en;
   const formatTime = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
 
-  async function handleGoogleSignIn() {
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: window.location.origin,
-      },
-    });
-  }
-
-  async function handleAppleSignIn() {
-    await supabase.auth.signInWithOAuth({
-      provider: 'apple',
+  // A failed OAuth start used to be completely silent (dead button). Route
+  // the user to /login where the email path always works and errors surface.
+  async function oauthSignIn(provider) {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
       options: { redirectTo: window.location.origin },
     });
+    if (error) {
+      console.error('[result] oauth start failed', provider, error.message);
+      router.push(`/login?lang=${lang}`);
+    }
   }
-
-  async function handleFacebookSignIn() {
-    await supabase.auth.signInWithOAuth({
-      provider: 'facebook',
-      options: { redirectTo: window.location.origin },
-    });
-  }
+  const handleGoogleSignIn = () => oauthSignIn('google');
+  const handleAppleSignIn = () => oauthSignIn('apple');
+  const handleFacebookSignIn = () => oauthSignIn('facebook');
 
   function stripQuestion(s) {
     return (s || '').replace(/^\d+\.\s*/, '');
@@ -284,7 +294,12 @@ function ResultContent() {
             <p className="text-sm text-[#94A3B8] mb-4">{tex.saveSubtext}</p>
             {inApp ? (
               <div className="rounded-xl border border-[#F59E0B] bg-[#FEF3C7] p-3 text-left">
-                <p className="text-xs text-[#B45309] leading-relaxed">{tex.inAppBrowserWarning}</p>
+                <p className="text-xs text-[#B45309] leading-relaxed mb-2">{tex.inAppBrowserWarning}</p>
+                {/* The warning used to promise an email form that this page
+                    does not render — give the webview user an actual path. */}
+                <Link href={`/login?lang=${lang}`} className="text-xs font-semibold text-[#B45309] underline">
+                  {tex.successSignInCta || 'Sign in with email'}
+                </Link>
               </div>
             ) : (
               <>
@@ -446,7 +461,7 @@ function ResultContent() {
           <GradientButton
             variant="blue"
             onClick={() => {
-              sessionStorage.setItem('retryQuestions', JSON.stringify(wrongQuestions));
+              try { sessionStorage.setItem('retryQuestions', JSON.stringify(wrongQuestions)); } catch { /* blocked storage: /test shows its empty state instead of this button crashing */ }
               router.push(`/test?state=${state}&category=${category}&lang=${lang}&retry=true`);
             }}
           >

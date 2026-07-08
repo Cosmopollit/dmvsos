@@ -141,18 +141,30 @@ function clientKey(req) {
 }
 
 export async function GET(req) {
+  // Hoisted out of the try so the catch block can log which request blew up.
+  let state = null, category = null, language = null;
   try {
     const url = new URL(req.url);
-    const state = url.searchParams.get('state');
-    const category = url.searchParams.get('category');
-    const language = url.searchParams.get('language');
+    state = url.searchParams.get('state');
+    category = url.searchParams.get('category');
+    language = url.searchParams.get('language');
     const subcategory = url.searchParams.get('subcategory') || null;
     let limit = parseInt(url.searchParams.get('limit') || String(DEFAULT_LIMIT), 10);
 
-    if (!VALID_STATES.has(state)) return corsJson({ ok: false, error: 'bad_state' }, { status: 400 });
-    if (!VALID_CATEGORIES.has(category)) return corsJson({ ok: false, error: 'bad_category' }, { status: 400 });
-    if (!VALID_LANGUAGES.has(language)) return corsJson({ ok: false, error: 'bad_language' }, { status: 400 });
+    if (!VALID_STATES.has(state)) {
+      console.error('[test/questions] bad_state', { state, category, language });
+      return corsJson({ ok: false, error: 'bad_state' }, { status: 400 });
+    }
+    if (!VALID_CATEGORIES.has(category)) {
+      console.error('[test/questions] bad_category', { state, category, language });
+      return corsJson({ ok: false, error: 'bad_category' }, { status: 400 });
+    }
+    if (!VALID_LANGUAGES.has(language)) {
+      console.error('[test/questions] bad_language', { state, category, language });
+      return corsJson({ ok: false, error: 'bad_language' }, { status: 400 });
+    }
     if (subcategory && !VALID_SUBCATEGORIES.has(subcategory)) {
+      console.error('[test/questions] bad_subcategory', { state, category, language, subcategory });
       return corsJson({ ok: false, error: 'bad_subcategory' }, { status: 400 });
     }
     if (!Number.isFinite(limit) || limit < 1) limit = DEFAULT_LIMIT;
@@ -168,6 +180,9 @@ export async function GET(req) {
     const bucketKey = tier === 'authed' ? `user:${userId}` : clientKey(req);
     const rl = rateLimit(bucketKey, max);
     if (!rl.ok) {
+      // Deliberate protective 429, not an app error. Warn keeps it visible
+      // without flooding the error stream during a scrape burst.
+      console.warn('[test/questions] rate_limited', { tier, key: bucketKey, state, category, language });
       return corsJson(
         { ok: false, error: 'rate_limited', resetAt: rl.resetAt },
         { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetAt - Date.now()) / 1000)) } }
@@ -215,6 +230,7 @@ export async function GET(req) {
     });
     if (!r.ok) {
       const text = await r.text();
+      console.error('[test/questions] db error', { status: r.status, state, category, language, detail: text.slice(0, 200) });
       return corsJson({ ok: false, error: 'db', detail: text.slice(0, 200) }, { status: 500 });
     }
     let rawQuestions = await r.json();
@@ -262,6 +278,7 @@ export async function GET(req) {
         } }
     );
   } catch (err) {
+    console.error('[test/questions] unhandled error', { state, category, language, message: err.message });
     return corsJson({ ok: false, error: err.message }, { status: 500 });
   }
 }

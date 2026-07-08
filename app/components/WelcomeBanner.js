@@ -42,7 +42,8 @@ export default function WelcomeBanner() {
     setLang(getSavedLang());
     const v = isPro ? 'pro' : 'welcome';
     const storageKey = `dmvsos_wb_${v}_${user.id}`;
-    const wasDismissed = typeof window !== 'undefined' && localStorage.getItem(storageKey);
+    let wasDismissed = false;
+    try { wasDismissed = typeof window !== 'undefined' && !!localStorage.getItem(storageKey); } catch { /* blocked storage: treat as not dismissed */ }
     setVariant(v);
     setDismissed(!!wasDismissed);
     setReady(true);
@@ -80,7 +81,11 @@ export default function WelcomeBanner() {
 
   function handleDismiss() {
     const storageKey = `dmvsos_wb_${variant}_${user.id}`;
-    if (typeof window !== 'undefined') localStorage.setItem(storageKey, '1');
+    // Persisting can throw (old Safari Private mode); the banner must still
+    // hide in-memory or the X button looks broken.
+    try {
+      if (typeof window !== 'undefined') localStorage.setItem(storageKey, '1');
+    } catch { /* blocked storage */ }
     setDismissed(true);
   }
 

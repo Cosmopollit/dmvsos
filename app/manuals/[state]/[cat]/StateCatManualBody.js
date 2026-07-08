@@ -388,7 +388,12 @@ export default async function StateCatManualBody({ lang, state, cat }) {
         areaServed: { '@type': 'State', name },
       }] : []),
     ],
-  });
+  // Match the visible copy: refer to this state's real agency, not generic
+  // "DMV" (WA = DOL, TX = DPS, ...). Catches the hardcoded "DMV" inside the
+  // CAT_META labels that the Article/GovernmentService entries interpolate;
+  // the FAQ text already went through dmv(), so this is a no-op there.
+  // \b keeps the brand "DMVSOS" intact.
+  }).replace(/\bDMV\b/g, ag);
 
   return (
     <div

@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Confirming email — DMVSOS',
+  title: 'Confirming email | DMVSOS',
   robots: { index: false, follow: false },
 };
 

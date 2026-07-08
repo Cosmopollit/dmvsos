@@ -48,10 +48,14 @@ async function tgSend(text) {
 }
 
 async function sendMagicLink(email) {
-  const res = await fetch(`${SUPA_URL}/auth/v1/admin/generate_link`, {
+  // /auth/v1/magiclink actually DELIVERS an email through the project SMTP
+  // (Resend). The previous admin/generate_link call only returned a link and
+  // sent nothing, so every "recovered" count before 2026-07-08 was fiction —
+  // and each call was silently invalidating the user's outstanding OTP.
+  const res = await fetch(`${SUPA_URL}/auth/v1/magiclink`, {
     method: 'POST',
     headers: sbHeaders,
-    body: JSON.stringify({ type: 'magiclink', email }),
+    body: JSON.stringify({ email }),
   });
   return res.ok;
 }
@@ -128,7 +132,7 @@ export async function GET(request) {
         `🆘 <b>Stuck-customer recovery ping</b>\n` +
         `Email: <code>${p.email}</code>\n` +
         `Paid: ${hoursAgo}h ago · ${p.pass_type} ${p.kind} · $${(p.amount_cents / 100).toFixed(2)}\n` +
-        `Status: never signed in. Resent magic-link${ok ? '' : ' (FAILED)'}.\n` +
+        `Status: never signed in. Emailed sign-in link${ok ? '' : ' (SEND FAILED)'}.\n` +
         `Manual fallback: <code>node scripts/grant-pass-manual.js --email=${p.email} --pass=${p.pass_type} --send-magic-link</code>`
       );
     }

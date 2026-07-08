@@ -38,9 +38,11 @@ export async function POST(request) {
     const { q_token, language, reason, comment, user_email } = body || {};
 
     if (!q_token || typeof q_token !== 'string') {
+      console.warn('[question-report] missing q_token', { reason: reason || null, language: language || null });
       return Response.json({ ok: false, error: 'q_token required' }, { status: 400 });
     }
     if (!VALID_REASONS.includes(reason)) {
+      console.warn('[question-report] invalid reason', { reason, language: language || null });
       return Response.json({ ok: false, error: 'invalid reason' }, { status: 400 });
     }
 
@@ -49,10 +51,12 @@ export async function POST(request) {
     // after the test ended; the question still exists in DB.
     const tokenResult = verifyQuestionToken(q_token);
     if (!tokenResult.ok && tokenResult.error !== 'expired') {
+      console.error('[question-report] invalid token', { tokenError: tokenResult.error, reason, language: language || null });
       return Response.json({ ok: false, error: 'bad_token' }, { status: 400 });
     }
     const question_id = tokenResult.questionId;
     if (!question_id) {
+      console.error('[question-report] token missing questionId', { tokenError: tokenResult.error || null, reason });
       return Response.json({ ok: false, error: 'bad_token' }, { status: 400 });
     }
 
@@ -91,6 +95,7 @@ export async function POST(request) {
     });
     if (!insertRes.ok) {
       const text = await insertRes.text();
+      console.error('[question-report] insert failed', { status: insertRes.status, questionId: question_id, reason, detail: text.slice(0, 200) });
       return Response.json({ ok: false, error: 'db', detail: text }, { status: 500 });
     }
 
@@ -120,6 +125,7 @@ export async function POST(request) {
 
     return Response.json({ ok: true });
   } catch (err) {
+    console.error('[question-report] unhandled error', { message: err.message });
     return Response.json({ ok: false, error: err.message }, { status: 500 });
   }
 }

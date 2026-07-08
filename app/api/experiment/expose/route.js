@@ -8,10 +8,11 @@ export async function POST(request) {
   try {
     const { experiment, variant, key } = await request.json();
     if (!experiment || !variant || !key) {
+      console.error('[experiment/expose] missing fields', { experiment: experiment || null, variant: variant || null, hasKey: Boolean(key) });
       return Response.json({ ok: false, error: 'missing fields' }, { status: 400 });
     }
 
-    await fetch(`${SUPA_URL}/rest/v1/experiment_exposures`, {
+    const res = await fetch(`${SUPA_URL}/rest/v1/experiment_exposures`, {
       method: 'POST',
       headers: {
         apikey: SUPA_KEY,
@@ -21,9 +22,15 @@ export async function POST(request) {
       },
       body: JSON.stringify({ experiment, variant, subject_key: key }),
     });
+    if (!res.ok) {
+      // Response stays ok:true (exposure logging is best-effort), but a
+      // silently failing insert would skew experiment data, so surface it.
+      console.error('[experiment/expose] insert failed', { status: res.status, experiment, variant });
+    }
 
     return Response.json({ ok: true });
   } catch (e) {
+    console.error('[experiment/expose] unhandled error', { message: e.message });
     return Response.json({ ok: false, error: e.message }, { status: 500 });
   }
 }

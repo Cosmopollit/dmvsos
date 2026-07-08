@@ -146,15 +146,6 @@ async function getOrCreateUserByEmail(email) {
   return newUser.id;
 }
 
-async function sendMagicLink(email) {
-  if (!email) return;
-  await fetch(`${SUPABASE_URL}/auth/v1/admin/generate_link`, {
-    method: 'POST',
-    headers: sbHeaders,
-    body: JSON.stringify({ type: 'magiclink', email }),
-  }).catch(e => console.warn(`magic-link send failed for ${emailTag(email)}: ${e.message}`));
-}
-
 async function notifyAdmin(text) {
   const TG_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
   const ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID;
@@ -167,7 +158,6 @@ async function notifyAdmin(text) {
 }
 
 async function handleOneTimePayment({ paymentIntentId, amountCents, metadata, checkoutSessionId, email }) {
-  // eslint-disable-next-line prefer-const
   let { user_id, pass_type, kind } = metadata;
 
   // Bail if we don't even know the pass_type — can't fulfill anything.
@@ -194,22 +184,16 @@ async function handleOneTimePayment({ paymentIntentId, amountCents, metadata, ch
     }
   }
 
-  // Always send a magic-link to the buying email — not just for anonymous
-  // purchases. The legitimate-but-stuck case is a logged-in user starting
-  // checkout in browser A, then paying from browser B / incognito / phone
-  // that does not actually hold the session. Webhook used to skip the
-  // magic-link there because metadata had user_id, leaving the paying
-  // browser silently locked out (galyna / yrynlnqry on 2026-05-19, qq.com
-  // 461259674 on 2026-05-22 all needed manual recovery). The /success
-  // checkout-login flow also issues a magic-link, but only when the user
-  // actually lands on /success; this email is the recovery channel when
-  // the Stripe tab was closed before redirect.
-  if (email) {
-    await sendMagicLink(email);
-  }
+  // No magic-link is generated here. The old admin/generate_link call never
+  // sent an email (that endpoint only RETURNS a link), and worse: Supabase
+  // keeps ONE outstanding magiclink token per user, so this call raced the
+  // /success checkout-login redirect and could invalidate the buyer's real
+  // login link mid-flight. Recovery channels for a buyer who never reaches
+  // /success: the hourly checkout-recovery cron emails a real magic link
+  // (auth/v1/magiclink) to paid-but-never-signed-in accounts.
 
   if (wasAnonymous) {
-    await notifyAdmin(`💰 <b>Anonymous purchase auto-fixed:</b> ${email} → ${pass_type} ($${(amountCents / 100).toFixed(2)})\nUser created. Magic-link sent.`);
+    await notifyAdmin(`💰 <b>Anonymous purchase auto-fixed:</b> ${email} → ${pass_type} ($${(amountCents / 100).toFixed(2)})\nUser created. If they don't sign in within the hour, checkout-recovery cron emails them a login link.`);
   }
 
   // [1] Idempotency: already processed?
@@ -377,8 +361,13 @@ export async function POST(request) {
   }
 
   try {
-    // ── checkout.session.completed: routes by mode + metadata ──────────────
-    if (event.type === 'checkout.session.completed') {
+    // ── checkout.session.completed / async_payment_succeeded ───────────────
+    // Delayed-notification methods (Klarna, Cash App, Amazon Pay, crypto,
+    // bank debits) complete the session with payment_status='unpaid' and the
+    // money arrives (or fails) minutes-to-days later via the async_payment_*
+    // events. Fulfillment must only ever run on actually-paid sessions, so
+    // both event types funnel into the same routing below behind the gate.
+    if (event.type === 'checkout.session.completed' || event.type === 'checkout.session.async_payment_succeeded') {
       const session = event.data.object;
       const email = session.customer_email || session.customer_details?.email || session.metadata?.email;
       const phone = session.customer_details?.phone || null;
@@ -386,7 +375,14 @@ export async function POST(request) {
       const customerId = session.customer;
       const meta = session.metadata || {};
 
-      console.log(`Webhook: checkout.session.completed | user=${emailTag(email)} | plan=${planType} | mode=${session.mode} | phone=${phone ? 'yes' : 'no'}`);
+      console.log(`Webhook: ${event.type} | user=${emailTag(email)} | plan=${planType} | mode=${session.mode} | pay_status=${session.payment_status} | phone=${phone ? 'yes' : 'no'}`);
+
+      if (session.mode === 'payment' && session.payment_status !== 'paid' && session.payment_status !== 'no_payment_required') {
+        // Not paid yet (delayed method still processing) or never will be.
+        // Do nothing; async_payment_succeeded re-enters here once paid.
+        console.log(`fulfillment deferred, session not paid | session=${session.id} | status=${session.payment_status}`);
+        return new Response('OK', { status: 200 });
+      }
 
       // New one-time pricing model (metadata.kind = 'new' | 'extension').
       // handleOneTimePayment already syncs profiles.is_pro / plan_expires_at.
@@ -437,6 +433,18 @@ export async function POST(request) {
         });
         console.log(`legacy one-time | plan=${planType} | expires=${expiresAt}`);
       }
+    }
+
+    // ── Delayed payment failed (Klarna/Cash App/crypto/bank) ───────────────
+    // Nothing was fulfilled (the paid-gate above deferred it), so there is
+    // nothing to revoke. Alert the operator: the buyer committed to a
+    // purchase and lost it, worth a manual follow-up while the intent is hot.
+    if (event.type === 'checkout.session.async_payment_failed') {
+      const session = event.data.object;
+      const email = session.customer_email || session.customer_details?.email || session.metadata?.email;
+      console.warn(`async payment failed | session=${session.id} | pi=${session.payment_intent} | user=${emailTag(email)}`);
+      await notifyAdmin(`⚠️ <b>Delayed payment failed</b> (Klarna/Cash App/bank).\nEmail: ${email || '(none)'}\nSession: <code>${session.id}</code>\nPass type: ${session.metadata?.pass_type || '?'}\nNo access was granted, nothing to revoke. Consider reaching out.`);
+      return new Response('OK', { status: 200 });
     }
 
     // ── Subscription renewed (legacy) ──────────────────────────────────────

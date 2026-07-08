@@ -55,7 +55,7 @@ export default function Terms() {
             <section>
               <h2 className="font-semibold text-[#0B1C3D] mb-2">5. Paid Plans</h2>
               <p>
-                DMVSOS uses one-time payments processed through Stripe — no subscriptions, no auto-renew.
+                DMVSOS uses one-time payments processed through Stripe. No subscriptions, no auto-renew.
                 Moto Pass ($19.99) for motorcycle tests, Auto Pass ($29.99) for car tests, and CDL Pro
                 ($49.99) for CDL tests with car content included. Each pass unlocks 30 days of access.
                 An Extension ($9.99) adds another 30 days to any active pass.

@@ -8,7 +8,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { PASS_META, EXTENSION } from '@/lib/plans';
-import { trackBeginCheckout } from '@/lib/gtag';
+import { trackBeginCheckout, trackCheckoutError } from '@/lib/gtag';
 import { examRulesFor } from '@/lib/exam-rules';
 import SupportFooter from '@/app/components/SupportFooter';
 import GradientButton from '@/app/components/GradientButton';
@@ -49,9 +49,11 @@ function ProfileContent() {
   const { user, isPro, planType, planExpiresAt, activePasses, loading } = useAuth();
   const [sessions, setSessions] = useState([]);
   const [extendLoading, setExtendLoading] = useState(null); // 'moto' | 'auto' | 'cdl' | null
+  const [extendError, setExtendError] = useState(null); // pass_type whose Extend failed
 
   async function handleExtend(passType) {
     setExtendLoading(passType);
+    setExtendError(null);
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch('/api/create-checkout', {
@@ -62,13 +64,23 @@ function ProfileContent() {
         },
         body: JSON.stringify({ planType: 'extension', passType, lang }),
       });
+      // Stale cached session: re-login and land back here.
+      if (res.status === 401) {
+        trackCheckoutError(401, 'profile');
+        router.push(`/login?next=${encodeURIComponent(`/profile?lang=${lang}`)}&lang=${lang}`);
+        return;
+      }
       const data = await res.json();
       if (data?.url) {
         trackBeginCheckout(passType, 'extension');
         window.location.href = data.url;
+      } else {
+        trackCheckoutError(res.status, 'profile');
+        setExtendError(passType);
       }
     } catch {
-      // Network/parse error — button re-enables so user can retry.
+      trackCheckoutError('network', 'profile');
+      setExtendError(passType);
     } finally {
       setExtendLoading(null);
     }
@@ -205,26 +217,35 @@ function ProfileContent() {
                 const meta = PASS_DISPLAY[type] || { label: type };
                 const lowDays = left <= 3;
                 return (
-                  <div key={type} className="flex items-center gap-3 p-3 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC]">
-                    {meta.art ? (
-                      <img src={meta.art} alt="" width={48} height={32} className="shrink-0 select-none object-contain" />
-                    ) : (
-                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#64748B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0" aria-hidden="true"><path d="M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 6v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-6z" /><path d="M13 5v2M13 11v2M13 17v2" /></svg>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-bold text-[#0B1C3D]">{meta.label}</div>
-                      <div className={`text-xs ${lowDays ? 'text-[#DC2626]' : 'text-[#64748B]'}`}>
-                        {left} {tex.daysLeft || 'days left'}
+                  <div key={type}>
+                    <div className="flex items-center gap-3 p-3 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC]">
+                      {meta.art ? (
+                        <img src={meta.art} alt="" width={48} height={32} className="shrink-0 select-none object-contain" />
+                      ) : (
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#64748B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0" aria-hidden="true"><path d="M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 6v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-6z" /><path d="M13 5v2M13 11v2M13 17v2" /></svg>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-bold text-[#0B1C3D]">{meta.label}</div>
+                        <div className={`text-xs ${lowDays ? 'text-[#DC2626]' : 'text-[#64748B]'}`}>
+                          {left} {tex.daysLeft || 'days left'}
+                        </div>
                       </div>
+                      <button
+                        type="button"
+                        onClick={() => handleExtend(type)}
+                        disabled={extendLoading !== null}
+                        className="text-xs font-semibold px-3 py-2 rounded-lg bg-[#0B1C3D] text-white hover:bg-[#1E3A5F] transition disabled:opacity-60 whitespace-nowrap"
+                      >
+                        {extendLoading === type ? '…' : (tex.extendCta || `+${EXTENSION.durationDays} days · ${EXTENSION.price}`)}
+                      </button>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => handleExtend(type)}
-                      disabled={extendLoading !== null}
-                      className="text-xs font-semibold px-3 py-2 rounded-lg bg-[#0B1C3D] text-white hover:bg-[#1E3A5F] transition disabled:opacity-60 whitespace-nowrap"
-                    >
-                      {extendLoading === type ? '…' : (tex.extendCta || `+${EXTENSION.durationDays} days · ${EXTENSION.price}`)}
-                    </button>
+                    {/* Inline failure notice under the row (a silently
+                        re-enabled button read as "nothing happened"). */}
+                    {extendError === type && (
+                      <p className="mt-1.5 text-xs text-center font-medium text-[#DC2626]">
+                        {tex.checkoutError || 'Something went wrong. Please try again.'}
+                      </p>
+                    )}
                   </div>
                 );
               })}

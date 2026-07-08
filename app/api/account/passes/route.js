@@ -1,4 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
+import { createHash } from 'crypto';
+
+// Log-safe email hash: first 8 hex chars of sha256 (mirrors webhook route).
+function emailTag(email) {
+  if (!email) return 'none';
+  return createHash('sha256').update(email.toLowerCase()).digest('hex').slice(0, 8);
+}
 
 // Return the caller's active passes — but searching by email, not just
 // by the current session's user_id.
@@ -35,6 +42,7 @@ export async function GET(req) {
     // Validate the caller's session, extract their email.
     const { data: userData, error: userErr } = await supabaseAdmin.auth.getUser(token);
     if (userErr || !userData?.user?.email) {
+      console.warn('[account/passes] invalid session', { message: userErr?.message });
       return Response.json({ error: 'Invalid session' }, { status: 401 });
     }
     const email = userData.user.email.toLowerCase();
@@ -50,7 +58,12 @@ export async function GET(req) {
     const userIds = new Set([userData.user.id]);
     for (let page = 1; page <= MAX_PAGES; page++) {
       const { data, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 200 });
-      if (error) break;
+      if (error) {
+        // Soft-degrades to caller-only passes; log it so a broken union
+        // ("my pass disappeared") is traceable.
+        console.warn('[account/passes] listUsers page failed', { page, message: error.message });
+        break;
+      }
       const users = data?.users || [];
       for (const u of users) {
         if (u.id === userData.user.id) continue;
@@ -64,7 +77,7 @@ export async function GET(req) {
     // detection on /login — surface it so we notice if Step B starts
     // failing or someone gets through a race.
     if (userIds.size > 1) {
-      console.warn(`[passes] cross-account union for ${email}: ${userIds.size} confirmed user_ids`);
+      console.warn(`[account/passes] cross-account union for ${emailTag(email)}: ${userIds.size} confirmed user_ids`);
     }
 
     // Union active_passes across all the matching user_ids.
@@ -76,6 +89,7 @@ export async function GET(req) {
         { headers: REST_H }
       );
       if (r.ok) activePasses = await r.json();
+      else console.error('[account/passes] active_passes fetch failed', { status: r.status, user: emailTag(email) });
     }
 
     // Legacy profile fallback (subscription/one-time pre-migration users
@@ -89,6 +103,8 @@ export async function GET(req) {
     if (profR.ok) {
       const rows = await profR.json();
       legacyProfile = rows?.[0] || null;
+    } else {
+      console.error('[account/passes] profiles fetch failed', { status: profR.status, user: emailTag(email) });
     }
 
     return Response.json({
@@ -98,6 +114,7 @@ export async function GET(req) {
       legacy_profile: legacyProfile,
     });
   } catch (err) {
+    console.error('[account/passes] unhandled error', { message: err?.message });
     return Response.json({ error: err?.message || 'Internal error' }, { status: 500 });
   }
 }
