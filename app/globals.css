@@ -106,3 +106,23 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 .term-row { opacity: 0; animation: term-row-in 0.35s ease-out forwards; }
+
+/* Official access card: staggered registry-lookup reveal (BeenVerified-style,
+   administrative tone). Each row fades in, shows "Checking...", then swaps to
+   the found value. Pure CSS with per-row inline delays; plays once on mount. */
+@keyframes off-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: none; }
+}
+.off-row { opacity: 0; animation: off-in 0.35s ease-out forwards; }
+
+@keyframes off-hide { to { opacity: 0; visibility: hidden; } }
+.off-checking { animation: off-hide 0.25s ease forwards; }
+
+@keyframes off-show { from { opacity: 0; } to { opacity: 1; } }
+.off-value { opacity: 0; animation: off-show 0.3s ease forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  .off-row, .off-value { animation: none; opacity: 1; }
+  .off-checking { animation: none; opacity: 0; visibility: hidden; }
+}

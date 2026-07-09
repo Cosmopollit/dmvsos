@@ -9,7 +9,7 @@ import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { PASS_META } from '@/lib/plans';
 import { examRulesFor, passPercentFor } from '@/lib/exam-rules';
-import { agencyAbbrForState } from '@/lib/agencies';
+import { agencyAbbrForState, AGENCY_FULL_NAMES } from '@/lib/agencies';
 import { questionCountForState, questionCountForStateCategory } from '@/lib/state-question-counts';
 import { trackBeginCheckout, trackCheckoutError } from '@/lib/gtag';
 import { useExperiment } from '@/lib/experiments';
@@ -297,19 +297,47 @@ function UpgradeContent() {
               </div>
             </div>
             <div className="px-5 pt-2 pb-5">
-              {rule?.questions && passPct && (
-                <div className="flex items-baseline justify-between gap-4 py-2.5 border-b border-white/10 text-sm">
-                  <span className="text-[#94A3B8] shrink-0">{tex.offExamLabel || 'Exam'}</span>
-                  <span className="text-white font-semibold text-right">
-                    {agencyAbbrForState(ctxState)} · {rule.questions} {tex.modeQuestions || 'questions'} · {passPct}%
-                  </span>
-                </div>
-              )}
-              <div className="flex items-baseline justify-between gap-4 py-2.5 border-b border-white/10 text-sm">
-                <span className="text-[#94A3B8] shrink-0">{tex.offBankLabel || 'Question bank'}</span>
-                <span className="text-white font-semibold">{nf} {tex.modeQuestions || 'questions'}</span>
-              </div>
-              <div className="pt-2.5">
+              {/* Registry lookup, row by row (BeenVerified-style ceremony in an
+                  administrative tone): each line reports "Checking..." then the
+                  found value. All values are live data; the theater is only in
+                  the pacing. STAGGER = seconds between rows; values resolve
+                  RESOLVE seconds after their row appears. */}
+              {(() => {
+                const abbr = agencyAbbrForState(ctxState);
+                const scanRows = [
+                  { label: tex.offJurisdiction || 'Jurisdiction',
+                    value: AGENCY_FULL_NAMES[abbr] ? `${abbr} · ${AGENCY_FULL_NAMES[abbr]}` : abbr },
+                  ...(rule?.questions && passPct ? [{
+                    label: tex.offExamLabel || 'Exam',
+                    value: `${rule.questions} ${tex.modeQuestions || 'questions'} · ${passPct}%` }] : []),
+                  { label: tex.offBankLabel || 'Question bank',
+                    value: (tex.offRecordsFound || '{n} records found').replace('{n}', nf), strong: true },
+                  { label: tex.offLangsLabel || 'Languages',
+                    value: '5 · EN RU ES 中文 UA' },
+                ];
+                const STAGGER = 0.5, RESOLVE = 0.65;
+                return scanRows.map((row, i) => (
+                  <div key={row.label} className="off-row flex items-baseline justify-between gap-4 py-2.5 border-b border-white/10 text-sm"
+                    style={{ animationDelay: `${i * STAGGER}s` }}>
+                    <span className="text-[#94A3B8] shrink-0">{row.label}</span>
+                    <span className="relative text-right min-w-0">
+                      <span className="off-checking absolute right-0 top-0 text-[#64748B] italic whitespace-nowrap"
+                        style={{ animationDelay: `${i * STAGGER + RESOLVE}s` }}>
+                        {tex.offChecking || 'Checking...'}
+                      </span>
+                      <span className={`off-value inline-flex items-baseline gap-1.5 ${row.strong ? 'text-[#F59E0B]' : 'text-white'} font-semibold`}
+                        style={{ animationDelay: `${i * STAGGER + RESOLVE}s` }}>
+                        <svg width="12" height="12" viewBox="0 0 16 16" className="shrink-0 self-center" aria-hidden="true">
+                          <circle cx="8" cy="8" r="8" fill="#16A34A" />
+                          <path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                        </svg>
+                        <span>{row.value}</span>
+                      </span>
+                    </span>
+                  </div>
+                ));
+              })()}
+              <div className="off-row pt-2.5" style={{ animationDelay: '2.2s' }}>
                 <div className="flex items-baseline justify-between gap-4 text-sm mb-2">
                   <span className="text-[#94A3B8] shrink-0">{tex.offAccessLabel || 'Your access'}</span>
                   <span className="text-white font-semibold">
@@ -322,7 +350,7 @@ function UpgradeContent() {
               </div>
               {/* The answer to the meter, right where the problem is shown:
                   buys exactly the bank counted above. */}
-              <div className="mt-5">
+              <div className="off-row mt-5" style={{ animationDelay: '2.6s' }}>
                 <GradientButton
                   variant="gold"
                   onClick={() => handleCheckout(ctxPlanId)}
