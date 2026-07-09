@@ -242,10 +242,17 @@ function UpgradeContent() {
         const pct = Math.max(0.1, Math.round((seen / bank) * 1000) / 10);
         const stateName = ctxState.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ');
         return (
-          <div className="w-full max-w-2xl mb-6 rounded-2xl overflow-hidden border border-[#1E3A5F] text-left"
-            style={{ background: '#081226', fontFamily: 'var(--font-geist-mono), ui-monospace, monospace' }}>
-            <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#12233F]">
-              <span className="w-2 h-2 rounded-full bg-[#22C55E]" aria-hidden="true" />
+          // On this navy page the terminal must be DARKER than the page and
+          // carry its own glow, or it melts into the background (the paywall
+          // version sits on a white modal and gets contrast for free).
+          <div className="w-full max-w-2xl mb-6 rounded-2xl overflow-hidden border border-[#2B4E7F] text-left"
+            style={{
+              background: '#04070F',
+              fontFamily: 'var(--font-geist-mono), ui-monospace, monospace',
+              boxShadow: '0 0 0 1px rgba(125,211,252,0.10), 0 0 28px rgba(34,197,94,0.10), 0 18px 44px rgba(0,0,0,0.55)',
+            }}>
+            <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#16294A]" style={{ background: '#070D1C' }}>
+              <span className="w-2 h-2 rounded-full bg-[#22C55E]" aria-hidden="true" style={{ boxShadow: '0 0 6px rgba(34,197,94,0.8)' }} />
               <span className="text-[10px] tracking-widest text-[#7DD3FC] uppercase truncate">
                 DMVSOS QUESTION BANK // {stateName}
               </span>
