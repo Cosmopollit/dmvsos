@@ -274,26 +274,23 @@ function UpgradeContent() {
           : ctxPlanId === 'onetime_cdl' ? (tex.catCdl || 'Truck (CDL)') : (tex.catCar || 'Car');
         const nf = bank.toLocaleString('en-US');
         return (
-          // Official access-record card (owner: same idea, "более официально"):
-          // the hacker-console chrome (mono font, neon, blinking caret) traded
-          // for a registry-style spec sheet — elevated navy, label/value rows,
-          // shield emblem, amber accents. Same honest data, same CTA.
-          <div className="w-full max-w-2xl mb-6 rounded-2xl border border-white/15 text-left shadow-xl"
-            style={{ background: '#13284d' }}>
-            <div className="flex items-center gap-3 px-5 py-4 border-b border-white/10">
-              <span className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-white/[0.06] border border-white/10">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2"
-                  strokeLinecap="round" strokeLinejoin="round" style={{ color: '#F59E0B' }} aria-hidden="true">
-                  <path d="M12 3l7 3v5c0 4.4-2.9 8.1-7 9.5C7.9 19.1 5 15.4 5 11V6l7-3z" fill="currentColor" fillOpacity="0.15" />
-                  <path d="M12 3l7 3v5c0 4.4-2.9 8.1-7 9.5C7.9 19.1 5 15.4 5 11V6l7-3z" />
-                  <path d="M9.2 12l2 2 3.6-3.8" />
-                </svg>
-              </span>
+          // Department-document card: paper body + institutional navy header
+          // strip with a seal — the layout language of an agency portal, with
+          // honest wording (it's OUR bank's registry, no gov claim).
+          <div className="w-full max-w-2xl mb-6 rounded-xl border border-[#CBD5E1] text-left shadow-xl overflow-hidden bg-white">
+            <div className="flex items-center gap-3.5 px-5 py-3.5" style={{ background: '#0B1C3D' }}>
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" className="shrink-0" aria-hidden="true">
+                <circle cx="12" cy="12" r="10.2" stroke="#F59E0B" strokeWidth="1.4" />
+                <circle cx="12" cy="12" r="7.6" stroke="#F59E0B" strokeWidth="1" strokeDasharray="1.6 2.2" />
+                <path d="M12 7.2l1.35 2.74 3.02.44-2.18 2.13.51 3.01L12 14.1l-2.7 1.42.51-3.01-2.18-2.13 3.02-.44L12 7.2z" fill="#F59E0B" />
+              </svg>
               <div className="flex-1 min-w-0">
-                <div className="text-white font-bold text-[15px] leading-tight truncate">
-                  {(tex.offBankLabel || 'Question bank')} · {stateName}
+                <div className="text-[10px] tracking-[0.18em] uppercase text-[#93B4E7] font-semibold">
+                  DMVSOS · {(tex.offBankLabel || 'Question bank')}
                 </div>
-                <div className="text-[#94A3B8] text-xs mt-0.5">{catLabel}</div>
+                <div className="text-white font-bold text-[15px] leading-tight truncate mt-0.5 uppercase tracking-wide">
+                  {stateName} · {catLabel}
+                </div>
               </div>
             </div>
             <div className="px-5 pt-2 pb-5">
@@ -317,15 +314,18 @@ function UpgradeContent() {
                 ];
                 const STAGGER = 0.5, RESOLVE = 0.65;
                 return scanRows.map((row, i) => (
-                  <div key={row.label} className="off-row flex items-baseline justify-between gap-4 py-2.5 border-b border-white/10 text-sm"
+                  <div key={row.label} className="off-row flex items-baseline gap-2 py-2.5 border-b border-[#EEF2F7] text-sm"
                     style={{ animationDelay: `${i * STAGGER}s` }}>
-                    <span className="text-[#94A3B8] shrink-0">{row.label}</span>
+                    <span className="text-[#64748B] shrink-0">{row.label}</span>
+                    {/* Form-style dotted leader between label and value. */}
+                    <span aria-hidden="true" className="flex-1 self-center border-b border-dotted border-[#CBD5E1] min-w-[16px] translate-y-[3px]" />
                     <span className="relative text-right min-w-0">
-                      <span className="off-checking absolute right-0 top-0 text-[#64748B] italic whitespace-nowrap"
+                      <span className="off-checking absolute right-0 top-0 inline-flex items-center gap-1.5 text-[#94A3B8] whitespace-nowrap"
                         style={{ animationDelay: `${i * STAGGER + RESOLVE}s` }}>
-                        {tex.offChecking || 'Checking...'}
+                        <span className="w-3 h-3 rounded-full border-2 border-[#94A3B8] border-t-transparent animate-spin shrink-0" />
+                        <span className="italic">{tex.offChecking || 'Checking...'}</span>
                       </span>
-                      <span className={`off-value inline-flex items-baseline gap-1.5 ${row.strong ? 'text-[#F59E0B]' : 'text-white'} font-semibold`}
+                      <span className={`off-value inline-flex items-baseline gap-1.5 ${row.strong ? 'text-[#B45309]' : 'text-[#0B1C3D]'} font-semibold`}
                         style={{ animationDelay: `${i * STAGGER + RESOLVE}s` }}>
                         <svg width="12" height="12" viewBox="0 0 16 16" className="shrink-0 self-center" aria-hidden="true">
                           <circle cx="8" cy="8" r="8" fill="#16A34A" />
@@ -339,12 +339,12 @@ function UpgradeContent() {
               })()}
               <div className="off-row pt-2.5" style={{ animationDelay: '2.2s' }}>
                 <div className="flex items-baseline justify-between gap-4 text-sm mb-2">
-                  <span className="text-[#94A3B8] shrink-0">{tex.offAccessLabel || 'Your access'}</span>
-                  <span className="text-white font-semibold">
-                    {seen} / {nf} · <span className="text-[#F59E0B] font-bold">{pct}%</span>
+                  <span className="text-[#64748B] shrink-0">{tex.offAccessLabel || 'Your access'}</span>
+                  <span className="text-[#0B1C3D] font-semibold">
+                    {seen} / {nf} · <span className="text-[#B45309] font-bold">{pct}%</span>
                   </span>
                 </div>
-                <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+                <div className="h-1.5 rounded-full bg-[#E2E8F0] overflow-hidden">
                   <div className="h-full rounded-full bg-[#F59E0B]" style={{ width: `${Math.max(2, pct)}%` }} />
                 </div>
               </div>
@@ -362,7 +362,7 @@ function UpgradeContent() {
                   </span>
                 </GradientButton>
                 {cardNotice?.planId === ctxPlanId && cardNotice.type === 'error' && (
-                  <p className="mt-2 text-xs text-center font-medium text-[#F87171]">
+                  <p className="mt-2 text-xs text-center font-medium text-[#DC2626]">
                     {tex.checkoutError || 'Something went wrong. Please try again.'}
                   </p>
                 )}
