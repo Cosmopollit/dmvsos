@@ -30,6 +30,15 @@ function UpgradeContent() {
   const { user, hasCar, hasMoto, hasCdl } = useAuth();
   useExperiment('upgrade_visit', user?.id);
   const [lang, setLangState] = useState(searchParams.get('lang') || getSavedLang());
+  // useSearchParams can be empty on the very first render (Suspense
+  // hydration), so the useState seed above may fall back to the saved lang
+  // and stick — an explicit ?lang= link then silently loses to localStorage.
+  // Re-sync once params resolve: the URL wins.
+  useEffect(() => {
+    const p = searchParams.get('lang');
+    if (p && t[p] && p !== lang) setLangState(p);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
   const [showLangMenu, setShowLangMenu] = useState(false);
   const currentLang = langs.find(l => l.code === lang) || langs[0];
   function switchLang(code) { setLangState(code); saveLang(code); setShowLangMenu(false); }
@@ -180,7 +189,17 @@ function UpgradeContent() {
   }, [user, preselect]);
 
   return (
-    <main className="min-h-screen bg-[#0B1C3D] flex flex-col items-center justify-center p-6 relative">
+    <main className="min-h-screen flex flex-col items-center justify-center p-6 relative"
+      style={{ background: 'linear-gradient(180deg, #0A1A38 0%, #0B1C3D 45%, #071021 100%)' }}>
+      {/* Depth layer: a flat navy read as unfinished. Two soft radial glows
+          (cool up top, a warm hint low near the pricing) in a clipped layer —
+          clipping stays OFF the content so badges/dropdowns never get cut. */}
+      <div aria-hidden="true" className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-48 left-1/2 -translate-x-1/2 w-[720px] h-[720px] rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(37,99,235,0.16) 0%, transparent 65%)' }} />
+        <div className="absolute -bottom-56 -right-40 w-[560px] h-[560px] rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.07) 0%, transparent 70%)' }} />
+      </div>
 
       {/* Lang switcher */}
       <div className="absolute top-4 right-4 z-10">
