@@ -270,65 +270,75 @@ function UpgradeContent() {
         const seen = Math.min(ctxPlanId === 'onetime_moto' ? 5 : 20, bank);
         const pct = Math.max(0.1, Math.round((seen / bank) * 1000) / 10);
         const stateName = ctxState.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ');
-        const catChrome = ctxPlanId === 'onetime_moto' ? 'MOTO' : ctxPlanId === 'onetime_cdl' ? 'CDL' : 'CAR';
+        const catLabel = ctxPlanId === 'onetime_moto' ? (tex.catMoto || 'Motorcycle')
+          : ctxPlanId === 'onetime_cdl' ? (tex.catCdl || 'Truck (CDL)') : (tex.catCar || 'Car');
+        const nf = bank.toLocaleString('en-US');
         return (
-          // On this navy page the terminal must be DARKER than the page and
-          // carry its own glow, or it melts into the background (the paywall
-          // version sits on a white modal and gets contrast for free).
-          <div className="w-full max-w-2xl mb-6 rounded-2xl overflow-hidden border border-[#2B4E7F] text-left"
-            style={{
-              background: '#04070F',
-              fontFamily: 'var(--font-geist-mono), ui-monospace, monospace',
-              boxShadow: '0 0 0 1px rgba(125,211,252,0.10), 0 0 28px rgba(34,197,94,0.10), 0 18px 44px rgba(0,0,0,0.55)',
-            }}>
-            <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#16294A]" style={{ background: '#070D1C' }}>
-              <span className="w-2 h-2 rounded-full bg-[#22C55E]" aria-hidden="true" style={{ boxShadow: '0 0 6px rgba(34,197,94,0.8)' }} />
-              <span className="text-[10px] tracking-widest text-[#7DD3FC] uppercase truncate">
-                DMVSOS QUESTION BANK // {stateName} · {catChrome}
+          // Official access-record card (owner: same idea, "более официально"):
+          // the hacker-console chrome (mono font, neon, blinking caret) traded
+          // for a registry-style spec sheet — elevated navy, label/value rows,
+          // shield emblem, amber accents. Same honest data, same CTA.
+          <div className="w-full max-w-2xl mb-6 rounded-2xl border border-white/15 text-left shadow-xl"
+            style={{ background: '#13284d' }}>
+            <div className="flex items-center gap-3 px-5 py-4 border-b border-white/10">
+              <span className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-white/[0.06] border border-white/10">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2"
+                  strokeLinecap="round" strokeLinejoin="round" style={{ color: '#F59E0B' }} aria-hidden="true">
+                  <path d="M12 3l7 3v5c0 4.4-2.9 8.1-7 9.5C7.9 19.1 5 15.4 5 11V6l7-3z" fill="currentColor" fillOpacity="0.15" />
+                  <path d="M12 3l7 3v5c0 4.4-2.9 8.1-7 9.5C7.9 19.1 5 15.4 5 11V6l7-3z" />
+                  <path d="M9.2 12l2 2 3.6-3.8" />
+                </svg>
               </span>
+              <div className="flex-1 min-w-0">
+                <div className="text-white font-bold text-[15px] leading-tight truncate">
+                  {(tex.offBankLabel || 'Question bank')} · {stateName}
+                </div>
+                <div className="text-[#94A3B8] text-xs mt-0.5">{catLabel}</div>
+              </div>
             </div>
-            <div className="px-4 py-3.5">
+            <div className="px-5 pt-2 pb-5">
               {rule?.questions && passPct && (
-                <div className="flex items-start gap-1.5 text-[11px] text-[#5EEAD4] mb-2 leading-snug">
-                  <span className="text-[#0EA5E9] shrink-0">&gt;</span>
-                  <span>
-                    {(tex.termTarget || 'Target locked: {agency} · {q}-question exam · pass {p}%')
-                      .replace('{agency}', agencyAbbrForState(ctxState))
-                      .replace('{q}', String(rule.questions))
-                      .replace('{p}', String(passPct))}
+                <div className="flex items-baseline justify-between gap-4 py-2.5 border-b border-white/10 text-sm">
+                  <span className="text-[#94A3B8] shrink-0">{tex.offExamLabel || 'Exam'}</span>
+                  <span className="text-white font-semibold text-right">
+                    {agencyAbbrForState(ctxState)} · {rule.questions} {tex.modeQuestions || 'questions'} · {passPct}%
                   </span>
                 </div>
               )}
-              <div className="text-[12px] font-bold text-[#E2E8F0] mb-2">
-                {(tex.termFound || 'Found: {n} questions').replace('{n}', bank.toLocaleString('en-US'))}
+              <div className="flex items-baseline justify-between gap-4 py-2.5 border-b border-white/10 text-sm">
+                <span className="text-[#94A3B8] shrink-0">{tex.offBankLabel || 'Question bank'}</span>
+                <span className="text-white font-semibold">{nf} {tex.modeQuestions || 'questions'}</span>
               </div>
-              <div className="flex items-baseline justify-between text-[11px] mb-1">
-                <span className="text-[#94A3B8]">
-                  {(tex.termAccess || 'Your access: {seen} of {n}')
-                    .replace('{seen}', String(seen)).replace('{n}', bank.toLocaleString('en-US'))}
-                </span>
-                <span className="text-[#F87171] font-bold">{pct}%<span className="term-caret">_</span></span>
-              </div>
-              <div className="h-1 rounded bg-[#12233F] overflow-hidden mb-4">
-                <div className="h-full rounded bg-[#F87171]" style={{ width: `${Math.max(2, pct)}%` }} />
+              <div className="pt-2.5">
+                <div className="flex items-baseline justify-between gap-4 text-sm mb-2">
+                  <span className="text-[#94A3B8] shrink-0">{tex.offAccessLabel || 'Your access'}</span>
+                  <span className="text-white font-semibold">
+                    {seen} / {nf} · <span className="text-[#F59E0B] font-bold">{pct}%</span>
+                  </span>
+                </div>
+                <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+                  <div className="h-full rounded-full bg-[#F59E0B]" style={{ width: `${Math.max(2, pct)}%` }} />
+                </div>
               </div>
               {/* The answer to the meter, right where the problem is shown:
                   buys exactly the bank counted above. */}
-              <GradientButton
-                variant="gold"
-                onClick={() => handleCheckout(ctxPlanId)}
-                className={loadingPlan !== null ? 'pointer-events-none opacity-60' : ''}>
-                <span className="text-[15px]" style={{ fontFamily: 'inherit' }}>
-                  {loadingPlan === ctxPlanId ? '…' : (tex.termUnlockCta || 'Unlock all {n} questions · {price}')
-                    .replace('{n}', String(bank))
-                    .replace('{price}', ctxPlan?.price || '')}
-                </span>
-              </GradientButton>
-              {cardNotice?.planId === ctxPlanId && cardNotice.type === 'error' && (
-                <p className="mt-2 text-xs text-center font-medium text-[#F87171]">
-                  {tex.checkoutError || 'Something went wrong. Please try again.'}
-                </p>
-              )}
+              <div className="mt-5">
+                <GradientButton
+                  variant="gold"
+                  onClick={() => handleCheckout(ctxPlanId)}
+                  className={loadingPlan !== null ? 'pointer-events-none opacity-60' : ''}>
+                  <span className="text-[15px]">
+                    {loadingPlan === ctxPlanId ? '…' : (tex.termUnlockCta || 'Unlock all {n} questions · {price}')
+                      .replace('{n}', String(bank))
+                      .replace('{price}', ctxPlan?.price || '')}
+                  </span>
+                </GradientButton>
+                {cardNotice?.planId === ctxPlanId && cardNotice.type === 'error' && (
+                  <p className="mt-2 text-xs text-center font-medium text-[#F87171]">
+                    {tex.checkoutError || 'Something went wrong. Please try again.'}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         );
