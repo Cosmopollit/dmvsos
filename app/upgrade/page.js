@@ -279,11 +279,18 @@ function UpgradeContent() {
           // honest wording (it's OUR bank's registry, no gov claim).
           <div className="w-full max-w-2xl mb-6 rounded-xl border border-[#CBD5E1] text-left shadow-xl overflow-hidden bg-white">
             <div className="flex items-center gap-3.5 px-5 py-3.5" style={{ background: '#0B1C3D' }}>
-              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" className="shrink-0" aria-hidden="true">
-                <circle cx="12" cy="12" r="10.2" stroke="#F59E0B" strokeWidth="1.4" />
-                <circle cx="12" cy="12" r="7.6" stroke="#F59E0B" strokeWidth="1" strokeDasharray="1.6 2.2" />
-                <path d="M12 7.2l1.35 2.74 3.02.44-2.18 2.13.51 3.01L12 14.1l-2.7 1.42.51-3.01-2.18-2.13 3.02-.44L12 7.2z" fill="#F59E0B" />
-              </svg>
+              {/* The state's own flag as the letterhead emblem — instantly
+                  "this is MY state's record" (50 PD flags in public/flags,
+                  fetched by scripts/download-state-flags.mjs). */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`/flags/${ctxState}.png`}
+                alt=""
+                aria-hidden="true"
+                width="46"
+                height="31"
+                className="shrink-0 w-[46px] h-[31px] object-cover rounded-[3px] border border-white/25 shadow-sm select-none"
+              />
               <div className="flex-1 min-w-0">
                 <div className="text-[10px] tracking-[0.18em] uppercase text-[#93B4E7] font-semibold">
                   DMVSOS · {(tex.offBankLabel || 'Question bank')}
