@@ -11,6 +11,7 @@ import { PASS_META } from '@/lib/plans';
 import { examRulesFor, passPercentFor } from '@/lib/exam-rules';
 import { agencyAbbrForState, AGENCY_FULL_NAMES } from '@/lib/agencies';
 import { questionCountForState, questionCountForStateCategory } from '@/lib/state-question-counts';
+import { STATE_OPTIONS, stateToSlug } from '@/lib/states';
 import { trackBeginCheckout, trackCheckoutError } from '@/lib/gtag';
 import { useExperiment } from '@/lib/experiments';
 import SupportFooter from '@/app/components/SupportFooter';
@@ -56,10 +57,18 @@ function UpgradeContent() {
       if (s && questionCountForState(s)) setCtxState(s);
     } catch { /* blocked storage: generic catalog */ }
   }, []);
-  // Category context for the whole page: the explicit plan param wins, else
-  // Car (the dominant journey). Drives the terminal AND the card order.
-  const ctxPlanId = ['onetime_moto', 'onetime_cdl'].includes(preselect) ? preselect : 'onetime_auto';
-  const showTerminal = !!ctxState && !hasCar && !hasMoto && !hasCdl;
+  // Category context: ONLY an explicit plan param counts as known — the
+  // registry must not guess (owner: the scan ran for "Car·Texas" before the
+  // page could possibly know either). Without both state AND category the
+  // card opens as a request form, like any agency portal, and the scan runs
+  // after the user answers. Drives the card AND the plan-card order.
+  const [ctxCat, setCtxCat] = useState(
+    preselect === 'onetime_moto' ? 'moto'
+      : preselect === 'onetime_cdl' ? 'cdl'
+      : preselect === 'onetime_auto' ? 'car' : null
+  );
+  const ctxPlanId = ctxCat ? { car: 'onetime_auto', moto: 'onetime_moto', cdl: 'onetime_cdl' }[ctxCat] : null;
+  const isFreeUser = !hasCar && !hasMoto && !hasCdl;
 
   const [loadingPlan, setLoadingPlan] = useState(null);
   // Per-card notice rendered right under the tapped Buy button (the old global
@@ -256,23 +265,28 @@ function UpgradeContent() {
           agency + exam format (competence) and his real access share. All
           numbers live (state-question-counts manifest + exam-rules). Free
           users only: the base game drops entirely once he buys. */}
-      {showTerminal && (() => {
-        // ONE coherent story: the terminal shows the bank of the category the
-        // buyer is actually preparing for, and solves it with the gold CTA
-        // right there — a meter with no action reads as a lost infographic.
-        // Numbers are the CATEGORY bank, so what the meter shows is exactly
-        // what the button buys.
-        const catForRules = ctxPlanId === 'onetime_moto' ? 'motorcycle' : ctxPlanId === 'onetime_cdl' ? 'cdl' : 'car';
-        const rule = examRulesFor(ctxState, catForRules);
-        const passPct = passPercentFor(ctxState, catForRules);
-        const bank = questionCountForStateCategory(ctxState, catForRules) || questionCountForState(ctxState);
-        const ctxPlan = plans.find(p => p.id === ctxPlanId);
-        const seen = Math.min(ctxPlanId === 'onetime_moto' ? 5 : 20, bank);
-        const pct = Math.max(0.1, Math.round((seen / bank) * 1000) / 10);
-        const stateName = ctxState.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ');
-        const catLabel = ctxPlanId === 'onetime_moto' ? (tex.catMoto || 'Motorcycle')
-          : ctxPlanId === 'onetime_cdl' ? (tex.catCdl || 'Truck (CDL)') : (tex.catCar || 'Car');
-        const nf = bank.toLocaleString('en-US');
+      {isFreeUser && (() => {
+        // ONE coherent story with an honest brain: the registry never guesses.
+        // Both state AND category must be established (plan param or the form
+        // below) before the scan ceremony runs — an agency portal asks first,
+        // then searches. Numbers are the CATEGORY bank, so what the meter
+        // shows is exactly what the button buys.
+        const scanReady = !!ctxState && !!ctxCat;
+        const catForRules = ctxCat === 'moto' ? 'motorcycle' : ctxCat === 'cdl' ? 'cdl' : 'car';
+        const rule = scanReady ? examRulesFor(ctxState, catForRules) : null;
+        const passPct = scanReady ? passPercentFor(ctxState, catForRules) : null;
+        const bank = scanReady ? (questionCountForStateCategory(ctxState, catForRules) || questionCountForState(ctxState)) : 0;
+        const ctxPlan = ctxPlanId ? plans.find(p => p.id === ctxPlanId) : null;
+        const seen = scanReady ? Math.min(ctxCat === 'moto' ? 5 : 20, bank) : 0;
+        const pct = scanReady ? Math.max(0.1, Math.round((seen / bank) * 1000) / 10) : 0;
+        const stateName = ctxState ? ctxState.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ') : null;
+        const catLabel = ctxCat === 'moto' ? (tex.catMoto || 'Motorcycle')
+          : ctxCat === 'cdl' ? (tex.catCdl || 'Truck (CDL)') : ctxCat === 'car' ? (tex.catCar || 'Car') : null;
+        const nf = bank ? bank.toLocaleString('en-US') : '';
+        const pickState = (slug) => {
+          setCtxState(slug || null);
+          if (slug) { try { localStorage.setItem('dmvsos_state', slug); } catch { /* blocked storage */ } }
+        };
         return (
           // Department-document card: paper body + institutional navy header
           // strip with a seal — the layout language of an agency portal, with
@@ -281,26 +295,80 @@ function UpgradeContent() {
             <div className="flex items-center gap-3.5 px-5 py-3.5" style={{ background: '#0B1C3D' }}>
               {/* The state's own flag as the letterhead emblem — instantly
                   "this is MY state's record" (50 PD flags in public/flags,
-                  fetched by scripts/download-state-flags.mjs). */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={`/flags/${ctxState}.png`}
-                alt=""
-                aria-hidden="true"
-                width="46"
-                height="31"
-                className="shrink-0 w-[46px] h-[31px] object-cover rounded-[3px] border border-white/25 shadow-sm select-none"
-              />
+                  fetched by scripts/download-state-flags.mjs). Before a state
+                  is chosen, a neutral star seal holds the slot. */}
+              {ctxState ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={`/flags/${ctxState}.png`}
+                  alt=""
+                  aria-hidden="true"
+                  width="46"
+                  height="31"
+                  className="shrink-0 w-[46px] h-[31px] object-cover rounded-[3px] border border-white/25 shadow-sm select-none"
+                />
+              ) : (
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" className="shrink-0" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10.2" stroke="#F59E0B" strokeWidth="1.4" />
+                  <circle cx="12" cy="12" r="7.6" stroke="#F59E0B" strokeWidth="1" strokeDasharray="1.6 2.2" />
+                  <path d="M12 7.2l1.35 2.74 3.02.44-2.18 2.13.51 3.01L12 14.1l-2.7 1.42.51-3.01-2.18-2.13 3.02-.44L12 7.2z" fill="#F59E0B" />
+                </svg>
+              )}
               <div className="flex-1 min-w-0">
                 <div className="text-[10px] tracking-[0.18em] uppercase text-[#93B4E7] font-semibold">
                   DMVSOS · {(tex.offBankLabel || 'Question bank')}
                 </div>
                 <div className="text-white font-bold text-[15px] leading-tight truncate mt-0.5 uppercase tracking-wide">
-                  {stateName} · {catLabel}
+                  {scanReady ? `${stateName} · ${catLabel}` : (stateName || '')}
                 </div>
               </div>
+              {scanReady && (
+                <button type="button" onClick={() => setCtxCat(null)}
+                  className="shrink-0 text-[11px] font-semibold text-[#93B4E7] underline underline-offset-2 hover:text-white transition">
+                  {tex.offChangeLink || 'Change'}
+                </button>
+              )}
             </div>
-            <div className="px-5 pt-2 pb-5">
+            {!scanReady && (
+              <div className="px-5 py-4">
+                <p className="text-sm text-[#475569] mb-3">{tex.offSelectPrompt || 'Select your state and category to check the registry'}</p>
+                <label className="block text-[11px] uppercase tracking-wide font-semibold text-[#94A3B8] mb-1">
+                  {tex.offStateLabel || 'State'}
+                </label>
+                <div className="relative mb-4">
+                  <select
+                    value={ctxState || ''}
+                    onChange={(e) => pickState(e.target.value)}
+                    className="w-full appearance-none rounded-lg border border-[#CBD5E1] bg-white px-3.5 py-2.5 text-sm font-semibold text-[#0B1C3D] focus:outline-none focus:border-[#2563EB]"
+                  >
+                    <option value="">{tex.selectState || 'Select your state'}</option>
+                    {STATE_OPTIONS.map((display) => {
+                      const slug = stateToSlug(display);
+                      return <option key={slug} value={slug}>{display}</option>;
+                    })}
+                  </select>
+                  <svg width="10" height="10" viewBox="0 0 12 12" className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ fill: '#64748B' }} aria-hidden="true"><path d="M6 8L1 3h10z" /></svg>
+                </div>
+                <label className="block text-[11px] uppercase tracking-wide font-semibold text-[#94A3B8] mb-1">
+                  {tex.offCategoryLabel || 'Category'}
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { cat: 'car', label: tex.catCar || 'Car' },
+                    { cat: 'moto', label: tex.catMoto || 'Motorcycle' },
+                    { cat: 'cdl', label: tex.catCdl || 'Truck (CDL)' },
+                  ].map(({ cat, label }) => (
+                    <button key={cat} type="button" onClick={() => setCtxCat(cat)}
+                      disabled={!ctxState}
+                      className="rounded-lg border border-[#CBD5E1] bg-white px-2 py-2.5 text-[13px] font-semibold text-[#0B1C3D] hover:border-[#2563EB] hover:text-[#2563EB] transition disabled:opacity-40 disabled:cursor-not-allowed">
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            {scanReady && (
+            <div className="px-5 pt-2 pb-5" key={`${ctxState}:${ctxCat}`}>
               {/* Registry lookup, row by row (BeenVerified-style ceremony in an
                   administrative tone): each line reports "Checking..." then the
                   found value. All values are live data; the theater is only in
@@ -375,6 +443,7 @@ function UpgradeContent() {
                 )}
               </div>
             </div>
+            )}
           </div>
         );
       })()}
@@ -398,7 +467,7 @@ function UpgradeContent() {
             <div
               key={plan.id}
               className={`flex-1 rounded-2xl p-5 flex flex-col relative shadow-xl w-full max-w-[420px] mx-auto sm:max-w-none sm:mx-0 ${
-                showTerminal && plan.id === ctxPlanId ? 'order-first sm:order-none ' : ''
+                isFreeUser && ctxPlanId && plan.id === ctxPlanId ? 'order-first sm:order-none ' : ''
               }${
                 isGold
                   ? 'border-2 border-[#F59E0B]'
