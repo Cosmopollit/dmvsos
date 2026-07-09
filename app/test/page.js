@@ -19,10 +19,29 @@ import AccessTerminal from '@/app/components/AccessTerminal';
 // Brand line icons (2px stroke) — replaces the page's pre-overhaul emoji set
 // (✏️🎯📚🏆🔒🔓📖🔔📨 …) with the SVG language the rest of the site speaks.
 const ICON_PATHS = {
-  pencil: <path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />,
-  target: <><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="4" /></>,
-  book: <path d="M4 19.5A2.5 2.5 0 016.5 17H20M4 19.5A2.5 2.5 0 006.5 22H20V2H6.5A2.5 2.5 0 004 4.5v15z" />,
-  trophy: <path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4zM7 6H4a3 3 0 003 3M17 6h3a3 3 0 01-3 3" />,
+  // Mode glyphs are two-tone (soft-filled silhouette + stroke + solid accent):
+  // thin single outlines read as filler at card size.
+  pencil: <>
+    <path d="M16.5 3.5a2.1 2.1 0 013 3L8 18l-4.2 1.2L5 14.8 16.5 3.5z" fill="currentColor" fillOpacity="0.15" />
+    <path d="M13.5 6.5l4 4" />
+    <path d="M5 21h15" />
+  </>,
+  target: <>
+    <circle cx="12" cy="12" r="9" />
+    <circle cx="12" cy="12" r="5.4" fill="currentColor" fillOpacity="0.13" />
+    <circle cx="12" cy="12" r="2.1" fill="currentColor" stroke="none" />
+  </>,
+  book: <>
+    <path d="M12 6.4C10.5 4.9 8.4 4 6 4H3.5v14H6c2.3 0 4.4.9 6 2.4 1.6-1.5 3.7-2.4 6-2.4h2.5V4H18c-2.4 0-4.5.9-6 2.4z" fill="currentColor" fillOpacity="0.13" />
+    <path d="M12 6.4v14" />
+    <path d="M12 6.4C10.5 4.9 8.4 4 6 4H3.5v14H6c2.3 0 4.4.9 6 2.4 1.6-1.5 3.7-2.4 6-2.4h2.5V4H18c-2.4 0-4.5.9-6 2.4z" />
+  </>,
+  trophy: <>
+    <path d="M7 4h10v5a5 5 0 01-10 0V4z" fill="currentColor" fillOpacity="0.16" />
+    <path d="M7 4h10v5a5 5 0 01-10 0V4zM7 6H4a3 3 0 003 3M17 6h3a3 3 0 01-3 3M12 14v3" />
+    <path d="M8.3 21h7.4l-.9-3.1a1 1 0 00-1-.7h-3.6a1 1 0 00-1 .7L8.3 21z" fill="currentColor" fillOpacity="0.16" />
+    <path d="M8.3 21h7.4l-.9-3.1a1 1 0 00-1-.7h-3.6a1 1 0 00-1 .7L8.3 21z" />
+  </>,
   clock: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
   lock: <><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 018 0v3" /></>,
   unlock: <><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 017.5-1.5" /></>,
@@ -34,9 +53,10 @@ const ICON_PATHS = {
   offline: <path d="M2 8a15 15 0 0120 0M5 12a10 10 0 0114 0M8.5 15.5a5 5 0 017 0M12 19h.01M3 3l18 18" />,
 };
 function LineIcon({ name, size = 16, color = '#2563EB', className = '' }) {
+  // style.color feeds the two-tone glyphs' currentColor fills.
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2"
-      strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      strokeLinecap="round" strokeLinejoin="round" className={className} style={{ color }} aria-hidden="true">
       {ICON_PATHS[name]}
     </svg>
   );
