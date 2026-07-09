@@ -1,7 +1,15 @@
 @import "tailwindcss";
 
 html, body {
+  /* clip (not hidden): hidden turns html/body into scroll containers, which
+     silently breaks every smooth scrollIntoView on the site (the animation
+     targets the wrong scroller and the page never moves — the hero trust
+     pill read as a dead button). clip cuts horizontal overflow without
+     creating a scroller; the hidden line stays as a fallback for engines
+     without clip support (their scrollIntoView falls back to an instant
+     jump, which works). */
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
