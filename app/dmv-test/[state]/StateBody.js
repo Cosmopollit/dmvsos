@@ -10,6 +10,7 @@ import GradientButton from '@/app/components/GradientButton';
 import StateLangStart from '@/app/components/StateLangStart';
 import FreeOnly from '@/app/components/FreeOnly';
 import { t } from '@/lib/translations';
+import { questionCountForState } from '@/lib/state-question-counts';
 
 // Brand line icons (kills the old emoji in the "what to expect" rows). Small,
 // navy-stroked, sit inside a tinted rounded chip — matches the rest of the site.
@@ -168,8 +169,12 @@ export default function StateBody({ lang, state }) {
   const citiesText = cities.length > 6 ? `${cityList}, ${repl(tex.dtCitiesOther)}` : cityList;
   const fill = (str) => repl(str).replaceAll('{cities}', citiesText);
 
+  // Real per-state bank size (distinct questions for this state). Specific
+  // beats vague: "635 questions" for California proves competence better than
+  // a generic "25,000+". Falls back to the global figure if a state is missing.
+  const bankCount = questionCountForState(state);
   const stats = [
-    { value: '25,000+', label: tex.dtStatQuestions || 'Questions' },
+    { value: bankCount ? bankCount.toLocaleString('en-US') : '25,000+', label: tex.dtStatQuestions || 'Questions' },
     { value: '3',       label: tex.dtStatCategories || 'Categories' },
     { value: '5',       label: tex.dtStatLanguages || 'Languages' },
     { value: `${exam.passingPct}%`, label: tex.dtStatPass || 'Score to pass' },
