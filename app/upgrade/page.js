@@ -8,6 +8,9 @@ import { useAuth } from '@/lib/AuthContext';
 import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { PASS_META } from '@/lib/plans';
+import { examRulesFor, passPercentFor } from '@/lib/exam-rules';
+import { agencyAbbrForState } from '@/lib/agencies';
+import { questionCountForState } from '@/lib/state-question-counts';
 import { trackBeginCheckout, trackCheckoutError } from '@/lib/gtag';
 import { useExperiment } from '@/lib/experiments';
 import SupportFooter from '@/app/components/SupportFooter';
@@ -32,6 +35,18 @@ function UpgradeContent() {
   function switchLang(code) { setLangState(code); saveLang(code); setShowLangMenu(false); }
   const preselect = searchParams.get('plan');
   const tex = t[lang] || t.en;
+
+  // The buyer's context: the home selector persists his state, so the money
+  // page can sell HIS bank ("565 Texas questions, your access 3.5%") instead
+  // of a generic three-card catalog. Free-tier-only per the base-access rule;
+  // read after mount (localStorage, guarded).
+  const [ctxState, setCtxState] = useState(null);
+  useEffect(() => {
+    try {
+      const s = localStorage.getItem('dmvsos_state');
+      if (s && questionCountForState(s)) setCtxState(s);
+    } catch { /* blocked storage: generic catalog */ }
+  }, []);
 
   const [loadingPlan, setLoadingPlan] = useState(null);
   // Per-card notice rendered right under the tapped Buy button (the old global
@@ -213,6 +228,58 @@ function UpgradeContent() {
         {(tex.statsLine || 'All 25,000+ questions · 5 languages · all 50 states').split(' ').slice(1).join(' ')}
       </p>
 
+      {/* Personal terminal header: continues the paywall's "open the bank"
+          story on the money page with the buyer's own facts — his state's
+          agency + exam format (competence) and his real access share. All
+          numbers live (state-question-counts manifest + exam-rules). Free
+          users only: the base game drops entirely once he buys. */}
+      {ctxState && !hasCar && !hasMoto && !hasCdl && (() => {
+        const catForRules = preselect === 'onetime_moto' ? 'motorcycle' : preselect === 'onetime_cdl' ? 'cdl' : 'car';
+        const rule = examRulesFor(ctxState, catForRules);
+        const passPct = passPercentFor(ctxState, catForRules);
+        const bank = questionCountForState(ctxState);
+        const seen = preselect === 'onetime_moto' ? 5 : 20;
+        const pct = Math.max(0.1, Math.round((seen / bank) * 1000) / 10);
+        const stateName = ctxState.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ');
+        return (
+          <div className="w-full max-w-2xl mb-6 rounded-2xl overflow-hidden border border-[#1E3A5F] text-left"
+            style={{ background: '#081226', fontFamily: 'var(--font-geist-mono), ui-monospace, monospace' }}>
+            <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#12233F]">
+              <span className="w-2 h-2 rounded-full bg-[#22C55E]" aria-hidden="true" />
+              <span className="text-[10px] tracking-widest text-[#7DD3FC] uppercase truncate">
+                DMVSOS QUESTION BANK // {stateName}
+              </span>
+            </div>
+            <div className="px-4 py-3.5">
+              {rule?.questions && passPct && (
+                <div className="flex items-start gap-1.5 text-[11px] text-[#5EEAD4] mb-2 leading-snug">
+                  <span className="text-[#0EA5E9] shrink-0">&gt;</span>
+                  <span>
+                    {(tex.termTarget || 'Target locked: {agency} · {q}-question exam · pass {p}%')
+                      .replace('{agency}', agencyAbbrForState(ctxState))
+                      .replace('{q}', String(rule.questions))
+                      .replace('{p}', String(passPct))}
+                  </span>
+                </div>
+              )}
+              <div className="text-[12px] font-bold text-[#E2E8F0] mb-2">
+                {(tex.termFound || 'Found: {n} questions').replace('{n}', bank.toLocaleString('en-US'))}
+              </div>
+              <div className="flex items-baseline justify-between text-[11px] mb-1">
+                <span className="text-[#94A3B8]">
+                  {(tex.termAccess || 'Your access: {seen} of {n}')
+                    .replace('{seen}', String(seen)).replace('{n}', bank.toLocaleString('en-US'))}
+                </span>
+                <span className="text-[#F87171] font-bold">{pct}%<span className="term-caret">_</span></span>
+              </div>
+              <div className="h-1 rounded bg-[#12233F] overflow-hidden">
+                <div className="h-full rounded bg-[#F87171]" style={{ width: `${Math.max(2, pct)}%` }} />
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* 3 Plan cards */}
       <div className="w-full max-w-2xl flex flex-col sm:flex-row gap-4 mb-6">
         {plans.map((plan) => {
@@ -275,7 +342,13 @@ function UpgradeContent() {
                       <circle cx="8" cy="8" r="8" fill="#16A34A" />
                       <path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
                     </svg>
-                    <span>{String(f).replace(/^[^\p{L}\p{N}]+/u, '')}</span>
+                    {/* Per-state agency rule: with a known buyer state, the
+                        generic "DMV" in feature copy becomes his real agency
+                        (a Texan reads "DPS exam simulation", not DMV). */}
+                    <span>{(() => {
+                      const clean = String(f).replace(/^[^\p{L}\p{N}]+/u, '');
+                      return ctxState ? clean.replace(/\bDMV\b/g, agencyAbbrForState(ctxState)) : clean;
+                    })()}</span>
                   </li>
                 ))}
               </ul>
