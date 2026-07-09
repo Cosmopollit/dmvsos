@@ -946,15 +946,17 @@ function TestContent() {
               }
 
               // Locked card · click goes straight to /upgrade. One quiet lock,
-              // no per-card price strip — the single gold CTA below the list
-              // carries the offer.
+              // no per-card price strip — the single gold CTA carries the
+              // offer, placed right after the free card (flex order-3 here,
+              // order-2 on the CTA) so the buyer sees it without scrolling
+              // past the whole locked list.
               return (
                 <button
                   key={m.id}
                   type="button"
                   onMouseEnter={() => setLockAnimKey(k => ({ ...k, [m.id]: (k[m.id] || 0) + 1 }))}
                   onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
-                  className="rounded-2xl p-5 flex items-center gap-4 text-left bg-white border border-[#E2E8F0] shadow-sm transition-all hover:shadow-lg hover:-translate-y-0.5 cursor-pointer">
+                  className="order-3 rounded-2xl p-5 flex items-center gap-4 text-left bg-white border border-[#E2E8F0] shadow-sm transition-all hover:shadow-lg hover:-translate-y-0.5 cursor-pointer">
                   <span className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: m.tint }}>
                     <LineIcon name={m.icon} size={22} color={m.color} />
                   </span>
@@ -971,17 +973,18 @@ function TestContent() {
                 </button>
               );
             })}
-          </div>
 
-          {/* Single concrete offer for the whole locked group (free users). */}
-          {!hasFullAccess && (
-            <GradientButton
-              variant="gold"
-              onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
-              className="mt-4">
-              <span className="text-[15px]">{unlockCtaText}</span>
-            </GradientButton>
-          )}
+            {/* Single concrete offer for the locked group — slotted right
+                after the free card (order-2; locked cards are order-3). */}
+            {!hasFullAccess && (
+              <GradientButton
+                variant="gold"
+                onClick={() => router.push(`/upgrade?lang=${lang}&plan=${suggestPlan}`)}
+                className="order-2">
+                <span className="text-[15px]">{unlockCtaText}</span>
+              </GradientButton>
+            )}
+          </div>
 
           {/* Real exam mode toggle (pro only) */}
           {hasFullAccess && (
