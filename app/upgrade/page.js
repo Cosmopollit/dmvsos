@@ -351,7 +351,12 @@ function UpgradeContent() {
       <div className="w-full max-w-2xl mb-6 rounded-2xl p-5 sm:p-6 border border-[#F59E0B]/30"
         style={{ background: 'linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(37,99,235,0.06) 100%)' }}>
         <div className="flex items-start gap-3 mb-3">
-          <svg width="24" height="24" viewBox="0 0 24 24" className="shrink-0" fill="none" stroke="#F59E0B" strokeWidth="2"><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="4" /><path d="M5 5l3.4 3.4M15.6 15.6L19 19M19 5l-3.4 3.4M8.4 15.6L5 19" /></svg>
+          {/* Route glyph: we guide you along the path (was a generic dial). */}
+          <svg width="24" height="24" viewBox="0 0 24 24" className="shrink-0 mt-0.5" fill="none" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="5" cy="19" r="2.2" />
+            <circle cx="19" cy="5" r="2.2" />
+            <path d="M7 17.5C11 14 8.5 10.5 12 8.5c2.2-1.3 4-1 5-1.5" />
+          </svg>
           <div>
             <h3 className="text-base font-bold text-white leading-tight">
               {tex.bureaucracyHelpTitle || 'Getting your license can be confusing'}
@@ -361,19 +366,24 @@ function UpgradeContent() {
             </p>
           </div>
         </div>
-        <ul className="flex flex-col gap-2 mt-4 ml-9">
+        {/* One meaning-bearing glyph per line (document / calendar / exam
+            sheet / chat) — four identical check bullets read as filler. */}
+        <ul className="flex flex-col gap-2.5 mt-4 ml-9">
           {[
-            tex.bureaucracyHelpDocs || 'What documents to bring',
-            tex.bureaucracyHelpSchedule || 'Where and how to schedule your exam',
-            tex.bureaucracyHelpExpect || 'What to expect on exam day',
-            tex.bureaucracyHelpAsk || 'Got questions? Ask us anytime',
-          ].map((line, i) => (
-            <li key={i} className="flex items-start gap-2 text-sm text-[#94A3B8]">
-              <svg width="14" height="14" viewBox="0 0 16 16" className="shrink-0 mt-1">
-                <circle cx="8" cy="8" r="8" fill="#F59E0B" />
-                <path d="M4.5 8l2.2 2.2L11.5 5.5" stroke="#0B1C3D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-              </svg>
-              <span>{line}</span>
+            { label: tex.bureaucracyHelpDocs || 'What documents to bring',
+              icon: <><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" /><path d="M14 3v5h5" /><path d="M9 13h6M9 17h4" /></> },
+            { label: tex.bureaucracyHelpSchedule || 'Where and how to schedule your exam',
+              icon: <><rect x="4" y="5" width="16" height="16" rx="2" /><path d="M8 3v4M16 3v4M4 10h16" /><path d="M9.5 15.5l2 2 3.5-3.5" /></> },
+            { label: tex.bureaucracyHelpExpect || 'What to expect on exam day',
+              icon: <><rect x="5" y="4" width="14" height="17" rx="2" /><path d="M9 4.5V3h6v1.5" /><path d="M9 10h6M9 13.5h6M9 17h3.5" /></> },
+            { label: tex.bureaucracyHelpAsk || 'Got questions? Ask us anytime',
+              icon: <><path d="M21 12a8 8 0 0 1-8 8H4l2.3-2.9A8 8 0 1 1 21 12z" /><path d="M9.5 10.2a2.5 2.5 0 1 1 3.4 2.3c-.7.3-.9.7-.9 1.5" /><path d="M12 17h.01" /></> },
+          ].map(({ label, icon }, i) => (
+            <li key={i} className="flex items-center gap-3 text-sm text-[#94A3B8]">
+              <span className="w-8 h-8 rounded-lg shrink-0 flex items-center justify-center border border-white/10 bg-white/[0.06]">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{icon}</svg>
+              </span>
+              <span>{label}</span>
             </li>
           ))}
         </ul>
