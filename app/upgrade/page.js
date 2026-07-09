@@ -231,7 +231,7 @@ function UpgradeContent() {
           return (
             <div
               key={plan.id}
-              className={`flex-1 rounded-2xl p-5 flex flex-col relative shadow-xl overflow-hidden ${
+              className={`flex-1 rounded-2xl p-5 flex flex-col relative shadow-xl w-full max-w-[420px] mx-auto sm:max-w-none sm:mx-0 ${
                 isGold
                   ? 'border-2 border-[#F59E0B]'
                   : isBlue
@@ -242,11 +242,14 @@ function UpgradeContent() {
                 ? { background: 'linear-gradient(160deg, #FFFFFF 0%, #F4F8FF 100%)' }
                 : { background: '#FFFFFF' }}
             >
+              {/* Shine lives in its own clipped layer: overflow-hidden on the
+                  CARD was cutting the -top-3 badges in half (Most popular /
+                  Car tests included) — same clipping class of bug as the
+                  state-landing language dropdown. */}
               {isMostPopular && (
-                <span
-                  aria-hidden="true"
-                  className="gradient-btn-shine pointer-events-none absolute inset-y-0 -left-1/2 w-1/2"
-                />
+                <span aria-hidden="true" className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
+                  <span className="gradient-btn-shine absolute inset-y-0 -left-1/2 w-1/2" />
+                </span>
               )}
               {plan.badge && (
                 <span className={`absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap ${
