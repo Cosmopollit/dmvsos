@@ -522,14 +522,14 @@ export default function HomeClient({ initialLang = 'en' }) {
             {tex.heroTrustStats}
           </p>
         )}
-        {/* Trust pill ("same questions as your exam"). Used to route to
-            /upgrade — which sent the coldest traffic straight into the login
-            wall as their FIRST tap. Now it starts the funnel like everything
-            else above the fold: scroll to the state selector. */}
+        {/* Trust pill ("same questions as your exam"): the lock + amber read
+            as a premium claim, so the tap answers it with the purchase page
+            (owner call 2026-07-09 — and /upgrade no longer opens with a login
+            wall: the access card + plans sell before any sign-in is needed). */}
         {!isPro && tex.heroTrustLine && (
           <button
             type="button"
-            onClick={() => document.getElementById('state-selector')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => router.push(`/upgrade?lang=${langCode}`)}
             className="group hero-trust-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full transition-all duration-300 cursor-pointer max-w-[320px]"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" className="shrink-0" style={{ overflow: 'visible' }}>
