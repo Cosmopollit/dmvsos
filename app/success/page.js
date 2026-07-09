@@ -171,7 +171,39 @@ function SuccessContent() {
               : (tex.paymentSuccess || 'Payment successful!')}
           </h1>
 
-          {(status === 'logging-in' || status === 'redirect') && (
+          {status === 'logging-in' && (
+            <>
+              {/* ACCESS GRANTED — the closing beat of the free-tier "open the
+                  bank" game. The access meter fills to 100% (it really did:
+                  the pass is now active), then the page logs the buyer in and
+                  everything downstream is the clean paid product. */}
+              <div className="rounded-xl overflow-hidden border border-[#1E3A5F] text-left mb-4"
+                style={{ background: '#081226', fontFamily: 'var(--font-geist-mono), ui-monospace, monospace' }}>
+                <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#12233F]">
+                  <span className="w-2 h-2 rounded-full bg-[#22C55E]" aria-hidden="true" />
+                  <span className="text-[10px] tracking-widest text-[#7DD3FC] uppercase">DMVSOS QUESTION BANK</span>
+                </div>
+                <div className="px-4 py-4">
+                  <div className="text-[13px] font-bold text-[#4ADE80] mb-3">
+                    &gt; {tex.termAccessGranted || 'ACCESS GRANTED'}<span className="term-caret">_</span>
+                  </div>
+                  <div className="h-1.5 rounded bg-[#12233F] overflow-hidden mb-1.5">
+                    <div className="term-scan-bar h-full rounded bg-[#22C55E]" />
+                  </div>
+                  <div className="flex justify-between text-[11px]">
+                    <span className="text-[#94A3B8]">{tex.termBankUnlocked || 'Full question bank unlocked'}</span>
+                    <span className="text-[#4ADE80] font-bold">100%</span>
+                  </div>
+                </div>
+              </div>
+              <p className="text-[#475569] text-sm leading-relaxed mb-2">
+                {tex.successLoggingIn || 'Setting up your account...'}
+              </p>
+              <div className="inline-block w-6 h-6 border-2 border-[#2563EB] border-t-transparent rounded-full animate-spin mt-1"></div>
+            </>
+          )}
+
+          {status === 'redirect' && (
             <>
               <p className="text-[#475569] text-sm leading-relaxed mb-2">
                 {tex.successLoggingIn || 'Setting up your account...'}
