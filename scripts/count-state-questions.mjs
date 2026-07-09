@@ -22,13 +22,22 @@ const SKEY = process.env.SUPABASE_SERVICE_ROLE_KEY || envVar('SUPABASE_SERVICE_R
 if (!SUPA_URL || !SKEY) { console.error('Missing Supabase env vars'); process.exit(1); }
 
 const states = Object.keys(STATE_META);
-const counts = {};
-for (const s of states) {
-  const r = await fetch(`${SUPA_URL}/rest/v1/questions?state=eq.${s}&language=eq.en&select=id`, {
+const CATS = ['car', 'motorcycle', 'cdl'];
+
+async function countWhere(filter) {
+  const r = await fetch(`${SUPA_URL}/rest/v1/questions?${filter}&language=eq.en&select=id`, {
     headers: { apikey: SKEY, Authorization: `Bearer ${SKEY}`, Prefer: 'count=exact', Range: '0-0' },
   });
-  counts[s] = parseInt((r.headers.get('content-range') || '').split('/')[1], 10) || 0;
-  process.stdout.write(`${s}:${counts[s]} `);
+  return parseInt((r.headers.get('content-range') || '').split('/')[1], 10) || 0;
+}
+
+const counts = {};
+const catCounts = {};
+for (const s of states) {
+  counts[s] = await countWhere(`state=eq.${s}`);
+  catCounts[s] = {};
+  for (const c of CATS) catCounts[s][c] = await countWhere(`state=eq.${s}&category=eq.${c}`);
+  process.stdout.write(`${s}:${counts[s]}(${CATS.map(c => catCounts[s][c]).join('/')}) `);
 }
 const total = Object.values(counts).reduce((a, b) => a + b, 0);
 
@@ -41,10 +50,23 @@ out += `// Generated total across 50 states: ${total}.\n\n`;
 out += 'export const STATE_QUESTION_COUNTS = {\n';
 for (const [k, v] of entries) out += `  ${JSON.stringify(k)}: ${v},\n`;
 out += '};\n\n';
+out += '// Same, split by DB category (car / motorcycle / cdl) — the per-pass\n';
+out += '// surfaces (paywall, /upgrade terminal) sell ONE category, so their\n';
+out += '// numbers must be the category bank, not the whole-state bank.\n';
+out += 'export const STATE_CATEGORY_COUNTS = {\n';
+for (const [k] of entries) {
+  const c = catCounts[k];
+  out += `  ${JSON.stringify(k)}: { car: ${c.car}, motorcycle: ${c.motorcycle}, cdl: ${c.cdl} },\n`;
+}
+out += '};\n\n';
 out += '// Total distinct questions across all states (for the global "N+ bank" line).\n';
 out += `export const TOTAL_QUESTIONS = ${total};\n\n`;
 out += 'export function questionCountForState(slug) {\n';
 out += '  return STATE_QUESTION_COUNTS[slug] || null;\n';
+out += '}\n\n';
+out += '// cat: DB category ("car" | "motorcycle" | "cdl").\n';
+out += 'export function questionCountForStateCategory(slug, cat) {\n';
+out += '  return STATE_CATEGORY_COUNTS[slug]?.[cat] || null;\n';
 out += '}\n';
 writeFileSync(new URL('../lib/state-question-counts.js', import.meta.url), out);
 console.log(`\nwrote lib/state-question-counts.js — ${entries.length} states, total ${total}`);

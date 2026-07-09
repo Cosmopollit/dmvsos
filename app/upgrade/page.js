@@ -10,7 +10,7 @@ import { getSavedLang, saveLang } from '@/lib/lang';
 import { PASS_META } from '@/lib/plans';
 import { examRulesFor, passPercentFor } from '@/lib/exam-rules';
 import { agencyAbbrForState } from '@/lib/agencies';
-import { questionCountForState } from '@/lib/state-question-counts';
+import { questionCountForState, questionCountForStateCategory } from '@/lib/state-question-counts';
 import { trackBeginCheckout, trackCheckoutError } from '@/lib/gtag';
 import { useExperiment } from '@/lib/experiments';
 import SupportFooter from '@/app/components/SupportFooter';
@@ -56,6 +56,10 @@ function UpgradeContent() {
       if (s && questionCountForState(s)) setCtxState(s);
     } catch { /* blocked storage: generic catalog */ }
   }, []);
+  // Category context for the whole page: the explicit plan param wins, else
+  // Car (the dominant journey). Drives the terminal AND the card order.
+  const ctxPlanId = ['onetime_moto', 'onetime_cdl'].includes(preselect) ? preselect : 'onetime_auto';
+  const showTerminal = !!ctxState && !hasCar && !hasMoto && !hasCdl;
 
   const [loadingPlan, setLoadingPlan] = useState(null);
   // Per-card notice rendered right under the tapped Buy button (the old global
@@ -252,14 +256,21 @@ function UpgradeContent() {
           agency + exam format (competence) and his real access share. All
           numbers live (state-question-counts manifest + exam-rules). Free
           users only: the base game drops entirely once he buys. */}
-      {ctxState && !hasCar && !hasMoto && !hasCdl && (() => {
-        const catForRules = preselect === 'onetime_moto' ? 'motorcycle' : preselect === 'onetime_cdl' ? 'cdl' : 'car';
+      {showTerminal && (() => {
+        // ONE coherent story: the terminal shows the bank of the category the
+        // buyer is actually preparing for, and solves it with the gold CTA
+        // right there — a meter with no action reads as a lost infographic.
+        // Numbers are the CATEGORY bank, so what the meter shows is exactly
+        // what the button buys.
+        const catForRules = ctxPlanId === 'onetime_moto' ? 'motorcycle' : ctxPlanId === 'onetime_cdl' ? 'cdl' : 'car';
         const rule = examRulesFor(ctxState, catForRules);
         const passPct = passPercentFor(ctxState, catForRules);
-        const bank = questionCountForState(ctxState);
-        const seen = preselect === 'onetime_moto' ? 5 : 20;
+        const bank = questionCountForStateCategory(ctxState, catForRules) || questionCountForState(ctxState);
+        const ctxPlan = plans.find(p => p.id === ctxPlanId);
+        const seen = Math.min(ctxPlanId === 'onetime_moto' ? 5 : 20, bank);
         const pct = Math.max(0.1, Math.round((seen / bank) * 1000) / 10);
         const stateName = ctxState.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ');
+        const catChrome = ctxPlanId === 'onetime_moto' ? 'MOTO' : ctxPlanId === 'onetime_cdl' ? 'CDL' : 'CAR';
         return (
           // On this navy page the terminal must be DARKER than the page and
           // carry its own glow, or it melts into the background (the paywall
@@ -273,7 +284,7 @@ function UpgradeContent() {
             <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#16294A]" style={{ background: '#070D1C' }}>
               <span className="w-2 h-2 rounded-full bg-[#22C55E]" aria-hidden="true" style={{ boxShadow: '0 0 6px rgba(34,197,94,0.8)' }} />
               <span className="text-[10px] tracking-widest text-[#7DD3FC] uppercase truncate">
-                DMVSOS QUESTION BANK // {stateName}
+                DMVSOS QUESTION BANK // {stateName} · {catChrome}
               </span>
             </div>
             <div className="px-4 py-3.5">
@@ -298,9 +309,26 @@ function UpgradeContent() {
                 </span>
                 <span className="text-[#F87171] font-bold">{pct}%<span className="term-caret">_</span></span>
               </div>
-              <div className="h-1 rounded bg-[#12233F] overflow-hidden">
+              <div className="h-1 rounded bg-[#12233F] overflow-hidden mb-4">
                 <div className="h-full rounded bg-[#F87171]" style={{ width: `${Math.max(2, pct)}%` }} />
               </div>
+              {/* The answer to the meter, right where the problem is shown:
+                  buys exactly the bank counted above. */}
+              <GradientButton
+                variant="gold"
+                onClick={() => handleCheckout(ctxPlanId)}
+                className={loadingPlan !== null ? 'pointer-events-none opacity-60' : ''}>
+                <span className="text-[15px]" style={{ fontFamily: 'inherit' }}>
+                  {loadingPlan === ctxPlanId ? '…' : (tex.termUnlockCta || 'Unlock all {n} questions · {price}')
+                    .replace('{n}', String(bank))
+                    .replace('{price}', ctxPlan?.price || '')}
+                </span>
+              </GradientButton>
+              {cardNotice?.planId === ctxPlanId && cardNotice.type === 'error' && (
+                <p className="mt-2 text-xs text-center font-medium text-[#F87171]">
+                  {tex.checkoutError || 'Something went wrong. Please try again.'}
+                </p>
+              )}
             </div>
           </div>
         );
@@ -325,6 +353,8 @@ function UpgradeContent() {
             <div
               key={plan.id}
               className={`flex-1 rounded-2xl p-5 flex flex-col relative shadow-xl w-full max-w-[420px] mx-auto sm:max-w-none sm:mx-0 ${
+                showTerminal && plan.id === ctxPlanId ? 'order-first sm:order-none ' : ''
+              }${
                 isGold
                   ? 'border-2 border-[#F59E0B]'
                   : isBlue
