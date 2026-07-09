@@ -11,6 +11,7 @@ import { curatedFor, mapsSearchUrl, webSearchUrl } from '@/lib/driving-schools';
 import { logServiceLead } from '@/lib/services';
 import StateSearchDropdown from '@/app/manuals/StateSearchDropdown';
 import GradientButton from '@/app/components/GradientButton';
+import WaSchoolsMap from '@/app/components/WaSchoolsMap';
 
 const langs = [
   { label: 'EN', code: 'en' },
@@ -107,6 +108,16 @@ function DrivingSchoolsContent() {
             </p>
           )}
         </div>
+
+        {/* Washington flagship: every licensed school from the DOL registry
+            on the brand map. Shown as the showcase before a state is picked
+            and as the main result for Washington itself — the partnership
+            asset schools join (and rank up on with QR tiers). */}
+        {(!state || state === 'washington') && (
+          <div className="mb-5 -mx-1 sm:mx-0">
+            <WaSchoolsMap tex={tex} lang={lang} />
+          </div>
+        )}
 
         {!state ? (
           <p className="text-center text-sm text-[#94A3B8] mt-6">{tex.drivingSchoolsPickFirst || 'Choose your state to search.'}</p>
