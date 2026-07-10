@@ -52,6 +52,31 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
   const scale = view.w / WA_MAP.width; // 1 at base, smaller when zoomed in
   const zoomedIn = scale < 0.55;
 
+  // ── clustering ────────────────────────────────────────────────────────────
+  // At low zoom the Seattle metro is 200 dots on top of each other. Grid the
+  // visible-matching schools into cells sized to ~28 screen px; a cell with >1
+  // school renders as a numbered bubble (partner-aware color) that flies you in
+  // on click; singles stay as dots. Grid dissolves as you zoom (cell → map px).
+  const painted = PAINT_ORDER.filter(matches);
+  const clusters = [];
+  const singles = [];
+  if (scale > 0.14) {
+    const cell = 52 * scale; // map units per cell; bigger = fewer, cleaner bubbles
+    const grid = new Map();
+    for (const s of painted) {
+      const key = `${Math.floor(s.x / cell)}:${Math.floor(s.y / cell)}`;
+      (grid.get(key) || grid.set(key, []).get(key)).push(s);
+    }
+    for (const group of grid.values()) {
+      if (group.length === 1) { singles.push(group[0]); continue; }
+      const cx = group.reduce((a, s) => a + s.x, 0) / group.length;
+      const cy = group.reduce((a, s) => a + s.y, 0) / group.length;
+      clusters.push({ x: cx, y: cy, count: group.length, hasPartner: group.some(s => s.partner), items: group });
+    }
+  } else {
+    singles.push(...painted);
+  }
+
   // ── viewBox helpers ──────────────────────────────────────────────────────
   const clampView = (v) => {
     const w = Math.min(WA_MAP.width, Math.max(MIN_W, v.w));
@@ -230,20 +255,40 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
               </g>
             ))}
 
-            {PAINT_ORDER.map((s) => {
-              const on = matches(s);
+            {/* Dimmed layer: everything NOT matching the filters, so the map
+                never looks empty when a filter is on. */}
+            {PAINT_ORDER.filter(s => !matches(s)).map((s) => (
+              <circle key={`d-${s.id}`} cx={s.x} cy={s.y} r={2.1 * scale} fill={CAT_COLORS[s.cat]} opacity="0.07" />
+            ))}
+
+            {/* Single schools */}
+            {singles.map((s) => {
               const isActive = active?.id === s.id;
               const c = CAT_COLORS[s.cat];
               return (
-                <g key={s.id} opacity={on ? 1 : 0.08} style={{ transition: 'opacity .25s' }}>
+                <g key={s.id}>
                   {s.partner && <circle cx={s.x} cy={s.y} r={7 * scale} fill="none" stroke="#F59E0B" strokeWidth={1.4 * scale} />}
                   <circle cx={s.x} cy={s.y} r={(isActive ? 9 : 5.5) * scale} fill={c} opacity="0.16" />
                   <circle
-                    cx={s.x} cy={s.y} r={(isActive ? 3.4 : 2.1) * scale} fill={c}
+                    cx={s.x} cy={s.y} r={(isActive ? 3.4 : 2.4) * scale} fill={c}
                     stroke={isActive ? '#FFFFFF' : 'none'} strokeWidth={1 * scale}
-                    style={{ cursor: on ? 'pointer' : 'default' }}
-                    onClick={(e) => { e.stopPropagation(); if (dragState.current?.moved) return; if (on) setActive(isActive ? null : s); }}
+                    style={{ cursor: 'pointer' }}
+                    onClick={(e) => { e.stopPropagation(); if (dragState.current?.moved) return; setActive(isActive ? null : s); }}
                   />
+                </g>
+              );
+            })}
+
+            {/* Cluster bubbles — count-labeled, click flies in */}
+            {clusters.map((cl, i) => {
+              const r = Math.min(20, 8 + Math.log2(cl.count) * 3) * scale;
+              return (
+                <g key={`c-${i}`} style={{ cursor: 'pointer' }}
+                  onClick={(e) => { e.stopPropagation(); if (dragState.current?.moved) return; zoomAt(cl.x, cl.y, 0.42); }}>
+                  <circle cx={cl.x} cy={cl.y} r={r * 1.5} fill="#2563EB" opacity="0.14" />
+                  <circle cx={cl.x} cy={cl.y} r={r} fill="#123A6B" stroke={cl.hasPartner ? '#F59E0B' : '#60A5FA'} strokeWidth={1.6 * scale} />
+                  <text x={cl.x} y={cl.y} dy={r * 0.34} textAnchor="middle" fontSize={r * 0.95} fill="#FFFFFF"
+                    style={{ fontWeight: 800, pointerEvents: 'none' }}>{cl.count}</text>
                 </g>
               );
             })}
