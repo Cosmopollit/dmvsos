@@ -8,7 +8,9 @@
 //   - a synced results list under the map — the surface where partner
 //     ranking actually shows (partner + qrTier sort first)
 //   - major-city anchors so the map reads as geography
-// Partner machinery: partner dots get a gold ring, paint on top, rank first.
+// Partner machinery: partners escape clustering (individual pulsing gold pins
+// at every zoom, painted above everything) and pin to a gold "Partners"
+// section atop the results list.
 import { useEffect, useRef, useState } from 'react';
 import { WA_MAP, WA_CITIES, WA_SCHOOLS } from '@/lib/wa-school-map-data';
 
@@ -82,13 +84,19 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
   // visible-matching schools into cells sized to ~28 screen px; a cell with >1
   // school renders as a numbered bubble (partner-aware color) that flies you in
   // on click; singles stay as dots. Grid dissolves as you zoom (cell → map px).
+  // Partners never enter the grid: a paying school must stay an individual
+  // gold marker at every zoom level, not get swallowed into a numbered bubble.
+  // They render in their own layer after the clusters, so nothing paints over
+  // them either.
   const painted = PAINT_ORDER.filter(matches);
+  const partners = painted.filter(s => s.partner);
+  const clusterable = painted.filter(s => !s.partner);
   const clusters = [];
   const singles = [];
   if (scale > 0.14) {
     const cell = 52 * scale; // map units per cell; bigger = fewer, cleaner bubbles
     const grid = new Map();
-    for (const s of painted) {
+    for (const s of clusterable) {
       const key = `${Math.floor(s.x / cell)}:${Math.floor(s.y / cell)}`;
       (grid.get(key) || grid.set(key, []).get(key)).push(s);
     }
@@ -96,10 +104,10 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
       if (group.length === 1) { singles.push(group[0]); continue; }
       const cx = group.reduce((a, s) => a + s.x, 0) / group.length;
       const cy = group.reduce((a, s) => a + s.y, 0) / group.length;
-      clusters.push({ x: cx, y: cy, count: group.length, hasPartner: group.some(s => s.partner), items: group });
+      clusters.push({ x: cx, y: cy, count: group.length, items: group });
     }
   } else {
-    singles.push(...painted);
+    singles.push(...clusterable);
   }
 
   // ── viewBox helpers ──────────────────────────────────────────────────────
@@ -205,6 +213,33 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
 
   const listLimit = listOpen ? 60 : 8;
 
+  // Partners are pinned above the regular list under their own header — the
+  // list placement a school is actually paying for. They don't consume the
+  // regular rows' limit.
+  const partnerRows = filtered.filter(s => s.partner);
+  const regularRows = filtered.filter(s => !s.partner);
+
+  const schoolRow = (s) => (
+    <button key={s.id} type="button" onClick={() => zoomTo(s)}
+      className="w-full flex items-center gap-2.5 py-2 px-1 rounded-lg text-left hover:bg-white/[0.05] transition border-b border-white/[0.06] last:border-0">
+      <span className="w-2 h-2 rounded-full shrink-0" style={{ background: s.partner ? '#F59E0B' : CAT_COLORS[s.cat], boxShadow: s.partner ? '0 0 6px rgba(245,158,11,0.8)' : 'none' }} />
+      <span className="min-w-0 flex-1">
+        <span className="block text-[12px] font-semibold text-white truncate">{s.name}</span>
+        <span className="block text-[10.5px] text-[#94A3B8]">{s.city}</span>
+      </span>
+      {s.partner && (
+        <span className="shrink-0 text-[9px] font-bold text-[#F59E0B] border border-[#F59E0B]/50 rounded-full px-1.5 py-0.5">
+          {tex.wsPartner || 'DMVSOS partner'}
+        </span>
+      )}
+      <span className="shrink-0 flex gap-1">
+        {s.langs.filter(l => l !== 'en').slice(0, 3).map(l => (
+          <span key={l} className="text-[9px] font-bold text-[#7DA0CF]">{LANG_LABELS[l] || l}</span>
+        ))}
+      </span>
+    </button>
+  );
+
   return (
     <div className="relative w-full rounded-2xl border border-white/10 overflow-hidden"
       style={{ background: 'linear-gradient(180deg, #0A1A38 0%, #0B1C3D 60%, #071021 100%)' }}>
@@ -304,7 +339,6 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
               const c = CAT_COLORS[s.cat];
               return (
                 <g key={s.id}>
-                  {s.partner && <circle cx={s.x} cy={s.y} r={7 * scale} fill="none" stroke="#F59E0B" strokeWidth={1.4 * scale} />}
                   <circle cx={s.x} cy={s.y} r={(isActive ? 9 : 5.5) * scale} fill={c} opacity="0.16" />
                   <circle
                     cx={s.x} cy={s.y} r={(isActive ? 3.4 : 2.4) * scale} fill={c}
@@ -323,9 +357,32 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
                 <g key={`c-${i}`} style={{ cursor: 'pointer' }}
                   onClick={(e) => { e.stopPropagation(); if (dragState.current?.moved) return; zoomAt(cl.x, cl.y, 0.42, true); }}>
                   <circle cx={cl.x} cy={cl.y} r={r * 1.5} fill="#2563EB" opacity="0.14" />
-                  <circle cx={cl.x} cy={cl.y} r={r} fill="#123A6B" stroke={cl.hasPartner ? '#F59E0B' : '#60A5FA'} strokeWidth={1.6 * scale} />
+                  <circle cx={cl.x} cy={cl.y} r={r} fill="#123A6B" stroke="#60A5FA" strokeWidth={1.6 * scale} />
                   <text x={cl.x} y={cl.y} dy={r * 0.34} textAnchor="middle" fontSize={r * 0.95} fill="#FFFFFF"
                     style={{ fontWeight: 800, pointerEvents: 'none' }}>{cl.count}</text>
+                </g>
+              );
+            })}
+
+            {/* Partner pins — always individual, always on top, always moving.
+                A gold core with a white rim plus an expanding pulse ring (SMIL,
+                zero JS) makes the paying schools findable at a glance even over
+                the Seattle dot field. */}
+            {partners.map((s) => {
+              const isActive = active?.id === s.id;
+              return (
+                <g key={`p-${s.id}`}>
+                  <circle cx={s.x} cy={s.y} fill="none" stroke="#F59E0B" strokeWidth={1.3 * scale}>
+                    <animate attributeName="r" values={`${4 * scale};${12 * scale}`} dur="2s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" values="0.8;0" dur="2s" repeatCount="indefinite" />
+                  </circle>
+                  <circle cx={s.x} cy={s.y} r={(isActive ? 10 : 7) * scale} fill="#F59E0B" opacity="0.2" />
+                  <circle
+                    cx={s.x} cy={s.y} r={(isActive ? 4.2 : 3.4) * scale} fill="#F59E0B"
+                    stroke="#FFFFFF" strokeWidth={1.1 * scale}
+                    style={{ cursor: 'pointer' }}
+                    onClick={(e) => { e.stopPropagation(); if (dragState.current?.moved) return; setActive(isActive ? null : s); }}
+                  />
                 </g>
               );
             })}
@@ -398,7 +455,7 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
               </span>
             ))}
             <span className="inline-flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full border border-[#F59E0B]" />
+              <span className="w-2 h-2 rounded-full bg-[#F59E0B]" style={{ boxShadow: '0 0 6px rgba(245,158,11,0.8)' }} />
               {tex.wsPartner || 'DMVSOS partner'}
             </span>
           </div>
@@ -413,31 +470,20 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
           {filtered.length === 0 && (
             <p className="text-[12px] text-[#94A3B8] py-2">{tex.wsNoMatches || 'Nothing found. Try another name or city.'}</p>
           )}
-          {filtered.slice(0, listLimit).map(s => (
-            <button key={s.id} type="button" onClick={() => zoomTo(s)}
-              className="w-full flex items-center gap-2.5 py-2 px-1 rounded-lg text-left hover:bg-white/[0.05] transition border-b border-white/[0.06] last:border-0">
-              <span className="w-2 h-2 rounded-full shrink-0" style={{ background: CAT_COLORS[s.cat], boxShadow: s.partner ? '0 0 0 2px rgba(245,158,11,0.6)' : 'none' }} />
-              <span className="min-w-0 flex-1">
-                <span className="block text-[12px] font-semibold text-white truncate">{s.name}</span>
-                <span className="block text-[10.5px] text-[#94A3B8]">{s.city}</span>
-              </span>
-              {s.partner && (
-                <span className="shrink-0 text-[9px] font-bold text-[#F59E0B] border border-[#F59E0B]/50 rounded-full px-1.5 py-0.5">
-                  {tex.wsPartner || 'DMVSOS partner'}
-                </span>
-              )}
-              <span className="shrink-0 flex gap-1">
-                {s.langs.filter(l => l !== 'en').slice(0, 3).map(l => (
-                  <span key={l} className="text-[9px] font-bold text-[#7DA0CF]">{LANG_LABELS[l] || l}</span>
-                ))}
-              </span>
-            </button>
-          ))}
-          {filtered.length > 8 && (
+          {partnerRows.length > 0 && (
+            <div className="mb-1 rounded-xl border border-[#F59E0B]/25 bg-[#F59E0B]/[0.05] px-2 pt-1.5 pb-0.5">
+              <p className="text-[9.5px] font-bold uppercase tracking-[0.12em] text-[#F59E0B] px-1 mb-0.5">
+                {tex.wsPartners || 'Partners'}
+              </p>
+              {partnerRows.map(schoolRow)}
+            </div>
+          )}
+          {regularRows.slice(0, listLimit).map(schoolRow)}
+          {regularRows.length > 8 && (
             <button type="button" onClick={() => setListOpen(v => !v)}
               className="mt-2 text-[11.5px] font-semibold text-[#60A5FA] hover:text-white transition">
               {listOpen ? (tex.wsShowLess || 'Show less')
-                : (tex.wsShowAll || 'Show all {n}').replace('{n}', String(Math.min(filtered.length, 60)))}
+                : (tex.wsShowAll || 'Show all {n}').replace('{n}', String(Math.min(regularRows.length, 60)))}
             </button>
           )}
         </div>
