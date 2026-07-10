@@ -22,9 +22,11 @@ export async function POST(request) {
       },
       body: JSON.stringify({ experiment, variant, subject_key: key }),
     });
-    if (!res.ok) {
+    if (!res.ok && res.status !== 409) {
       // Response stays ok:true (exposure logging is best-effort), but a
       // silently failing insert would skew experiment data, so surface it.
+      // 409 is excluded: the UNIQUE index rejecting a repeat exposure is the
+      // idempotency working as designed, not a failure.
       console.error('[experiment/expose] insert failed', { status: res.status, experiment, variant });
     }
 

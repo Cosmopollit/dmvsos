@@ -144,11 +144,6 @@ export async function POST(req) {
         : ONETIME_TO_PASS_TYPE[planType];
     }
 
-    // No payment_method_types restriction — Stripe Checkout auto-shows every
-    // method enabled in the Stripe Dashboard (Apple Pay, Google Pay, Link,
-    // Cash App Pay, Klarna, etc.) based on customer locale + device.
-    // 60% of our visitors are mobile; 48% on iOS. Apple Pay is critical for
-    // checkout conversion on iPhone (two taps vs typing a card number).
     // Pass type + kind ride along on success_url so /success can fire the GA4
     // `purchase` conversion immediately on mount (with the right value) without
     // a second round trip to Stripe. Stripe replaces {CHECKOUT_SESSION_ID} and
@@ -164,6 +159,15 @@ export async function POST(req) {
       // and the UI language intact (no intent param, so nothing auto-fires).
       cancel_url: `${SITE_URL}/upgrade?plan=${encodeURIComponent(planType)}&lang=${encodeURIComponent(body.lang || 'en')}`,
       metadata,
+      // Payment methods stay on Stripe's auto-selection (Dashboard is the
+      // source of truth; card auto-includes Apple Pay / Google Pay — critical:
+      // 60% mobile, 48% iOS) with one hard exception: crypto. It lost a real
+      // sale on 2026-07-08 — a returning buyer picked crypto for Auto Pass,
+      // never sent funds, and the session died after 24h. Exclusion (vs an
+      // explicit whitelist) can't break checkout if a listed method isn't
+      // activated in live, and keeps crypto out even if someone re-enables it
+      // in the Dashboard. Verified against the SDK's pinned API version.
+      excluded_payment_method_types: ['crypto'],
       // phone_number_collection removed 2026-07-01: a REQUIRED phone field on a
       // $19.99-$49.99 one-time digital purchase measurably kills mobile checkout
       // completion (privacy-wary audience, 60% mobile) and nothing in the
