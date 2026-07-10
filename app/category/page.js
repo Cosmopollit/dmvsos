@@ -7,15 +7,48 @@ import { t } from '@/lib/translations';
 import { getSavedLang, saveLang } from '@/lib/lang';
 import { useAuth } from '@/lib/AuthContext';
 import { STATE_OPTIONS } from '@/lib/states';
+import { agencyAbbrForState } from '@/lib/agencies';
+import { examRulesFor, passPercentFor } from '@/lib/exam-rules';
+import { questionCountForStateCategory } from '@/lib/state-question-counts';
 
 // Category illustrations live in /public/vehicles (transparent PNGs, the same
 // art the mobile app and home page use) — keeps the look consistent across
 // web + native. Maps mirror HomeClient's vehicle → category pairing.
 const categories = [
-  { id: 'dmv',  img: '/vehicles/mustang.png',   titleKey: 'catCar',  descKey: 'carDesc',   gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' },
-  { id: 'cdl',  img: '/vehicles/truck-hero.png', titleKey: 'catCdl',  descKey: 'truckDesc', gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)' },
-  { id: 'moto', img: '/vehicles/moto-hero.png',  titleKey: 'catMoto', descKey: 'motoDesc',  gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)' },
+  { id: 'dmv',  img: '/vehicles/mustang.png',   titleKey: 'catCar',  descKey: 'carDesc',   dbCat: 'car',        gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' },
+  { id: 'cdl',  img: '/vehicles/truck-hero.png', titleKey: 'catCdl',  descKey: 'truckDesc', dbCat: 'cdl',        gradient: 'linear-gradient(135deg, #F0F9FF, #E0F2FE)' },
+  { id: 'moto', img: '/vehicles/moto-hero.png',  titleKey: 'catMoto', descKey: 'motoDesc',  dbCat: 'motorcycle', gradient: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)' },
 ];
+
+// RU/UA need the count noun declined by number (33 вопроса vs 40 вопросов);
+// the other languages carry the noun inside the translation key itself.
+function questionsWord(lang, n) {
+  const mod10 = n % 10, mod100 = n % 100;
+  const few = mod10 >= 2 && mod10 <= 4 && !(mod100 >= 12 && mod100 <= 14);
+  const one = mod10 === 1 && mod100 !== 11;
+  if (lang === 'ru') return one ? 'вопрос' : few ? 'вопроса' : 'вопросов';
+  if (lang === 'ua') return one ? 'питання' : few ? 'питання' : 'питань';
+  return '';
+}
+
+// The competence line under each category: real agency, real exam size and
+// pass mark, real bank count. Free-tier only (base-access scope rule: all
+// bank framing drops the moment the user buys). Returns null when any fact
+// is missing so a bad slug never renders a half-empty spec row.
+function specLine(tex, lang, state, dbCat) {
+  const agency = agencyAbbrForState(state);
+  const rules = examRulesFor(state, dbCat);
+  const passPct = passPercentFor(state, dbCat);
+  const bank = questionCountForStateCategory(state, dbCat);
+  if (!agency || !rules || !passPct || !bank) return null;
+  return (tex.catSpecLine || '{agency} exam: {q} questions · pass mark {p}% · {n} in the bank')
+    .replace('{agency}', agency)
+    .replace('{q}', String(rules.questions))
+    .replace('{qWord}', questionsWord(lang, rules.questions))
+    .replace('{p}', String(passPct))
+    .replace('{n}', bank.toLocaleString())
+    .replace(/\s{2,}/g, ' ');
+}
 
 const langs = [
   { label: 'EN', code: 'en' },
@@ -38,6 +71,7 @@ function CategoryContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const state = searchParams.get('state') ?? '';
+  const { isPro } = useAuth();
   const [lang, setLangState] = useState(searchParams.get('lang') || getSavedLang());
   const [showLangMenu, setShowLangMenu] = useState(false);
   const tex = t[lang] || t.en;
@@ -118,6 +152,11 @@ function CategoryContent() {
               <div className="flex-1 min-w-0">
                 <span className="font-bold text-[#0B1C3D] text-lg">{tex[cat.titleKey]}</span>
                 <div className="text-sm text-[#64748B] mt-0.5">{tex[cat.descKey]}</div>
+                {state && !isPro && specLine(tex, lang, state, cat.dbCat) && (
+                  <div className="text-[11px] font-medium text-[#64748B]/90 mt-1.5 pt-1.5 border-t border-[#0B1C3D]/[0.07]">
+                    {specLine(tex, lang, state, cat.dbCat)}
+                  </div>
+                )}
               </div>
               <div className="text-[#94A3B8] text-lg shrink-0"></div>
             </button>
