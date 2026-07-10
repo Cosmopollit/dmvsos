@@ -9,7 +9,7 @@
 //     ranking actually shows (partner + qrTier sort first)
 //   - major-city anchors so the map reads as geography
 // Partner machinery: partner dots get a gold ring, paint on top, rank first.
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { WA_MAP, WA_CITIES, WA_SCHOOLS } from '@/lib/wa-school-map-data';
 
 const CAT_COLORS = { car: '#60A5FA', moto: '#FBBF24', cdl: '#A78BFA' };
@@ -41,12 +41,37 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
   const svgRef = useRef(null);
   const pointers = useRef(new Map());
   const dragState = useRef(null);
+  const animRef = useRef(null);
+  const viewRef = useRef(view);
+  useEffect(() => { viewRef.current = view; }, [view]);
+
+  // Animate the viewBox from its current value to `target` (ease-out cubic) so
+  // discrete zooms glide like a real map. Drag/pinch bypass this (instant).
+  const animateTo = (target) => {
+    if (animRef.current) cancelAnimationFrame(animRef.current);
+    const from = viewRef.current;
+    const DUR = 380;
+    let t0 = null;
+    const step = (now) => {
+      if (t0 === null) t0 = now;
+      const p = Math.min(1, (now - t0) / DUR);
+      const e = 1 - Math.pow(1 - p, 3);
+      setView({
+        x: from.x + (target.x - from.x) * e,
+        y: from.y + (target.y - from.y) * e,
+        w: from.w + (target.w - from.w) * e,
+        h: from.h + (target.h - from.h) * e,
+      });
+      if (p < 1) animRef.current = requestAnimationFrame(step);
+    };
+    animRef.current = requestAnimationFrame(step);
+  };
 
   const q = query.trim().toLowerCase();
   const matches = (s) =>
     (cat === 'all' || s.cat === cat) &&
     (!langFilter || s.langs.includes(langFilter)) &&
-    (!q || s.name.toLowerCase().includes(q) || s.city.toLowerCase().includes(q));
+    (!q || s.name.toLowerCase().includes(q) || s.city.toLowerCase().includes(q) || s.zip.startsWith(q));
 
   const filtered = LIST_ORDER.filter(matches);
   const scale = view.w / WA_MAP.width; // 1 at base, smaller when zoomed in
@@ -87,35 +112,47 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
     return { x, y, w, h };
   };
 
-  const zoomAt = (fx, fy, factor) =>
-    setView((v) => clampView({
+  // animated=true glides (buttons, cluster, list); wheel/pinch pass false.
+  const zoomAt = (fx, fy, factor, animated = false) => {
+    const v = viewRef.current;
+    const target = clampView({
       w: v.w * factor,
       h: v.h * factor,
       x: fx - (fx - v.x) * factor,
       y: fy - (fy - v.y) * factor,
-    }));
+    });
+    animated ? animateTo(target) : setView(target);
+  };
 
   // Client px → viewBox coords.
   const toMap = (clientX, clientY) => {
     const r = svgRef.current.getBoundingClientRect();
+    const v = viewRef.current;
     return {
-      x: view.x + ((clientX - r.left) / r.width) * view.w,
-      y: view.y + ((clientY - r.top) / r.height) * view.h,
+      x: v.x + ((clientX - r.left) / r.width) * v.w,
+      y: v.y + ((clientY - r.top) / r.height) * v.h,
     };
   };
 
   const zoomTo = (s) => {
     const w = 170;
-    setView(clampView({ x: s.x - w / 2, y: s.y - (w * (WA_MAP.height / WA_MAP.width)) / 2, w, h: w * (WA_MAP.height / WA_MAP.width) }));
+    animateTo(clampView({ x: s.x - w / 2, y: s.y - (w * (WA_MAP.height / WA_MAP.width)) / 2, w, h: w * (WA_MAP.height / WA_MAP.width) }));
     setActive(s);
   };
 
+  // Named control handlers (compiler-safe: like onWheel, they're memoizable
+  // component functions rather than ref-touching arrows created inside JSX).
+  const zoomInBtn = () => { const v = viewRef.current; zoomAt(v.x + v.w / 2, v.y + v.h / 2, 1 / 1.5, true); };
+  const zoomOutBtn = () => { const v = viewRef.current; zoomAt(v.x + v.w / 2, v.y + v.h / 2, 1.5, true); };
+  const resetBtn = () => { animateTo(BASE); setActive(null); };
+
   // ── pointer events: drag + pinch ─────────────────────────────────────────
   const onPointerDown = (e) => {
+    if (animRef.current) cancelAnimationFrame(animRef.current); // grab interrupts a glide
     svgRef.current.setPointerCapture?.(e.pointerId);
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (pointers.current.size === 1) {
-      dragState.current = { sx: e.clientX, sy: e.clientY, view: { ...view }, moved: false };
+      dragState.current = { sx: e.clientX, sy: e.clientY, view: { ...viewRef.current }, moved: false };
     }
   };
   const onPointerMove = (e) => {
@@ -156,7 +193,7 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
   };
   const onDblClick = (e) => {
     const p = toMap(e.clientX, e.clientY);
-    zoomAt(p.x, p.y, 1 / 1.8);
+    zoomAt(p.x, p.y, 1 / 1.8, true);
   };
 
   const catTabs = [
@@ -284,7 +321,7 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
               const r = Math.min(20, 8 + Math.log2(cl.count) * 3) * scale;
               return (
                 <g key={`c-${i}`} style={{ cursor: 'pointer' }}
-                  onClick={(e) => { e.stopPropagation(); if (dragState.current?.moved) return; zoomAt(cl.x, cl.y, 0.42); }}>
+                  onClick={(e) => { e.stopPropagation(); if (dragState.current?.moved) return; zoomAt(cl.x, cl.y, 0.42, true); }}>
                   <circle cx={cl.x} cy={cl.y} r={r * 1.5} fill="#2563EB" opacity="0.14" />
                   <circle cx={cl.x} cy={cl.y} r={r} fill="#123A6B" stroke={cl.hasPartner ? '#F59E0B' : '#60A5FA'} strokeWidth={1.6 * scale} />
                   <text x={cl.x} y={cl.y} dy={r * 0.34} textAnchor="middle" fontSize={r * 0.95} fill="#FFFFFF"
@@ -294,16 +331,16 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
             })}
           </svg>
 
-          {/* Zoom controls */}
+          {/* Zoom controls — explicit buttons (handlers assigned directly to
+              onClick; the React Compiler bars ref-touching fns passed through a
+              render-time array). */}
           <div className="absolute right-2 top-2 flex flex-col gap-1">
-            {[{ k: '+', f: () => zoomAt(view.x + view.w / 2, view.y + view.h / 2, 1 / 1.5), l: 'Zoom in' },
-              { k: '−', f: () => zoomAt(view.x + view.w / 2, view.y + view.h / 2, 1.5), l: 'Zoom out' },
-              { k: '⌂', f: () => { setView(BASE); setActive(null); }, l: 'Reset' }].map(b => (
-              <button key={b.l} type="button" onClick={b.f} aria-label={b.l}
-                className="w-7 h-7 rounded-md bg-[#0B1C3D]/90 border border-white/20 text-white text-[15px] leading-none font-bold hover:border-white/50 transition flex items-center justify-center">
-                {b.k}
-              </button>
-            ))}
+            <button type="button" onClick={zoomInBtn} aria-label="Zoom in"
+              className="w-7 h-7 rounded-md bg-[#0B1C3D]/90 border border-white/20 text-white text-[15px] leading-none font-bold hover:border-white/50 transition flex items-center justify-center">+</button>
+            <button type="button" onClick={zoomOutBtn} aria-label="Zoom out"
+              className="w-7 h-7 rounded-md bg-[#0B1C3D]/90 border border-white/20 text-white text-[15px] leading-none font-bold hover:border-white/50 transition flex items-center justify-center">−</button>
+            <button type="button" onClick={resetBtn} aria-label="Reset"
+              className="w-7 h-7 rounded-md bg-[#0B1C3D]/90 border border-white/20 text-white text-[15px] leading-none font-bold hover:border-white/50 transition flex items-center justify-center">⌂</button>
           </div>
 
           {/* School card */}
@@ -319,7 +356,7 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
                   <span className="mt-1 w-2 h-2 rounded-full shrink-0" style={{ background: CAT_COLORS[active.cat] }} />
                   <div className="min-w-0">
                     <div className="text-[12.5px] font-bold text-[#0B1C3D] leading-snug">{active.name}</div>
-                    <div className="text-[11px] text-[#64748B] mt-0.5">{active.city}</div>
+                    <div className="text-[11px] text-[#64748B] mt-0.5">{active.city}{active.zip ? ` · ${active.zip}` : ''}</div>
                   </div>
                   <button type="button" onClick={() => setActive(null)} aria-label="Close"
                     className="ml-auto -mt-0.5 text-[#94A3B8] hover:text-[#0B1C3D] pointer-events-auto">

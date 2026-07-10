@@ -52,11 +52,14 @@ for (const x of items) {
   for (const l of x.Languages || []) {
     if (LANG_MAP[l]) langs.push(LANG_MAP[l]); else extraLangs.push(l);
   }
+  const addr = String(x.Address || '').replace(/\r?\n/g, ', ');
+  const zip = (addr.match(/\b(\d{5})(?:-\d{4})?\b/) || [])[1] || '';
   schools.push({
     id: x.ID,
     name: x.Name,
     city: x.City,
-    address: String(x.Address || '').replace(/\r?\n/g, ', '),
+    address: addr,
+    zip,
     cat,
     langs,
     extraLangs,
