@@ -318,23 +318,31 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
           )}
         </div>
 
-        {/* Filters */}
-        <div className="flex flex-wrap gap-1.5 mb-1.5">
+        {/* Controls — ONE horizontally scrollable rail, not a wrapping chip
+            soup (owner: "всё наляпано"). Categories first; then, for non-EN
+            audiences only, a single language toggle worded as the benefit
+            ("Говорят по-русски"), not a row of RU ES 中文 UA codes nobody
+            asked for. EN users get no language controls at all — their rows
+            already carry the multilingual badges. */}
+        <div className="flex gap-1.5 mb-2 overflow-x-auto scrollbar-hide whitespace-nowrap">
+          {/* The language toggle leads the rail: it's the page's promise and
+              it's ON by default — an active filter hidden past the scroll
+              edge would be invisible state. */}
+          {lang !== 'en' && (
+            <button type="button" onClick={() => { setLangFilter(langFilter === lang ? null : lang); setActive(null); }}
+              className={`shrink-0 px-2.5 py-1 rounded-full text-[11px] font-semibold border transition ${
+                langFilter === lang ? 'bg-[#0B1C3D] text-white border-[#0B1C3D]' : 'bg-white text-[#475569] border-[#CBD5E1] hover:border-[#64748B]'
+              }`}>
+              {langFilter === lang && <span className="mr-1" aria-hidden="true">✓</span>}
+              {tex.wsSpeakMyLang || LANG_LABELS[lang] || lang.toUpperCase()}
+            </button>
+          )}
           {catTabs.map(({ id, label }) => (
             <button key={id} type="button" onClick={() => { setCat(id); setActive(null); }}
-              className={`px-2.5 py-1 rounded-full text-[11px] font-semibold border transition ${
+              className={`shrink-0 px-2.5 py-1 rounded-full text-[11px] font-semibold border transition ${
                 cat === id ? 'bg-[#0B1C3D] text-white border-[#0B1C3D]' : 'bg-white text-[#475569] border-[#CBD5E1] hover:border-[#64748B]'
               }`}>
               {id !== 'all' && <span className="inline-block w-1.5 h-1.5 rounded-full mr-1 align-middle" style={{ background: CAT_COLORS[id] }} />}
-              {label}
-            </button>
-          ))}
-          <span className="w-px bg-[#E2E8F0] mx-0.5 self-stretch" aria-hidden="true" />
-          {Object.entries(LANG_LABELS).map(([code, label]) => (
-            <button key={code} type="button" onClick={() => { setLangFilter(langFilter === code ? null : code); setActive(null); }}
-              className={`px-2.5 py-1 rounded-full text-[11px] font-semibold border transition ${
-                langFilter === code ? 'bg-[#0B1C3D] text-white border-[#0B1C3D]' : 'bg-white text-[#475569] border-[#CBD5E1] hover:border-[#64748B]'
-              }`}>
               {label}
             </button>
           ))}
@@ -348,16 +356,17 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
           </p>
         )}
 
-        {/* City quick-nav — one tap flies in. Counts follow the ACTIVE
-            filters (a "Seattle 33" chip over a Russian-filtered map showing 5
-            Seattle dots would be lying); cities filtered to zero drop out. */}
-        <div className="flex flex-wrap gap-1.5 mb-2">
+        {/* City quick-nav — one tap flies in; a single scrollable rail. Counts
+            follow the ACTIVE filters (a "Seattle 33" chip over a Russian-
+            filtered map showing 5 Seattle dots would be lying); cities
+            filtered to zero drop out. */}
+        <div className="flex gap-1.5 mb-2 overflow-x-auto scrollbar-hide whitespace-nowrap">
           {CITY_CHIPS
             .map(c => ({ ...c, liveCount: filtered.filter(s => s.city.toLowerCase() === c.name.toLowerCase()).length }))
             .filter(c => c.liveCount > 0)
             .map(c => (
               <button key={c.name} type="button" onClick={() => zoomToCity(c)}
-                className="px-2 py-0.5 rounded-full text-[10.5px] font-semibold bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] hover:border-[#2563EB] transition">
+                className="shrink-0 px-2 py-0.5 rounded-full text-[10.5px] font-semibold bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] hover:border-[#2563EB] transition">
                 {c.name} <span className="font-bold">{c.liveCount}</span>
               </button>
             ))}
