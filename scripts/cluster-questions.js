@@ -22,6 +22,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 // ---------------------------------------------------------------------------
 // Config
@@ -352,27 +353,31 @@ function phase1ExactDedup(questions) {
 // ---------------------------------------------------------------------------
 
 function buildFuzzyPrompt(stateName, questions) {
+  // Questions are addressed by their 1-based NUMBER in this list, never by
+  // database id. Model-transcribed UUIDs came back mangled often enough that
+  // dedup silently under-deleted for months (Maine 2026-07-10: "67 removed"
+  // but only 16 ids matched real rows). Numbers are short enough to copy
+  // reliably and get range-validated on the way back.
   const qList = questions.map((q, i) =>
-    `${i + 1}. [ID:${q.id}] ${q.question_text}`
+    `${i + 1}. ${q.question_text}`
   ).join('\n');
 
   return `You are reviewing DMV test questions for ${stateName}.
 
-Below is a list of questions. Find any groups that test the EXACT SAME concept or fact (even if worded differently). For each duplicate group, keep the clearest/most accurate one and mark the rest for removal.
+Below is a numbered list of questions. Find any groups that test the EXACT SAME concept or fact (even if worded differently). For each duplicate group, keep the clearest/most accurate one and mark the rest for removal.
 
 Questions:
 ${qList}
 
 Return ONLY a JSON object in this exact format (no markdown, no explanation outside JSON):
 {
-  "keep": [list of IDs to keep],
-  "remove": [list of IDs to remove — duplicates only],
+  "remove": [question numbers to remove — duplicates only],
   "groups": [
-    { "keep_id": 123, "remove_ids": [456, 789], "reason": "same concept" }
+    { "keep": 3, "remove": [7, 12], "reason": "same concept" }
   ]
 }
 
-If there are no duplicates, return: {"keep": [], "remove": [], "groups": []}
+If there are no duplicates, return: {"remove": [], "groups": []}
 IMPORTANT: Only remove true duplicates. Keep questions that cover different aspects.`;
 }
 
@@ -388,7 +393,13 @@ async function phase2FuzzyDedup(state, questions, progress) {
   console.log(`  Phase 2: ${batches.length} batches of up to ${FUZZY_BATCH}`);
 
   for (let b = 0; b < batches.length; b++) {
-    const batchKey = `batch_${b}`;
+    // Content-keyed resume cache (same fix as verify-cluster-answers): a
+    // positional batch_N key replays stale results over a different batch
+    // after the question set changes between runs.
+    const batchKey = crypto.createHash('sha256')
+      .update(batches[b].map(q => q.id).join(','))
+      .digest('hex')
+      .slice(0, 16);
     if (progress.fuzzyProcessed[batchKey]) {
       const cached = progress.fuzzyProcessed[batchKey];
       for (const id of cached.remove) toRemove.add(id);
@@ -406,7 +417,12 @@ async function phase2FuzzyDedup(state, questions, progress) {
       console.log(` ERROR: ${e.message}`);
     }
 
-    const removeIds = result?.remove || [];
+    // The model returns 1-based question NUMBERS; resolve to ids locally and
+    // drop anything out of range or non-integer.
+    const removeIds = (result?.remove || [])
+      .map(Number)
+      .filter(n => Number.isInteger(n) && n >= 1 && n <= batches[b].length)
+      .map(n => batches[b][n - 1].id);
     for (const id of removeIds) toRemove.add(id);
 
     progress.fuzzyProcessed[batchKey] = { remove: removeIds };
@@ -434,11 +450,13 @@ async function phase3Cap(state, questions, manualText) {
     ? `Manual excerpt (first 3000 chars):\n---\n${manualText.substring(0, 3000)}\n---\n\n`
     : '';
 
-  const qList = questions.map(q => `[ID:${q.id}] ${q.question_text}`).join('\n');
+  // Numbered list, numbers back — same reasoning as buildFuzzyPrompt: the
+  // model mangles transcribed UUIDs, numbers survive the round trip.
+  const qList = questions.map((q, i) => `${i + 1}. ${q.question_text}`).join('\n');
 
   const prompt = `You are curating DMV knowledge test questions for ${stateName}.
 
-${manualCtx}Select exactly ${TARGET_COUNT} questions from the list below. Prefer questions that:
+${manualCtx}Select exactly ${TARGET_COUNT} questions from the numbered list below. Prefer questions that:
 - Cover diverse topics: signs, speed limits, right-of-way, parking, safety, alcohol/DUI, licensing requirements, intersections, lane changes, pedestrians
 - Are clearly worded and unambiguous
 - Have distinct correct answers (not opinion-based)
@@ -446,18 +464,24 @@ ${manualCtx}Select exactly ${TARGET_COUNT} questions from the list below. Prefer
 Questions (${questions.length} total):
 ${qList}
 
-Return ONLY a JSON array of exactly ${TARGET_COUNT} IDs to KEEP (no markdown, no explanation):
-[id1, id2, ...]`;
+Return ONLY a JSON array of exactly ${TARGET_COUNT} question numbers to KEEP (no markdown, no explanation):
+[1, 4, 7, ...]`;
 
   let keepIds = null;
   try {
     const text = await callClaudeText(prompt, SONNET_MODEL, 8192);
-    keepIds = parseJSON(text);
+    const nums = parseJSON(text);
+    if (Array.isArray(nums)) {
+      keepIds = nums
+        .map(Number)
+        .filter(n => Number.isInteger(n) && n >= 1 && n <= questions.length)
+        .map(n => questions[n - 1].id);
+    }
   } catch (e) {
     console.log(`  ERROR in phase 3: ${e.message}. Keeping top ${TARGET_COUNT} by score.`);
   }
 
-  if (!Array.isArray(keepIds) || keepIds.length !== TARGET_COUNT) {
+  if (!Array.isArray(keepIds) || new Set(keepIds).size !== TARGET_COUNT) {
     console.log(`  Phase 3 fallback: using score-based top ${TARGET_COUNT}`);
     const sorted = [...questions].sort((a, b) => scoreQuestion(b) - scoreQuestion(a));
     keepIds = sorted.slice(0, TARGET_COUNT).map(q => q.id);
