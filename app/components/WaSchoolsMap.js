@@ -1,20 +1,22 @@
 'use client';
-// Washington driving-schools map v2 — the flagship asset of the schools
-// partnership program. Every licensed school from the official DOL registry
-// on a brand-navy state map, now as a real instrument:
-//   - zoom & pan (buttons, wheel-to-cursor, drag, pinch, double-click) so the
-//     300-dot Seattle cluster resolves into individual schools
-//   - search by school name or city
-//   - a synced results list under the map — the surface where partner
-//     ranking actually shows (partner + qrTier sort first)
-//   - major-city anchors so the map reads as geography
+// Washington driving-schools map v3 — the flagship asset of the schools
+// partnership program, dressed as an OFFICIAL REGISTRY instrument (the same
+// department-document direction as the /upgrade access card; owner killed the
+// dark navy v2: "тёмная, неинформативная, не продающая").
+//   - white paper card with a navy registry header strip
+//   - light road-atlas map: paper state on a water-blue field, navy clusters
+//   - city chips with live counts — one tap flies to the city
+//   - zoom & pan (buttons, wheel-to-cursor, drag, pinch, double-click)
+//   - search by school name, city or ZIP
+//   - a synced directory list under the map with addresses
 // Partner machinery: partners escape clustering (individual pulsing gold pins
 // at every zoom, painted above everything) and pin to a gold "Partners"
-// section atop the results list.
+// section atop the results list. Gold is reserved for partners only.
 import { useEffect, useRef, useState } from 'react';
 import { WA_MAP, WA_CITIES, WA_SCHOOLS } from '@/lib/wa-school-map-data';
 
-const CAT_COLORS = { car: '#60A5FA', moto: '#FBBF24', cdl: '#A78BFA' };
+// Saturated variants that hold contrast on the light map field.
+const CAT_COLORS = { car: '#2563EB', moto: '#D97706', cdl: '#7C3AED' };
 const LANG_LABELS = { ru: 'RU', es: 'ES', zh: '中文', ua: 'UA' };
 const BASE = { x: 0, y: 0, w: WA_MAP.width, h: WA_MAP.height };
 const MIN_W = 70; // ~14x zoom
@@ -29,8 +31,26 @@ const LIST_ORDER = [...WA_SCHOOLS].sort((a, b) => {
   return a.name.localeCompare(b.name);
 });
 
+// City quick-nav chips: anchor cities that actually have schools, biggest
+// counts first. Counts are real (the anti-fake rule: one number, verifiable).
+const CITY_CHIPS = WA_CITIES
+  .map(c => ({
+    ...c,
+    count: WA_SCHOOLS.filter(s => s.city.toLowerCase() === c.name.toLowerCase()).length,
+  }))
+  .filter(c => c.count > 0)
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 7);
+
 function mapsUrl(s) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${s.name} ${s.address}`)}`;
+}
+
+// DOL feed addresses arrive ALL CAPS ("1000 TURK DR, SULTAN WA 98294");
+// title-case them for the card so the registry reads typeset, not shouted.
+function displayAddress(addr) {
+  if (!addr) return '';
+  return addr.toLowerCase().replace(/\b([a-z])/g, (m, ch) => ch.toUpperCase()).replace(/\bWa\b/g, 'WA');
 }
 
 export default function WaSchoolsMap({ tex, lang = 'en' }) {
@@ -82,8 +102,8 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
   // ── clustering ────────────────────────────────────────────────────────────
   // At low zoom the Seattle metro is 200 dots on top of each other. Grid the
   // visible-matching schools into cells sized to ~28 screen px; a cell with >1
-  // school renders as a numbered bubble (partner-aware color) that flies you in
-  // on click; singles stay as dots. Grid dissolves as you zoom (cell → map px).
+  // school renders as a numbered bubble that flies you in on click; singles
+  // stay as dots. Grid dissolves as you zoom (cell → map px).
   // Partners never enter the grid: a paying school must stay an individual
   // gold marker at every zoom level, not get swallowed into a numbered bubble.
   // They render in their own layer after the clusters, so nothing paints over
@@ -146,6 +166,12 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
     const w = 170;
     animateTo(clampView({ x: s.x - w / 2, y: s.y - (w * (WA_MAP.height / WA_MAP.width)) / 2, w, h: w * (WA_MAP.height / WA_MAP.width) }));
     setActive(s);
+  };
+
+  const zoomToCity = (c) => {
+    const w = 150;
+    animateTo(clampView({ x: c.x - w / 2, y: c.y - (w * (WA_MAP.height / WA_MAP.width)) / 2, w, h: w * (WA_MAP.height / WA_MAP.width) }));
+    setActive(null);
   };
 
   // Named control handlers (compiler-safe: like onWheel, they're memoizable
@@ -221,44 +247,41 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
 
   const schoolRow = (s) => (
     <button key={s.id} type="button" onClick={() => zoomTo(s)}
-      className="w-full flex items-center gap-2.5 py-2 px-1 rounded-lg text-left hover:bg-white/[0.05] transition border-b border-white/[0.06] last:border-0">
+      className="w-full flex items-center gap-2.5 py-2 px-1.5 rounded-lg text-left hover:bg-[#F1F5F9] transition border-b border-[#E2E8F0] last:border-0">
       <span className="w-2 h-2 rounded-full shrink-0" style={{ background: s.partner ? '#F59E0B' : CAT_COLORS[s.cat], boxShadow: s.partner ? '0 0 6px rgba(245,158,11,0.8)' : 'none' }} />
       <span className="min-w-0 flex-1">
-        <span className="block text-[12px] font-semibold text-white truncate">{s.name}</span>
-        <span className="block text-[10.5px] text-[#94A3B8]">{s.city}</span>
+        <span className="block text-[12.5px] font-semibold text-[#0B1C3D] truncate">{s.name}</span>
+        <span className="block text-[10.5px] text-[#64748B]">{s.city}{s.zip ? ` · ${s.zip}` : ''}</span>
       </span>
-      {s.partner && (
-        <span className="shrink-0 text-[9px] font-bold text-[#F59E0B] border border-[#F59E0B]/50 rounded-full px-1.5 py-0.5">
-          {tex.wsPartner || 'DMVSOS partner'}
-        </span>
-      )}
       <span className="shrink-0 flex gap-1">
         {s.langs.filter(l => l !== 'en').slice(0, 3).map(l => (
-          <span key={l} className="text-[9px] font-bold text-[#7DA0CF]">{LANG_LABELS[l] || l}</span>
+          <span key={l} className="text-[9px] font-bold px-1 py-0.5 rounded bg-[#EFF6FF] text-[#2563EB]">{LANG_LABELS[l] || l}</span>
         ))}
       </span>
     </button>
   );
 
   return (
-    <div className="relative w-full rounded-2xl border border-white/10 overflow-hidden"
-      style={{ background: 'linear-gradient(180deg, #0A1A38 0%, #0B1C3D 60%, #071021 100%)' }}>
-      <div aria-hidden="true" className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-24 left-1/4 w-[420px] h-[420px] rounded-full"
-          style={{ background: 'radial-gradient(circle, rgba(37,99,235,0.18) 0%, transparent 65%)' }} />
+    <div className="relative w-full rounded-2xl border border-[#E2E8F0] bg-white shadow-md overflow-hidden">
+      {/* Registry header strip — the department-document motif */}
+      <div className="flex items-center gap-3 px-4 py-3" style={{ background: '#0B1C3D' }}>
+        <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true" className="shrink-0">
+          <circle cx="13" cy="13" r="12" fill="none" stroke="#F59E0B" strokeWidth="1.4" />
+          <circle cx="13" cy="13" r="9.2" fill="none" stroke="#F59E0B" strokeWidth="0.7" strokeDasharray="1.6 1.8" />
+          <path d="M13 7.6l1.45 2.94 3.25.47-2.35 2.29.55 3.24L13 15.01l-2.9 1.53.55-3.24-2.35-2.29 3.25-.47z" fill="#F59E0B" />
+        </svg>
+        <div className="min-w-0">
+          <h3 className="text-white font-bold text-[14px] leading-snug">{tex.wsMapTitle || 'Washington: every licensed school on one map'}</h3>
+          <p className="text-[#9DB2D6] text-[11px] mt-0.5">
+            {(tex.wsMapSub || '{n} schools from the official DOL registry').replace('{n}', String(filtered.length))}
+          </p>
+        </div>
       </div>
 
-      <div className="relative p-4 sm:p-5">
-        <h3 className="text-white font-bold text-[16px] mb-1">{tex.wsMapTitle || 'Washington: every licensed school on one map'}</h3>
-        <p className="text-[#94A3B8] text-xs mb-3">
-          {(tex.wsMapSub || '{n} schools from the official DOL registry').replace('{n}', String(filtered.length))}
-          {' · '}
-          <span className="text-[#CBD5E1]">{tex.wsHint || 'Tap a dot to see the school'}</span>
-        </p>
-
+      <div className="relative p-4 sm:p-5" style={{ background: 'linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%)' }}>
         {/* Search */}
         <div className="relative mb-2">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" strokeWidth="2" strokeLinecap="round"
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" strokeWidth="2" strokeLinecap="round"
             className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true">
             <circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3" />
           </svg>
@@ -267,11 +290,11 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
             value={query}
             onChange={(e) => { setQuery(e.target.value); setActive(null); }}
             placeholder={tex.wsSearchPlaceholder || 'Search by school or city'}
-            className="w-full rounded-lg bg-white/[0.06] border border-white/15 pl-9 pr-8 py-2 text-[13px] text-white placeholder-[#64748B] focus:outline-none focus:border-[#60A5FA]"
+            className="w-full rounded-lg bg-white border border-[#CBD5E1] pl-9 pr-8 py-2 text-[13px] text-[#0B1C3D] placeholder-[#94A3B8] focus:outline-none focus:border-[#2563EB]"
           />
           {query && (
             <button type="button" onClick={() => setQuery('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-white" aria-label="Clear">
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#94A3B8] hover:text-[#0B1C3D]" aria-label="Clear">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
             </button>
           )}
@@ -282,30 +305,40 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
           {catTabs.map(({ id, label }) => (
             <button key={id} type="button" onClick={() => { setCat(id); setActive(null); }}
               className={`px-2.5 py-1 rounded-full text-[11px] font-semibold border transition ${
-                cat === id ? 'bg-white text-[#0B1C3D] border-white' : 'text-[#94A3B8] border-white/20 hover:border-white/50'
+                cat === id ? 'bg-[#0B1C3D] text-white border-[#0B1C3D]' : 'bg-white text-[#475569] border-[#CBD5E1] hover:border-[#64748B]'
               }`}>
               {id !== 'all' && <span className="inline-block w-1.5 h-1.5 rounded-full mr-1 align-middle" style={{ background: CAT_COLORS[id] }} />}
               {label}
             </button>
           ))}
-          <span className="w-px bg-white/15 mx-0.5 self-stretch" aria-hidden="true" />
+          <span className="w-px bg-[#E2E8F0] mx-0.5 self-stretch" aria-hidden="true" />
           {Object.entries(LANG_LABELS).map(([code, label]) => (
             <button key={code} type="button" onClick={() => { setLangFilter(langFilter === code ? null : code); setActive(null); }}
               className={`px-2.5 py-1 rounded-full text-[11px] font-semibold border transition ${
-                langFilter === code ? 'bg-[#F59E0B] text-[#0B1C3D] border-[#F59E0B]' : 'text-[#94A3B8] border-white/20 hover:border-white/50'
+                langFilter === code ? 'bg-[#0B1C3D] text-white border-[#0B1C3D]' : 'bg-white text-[#475569] border-[#CBD5E1] hover:border-[#64748B]'
               }`}>
               {label}
             </button>
           ))}
         </div>
 
-        {/* Map */}
-        <div className="relative mt-2">
+        {/* City quick-nav — real counts, one tap flies in */}
+        <div className="flex flex-wrap gap-1.5 mb-2">
+          {CITY_CHIPS.map(c => (
+            <button key={c.name} type="button" onClick={() => zoomToCity(c)}
+              className="px-2 py-0.5 rounded-full text-[10.5px] font-semibold bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] hover:border-[#2563EB] transition">
+              {c.name} <span className="font-bold">{c.count}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Map — light road-atlas field */}
+        <div className="relative">
           <svg
             ref={svgRef}
             viewBox={`${view.x} ${view.y} ${view.w} ${view.h}`}
-            className="w-full h-auto block select-none rounded-lg"
-            style={{ touchAction: 'none', cursor: 'grab' }}
+            className="w-full h-auto block select-none rounded-xl border border-[#DBEAFE]"
+            style={{ touchAction: 'none', cursor: 'grab', background: 'linear-gradient(180deg, #EAF2FB 0%, #E3EDF9 100%)' }}
             role="img"
             aria-label={tex.wsMapTitle || 'Washington driving schools map'}
             onPointerDown={onPointerDown}
@@ -315,14 +348,13 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
             onWheel={onWheel}
             onDoubleClick={onDblClick}
           >
-            <path d={WA_MAP.outline} fill="#0E2148" stroke="#3B6BB0" strokeWidth={1.5 * scale} strokeLinejoin="round" />
-            <path d={WA_MAP.outline} fill="none" stroke="rgba(96,165,250,0.25)" strokeWidth={5 * scale} strokeLinejoin="round" style={{ filter: 'blur(4px)' }} />
+            <path d={WA_MAP.outline} fill="#FBFDFF" stroke="#7E9CC4" strokeWidth={1.4 * scale} strokeLinejoin="round" />
 
             {/* City anchors */}
             {WA_CITIES.filter(c => c.rank === 1 || zoomedIn).map(c => (
-              <g key={c.name} opacity="0.75" pointerEvents="none">
-                <circle cx={c.x} cy={c.y} r={1.6 * scale} fill="#7DA0CF" />
-                <text x={c.x + 5 * scale} y={c.y - 4 * scale} fontSize={11 * scale} fill="#7DA0CF"
+              <g key={c.name} pointerEvents="none">
+                <circle cx={c.x} cy={c.y} r={1.7 * scale} fill="#64748B" />
+                <text x={c.x + 5 * scale} y={c.y - 4 * scale} fontSize={11 * scale} fill="#475569"
                   style={{ fontWeight: 600, letterSpacing: '0.04em' }}>{c.name}</text>
               </g>
             ))}
@@ -330,7 +362,7 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
             {/* Dimmed layer: everything NOT matching the filters, so the map
                 never looks empty when a filter is on. */}
             {PAINT_ORDER.filter(s => !matches(s)).map((s) => (
-              <circle key={`d-${s.id}`} cx={s.x} cy={s.y} r={2.1 * scale} fill={CAT_COLORS[s.cat]} opacity="0.07" />
+              <circle key={`d-${s.id}`} cx={s.x} cy={s.y} r={2.1 * scale} fill={CAT_COLORS[s.cat]} opacity="0.08" />
             ))}
 
             {/* Single schools */}
@@ -339,10 +371,10 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
               const c = CAT_COLORS[s.cat];
               return (
                 <g key={s.id}>
-                  <circle cx={s.x} cy={s.y} r={(isActive ? 9 : 5.5) * scale} fill={c} opacity="0.16" />
+                  <circle cx={s.x} cy={s.y} r={(isActive ? 9 : 5.5) * scale} fill={c} opacity="0.15" />
                   <circle
-                    cx={s.x} cy={s.y} r={(isActive ? 3.4 : 2.4) * scale} fill={c}
-                    stroke={isActive ? '#FFFFFF' : 'none'} strokeWidth={1 * scale}
+                    cx={s.x} cy={s.y} r={(isActive ? 3.4 : 2.5) * scale} fill={c}
+                    stroke="#FFFFFF" strokeWidth={(isActive ? 1.2 : 0.8) * scale}
                     style={{ cursor: 'pointer' }}
                     onClick={(e) => { e.stopPropagation(); if (dragState.current?.moved) return; setActive(isActive ? null : s); }}
                   />
@@ -356,8 +388,8 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
               return (
                 <g key={`c-${i}`} style={{ cursor: 'pointer' }}
                   onClick={(e) => { e.stopPropagation(); if (dragState.current?.moved) return; zoomAt(cl.x, cl.y, 0.42, true); }}>
-                  <circle cx={cl.x} cy={cl.y} r={r * 1.5} fill="#2563EB" opacity="0.14" />
-                  <circle cx={cl.x} cy={cl.y} r={r} fill="#123A6B" stroke="#60A5FA" strokeWidth={1.6 * scale} />
+                  <circle cx={cl.x} cy={cl.y} r={r * 1.5} fill="#2563EB" opacity="0.10" />
+                  <circle cx={cl.x} cy={cl.y} r={r} fill="#0B1C3D" stroke="#FFFFFF" strokeWidth={1.3 * scale} />
                   <text x={cl.x} y={cl.y} dy={r * 0.34} textAnchor="middle" fontSize={r * 0.95} fill="#FFFFFF"
                     style={{ fontWeight: 800, pointerEvents: 'none' }}>{cl.count}</text>
                 </g>
@@ -376,7 +408,7 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
                     <animate attributeName="r" values={`${4 * scale};${12 * scale}`} dur="2s" repeatCount="indefinite" />
                     <animate attributeName="opacity" values="0.8;0" dur="2s" repeatCount="indefinite" />
                   </circle>
-                  <circle cx={s.x} cy={s.y} r={(isActive ? 10 : 7) * scale} fill="#F59E0B" opacity="0.2" />
+                  <circle cx={s.x} cy={s.y} r={(isActive ? 10 : 7) * scale} fill="#F59E0B" opacity="0.22" />
                   <circle
                     cx={s.x} cy={s.y} r={(isActive ? 4.2 : 3.4) * scale} fill="#F59E0B"
                     stroke="#FFFFFF" strokeWidth={1.1 * scale}
@@ -393,11 +425,11 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
               render-time array). */}
           <div className="absolute right-2 top-2 flex flex-col gap-1">
             <button type="button" onClick={zoomInBtn} aria-label="Zoom in"
-              className="w-7 h-7 rounded-md bg-[#0B1C3D]/90 border border-white/20 text-white text-[15px] leading-none font-bold hover:border-white/50 transition flex items-center justify-center">+</button>
+              className="w-7 h-7 rounded-md bg-white/95 border border-[#CBD5E1] text-[#0B1C3D] text-[15px] leading-none font-bold shadow-sm hover:border-[#64748B] transition flex items-center justify-center">+</button>
             <button type="button" onClick={zoomOutBtn} aria-label="Zoom out"
-              className="w-7 h-7 rounded-md bg-[#0B1C3D]/90 border border-white/20 text-white text-[15px] leading-none font-bold hover:border-white/50 transition flex items-center justify-center">−</button>
+              className="w-7 h-7 rounded-md bg-white/95 border border-[#CBD5E1] text-[#0B1C3D] text-[15px] leading-none font-bold shadow-sm hover:border-[#64748B] transition flex items-center justify-center">−</button>
             <button type="button" onClick={resetBtn} aria-label="Reset"
-              className="w-7 h-7 rounded-md bg-[#0B1C3D]/90 border border-white/20 text-white text-[15px] leading-none font-bold hover:border-white/50 transition flex items-center justify-center">⌂</button>
+              className="w-7 h-7 rounded-md bg-white/95 border border-[#CBD5E1] text-[#0B1C3D] text-[15px] leading-none font-bold shadow-sm hover:border-[#64748B] transition flex items-center justify-center">⌂</button>
           </div>
 
           {/* School card */}
@@ -408,12 +440,12 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
                 top: `${Math.min(84, Math.max(30, ((active.y - view.y) / view.h) * 100))}%`,
                 transform: 'translate(-50%, -116%)',
               }}>
-              <div className="pointer-events-auto w-[240px] rounded-xl bg-white shadow-2xl border border-[#E2E8F0] p-3 text-left">
+              <div className="pointer-events-auto w-[250px] rounded-xl bg-white shadow-2xl border border-[#E2E8F0] p-3 text-left">
                 <div className="flex items-start gap-2">
-                  <span className="mt-1 w-2 h-2 rounded-full shrink-0" style={{ background: CAT_COLORS[active.cat] }} />
+                  <span className="mt-1 w-2 h-2 rounded-full shrink-0" style={{ background: active.partner ? '#F59E0B' : CAT_COLORS[active.cat] }} />
                   <div className="min-w-0">
                     <div className="text-[12.5px] font-bold text-[#0B1C3D] leading-snug">{active.name}</div>
-                    <div className="text-[11px] text-[#64748B] mt-0.5">{active.city}{active.zip ? ` · ${active.zip}` : ''}</div>
+                    <div className="text-[10.5px] text-[#64748B] mt-0.5 leading-snug">{displayAddress(active.address) || `${active.city}${active.zip ? ` · ${active.zip}` : ''}`}</div>
                   </div>
                   <button type="button" onClick={() => setActive(null)} aria-label="Close"
                     className="ml-auto -mt-0.5 text-[#94A3B8] hover:text-[#0B1C3D] pointer-events-auto">
@@ -447,7 +479,7 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
 
         {/* Legend + partner hook */}
         <div className="flex flex-wrap items-center justify-between gap-2 mt-3">
-          <div className="flex items-center gap-3 text-[10.5px] text-[#94A3B8]">
+          <div className="flex items-center gap-3 text-[10.5px] text-[#64748B]">
             {['car', 'moto', 'cdl'].map(c => (
               <span key={c} className="inline-flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full" style={{ background: CAT_COLORS[c] }} />
@@ -460,19 +492,19 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
             </span>
           </div>
           <a href={`mailto:maindmvsos@gmail.com?subject=${encodeURIComponent('DMVSOS map · driving school partnership')}`}
-            className="text-[11px] font-semibold text-[#F59E0B] hover:text-[#FBBF24] underline underline-offset-2 transition">
+            className="text-[11px] font-semibold text-[#B45309] hover:text-[#92400E] underline underline-offset-2 transition">
             {tex.wsForSchools || 'Own a driving school? Get on the map'}
           </a>
         </div>
 
         {/* Results list — where partner placement actually shows */}
-        <div className="mt-3 border-t border-white/10 pt-2">
+        <div className="mt-3 border-t border-[#E2E8F0] pt-2">
           {filtered.length === 0 && (
-            <p className="text-[12px] text-[#94A3B8] py-2">{tex.wsNoMatches || 'Nothing found. Try another name or city.'}</p>
+            <p className="text-[12px] text-[#64748B] py-2">{tex.wsNoMatches || 'Nothing found. Try another name or city.'}</p>
           )}
           {partnerRows.length > 0 && (
-            <div className="mb-1 rounded-xl border border-[#F59E0B]/25 bg-[#F59E0B]/[0.05] px-2 pt-1.5 pb-0.5">
-              <p className="text-[9.5px] font-bold uppercase tracking-[0.12em] text-[#F59E0B] px-1 mb-0.5">
+            <div className="mb-1 rounded-xl border border-[#F59E0B]/40 bg-[#FFFBEB] px-2 pt-1.5 pb-0.5">
+              <p className="text-[9.5px] font-bold uppercase tracking-[0.12em] text-[#B45309] px-1 mb-0.5">
                 {tex.wsPartners || 'Partners'}
               </p>
               {partnerRows.map(schoolRow)}
@@ -481,7 +513,7 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
           {regularRows.slice(0, listLimit).map(schoolRow)}
           {regularRows.length > 8 && (
             <button type="button" onClick={() => setListOpen(v => !v)}
-              className="mt-2 text-[11.5px] font-semibold text-[#60A5FA] hover:text-white transition">
+              className="mt-2 text-[11.5px] font-semibold text-[#2563EB] hover:text-[#0B1C3D] transition">
               {listOpen ? (tex.wsShowLess || 'Show less')
                 : (tex.wsShowAll || 'Show all {n}').replace('{n}', String(Math.min(regularRows.length, 60)))}
             </button>
