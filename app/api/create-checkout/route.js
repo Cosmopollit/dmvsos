@@ -50,7 +50,12 @@ export async function POST(req) {
     // fixed enum (https://stripe.com/docs/payments/checkout/customization/translate);
     // we narrow to the four non-EN locales we actually translate the rest
     // of the funnel into. Unknown / EN falls through to 'auto'.
-    const LANG_TO_STRIPE_LOCALE = { ru: 'ru', es: 'es', zh: 'zh', ua: 'uk' };
+    // NO 'ua'/'uk' entry: the 2026-01-28.clover API version dropped Ukrainian
+    // from the Checkout locale enum, and passing 'uk' made session creation
+    // 500 for every UA buyer (found live 2026-07-11). Ukrainian users get
+    // 'auto' — Stripe picks the closest supported language from the browser.
+    // Do NOT "fix" this by mapping ua to ru.
+    const LANG_TO_STRIPE_LOCALE = { ru: 'ru', es: 'es', zh: 'zh' };
     const checkoutLocale = LANG_TO_STRIPE_LOCALE[body.lang] || 'auto';
 
     if (!ALL_PLANS.has(planType)) {
