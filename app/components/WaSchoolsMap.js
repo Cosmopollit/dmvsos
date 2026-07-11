@@ -262,7 +262,14 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
         <span className="block text-[10.5px] text-[#64748B]">{s.city}{s.zip ? ` · ${s.zip}` : ''}</span>
       </span>
       <span className="shrink-0 flex gap-1">
-        {s.langs.filter(l => l !== 'en').slice(0, 3).map(l => (
+        {/* EN audience gets the full multilingual picture; everyone else gets
+            ONE badge answering the only question they have — "do they speak
+            MY language" (owner: a RU user drowning in 中文 RU ES rows reads
+            noise, not information). Full detail stays on the tap-card. */}
+        {(lang === 'en'
+          ? s.langs.filter(l => l !== 'en').slice(0, 3)
+          : s.langs.includes(lang) ? [lang] : []
+        ).map(l => (
           <span key={l} className="text-[9px] font-bold px-1 py-0.5 rounded bg-[#EFF6FF] text-[#2563EB]">{LANG_LABELS[l] || l}</span>
         ))}
       </span>
