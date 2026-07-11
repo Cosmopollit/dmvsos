@@ -13,7 +13,10 @@
 // at every zoom, painted above everything) and pin to a gold "Partners"
 // section atop the results list. Gold is reserved for partners only.
 import { useEffect, useRef, useState } from 'react';
+import GradientButton from '@/app/components/GradientButton';
 import { WA_MAP, WA_CITIES, WA_SCHOOLS } from '@/lib/wa-school-map-data';
+
+const PARTNER_MAILTO = `mailto:maindmvsos@gmail.com?subject=${encodeURIComponent('DMVSOS map · driving school partnership')}`;
 
 // Saturated variants that hold contrast on the light map field.
 const CAT_COLORS = { car: '#2563EB', moto: '#D97706', cdl: '#7C3AED' };
@@ -477,24 +480,19 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
           )}
         </div>
 
-        {/* Legend + partner hook */}
-        <div className="flex flex-wrap items-center justify-between gap-2 mt-3">
-          <div className="flex items-center gap-3 text-[10.5px] text-[#64748B]">
-            {['car', 'moto', 'cdl'].map(c => (
-              <span key={c} className="inline-flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full" style={{ background: CAT_COLORS[c] }} />
-                {c === 'car' ? (tex.catCar || 'Car') : c === 'moto' ? (tex.catMoto || 'Motorcycle') : (tex.catCdl || 'CDL')}
-              </span>
-            ))}
-            <span className="inline-flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#F59E0B]" style={{ boxShadow: '0 0 6px rgba(245,158,11,0.8)' }} />
-              {tex.wsPartner || 'DMVSOS partner'}
+        {/* Legend. The partnership pitch lives in the vacant-slot card below —
+            a second link here would double the ask (repetition reads cheap). */}
+        <div className="flex flex-wrap items-center gap-3 mt-3 text-[10.5px] text-[#64748B]">
+          {['car', 'moto', 'cdl'].map(c => (
+            <span key={c} className="inline-flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full" style={{ background: CAT_COLORS[c] }} />
+              {c === 'car' ? (tex.catCar || 'Car') : c === 'moto' ? (tex.catMoto || 'Motorcycle') : (tex.catCdl || 'CDL')}
             </span>
-          </div>
-          <a href={`mailto:maindmvsos@gmail.com?subject=${encodeURIComponent('DMVSOS map · driving school partnership')}`}
-            className="text-[11px] font-semibold text-[#B45309] hover:text-[#92400E] underline underline-offset-2 transition">
-            {tex.wsForSchools || 'Own a driving school? Get on the map'}
-          </a>
+          ))}
+          <span className="inline-flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-[#F59E0B]" style={{ boxShadow: '0 0 6px rgba(245,158,11,0.8)' }} />
+            {tex.wsPartner || 'DMVSOS partner'}
+          </span>
         </div>
 
         {/* Results list — where partner placement actually shows */}
@@ -502,6 +500,34 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
           {filtered.length === 0 && (
             <p className="text-[12px] text-[#64748B] py-2">{tex.wsNoMatches || 'Nothing found. Try another name or city.'}</p>
           )}
+          {/* Vacant partner slot — the luxe sales card for the partnership
+              program. Sits exactly where a paying school would appear, so the
+              pitch IS the product demo. */}
+          <div className="relative mb-2 rounded-xl overflow-hidden border border-[#F59E0B]/60"
+            style={{ background: 'linear-gradient(120deg, #FFFBEB 0%, #FFFFFF 55%, #FFF4D6 100%)' }}>
+            <svg aria-hidden="true" width="118" height="118" viewBox="0 0 26 26"
+              className="absolute -right-5 -bottom-6 opacity-[0.09] pointer-events-none">
+              <circle cx="13" cy="13" r="12" fill="none" stroke="#B45309" strokeWidth="1.4" />
+              <circle cx="13" cy="13" r="9.2" fill="none" stroke="#B45309" strokeWidth="0.7" strokeDasharray="1.6 1.8" />
+              <path d="M13 7.6l1.45 2.94 3.25.47-2.35 2.29.55 3.24L13 15.01l-2.9 1.53.55-3.24-2.35-2.29 3.25-.47z" fill="#B45309" />
+            </svg>
+            <div className="relative p-3.5">
+              <p className="text-[9.5px] font-bold uppercase tracking-[0.14em] text-[#B45309]">
+                {tex.wsSlotKicker || 'Partner spot'}
+              </p>
+              <p className="text-[15px] font-bold text-[#0B1C3D] mt-0.5 leading-snug">
+                {tex.wsSlotTitle || 'Your school could be here'}
+              </p>
+              <p className="text-[11.5px] text-[#64748B] mt-1 leading-relaxed max-w-[420px]">
+                {tex.wsSlotDesc || 'A gold pin on the map, top of the list, students contact you directly.'}
+              </p>
+              <div className="mt-2.5 max-w-[300px]">
+                <GradientButton variant="gold" onClick={() => { window.location.href = PARTNER_MAILTO; }}>
+                  <span className="text-[13px]">{tex.wsSlotCta || 'Claim the spot'}</span>
+                </GradientButton>
+              </div>
+            </div>
+          </div>
           {partnerRows.length > 0 && (
             <div className="mb-1 rounded-xl border border-[#F59E0B]/40 bg-[#FFFBEB] px-2 pt-1.5 pb-0.5">
               <p className="text-[9.5px] font-bold uppercase tracking-[0.12em] text-[#B45309] px-1 mb-0.5">
