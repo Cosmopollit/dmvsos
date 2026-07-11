@@ -19,6 +19,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const SUPABASE_URL  = 'https://yaogndpgnewqffbjrsgz.supabase.co';
 const SERVICE_KEY   = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -331,6 +332,21 @@ async function processState(state) {
     `state=eq.${encodeURIComponent(state)}&category=eq.${CATEGORY_ARG}&language=eq.en&cluster_code=not.is.null${subcatFilter}`
   );
   console.log(`  Found ${enQuestions.length} EN questions with cluster_code${SUBCATEGORY_ARG ? ` (subcategory=${SUBCATEGORY_ARG})` : ''}`);
+
+  // The per-language done flags are only valid for the EN set they were
+  // written against. Re-clustering renumbers codes and changes the set, and a
+  // stale "done" then skips translation entirely, leaving old non-EN rows
+  // attached to codes that now belong to DIFFERENT questions (bit us
+  // 2026-07-11: Maine retrofit to 292 clusters kept 205 mismatched rows).
+  // Fingerprint the EN set; any change resets the flags.
+  const enFingerprint = crypto.createHash('sha256')
+    .update(enQuestions.map(q => q.id).sort().join(','))
+    .digest('hex');
+  if (prog.enFingerprint !== enFingerprint) {
+    if (prog.enFingerprint) console.log('  EN set changed since last run — resetting per-language done flags');
+    prog.done = {};
+    prog.enFingerprint = enFingerprint;
+  }
 
   if (enQuestions.length === 0) {
     console.log('  No clustered EN questions found — run cluster-questions.js first');
