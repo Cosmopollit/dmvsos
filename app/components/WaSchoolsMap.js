@@ -58,7 +58,12 @@ function displayAddress(addr) {
 
 export default function WaSchoolsMap({ tex, lang = 'en' }) {
   const [cat, setCat] = useState('all');
-  const [langFilter, setLangFilter] = useState(null);
+  // The page above the map promises "schools that speak your language" — so
+  // the map opens with that language filter already ON (the promise is kept,
+  // "All" is one tap away). Guarded: never pre-filter into an empty map.
+  const [langFilter, setLangFilter] = useState(() =>
+    lang !== 'en' && WA_SCHOOLS.some(s => s.langs.includes(lang)) ? lang : null,
+  );
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(null);
   const [view, setView] = useState(BASE);
@@ -276,7 +281,10 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
         <div className="min-w-0">
           <h3 className="text-white font-bold text-[14px] leading-snug">{tex.wsMapTitle || 'Washington: every licensed school on one map'}</h3>
           <p className="text-[#9DB2D6] text-[11px] mt-0.5">
-            {(tex.wsMapSub || '{n} schools from the official DOL registry').replace('{n}', String(filtered.length))}
+            {/* The registry size is a constant fact; the live filtered count
+                has its own "Found:" line below. Mixing them made the header
+                claim "431 in the registry" turn into "31" under a filter. */}
+            {(tex.wsMapSub || '{n} schools from the official DOL registry').replace('{n}', String(WA_SCHOOLS.length))}
           </p>
         </div>
       </div>
@@ -325,14 +333,27 @@ export default function WaSchoolsMap({ tex, lang = 'en' }) {
           ))}
         </div>
 
-        {/* City quick-nav — real counts, one tap flies in */}
+        {/* Live result count — only when a filter or search narrows the set,
+            so it never fights the constant registry total in the header. */}
+        {filtered.length !== WA_SCHOOLS.length && (
+          <p className="text-[10.5px] font-semibold text-[#2563EB] mb-1.5">
+            {(tex.wsFound || 'Found: {n}').replace('{n}', String(filtered.length))}
+          </p>
+        )}
+
+        {/* City quick-nav — one tap flies in. Counts follow the ACTIVE
+            filters (a "Seattle 33" chip over a Russian-filtered map showing 5
+            Seattle dots would be lying); cities filtered to zero drop out. */}
         <div className="flex flex-wrap gap-1.5 mb-2">
-          {CITY_CHIPS.map(c => (
-            <button key={c.name} type="button" onClick={() => zoomToCity(c)}
-              className="px-2 py-0.5 rounded-full text-[10.5px] font-semibold bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] hover:border-[#2563EB] transition">
-              {c.name} <span className="font-bold">{c.count}</span>
-            </button>
-          ))}
+          {CITY_CHIPS
+            .map(c => ({ ...c, liveCount: filtered.filter(s => s.city.toLowerCase() === c.name.toLowerCase()).length }))
+            .filter(c => c.liveCount > 0)
+            .map(c => (
+              <button key={c.name} type="button" onClick={() => zoomToCity(c)}
+                className="px-2 py-0.5 rounded-full text-[10.5px] font-semibold bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] hover:border-[#2563EB] transition">
+                {c.name} <span className="font-bold">{c.liveCount}</span>
+              </button>
+            ))}
         </div>
 
         {/* Map — light road-atlas field */}
