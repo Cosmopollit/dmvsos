@@ -51,7 +51,12 @@ const CATEGORY_SLUG = CATEGORY_ARG === 'motorcycle' ? 'moto' : CATEGORY_ARG;
 const MANUALS_DIR = path.join(__dirname, '..', '.manuals-text');
 const HAIKU_MODEL = 'claude-haiku-4-5-20251001';
 const SONNET_MODEL = 'claude-sonnet-4-6';
-const TARGET_COUNT = 200;
+// Cap is optional since 2026-07-11 (owner: keep everything that survives
+// dedup and cluster it — bank size sells). --no-cap keeps all survivors;
+// --cap=N overrides the default 200.
+const NO_CAP = process.argv.includes('--no-cap');
+const CAP_ARG = parseInt(process.argv.find(a => a.startsWith('--cap='))?.split('=')[1] || '', 10);
+const TARGET_COUNT = NO_CAP ? Infinity : (CAP_ARG > 0 ? CAP_ARG : 200);
 const FUZZY_BATCH = 30;
 
 if (!SERVICE_KEY) { console.error('Set SUPABASE_SERVICE_ROLE_KEY env var'); process.exit(1); }

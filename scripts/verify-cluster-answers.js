@@ -17,6 +17,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 // ---------------------------------------------------------------------------
 // Config
@@ -353,8 +354,15 @@ async function processState(state) {
     batches.push(questions.slice(i, i + BATCH_SIZE));
   }
 
-  const tasks = batches.map((batch, batchIdx) => async () => {
-    const batchKey = `batch_${batchIdx}`;
+  const tasks = batches.map((batch) => async () => {
+    // Key the resume cache by batch CONTENT, not position. A positional key
+    // (`batch_${i}`) silently replays a stale progress file over a completely
+    // different question set — a March progress file made the 2026-07-11 Maine
+    // verify "finish" in 1s with cached verdicts while writing nothing to the DB.
+    const batchKey = crypto.createHash('sha256')
+      .update(batch.map(q => q.id).join(','))
+      .digest('hex')
+      .slice(0, 16);
     if (progress.done[batchKey]) {
       // Count cached results
       const cached = progress.done[batchKey];
