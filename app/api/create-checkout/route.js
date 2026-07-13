@@ -1,7 +1,17 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+// Lazy Stripe client — Next.js instantiates modules during `next build`'s
+// "Collecting page data" phase, and preview deployments don't have
+// STRIPE_SECRET_KEY in their env scope. Deferring construction to first
+// use keeps the build importable without leaking prod secrets to previews.
+let _stripe;
+const stripe = new Proxy({}, {
+  get(_t, prop) {
+    if (!_stripe) _stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+    return _stripe[prop];
+  },
+});
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
