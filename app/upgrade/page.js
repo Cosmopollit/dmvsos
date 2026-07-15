@@ -28,7 +28,7 @@ const langs = [
 function UpgradeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { user, hasCar, hasMoto, hasCdl } = useAuth();
+  const { user, hasCar, hasMoto, hasCdl, loading: authLoading } = useAuth();
   useExperiment('upgrade_visit', user?.id);
   const [lang, setLangState] = useState(searchParams.get('lang') || getSavedLang());
   // useSearchParams can be empty on the very first render (Suspense
@@ -188,9 +188,19 @@ function UpgradeContent() {
   // user doesn't have to click "Buy" a second time.
   useEffect(() => {
     if (autoCheckoutFiredRef.current) return;
-    if (!user) return;
     if (searchParams.get('intent') !== 'checkout') return;
     if (!preselect) return;
+    // Anonymous arrival WITH a buy intent (home plan cards, result upsell):
+    // route straight to login with the intent preserved — showing this page
+    // first only added a second Buy click before the login wall. Wait for
+    // auth to settle so a logged-in user isn't misrouted mid-hydration.
+    if (!user) {
+      if (authLoading) return;
+      autoCheckoutFiredRef.current = true;
+      const next = `/upgrade?plan=${preselect}&lang=${lang}&intent=checkout`;
+      router.replace(`/login?next=${encodeURIComponent(next)}&lang=${lang}`);
+      return;
+    }
     autoCheckoutFiredRef.current = true;
     // Disarm the history entry: Back from Stripe re-mounts this page with the
     // same URL, and a live `intent` param would re-launch Stripe checkout.
@@ -199,7 +209,7 @@ function UpgradeContent() {
     router.replace(`/upgrade?${params.toString()}`, { scroll: false });
     handleCheckout(preselect);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, preselect]);
+  }, [user, authLoading, preselect]);
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-6 relative"

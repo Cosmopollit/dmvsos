@@ -378,7 +378,10 @@ function ResultContent() {
                   );
                 })}
               </div>
-              <GradientButton variant="gold" href={`/upgrade?lang=${lang}&plan=${planForCategory(category).id}`}>
+              {/* intent=checkout: the button says Unlock — /upgrade fires the
+                  Stripe checkout on arrival (or routes через login with the
+                  intent preserved) instead of asking for a second Buy click. */}
+              <GradientButton variant="gold" href={`/upgrade?lang=${lang}&plan=${planForCategory(category).id}&intent=checkout`}>
                 <AnimatedLock size={20} color="#0B1C3D" />
                 {tex.unlockFullAccess}
               </GradientButton>

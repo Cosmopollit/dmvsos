@@ -837,7 +837,7 @@ export default function HomeClient({ initialLang = 'en' }) {
               <PlanOwnedCta tex={tex} onClick={() => goPractice('moto')} />
             ) : (
               <GradientButton variant="blue" className="mt-auto"
-                onClick={() => router.push(`/upgrade?lang=${langCode}&plan=${PASS_META.moto.id}`)}>
+                onClick={() => router.push(`/upgrade?lang=${langCode}&plan=${PASS_META.moto.id}&intent=checkout`)}>
                 {tex.planGetMoto}
               </GradientButton>
             )}
@@ -867,7 +867,7 @@ export default function HomeClient({ initialLang = 'en' }) {
               <PlanOwnedCta tex={tex} onClick={() => goPractice('dmv')} />
             ) : (
               <GradientButton variant="blue" className="mt-auto"
-                onClick={() => router.push(`/upgrade?lang=${langCode}&plan=${PASS_META.auto.id}`)}>
+                onClick={() => router.push(`/upgrade?lang=${langCode}&plan=${PASS_META.auto.id}&intent=checkout`)}>
                 {tex.planGetAuto}
               </GradientButton>
             )}
@@ -897,7 +897,7 @@ export default function HomeClient({ initialLang = 'en' }) {
               <PlanOwnedCta tex={tex} onClick={() => goPractice('cdl')} />
             ) : (
               <GradientButton variant="gold" className="mt-auto"
-                onClick={() => router.push(`/upgrade?lang=${langCode}&plan=${PASS_META.cdl.id}`)}>
+                onClick={() => router.push(`/upgrade?lang=${langCode}&plan=${PASS_META.cdl.id}&intent=checkout`)}>
                 {tex.planGetCdl}
               </GradientButton>
             )}
