@@ -23,6 +23,12 @@ const GREETINGS = {
     body: 'Открыт секретный доступ: все тесты, все режимы, без ограничений. Если будут вопросы, напиши нам в поддержку. Удачи на экзамене!',
     cta: 'Поехали',
   },
+  'vladyslav.v.durov@gmail.com': {
+    title: 'Добро пожаловать, Владислав!',
+    body: 'Auto Pass открыт на 30 дней: все тесты, все режимы, без ограничений. Если будут вопросы, напишите Анастасии. Удачи на экзамене!',
+    cta: 'Поехали',
+    celebrate: true,
+  },
   // anastasiyarubkevich@gmail.com — handled separately by <NastyaGreeting>
   // (fullscreen heart overlay instead of the generic modal).
 };
