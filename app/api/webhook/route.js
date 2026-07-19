@@ -167,6 +167,41 @@ async function notifyAdmin(text) {
   }).catch(() => {});
 }
 
+// Server-side GA4 purchase via Measurement Protocol. The client-side purchase
+// (fired on /success mount) misses every buyer who never returns to /success
+// (closed the Stripe tab, in-app browser died, delayed payment method) — GA
+// showed 1 purchase in a window where Stripe settled 2. transaction_id =
+// checkout session id, the SAME id /success uses, so GA4 dedupes when both
+// fire. No-op until GA4_API_SECRET is set (GA Admin -> Data streams ->
+// Measurement Protocol API secrets). client_id is synthetic (derived from the
+// session id): attribution stays with the client-side event when it fires;
+// this one exists so the COUNT and revenue are never lost.
+const GA4_MEASUREMENT_ID = 'G-JGE08M8VEW';
+async function sendGa4Purchase({ checkoutSessionId, passType, kind, amountCents }) {
+  const secret = process.env.GA4_API_SECRET;
+  if (!secret || !checkoutSessionId) return;
+  const cidSeed = String(checkoutSessionId).replace(/\D/g, '').slice(-18) || '555';
+  const body = {
+    client_id: `${cidSeed.slice(0, 9) || '555'}.${cidSeed.slice(9) || '555'}`,
+    non_personalized_ads: true,
+    events: [{
+      name: 'purchase',
+      params: {
+        transaction_id: checkoutSessionId,
+        currency: 'USD',
+        value: Math.round(amountCents) / 100,
+        items: [{ item_id: `${passType}_${kind}`, item_name: `${passType} pass (${kind})`, price: Math.round(amountCents) / 100, quantity: 1 }],
+        source_channel: 'stripe_webhook',
+      },
+    }],
+  };
+  await fetch(`https://www.google-analytics.com/mp/collect?measurement_id=${GA4_MEASUREMENT_ID}&api_secret=${secret}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).catch(e => console.warn(`ga4 mp purchase failed (non-fatal): ${e.message}`));
+}
+
 async function handleOneTimePayment({ paymentIntentId, amountCents, metadata, checkoutSessionId, email }) {
   let { user_id, pass_type, kind } = metadata;
 
@@ -404,6 +439,12 @@ export async function POST(request) {
           metadata: meta,
           checkoutSessionId: session.id,
           email,
+        });
+        await sendGa4Purchase({
+          checkoutSessionId: session.id,
+          passType: meta.pass_type,
+          kind: meta.kind,
+          amountCents: session.amount_total,
         });
         if (email && (customerId || phone)) {
           const patch = {};

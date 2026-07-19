@@ -5,6 +5,7 @@ import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 import { agencyAbbrForState } from '@/lib/agencies';
 import ManualLangSwitch from './ManualLangSwitch';
 import GradientButton from '@/app/components/GradientButton';
+import ManualPdfLinks from '@/app/components/ManualPdfLinks';
 
 const SUPABASE_URL = 'https://yaogndpgnewqffbjrsgz.supabase.co';
 const INDEX_URL = `${SUPABASE_URL}/storage/v1/object/public/manuals/manuals-index.json`;
@@ -195,27 +196,15 @@ export default async function StateManualBody({ lang, state }) {
                     <img src={CAT_ART[cat]} alt="" className="w-10 h-10 object-contain shrink-0 select-none" />
                     {tex[CAT_LABELS_KEY[cat]] || cat}
                   </p>
-                  <div className="flex flex-col gap-2">
-                    {pdfByCategory[cat].map(({ langCode, url }) => (
-                      <a
-                        key={langCode}
-                        href={url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-[#E2E8F0] bg-white hover:border-[#2563EB] hover:bg-[#EFF6FF] transition-all"
-                      >
-                        <span className="flex items-center gap-2.5 text-sm font-medium text-[#1A2B4A]">
-                          {LANG_LABELS[langCode] || langCode.toUpperCase()}
-                        </span>
-                        <span className="flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] shrink-0">
-                          PDF
-                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                            <path d="M12 3v12" /><path d="m7 11 5 5 5-5" /><path d="M5 21h14" />
-                          </svg>
-                        </span>
-                      </a>
-                    ))}
-                  </div>
+                  <ManualPdfLinks
+                    links={pdfByCategory[cat].map(({ langCode, url }) => ({
+                      langCode, url, label: LANG_LABELS[langCode] || langCode.toUpperCase(),
+                    }))}
+                    state={state}
+                    stateName={name}
+                    cat={cat}
+                    lang={lang}
+                  />
                 </div>
               ))}
             </div>

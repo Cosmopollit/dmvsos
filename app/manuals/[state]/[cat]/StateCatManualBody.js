@@ -5,6 +5,7 @@ import { STATE_DISPLAY, STATE_SLUGS, STATE_META } from '@/lib/manual-data';
 import { examRulesFor } from '@/lib/exam-rules';
 import { agencyAbbrForState } from '@/lib/agencies';
 import ManualPracticeCta from './ManualPracticeCta';
+import ManualPdfLinks from '@/app/components/ManualPdfLinks';
 
 // Local i18n for the user-visible strings on this page. Kept self-contained so
 // shared files stay untouched. Metadata + JSON-LD stay English on purpose.
@@ -482,27 +483,15 @@ export default async function StateCatManualBody({ lang, state, cat }) {
               {tx.downloadHeading({ name, label: catInfo.label })}
             </h2>
             <p className="text-xs text-[#94A3B8] mb-4">{tx.pickLanguage}</p>
-            <div className="flex flex-col gap-2">
-              {pdfs.map(({ langCode, url }) => (
-                <a
-                  key={langCode}
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-[#E2E8F0] bg-white hover:border-[#2563EB] hover:bg-[#EFF6FF] transition-all"
-                >
-                  <span className="flex items-center gap-2.5 text-sm font-medium text-[#1A2B4A]">
-                    {LANG_LABELS[langCode] || langCode.toUpperCase()}
-                  </span>
-                  <span className="flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] shrink-0">
-                    PDF
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <path d="M12 3v12" /><path d="m7 11 5 5 5-5" /><path d="M5 21h14" />
-                    </svg>
-                  </span>
-                </a>
-              ))}
-            </div>
+            <ManualPdfLinks
+              links={pdfs.map(({ langCode, url }) => ({
+                langCode, url, label: LANG_LABELS[langCode] || langCode.toUpperCase(),
+              }))}
+              state={state}
+              stateName={name}
+              cat={cat}
+              lang={lang}
+            />
           </div>
         ) : (
           <div className="bg-[#FFFBEB] border border-[#FDE68A] rounded-2xl p-5 mb-5">
