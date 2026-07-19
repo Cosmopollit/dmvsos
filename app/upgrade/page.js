@@ -13,6 +13,7 @@ import { agencyAbbrForState, AGENCY_FULL_NAMES } from '@/lib/agencies';
 import { questionCountForState, questionCountForStateCategory } from '@/lib/state-question-counts';
 import { STATE_OPTIONS, stateToSlug } from '@/lib/states';
 import { trackBeginCheckout, trackCheckoutError } from '@/lib/gtag';
+import { isInAppBrowser, normalizeEmail, suggestEmailFix } from '@/lib/emailHints';
 import { useExperiment } from '@/lib/experiments';
 import SupportFooter from '@/app/components/SupportFooter';
 import GradientButton from '@/app/components/GradientButton';
@@ -71,6 +72,15 @@ function UpgradeContent() {
   const isFreeUser = !hasCar && !hasMoto && !hasCdl;
 
   const [loadingPlan, setLoadingPlan] = useState(null);
+  // Magic-link checkout for in-app browsers (Instagram/FB/TikTok webviews):
+  // Google OAuth is blocked there and password signup is heavy friction, so
+  // an anonymous Buy tap opens an email form instead of the /login redirect.
+  // The emailed link opens in the user's real browser and resumes checkout
+  // (see /api/checkout-intent + CheckoutIntentResume). magicPlan doubles as
+  // the modal-visible flag. Phases: input -> sending -> sent | error.
+  const [magicPlan, setMagicPlan] = useState(null);
+  const [magicEmail, setMagicEmail] = useState('');
+  const [magicPhase, setMagicPhase] = useState('input');
   // Per-card notice rendered right under the tapped Buy button (the old global
   // error line sat below the bureaucracy block — off-screen on mobile, so a
   // failed tap looked like "nothing happened"). type: 'error' | 'owned'.
@@ -122,6 +132,14 @@ function UpgradeContent() {
     // After login the user lands back on /upgrade with their selected plan
     // pre-highlighted and Stripe receives the verified email from session.
     if (!user) {
+      // In-app browsers get the magic-link email form: the /login route is a
+      // dead end there (OAuth refuses webviews) and the paid journey should
+      // finish in a real browser where Apple Pay / Google Pay exist.
+      if (isInAppBrowser()) {
+        setMagicPhase('input');
+        setMagicPlan(planId);
+        return;
+      }
       // After login, return to /upgrade with the plan still selected and
       // intent=checkout flagged so the auto-resume effect below fires Stripe
       // checkout without the user having to click Buy twice. The intent flag
@@ -179,6 +197,41 @@ function UpgradeContent() {
     }
   }
 
+  async function sendMagicCheckout() {
+    const email = normalizeEmail(magicEmail);
+    setMagicPhase('sending');
+    try {
+      // 1) Stamp the buy intent on the (created-if-missing) auth user.
+      const res = await fetch('/api/checkout-intent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, planType: magicPlan, lang }),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      // 2) Send the magic link through a one-off IMPLICIT-flow client. The
+      // default client is PKCE: a link it requests is bound to a code
+      // verifier in THIS webview's storage and dies when opened in Safari,
+      // which is the whole point of the flow. Implicit links carry the
+      // session in the URL hash and open anywhere. emailRedirectTo stays on
+      // the bare origin: the only whitelisted Supabase redirect (do not add
+      // paths, see feedback_verify_supabase_redirect_urls).
+      const { createClient } = await import('@supabase/supabase-js');
+      const otp = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+        { auth: { flowType: 'implicit', persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } }
+      );
+      const { error } = await otp.auth.signInWithOtp({
+        email,
+        options: { shouldCreateUser: false, emailRedirectTo: window.location.origin },
+      });
+      if (error) throw error;
+      setMagicPhase('sent');
+    } catch {
+      setMagicPhase('error');
+    }
+  }
+
   // Auto-resume checkout after login redirect. When an anonymous user clicks
   // "Buy", they're sent to /login with ?next=/upgrade?plan=X&intent=checkout.
   // After login they're routed back here (password sign-in via router.push;
@@ -197,6 +250,13 @@ function UpgradeContent() {
     if (!user) {
       if (authLoading) return;
       autoCheckoutFiredRef.current = true;
+      // Same webview split as handleCheckout: keep the buyer here and mail
+      // them a link instead of parking them on a login page that can't OAuth.
+      if (isInAppBrowser()) {
+        setMagicPhase('input');
+        setMagicPlan(preselect);
+        return;
+      }
       const next = `/upgrade?plan=${preselect}&lang=${lang}&intent=checkout`;
       router.replace(`/login?next=${encodeURIComponent(next)}&lang=${lang}`);
       return;
@@ -654,6 +714,62 @@ function UpgradeContent() {
       </button>
 
       <SupportFooter lang={lang} dark={true} />
+
+      {/* Magic-link checkout modal (in-app browsers only, see handleCheckout). */}
+      {magicPlan && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70"
+          onClick={() => { if (magicPhase !== 'sending') { setMagicPlan(null); setMagicPhase('input'); } }}>
+          <div className="w-full max-w-sm rounded-2xl border border-white/15 p-6"
+            style={{ background: 'linear-gradient(180deg, #10254D 0%, #0B1C3D 100%)' }}
+            onClick={e => e.stopPropagation()}>
+            {magicPhase === 'sent' ? (
+              <>
+                <div className="w-11 h-11 mx-auto mb-3 rounded-full flex items-center justify-center bg-[#16A34A]/15 border border-[#16A34A]/30">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16A34A" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>
+                </div>
+                <h3 className="text-lg font-bold text-white text-center mb-2">{tex.checkEmail || 'Check your email!'}</h3>
+                <p className="text-sm text-[#94A3B8] text-center mb-5">{tex.magicPaySent}</p>
+                <button type="button"
+                  onClick={() => { setMagicPlan(null); setMagicPhase('input'); }}
+                  className="w-full py-3 rounded-xl text-sm font-semibold text-white border border-white/15 hover:bg-white/5">
+                  {tex.back}
+                </button>
+              </>
+            ) : (
+              <>
+                <h3 className="text-lg font-bold text-white mb-2">{tex.magicPayTitle}</h3>
+                <p className="text-sm text-[#94A3B8] mb-4">{tex.magicPayBody}</p>
+                <input
+                  type="email"
+                  inputMode="email"
+                  autoComplete="email"
+                  value={magicEmail}
+                  onChange={e => { setMagicEmail(e.target.value); if (magicPhase === 'error') setMagicPhase('input'); }}
+                  placeholder={tex.emailPlaceholder}
+                  className="w-full px-4 py-3 rounded-xl bg-white/[0.07] border border-white/15 text-white text-sm placeholder-[#64748B] focus:outline-none focus:border-[#2563EB] mb-2"
+                />
+                {suggestEmailFix(magicEmail) && (
+                  <button type="button"
+                    onClick={() => setMagicEmail(suggestEmailFix(magicEmail))}
+                    className="text-xs text-[#F59E0B] mb-2 text-left">
+                    {tex.didYouMean} <span className="font-semibold underline">{suggestEmailFix(magicEmail)}</span>?
+                  </button>
+                )}
+                {magicPhase === 'error' && (
+                  <p className="text-xs text-[#F87171] mb-2">{tex.magicPayError}</p>
+                )}
+                <button type="button"
+                  onClick={sendMagicCheckout}
+                  disabled={magicPhase === 'sending' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizeEmail(magicEmail))}
+                  className="w-full mt-2 py-3.5 rounded-2xl text-base font-bold text-white disabled:opacity-40 transition-transform duration-100 active:scale-[0.98]"
+                  style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #2563EB 50%, #1D4ED8 100%)', boxShadow: '0 6px 18px rgba(37,99,235,0.35)' }}>
+                  {magicPhase === 'sending' ? '…' : tex.magicPaySend}
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   );
 }

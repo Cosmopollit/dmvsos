@@ -8,6 +8,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import PersonalGreeting from "./components/PersonalGreeting";
 import NastyaGreeting from "./NastyaGreeting";
+import CheckoutIntentResume from "./components/CheckoutIntentResume";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -181,6 +182,7 @@ export default async function RootLayout({ children }) {
           {children}
           <PersonalGreeting />
           <NastyaGreeting />
+          <CheckoutIntentResume />
         </AuthProvider>
         <Analytics />
         <SpeedInsights />
