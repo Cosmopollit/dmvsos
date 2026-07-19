@@ -288,7 +288,7 @@ def main():
                 print(f'DRY {tag} <- {path}')
                 done += 1
                 continue
-            with http(f'{SUPA}/storage/v1/object/public/{path}?nocache=1') as r:
+            with http(f'{SUPA}/storage/v1/object/public/{BUCKET}/{path}') as r:
                 blob = r.read()
             stamped = stamp_pdf(blob, state, cat, lang)
             if stamped is None:
