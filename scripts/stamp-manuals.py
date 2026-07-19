@@ -158,7 +158,7 @@ def _compose_page_png():
     icon_size, gap = 112, 30
     total_w = icon_size + gap + d.textlength(word, font=word_font)
     lx = int(cx - total_w / 2)
-    ly = 300
+    ly = 250
     if os.path.exists(ICON_IMG):
         icon = Image.open(ICON_IMG).convert('RGBA').resize((icon_size, icon_size), Image.LANCZOS)
         mask = Image.new('L', (icon_size, icon_size), 0)
@@ -167,18 +167,18 @@ def _compose_page_png():
     d.text((lx + icon_size + gap, ly + icon_size // 2), word, font=word_font, fill=NAVYC, anchor='lm')
 
     # Claim
-    d.text((cx, 780), 'The largest DMV question bank.', font=_sf(88, 'Heavy'), fill=NAVYC, anchor='mm')
-    d.text((cx, 900), 'In 5 languages.', font=_sf(88, 'Heavy'), fill=AMBERC, anchor='mm')
+    d.text((cx, 620), 'The largest DMV question bank.', font=_sf(88, 'Heavy'), fill=NAVYC, anchor='mm')
+    d.text((cx, 740), 'In 5 languages.', font=_sf(88, 'Heavy'), fill=AMBERC, anchor='mm')
     lang_font = ImageFont.truetype(ARIAL_UNI, 40) if ARIAL_UNI else _sf(40)
-    d.text((cx, 1010), 'English · Español · Русский · 中文 · Українська', font=lang_font, fill=GRAYC, anchor='mm')
+    d.text((cx, 850), 'English · Español · Русский · 中文 · Українська', font=lang_font, fill=GRAYC, anchor='mm')
 
     # Address (clickable)
     url_font = _sf(78, 'Heavy')
     url_text = 'www.dmvsos.com'
-    d.text((cx, 1200), url_text, font=url_font, fill=BLUEC, anchor='mm')
+    d.text((cx, 1010), url_text, font=url_font, fill=BLUEC, anchor='mm')
     tw = d.textlength(url_text, font=url_font)
-    bx0, by0 = int(cx - tw / 2) - 30, 1200 - 70
-    bx1, by1 = int(cx + tw / 2) + 30, 1200 + 70
+    bx0, by0 = int(cx - tw / 2) - 30, 1010 - 70
+    bx1, by1 = int(cx + tw / 2) + 30, 1010 + 70
 
     # QR to the site
     qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=12, border=2)
@@ -187,8 +187,8 @@ def _compose_page_png():
     qr_img = qr.make_image(fill_color='#0B1C3D', back_color='white').convert('RGB')
     qr_size = 470
     qr_img = qr_img.resize((qr_size, qr_size), Image.NEAREST)
-    img.paste(qr_img, (cx - qr_size // 2, 1360))
-    d.text((cx, 1360 + qr_size + 54), 'Scan to open', font=_sf(34), fill=GRAYC, anchor='mm')
+    img.paste(qr_img, (cx - qr_size // 2, 1160))
+    d.text((cx, 1160 + qr_size + 54), 'Scan to open', font=_sf(34), fill=GRAYC, anchor='mm')
 
     # Footer honesty line
     d.text((cx, PAGE_H - 90),
