@@ -32,6 +32,21 @@ import urllib.request
 from pypdf import PdfReader, PdfWriter
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+
+# Helvetica has no Cyrillic/CJK glyphs; the language line needs a Unicode
+# font. Arial Unicode ships with macOS. Falls back to English language names
+# if the font is missing (e.g. a Linux CI box).
+UNICODE_FONT = None
+for _p in ('/Library/Fonts/Arial Unicode.ttf', '/System/Library/Fonts/Supplemental/Arial Unicode.ttf'):
+    if os.path.exists(_p):
+        try:
+            pdfmetrics.registerFont(TTFont('ArialUni', _p))
+            UNICODE_FONT = 'ArialUni'
+        except Exception:
+            pass
+        break
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -96,59 +111,145 @@ BLUE = (37/255, 99/255, 235/255)
 AMBER = (245/255, 158/255, 11/255)
 GRAY = (100/255, 116/255, 139/255)
 
-def build_insert_page(state_slug, cat, lang):
-    """One US-letter page, official-dress style, clickable link block."""
-    state_name = title_case(state_slug)
-    url = f'https://dmvsos.com/dmv-test/{state_slug}?utm_source=manual_pdf&utm_medium=pdf&utm_campaign={state_slug}-{cat}-{lang}'
-    display_url = f'dmvsos.com/dmv-test/{state_slug}'
+# ── PIL page composition ──────────────────────────────────────────────────
+# The page is designed as a high-res image (same craft as the App Store IAP
+# cards in dmvsos-mobile/store-screenshots/build_iap_cards.py) and embedded
+# full-bleed into the PDF; the dmvsos.com button gets a link annotation on
+# top. Design tokens follow the product: navy #0B1C3D card, amber accents,
+# blue CTA, SF wordmark.
 
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
+
+MOBILE = os.path.join(os.path.dirname(ROOT), 'dmvsos-mobile')
+HERO_IMG = os.path.join(MOBILE, 'assets/images/vehicles/mustang-hero.png')
+ICON_IMG = os.path.join(MOBILE, 'assets/images/icon.png')
+SF_FONT = '/System/Library/Fonts/SFNS.ttf'
+ARIAL_UNI = next((p for p in ('/Library/Fonts/Arial Unicode.ttf',
+                              '/System/Library/Fonts/Supplemental/Arial Unicode.ttf')
+                  if os.path.exists(p)), None)
+
+def _sf(size, weight='Regular'):
+    f = ImageFont.truetype(SF_FONT, size)
+    try:
+        f.set_variation_by_name(weight)
+    except Exception:
+        pass
+    return f
+
+PAGE_W, PAGE_H = 1700, 2200  # US letter @ 200dpi
+
+def _compose_page_png():
+    """Returns (png_bytes, button_rect_px). Cached per run: the page is
+    identical for every PDF (only the UTM in the link annotation differs)."""
+    img = Image.new('RGB', (PAGE_W, PAGE_H), (240, 246, 255))
+    d = ImageDraw.Draw(img)
+
+    # Soft page gradient wash (top cool, bottom warm) like the web hero.
+    grad = Image.new('L', (1, PAGE_H))
+    for y in range(PAGE_H):
+        grad.putpixel((0, y), int(14 * (y / PAGE_H)))
+    warm = Image.new('RGB', (PAGE_W, PAGE_H), (255, 247, 237))
+    img = Image.composite(warm, img, grad.resize((PAGE_W, PAGE_H)))
+    d = ImageDraw.Draw(img)
+
+    # ── Header band ──
+    NAVYC = (11, 28, 61)
+    d.rectangle([0, 0, PAGE_W, 300], fill=NAVYC)
+    x = 90
+    if os.path.exists(ICON_IMG):
+        icon = Image.open(ICON_IMG).convert('RGBA').resize((150, 150), Image.LANCZOS)
+        mask = Image.new('L', (150, 150), 0)
+        ImageDraw.Draw(mask).rounded_rectangle([0, 0, 150, 150], 34, fill=255)
+        img.paste(icon, (x, 75), mask)
+        x += 190
+    d.text((x, 92), 'DMVSOS', font=_sf(92, 'Heavy'), fill=(255, 255, 255))
+    d.text((x + 4, 196), 'DMV practice tests · All 50 states', font=_sf(34, 'Bold'), fill=(245, 158, 11))
+
+    # ── Navy feature card ──
+    CX0, CY0, CX1, CY1 = 150, 470, PAGE_W - 150, 1780
+    shadow = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    ImageDraw.Draw(shadow).rounded_rectangle([CX0 + 10, CY0 + 24, CX1 + 10, CY1 + 24], 48, fill=(11, 28, 61, 70))
+    img = Image.alpha_composite(img.convert('RGBA'), shadow.filter(ImageFilter.GaussianBlur(18))).convert('RGB')
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([CX0, CY0, CX1, CY1], 48, fill=NAVYC, outline=(245, 158, 11), width=4)
+
+    cx = (CX0 + CX1) // 2
+
+    # Gold badge on the card's top edge
+    badge_font = _sf(34, 'Bold')
+    badge_text = '28,000+ QUESTIONS'
+    bw = d.textlength(badge_text, font=badge_font) + 90
+    d.rounded_rectangle([cx - bw / 2, CY0 - 34, cx + bw / 2, CY0 + 40], 37, fill=(245, 158, 11))
+    d.text((cx, CY0 + 2), badge_text, font=badge_font, fill=(11, 28, 61), anchor='mm')
+
+    # Hero car
+    y = CY0 + 110
+    if os.path.exists(HERO_IMG):
+        hero = Image.open(HERO_IMG).convert('RGBA')
+        hw = 640
+        hh = int(hero.height * hw / hero.width)
+        hero = hero.resize((hw, hh), Image.LANCZOS)
+        img.paste(hero, (cx - hw // 2, y), hero)
+        y += hh + 60
+    d = ImageDraw.Draw(img)
+
+    # Claim
+    d.text((cx, y + 30), 'The largest DMV question bank.', font=_sf(74, 'Heavy'), fill=(255, 255, 255), anchor='mm')
+    d.text((cx, y + 130), 'In 5 languages.', font=_sf(74, 'Heavy'), fill=(245, 158, 11), anchor='mm')
+    y += 230
+
+    # Languages line (Arial Unicode: SFNS lacks CJK)
+    lang_font = ImageFont.truetype(ARIAL_UNI, 40) if ARIAL_UNI else _sf(40)
+    d.text((cx, y), 'English · Español · Русский · 中文 · Українська', font=lang_font, fill=(148, 163, 184), anchor='mm')
+    y += 70
+    d.text((cx, y), 'Built from official handbooks like this one.', font=_sf(38), fill=(148, 163, 184), anchor='mm')
+    y += 120
+
+    # Blue CTA button (recorded for the PDF link annotation)
+    btn_w, btn_h = 660, 132
+    bx0, by0 = cx - btn_w // 2, y
+    bx1, by1 = cx + btn_w // 2, y + btn_h
+    # Two-tone flat button: brand blue with a slightly lighter top edge line.
+    d.rounded_rectangle([bx0, by0, bx1, by1], 32, fill=(37, 99, 235))
+    d.rounded_rectangle([bx0, by0, bx1, by1], 32, outline=(96, 143, 245), width=3)
+    d.text(((bx0 + bx1) // 2, (by0 + by1) // 2), 'dmvsos.com', font=_sf(56, 'Heavy'), fill=(255, 255, 255), anchor='mm')
+    y = by1 + 80
+
+    d.text((cx, y), 'Available on the web and in the App Store', font=_sf(38), fill=(203, 213, 225), anchor='mm')
+    d.text((cx, y + 66), 'Come in and learn.', font=_sf(42, 'Bold'), fill=(245, 158, 11), anchor='mm')
+
+    # Footer honesty line
+    d.text((PAGE_W // 2, PAGE_H - 90),
+           'This page was added by DMVSOS.com. The official handbook begins on the next page.',
+           font=_sf(30), fill=(120, 134, 156), anchor='mm')
+
+    out = io.BytesIO()
+    img.save(out, format='PNG', optimize=True)
+    out.seek(0)
+    return out, (bx0, by0, bx1, by1)
+
+_PAGE_CACHE = None
+
+def build_insert_page(state_slug, cat, lang):
+    """One US-letter page: the PIL-composed brand card + clickable button.
+    Per-file UTM keeps analytics granular even though the visible link is
+    just dmvsos.com."""
+    global _PAGE_CACHE
+    if _PAGE_CACHE is None:
+        _PAGE_CACHE = _compose_page_png()
+    png_buf, (bx0, by0, bx1, by1) = _PAGE_CACHE
+
+    url = f'https://dmvsos.com/?utm_source=manual_pdf&utm_medium=pdf&utm_campaign={state_slug}-{cat}-{lang}'
+
+    from reportlab.lib.utils import ImageReader
     buf = io.BytesIO()
     c = canvas.Canvas(buf, pagesize=letter)
     W, H = letter
-
-    # Header band
-    c.setFillColorRGB(*NAVY)
-    c.rect(0, H - 110, W, 110, fill=1, stroke=0)
-    c.setFillColorRGB(1, 1, 1)
-    c.setFont('Helvetica-Bold', 30)
-    c.drawString(54, H - 68, 'DMVSOS')
-    c.setFillColorRGB(*AMBER)
-    c.setFont('Helvetica-Bold', 12)
-    c.drawString(54, H - 88, 'Free DMV practice tests · All 50 states · 5 languages')
-
-    # Title
-    c.setFillColorRGB(*NAVY)
-    c.setFont('Helvetica-Bold', 24)
-    c.drawString(54, H - 170, f'Studying for the {state_name}')
-    c.drawString(54, H - 200, 'knowledge test?')
-
-    # Body
-    c.setFillColorRGB(*GRAY)
-    c.setFont('Helvetica', 13)
-    body_lines = [
-        'This official handbook pairs with free practice questions built from it.',
-        'Check yourself before exam day: 20 free questions per test, no signup.',
-        'Practice in English, Spanish, Russian, Chinese, or Ukrainian.',
-    ]
-    y = H - 240
-    for line in body_lines:
-        c.drawString(54, y, line)
-        y -= 20
-
-    # Link button
-    btn_y = y - 46
-    c.setFillColorRGB(*BLUE)
-    c.roundRect(54, btn_y, 340, 44, 10, fill=1, stroke=0)
-    c.setFillColorRGB(1, 1, 1)
-    c.setFont('Helvetica-Bold', 15)
-    c.drawString(74, btn_y + 15, display_url)
-    c.linkURL(url, (54, btn_y, 394, btn_y + 44), relative=0)
-
-    # Footer note (honesty: the official manual is untouched, starts next page)
-    c.setFillColorRGB(*GRAY)
-    c.setFont('Helvetica', 9)
-    c.drawString(54, 60, 'This page was added by DMVSOS.com. The official handbook begins on the next page.')
-
+    png_buf.seek(0)
+    c.drawImage(ImageReader(png_buf), 0, 0, W, H)
+    # px → pt (PIL y grows down, PDF y grows up)
+    sx, sy = W / PAGE_W, H / PAGE_H
+    c.linkURL(url, (bx0 * sx, H - by1 * sy, bx1 * sx, H - by0 * sy), relative=0)
     c.showPage()
     c.save()
     buf.seek(0)
