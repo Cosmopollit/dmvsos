@@ -139,89 +139,61 @@ def _sf(size, weight='Regular'):
 PAGE_W, PAGE_H = 1700, 2200  # US letter @ 200dpi
 
 def _compose_page_png():
-    """Returns (png_bytes, button_rect_px). Cached per run: the page is
-    identical for every PDF (only the UTM in the link annotation differs)."""
-    img = Image.new('RGB', (PAGE_W, PAGE_H), (240, 246, 255))
-    d = ImageDraw.Draw(img)
+    """Returns (png_bytes, button_rect_px). Minimal brand card: neat logo,
+    one claim, the address, a QR to the site. Cached per run (identical for
+    every PDF; only the link annotation's UTM differs per file)."""
+    import qrcode
 
-    # Soft page gradient wash (top cool, bottom warm) like the web hero.
-    grad = Image.new('L', (1, PAGE_H))
-    for y in range(PAGE_H):
-        grad.putpixel((0, y), int(14 * (y / PAGE_H)))
-    warm = Image.new('RGB', (PAGE_W, PAGE_H), (255, 247, 237))
-    img = Image.composite(warm, img, grad.resize((PAGE_W, PAGE_H)))
+    img = Image.new('RGB', (PAGE_W, PAGE_H), (255, 255, 255))
     d = ImageDraw.Draw(img)
-
-    # ── Header band ──
     NAVYC = (11, 28, 61)
-    d.rectangle([0, 0, PAGE_W, 300], fill=NAVYC)
-    x = 90
+    AMBERC = (245, 158, 11)
+    GRAYC = (120, 134, 156)
+    BLUEC = (37, 99, 235)
+    cx = PAGE_W // 2
+
+    # Neat logo: icon + wordmark, centered as one unit
+    word_font = _sf(86, 'Heavy')
+    word = 'DMVSOS'
+    icon_size, gap = 112, 30
+    total_w = icon_size + gap + d.textlength(word, font=word_font)
+    lx = int(cx - total_w / 2)
+    ly = 300
     if os.path.exists(ICON_IMG):
-        icon = Image.open(ICON_IMG).convert('RGBA').resize((150, 150), Image.LANCZOS)
-        mask = Image.new('L', (150, 150), 0)
-        ImageDraw.Draw(mask).rounded_rectangle([0, 0, 150, 150], 34, fill=255)
-        img.paste(icon, (x, 75), mask)
-        x += 190
-    d.text((x, 92), 'DMVSOS', font=_sf(92, 'Heavy'), fill=(255, 255, 255))
-    d.text((x + 4, 196), 'DMV practice tests · All 50 states', font=_sf(34, 'Bold'), fill=(245, 158, 11))
-
-    # ── Navy feature card ──
-    CX0, CY0, CX1, CY1 = 150, 470, PAGE_W - 150, 1780
-    shadow = Image.new('RGBA', img.size, (0, 0, 0, 0))
-    ImageDraw.Draw(shadow).rounded_rectangle([CX0 + 10, CY0 + 24, CX1 + 10, CY1 + 24], 48, fill=(11, 28, 61, 70))
-    img = Image.alpha_composite(img.convert('RGBA'), shadow.filter(ImageFilter.GaussianBlur(18))).convert('RGB')
-    d = ImageDraw.Draw(img)
-    d.rounded_rectangle([CX0, CY0, CX1, CY1], 48, fill=NAVYC, outline=(245, 158, 11), width=4)
-
-    cx = (CX0 + CX1) // 2
-
-    # Gold badge on the card's top edge
-    badge_font = _sf(34, 'Bold')
-    badge_text = '28,000+ QUESTIONS'
-    bw = d.textlength(badge_text, font=badge_font) + 90
-    d.rounded_rectangle([cx - bw / 2, CY0 - 34, cx + bw / 2, CY0 + 40], 37, fill=(245, 158, 11))
-    d.text((cx, CY0 + 2), badge_text, font=badge_font, fill=(11, 28, 61), anchor='mm')
-
-    # Hero car
-    y = CY0 + 110
-    if os.path.exists(HERO_IMG):
-        hero = Image.open(HERO_IMG).convert('RGBA')
-        hw = 640
-        hh = int(hero.height * hw / hero.width)
-        hero = hero.resize((hw, hh), Image.LANCZOS)
-        img.paste(hero, (cx - hw // 2, y), hero)
-        y += hh + 60
-    d = ImageDraw.Draw(img)
+        icon = Image.open(ICON_IMG).convert('RGBA').resize((icon_size, icon_size), Image.LANCZOS)
+        mask = Image.new('L', (icon_size, icon_size), 0)
+        ImageDraw.Draw(mask).rounded_rectangle([0, 0, icon_size, icon_size], 26, fill=255)
+        img.paste(icon, (lx, ly), mask)
+    d.text((lx + icon_size + gap, ly + icon_size // 2), word, font=word_font, fill=NAVYC, anchor='lm')
 
     # Claim
-    d.text((cx, y + 30), 'The largest DMV question bank.', font=_sf(74, 'Heavy'), fill=(255, 255, 255), anchor='mm')
-    d.text((cx, y + 130), 'In 5 languages.', font=_sf(74, 'Heavy'), fill=(245, 158, 11), anchor='mm')
-    y += 230
-
-    # Languages line (Arial Unicode: SFNS lacks CJK)
+    d.text((cx, 780), 'The largest DMV question bank.', font=_sf(88, 'Heavy'), fill=NAVYC, anchor='mm')
+    d.text((cx, 900), 'In 5 languages.', font=_sf(88, 'Heavy'), fill=AMBERC, anchor='mm')
     lang_font = ImageFont.truetype(ARIAL_UNI, 40) if ARIAL_UNI else _sf(40)
-    d.text((cx, y), 'English · Español · Русский · 中文 · Українська', font=lang_font, fill=(148, 163, 184), anchor='mm')
-    y += 70
-    d.text((cx, y), 'Built from official handbooks like this one.', font=_sf(38), fill=(148, 163, 184), anchor='mm')
-    y += 120
+    d.text((cx, 1010), 'English · Español · Русский · 中文 · Українська', font=lang_font, fill=GRAYC, anchor='mm')
 
-    # Blue CTA button (recorded for the PDF link annotation)
-    btn_w, btn_h = 660, 132
-    bx0, by0 = cx - btn_w // 2, y
-    bx1, by1 = cx + btn_w // 2, y + btn_h
-    # Two-tone flat button: brand blue with a slightly lighter top edge line.
-    d.rounded_rectangle([bx0, by0, bx1, by1], 32, fill=(37, 99, 235))
-    d.rounded_rectangle([bx0, by0, bx1, by1], 32, outline=(96, 143, 245), width=3)
-    d.text(((bx0 + bx1) // 2, (by0 + by1) // 2), 'dmvsos.com', font=_sf(56, 'Heavy'), fill=(255, 255, 255), anchor='mm')
-    y = by1 + 80
+    # Address (clickable)
+    url_font = _sf(78, 'Heavy')
+    url_text = 'www.dmvsos.com'
+    d.text((cx, 1200), url_text, font=url_font, fill=BLUEC, anchor='mm')
+    tw = d.textlength(url_text, font=url_font)
+    bx0, by0 = int(cx - tw / 2) - 30, 1200 - 70
+    bx1, by1 = int(cx + tw / 2) + 30, 1200 + 70
 
-    d.text((cx, y), 'Available on the web and in the App Store', font=_sf(38), fill=(203, 213, 225), anchor='mm')
-    d.text((cx, y + 66), 'Come in and learn.', font=_sf(42, 'Bold'), fill=(245, 158, 11), anchor='mm')
+    # QR to the site
+    qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=12, border=2)
+    qr.add_data('https://www.dmvsos.com/?utm_source=manual_pdf&utm_medium=qr')
+    qr.make(fit=True)
+    qr_img = qr.make_image(fill_color='#0B1C3D', back_color='white').convert('RGB')
+    qr_size = 470
+    qr_img = qr_img.resize((qr_size, qr_size), Image.NEAREST)
+    img.paste(qr_img, (cx - qr_size // 2, 1360))
+    d.text((cx, 1360 + qr_size + 54), 'Scan to open', font=_sf(34), fill=GRAYC, anchor='mm')
 
     # Footer honesty line
-    d.text((PAGE_W // 2, PAGE_H - 90),
+    d.text((cx, PAGE_H - 90),
            'This page was added by DMVSOS.com. The official handbook begins on the next page.',
-           font=_sf(30), fill=(120, 134, 156), anchor='mm')
+           font=_sf(30), fill=GRAYC, anchor='mm')
 
     out = io.BytesIO()
     img.save(out, format='PNG', optimize=True)
