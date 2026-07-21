@@ -9,6 +9,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import PersonalGreeting from "./components/PersonalGreeting";
 import NastyaGreeting from "./NastyaGreeting";
 import CheckoutIntentResume from "./components/CheckoutIntentResume";
+import EngagementBanners from "./components/EngagementBanners";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -183,6 +184,7 @@ export default async function RootLayout({ children }) {
           <PersonalGreeting />
           <NastyaGreeting />
           <CheckoutIntentResume />
+          <EngagementBanners />
         </AuthProvider>
         <Analytics />
         <SpeedInsights />
