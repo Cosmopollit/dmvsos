@@ -1,0 +1,7 @@
+# CLI deploys only (git deploys build from the repo tree).
+# backups/ is 6.5GB of local DB/question snapshots and must never upload.
+backups
+.manuals-text
+*.log
+.verify-answers-*
+.write-explanations-*
