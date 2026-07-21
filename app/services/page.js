@@ -108,6 +108,26 @@ function ServicesContent() {
         </div>
 
         {/* Pro lock banner */}
+        {/* Booking-intent banner: people arriving from old Wix booking links
+            (301 from /booking-calendar/*) want a lesson or a pre-exam warm-up.
+            NOT Pro-gated: they came to spend money on a lesson, not to hit a
+            paywall. Direct line to support instead. */}
+        {params.get('from') === 'booking' && (
+          <div className="bg-[#0B1C3D] rounded-2xl p-5 mb-4 shadow-xl">
+            <h2 className="text-base font-bold text-white mb-1.5">
+              {tex.bookingMovedTitle || 'Looking to book a lesson?'}
+            </h2>
+            <p className="text-sm text-[#94A3B8] mb-4 leading-relaxed">
+              {tex.bookingMovedBody || 'Online booking moved. Message us and we will set you up with a lesson or a pre-exam warm-up.'}
+            </p>
+            <a href="https://t.me/dmvsos_support_bot" target="_blank" rel="noopener noreferrer"
+              className="block w-full text-center py-3 rounded-xl text-sm font-bold text-white"
+              style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #2563EB 50%, #1D4ED8 100%)' }}>
+              {tex.bookingMovedCta || 'Message us on Telegram'}
+            </a>
+          </div>
+        )}
+
         {!isPro && (
           <div className="bg-[#FEF3C7] border border-[#FDE68A] rounded-xl p-3 mb-4 flex items-start gap-2">
             <AnimatedLock size={18} color="#92400E" className="mt-0.5" />

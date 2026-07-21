@@ -59,6 +59,18 @@ const nextConfig = {
         destination: 'https://dmvsos.com/:path*',
         permanent: true,
       },
+      // Old Wix booking links (skills-test warm-ups, driving lessons) still
+      // live in search results and messengers, and prod logs show real people
+      // clicking them into 404s. Catch that intent on /services, where
+      // ?from=booking shows a non-gated "message us to book" banner.
+      {
+        source: '/booking-calendar/:slug*',
+        destination: '/services?from=booking',
+        permanent: true,
+      },
+      // Crawlers guess WordPress-style sitemap names; point them at ours.
+      { source: '/sitemap_index.xml', destination: '/sitemap.xml', permanent: true },
+      { source: '/sitemap-index.xml', destination: '/sitemap.xml', permanent: true },
     ];
   },
 };
