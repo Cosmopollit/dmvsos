@@ -71,6 +71,15 @@ const nextConfig = {
       // Crawlers guess WordPress-style sitemap names; point them at ours.
       { source: '/sitemap_index.xml', destination: '/sitemap.xml', permanent: true },
       { source: '/sitemap-index.xml', destination: '/sitemap.xml', permanent: true },
+      // Contact-intent guesses (bots and old-site visitors alike) and Wix
+      // placeholder pages (/blank-N) from the previous site. Home carries the
+      // support footer, so intent still lands somewhere useful.
+      {
+        source: '/:slug(contact|contact-us|contactus|contact_us|contact-form|get-in-touch|reach-us|reachout|connect|connect-us|write-us|message-us)',
+        destination: '/',
+        permanent: true,
+      },
+      { source: '/blank-:num', destination: '/', permanent: true },
     ];
   },
 };
