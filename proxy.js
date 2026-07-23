@@ -244,9 +244,45 @@ function isScraperTargetPath(path) {
   return false
 }
 
+// Exploit-scanner probes: PHP shells, WordPress paths, dotfiles. We run zero
+// PHP, so these can be answered from the edge with a bare 410. Before this
+// guard, every probe cost TWO function invocations (the 404 page render plus
+// the bot-event POST) — a scanner burst on 2026-07-23 (~10 probes/s of
+// *.php paths, empty UA) tripped Vercel's invocation-anomaly alert at ~20x
+// baseline. Telemetry for these is sampled at 2% so waves stay visible in
+// bot_events without us amplifying them request-for-request.
+const SCANNER_PATH_RE = new RegExp(
+  '\\.(php|phtml|asp|aspx|jsp|cgi)$' +
+  '|^/(wp-admin|wp-content|wp-includes|wp-login|wordpress|phpmyadmin|phpMyAdmin|cgi-bin|vendor/phpunit)(/|$)' +
+  '|^/\\.(env|git|aws|ssh|docker|vscode)' +
+  '|^/xmlrpc\\.php'
+)
+
 export async function proxy(request) {
   const path = request.nextUrl.pathname
   const isApi = path.startsWith('/api/')
+
+  // 0. Edge-terminate exploit probes before any scoring or λ work.
+  if (SCANNER_PATH_RE.test(path)) {
+    const collectorSecret = process.env.BOT_EVENT_SECRET || process.env.TELEGRAM_WEBHOOK_SECRET || ''
+    if (collectorSecret && Math.random() < 0.02) {
+      fetch(`${request.nextUrl.origin}/api/internal/bot-event`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-bot-event-secret': collectorSecret },
+        keepalive: true,
+        body: JSON.stringify({
+          ip: request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || null,
+          country: request.headers.get('x-vercel-ip-country') || null,
+          path,
+          method: request.method,
+          ua: request.headers.get('user-agent') || null,
+          score: 10,
+          reasons: ['scanner-path', 'sampled-2pct'],
+        }),
+      }).catch(() => {})
+    }
+    return new NextResponse(null, { status: 410 })
+  }
 
   // 1. Bot scoring — runs on every matched request (page or API).
   //    Pure CPU work, no network call, so cost is negligible.
